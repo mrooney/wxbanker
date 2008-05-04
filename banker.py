@@ -341,9 +341,11 @@ def _selectAccount(accountNames):
         accountlist[i] = x
     accountnum = input("Account?\n"+"\n".join( [ str(i+1)+". "+accountlist[i] for i in accountlist] )+"\n? ")
     accountname = accountlist[accountnum-1]
-    os.system('cls')
+    clearScreen()
     return accountname
     
+def clearScreen():
+    os.system(['clear','cls'][os.name == 'nt'])
 
 def main():
     """
@@ -354,7 +356,7 @@ def main():
 
     choice = -1
     while choice != 0:
-        os.system('cls')
+        clearScreen()
         print '1. Create an account'
         print '2. Enter a transaction'
         print '3. Enter a transfer'
@@ -364,8 +366,7 @@ def main():
         print '0. Quit'
         choice = input("? ")
 
-        #TODO: this doesn't work on linux
-        os.system('cls')
+        clearScreen()
 
         if choice == 1:
             accountName = raw_input("Account name: ")
@@ -440,7 +441,10 @@ def main():
 
 
 if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
-    #main()
+    import sys
+    if len(sys.argv) > 1 and sys.argv[1] == 'test':
+        import doctest
+        doctest.testmod(verbose=True)
+    else:
+        main()
 
