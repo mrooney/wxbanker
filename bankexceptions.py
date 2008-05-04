@@ -1,0 +1,2 @@
+class NoNumpyException(Exception):
+    pass
