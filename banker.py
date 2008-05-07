@@ -137,7 +137,7 @@ def float2str(number, just=0):
         numStr = numStr[:len(numStr)-6] + ',' + numStr[len(numStr)-6:]
     return ('$'+numStr).rjust(just)
 
-def str2float(str):
+def str2float(mstr):
     """
     Converts a pleasing "money string" to a float.
     
@@ -158,8 +158,39 @@ def str2float(str):
     >>> str2float('   $0.01') == 0.01
     True
     """
-    return float(str.strip()[1:].replace(',', ''))
+    return float(mstr.strip()[1:].replace(',', ''))
 
+def wellFormDate(date):
+    """
+    Takes a date in the form Y-M-D, and ensures it is proper.
+    Abbreviated years must be converted into the real year.
+
+    >>> wellFormDate("2008-01-06")
+    datetime.date(2008, 1, 6)
+    >>> wellFormDate("08-01-06")
+    datetime.date(2008, 1, 6)
+    >>> wellFormDate("86-01-06")
+    datetime.date(1986, 1, 6)
+    >>> wellFormDate("11-01-06")
+    datetime.date(2011, 1, 6)
+    >>> wellFormDate("0-1-6")
+    datetime.date(2000, 1, 6)
+    """
+    
+    date = str(date) #if it is a datetime.date object, make it a Y-M-D string.
+    year, m, d = [int(x) for x in date.split("-")]
+    if year < 100:
+        currentYear = datetime.date.today().year
+        currentAbr = currentYear % 100
+        currentBase = currentYear / 100
+        if year <= currentAbr + 10: #allow the user to reasonably refer to future years
+            year += currentBase * 100
+        else:
+            year += (currentBase-1) * 100
+    return datetime.date(year, m, d)
+
+
+#Custom exceptions:
 class InvalidAccountException(Exception):
     def __init__(self, account):
         self.account = account
@@ -182,6 +213,7 @@ class InvalidTransactionException(Exception):
         return "Unable to find transaction with UID %s"%self.uid
 
 
+#The controller class!
 class Bank(object):
     def __init__(self, path=None):
         if path is None:
@@ -317,6 +349,8 @@ class Bank(object):
         
         if date is None:
             date = datetime.date.today()
+        else:
+            date = wellFormDate(date)
             
         transaction = (accountId, amount, desc, date)
         return self.model.makeTransaction(transaction)
