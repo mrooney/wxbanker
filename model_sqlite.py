@@ -30,7 +30,7 @@ class Model:
         """
         datetup = [int(x) for x in result[4].split('/')]
         if datetup[0] < 10:
-            print datetup
+            print result
             datetup[0] += 2000
         date = datetime.date(*datetup)
         #print date
@@ -72,13 +72,16 @@ class Model:
             return result[0]
         
     def removeTransaction(self, ID):
-        #print repr(ID)
         result = self.dbconn.cursor().execute('DELETE FROM transactions WHERE id=?', (ID,)).fetchone()
-        return bool(result)
+        #the result doesn't appear to be useful here, it is None regardless of whether the DELETE matched anything
+        #the controller already checks for existence of the ID though, so if this doesn't raise an exception, theoretically
+        #everythin is fine. So just return True.
+        return True
     
     def getTransactionById(self, ID):
         result = self.dbconn.cursor().execute('SELECT * FROM transactions WHERE id=?', (ID,)).fetchone()
-        #print result
+        if result is None:
+            return result
         return self.result2transaction(result)
     
     def updateTransaction(self, transaction):

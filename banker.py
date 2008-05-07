@@ -94,6 +94,16 @@ Traceback (most recent call last):
 InvalidAccountException: Invalid account 'Another Account' specified.
 >>> float2str(b.getTotalBalance())
 '$0.29'
+>>> b.removeTransaction(tId1)
+True
+>>> b.getTransactionByID('FakeID')
+Traceback (most recent call last):
+  ...
+InvalidTransactionException: Unable to find transaction with UID FakeID
+>>> b.removeTransaction('FakeID')
+Traceback (most recent call last):
+  ...
+InvalidTransactionException: Unable to find transaction with UID FakeID
 >>> b.close()
 >>> os.remove('test.db')
 
@@ -149,7 +159,6 @@ def str2float(str):
     True
     """
     return float(str.strip()[1:].replace(',', ''))
-
 
 class InvalidAccountException(Exception):
     def __init__(self, account):
@@ -273,9 +282,11 @@ class Bank(object):
         return sorted(transactions, cmp=lambda l,r: cmp(l[3], r[3]))
     
     def removeTransaction(self, ID):
-        success = self.model.removeTransaction(ID)
-        if not success:
+        if self.model.getTransactionById(ID) is None:
             raise InvalidTransactionException(ID)
+        
+        self.model.removeTransaction(ID)
+        return True
         
     def getTransactionByID(self, ID):
         transaction = self.model.getTransactionById(ID)
@@ -443,8 +454,11 @@ def main():
 if __name__ == "__main__":
     import sys
     if len(sys.argv) > 1 and sys.argv[1] == 'test':
+        v = True
+        if len(sys.argv) == 3 and sys.argv[2] == 'quiet':
+            v = False
         import doctest
-        doctest.testmod(verbose=True)
+        doctest.testmod(verbose=v)
     else:
         main()
 
