@@ -365,7 +365,14 @@ class AccountListCtrl(wx.Panel):
         if oldName == newName:
             #if there was no change, don't do anything
             self.onHideEditCtrl()
-        elif self.frame.bank.renameAccount(oldName, newName):
+            return
+
+        try:
+            self.frame.bank.renameAccount(oldName, newName)
+        except AccountAlreadyExistsException:
+            #wx.MessageDialog(self, 'An account by that name already exists', 'Error :[', wx.OK | wx.ICON_ERROR).ShowModal()
+            wx.TipWindow(self, "Sorry, an account by that name already exists.")#, maxLength=200)
+        else:
             #hide the edit control
             self.onHideEditCtrl(restore=False)
             #just renaming won't put it in the right alpha position
@@ -375,9 +382,6 @@ class AccountListCtrl(wx.Panel):
             self.HighlightItem(self.currentIndex)
             #notify anyone who cares about this
             pubsub.Publisher().sendMessage("RENAMED ACCOUNT", (oldName, newName))
-        else:
-            #wx.MessageDialog(self, 'An account by that name already exists', 'Error :[', wx.OK | wx.ICON_ERROR).ShowModal()
-            wx.TipWindow(self, "Sorry, an account by that name already exists.")#, maxLength=200)
 
     def onAccountClick(self, event):
         """

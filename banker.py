@@ -299,7 +299,7 @@ class Bank(object):
     def renameAccount(self, oldName, newName):
         #this will return false if an account is renamed to another one, or to the same thing as it was
         currentAccounts = self.getAccountNames()
-        if oldName not in currentAccounts:
+        if oldName not in currentAccounts: #this should never happen
             raise InvalidAccountException(oldName)
         if newName in currentAccounts:
             raise AccountAlreadyExistsException(newName)
