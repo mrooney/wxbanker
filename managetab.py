@@ -266,7 +266,7 @@ class TransactionGrid(gridlib.Grid):
         parent = self.GetParent()
         parent.Freeze()
         
-        self.AutoSize()
+        self.AutoSizeColumns()
         #parent.Sizer.RecalcSizes()
         parent.Layout()
         
