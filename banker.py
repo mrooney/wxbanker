@@ -335,7 +335,7 @@ class Bank(object):
         if desc is not None:
             trans[2] = desc
         if date is not None:
-            trans[3] = date
+            trans[3] = wellFormDate(date)
             
         self.model.updateTransaction(trans)
     
