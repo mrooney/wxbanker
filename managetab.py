@@ -171,10 +171,12 @@ class TransactionGrid(gridlib.Grid):
             value = self.GetCellValue(event.Row, event.Col)
 
             amount = desc = date = None
+            refreshNeeded = False
             if event.Col == 0:
                 #make a date
                 m, d, y = [int(x) for x in value.split('/')]
                 date = datetime.date(y, m, d)
+                refreshNeeded = True
             elif event.Col == 1:
                 #make a desc
                 desc = value
@@ -188,6 +190,13 @@ class TransactionGrid(gridlib.Grid):
             self.frame.bank.updateTransaction(uid, amount, desc, date)
             pubsub.Publisher().sendMessage("UPDATED TRANSACTION")
             self.changeFrozen = False
+
+            if refreshNeeded:
+                #this is needed because otherwise the Grid will put the new value in,
+                #even if event.Skip isn't called, for some reason I don't understand.
+                #event.Veto() will cause the OLD value to be put in. so it has to be updated
+                #after the event handlers (ie this function) finish.
+                wx.CallLater(50, lambda: self.setTransactions(self.Parent.Parent.getCurrentAccount(), ensureVisible=None))
         
     def updateTotals(self, startingRow=0):
         """
@@ -207,7 +216,7 @@ class TransactionGrid(gridlib.Grid):
             self.SetCellValue(row, 3, total)
             row += 1
 
-    def setTransactions(self, accountName):
+    def setTransactions(self, accountName, ensureVisible=-1):
         if accountName is None:
             numRows = self.GetNumberRows()
             if numRows:
@@ -251,8 +260,14 @@ class TransactionGrid(gridlib.Grid):
         self.doResize()
         
         #scroll to the last transaction
-        self.ClearSelection()
-        self.MakeCellVisible(len(transactions)-1, 0)
+        if ensureVisible is not None:
+            if ensureVisible < 0:
+                #allow pythonic negative indexing: -1 for the last, -2 for 2nd last, etc.
+                index = len(transactions) + ensureVisible
+            else:
+                index = ensureVisible
+            self.ClearSelection()
+            self.MakeCellVisible(index, 0)
 
     def doResize(self, event=None):
         """
