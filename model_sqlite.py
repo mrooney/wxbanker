@@ -73,9 +73,10 @@ class Model:
         
     def removeTransaction(self, ID):
         result = self.dbconn.cursor().execute('DELETE FROM transactions WHERE id=?', (ID,)).fetchone()
+        self.dbconn.commit()
         #the result doesn't appear to be useful here, it is None regardless of whether the DELETE matched anything
         #the controller already checks for existence of the ID though, so if this doesn't raise an exception, theoretically
-        #everythin is fine. So just return True.
+        #everything is fine. So just return True, as there we no errors that we are aware of.
         return True
     
     def getTransactionById(self, ID):

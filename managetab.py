@@ -156,15 +156,12 @@ class TransactionGrid(gridlib.Grid):
             
     def onRemoveTransaction(self, row, ID):
         #remove the transaction from the bank
-        try:
-            self.frame.bank.removeTransaction(ID)
-        except:
-            import traceback; traceback.print_exc()
-            return
+        self.frame.bank.removeTransaction(ID)
 
         #delete the row from our grid
         self.DeleteRows(row)
-        self.updateTotals(row)
+        #self.updateTotals(row)
+        self.setTransactions(self.Parent.Parent.getCurrentAccount())
         #inform anyone that cares
         pubsub.Publisher().sendMessage("REMOVED TRANSACTION", ID)
 
