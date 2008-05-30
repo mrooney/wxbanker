@@ -1,3 +1,4 @@
+#! /usr/bin/python
 """
 A GUI layer on top of banker.py
 
@@ -7,7 +8,6 @@ A GUI layer on top of banker.py
 """
 import wx, wx.aui, wx.lib.delayedresult as delayedresult
 import time, os
-#import exceptions
 from bankexceptions import NoNumpyException
 
 #tabs
@@ -87,6 +87,7 @@ class BankerFrame(wx.Frame):
         dlg.ShowModal()
         dlg.Destroy()
         
+    '''
     def onMessage(self, message, data):
         saveWorthyMessages = [
             "FIRST RUN",
@@ -121,6 +122,7 @@ class BankerFrame(wx.Frame):
             
         #allow other threads to save
         self.isSaveLocked = False
+    '''
 
 if __name__ == "__main__":
     app = wx.App(False)

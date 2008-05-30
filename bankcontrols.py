@@ -350,7 +350,8 @@ class AccountListCtrl(wx.Panel):
     def onRemoveButton(self, event):
         if self.currentIndex is not None:
             linkCtrl = self.hyperLinks[self.currentIndex]
-            dlg = wx.MessageDialog(self, "This will permanently remove the account '%s'. Continue?"%linkCtrl.Label[:-1], "Warning", style=wx.YES_NO|wx.ICON_EXCLAMATION)
+            warningMsg = "This will permanently remove the account '%s' and all its transactions. Continue?"
+            dlg = wx.MessageDialog(self, warningMsg%linkCtrl.Label[:-1], "Warning", style=wx.YES_NO|wx.ICON_EXCLAMATION)
             if dlg.ShowModal() == wx.ID_YES:
                 self.RemoveAccount(linkCtrl.Label[:-1])
         
