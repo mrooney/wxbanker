@@ -38,6 +38,10 @@ class AccountListCtrl(wx.Panel):
         self.currentIndex = None
         self.boxLabel = "Accounts (%i)"
         self.hyperLinks, self.totalTexts = [], []
+        
+        #create the staticboxsizer which is the home for everything
+        #this MUST be created first to ensure proper z-ordering (as per docs)
+        self.staticBox = wx.StaticBox(self, label=self.boxLabel%0)
 
         ##create and set up the buttons
         #the ADD account button
@@ -75,9 +79,6 @@ class AccountListCtrl(wx.Panel):
         #the hide zero balance accounts option
         self.hideBox = hideBox = wx.CheckBox(self, label="Hide zero-balance accounts")
 
-        #create the staticboxsizer which is the home for everything
-        self.staticBox = wx.StaticBox(self, label=self.boxLabel%0)
-        #self.staticBoxSizer = wx.StaticBoxSizer(self.staticBox, wx.VERTICAL)
         #self.staticBoxSizer = SmoothStaticBoxSizer(self.staticBox, wx.VERTICAL)
         self.staticBoxSizer = wx.StaticBoxSizer(self.staticBox, wx.VERTICAL)
         #self.staticBoxSizer.SetSmooth(False)
