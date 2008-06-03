@@ -198,7 +198,7 @@ class SmoothSizerMixin:
     
     def SmoothShow(self, item, pixels=None, smooth=None, index=-1, spacer=None, callback=None, *args, **kwargs):
         """
-        This method smoothly (by default) removes an item from a sizer.
+        This method smoothly (by default) adds an item to a sizer.
         
         It does this by first hiding the item, and then creating a spacer the same size as the
         item was. Then each iteration it reduces the size of the spacer until it is (0,0), at which
@@ -220,13 +220,13 @@ class SmoothSizerMixin:
                     pos = i; break
                 
             #we know it is not shown, so grab the size (how much space we need to hide) ###X
-            #if self.GetContainingWindow(): self.GetContainingWindow().Freeze()
-            #wx.Sizer.Show(self, item)
-            #self.Layout()
+            if self.GetContainingWindow(): self.GetContainingWindow().Freeze()
+            wx.Sizer.Show(self, item)
+            self.Layout()
             pixels = self.GetItem(item).Size
             #print pixels
-            #wx.Sizer.Hide(self, item)
-            #if self.GetContainingWindow(): self.GetContainingWindow().Thaw()
+            wx.Sizer.Hide(self, item)
+            if self.GetContainingWindow(): self.GetContainingWindow().Thaw()
                 
             #grab these now before we change anything
             sProp, sFlag, sBorder, sUserData = sizerItem.Proportion, sizerItem.Flag, sizerItem.Border, sizerItem.UserData
@@ -244,8 +244,8 @@ class SmoothSizerMixin:
                         self._actives[index][1] = self._actives[i][1]
                         self._actives[i][1] = None
                     elif data[4] == "I": ###
-                        #we are being told to hide an item, which is already being hidden. that's silly.
-                        #remove ourselves, return, and let the previous hide continue
+                        #we are being told to show an item, which is already being shown. that's silly.
+                        #remove ourselves, return, and let the previous show continue
                         del self._actives[index]
                         return True
                     else:

@@ -29,8 +29,8 @@ class Model:
         of a transaction into the Bank's generic one.
         """
         datetup = [int(x) for x in result[4].split('/')]
-        if datetup[0] < 10:
-            print result
+        if datetup[0] < 1000:
+            print "You have a bad date, how did that happen?", result
             datetup[0] += 2000
         date = datetime.date(*datetup)
         #print date
