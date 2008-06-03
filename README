@@ -1,0 +1,19 @@
+Hello, and thanks for using wxBanker.
+
+== REQUIREMENTS ==
+In order to use wxBanker you will need:
+ - Python >= 2.5
+ - wxPython >= 2.8
+ * numpy (optional, for computing balance over time)
+
+== INSTALL ==
+There is no need to "install" wxBanker, it just runs from wherever it is located.
+
+== RUNNING ==
+Use python to run wxbanker.py wherever it is located. On Windows this means just double-clicking wxbanker.py.
+
+Example: "python ~/wxBanker/wxbanker.py"
+
+In many cases running wxbanker.py itself should work as well, as long as Python is installed as expected.
+
+Example: "~/wxBanker/wxbanker.py"
