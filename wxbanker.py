@@ -1,4 +1,23 @@
 #! /usr/bin/python
+#
+#    https://launchpad.net/wxbanker
+#    wxbanker.py: Copyright 2007, 2008 Mike Rooney <wxbanker@rowk.com>
+#
+#    This file is part of wxBanker.
+#
+#    wxBanker is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    wxBanker is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
+
 """
 A GUI layer on top of banker.py
 
@@ -11,10 +30,10 @@ import time, os
 from bankexceptions import NoNumpyException
 
 #tabs
-from managetab import ManagePanel
+import managetab
 summary = True
 try:
-    from summarytab import SummaryPanel
+    import summarytab
 except NoNumpyException:
     summary = False
     print "Numpy not available, disabling Summary tab..."
@@ -36,11 +55,11 @@ class BankerFrame(wx.Frame):
 
         self.notebook = notebook = wx.aui.AuiNotebook(self)
 
-        self.managePanel = ManagePanel(notebook, self)
+        self.managePanel = managetab.ManagePanel(notebook, self)
         notebook.AddPage(self.managePanel, "Transactions")
         
         if summary:
-            self.summaryPanel = SummaryPanel(notebook, self)
+            self.summaryPanel = summarytab.SummaryPanel(notebook, self)
             notebook.AddPage(self.summaryPanel, "Summary")
         
         self.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.onTabSwitching)
