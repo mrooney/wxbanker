@@ -1,3 +1,21 @@
+#    https://launchpad.net/wxbanker
+#    managetab.py: Copyright 2007, 2008 Mike Rooney <wxbanker@rowk.com>
+#
+#    This file is part of wxBanker.
+#
+#    wxBanker is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    wxBanker is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
+
 import wx, wx.grid as gridlib
 import datetime
 from banker import float2str
@@ -21,16 +39,16 @@ class ManagePanel(wx.Panel):
         mainSizer = wx.BoxSizer()
         mainSizer.Add(accountCtrl, 0, wx.ALL, 5)
         mainSizer.Add(transactionPanel, 1, wx.EXPAND|wx.ALL, 5)
-        
+
         #subscribe to messages that interest us
         pubsub.Publisher().subscribe(self.refreshGrid, "NEW TRANSACTION")
-        pubsub.Publisher().subscribe(self.onChangeAccount, "ACCOUNT CHANGED")
-        
+        pubsub.Publisher().subscribe(self.onChangeAccount, "VIEW.ACCOUNT_CHANGED")
+
         #select the first item by default, if there are any
         #we use a CallLater to allow everything else to finish creation as well,
         #otherwise it won't get scrolled to the bottom initially as it should.
         wx.CallLater(50, accountCtrl.SelectFirstVisible)
-            
+
         self.Sizer = mainSizer
         mainSizer.Layout()
 
@@ -39,7 +57,7 @@ class ManagePanel(wx.Panel):
 
     def refreshGrid(self, message, data):
         self.transactionPanel.setTransactions(self.getCurrentAccount())
-        
+
     def getCurrentAccount(self):
         return self.accountCtrl.GetCurrentAccount()
 
@@ -66,10 +84,11 @@ class TransactionPanel(wx.Panel):
     def setTransactions(self, *args, **kwargs):
         self.transactionGrid.setTransactions(*args, **kwargs)
 
+
 class MoneyCellRenderer(gridlib.PyGridCellRenderer):
-    def __init__(self): 
+    def __init__(self):
         gridlib.PyGridCellRenderer.__init__(self)
-        
+
     def Draw(self, grid, attr, dc, rect, row, col, isSelected):
         dc.SetBackgroundMode(wx.SOLID)
         dc.SetBrush(wx.Brush(attr.GetBackgroundColour(), wx.SOLID))
@@ -77,29 +96,30 @@ class MoneyCellRenderer(gridlib.PyGridCellRenderer):
         dc.DrawRectangleRect(rect)
         dc.SetBackgroundMode(wx.TRANSPARENT)
         dc.SetFont(attr.GetFont())
-        
+
         value = grid.GetCellValue(row, col)
         if value < 0:
             dc.SetTextForeground("RED")
         else:
             dc.SetTextForeground("BLACK")
-        
+
         text = float2str(value)
 
         #right-align horizontal, center vertical
         w, h = dc.GetTextExtent(text)
         x = rect.x + (rect.width-w) - 1
         y = rect.y + (rect.height-h)/2
-        
+
         dc.DrawText(text, x, y)
-            
+
     def GetBestSize(self, grid, attr, dc, row, col):
         dc.SetFont(attr.GetFont())
         w, h = dc.GetTextExtent(float2str(grid.GetCellValue(row, col)))
         return wx.Size(w, h)
-    
+
     def Clone(self):
         return MoneyCellRenderer()
+
 
 class TransactionGrid(gridlib.Grid):
     def __init__(self, parent, frame):
@@ -117,7 +137,9 @@ class TransactionGrid(gridlib.Grid):
 
         self.Bind(gridlib.EVT_GRID_CELL_CHANGE, self.onCellChange)
         self.Bind(gridlib.EVT_GRID_LABEL_RIGHT_CLICK, self.onLabelRightClick)
-        
+
+        pubsub.Publisher().subscribe(self.onTransactionRemoved, "REMOVED TRANSACTION")
+
     def GetCellValue(self, row, col):
         """
         When we get the values of amount/total columns,
@@ -126,9 +148,9 @@ class TransactionGrid(gridlib.Grid):
         val = gridlib.Grid.GetCellValue(self, row, col)
         if col in [2,3]: #cols 2 and 3 and amount/total
             val = float(val)
-            
+
         return val
-    
+
     def SetCellValue(self, row, col, val):
         """
         When we set the values of amount/total columns,
@@ -137,9 +159,9 @@ class TransactionGrid(gridlib.Grid):
         """
         if col in [2,3]: #cols 2 and 3 and amount/total
             val = str(val)
-        
+
         return gridlib.Grid.SetCellValue(self, row, col, val)
-        
+
     def onLabelRightClick(self, event):
         row, col = event.Row, event.Col
         if col == -1 and row >= 0:
@@ -153,17 +175,23 @@ class TransactionGrid(gridlib.Grid):
             menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransaction(row, ID))
             self.PopupMenu(menu)
             menu.Destroy()
-            
+
     def onRemoveTransaction(self, row, ID):
         #remove the transaction from the bank
         self.frame.bank.removeTransaction(ID)
 
-        #delete the row from our grid
-        self.DeleteRows(row)
-        #self.updateTotals(row)
-        self.setTransactions(self.Parent.Parent.getCurrentAccount())
-        #inform anyone that cares
-        pubsub.Publisher().sendMessage("REMOVED TRANSACTION", ID)
+    def getRowFromID(self, ID):
+        for i in range(self.GetNumberRows()):
+            if int(self.GetRowLabelValue(i)) == ID:
+                return i
+
+    def onTransactionRemoved(self, topic, ID):
+        row = self.getRowFromID(ID)
+        if row is not None: # it may not have been from the current account
+            #delete the row from our grid
+            self.DeleteRows(row)
+            #self.updateTotals(row)
+            self.setTransactions(self.Parent.Parent.getCurrentAccount())
 
     def onCellChange(self, event):
         if not self.changeFrozen:
@@ -188,7 +216,6 @@ class TransactionGrid(gridlib.Grid):
 
             self.changeFrozen = True
             self.frame.bank.updateTransaction(uid, amount, desc, date)
-            pubsub.Publisher().sendMessage("UPDATED TRANSACTION")
             self.changeFrozen = False
 
             if refreshNeeded:
@@ -197,7 +224,7 @@ class TransactionGrid(gridlib.Grid):
                 #event.Veto() will cause the OLD value to be put in. so it has to be updated
                 #after the event handlers (ie this function) finish.
                 wx.CallLater(50, lambda: self.setTransactions(self.Parent.Parent.getCurrentAccount(), ensureVisible=None))
-        
+
     def updateTotals(self, startingRow=0):
         """
         Instead of pulling all the data from the bank, just
@@ -207,7 +234,7 @@ class TransactionGrid(gridlib.Grid):
             total = 0.0
         else:
             total = self.GetCellValue(startingRow-1, 3)
-            
+
         row = startingRow
         lastRow = self.GetNumberRows()-1
         while row <= lastRow:
@@ -222,7 +249,7 @@ class TransactionGrid(gridlib.Grid):
             if numRows:
                 self.DeleteRows(0, numRows)
             return
-            
+
         transactions = self.frame.bank.getTransactionsFrom(accountName)
         #first, adjust the number of rows in the grid to fit
         rowsNeeded = len(transactions)
@@ -247,7 +274,7 @@ class TransactionGrid(gridlib.Grid):
             for col in range(2):
                 self.SetCellAlignment(i, 2+col, wx.ALIGN_RIGHT, wx.ALIGN_CENTER)
                 self.SetCellRenderer(i, 2+col, MoneyCellRenderer())
-                
+
             #make every other row a different color
             cellAttr = gridlib.GridCellAttr()
             if i%2:
@@ -255,10 +282,10 @@ class TransactionGrid(gridlib.Grid):
             else:
                 cellAttr.SetBackgroundColour(wx.WHITE)
             self.SetRowAttr(i, cellAttr)
-        
+
         #resize
         self.doResize()
-        
+
         #scroll to the last transaction
         if ensureVisible is not None:
             if ensureVisible < 0:
@@ -277,11 +304,11 @@ class TransactionGrid(gridlib.Grid):
         """
         parent = self.GetParent()
         parent.Freeze()
-        
+
         self.AutoSizeColumns()
         #parent.Sizer.RecalcSizes()
         parent.Layout()
-        
+
         #the column which will be expanded
         expandCol = 1
 
@@ -293,7 +320,7 @@ class TransactionGrid(gridlib.Grid):
 
         #add the width of the row label column
         otherWidths += self.RowLabelSize
-        
+
         sbWidth = 30
         #if not self.IsVisible(0, 0): #there must be a scrollbar!
         #    sbWidth += wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X)

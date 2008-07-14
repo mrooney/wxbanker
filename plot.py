@@ -108,7 +108,10 @@ except:
             (it's not part of the standard Python distribution). See the
             Numeric Python site (http://numpy.scipy.org) for information on
             downloading source or binaries."""
-            raise ImportError, "Numeric,numarray or NumPy not found. \n" + msg
+            raise ImportError, "Numeric, numarray or NumPy not found. \n" + msg
+            
+if not hasattr(_Numeric, 'polyfit'):
+    raise ImportError, "Numeric/numarray/NumPy does not have polyfit, which is required. Please upgrade to a newer version."
 
 
 

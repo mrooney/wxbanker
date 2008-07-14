@@ -1,3 +1,21 @@
+#    https://launchpad.net/wxbanker
+#    banker.py: Copyright 2007, 2008 Mike Rooney <wxbanker@rowk.com>
+#
+#    This file is part of wxBanker.
+#
+#    wxBanker is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    wxBanker is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
+
 """
 Table: accounts
 +--------------------------------------------+
@@ -110,11 +128,12 @@ InvalidTransactionException: Unable to find transaction with UID FakeID
 """
 import time, os, datetime
 from model_sqlite import Model
+import pubsub
 
 def float2str(number, just=0):
     """
     Converts a float to a pleasing "money string".
-    
+
     >>> float2str(1)
     '$1.00'
     >>> float2str(-2.1)
@@ -127,6 +146,12 @@ def float2str(number, just=0):
     '$12,345.67'
     >>> float2str(12345)
     '$12,345.00'
+    >>> float2str(-12345.67)
+    '$-12,345.67'
+    >>> float2str(-12345.6)
+    '$-12,345.60'
+    >>> float2str(-123456)
+    '$-123,456.00'
     >>> float2str(.01)
     '$0.01'
     >>> float2str(.01, 8)
@@ -140,7 +165,7 @@ def float2str(number, just=0):
 def str2float(mstr):
     """
     Converts a pleasing "money string" to a float.
-    
+
     >>> str2float('$1.00') == 1.0
     True
     >>> str2float('$-2.10') == -2.1
@@ -152,6 +177,12 @@ def str2float(mstr):
     >>> str2float('$12,345.67') == 12345.67
     True
     >>> str2float('$12,345.00') == 12345
+    True
+    >>> str2float('$-12,345.67') == -12345.67
+    True
+    >>> str2float('$-12,345.6') == -12345.6
+    True
+    >>> str2float('$-123,456') == -123456
     True
     >>> str2float('$0.01') == 0.01
     True
@@ -176,7 +207,7 @@ def wellFormDate(date):
     >>> wellFormDate("0-1-6")
     datetime.date(2000, 1, 6)
     """
-    
+
     date = str(date) #if it is a datetime.date object, make it a Y-M-D string.
     year, m, d = [int(x) for x in date.split("-")]
     if year < 100:
@@ -194,21 +225,21 @@ def wellFormDate(date):
 class InvalidAccountException(Exception):
     def __init__(self, account):
         self.account = account
-        
+
     def __str__(self):
         return "Invalid account '%s' specified."%self.account
-    
+
 class AccountAlreadyExistsException(Exception):
     def __init__(self, account):
         self.account = account
-        
+
     def __str__(self):
         return "Account '%s' already exists."%self.account
-    
+
 class InvalidTransactionException(Exception):
     def __init__(self, uid):
         self.uid = uid
-        
+
     def __str__(self):
         return "Unable to find transaction with UID %s"%self.uid
 
@@ -218,28 +249,28 @@ class Bank(object):
     def __init__(self, path=None):
         if path is None:
             path = 'bank'
-            
+
         self.model = Model(path)
-    
+
     def getBalanceOf(self, account):
         balance = 0.0
         for transaction in self.getTransactionsFrom(account):
             balance += transaction[1]
         return balance
-    
+
     def getTotalBalance(self):
         total = 0.0
         for account in self.getAccountNames():
             total += self.getBalanceOf(account)
         return total
-        
+
     def getAllTransactions(self):
         transactions = []
         for accountName in self.getAccountNames():
             transactions.extend(self.getTransactionsFrom(accountName))
 
         return sorted(transactions, cmp=lambda l,r: cmp(l[3], r[3]))
-            
+
     def getTotalsEvery(self, days):
         offset = datetime.timedelta(days)
         transactions = self.getAllTransactions()
@@ -248,7 +279,7 @@ class Bank(object):
 
         totals = []
         total = grandTotal = 0.0
-        
+
         for trans in transactions:
             if trans[3] < currentDate + offset:
                 #if trans[3].month == lastMonth:
@@ -262,40 +293,42 @@ class Bank(object):
                 #lastMonth = trans[3].month
             grandTotal += trans[1]
         totals.append(total) #append whatever is left over
-        
+
         assert float2str(grandTotal) == float2str(self.getTotalBalance()), (grandTotal, self.getTotalBalance())
 
         return totals, startDate
-        
+
     def makeTransfer(self, source, destination, amount, desc="", date=None):
         if desc:
             desc = ' (%s)'%desc #add parens around the description if they entered one, otherwise we add a blank string which is fine
         tId1 = self.makeTransaction(source, -amount, ('Transfer to %s'%destination)+desc, date)
         tId2 = self.makeTransaction(destination, amount, ('Transfer from %s'%source)+desc, date)
         return (tId1, tId2)
-    
+
     def getAccountId(self, account):
         ID = self.model.getAccountId(account)
         if ID is None:
             raise InvalidAccountException(account)
-        
+
         return ID
-    
+
     def getAccountNames(self):
         return self.model.getAccounts()
 
     def createAccount(self, account):
         if account in self.getAccountNames():
             raise AccountAlreadyExistsException(account)
-        
+
         self.model.createAccount(account)
+        pubsub.Publisher().sendMessage("NEW ACCOUNT", account)
 
     def removeAccount(self, account):
         if account not in self.getAccountNames():
             raise InvalidAccountException(account)
-            
+
         self.model.removeAccount(account)
-        
+        pubsub.Publisher().sendMessage("REMOVED ACCOUNT", account)
+
     def renameAccount(self, oldName, newName):
         #this will return false if an account is renamed to another one, or to the same thing as it was
         currentAccounts = self.getAccountNames()
@@ -303,30 +336,32 @@ class Bank(object):
             raise InvalidAccountException(oldName)
         if newName in currentAccounts:
             raise AccountAlreadyExistsException(newName)
-            
+
         self.model.renameAccount(oldName, newName)
-        
+        pubsub.Publisher().sendMessage("RENAMED ACCOUNT", (oldName, newName))
+
     def getTransactionsFrom(self, account):
         if account not in self.getAccountNames():
             raise InvalidAccountException(account)
-        
+
         transactions = self.model.getTransactionsFrom(account)
         return sorted(transactions, cmp=lambda l,r: cmp(l[3], r[3]))
-    
+
     def removeTransaction(self, ID):
         if self.model.getTransactionById(ID) is None:
             raise InvalidTransactionException(ID)
-        
+
         self.model.removeTransaction(ID)
+        pubsub.Publisher().sendMessage("REMOVED TRANSACTION", ID)
         return True
-        
+
     def getTransactionByID(self, ID):
         transaction = self.model.getTransactionById(ID)
         if transaction is None:
             raise InvalidTransactionException(ID)
-        
+
         return transaction
-    
+
     def updateTransaction(self, uid, amount=None, desc=None, date=None):
         trans = self.model.getTransactionById(uid)
 
@@ -336,25 +371,28 @@ class Bank(object):
             trans[2] = desc
         if date is not None:
             trans[3] = wellFormDate(date)
-            
+
         self.model.updateTransaction(trans)
-    
+        pubsub.Publisher().sendMessage("UPDATED TRANSACTION")
+
     def makeTransaction(self, account, amount, desc="", date=None):
         """
         Enter a transaction into the specified account.
-        
+
         If no date is specified, the current date will be assumed.
         """
         accountId = self.getAccountId(account)
-        
+
         if date is None:
             date = datetime.date.today()
         else:
             date = wellFormDate(date)
-            
+
         transaction = (accountId, amount, desc, date)
-        return self.model.makeTransaction(transaction)
-    
+        lastRowId = self.model.makeTransaction(transaction)
+        pubsub.Publisher().sendMessage("NEW TRANSACTION")
+        return lastRowId
+
     def close(self):
         self.model.close()
 
@@ -388,7 +426,7 @@ def _selectAccount(accountNames):
     accountname = accountlist[accountnum-1]
     clearScreen()
     return accountname
-    
+
 def clearScreen():
     os.system(['clear','cls'][os.name == 'nt'])
 
