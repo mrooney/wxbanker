@@ -188,9 +188,13 @@ def float2str(number, just=0):
     '$0.01'
     >>> float2str(.01, 8)
     '   $0.01'
+    >>> float2str(2.1-2.2+.1) #test to ensure no negative zeroes
+    '$0.00'
     """
     numStr = '%.2f' % number
-    if len(numStr) > 6 + numStr.find('-') + 1: #$ is not added yet
+    if numStr == '-0.00': # don't display negative zeroes (LP: 250151)
+        numStr = '0.00'
+    if len(numStr) > 6 + numStr.find('-') + 1: # remember, $ is not added yet
         numStr = numStr[:len(numStr)-6] + ',' + numStr[len(numStr)-6:]
     return ('$'+numStr).rjust(just)
 

@@ -82,12 +82,18 @@ class Model:
     def createAccount(self, account):
         self.dbconn.cursor().execute('INSERT INTO accounts VALUES (null, ?)', (account,))
         self.dbconn.commit()
-
-    def removeAccount(self, account):
+        # ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.
+        self.clearAccountTransactions(account)
+        
+    def clearAccountTransactions(self, account):
         accountId = self.getAccountId(account)
+        self.dbconn.cursor().execute('DELETE FROM transactions WHERE accountId=?', (accountId,))
+        self.dbconn.commit()
+        
+    def removeAccount(self, account):
         # remove all the transactions associated with this account
         # this is absolutely necessary to maintain integrity (LP: 249954)
-        self.dbconn.cursor().execute('DELETE FROM transactions WHERE accountId=?', (accountId,))
+        self.clearAccountTransactions(account)
         self.dbconn.cursor().execute('DELETE FROM accounts WHERE name=?',(account,))
         self.dbconn.commit()
 
