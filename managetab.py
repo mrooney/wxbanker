@@ -41,22 +41,18 @@ class ManagePanel(wx.Panel):
         mainSizer.Add(transactionPanel, 1, wx.EXPAND|wx.ALL, 5)
 
         #subscribe to messages that interest us
-        pubsub.Publisher().subscribe(self.refreshGrid, "NEW TRANSACTION")
         pubsub.Publisher().subscribe(self.onChangeAccount, "VIEW.ACCOUNT_CHANGED")
 
         #select the first item by default, if there are any
         #we use a CallLater to allow everything else to finish creation as well,
         #otherwise it won't get scrolled to the bottom initially as it should.
-        wx.CallLater(50, accountCtrl.SelectFirstVisible)
+        wx.CallLater(50, accountCtrl.SelectVisibleItem(0))
 
         self.Sizer = mainSizer
         mainSizer.Layout()
 
     def onChangeAccount(self, message, accountName):
         self.transactionPanel.setTransactions(accountName)
-
-    def refreshGrid(self, message, data):
-        self.transactionPanel.setTransactions(self.getCurrentAccount())
 
     def getCurrentAccount(self):
         return self.accountCtrl.GetCurrentAccount()
@@ -139,6 +135,9 @@ class TransactionGrid(gridlib.Grid):
         self.Bind(gridlib.EVT_GRID_LABEL_RIGHT_CLICK, self.onLabelRightClick)
 
         pubsub.Publisher().subscribe(self.onTransactionRemoved, "REMOVED TRANSACTION")
+        pubsub.Publisher().subscribe(self.onTransactionAdded, "NEW TRANSACTION")
+        # this causes a segfault on amount changes, that's cute
+        #pubsub.Publisher().subscribe(self.onTransactionUpdated, "UPDATED TRANSACTION")
 
     def GetCellValue(self, row, col):
         """
@@ -161,6 +160,14 @@ class TransactionGrid(gridlib.Grid):
             val = str(val)
 
         return gridlib.Grid.SetCellValue(self, row, col, val)
+
+    def onTransactionAdded(self, message, data):
+        #ASSUMPTION: the transaction was added to the current account
+        self.setTransactions(self.Parent.Parent.getCurrentAccount())
+
+    def onTransactionUpdated(self, message, data):
+        #ASSUMPTION: the transaction was added to the current account
+        self.setTransactions(self.Parent.Parent.getCurrentAccount(), ensureVisible=None)
 
     def onLabelRightClick(self, event):
         row, col = event.Row, event.Col

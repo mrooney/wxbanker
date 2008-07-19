@@ -27,9 +27,9 @@ class Publisher:
 
     def sendMessage(self, message, data=None):
         specificSubs = self.subscribers.get(message, [])
-        genericSubs = self.subscribers[""]
+        genericSubs = [s for s in self.subscribers[""] if s not in specificSubs]
         #iterate over all the subscribers, but don't duplicate
-        for subscriber in set(specificSubs + genericSubs):
+        for subscriber in specificSubs + genericSubs:
             try:
                 subscriber(message, data)
             except:

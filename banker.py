@@ -17,20 +17,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Table: accounts
-+--------------------------------------------+
-| id INTEGER PRIMARY KEY | name VARCHAR(255) |
-|------------------------+-------------------|
-| 1                      | "My Account"      |
-+--------------------------------------------+
-
-Table: transactions
-+-------------------------------------------------------------------------------------------------------+
-| id INTEGER PRIMARY KEY | accountId INTEGER | amount FLOAT | description VARCHAR(255) | date CHAR(10)) |
-|------------------------+-------------------+--------------+--------------------------+----------------|
-| 1                      | 1                 | 100.00       | "Initial Balance"        | "2007/01/06"   |
-+-------------------------------------------------------------------------------------------------------+
-
+>>> messages = Subscriber()
 >>> import os
 >>> if os.path.exists("test.db"): os.remove("test.db")
 >>> b = Bank("test")
@@ -54,27 +41,49 @@ InvalidAccountException: Invalid account 'My Account' specified.
 Traceback (most recent call last):
   ...
 InvalidAccountException: Invalid account 'My Account' specified.
+>>> len(messages) == 0
+True
 >>> b.createAccount("My Account")
+>>> len(messages) == 1
+True
+>>> messages[0]
+('NEW ACCOUNT', 'My Account')
 >>> b.createAccount("My Account")
 Traceback (most recent call last):
   ...
 AccountAlreadyExistsException: Account 'My Account' already exists.
+>>> len(messages) == 1
+True
 >>> b.getAccountNames()
 [u'My Account']
 >>> myId = b.getAccountId("My Account")
 >>> b.getBalanceOf("My Account")
 0.0
 >>> tId = b.makeTransaction("My Account", 100.27, "Initial Balance")
+>>> len(messages) == 2
+True
+>>> messages[0]
+('NEW TRANSACTION', None)
 >>> b.getBalanceOf("My Account")
 100.27
 >>> tId = b.makeTransaction("My Account", -10, "ATM Withdrawal", datetime.date(2007, 1, 6))
+>>> len(messages) == 3
+True
+>>> messages[0]
+('NEW TRANSACTION', None)
 >>> balance = b.getBalanceOf("My Account")
 >>> float2str(balance)
 '$90.27'
 >>> b.renameAccount("My Account", "My Renamed Account")
+>>> len(messages) == 4
+True
+>>> messages[0]
+('RENAMED ACCOUNT', ('My Account', 'My Renamed Account'))
 >>> b.getAccountNames()
 [u'My Renamed Account']
 >>> b.updateTransaction(tId, amount=-101)
+>>> len(messages) == 5
+True
 >>> balance = b.getBalanceOf("My Renamed Account")
 >>> float2str(balance)
 '$-0.73'
@@ -112,7 +121,16 @@ Traceback (most recent call last):
 InvalidAccountException: Invalid account 'Another Account' specified.
 >>> float2str(b.getTotalBalance())
 '$0.29'
->>> b.removeTransaction(tId1)
+>>> b.createAccount("Fresh New Account")
+>>> b.getBalanceOf("Fresh New Account")
+0.0
+>>> b.getTransactionsFrom("Fresh New Account")
+[]
+>>> b.removeTransaction(tId1) #doctest: +ELLIPSIS
+Traceback (most recent call last):
+  ...
+InvalidTransactionException: Unable to find transaction with UID ...
+>>> b.removeTransaction(tId2)
 True
 >>> b.getTransactionByID('FakeID')
 Traceback (most recent call last):
@@ -129,6 +147,20 @@ InvalidTransactionException: Unable to find transaction with UID FakeID
 import time, os, datetime
 from model_sqlite import Model
 import pubsub
+
+
+class Subscriber(list):
+    """
+    This class subscribes to all pubsub messages.
+    It is used by the unit tests to ensure proper
+    underlying messaging exists.
+    """
+    def __init__(self):
+        list.__init__(self)
+        pubsub.Publisher().subscribe(self.onMessage)
+
+    def onMessage(self, topic, data):
+        self.insert(0, (topic, data))
 
 def float2str(number, just=0):
     """

@@ -18,6 +18,20 @@
 
 """
 This is an implementation of a Bank Model using sqlite3.
+
+Table: accounts
++--------------------------------------------+
+| id INTEGER PRIMARY KEY | name VARCHAR(255) |
+|------------------------+-------------------|
+| 1                      | "My Account"      |
++--------------------------------------------+
+
+Table: transactions
++-------------------------------------------------------------------------------------------------------+
+| id INTEGER PRIMARY KEY | accountId INTEGER | amount FLOAT | description VARCHAR(255) | date CHAR(10)) |
+|------------------------+-------------------+--------------+--------------------------+----------------|
+| 1                      | 1                 | 100.00       | "Initial Balance"        | "2007/01/06"   |
++-------------------------------------------------------------------------------------------------------+
 """
 import os, datetime
 from sqlite3 import dbapi2 as sqlite
@@ -70,6 +84,10 @@ class Model:
         self.dbconn.commit()
 
     def removeAccount(self, account):
+        accountId = self.getAccountId(account)
+        # remove all the transactions associated with this account
+        # this is absolutely necessary to maintain integrity (LP: 249954)
+        self.dbconn.cursor().execute('DELETE FROM transactions WHERE accountId=?', (accountId,))
         self.dbconn.cursor().execute('DELETE FROM accounts WHERE name=?',(account,))
         self.dbconn.commit()
 

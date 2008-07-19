@@ -142,6 +142,20 @@ class AccountListCtrl(wx.Panel):
         self.staticBoxSizer.Layout()
         #self.staticBoxSizer.SetSmooth(True)
 
+    def IsVisible(self, index):
+        """
+        Return whether or not the account at the given
+        index is visible.
+        """
+        if index is None:
+            return False
+
+        if index < 0 or index >= self.GetCount():
+            raise IndexError, "No element at index %i"%index
+
+        # offset by 1 because the first child is actually the button sizer
+        return self.staticBoxSizer.GetItem(index+1).IsShown()
+
     def SelectItem(self, index):
         """
         Given an index (zero-based), select the
@@ -168,16 +182,26 @@ class AccountListCtrl(wx.Panel):
         #tell the parent we changed
         pubsub.Publisher().sendMessage("VIEW.ACCOUNT_CHANGED", account)
 
+    def SelectVisibleItem(self, index):
+        """
+        Given an index (zero-based), select the
+        visible account at that index.
+        """
+        visibleItems = -1
+        for i in range(self.GetCount()):
+            if self.IsVisible(i):
+                visibleItems += 1
+
+                if index == visibleItems:
+                    self.SelectItem(i)
+                    return
+        else: # if we didn't break (or return)
+            self.SelectItem(None)
+
     def SelectItemByName(self, name):
         for i, label in enumerate(self.GetAccounts()):
             if label == name:
                 self.SelectItem(i)
-
-    def SelectFirstVisible(self):
-        for i, ctrl in enumerate(list(self.staticBoxSizer.Children)[1:self.GetCount()+1]):
-            if self.staticBoxSizer.IsShown(ctrl.Sizer):
-                self.SelectItem(i)
-                return
 
     def HighlightItem(self, index):
         #print "Highlighting", self.hyperLinks[index].Label[:-1]
@@ -276,8 +300,13 @@ class AccountListCtrl(wx.Panel):
         #handle selection logic
         if fixSel:
             if self.currentIndex >= self.GetCount():
-                self.currentIndex = None
-            self.SelectItem(self.currentIndex)
+                # select the first one, if there is at least one
+                if self.GetCount() > 0:
+                    self.currentIndex = 0
+                # otherwise, select None, as there are no accounts
+                else:
+                    self.currentIndex = None
+            self.SelectVisibleItem(self.currentIndex)
 
         #update the total text (subtract what was removed)
         total = str2float(self.totalText.Label)
@@ -322,7 +351,7 @@ class AccountListCtrl(wx.Panel):
         """
         Called when a new account is created in the model.
         """
-        self.onHideEditCtrl()
+        self.onHideEditCtrl() #ASSUMPTION!
         self._PutAccount(accountName)
         self.SelectItemByName(accountName)
 
@@ -400,7 +429,7 @@ class AccountListCtrl(wx.Panel):
         Called when an account has been renamed in the model.
         """
         #hide the edit control
-        self.onHideEditCtrl(restore=False) # ASSUMPTION!
+        self.onHideEditCtrl(restore=False) #ASSUMPTION!
         #just renaming won't put it in the right alpha position
         self.UnhighlightItem(self.currentIndex)
         self._RemoveItem(self.currentIndex, fixSel=False)
@@ -420,22 +449,20 @@ class AccountListCtrl(wx.Panel):
         the option to hide zero-balance accounts.
         """
         checked = self.hideBox.IsChecked()
-        hidden = []
         for i, amountCtrl in enumerate(self.totalTexts):
-            #show it, in the case of calls from updateTotals where a zero-balance
-            #became a non-zero. otherwise it won't come up.
-            #+1 offset is to take into account the buttons at the top.
+            # show it, in the case of calls from updateTotals where a zero-balance
+            # became a non-zero. otherwise it won't come up.
+            # +1 offset is to take into account the buttons at the top.
             self.staticBoxSizer.Show(i+1)
             if checked:
                 if str2float(amountCtrl.Label) == 0:
                     self.staticBoxSizer.Hide(i+1)
-                    hidden.append(i)
 
         self.parent.Layout()
 
-        #we hid the current selection, so hide the first available
-        if checked and self.currentIndex in hidden:
-            self.SelectFirstVisible()
+        #we hid the current selection, so select the first available
+        if checked and not self.IsVisible(self.currentIndex):
+            self.SelectVisibleItem(0)
 
         wx.Config.Get().WriteBool("HIDE_ZERO_BALANCE_ACCOUNTS", checked)
 

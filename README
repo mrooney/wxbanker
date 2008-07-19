@@ -7,26 +7,24 @@ https://bugs.launchpad.net/wxbanker.
 == REQUIREMENTS ==
  - Python >= 2.5
  - wxPython >= 2.8
- * numpy >= 1.04 (completely optional; provides improved graph data)
+ * numpy >= 1.04 (completely optional; enables graphing capabilities)
 
 See "INSTALLING" below for instructions on installing these
 dependencies on your specific operating system.
 
 
-== INSTALL ==
+== INSTALLING ==
  - Windows 2000/XP/Vista:
    - Download and install python from:
       http://www.python.org/ftp/python/2.5.2/python-2.5.2.msi
    - Download and install wxPython from:
       http://downloads.sourceforge.net/wxpython/wxPython2.8-win32-unicode-2.8.8.0-py25.exe
-   - Optionally, for improved graph data, download and install
+   - Optionally, for graphing capabilities, download and install
       numpy-1.1.0-win32-superpack-python2.5.exe from:
       http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=175103
 
  - Ubuntu/Debian
-   - Python 2.5 is already installed on your system!
-   - To install wxPython, use apt-get or synaptic to install python-wxgtk2.8
-   - To (optionally) install numpy, use apt-get or synaptic to install python-numpy.
+   - sudo apt-get install python2.5 python-wxgtk2.8 python-numpy
 
  - Mac OSX (PPC or Intel)
    - If you are using Leopard 10.5 or newer, you already have Python 2.5 installed.
@@ -34,7 +32,7 @@ dependencies on your specific operating system.
       http://www.python.org/ftp/python/2.5.2/python-2.5.2-macosx.dmg
    - Download and install wxPython from:
       http://downloads.sourceforge.net/wxpython/wxPython2.8-osx-unicode-2.8.8.0-universal-py2.5.dmg
-   - Optionally, for improved graph data, download and install
+   - Optionally, for graphing capabilities, download and install
       numpy-1.1.0-py2.5-macosx10.5.dmg from:
       http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=175103
 
@@ -49,7 +47,7 @@ See the below section "RUNNING" for instructions on running wxBanker.
 Use python to run wxbanker.py wherever it is located. On Windows,
 and usually elsewhere, this simply means double-clicking wxbanker.py.
 
-Otherwise:
+Otherwise, at a terminal (assuming wxBanker is in your home directory):
 
 Example: "python ~/wxBanker/wxbanker.py"
 
