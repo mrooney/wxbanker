@@ -46,10 +46,12 @@ class ManagePanel(wx.Panel):
         #select the first item by default, if there are any
         #we use a CallLater to allow everything else to finish creation as well,
         #otherwise it won't get scrolled to the bottom initially as it should.
-        wx.CallLater(50, accountCtrl.SelectVisibleItem(0))
+        accountCtrl.SelectVisibleItem(0)
 
         self.Sizer = mainSizer
         mainSizer.Layout()
+        
+        wx.CallLater(50, lambda: transactionPanel.transactionGrid.ensureVisible(-1))
 
     def onChangeAccount(self, message, accountName):
         self.transactionPanel.setTransactions(accountName)
@@ -162,11 +164,11 @@ class TransactionGrid(gridlib.Grid):
         return gridlib.Grid.SetCellValue(self, row, col, val)
 
     def onTransactionAdded(self, message, data):
-        #ASSUMPTION: the transaction was added to the current account
+        #ASSUMPTION: the transaction was of the current account
         self.setTransactions(self.Parent.Parent.getCurrentAccount())
 
     def onTransactionUpdated(self, message, data):
-        #ASSUMPTION: the transaction was added to the current account
+        #ASSUMPTION: the transaction was of the current account
         self.setTransactions(self.Parent.Parent.getCurrentAccount(), ensureVisible=None)
 
     def onLabelRightClick(self, event):
@@ -295,13 +297,22 @@ class TransactionGrid(gridlib.Grid):
 
         #scroll to the last transaction
         if ensureVisible is not None:
-            if ensureVisible < 0:
-                #allow pythonic negative indexing: -1 for the last, -2 for 2nd last, etc.
-                index = len(transactions) + ensureVisible
-            else:
-                index = ensureVisible
             self.ClearSelection()
-            self.MakeCellVisible(index, 0)
+            self.ensureVisible(ensureVisible)
+            
+    def ensureVisible(self, index):
+        """
+        Make sure that a cell at a given index is shown.
+        Negative indexes are allowed for pythonic purposes.
+        """
+        rows = self.GetNumberRows()
+        if not rows:
+            return
+        
+        if index < 0:
+            #allow pythonic negative indexing: -1 for the last, -2 for 2nd last, etc.
+            index = rows + index
+        self.MakeCellVisible(index, 0)
 
     def doResize(self, event=None):
         """
