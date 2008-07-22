@@ -3,6 +3,11 @@ comments, or suggestions, please don't hesitate to email me at
 wxbanker@rowk.com. If you find a bug, please file it at
 https://bugs.launchpad.net/wxbanker.
 
+== UPGRADING ==
+
+If you are upgrading from a previous release, please see UPGRADING.txt
+for simple instructions. It's easy, I promise!
+
 
 == REQUIREMENTS ==
  - Python >= 2.5
@@ -18,7 +23,7 @@ dependencies on your specific operating system.
    - Download and install python from:
       http://www.python.org/ftp/python/2.5.2/python-2.5.2.msi
    - Download and install wxPython from:
-      http://downloads.sourceforge.net/wxpython/wxPython2.8-win32-unicode-2.8.8.0-py25.exe
+      http://downloads.sourceforge.net/wxpython/wxPython2.8-win32-unicode-2.8.8.1-py25.exe
    - Optionally, for graphing capabilities, download and install
       numpy-1.1.0-win32-superpack-python2.5.exe from:
       http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=175103
@@ -31,8 +36,8 @@ dependencies on your specific operating system.
      Otherwise, download and install python from:
       http://www.python.org/ftp/python/2.5.2/python-2.5.2-macosx.dmg
    - Download and install wxPython from:
-      http://downloads.sourceforge.net/wxpython/wxPython2.8-osx-unicode-2.8.8.0-universal-py2.5.dmg
-   - Optionally, for graphing capabilities, download and install
+      http://downloads.sourceforge.net/wxpython/wxPython2.8-osx-unicode-2.8.8.1-universal-py2.5.dmg
+   - Optionally (10.5 only), for graphing capabilities, download and install
       numpy-1.1.0-py2.5-macosx10.5.dmg from:
       http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=175103
 
