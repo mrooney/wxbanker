@@ -449,7 +449,7 @@ class AccountListCtrl(wx.Panel):
         the option to hide zero-balance accounts.
         """
         checked = self.hideBox.IsChecked()
-        for i, amountCtrl in enumerate(self.totalTexts):
+        for i, amountCtrl in enumerate(self.totalTexts[:-1]):
             # show it, in the case of calls from updateTotals where a zero-balance
             # became a non-zero. otherwise it won't come up.
             # +1 offset is to take into account the buttons at the top.
