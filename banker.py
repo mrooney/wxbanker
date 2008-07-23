@@ -308,10 +308,13 @@ class Bank(object):
         return sorted(transactions, cmp=lambda l,r: cmp(l[3], r[3]))
 
     def getTotalsEvery(self, days):
-        offset = datetime.timedelta(days)
         transactions = self.getAllTransactions()
+        if len(transactions) == 0:
+            return [], None
+
         startDate = currentDate = transactions[0][3]
         #lastMonth = currentDate.month
+        offset = datetime.timedelta(days)
 
         totals = []
         total = grandTotal = 0.0

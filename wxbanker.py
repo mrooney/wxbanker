@@ -151,7 +151,10 @@ class BankerFrame(wx.Frame):
 if __name__ == "__main__":
     app = wx.App(False)
 
-    #initialize our configuration object
+    # Initialize our configuration object.
+    # It is only necessary to initialize any default values we
+    # have which differ from the default values of the types,
+    # so initializing an Int to 0 or a Bool to False is not needed.
     wx.Config.Set(wx.Config("wxBanker"))
     config = wx.Config.Get()
     if not config.HasEntry("SIZE_X"):

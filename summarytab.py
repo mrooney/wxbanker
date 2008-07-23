@@ -27,6 +27,8 @@ except ImportError:
 from banker import float2str
 import datetime
 
+# TODO: sliders for granularity (getPoints(100)), and trend degree (N=2)
+
 class SummaryPanel(wx.Panel):
     def __init__(self, parent, frame):
         wx.Panel.__init__(self, parent)
@@ -41,41 +43,91 @@ class SummaryPanel(wx.Panel):
         sizer.Layout()
 
     def generateData(self):
-        totals, startDate = self.frame.bank.getTotalsEvery(7)
-        self.plotPanel.plotBalance(totals, startDate, 1, "Weeks")
+        totals, startDate, delta = self.getPoints(100)
+        self.plotPanel.plotBalance(totals, startDate, delta, "Days")
 
+    def getPoints(self, numPoints):
+        """
+        A function to turn the daily balances into numPoints number of values,
+        spanning the balances if there are not enough and averaging balances
+        together if there are too many.
+        """
+        days, startDate = self.frame.bank.getTotalsEvery(1)
+        numDays = len(days)
+        delta = float(numDays) / numPoints
+        returnPoints = []
+
+        if numDays == 0:
+            return [0.0 for i in range(numPoints)], datetime.date.today(), 1
+        elif numDays <= numPoints:
+            span = numPoints / numDays
+            mod = numPoints % numDays
+            total = 0
+            for val in days:
+                total += val
+                for i in range(span):
+                    returnPoints.append(total)
+            for i in range(mod):
+                returnPoints.append(total)
+        else: # we have too much data, we need to average
+            groupSize = numDays / numPoints
+            total = 0
+            for i in range(numPoints):
+                start = i*groupSize
+                end = start + groupSize
+                points = days[start:end]
+
+                if i == (numPoints-1): # this is the last one, throw in the rest
+                    points.extend(days[end:])
+                    groupSize += numDays % numPoints # to make avg accurate!
+
+                pointSum = sum(points)
+                avgVal = pointSum / float(groupSize)
+                returnPoints.append(total+avgVal)
+                total += pointSum
+
+        return returnPoints, startDate, delta
 
 class AccountPlotCanvas(pyplot.PlotCanvas):
     def __init__(self, *args, **kwargs):
         pyplot.PlotCanvas.__init__(self, *args, **kwargs)
         self.pointDates = []
         self.SetEnablePointLabel(True)
+        self.SetEnableLegend(True)
         self.SetPointLabelFunc(self.drawPointLabel)
 
         self.canvas.Bind(wx.EVT_MOTION, self.onMotion)
 
     def plotBalance(self, totals, startDate, every, xunits="Days"):
         timeDelta = datetime.timedelta( every * {'Days':1, 'Weeks':7, 'Months':30, 'Years':365}[xunits] )
-        currentDate = startDate
         pointDates = []
 
-        currentTotal = currentTime = 0
         data = []
-
-        for total in totals:
-            currentTotal += total
-            data.append((currentTime, currentTotal))
+        currentTime = 0
+        uniquePoints = set()
+        for i, total in enumerate(totals):
+            data.append((currentTime, total))
+            uniquePoints.add("%.2f"%total)
             currentTime += every
-            currentDate += timeDelta
+
+            # don't just += the timeDelta to currentDate, since adding days is all or nothing, ie:
+            #   currentDate + timeDelta == currentDate, where timeDelta < 1
+            # so the date will never advance for timeDeltas < 1.
+            # as such we must start fresh each time and multiple the time delta appropriately.
+            currentDate = startDate + (i+1)*timeDelta
 
             pointDates.append(currentDate.strftime('%m/%d/%Y'))
 
         #drawPointLabel will need these later
         self.pointDates = pointDates
 
-        line = pyplot.PolyLine(data, width=3, colour="green")
-        bestfitline = pyplot.PolyBestFitLine(data, N=2, width=3, colour="blue")
-        self.Draw(pyplot.PlotGraphics([line, bestfitline], "Balance Over Time", "Time (%s)"%xunits, "Total ($)"))
+        line = pyplot.PolyLine(data, width=2, colour="green", legend="Balance")
+        lines = [line]
+        if len(uniquePoints) > 1:
+            # without more than one unique value, a best fit line doesn't make sense (and also causes freezes!)
+            bestfitline = pyplot.PolyBestFitLine(data, N=2, width=2, colour="blue", legend="Trend")
+            lines.append(bestfitline)
+        self.Draw(pyplot.PlotGraphics(lines, "Balance Over Time", "Time (%s)"%xunits, "Total ($)"))
 
     def onMotion(self, event):
         #show closest point (when enbled)
@@ -99,6 +151,10 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
 
         This just displays the total in a nicely-formatted money string.
         """
+        #print mDataDict
+        #if mDataDict['legend'] != 'Balance':
+        #    return False
+
         dc.SetPen(wx.Pen(wx.BLACK))
         dc.SetBrush(wx.Brush( wx.BLACK, wx.SOLID ))
 
