@@ -20,6 +20,7 @@ import wx, wx.grid as gridlib
 import datetime
 from banker import float2str
 from bankcontrols import AccountListCtrl, NewTransactionCtrl
+from calculator import CollapsableWidget, SimpleCalculator
 import pubsub
 
 #TODO: search control, for searching in currently displayed transactions
@@ -33,25 +34,53 @@ class ManagePanel(wx.Panel):
         wx.Panel.__init__(self, parent)
         self.frame = frame
 
-        self.accountCtrl = accountCtrl = AccountListCtrl(self, frame)
+        ## Left side, the account list and calculator
+        leftPanel = wx.Panel(self)
+        leftPanel.Sizer = wx.BoxSizer(wx.VERTICAL)
+
+        self.accountCtrl = accountCtrl = AccountListCtrl(leftPanel, frame)
+        calcWidget = CollapsableWidget(leftPanel, SimpleCalculator, "Calculator")
+
+        leftPanel.Sizer.Add(accountCtrl, 0, wx.EXPAND)
+        leftPanel.Sizer.AddStretchSpacer(1)
+        leftPanel.Sizer.Add(calcWidget, 0, wx.EXPAND)
+
+        # Do some magic to get the calculator and panel to size correctly
+        for widget in [calcWidget.widget, leftPanel]:
+            widget.SetMinSize((accountCtrl.BestSize[0], -1)) # works only in Windows
+            widget.SetMaxSize((accountCtrl.BestSize[0], -1)) # works only in GTK
+
+        ## Right side, the transaction panel:
         self.transactionPanel = transactionPanel = TransactionPanel(self, frame)
 
         mainSizer = wx.BoxSizer()
-        mainSizer.Add(accountCtrl, 0, wx.ALL, 5)
+        self.Sizer = mainSizer
+        mainSizer.Add(leftPanel, 0, wx.EXPAND|wx.ALL, 5)
         mainSizer.Add(transactionPanel, 1, wx.EXPAND|wx.ALL, 5)
 
         #subscribe to messages that interest us
         pubsub.Publisher().subscribe(self.onChangeAccount, "VIEW.ACCOUNT_CHANGED")
+        pubsub.Publisher().subscribe(self.onCalculatorToggled, "CALCULATOR.TOGGLED")
 
         #select the first item by default, if there are any
         #we use a CallLater to allow everything else to finish creation as well,
         #otherwise it won't get scrolled to the bottom initially as it should.
         accountCtrl.SelectVisibleItem(0)
 
-        self.Sizer = mainSizer
         mainSizer.Layout()
-        
+
+        if wx.Config.Get().ReadBool("SHOW_CALC"):
+            calcWidget.OnToggle()
+
         wx.CallLater(50, lambda: transactionPanel.transactionGrid.ensureVisible(-1))
+
+    def onCalculatorToggled(self, message, data):
+        """
+        Re-layout ourself so the calcWidget always fits properly at the bottom.
+        """
+        self.Layout()
+        shown = data == "HIDE" # backwards, HIDE means it is now shown.
+        wx.Config.Get().WriteBool("SHOW_CALC", shown)
 
     def onChangeAccount(self, message, accountName):
         self.transactionPanel.setTransactions(accountName)
@@ -299,7 +328,7 @@ class TransactionGrid(gridlib.Grid):
         if ensureVisible is not None:
             self.ClearSelection()
             self.ensureVisible(ensureVisible)
-            
+
     def ensureVisible(self, index):
         """
         Make sure that a cell at a given index is shown.
@@ -308,7 +337,7 @@ class TransactionGrid(gridlib.Grid):
         rows = self.GetNumberRows()
         if not rows:
             return
-        
+
         if index < 0:
             #allow pythonic negative indexing: -1 for the last, -2 for 2nd last, etc.
             index = rows + index
