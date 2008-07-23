@@ -19,7 +19,7 @@
 import wx
 import datetime
 
-import pubsub
+from wx.lib.pubsub import Publisher
 from banker import str2float, float2str, AccountAlreadyExistsException
 from smoothsizer import SmoothStaticBoxSizer
 
@@ -113,12 +113,12 @@ class AccountListCtrl(wx.Panel):
         self.Bind(wx.EVT_HYPERLINK, self.onAccountClick)
 
         #subscribe to messages we are concerned about
-        pubsub.Publisher().subscribe(self.updateTotals, "NEW TRANSACTION")
-        pubsub.Publisher().subscribe(self.updateTotals, "UPDATED TRANSACTION")
-        pubsub.Publisher().subscribe(self.updateTotals, "REMOVED TRANSACTION")
-        pubsub.Publisher().subscribe(self.onAccountRemoved, "REMOVED ACCOUNT")
-        pubsub.Publisher().subscribe(self.onAccountAdded, "NEW ACCOUNT")
-        pubsub.Publisher().subscribe(self.onAccountRenamed, "RENAMED ACCOUNT")
+        Publisher().subscribe(self.updateTotals, "NEW TRANSACTION")
+        Publisher().subscribe(self.updateTotals, "UPDATED TRANSACTION")
+        Publisher().subscribe(self.updateTotals, "REMOVED TRANSACTION")
+        Publisher().subscribe(self.onAccountRemoved, "REMOVED ACCOUNT")
+        Publisher().subscribe(self.onAccountAdded, "NEW ACCOUNT")
+        Publisher().subscribe(self.onAccountRenamed, "RENAMED ACCOUNT")
 
         #populate ourselves initially unless explicitly told not to
         if autoPopulate:
@@ -180,7 +180,7 @@ class AccountListCtrl(wx.Panel):
         self.editButton.Enabled = index is not None
 
         #tell the parent we changed
-        pubsub.Publisher().sendMessage("VIEW.ACCOUNT_CHANGED", account)
+        Publisher().sendMessage("VIEW.ACCOUNT_CHANGED", account)
 
     def SelectVisibleItem(self, index):
         """
@@ -223,10 +223,11 @@ class AccountListCtrl(wx.Panel):
         else: #not necessary but this is explicit
             return None
 
-    def onAccountRemoved(self, topic, accountName):
+    def onAccountRemoved(self, message):
         """
         Called when an account is removed from the model.
         """
+        accountName = message.data
         index = self.GetAccounts().index(accountName)
         self._RemoveItem(index)
 
@@ -318,7 +319,7 @@ class AccountListCtrl(wx.Panel):
         self.Layout()
         self.parent.Layout()
 
-    def updateTotals(self, message=None, data=None):
+    def updateTotals(self, message=None):
         """
         Update all the total strings.
         """
@@ -347,10 +348,11 @@ class AccountListCtrl(wx.Panel):
         except AccountAlreadyExistsException:
             wx.TipWindow(self, "Sorry, an account by that name already exists.")#, maxLength=200)
 
-    def onAccountAdded(self, topic, accountName):
+    def onAccountAdded(self, message):
         """
         Called when a new account is created in the model.
         """
+        accountName = message.data
         self.onHideEditCtrl() #ASSUMPTION!
         self._PutAccount(accountName)
         self.SelectItemByName(accountName)
@@ -424,10 +426,13 @@ class AccountListCtrl(wx.Panel):
             #wx.MessageDialog(self, 'An account by that name already exists', 'Error :[', wx.OK | wx.ICON_ERROR).ShowModal()
             wx.TipWindow(self, "Sorry, an account by that name already exists.")#, maxLength=200)
 
-    def onAccountRenamed(self, topic, (oldName, newName)):
+    def onAccountRenamed(self, message):
         """
         Called when an account has been renamed in the model.
+
+        TODO: don't assume it was the current account that was renamed.
         """
+        oldName, newName = message.data
         #hide the edit control
         self.onHideEditCtrl(restore=False) #ASSUMPTION!
         #just renaming won't put it in the right alpha position

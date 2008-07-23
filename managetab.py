@@ -21,7 +21,7 @@ import datetime
 from banker import float2str
 from bankcontrols import AccountListCtrl, NewTransactionCtrl
 from calculator import CollapsableWidget, SimpleCalculator
-import pubsub
+from wx.lib.pubsub import Publisher
 
 #TODO: search control, for searching in currently displayed transactions
 
@@ -59,8 +59,8 @@ class ManagePanel(wx.Panel):
         mainSizer.Add(transactionPanel, 1, wx.EXPAND|wx.ALL, 5)
 
         #subscribe to messages that interest us
-        pubsub.Publisher().subscribe(self.onChangeAccount, "VIEW.ACCOUNT_CHANGED")
-        pubsub.Publisher().subscribe(self.onCalculatorToggled, "CALCULATOR.TOGGLED")
+        Publisher().subscribe(self.onChangeAccount, "VIEW.ACCOUNT_CHANGED")
+        Publisher().subscribe(self.onCalculatorToggled, "CALCULATOR.TOGGLED")
 
         #select the first item by default, if there are any
         #we use a CallLater to allow everything else to finish creation as well,
@@ -74,16 +74,16 @@ class ManagePanel(wx.Panel):
 
         wx.CallLater(50, lambda: transactionPanel.transactionGrid.ensureVisible(-1))
 
-    def onCalculatorToggled(self, message, data):
+    def onCalculatorToggled(self, message):
         """
         Re-layout ourself so the calcWidget always fits properly at the bottom.
         """
         self.Layout()
-        shown = data == "HIDE" # backwards, HIDE means it is now shown.
+        shown = message.data == "HIDE" # backwards, HIDE means it is now shown.
         wx.Config.Get().WriteBool("SHOW_CALC", shown)
 
-    def onChangeAccount(self, message, accountName):
-        self.transactionPanel.setTransactions(accountName)
+    def onChangeAccount(self, message):
+        self.transactionPanel.setTransactions(message.data)
 
     def getCurrentAccount(self):
         return self.accountCtrl.GetCurrentAccount()
@@ -165,10 +165,10 @@ class TransactionGrid(gridlib.Grid):
         self.Bind(gridlib.EVT_GRID_CELL_CHANGE, self.onCellChange)
         self.Bind(gridlib.EVT_GRID_LABEL_RIGHT_CLICK, self.onLabelRightClick)
 
-        pubsub.Publisher().subscribe(self.onTransactionRemoved, "REMOVED TRANSACTION")
-        pubsub.Publisher().subscribe(self.onTransactionAdded, "NEW TRANSACTION")
+        Publisher().subscribe(self.onTransactionRemoved, "REMOVED TRANSACTION")
+        Publisher().subscribe(self.onTransactionAdded, "NEW TRANSACTION")
         # this causes a segfault on amount changes, that's cute
-        #pubsub.Publisher().subscribe(self.onTransactionUpdated, "UPDATED TRANSACTION")
+        #Publisher().subscribe(self.onTransactionUpdated, "UPDATED TRANSACTION")
 
     def GetCellValue(self, row, col):
         """
@@ -192,11 +192,11 @@ class TransactionGrid(gridlib.Grid):
 
         return gridlib.Grid.SetCellValue(self, row, col, val)
 
-    def onTransactionAdded(self, message, data):
+    def onTransactionAdded(self, message):
         #ASSUMPTION: the transaction was of the current account
         self.setTransactions(self.Parent.Parent.getCurrentAccount())
 
-    def onTransactionUpdated(self, message, data):
+    def onTransactionUpdated(self, message):
         #ASSUMPTION: the transaction was of the current account
         self.setTransactions(self.Parent.Parent.getCurrentAccount(), ensureVisible=None)
 
@@ -223,7 +223,8 @@ class TransactionGrid(gridlib.Grid):
             if int(self.GetRowLabelValue(i)) == ID:
                 return i
 
-    def onTransactionRemoved(self, topic, ID):
+    def onTransactionRemoved(self, message):
+        ID = message.data
         row = self.getRowFromID(ID)
         if row is not None: # it may not have been from the current account
             #delete the row from our grid

@@ -1,5 +1,5 @@
 import wx
-import pubsub
+from wx.lib.pubsub import Publisher
 
 class TestPanel(wx.Panel):
     def __init__(self, parent):
@@ -149,7 +149,7 @@ class CollapsableWidget(wx.Panel):
             modifier = "Show"
         self.cp.Label = self.clickLabel % modifier
 
-        pubsub.Publisher().sendMessage("CALCULATOR.TOGGLED", modifier.upper())
+        Publisher().sendMessage("CALCULATOR.TOGGLED", modifier.upper())
 
 
 if __name__ == "__main__":

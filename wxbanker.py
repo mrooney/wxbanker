@@ -25,6 +25,7 @@ A GUI layer on top of banker.py
 #TODO: metadata info, such as FIXED, UNEXPECTED
 """
 import wx, wx.aui, wx.lib.delayedresult as delayedresult
+from wx.lib.pubsub import Publisher
 import time, os
 from bankexceptions import NoNumpyException
 
@@ -38,7 +39,6 @@ except NoNumpyException:
     print "Numpy not available, disabling Summary tab..."
 
 from banker import Bank
-import pubsub
 
 
 class BankerFrame(wx.Frame):
@@ -63,7 +63,7 @@ class BankerFrame(wx.Frame):
 
         self.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.onTabSwitching)
 
-        pubsub.Publisher().subscribe(self.onFirstRun, "FIRST RUN")
+        Publisher().subscribe(self.onFirstRun, "FIRST RUN")
 
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_MOVE, self.OnMove)
@@ -100,7 +100,7 @@ class BankerFrame(wx.Frame):
         if tabIndex == 1:
             self.summaryPanel.generateData()
 
-    def onFirstRun(self, message, data):
+    def onFirstRun(self, message):
         welcomeMsg = "It looks like this is your first time using wxBanker!"
         welcomeMsg += " To\nget started, add an account using the account\ncontrol in the top left corner."
         welcomeMsg += "\n\nThe buttons in the account control allow you to add,\nremove, and rename an account, respectively."
@@ -176,7 +176,7 @@ if __name__ == "__main__":
     #greet the user if it appears this is their first time
     firstTime = not config.ReadBool("RUN_BEFORE")
     if firstTime:
-        pubsub.Publisher().sendMessage("FIRST RUN")
+        Publisher().sendMessage("FIRST RUN")
         config.WriteBool("RUN_BEFORE", True)
 
     app.MainLoop()

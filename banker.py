@@ -47,7 +47,7 @@ True
 >>> len(messages) == 1
 True
 >>> messages[0]
-('NEW ACCOUNT', 'My Account')
+(('NEW ACCOUNT',), 'My Account')
 >>> b.createAccount("My Account")
 Traceback (most recent call last):
   ...
@@ -63,14 +63,14 @@ True
 >>> len(messages) == 2
 True
 >>> messages[0]
-('NEW TRANSACTION', None)
+(('NEW TRANSACTION',), None)
 >>> b.getBalanceOf("My Account")
 100.27
 >>> tId = b.makeTransaction("My Account", -10, "ATM Withdrawal", datetime.date(2007, 1, 6))
 >>> len(messages) == 3
 True
 >>> messages[0]
-('NEW TRANSACTION', None)
+(('NEW TRANSACTION',), None)
 >>> balance = b.getBalanceOf("My Account")
 >>> float2str(balance)
 '$90.27'
@@ -78,7 +78,7 @@ True
 >>> len(messages) == 4
 True
 >>> messages[0]
-('RENAMED ACCOUNT', ('My Account', 'My Renamed Account'))
+(('RENAMED ACCOUNT',), ('My Account', 'My Renamed Account'))
 >>> b.getAccountNames()
 [u'My Renamed Account']
 >>> b.updateTransaction(tId, amount=-101)
@@ -146,7 +146,7 @@ InvalidTransactionException: Unable to find transaction with UID FakeID
 """
 import time, os, datetime
 from model_sqlite import Model
-import pubsub
+from wx.lib.pubsub import Publisher
 
 
 class Subscriber(list):
@@ -157,10 +157,10 @@ class Subscriber(list):
     """
     def __init__(self):
         list.__init__(self)
-        pubsub.Publisher().subscribe(self.onMessage)
+        Publisher().subscribe(self.onMessage)
 
-    def onMessage(self, topic, data):
-        self.insert(0, (topic, data))
+    def onMessage(self, message):
+        self.insert(0, (message.topic, message.data))
 
 def float2str(number, just=0):
     """
@@ -356,14 +356,14 @@ class Bank(object):
             raise AccountAlreadyExistsException(account)
 
         self.model.createAccount(account)
-        pubsub.Publisher().sendMessage("NEW ACCOUNT", account)
+        Publisher().sendMessage("NEW ACCOUNT", account)
 
     def removeAccount(self, account):
         if account not in self.getAccountNames():
             raise InvalidAccountException(account)
 
         self.model.removeAccount(account)
-        pubsub.Publisher().sendMessage("REMOVED ACCOUNT", account)
+        Publisher().sendMessage("REMOVED ACCOUNT", account)
 
     def renameAccount(self, oldName, newName):
         #this will return false if an account is renamed to another one, or to the same thing as it was
@@ -374,7 +374,7 @@ class Bank(object):
             raise AccountAlreadyExistsException(newName)
 
         self.model.renameAccount(oldName, newName)
-        pubsub.Publisher().sendMessage("RENAMED ACCOUNT", (oldName, newName))
+        Publisher().sendMessage("RENAMED ACCOUNT", (oldName, newName))
 
     def getTransactionsFrom(self, account):
         if account not in self.getAccountNames():
@@ -388,7 +388,7 @@ class Bank(object):
             raise InvalidTransactionException(ID)
 
         self.model.removeTransaction(ID)
-        pubsub.Publisher().sendMessage("REMOVED TRANSACTION", ID)
+        Publisher().sendMessage("REMOVED TRANSACTION", ID)
         return True
 
     def getTransactionByID(self, ID):
@@ -409,7 +409,7 @@ class Bank(object):
             trans[3] = wellFormDate(date)
 
         self.model.updateTransaction(trans)
-        pubsub.Publisher().sendMessage("UPDATED TRANSACTION")
+        Publisher().sendMessage("UPDATED TRANSACTION")
 
     def makeTransaction(self, account, amount, desc="", date=None):
         """
@@ -426,7 +426,7 @@ class Bank(object):
 
         transaction = (accountId, amount, desc, date)
         lastRowId = self.model.makeTransaction(transaction)
-        pubsub.Publisher().sendMessage("NEW TRANSACTION")
+        Publisher().sendMessage("NEW TRANSACTION")
         return lastRowId
 
     def close(self):
