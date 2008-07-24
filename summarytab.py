@@ -18,7 +18,6 @@
 
 from bankexceptions import NoNumpyException
 import wx
-#import wx.lib.plot as pyplot
 try:
     import plot as pyplot
 except ImportError:
@@ -27,7 +26,6 @@ except ImportError:
 from banker import float2str
 import datetime
 
-# TODO: sliders for granularity (getPoints(100)), and trend degree (N=2)
 
 class SummaryPanel(wx.Panel):
     def __init__(self, parent, frame):
@@ -35,13 +33,38 @@ class SummaryPanel(wx.Panel):
         self.frame = frame
         self.plotSettings = {'FitDegree': 2, 'Granularity': 100}
 
+        # create the plot panel
         self.plotPanel = AccountPlotCanvas(self)
 
-        sizer = wx.BoxSizer()
-        sizer.Add(self.plotPanel, 1, wx.EXPAND)
+        # create the controls at the bottom
+        controlSizer = wx.BoxSizer()
+        granCtrl = wx.SpinCtrl(self, min=10, max=1000, initial=self.plotSettings['Granularity'])
+        degCtrl = wx.SpinCtrl(self, min=1, max=20, initial=self.plotSettings['FitDegree'])
+        controlSizer.Add(wx.StaticText(self, label="Sample Points"), 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.Add(granCtrl)
+        controlSizer.AddSpacer(20)
+        controlSizer.Add(wx.StaticText(self, label="Fit Curve Degree"), 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.Add(degCtrl)
+        controlSizer.Layout()
 
-        self.Sizer = sizer
-        sizer.Layout()
+        # put it all together
+        self.Sizer = wx.BoxSizer(wx.VERTICAL)
+        self.Sizer.Add(self.plotPanel, 1, wx.EXPAND)
+        self.plotPanel.SetShowScrollbars(False)
+        self.Sizer.Add(controlSizer, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 3)
+        self.Layout()
+
+        # bind to the spin buttons
+        granCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinGran)
+        degCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinFitDeg)
+
+    def onSpinGran(self, event):
+        self.plotSettings['Granularity'] = event.EventObject.Value
+        self.generateData()
+
+    def onSpinFitDeg(self, event):
+        self.plotSettings['FitDegree'] = event.EventObject.Value
+        self.generateData()
 
     def generateData(self):
         totals, startDate, delta = self.getPoints(self.plotSettings['Granularity'])
@@ -84,7 +107,6 @@ class SummaryPanel(wx.Panel):
                     returnPoints.append(total+avgVal)
                     total += pointSum
                 else:
-                    print 'making total last!'
                     # this is the last one, so make it the actual total balance!
                     returnPoints.append(sum(days))
 
@@ -122,7 +144,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
                 # This is the last point, so make sure the date is set to today.
                 # Regardless of the date of the last transaction, the total is still
                 # the total as of today, which is what a user expects to see.
-                currentDate = currentDate.today()
+                currentDate = datetime.date.today()
 
             pointDates.append(currentDate.strftime('%m/%d/%Y'))
 
