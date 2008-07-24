@@ -33,6 +33,7 @@ class SummaryPanel(wx.Panel):
     def __init__(self, parent, frame):
         wx.Panel.__init__(self, parent)
         self.frame = frame
+        self.plotSettings = {'FitDegree': 2, 'Granularity': 100}
 
         self.plotPanel = AccountPlotCanvas(self)
 
@@ -43,8 +44,8 @@ class SummaryPanel(wx.Panel):
         sizer.Layout()
 
     def generateData(self):
-        totals, startDate, delta = self.getPoints(100)
-        self.plotPanel.plotBalance(totals, startDate, delta, "Days")
+        totals, startDate, delta = self.getPoints(self.plotSettings['Granularity'])
+        self.plotPanel.plotBalance(totals, startDate, delta, "Days", fitdegree=self.plotSettings['FitDegree'])
 
     def getPoints(self, numPoints):
         """
@@ -58,7 +59,7 @@ class SummaryPanel(wx.Panel):
         returnPoints = []
 
         if numDays == 0:
-            return [0.0 for i in range(numPoints)], datetime.date.today(), 1
+            return [0.0 for i in range(numPoints)], datetime.date.today(), 1./100000
         elif numDays <= numPoints:
             span = numPoints / numDays
             mod = numPoints % numDays
@@ -73,18 +74,19 @@ class SummaryPanel(wx.Panel):
             groupSize = numDays / numPoints
             total = 0
             for i in range(numPoints):
-                start = i*groupSize
-                end = start + groupSize
-                points = days[start:end]
-
-                if i == (numPoints-1): # this is the last one, throw in the rest
-                    points.extend(days[end:])
-                    groupSize += numDays % numPoints # to make avg accurate!
-
-                pointSum = sum(points)
-                avgVal = pointSum / float(groupSize)
-                returnPoints.append(total+avgVal)
-                total += pointSum
+                if i < (numPoints-1):
+                    # average the totals over this period
+                    start = i*groupSize
+                    end = start + groupSize
+                    points = days[start:end]
+                    pointSum = sum(points)
+                    avgVal = pointSum / float(groupSize)
+                    returnPoints.append(total+avgVal)
+                    total += pointSum
+                else:
+                    print 'making total last!'
+                    # this is the last one, so make it the actual total balance!
+                    returnPoints.append(sum(days))
 
         return returnPoints, startDate, delta
 
@@ -98,7 +100,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
 
         self.canvas.Bind(wx.EVT_MOTION, self.onMotion)
 
-    def plotBalance(self, totals, startDate, every, xunits="Days"):
+    def plotBalance(self, totals, startDate, every, xunits="Days", fitdegree=2):
         timeDelta = datetime.timedelta( every * {'Days':1, 'Weeks':7, 'Months':30, 'Years':365}[xunits] )
         pointDates = []
 
@@ -110,11 +112,17 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
             uniquePoints.add("%.2f"%total)
             currentTime += every
 
-            # don't just += the timeDelta to currentDate, since adding days is all or nothing, ie:
-            #   currentDate + timeDelta == currentDate, where timeDelta < 1
-            # so the date will never advance for timeDeltas < 1.
-            # as such we must start fresh each time and multiple the time delta appropriately.
-            currentDate = startDate + (i+1)*timeDelta
+            if i < len(totals)-1:
+                # Don't just += the timeDelta to currentDate, since adding days is all or nothing, ie:
+                #   currentDate + timeDelta == currentDate, where timeDelta < 1 (bad!)
+                # ...so the date will never advance for timeDeltas < 1, no matter how many adds you do.
+                # As such we must start fresh each time and multiply the time delta appropriately.
+                currentDate = startDate + (i+1)*timeDelta
+            else:
+                # This is the last point, so make sure the date is set to today.
+                # Regardless of the date of the last transaction, the total is still
+                # the total as of today, which is what a user expects to see.
+                currentDate = currentDate.today()
 
             pointDates.append(currentDate.strftime('%m/%d/%Y'))
 
@@ -125,7 +133,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         lines = [line]
         if len(uniquePoints) > 1:
             # without more than one unique value, a best fit line doesn't make sense (and also causes freezes!)
-            bestfitline = pyplot.PolyBestFitLine(data, N=2, width=2, colour="blue", legend="Trend")
+            bestfitline = pyplot.PolyBestFitLine(data, N=fitdegree, width=2, colour="blue", legend="Trend")
             lines.append(bestfitline)
         self.Draw(pyplot.PlotGraphics(lines, "Balance Over Time", "Time (%s)"%xunits, "Total ($)"))
 
