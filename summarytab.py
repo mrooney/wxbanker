@@ -116,6 +116,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
     def __init__(self, *args, **kwargs):
         pyplot.PlotCanvas.__init__(self, *args, **kwargs)
         self.pointDates = []
+        self.startDate = None #TODO: get rid of this and use self.pointDates[0]
         self.SetEnablePointLabel(True)
         self.SetEnableLegend(True)
         self.SetPointLabelFunc(self.drawPointLabel)
@@ -123,6 +124,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         self.canvas.Bind(wx.EVT_MOTION, self.onMotion)
 
     def plotBalance(self, totals, startDate, every, xunits="Days", fitdegree=2):
+        self.startDate = startDate
         timeDelta = datetime.timedelta( every * {'Days':1, 'Weeks':7, 'Months':30, 'Years':365}[xunits] )
         pointDates = []
 
@@ -157,7 +159,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
             # without more than one unique value, a best fit line doesn't make sense (and also causes freezes!)
             bestfitline = pyplot.PolyBestFitLine(data, N=fitdegree, width=2, colour="blue", legend="Trend")
             lines.append(bestfitline)
-        self.Draw(pyplot.PlotGraphics(lines, "Balance Over Time", "Time (%s)"%xunits, "Total ($)"))
+        self.Draw(pyplot.PlotGraphics(lines, "Balance Over Time", "Time (%s)"%xunits, "Balance"))
 
     def onMotion(self, event):
         #show closest point (when enbled)
@@ -197,3 +199,23 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         x2, y2 = dc.GetTextExtent(line2)
         dc.DrawText(line1, sx, sy+1)
         dc.DrawText(line2, sx-(x2-x1)/2, sy+y1+3)
+        
+    def _xticks(self, *args):
+        ticks = pyplot.PlotCanvas._xticks(self, *args)
+        myTicks = []
+        for tick in ticks:
+            flt = tick[0]
+            s = str(self.startDate + datetime.timedelta(flt))
+            myTicks.append( (flt, s) )
+        return myTicks
+
+    def _yticks(self, *args):
+        ticks = pyplot.PlotCanvas._yticks(self, *args)
+        myTicks = []
+        for tick in ticks:
+            flt = tick[0]
+            s = float2str(flt)
+            if s.endswith('.00'):
+                s = s[:-3]
+            myTicks.append( (flt, s) )
+        return myTicks
