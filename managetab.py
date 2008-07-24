@@ -35,7 +35,7 @@ class ManagePanel(wx.Panel):
         self.frame = frame
 
         ## Left side, the account list and calculator
-        leftPanel = wx.Panel(self)
+        self.leftPanel = leftPanel = wx.Panel(self)
         leftPanel.Sizer = wx.BoxSizer(wx.VERTICAL)
 
         self.accountCtrl = accountCtrl = AccountListCtrl(leftPanel, frame)
@@ -67,7 +67,7 @@ class ManagePanel(wx.Panel):
         #otherwise it won't get scrolled to the bottom initially as it should.
         accountCtrl.SelectVisibleItem(0)
 
-        mainSizer.Layout()
+        self.Layout()
 
         if wx.Config.Get().ReadBool("SHOW_CALC"):
             calcWidget.OnToggle()
@@ -78,7 +78,7 @@ class ManagePanel(wx.Panel):
         """
         Re-layout ourself so the calcWidget always fits properly at the bottom.
         """
-        self.Layout()
+        self.leftPanel.Layout()
         shown = message.data == "HIDE" # backwards, HIDE means it is now shown.
         wx.Config.Get().WriteBool("SHOW_CALC", shown)
 
