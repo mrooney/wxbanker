@@ -47,8 +47,8 @@ class ManagePanel(wx.Panel):
 
         # Do some magic to get the calculator and panel to size correctly
         for widget in [calcWidget.widget, leftPanel]:
-            widget.SetMinSize((accountCtrl.BestSize[0], -1)) # works only in Windows
-            widget.SetMaxSize((accountCtrl.BestSize[0], -1)) # works only in GTK
+            widget.SetMinSize((accountCtrl.BestSize[0], -1)) # works only in Windows (GTK now?!)
+            #widget.SetMaxSize((accountCtrl.BestSize[0], -1)) # works only in GTK
 
         ## Right side, the transaction panel:
         self.transactionPanel = transactionPanel = TransactionPanel(self, frame)

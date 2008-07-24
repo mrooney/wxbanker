@@ -121,7 +121,7 @@ class CollapsableWidget(wx.Panel):
         wx.Panel.__init__(self, parent, -1)
         self.clickLabel = "%s" + " %s"%name
 
-        self.cp = cp = wx.CollapsiblePane(self, label=self.clickLabel%"Hide", style=wx.CP_DEFAULT_STYLE|wx.CP_NO_TLW_RESIZE)
+        self.cp = cp = wx.CollapsiblePane(self, label=self.clickLabel%"Show", style=wx.CP_DEFAULT_STYLE|wx.CP_NO_TLW_RESIZE)
         self.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, self.OnPaneChanged, cp)
 
         pane = cp.GetPane()
