@@ -1,35 +1,6 @@
 import wx
 from wx.lib.pubsub import Publisher
 
-class TestPanel(wx.Panel):
-    def __init__(self, parent):
-        wx.Panel.__init__(self, parent)
-
-        leftPanel = wx.Panel(self)
-        leftPanel.Sizer = wx.BoxSizer(wx.VERTICAL)
-
-        button = wx.Button(leftPanel, label="Just Fit to my Width")
-        button.SetMinSize((250, -1))
-
-        #calcWidget = CollapsableWidget(self, SimpleCalculator, "Calculator")
-        calcWidget = SimpleCalculator(leftPanel)
-
-        leftPanel.Sizer.Add(button)
-        leftPanel.Sizer.Add(calcWidget)
-
-        # a black panel, so we can see the space better
-        rightPanel = wx.Panel(self)
-        rightPanel.SetBackgroundColour(wx.BLACK)
-
-        ## MY ATTEMPT
-        calcWidget.SetMinSize((button.MinSize[0], -1))
-        leftPanel.SetMinSize((button.MinSize[0], -1))
-
-        self.Sizer = wx.BoxSizer()
-        self.Sizer.Add(leftPanel, 0, wx.EXPAND)
-        self.Sizer.Add(rightPanel, 1, wx.EXPAND)
-        self.Layout()
-
 
 class SimpleCalculator(wx.Panel):
     def __init__(self, parent):
@@ -52,7 +23,13 @@ class SimpleCalculator(wx.Panel):
 
         sizer.Add(gs, 1, wx.EXPAND)
         self.SetSizer(sizer)
+        Publisher.subscribe(self.onPushChars, "CALCULATOR.PUSH_CHARS")
         wx.CallLater(50, self.display.SetInsertionPointEnd)
+
+    def onPushChars(self, message):
+        for char in message.data:
+            self.onChar(char=char)
+        self.Parent.Parent.SetExpanded(True)
 
     def onChar(self, event=None, char=None):
         """
@@ -116,38 +93,39 @@ class SimpleCalculator(wx.Panel):
         self.onChar(char=command)
 
 
-class CollapsableWidget(wx.Panel):
+class CollapsableWidget(wx.CollapsiblePane):
     def __init__(self, parent, widget, name, *args, **kwargs):
-        wx.Panel.__init__(self, parent, -1)
         self.clickLabel = "%s" + " %s"%name
+        wx.CollapsiblePane.__init__(self, parent, label=self.clickLabel%"Show", style=wx.CP_DEFAULT_STYLE|wx.CP_NO_TLW_RESIZE)
 
-        self.cp = cp = wx.CollapsiblePane(self, label=self.clickLabel%"Show", style=wx.CP_DEFAULT_STYLE|wx.CP_NO_TLW_RESIZE)
-        self.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, self.OnPaneChanged, cp)
-
-        pane = cp.GetPane()
+        pane = self.GetPane()
         self.widget = widget(pane, *args, **kwargs)
         pane.Sizer = wx.BoxSizer()
         pane.Sizer.Add(self.widget, 1, wx.EXPAND)
 
-        sizer = wx.BoxSizer(wx.VERTICAL)
-        self.SetSizer(sizer)
-        sizer.Add(cp, 1, wx.EXPAND)
-        #self.OnToggle()
+        self.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, self.OnPaneChanged)
 
-    def OnToggle(self, evt=None):
-        self.cp.Collapse(self.cp.IsExpanded())
-        self.OnPaneChanged()
+    def SetExpanded(self, expanded):
+        """
+        Set whether the contained widget is collapsed or expanded. If there
+        will be no change, don't do anything.
+        """
+        if expanded != self.IsExpanded():
+            self.Collapse(not expanded)
+            self.OnPaneChanged()
 
     def OnPaneChanged(self, evt=None):
-        # redo the layout
+        """
+        Redo the text and layout when the widget state is toggled.
+        """
         self.Layout()
 
         # and also change the labels
-        if self.cp.IsExpanded():
+        if self.IsExpanded():
             modifier = "Hide"
         else:
             modifier = "Show"
-        self.cp.Label = self.clickLabel % modifier
+        self.Label = self.clickLabel % modifier
 
         Publisher().sendMessage("CALCULATOR.TOGGLED", modifier.upper())
 
@@ -158,15 +136,10 @@ if __name__ == "__main__":
     frame.Sizer = wx.BoxSizer()
 
     ## DEMO OF COLLAPSABLE CALCULATOR
-    #frame.Sizer.Add(CollapsableWidget(frame, SimpleCalculator, "Calculator"), 1, wx.EXPAND)
+    frame.Sizer.Add(CollapsableWidget(frame, SimpleCalculator, "Calculator"), 1, wx.EXPAND)
 
     ## DEMO OF JUST CALCULATOR WIDGET
     #frame.Sizer.Add(SimpleCalculator(frame), 1, wx.EXPAND)
 
-    ## DEMO OF SIZING PROBLEM
-    frame.Sizer.Add(TestPanel(frame), 1, wx.EXPAND)
-    frame.Size = (800, 600)
-
     frame.Show(True)
     app.MainLoop()
-

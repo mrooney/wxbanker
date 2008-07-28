@@ -69,8 +69,8 @@ class ManagePanel(wx.Panel):
 
         self.Layout()
 
-        if wx.Config.Get().ReadBool("SHOW_CALC"):
-            calcWidget.OnToggle()
+        # Ensure the calculator is displayed as desired.
+        calcWidget.SetExpanded(wx.Config.Get().ReadBool("SHOW_CALC"))
 
         wx.CallLater(50, lambda: transactionPanel.transactionGrid.ensureVisible(-1))
 
@@ -163,7 +163,8 @@ class TransactionGrid(gridlib.Grid):
         self.SetColLabelValue(3, "Total")
 
         self.Bind(gridlib.EVT_GRID_CELL_CHANGE, self.onCellChange)
-        self.Bind(gridlib.EVT_GRID_LABEL_RIGHT_CLICK, self.onLabelRightClick)
+        self.Bind(gridlib.EVT_GRID_LABEL_RIGHT_CLICK, self.onCellRightClick)
+        self.Bind(gridlib.EVT_GRID_CELL_RIGHT_CLICK, self.onCellRightClick)
 
         Publisher().subscribe(self.onTransactionRemoved, "REMOVED TRANSACTION")
         Publisher().subscribe(self.onTransactionAdded, "NEW TRANSACTION")
@@ -200,19 +201,50 @@ class TransactionGrid(gridlib.Grid):
         #ASSUMPTION: the transaction was of the current account
         self.setTransactions(self.Parent.Parent.getCurrentAccount(), ensureVisible=None)
 
-    def onLabelRightClick(self, event):
-        row, col = event.Row, event.Col
-        if col == -1 and row >= 0:
-            ID = int(self.GetRowLabelValue(row))
-            menu = wx.Menu()
-            item = wx.MenuItem(menu, -1, "Remove this transaction")
-            #TODO: use an images library to get the remove BMP
-            #item.SetBitmap(images.getRemoveBitmap())
-            menu.AppendItem(item)
-            #bind the right click, show, and then destroy
-            menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransaction(row, ID))
-            self.PopupMenu(menu)
-            menu.Destroy()
+    def onCellRightClick(self, event):
+        row, col = event.Row, event.Col # col == -1 -> row label right click
+        if row < 0: # col labels have row of -1, we don't care about them
+            return
+
+        menu = wx.Menu()
+
+        if col in (2,3):
+            # This is an amount cell, allow calculator options.
+            actions = ["Send to calculator",
+                       "Subtract from calculator",
+                       "Add to calculator",
+                       ]
+            for actionStr in actions:
+                item = wx.MenuItem(menu, -1, actionStr)
+                menu.Bind(wx.EVT_MENU, lambda e, s=actionStr: self.onCalculatorAction(row, col, s), source=item)
+                menu.AppendItem(item)
+            menu.AppendSeparator()
+
+        # Always show the Remove context entry.
+        ID = int(self.GetRowLabelValue(row))
+        removeItem = wx.MenuItem(menu, -1, "Remove this transaction")
+        menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransaction(row, ID), source=removeItem)
+        #TODO: use an images library to get the remove BMP
+        #item.SetBitmap(images.getRemoveBitmap())
+        menu.AppendItem(removeItem)
+
+        # Show the menu and then destroy it afterwards.
+        self.PopupMenu(menu)
+        menu.Destroy()
+
+    def onCalculatorAction(self, row, col, actionStr):
+        """
+        Given an action to perform on the calculator, and the row and col,
+        generate the string of characters necessary to perform that action
+        in the calculator, and push them.
+        """
+        command = actionStr.split(' ')[0].upper()
+        amount = self.GetCellValue(row, col)
+
+        pushStr = {'SEND': 'C%s', 'SUBTRACT': '-%s=', 'ADD': '+%s='}[command]
+        pushStr %= amount
+
+        Publisher.sendMessage("CALCULATOR.PUSH_CHARS", pushStr)
 
     def onRemoveTransaction(self, row, ID):
         #remove the transaction from the bank
