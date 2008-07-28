@@ -32,6 +32,7 @@ class SummaryPanel(wx.Panel):
         wx.Panel.__init__(self, parent)
         self.frame = frame
         self.plotSettings = {'FitDegree': 2, 'Granularity': 100}
+        self.cachedData = None
 
         # create the plot panel
         self.plotPanel = AccountPlotCanvas(self)
@@ -64,10 +65,15 @@ class SummaryPanel(wx.Panel):
 
     def onSpinFitDeg(self, event):
         self.plotSettings['FitDegree'] = event.EventObject.Value
-        self.generateData()
+        self.generateData(useCache=True)
 
-    def generateData(self):
-        totals, startDate, delta = self.getPoints(self.plotSettings['Granularity'])
+    def generateData(self, useCache=False):
+        if useCache and self.cachedData is not None:
+            totals, startDate, delta = self.cachedData
+        else:
+            totals, startDate, delta = self.getPoints(self.plotSettings['Granularity'])
+            self.cachedData = totals, startDate, delta
+
         self.plotPanel.plotBalance(totals, startDate, delta, "Days", fitdegree=self.plotSettings['FitDegree'])
 
     def getPoints(self, numPoints):
@@ -159,7 +165,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
             # without more than one unique value, a best fit line doesn't make sense (and also causes freezes!)
             bestfitline = pyplot.PolyBestFitLine(data, N=fitdegree, width=2, colour="blue", legend="Trend")
             lines.append(bestfitline)
-        self.Draw(pyplot.PlotGraphics(lines, "Balance Over Time", "Time (%s)"%xunits, "Balance"))
+        self.Draw(pyplot.PlotGraphics(lines, "Total Balance Over Time", "Date", "Balance"))
 
     def onMotion(self, event):
         #show closest point (when enbled)
@@ -199,23 +205,23 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         x2, y2 = dc.GetTextExtent(line2)
         dc.DrawText(line1, sx, sy+1)
         dc.DrawText(line2, sx-(x2-x1)/2, sy+y1+3)
-        
+
     def _xticks(self, *args):
         ticks = pyplot.PlotCanvas._xticks(self, *args)
         myTicks = []
         for tick in ticks:
-            flt = tick[0]
-            s = str(self.startDate + datetime.timedelta(flt))
-            myTicks.append( (flt, s) )
+            floatVal = tick[0]
+            stringVal = str(self.startDate + datetime.timedelta(floatVal))
+            myTicks.append( (floatVal, stringVal) )
         return myTicks
 
     def _yticks(self, *args):
         ticks = pyplot.PlotCanvas._yticks(self, *args)
         myTicks = []
         for tick in ticks:
-            flt = tick[0]
-            s = float2str(flt)
-            if s.endswith('.00'):
-                s = s[:-3]
-            myTicks.append( (flt, s) )
+            floatVal = tick[0]
+            stringVal = float2str(floatVal)
+            if stringVal.endswith('.00'):
+                stringVal = stringVal[:-3]
+            myTicks.append( (floatVal, stringVal) )
         return myTicks
