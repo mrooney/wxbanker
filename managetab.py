@@ -157,6 +157,8 @@ class TransactionGrid(gridlib.Grid):
 
         self.CreateGrid(0, 4)
 
+        self.SetRowLabelSize(1)
+
         self.SetColLabelValue(0, "Date")
         self.SetColLabelValue(1, "Description")
         self.SetColLabelValue(2, "Amount")
@@ -192,6 +194,21 @@ class TransactionGrid(gridlib.Grid):
             val = str(val)
 
         return gridlib.Grid.SetCellValue(self, row, col, val)
+
+    def DeleteRows(self, pos=0, numRows=1, updateLabels=True):
+        """
+        Override the default DeleteRows, which ignores updateLabels, and
+        always updates them. For this application, we don't want that, so
+        allow that option.
+        """
+        if not updateLabels:
+            # Shift all the following row labels up the appropriate amount, to
+            # compensate for the row[s] that are being deleted, so that the row
+            # labels still correspond to the same rows that they did before
+            # the DeleteRows call.
+            for i in range( self.GetNumberRows() - (pos + numRows) ):
+                self.SetRowLabelValue(pos+i, self.GetRowLabelValue(pos+i+numRows))
+        gridlib.Grid.DeleteRows(self, pos, numRows, updateLabels=True)
 
     def onTransactionAdded(self, message):
         #ASSUMPTION: the transaction was of the current account
@@ -259,10 +276,12 @@ class TransactionGrid(gridlib.Grid):
         ID = message.data
         row = self.getRowFromID(ID)
         if row is not None: # it may not have been from the current account
-            #delete the row from our grid
-            self.DeleteRows(row)
-            #self.updateTotals(row)
-            self.setTransactions(self.Parent.Parent.getCurrentAccount())
+            # Delete the row from the grid.
+            self.DeleteRows(row, updateLabels=False)
+            # Update all the rows starting from where it was.
+            self.updateRowsFrom(row)
+            ##self.updateTotalsFrom(row)
+            ##self.setTransactions(self.Parent.Parent.getCurrentAccount())
 
     def onCellChange(self, event):
         if not self.changeFrozen:
@@ -283,7 +302,7 @@ class TransactionGrid(gridlib.Grid):
                 #make a float
                 amount = value
                 #update all the totals after and including this one
-                self.updateTotals(event.Row)
+                self.updateTotalsFrom(event.Row)
 
             self.changeFrozen = True
             self.frame.bank.updateTransaction(uid, amount, desc, date)
@@ -296,7 +315,17 @@ class TransactionGrid(gridlib.Grid):
                 #after the event handlers (ie this function) finish.
                 wx.CallLater(50, lambda: self.setTransactions(self.Parent.Parent.getCurrentAccount(), ensureVisible=None))
 
-    def updateTotals(self, startingRow=0):
+    def updateRowsFrom(self, startingRow=0):
+        """
+        This method will ensure everything from startingRow is correct:
+          * the alternating background color of the row cells
+          * the total column
+        """
+        for i in range(startingRow, self.GetNumberRows()):
+            self.colorizeRow(i)
+        self.updateTotalsFrom(startingRow)
+
+    def updateTotalsFrom(self, startingRow=0):
         """
         Instead of pulling all the data from the bank, just
         update the totals ourselves, starting at a given row.
@@ -313,6 +342,14 @@ class TransactionGrid(gridlib.Grid):
             total += amount
             self.SetCellValue(row, 3, total)
             row += 1
+
+    def colorizeRow(self, rowNum):
+        cellAttr = gridlib.GridCellAttr()
+        if rowNum%2:
+            cellAttr.SetBackgroundColour(wx.Color(224,238,238))
+        else:
+            cellAttr.SetBackgroundColour(wx.WHITE)
+        self.SetRowAttr(rowNum, cellAttr)
 
     def setTransactions(self, accountName, ensureVisible=-1):
         if accountName is None:
@@ -347,12 +384,7 @@ class TransactionGrid(gridlib.Grid):
                 self.SetCellRenderer(i, 2+col, MoneyCellRenderer())
 
             #make every other row a different color
-            cellAttr = gridlib.GridCellAttr()
-            if i%2:
-                cellAttr.SetBackgroundColour(wx.Color(224,238,238))
-            else:
-                cellAttr.SetBackgroundColour(wx.WHITE)
-            self.SetRowAttr(i, cellAttr)
+            self.colorizeRow(i)
 
         #resize
         self.doResize()
