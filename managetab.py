@@ -206,8 +206,10 @@ class TransactionGrid(gridlib.Grid):
             # compensate for the row[s] that are being deleted, so that the row
             # labels still correspond to the same rows that they did before
             # the DeleteRows call.
+            self.BeginBatch() # Freeze and future repaints temporarily.
             for i in range( self.GetNumberRows() - (pos + numRows) ):
                 self.SetRowLabelValue(pos+i, self.GetRowLabelValue(pos+i+numRows))
+            self.EndBatch() # Unfreeze repaints.
         gridlib.Grid.DeleteRows(self, pos, numRows, updateLabels=True)
 
     def onTransactionAdded(self, message):
@@ -280,8 +282,8 @@ class TransactionGrid(gridlib.Grid):
             self.DeleteRows(row, updateLabels=False)
             # Update all the rows starting from where it was.
             self.updateRowsFrom(row)
-            ##self.updateTotalsFrom(row)
-            ##self.setTransactions(self.Parent.Parent.getCurrentAccount())
+            # Ensure the first cell visible is still the first cell visible.
+            #TODO: ^
 
     def onCellChange(self, event):
         if not self.changeFrozen:
@@ -321,9 +323,11 @@ class TransactionGrid(gridlib.Grid):
           * the alternating background color of the row cells
           * the total column
         """
+        self.BeginBatch() # Freeze and future repaints temporarily.
         for i in range(startingRow, self.GetNumberRows()):
             self.colorizeRow(i)
         self.updateTotalsFrom(startingRow)
+        self.EndBatch() # Unfreeze repaints.
 
     def updateTotalsFrom(self, startingRow=0):
         """
@@ -335,6 +339,8 @@ class TransactionGrid(gridlib.Grid):
         else:
             total = self.GetCellValue(startingRow-1, 3)
 
+        self.BeginBatch() # Freeze and future repaints temporarily.
+
         row = startingRow
         lastRow = self.GetNumberRows()-1
         while row <= lastRow:
@@ -342,6 +348,8 @@ class TransactionGrid(gridlib.Grid):
             total += amount
             self.SetCellValue(row, 3, total)
             row += 1
+
+        self.EndBatch() # Unfreeze repaints.
 
     def colorizeRow(self, rowNum):
         cellAttr = gridlib.GridCellAttr()
@@ -357,6 +365,8 @@ class TransactionGrid(gridlib.Grid):
             if numRows:
                 self.DeleteRows(0, numRows)
             return
+
+        self.BeginBatch() # Freeze and future repaints temporarily.
 
         transactions = self.frame.bank.getTransactionsFrom(accountName)
         #first, adjust the number of rows in the grid to fit
@@ -394,6 +404,8 @@ class TransactionGrid(gridlib.Grid):
             self.ClearSelection()
             self.ensureVisible(ensureVisible)
 
+        self.EndBatch() # Unfreeze repaints.
+
     def ensureVisible(self, index):
         """
         Make sure that a cell at a given index is shown.
@@ -416,6 +428,7 @@ class TransactionGrid(gridlib.Grid):
         """
         parent = self.GetParent()
         parent.Freeze()
+        self.BeginBatch() # Freeze and future repaints temporarily.
 
         self.AutoSizeColumns()
         #parent.Sizer.RecalcSizes()
@@ -442,6 +455,7 @@ class TransactionGrid(gridlib.Grid):
 
         self.SetColSize(expandCol, descWidth)
 
+        self.EndBatch() # Unfreeze repaints.
         parent.Thaw()
         parent.Layout()
 
