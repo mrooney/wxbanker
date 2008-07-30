@@ -19,7 +19,7 @@
 import wx, wx.grid as gridlib
 import datetime
 from banker import float2str
-from bankcontrols import AccountListCtrl, NewTransactionCtrl
+from bankcontrols import AccountListCtrl, NewTransactionCtrl, SearchCtrl
 from calculator import CollapsableWidget, SimpleCalculator
 from wx.lib.pubsub import Publisher
 
@@ -45,10 +45,9 @@ class ManagePanel(wx.Panel):
         leftPanel.Sizer.AddStretchSpacer(1)
         leftPanel.Sizer.Add(calcWidget, 0, wx.EXPAND)
 
-        # Do some magic to get the calculator and panel to size correctly
+        # Force the calculator widget (and parent) to take on the desired size.
         for widget in [calcWidget.widget, leftPanel]:
-            widget.SetMinSize((accountCtrl.BestSize[0], -1)) # works only in Windows (GTK now?!)
-            #widget.SetMaxSize((accountCtrl.BestSize[0], -1)) # works only in GTK
+            widget.SetMinSize((accountCtrl.BestSize[0], -1))
 
         ## Right side, the transaction panel:
         self.transactionPanel = transactionPanel = TransactionPanel(self, frame)
@@ -56,7 +55,7 @@ class ManagePanel(wx.Panel):
         mainSizer = wx.BoxSizer()
         self.Sizer = mainSizer
         mainSizer.Add(leftPanel, 0, wx.EXPAND|wx.ALL, 5)
-        mainSizer.Add(transactionPanel, 1, wx.EXPAND|wx.ALL, 5)
+        mainSizer.Add(transactionPanel, 1, wx.EXPAND|wx.ALL, 0)
 
         #subscribe to messages that interest us
         Publisher().subscribe(self.onChangeAccount, "VIEW.ACCOUNT_CHANGED")
@@ -83,7 +82,7 @@ class ManagePanel(wx.Panel):
         wx.Config.Get().WriteBool("SHOW_CALC", shown)
 
     def onChangeAccount(self, message):
-        self.transactionPanel.setTransactions(message.data)
+        self.transactionPanel.setAccount(message.data)
 
     def getCurrentAccount(self):
         return self.accountCtrl.GetCurrentAccount()
@@ -95,10 +94,12 @@ class TransactionPanel(wx.Panel):
         self.parent = parent
         self.frame = frame
 
+        self.searchCtrl = searchCtrl = SearchCtrl(self)
         self.transactionGrid = transactionGrid = TransactionGrid(self, frame)
         self.newTransCtrl = newTransCtrl = NewTransactionCtrl(self, frame)
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
+        mainSizer.Add(searchCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL)
         mainSizer.Add(transactionGrid, 1, wx.EXPAND)
         mainSizer.Add(newTransCtrl, 0, wx.EXPAND|wx.LEFT|wx.TOP, 5)
 
@@ -107,9 +108,13 @@ class TransactionPanel(wx.Panel):
 
         self.Bind(wx.EVT_SIZE, self.transactionGrid.doResize)
         #self.Bind(wx.EVT_MAXIMIZE, self.doResize)
+        Publisher().subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
 
-    def setTransactions(self, *args, **kwargs):
-        self.transactionGrid.setTransactions(*args, **kwargs)
+    def setAccount(self, *args, **kwargs):
+        self.transactionGrid.setAccount(*args, **kwargs)
+
+    def onSearchCancelled(self, message):
+        self.transactionGrid.setAccount(self.Parent.getCurrentAccount())
 
 
 class MoneyCellRenderer(gridlib.PyGridCellRenderer):
@@ -170,6 +175,7 @@ class TransactionGrid(gridlib.Grid):
 
         Publisher().subscribe(self.onTransactionRemoved, "REMOVED TRANSACTION")
         Publisher().subscribe(self.onTransactionAdded, "NEW TRANSACTION")
+        Publisher().subscribe(self.onSearch, "SEARCH.INITIATED")
         # this causes a segfault on amount changes, that's cute
         #Publisher().subscribe(self.onTransactionUpdated, "UPDATED TRANSACTION")
 
@@ -212,13 +218,24 @@ class TransactionGrid(gridlib.Grid):
             self.EndBatch() # Unfreeze repaints.
         gridlib.Grid.DeleteRows(self, pos, numRows, updateLabels=True)
 
+    def onSearch(self, message):
+        searchString, currentAccount = message.data
+
+        if currentAccount:
+            accountName = self.Parent.Parent.getCurrentAccount()
+        else:
+            accountName = None
+
+        matches = self.frame.bank.searchTransactions(searchString, accountName=accountName, desc=True)
+        self.setTransactions(matches)
+
     def onTransactionAdded(self, message):
         #ASSUMPTION: the transaction was of the current account
-        self.setTransactions(self.Parent.Parent.getCurrentAccount())
+        self.setAccount(self.Parent.Parent.getCurrentAccount())
 
     def onTransactionUpdated(self, message):
         #ASSUMPTION: the transaction was of the current account
-        self.setTransactions(self.Parent.Parent.getCurrentAccount(), ensureVisible=None)
+        self.setAccount(self.Parent.Parent.getCurrentAccount(), ensureVisible=None)
 
     def onCellRightClick(self, event):
         row, col = event.Row, event.Col # col == -1 -> row label right click
@@ -315,7 +332,7 @@ class TransactionGrid(gridlib.Grid):
                 #even if event.Skip isn't called, for some reason I don't understand.
                 #event.Veto() will cause the OLD value to be put in. so it has to be updated
                 #after the event handlers (ie this function) finish.
-                wx.CallLater(50, lambda: self.setTransactions(self.Parent.Parent.getCurrentAccount(), ensureVisible=None))
+                wx.CallLater(50, lambda: self.setAccount(self.Parent.Parent.getCurrentAccount(), ensureVisible=None))
 
     def updateRowsFrom(self, startingRow=0):
         """
@@ -359,16 +376,19 @@ class TransactionGrid(gridlib.Grid):
             cellAttr.SetBackgroundColour(wx.WHITE)
         self.SetRowAttr(rowNum, cellAttr)
 
-    def setTransactions(self, accountName, ensureVisible=-1):
+    def setAccount(self, accountName, ensureVisible=-1):
         if accountName is None:
             numRows = self.GetNumberRows()
             if numRows:
                 self.DeleteRows(0, numRows)
             return
 
+        transactions = self.frame.bank.getTransactionsFrom(accountName)
+        self.setTransactions(transactions, ensureVisible)
+
+    def setTransactions(self, transactions, ensureVisible=-1):
         self.BeginBatch() # Freeze and future repaints temporarily.
 
-        transactions = self.frame.bank.getTransactionsFrom(accountName)
         #first, adjust the number of rows in the grid to fit
         rowsNeeded = len(transactions)
         rowsExisting = self.GetNumberRows()

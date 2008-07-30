@@ -39,6 +39,51 @@ class HyperlinkText(wx.HyperlinkCtrl):
         print visited
 
 
+class SearchCtrl(wx.Panel):
+    def __init__(self, parent):
+        wx.Panel.__init__(self, parent)
+
+        self.searchCtrl = wx.SearchCtrl(self, value="", size=(200, -1), style=wx.TE_PROCESS_ENTER)
+        self.searchCtrl.ShowCancelButton(True)
+        self.searchCtrl.ShowSearchButton(False)
+        self.searchCtrl.DescriptiveText = "Search transactions"
+
+        self.rb1 = wx.RadioButton(self, label="this account")
+        self.rb2 = wx.RadioButton(self, label="all accounts")
+
+        self.Sizer = wx.BoxSizer()
+        #self.Sizer.Add(wx.StaticText(self, label="Search: "))
+        self.Sizer.Add(self.searchCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
+        self.Sizer.AddSpacer(10)
+        #self.Sizer.Add(radioBox, 0, wx.ALIGN_CENTER_VERTICAL)
+        self.Sizer.Add(wx.StaticText(self, label="in: "), 0, wx.ALIGN_CENTER_VERTICAL)
+        self.Sizer.Add(self.rb1, 0, wx.ALIGN_CENTER_VERTICAL)
+        self.Sizer.Add(self.rb2, 0, wx.ALIGN_CENTER_VERTICAL)
+        self.Layout()
+
+        self.searchCtrl.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, self.onCancel)
+        #self.searchCtrl.Bind(wx.EVT_SEARCHCTRL_SEARCH_BTN, self.onSearch)
+        self.searchCtrl.Bind(wx.EVT_TEXT_ENTER, self.onSearch)
+
+    def onSearch(self, event):
+        # TODO: sort by [Amount, Description, Date]
+        # TODO: order [Ascending, Descending]
+        # TODO: case sensitivity checkbox
+        # TODO: checkboxes for defining what to search in (currently just desc)
+        # TODO: enable search button in ctrl and appropriate event handling
+        # TODO: properly handle the state of everything during a search!
+        searchString = event.String
+        currentAccount = self.rb1.Value
+
+        searchInfo = (searchString, currentAccount)
+        Publisher().sendMessage("SEARCH.INITIATED", searchInfo)
+
+    def onCancel(self, event):
+        self.searchCtrl.Value = ""
+        Publisher().sendMessage("SEARCH.CANCELLED")
+        #event.Skip()
+
+
 class AccountListCtrl(wx.Panel):
     """
     This control manages a clickable list of accounts,

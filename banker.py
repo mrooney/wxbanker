@@ -432,6 +432,29 @@ class Bank(object):
         Publisher().sendMessage("NEW TRANSACTION")
         return lastRowId
 
+    def searchTransactions(self, searchString, accountName=None, amount=False, desc=False, date=False, matchCase=False):
+        # Handle case-sensitive options.
+        if matchCase:
+            caser = lambda s: s
+        else:
+            caser = lambda s: s.lower()
+        searchString = caser(searchString)
+
+        # Handle account options.
+        if accountName is None:
+            potentials = self.getAllTransactions()
+        else:
+            potentials = self.getTransactionsFrom(accountName)
+
+        # Find all the matches.
+        matches = []
+        for potential in potentials:
+            for i, toMatch in enumerate([amount, desc, date]):
+                if toMatch and searchString in caser(str(potential[i+1])):
+                    matches.append(potential)
+                    break
+        return matches
+
     def close(self):
         self.model.close()
 
