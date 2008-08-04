@@ -93,6 +93,7 @@ class TransactionPanel(wx.Panel):
         wx.Panel.__init__(self, parent)
         self.parent = parent
         self.frame = frame
+        self.searchActive = False
 
         self.searchCtrl = searchCtrl = SearchCtrl(self)
         self.transactionGrid = transactionGrid = TransactionGrid(self, frame)
@@ -107,14 +108,20 @@ class TransactionPanel(wx.Panel):
         mainSizer.Layout()
 
         self.Bind(wx.EVT_SIZE, self.transactionGrid.doResize)
+        for message in ['NEW ACCOUNT', 'REMOVED ACCOUNT', 'VIEW.ACCOUNT_CHANGED']:
+            Publisher().subscribe(self.onSearchInvalidatingChange, message)
         #self.Bind(wx.EVT_MAXIMIZE, self.doResize)
-        Publisher().subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
 
     def setAccount(self, *args, **kwargs):
         self.transactionGrid.setAccount(*args, **kwargs)
 
-    def onSearchCancelled(self, message):
-        self.transactionGrid.setAccount(self.Parent.getCurrentAccount())
+    def onSearchInvalidatingChange(self, event):
+        """
+        Some event has occurred which trumps any active search, so make the
+        required changes to state. These events will handle all other logic.
+        """
+        self.searchActive = False
+        #Publisher().sendMessage("SEARCH.CANCELLED")
 
 
 class MoneyCellRenderer(gridlib.PyGridCellRenderer):
@@ -176,7 +183,8 @@ class TransactionGrid(gridlib.Grid):
         Publisher().subscribe(self.onTransactionRemoved, "REMOVED TRANSACTION")
         Publisher().subscribe(self.onTransactionAdded, "NEW TRANSACTION")
         Publisher().subscribe(self.onSearch, "SEARCH.INITIATED")
-        # this causes a segfault on amount changes, that's cute
+        Publisher().subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
+        #XXX this causes a segfault on amount changes, that's cute
         #Publisher().subscribe(self.onTransactionUpdated, "UPDATED TRANSACTION")
 
     def GetCellValue(self, row, col):
@@ -228,6 +236,11 @@ class TransactionGrid(gridlib.Grid):
 
         matches = self.frame.bank.searchTransactions(searchString, accountName=accountName, matchType=match, matchCase=caseSens)
         self.setTransactions(matches)
+        self.Parent.searchActive = True
+
+    def onSearchCancelled(self, message):
+        self.setAccount(self.Parent.Parent.getCurrentAccount())
+        self.Parent.searchActive = False
 
     def onTransactionAdded(self, message):
         #ASSUMPTION: the transaction was of the current account
@@ -327,7 +340,7 @@ class TransactionGrid(gridlib.Grid):
             self.frame.bank.updateTransaction(uid, amount, desc, date)
             self.changeFrozen = False
 
-            if refreshNeeded:
+            if refreshNeeded and not self.Parent.searchActive:
                 #this is needed because otherwise the Grid will put the new value in,
                 #even if event.Skip isn't called, for some reason I don't understand.
                 #event.Veto() will cause the OLD value to be put in. so it has to be updated
@@ -417,7 +430,7 @@ class TransactionGrid(gridlib.Grid):
             self.colorizeRow(i)
 
         self.EndBatch() # Unfreeze repaints.
-        
+
         #resize
         self.doResize()
 

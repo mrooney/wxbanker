@@ -50,10 +50,10 @@ class SearchCtrl(wx.Panel):
 
         self.searchInChoices = ["Current Account", "All Accounts"]
         self.searchInBox = wx.ComboBox(self, value=self.searchInChoices[0], choices=self.searchInChoices, style=wx.CB_READONLY)
-        
+
         self.matchChoices = ["Description", "Amount", "Date"]
         self.matchBox = wx.ComboBox(self, value=self.matchChoices[0], choices=self.matchChoices, style=wx.CB_READONLY)
-        
+
         self.caseCheck = wx.CheckBox(self, label="Case Sensitive")
 
         self.Sizer = wx.BoxSizer()
@@ -568,6 +568,7 @@ class NewTransactionCtrl(wx.Panel):
         #initialize some bindings
         self.Bind(wx.EVT_BUTTON, self.onNewTransaction, source=newButton)
         self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
+        #self.dateCtrl.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
 
     def getValues(self):
         #first ensure an account is selected
@@ -617,8 +618,19 @@ class NewTransactionCtrl(wx.Panel):
             return
 
         account, amount, desc, date = result
-
         isTransfer = self.transferCheck.Value
+
+        # If a search is active, we have to ask the user what they want to do.
+        if self.Parent.searchActive:
+            actionStr = {True: "transfer", False:"transaction"}[isTransfer]
+            msg = 'A search is currently active. Would you like to clear the current search and make this %s in "%s"?' % (actionStr, account)
+            dlg = wx.MessageDialog(self, msg, "Clear search?", style=wx.YES_NO|wx.ICON_WARNING)
+            result = dlg.ShowModal()
+            if result == wx.ID_YES:
+                Publisher().sendMessage("SEARCH.CANCELLED")
+            else:
+                return
+
         if isTransfer:
             destination = account
             source = self.getSourceAccount(destination)
