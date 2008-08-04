@@ -300,12 +300,14 @@ class Bank(object):
             total += self.getBalanceOf(account)
         return total
 
-    def getAllTransactions(self):
+    def getAllTransactions(self, sortCmp=None):
         transactions = []
         for accountName in self.getAccountNames():
             transactions.extend(self.getTransactionsFrom(accountName))
 
-        return sorted(transactions, cmp=lambda l,r: cmp(l[3], r[3]))
+        if sortCmp is None:
+            sortCmp = lambda l,r: cmp(l[3], r[3])
+        return sorted(transactions, cmp=sortCmp)
 
     def getTotalsEvery(self, days):
         transactions = self.getAllTransactions()
@@ -432,7 +434,7 @@ class Bank(object):
         Publisher().sendMessage("NEW TRANSACTION")
         return lastRowId
 
-    def searchTransactions(self, searchString, accountName=None, amount=False, desc=False, date=False, matchCase=False):
+    def searchTransactions(self, searchString, accountName=None, matchType="DESCRIPTION", matchCase=False):
         # Handle case-sensitive options.
         if matchCase:
             caser = lambda s: s
@@ -445,14 +447,16 @@ class Bank(object):
             potentials = self.getAllTransactions()
         else:
             potentials = self.getTransactionsFrom(accountName)
+            
+        # Handle match options.
+        matchIndex = ["AMOUNT", "DESCRIPTION", "DATE"].index(matchType.upper())
 
         # Find all the matches.
         matches = []
         for potential in potentials:
-            for i, toMatch in enumerate([amount, desc, date]):
-                if toMatch and searchString in caser(str(potential[i+1])):
-                    matches.append(potential)
-                    break
+            #for i, toMatch in enumerate([amount, desc, date]):
+            if searchString in caser(str(potential[matchIndex+1])): # +1 as ID is 0
+                matches.append(potential)
         return matches
 
     def close(self):

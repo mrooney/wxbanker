@@ -48,19 +48,29 @@ class SearchCtrl(wx.Panel):
         self.searchCtrl.ShowSearchButton(False)
         self.searchCtrl.DescriptiveText = "Search transactions"
 
-        self.rb1 = wx.RadioButton(self, label="this account")
-        self.rb2 = wx.RadioButton(self, label="all accounts")
+        self.searchInChoices = ["Current Account", "All Accounts"]
+        self.searchInBox = wx.ComboBox(self, value=self.searchInChoices[0], choices=self.searchInChoices, style=wx.CB_READONLY)
+        
+        self.matchChoices = ["Description", "Amount", "Date"]
+        self.matchBox = wx.ComboBox(self, value=self.matchChoices[0], choices=self.matchChoices, style=wx.CB_READONLY)
+        
+        self.caseCheck = wx.CheckBox(self, label="Case Sensitive")
 
         self.Sizer = wx.BoxSizer()
         #self.Sizer.Add(wx.StaticText(self, label="Search: "))
         self.Sizer.Add(self.searchCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
         self.Sizer.AddSpacer(10)
         #self.Sizer.Add(radioBox, 0, wx.ALIGN_CENTER_VERTICAL)
-        self.Sizer.Add(wx.StaticText(self, label="in: "), 0, wx.ALIGN_CENTER_VERTICAL)
-        self.Sizer.Add(self.rb1, 0, wx.ALIGN_CENTER_VERTICAL)
-        self.Sizer.Add(self.rb2, 0, wx.ALIGN_CENTER_VERTICAL)
+        self.Sizer.Add(wx.StaticText(self, label="In: "), 0, wx.ALIGN_CENTER_VERTICAL)
+        self.Sizer.Add(self.searchInBox, 0, wx.ALIGN_CENTER_VERTICAL)
+        self.Sizer.AddSpacer(5)
+        self.Sizer.Add(wx.StaticText(self, label="Match: "), 0, wx.ALIGN_CENTER_VERTICAL)
+        self.Sizer.Add(self.matchBox, 0, wx.ALIGN_CENTER_VERTICAL)
+        self.Sizer.AddSpacer(5)
+        self.Sizer.Add(self.caseCheck, 0, wx.ALIGN_CENTER_VERTICAL)
         self.Layout()
 
+        #self.matchBox.Bind(wx.EVT_COMBOBOX, self.onMatchCombo)
         self.searchCtrl.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, self.onCancel)
         #self.searchCtrl.Bind(wx.EVT_SEARCHCTRL_SEARCH_BTN, self.onSearch)
         self.searchCtrl.Bind(wx.EVT_TEXT_ENTER, self.onSearch)
@@ -68,14 +78,16 @@ class SearchCtrl(wx.Panel):
     def onSearch(self, event):
         # TODO: sort by [Amount, Description, Date]
         # TODO: order [Ascending, Descending]
-        # TODO: case sensitivity checkbox
-        # TODO: checkboxes for defining what to search in (currently just desc)
+        #X TODO: case sensitivity checkbox
+        #X TODO: checkboxes for defining what to search in (currently just desc)
         # TODO: enable search button in ctrl and appropriate event handling
         # TODO: properly handle the state of everything during a search!
         searchString = event.String
-        currentAccount = self.rb1.Value
+        accountScope = self.searchInBox.Value == self.searchInChoices[0]
+        matchType = self.matchBox.Value
+        caseSens = self.caseCheck.Value
 
-        searchInfo = (searchString, currentAccount)
+        searchInfo = (searchString, accountScope, matchType, caseSens)
         Publisher().sendMessage("SEARCH.INITIATED", searchInfo)
 
     def onCancel(self, event):
