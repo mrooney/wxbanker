@@ -144,7 +144,7 @@ InvalidTransactionException: Unable to find transaction with UID FakeID
 >>> os.remove('test.db')
 
 """
-import time, os, datetime
+import time, os, datetime, re
 from model_sqlite import Model
 from wx.lib.pubsub import Publisher
 
@@ -435,27 +435,23 @@ class Bank(object):
         return lastRowId
 
     def searchTransactions(self, searchString, accountName=None, matchType="DESCRIPTION", matchCase=False):
-        # Handle case-sensitive options.
-        if matchCase:
-            caser = lambda s: s
-        else:
-            caser = lambda s: s.lower()
-        searchString = caser(searchString)
+        # Handle case-sensitive option.
+        reFlag = {False: re.IGNORECASE, True: 0}[matchCase]
 
         # Handle account options.
         if accountName is None:
             potentials = self.getAllTransactions()
         else:
             potentials = self.getTransactionsFrom(accountName)
-            
+
         # Handle match options.
         matchIndex = ["AMOUNT", "DESCRIPTION", "DATE"].index(matchType.upper())
 
         # Find all the matches.
         matches = []
         for potential in potentials:
-            #for i, toMatch in enumerate([amount, desc, date]):
-            if searchString in caser(str(potential[matchIndex+1])): # +1 as ID is 0
+            potentialStr = str(potential[matchIndex+1]) # +1 as ID is 0
+            if re.findall(searchString, potentialStr, flags=reFlag):
                 matches.append(potential)
         return matches
 
