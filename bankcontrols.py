@@ -587,8 +587,8 @@ class NewTransactionCtrl(wx.Panel):
 
         #initialize some bindings
         self.Bind(wx.EVT_BUTTON, self.onNewTransaction, source=newButton)
+        self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
         # None of these below work to fix LP: 252454 :[
-        #self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
         #dateTextCtrl = self.dateCtrl.Children[0].Children[0]
         #dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
 
