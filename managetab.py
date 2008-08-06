@@ -110,7 +110,7 @@ class TransactionPanel(wx.Panel):
         self.Bind(wx.EVT_SIZE, self.transactionGrid.doResize)
         for message in ['NEW ACCOUNT', 'REMOVED ACCOUNT', 'VIEW.ACCOUNT_CHANGED']:
             Publisher().subscribe(self.onSearchInvalidatingChange, message)
-        #self.Bind(wx.EVT_MAXIMIZE, self.doResize)
+        #self.Bind(wx.EVT_MAXIMIZE, self.doResize) # isn't necessary on GTK, what about Windows?
 
     def setAccount(self, *args, **kwargs):
         self.transactionGrid.setAccount(*args, **kwargs)
@@ -267,13 +267,14 @@ class TransactionGrid(gridlib.Grid):
                 item = wx.MenuItem(menu, -1, actionStr)
                 menu.Bind(wx.EVT_MENU, lambda e, s=actionStr: self.onCalculatorAction(row, col, s), source=item)
                 menu.AppendItem(item)
+                #ICON: use appropriate calc icons for these entries
             menu.AppendSeparator()
 
         # Always show the Remove context entry.
         ID = int(self.GetRowLabelValue(row))
         removeItem = wx.MenuItem(menu, -1, "Remove this transaction")
         menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransaction(row, ID), source=removeItem)
-        #TODO: use an images library to get the remove BMP
+        #ICON: use an images library to get the remove BMP
         #item.SetBitmap(images.getRemoveBitmap())
         menu.AppendItem(removeItem)
 
@@ -459,34 +460,37 @@ class TransactionGrid(gridlib.Grid):
         Basically, it Autosizes all columns and then gives any remaining space
         to the Description column's width.
         """
+        # The column which will be expanded.
+        expandCol = 1
+
+        # Freeze everything so no changes are made while we do some magic.
         parent = self.Parent
         parent.Freeze()
 
+        # Autosize the columns and layout so we know how big everything wants to be.
         self.AutoSizeColumns()
-        #parent.Sizer.RecalcSizes()
         parent.Layout()
 
-        #the column which will be expanded
-        expandCol = 1
-
-        #calculate the total width of the other columns
-        otherWidths = 0
+        # Calculate the total width of the other columns, including the Row Label.
+        otherWidths = self.RowLabelSize
         for i in range(self.GetNumberCols()):
             if i != expandCol:
                 otherWidths += self.GetColSize(i)
 
-        #add the width of the row label column
-        otherWidths += self.RowLabelSize
+        # Calculate the width of the description (as wide as we can get).
+        descWidth = self.Size[0] - otherWidths
 
-        sbWidth = 30
-        #if not self.IsVisible(0, 0): #there must be a scrollbar!
-        #    sbWidth += wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X)
-        #    #self.EnableScrolling(False, True)
+        # If there is a vertical scrollbar, allow for that.
+        vsbWidth = wx.SystemSettings.GetMetric(wx.SYS_VSCROLL_X)
+        if self.HasScrollbar(wx.VERTICAL):
+            descWidth -= vsbWidth
 
-        descWidth = self.Size[0] - otherWidths - sbWidth
-
+        # Finally, set the size of the expandable column.
         self.SetColSize(expandCol, descWidth)
 
+        #self.SetVirtualSize((self.Size[0]-vsbWidth, self.Size[1]))
+
+        self.Refresh()
         parent.Thaw()
         parent.Layout()
 

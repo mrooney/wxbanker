@@ -49,6 +49,8 @@ class BankerFrame(wx.Frame):
         pos = config.ReadInt('POS_X'), config.ReadInt('POS_Y')
 
         wx.Frame.__init__(self, None, title="wxBanker", size=size, pos=pos)
+        #ICON: use finance/money app icon
+
         self.isSaveLocked = False
         self.bank = bank
 
@@ -181,5 +183,9 @@ if __name__ == "__main__":
     if firstTime:
         Publisher().sendMessage("FIRST RUN")
         config.WriteBool("RUN_BEFORE", True)
+
+    if '--inspect' in sys.argv:
+        import wx.lib.inspection
+        wx.lib.inspection.InspectionTool().Show()
 
     app.MainLoop()

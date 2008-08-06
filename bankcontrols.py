@@ -51,29 +51,41 @@ class SearchCtrl(wx.Panel):
         self.searchInChoices = ["Current Account", "All Accounts"]
         self.searchInBox = wx.ComboBox(self, value=self.searchInChoices[0], choices=self.searchInChoices, style=wx.CB_READONLY)
 
+        self.moreButton = wx.Button(self)
+
         self.matchChoices = ["Description", "Amount", "Date"]
         self.matchBox = wx.ComboBox(self, value=self.matchChoices[0], choices=self.matchChoices, style=wx.CB_READONLY)
 
         self.caseCheck = wx.CheckBox(self, label="Case Sensitive")
+        self.caseCheck.SetToolTipString("Whether or not to match based on capitalization")
 
-        self.Sizer = wx.BoxSizer()
+        topSizer = wx.BoxSizer()
         #self.Sizer.Add(wx.StaticText(self, label="Search: "))
-        self.Sizer.Add(self.searchCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
-        self.Sizer.AddSpacer(10)
-        #self.Sizer.Add(radioBox, 0, wx.ALIGN_CENTER_VERTICAL)
-        self.Sizer.Add(wx.StaticText(self, label="In: "), 0, wx.ALIGN_CENTER_VERTICAL)
-        self.Sizer.Add(self.searchInBox, 0, wx.ALIGN_CENTER_VERTICAL)
-        self.Sizer.AddSpacer(5)
-        self.Sizer.Add(wx.StaticText(self, label="Match: "), 0, wx.ALIGN_CENTER_VERTICAL)
-        self.Sizer.Add(self.matchBox, 0, wx.ALIGN_CENTER_VERTICAL)
-        self.Sizer.AddSpacer(5)
-        self.Sizer.Add(self.caseCheck, 0, wx.ALIGN_CENTER_VERTICAL)
+        topSizer.Add(self.searchCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
+        topSizer.AddSpacer(10)
+        topSizer.Add(wx.StaticText(self, label="In: "), 0, wx.ALIGN_CENTER_VERTICAL)
+        topSizer.Add(self.searchInBox, 0, wx.ALIGN_CENTER_VERTICAL)
+        topSizer.AddSpacer(10)
+        topSizer.Add(self.moreButton, 0, wx.ALIGN_CENTER_VERTICAL)
+
+        self.moreSizer = moreSizer = wx.BoxSizer()
+        moreSizer.Add(wx.StaticText(self, label="Match: "), 0, wx.ALIGN_CENTER_VERTICAL)
+        moreSizer.Add(self.matchBox, 0, wx.ALIGN_CENTER_VERTICAL)
+        moreSizer.AddSpacer(5)
+        moreSizer.Add(self.caseCheck, 0, wx.ALIGN_CENTER_VERTICAL)
+
+        self.Sizer = wx.BoxSizer(wx.VERTICAL)
+        self.Sizer.Add(topSizer, 0, wx.ALIGN_CENTER)
+        self.Sizer.Add(moreSizer, 0, wx.ALIGN_CENTER)
         self.Layout()
 
         #self.matchBox.Bind(wx.EVT_COMBOBOX, self.onMatchCombo)
         self.searchCtrl.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, self.onCancel)
         #self.searchCtrl.Bind(wx.EVT_SEARCHCTRL_SEARCH_BTN, self.onSearch)
         self.searchCtrl.Bind(wx.EVT_TEXT_ENTER, self.onSearch)
+        self.moreButton.Bind(wx.EVT_BUTTON, self.onToggleMore)
+
+        self.onToggleMore()
 
     def onSearch(self, event):
         # TODO: sort by [Amount, Description, Date]
@@ -81,8 +93,8 @@ class SearchCtrl(wx.Panel):
         #X TODO: case sensitivity checkbox
         #X TODO: checkboxes for defining what to search in (currently just desc)
         # TODO: enable search button in ctrl and appropriate event handling
-        # TODO: properly handle the state of everything during a search!
-        searchString = event.String
+        #X TODO: properly handle the state of everything during a search!
+        searchString = event.String # for a date, should be YYYY-MM-DD
         accountScope = self.searchInBox.Value == self.searchInChoices[0]
         matchType = self.matchBox.Value
         caseSens = self.caseCheck.Value
@@ -94,6 +106,12 @@ class SearchCtrl(wx.Panel):
         self.searchCtrl.Value = ""
         Publisher().sendMessage("SEARCH.CANCELLED")
         #event.Skip()
+
+    def onToggleMore(self, event=None):
+        showLess = self.Sizer.IsShown(self.moreSizer)
+        self.Sizer.Show(self.moreSizer, not showLess)
+        self.moreButton.Label = "%s Options" % {True: "More", False: "Less"}[showLess]
+        self.Parent.Layout()
 
 
 class AccountListCtrl(wx.Panel):
@@ -119,18 +137,18 @@ class AccountListCtrl(wx.Panel):
         self.staticBox = wx.StaticBox(self, label=self.boxLabel%0)
 
         ##create and set up the buttons
-        #the ADD account button
+        #ICON: the ADD account button
         BMP = wx.Bitmap('art/add.bmp')
         BMP.SetMask(wx.Mask(BMP, wx.WHITE))
         self.addButton = addButton = wx.BitmapButton(self, bitmap=BMP)
         addButton.SetToolTipString("Add a new account")
-        #the REMOVE account button
+        #ICON: the REMOVE account button
         BMP = wx.Bitmap('art/remove.bmp')
         BMP.SetMask(wx.Mask(BMP, wx.WHITE))
         self.removeButton = removeButton = wx.BitmapButton(self, bitmap=BMP)
         removeButton.SetToolTipString("Remove the selected account")
         removeButton.Enabled = False
-        #the EDIT account button
+        #ICON: the EDIT account button
         BMP = wx.Bitmap('art/edit.bmp')
         BMP.SetMask(wx.Mask(BMP, wx.WHITE))
         self.editButton = editButton = wx.BitmapButton(self, bitmap=BMP)
@@ -535,20 +553,22 @@ class NewTransactionCtrl(wx.Panel):
         self.parent = parent
         self.frame = frame
 
-        #the add button
+        # The add button.
         BMP = wx.Bitmap('art/add.bmp')
         BMP.SetMask(wx.Mask(BMP, wx.WHITE))
         self.newButton = newButton = wx.BitmapButton(self, bitmap=BMP)
         newButton.SetToolTipString("Enter this transaction")
-        #the date, description, and total
-        self.dateCtrl = dateCtrl = wx.DatePickerCtrl(self, style=wx.DP_DROPDOWN | wx.DP_SHOWCENTURY)
-        dateCtrl.SetMinSize(dateCtrl.GetBestSize())
+
+        # The date, description, and total.
+        self.dateCtrl = dateCtrl = wx.DatePickerCtrl(self, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY|wx.TE_PROCESS_ENTER)
+        #self.dateCtrl = dateCtrl = wx.GenericDatePickerCtrl(self, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY|wx.TE_PROCESS_ENTER)
         self.descCtrl = descCtrl = wx.TextCtrl(self, style=wx.TE_PROCESS_ENTER)
         self.amountCtrl = amountCtrl = wx.TextCtrl(self, size=(70, -1), style=wx.TE_PROCESS_ENTER)
         #the transfer option
         self.transferCheck = transferCheck = wx.CheckBox(self, label="Transfer")
 
-        #set up the layout
+        # Set up the layout.
+        dateCtrl.SetMinSize(dateCtrl.GetBestSize())
         self.mainSizer = mainSizer = wx.BoxSizer()
         mainSizer.Add(wx.StaticText(self, label="New transaction: "), 0, wx.ALIGN_CENTER_VERTICAL)
         mainSizer.Add(dateCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
@@ -567,8 +587,10 @@ class NewTransactionCtrl(wx.Panel):
 
         #initialize some bindings
         self.Bind(wx.EVT_BUTTON, self.onNewTransaction, source=newButton)
-        self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
-        #self.dateCtrl.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
+        # None of these below work to fix LP: 252454 :[
+        #self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
+        #dateTextCtrl = self.dateCtrl.Children[0].Children[0]
+        #dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
 
     def getValues(self):
         #first ensure an account is selected
