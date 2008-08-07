@@ -16,22 +16,23 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import wx
 import datetime
-
+import wx
 from wx.lib.pubsub import Publisher
+
 from banker import str2float, float2str, AccountAlreadyExistsException
 from smoothsizer import SmoothStaticBoxSizer
 
+
 class HyperlinkText(wx.HyperlinkCtrl):
     def __init__(self, parent, id=-1, label='', url='', style=wx.NO_BORDER | wx.HL_ALIGN_CENTRE, onClick=None, *args, **kwargs):
-        #by default, disable the right-click "Copy URL" menu
+        # By default, disable the right-click "Copy URL" menu.
         wx.HyperlinkCtrl.__init__(self, parent, id, label, url, style=style, *args, **kwargs)
 
-        #don't show a different color for previously clicked items
+        # Don't show a different color for previously clicked items.
         self.VisitedColour = wx.BLUE
 
-        #bind to the optional callable
+        # Bind to the optional callable.
         if callable:
             self.Bind(wx.EVT_HYPERLINK, onClick)
 
@@ -49,12 +50,12 @@ class SearchCtrl(wx.Panel):
         self.searchCtrl.DescriptiveText = "Search transactions"
 
         self.searchInChoices = ["Current Account", "All Accounts"]
-        self.searchInBox = wx.ComboBox(self, value=self.searchInChoices[0], choices=self.searchInChoices, style=wx.CB_READONLY)
+        self.searchInBox = CompactableComboBox(self, value=self.searchInChoices[0], choices=self.searchInChoices, style=wx.CB_READONLY)
 
         self.moreButton = wx.Button(self)
 
         self.matchChoices = ["Description", "Amount", "Date"]
-        self.matchBox = wx.ComboBox(self, value=self.matchChoices[0], choices=self.matchChoices, style=wx.CB_READONLY)
+        self.matchBox = CompactableComboBox(self, value=self.matchChoices[0], choices=self.matchChoices, style=wx.CB_READONLY)
 
         self.caseCheck = wx.CheckBox(self, label="Case Sensitive")
         self.caseCheck.SetToolTipString("Whether or not to match based on capitalization")
@@ -77,6 +78,8 @@ class SearchCtrl(wx.Panel):
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
         self.Sizer.Add(topSizer, 0, wx.ALIGN_CENTER)
         self.Sizer.Add(moreSizer, 0, wx.ALIGN_CENTER)
+        self.searchInBox.Compact()
+        self.matchBox.Compact()
         self.Layout()
 
         #self.matchBox.Bind(wx.EVT_COMBOBOX, self.onMatchCombo)
@@ -85,6 +88,7 @@ class SearchCtrl(wx.Panel):
         self.searchCtrl.Bind(wx.EVT_TEXT_ENTER, self.onSearch)
         self.moreButton.Bind(wx.EVT_BUTTON, self.onToggleMore)
 
+        # Initially hide the extra search options.
         self.onToggleMore()
 
     def onSearch(self, event):
@@ -94,7 +98,7 @@ class SearchCtrl(wx.Panel):
         #X TODO: checkboxes for defining what to search in (currently just desc)
         # TODO: enable search button in ctrl and appropriate event handling
         #X TODO: properly handle the state of everything during a search!
-        searchString = event.String # for a date, should be YYYY-MM-DD
+        searchString = event.String # For a date, should be YYYY-MM-DD.
         accountScope = self.searchInBox.Value == self.searchInChoices[0]
         matchType = self.matchBox.Value
         caseSens = self.caseCheck.Value
@@ -108,9 +112,17 @@ class SearchCtrl(wx.Panel):
         #event.Skip()
 
     def onToggleMore(self, event=None):
+        # Show or hide the advanced search options.
         showLess = self.Sizer.IsShown(self.moreSizer)
         self.Sizer.Show(self.moreSizer, not showLess)
-        self.moreButton.Label = "%s Options" % {True: "More", False: "Less"}[showLess]
+
+        # Update appropriate strings.
+        actionStr = {True: "More", False: "Less"}[showLess]
+        self.moreButton.Label = "%s Options" % actionStr
+        actionStr = {True: "Show", False: "Hide"}[showLess]
+        self.moreButton.SetToolTipString("%s advanced search options"%actionStr)
+
+        # Give or take the appropriate amount of space.
         self.Parent.Layout()
 
 
@@ -126,17 +138,17 @@ class AccountListCtrl(wx.Panel):
     def __init__(self, parent, frame, autoPopulate = True):
         wx.Panel.__init__(self, parent)
         self.parent, self.frame = parent, frame
-        #initialize some attributes to their default values
+        # Initialize some attributes to their default values.
         self.editCtrl = self.hiddenIndex = None
         self.currentIndex = None
         self.boxLabel = "Accounts (%i)"
         self.hyperLinks, self.totalTexts = [], []
 
-        #create the staticboxsizer which is the home for everything
-        #this MUST be created first to ensure proper z-ordering (as per docs)
+        # Create the staticboxsizer which is the home for everything.
+        # This *MUST* be created first to ensure proper z-ordering (as per docs).
         self.staticBox = wx.StaticBox(self, label=self.boxLabel%0)
 
-        ##create and set up the buttons
+        ## Create and set up the buttons.
         #ICON: the ADD account button
         BMP = wx.Bitmap('art/add.bmp')
         BMP.SetMask(wx.Mask(BMP, wx.WHITE))
@@ -155,13 +167,13 @@ class AccountListCtrl(wx.Panel):
         editButton.SetToolTipString("Edit the name of the selected account")
         editButton.Enabled = False
 
-        #layout the buttons
+        # Layout the buttons.
         buttonSizer = wx.BoxSizer()
         buttonSizer.Add(addButton)
         buttonSizer.Add(removeButton)
         buttonSizer.Add(editButton)
 
-        #set up the "Total" sizer
+        # Set up the "Total" sizer.
         self.totalText = wx.StaticText(self, label="$0.00")
         self.totalTexts.append(self.totalText)
         miniSizer = wx.BoxSizer()
@@ -169,7 +181,7 @@ class AccountListCtrl(wx.Panel):
         miniSizer.AddStretchSpacer(1)
         miniSizer.Add(self.totalText)
 
-        #the hide zero balance accounts option
+        # The hide zero-balance accounts option.
         self.hideBox = hideBox = wx.CheckBox(self, label="Hide zero-balance accounts")
 
         #self.staticBoxSizer = SmoothStaticBoxSizer(self.staticBox, wx.VERTICAL)
@@ -179,15 +191,15 @@ class AccountListCtrl(wx.Panel):
         self.staticBoxSizer.Add(miniSizer, 0, wx.EXPAND)
         self.staticBoxSizer.Add(hideBox, 0, wx.TOP, 10)
 
-        #set up the button bindings
+        # Set up the button bindings.
         addButton.Bind(wx.EVT_BUTTON, self.onAddButton)
         removeButton.Bind(wx.EVT_BUTTON, self.onRemoveButton)
         editButton.Bind(wx.EVT_BUTTON, self.onRenameButton)
         hideBox.Bind(wx.EVT_CHECKBOX, self.onHideCheck)
-        #set up the link binding
+        # Set up the link binding.
         self.Bind(wx.EVT_HYPERLINK, self.onAccountClick)
 
-        #subscribe to messages we are concerned about
+        # Subscribe to messages we are concerned about.
         Publisher().subscribe(self.updateTotals, "NEW TRANSACTION")
         Publisher().subscribe(self.updateTotals, "UPDATED TRANSACTION")
         Publisher().subscribe(self.updateTotals, "REMOVED TRANSACTION")
@@ -195,13 +207,13 @@ class AccountListCtrl(wx.Panel):
         Publisher().subscribe(self.onAccountAdded, "NEW ACCOUNT")
         Publisher().subscribe(self.onAccountRenamed, "RENAMED ACCOUNT")
 
-        #populate ourselves initially unless explicitly told not to
+        # Populate ourselves initially unless explicitly told not to.
         if autoPopulate:
             for accountName in frame.bank.getAccountNames():
                 self._PutAccount(accountName)
 
         self.Sizer = self.staticBoxSizer
-        #set the minimum size to the amount it needs to display the edit box
+        # Set the minimum size to the amount it needs to display the edit box.
         self.Freeze()
         self.showEditCtrl(focus=False)
         minWidth = self.staticBoxSizer.CalcMin()[0]
@@ -209,9 +221,10 @@ class AccountListCtrl(wx.Panel):
         self.Thaw()
         self.staticBoxSizer.SetMinSize((minWidth, -1))
 
-        #update the checkbox at the end, so everything else is initialized
+        # Update the checkbox at the end, so everything else is initialized.
         hideBox.Value = wx.Config.Get().ReadBool("HIDE_ZERO_BALANCE_ACCOUNTS")
-        self.onHideCheck() #setting the value doesn't trigger an event
+        # Setting the value doesn't trigger an event, so force an update.
+        self.onHideCheck()
 
         #self.Sizer = self.staticBoxSizer
         self.staticBoxSizer.Layout()
@@ -228,7 +241,7 @@ class AccountListCtrl(wx.Panel):
         if index < 0 or index >= self.GetCount():
             raise IndexError, "No element at index %i"%index
 
-        # offset by 1 because the first child is actually the button sizer
+        # Offset by 1 because the first child is actually the button sizer.
         return self.staticBoxSizer.GetItem(index+1).IsShown()
 
     def SelectItem(self, index):
@@ -236,12 +249,12 @@ class AccountListCtrl(wx.Panel):
         Given an index (zero-based), select the
         appropriate account.
         """
-        #return the old ctrl to an "unselected" state
+        # Return the old ctrl to an "unselected" state.
         if self.currentIndex is not None:
             self.UnhighlightItem(self.currentIndex)
 
         if index is not None:
-            #set this as "selected"
+            # Set this as "selected".
             linkCtrl = self.hyperLinks[index]
             linkCtrl.Visited = False
             self.HighlightItem(index)
@@ -250,11 +263,11 @@ class AccountListCtrl(wx.Panel):
             account = None
 
         self.currentIndex = index
-        #update the remove/edit buttons
+        # Update the remove/edit buttons.
         self.removeButton.Enabled = index is not None
         self.editButton.Enabled = index is not None
 
-        #tell the parent we changed
+        # Tell the parent we changed.
         Publisher().sendMessage("VIEW.ACCOUNT_CHANGED", account)
 
     def SelectVisibleItem(self, index):
@@ -270,7 +283,7 @@ class AccountListCtrl(wx.Panel):
                 if index == visibleItems:
                     self.SelectItem(i)
                     return
-        else: # if we didn't break (or return)
+        else: # If we didn't break (or return).
             self.SelectItem(None)
 
     def SelectItemByName(self, name):
@@ -295,7 +308,7 @@ class AccountListCtrl(wx.Panel):
     def GetCurrentAccount(self):
         if self.currentIndex is not None:
             return self.GetAccounts()[self.currentIndex]
-        else: #not necessary but this is explicit
+        else: # Not necessary, but explicit is clearer here.
             return None
 
     def onAccountRemoved(self, message):
@@ -325,32 +338,32 @@ class AccountListCtrl(wx.Panel):
         accountName = item
         balance = self.frame.bank.getBalanceOf(accountName)
 
-        #create the controls
+        # Create the controls.
         link = HyperlinkText(self, label=accountName+":", url=str(index))
         totalText = wx.StaticText(self, label=float2str(balance))
         self.hyperLinks.insert(index, link)
         self.totalTexts.insert(index, totalText)
 
-        #put them in an hsizer
+        # Put them in an hsizer.
         miniSizer = wx.BoxSizer()
         miniSizer.Add(link)
         miniSizer.AddStretchSpacer(1)
         miniSizer.Add(totalText, 0, wx.LEFT, 10)
 
-        #and insert the hsizer into the correct position in the list
+        # Insert the hsizer into the correct position in the list.
         self.staticBoxSizer.Insert(index+1, miniSizer, 0, wx.EXPAND|wx.BOTTOM, 3)
 
-        #renumber the links after this
+        # Renumber the links after this.
         for linkCtrl in self.hyperLinks[index+1:]:
             linkCtrl.URL = str( int(linkCtrl.URL)+1 )
         if self.currentIndex >= index:
             self.currentIndex += 1
 
-        #update the total text, as sometimes the account already exists
+        # Update the total text, as sometimes the account already exists.
         total = str2float(self.totalText.Label)
         self.totalText.Label = float2str(total + balance)
 
-        #update the static label
+        # Update the static label.
         self.staticBox.Label = self.boxLabel % self.GetCount()
 
         self.Layout()
@@ -365,30 +378,30 @@ class AccountListCtrl(wx.Panel):
         del self.hyperLinks[index]
         del self.totalTexts[index]
 
-        #renumber the links after this
+        # Renumber the links after this.
         for linkCtrl in self.hyperLinks[index:]:
             linkCtrl.URL = str( int(linkCtrl.URL)-1 )
 
-        #actually remove (sort of) the account sizer
+        # Actually remove (sort of) the account sizer.
         self.Sizer.Hide(index+1)
         self.Sizer.Detach(index+1)
 
-        #handle selection logic
+        # Handle selection logic.
         if fixSel:
             if self.currentIndex >= self.GetCount():
-                # select the first one, if there is at least one
+                # Select the first one, if there is at least one.
                 if self.GetCount() > 0:
                     self.currentIndex = 0
-                # otherwise, select None, as there are no accounts
+                # Otherwise, select None, as there are no accounts.
                 else:
                     self.currentIndex = None
             self.SelectVisibleItem(self.currentIndex)
 
-        #update the total text (subtract what was removed)
+        # Update the total text (subtract what was removed).
         total = str2float(self.totalText.Label)
         self.totalText.Label = float2str(total - balance)
 
-        #update the static label
+        # Update the static label.
         self.staticBox.Label = self.boxLabel % self.GetCount()
 
         self.Layout()
@@ -406,7 +419,8 @@ class AccountListCtrl(wx.Panel):
             total += balance
         self.totalTexts[-1].Label = float2str(total)
 
-        self.onHideCheck() #if a zero-balance account went to non-zero or vice-versa
+        # Handle a zero-balance account going to non-zero or vice-versa.
+        self.onHideCheck()
 
         self.Layout()
         self.parent.Layout()
@@ -416,7 +430,7 @@ class AccountListCtrl(wx.Panel):
         self.addButton.Enabled = False
 
     def onAddAccount(self, event):
-        #grab the account name and add it
+        # Grab the account name and add it.
         accountName = self.editCtrl.Value
         try:
             self.frame.bank.createAccount(accountName)
@@ -458,18 +472,18 @@ class AccountListCtrl(wx.Panel):
             self.editCtrl.SetFocus()
 
     def onHideEditCtrl(self, event=None, restore=True):
-        #hide and remove the control and re-layout
+        # Hide and remove the control and re-layout.
         self.staticBoxSizer.Hide(self.editCtrl)#, smooth=True)
         self.staticBoxSizer.Detach(self.editCtrl)
 
-        #if it was a rename, we have to re-show the linkctrl
+        # If it was a rename, we have to re-show the linkctrl.
         if restore and self.hiddenIndex is not None:
             self.Sizer.Show(self.hiddenIndex)
             self.hiddenIndex = None
 
         self.parent.Layout()
 
-        #re-enable the add button
+        # Re-enable the add button.
         self.addButton.Enabled = True
 
     def onRemoveButton(self, event):
@@ -478,7 +492,7 @@ class AccountListCtrl(wx.Panel):
             warningMsg = "This will permanently remove the account '%s' and all its transactions. Continue?"
             dlg = wx.MessageDialog(self, warningMsg%linkCtrl.Label[:-1], "Warning", style=wx.YES_NO|wx.ICON_EXCLAMATION)
             if dlg.ShowModal() == wx.ID_YES:
-                #remove it from the bank
+                # Remove the account from the model.
                 accountName = linkCtrl.Label[:-1]
                 self.frame.bank.removeAccount(accountName)
 
@@ -491,7 +505,7 @@ class AccountListCtrl(wx.Panel):
         newName = self.editCtrl.Value
 
         if oldName == newName:
-            #if there was no change, don't do anything
+            # If there was no change, don't do anything.
             self.onHideEditCtrl()
             return
 
@@ -508,9 +522,10 @@ class AccountListCtrl(wx.Panel):
         TODO: don't assume it was the current account that was renamed.
         """
         oldName, newName = message.data
-        #hide the edit control
+        # Hide the edit control.
         self.onHideEditCtrl(restore=False) #ASSUMPTION!
-        #just renaming won't put it in the right alpha position
+        # Just renaming won't put it in the right alpha position, so remove it
+        # and add it again, letting _PutAccount handle the ordering.
         self.UnhighlightItem(self.currentIndex)
         self._RemoveItem(self.currentIndex, fixSel=False)
         self.currentIndex = self._PutAccount(newName)
@@ -530,8 +545,8 @@ class AccountListCtrl(wx.Panel):
         """
         checked = self.hideBox.IsChecked()
         for i, amountCtrl in enumerate(self.totalTexts[:-1]):
-            # show it, in the case of calls from updateTotals where a zero-balance
-            # became a non-zero. otherwise it won't come up.
+            # Show it, in the case of calls from updateTotals where a
+            # zero-balance became a non-zero. otherwise it won't come up.
             # +1 offset is to take into account the buttons at the top.
             self.staticBoxSizer.Show(i+1)
             if checked:
@@ -540,7 +555,7 @@ class AccountListCtrl(wx.Panel):
 
         self.parent.Layout()
 
-        #we hid the current selection, so select the first available
+        # We hid the current selection, so select the first available.
         if checked and not self.IsVisible(self.currentIndex):
             self.SelectVisibleItem(0)
 
@@ -589,23 +604,22 @@ class NewTransactionCtrl(wx.Panel):
         mainSizer.Add(wx.StaticText(self, label=")"), 0, wx.ALIGN_CENTER_VERTICAL)
         self.Sizer = mainSizer
         mainSizer.Layout()
-        #mainSizer.SetMinSize(mainSizer.Size)
 
-        # Initialize necessary bindings
+        # Initialize necessary bindings.
         self.Bind(wx.EVT_BUTTON, self.onNewTransaction, source=newButton)
-        self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction) # Gives us enter from description/amount
-        # Bind to DateCtrl Enter (LP: 252454)
+        self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction) # Gives us enter from description/amount.
+        # Bind to DateCtrl Enter (LP: 252454).
         try:
             dateTextCtrl = self.dateCtrl.Children[0].Children[0]
         except IndexError:
-            # This will fail on Windows, wxPython < 2.8.8.0
+            # This will fail on Windows, wxPython < 2.8.8.0.
             pass
         else:
             dateTextCtrl.WindowStyleFlag |= wx.TE_PROCESS_ENTER
             dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
 
     def getValues(self):
-        #first ensure an account is selected
+        # First, ensure an account is selected.
         account = self.parent.parent.getCurrentAccount()
         if account is None:
             dlg = wx.MessageDialog(self,
@@ -614,22 +628,27 @@ class NewTransactionCtrl(wx.Panel):
             dlg.ShowModal()
             return
 
-        #now grab the values we will need
+        # Grab the raw values we will need to parse.
         date = self.dateCtrl.Value
         desc = self.descCtrl.Value
         amount = self.amountCtrl.Value
 
-        #parse the amount
+        # Parse the amount.
         try:
             amount = float(amount)
         except:
+            if amount == "":
+                baseStr = "No amount entered in the 'Amount' field."
+            else:
+                baseStr = "'%s' is not a valid amount." % amount
+
             dlg = wx.MessageDialog(self,
-                                "Invalid amount. Please enter an amount such as 12.34",
-                                "Error parsing amount", wx.OK | wx.ICON_ERROR)
+                                baseStr + " Please enter a number such as 12.34 or -20.",
+                                "Invalid Transaction Amount", wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
             return
 
-        #parse the date. this is already validated so we are pretty safe
+        # Parse the date. This is already validated so we are pretty safe.
         date = datetime.date(date.Year, date.Month+1, date.Day)
 
         return account, amount, desc, date
@@ -638,7 +657,7 @@ class NewTransactionCtrl(wx.Panel):
         otherAccounts = self.frame.bank.getAccountNames()
         otherAccounts.remove(destination)
 
-        #create a dialog with the other account names to choose from
+        # Create a dialog with the other account names to choose from.
         dlg = wx.SingleChoiceDialog(self,
                 'Which account will the money come from?', 'Other accounts',
                 otherAccounts, wx.CHOICEDLG_STYLE)
@@ -681,6 +700,20 @@ class NewTransactionCtrl(wx.Panel):
         wx.TipWindow(self, tipStr, maxLength=200)
 
     def onSuccess(self):
-        #reset the controls
+        # Reset the controls.
         self.descCtrl.Value = ''
         self.amountCtrl.Value = ''
+
+
+class CompactableComboBox(wx.ComboBox):
+    def Compact(self):
+        # Calculates and sets the minimum width of the ComboBox.
+        # Width is based on the width of the longest string.
+        # From the ideas of Mike Rooney, Cody Precord, Robin Dunn and Raffaello.
+        comboStrings = self.Strings
+        if len(comboStrings) == 0:
+            self.SetMinSize(wx.DefaultSize)
+        else:
+            height = self.Size[1]
+            maxTextWidth = max([self.Parent.GetTextExtent(s.strip())[0] for s in comboStrings])
+            self.SetMinSize((maxTextWidth + height + 8, height))
