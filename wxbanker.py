@@ -170,8 +170,10 @@ if __name__ == "__main__":
 
     import sys
     root = os.path.split(sys.argv[0])[0]
-    if root: #we may already be in the directory
+    if root:
+        # We are not already in the directory, so change to it.
         os.chdir(root)
+    #ICON: once icon infrastructure is in place, I don't think we need a chdir, we can just the below commented line
     #bankPath = os.path.join(root, 'bank')
     bankPath = 'bank'
 

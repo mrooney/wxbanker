@@ -559,12 +559,18 @@ class NewTransactionCtrl(wx.Panel):
         self.newButton = newButton = wx.BitmapButton(self, bitmap=BMP)
         newButton.SetToolTipString("Enter this transaction")
 
-        # The date, description, and total.
-        self.dateCtrl = dateCtrl = wx.DatePickerCtrl(self, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY|wx.TE_PROCESS_ENTER)
-        #self.dateCtrl = dateCtrl = wx.GenericDatePickerCtrl(self, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY|wx.TE_PROCESS_ENTER)
+        # The date control. We want the Generic control, which is a composite control
+        # and allows us to bind to its enter, but on Windows with wxPython < 2.8.8.0,
+        # it won't be available.
+        try:
+            DatePickerClass = wx.GenericDatePickerCtrl
+        except AttributeError:
+            DatePickerClass = wx.DatePickerCtrl
+        self.dateCtrl = dateCtrl = DatePickerClass(self, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY)
+
+        # The Description, Amount, and Transfer controls.
         self.descCtrl = descCtrl = wx.TextCtrl(self, style=wx.TE_PROCESS_ENTER)
         self.amountCtrl = amountCtrl = wx.TextCtrl(self, size=(70, -1), style=wx.TE_PROCESS_ENTER)
-        #the transfer option
         self.transferCheck = transferCheck = wx.CheckBox(self, label="Transfer")
 
         # Set up the layout.
@@ -585,12 +591,18 @@ class NewTransactionCtrl(wx.Panel):
         mainSizer.Layout()
         #mainSizer.SetMinSize(mainSizer.Size)
 
-        #initialize some bindings
+        # Initialize necessary bindings
         self.Bind(wx.EVT_BUTTON, self.onNewTransaction, source=newButton)
-        self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
-        # None of these below work to fix LP: 252454 :[
-        #dateTextCtrl = self.dateCtrl.Children[0].Children[0]
-        #dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
+        self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction) # Gives us enter from description/amount
+        # Bind to DateCtrl Enter (LP: 252454)
+        try:
+            dateTextCtrl = self.dateCtrl.Children[0].Children[0]
+        except IndexError:
+            # This will fail on Windows, wxPython < 2.8.8.0
+            pass
+        else:
+            dateTextCtrl.WindowStyleFlag |= wx.TE_PROCESS_ENTER
+            dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
 
     def getValues(self):
         #first ensure an account is selected
