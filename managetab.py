@@ -71,6 +71,7 @@ class ManagePanel(wx.Panel):
         calcWidget.SetExpanded(wx.Config.Get().ReadBool("SHOW_CALC"))
 
         wx.CallLater(50, lambda: transactionPanel.transactionGrid.doResize())
+        wx.CallLater(50, lambda: transactionPanel.transactionGrid.ensureVisible(-1)) # GTK
 
     def onCalculatorToggled(self, message):
         """

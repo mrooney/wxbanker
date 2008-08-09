@@ -53,7 +53,6 @@ class SearchCtrl(wx.Panel):
         self.searchInBox = CompactableComboBox(self, value=self.searchInChoices[0], choices=self.searchInChoices, style=wx.CB_READONLY)
 
         # The More/Less button.
-        self.moreButton = wx.Button(self)
         self.moreButton = MultiStateButton(self, baseLabel="%s Options", labelDict={True: "More", False: "Less"}, state=True)
 
         self.matchChoices = ["Description", "Amount", "Date"]
