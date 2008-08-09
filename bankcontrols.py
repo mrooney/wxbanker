@@ -52,7 +52,9 @@ class SearchCtrl(wx.Panel):
         self.searchInChoices = ["Current Account", "All Accounts"]
         self.searchInBox = CompactableComboBox(self, value=self.searchInChoices[0], choices=self.searchInChoices, style=wx.CB_READONLY)
 
+        # The More/Less button.
         self.moreButton = wx.Button(self)
+        self.moreButton = MultiStateButton(self, baseLabel="%s Options", labelDict={True: "More", False: "Less"}, state=True)
 
         self.matchChoices = ["Description", "Amount", "Date"]
         self.matchBox = CompactableComboBox(self, value=self.matchChoices[0], choices=self.matchChoices, style=wx.CB_READONLY)
@@ -117,13 +119,13 @@ class SearchCtrl(wx.Panel):
         self.Sizer.Show(self.moreSizer, not showLess)
 
         # Update appropriate strings.
-        actionStr = {True: "More", False: "Less"}[showLess]
-        self.moreButton.Label = "%s Options" % actionStr
-        actionStr = {True: "Show", False: "Hide"}[showLess]
-        self.moreButton.SetToolTipString("%s advanced search options"%actionStr)
+        self.moreButton.State = showLess
+        tipActionStr = {True: "Show", False: "Hide"}[showLess]
+        self.moreButton.SetToolTipString("%s advanced search options" % tipActionStr)
 
         # Give or take the appropriate amount of space.
         self.Parent.Layout()
+        Publisher().sendMessage("SEARCH.MORETOGGLED")
 
 
 class AccountListCtrl(wx.Panel):
@@ -717,3 +719,44 @@ class CompactableComboBox(wx.ComboBox):
             height = self.Size[1]
             maxTextWidth = max([self.Parent.GetTextExtent(s.strip())[0] for s in comboStrings])
             self.SetMinSize((maxTextWidth + height + 8, height))
+            
+
+class MultiStateButton(wx.Button):
+    def __init__(self, parent, id=-1, baseLabel="%s", labelDict=None, state=None, style=0):
+        wx.Button.__init__(self, parent, id=id, style=style)
+        self.BaseLabel = baseLabel
+        self._State = state
+        
+        if labelDict is None:
+            labelDict = {None: ""}
+        self.LabelDict = labelDict
+        self.State = state
+        
+    def GetLabelDict(self):
+        return self._LabelDict
+    
+    def SetLabelDict(self, ldict):
+        self._LabelDict = ldict
+        
+        # Calculate the width of the button.
+        self.Freeze()
+        minWidth, minHeight = self.MinSize
+        for modifier in ldict.values():
+            self.Label = self.BaseLabel % modifier
+            cWidth = self.BestSize[0]
+            minWidth = max((minWidth, cWidth))
+        self.MinSize = minWidth, minHeight
+        # Restore the original State (and Label)
+        self.State = self._State
+        self.Thaw()
+        
+    def GetState(self):
+        return self._State
+        
+    def SetState(self, state):
+        self._State = state
+        self.Label = self.BaseLabel % self.LabelDict[state]
+        
+    LabelDict = property(GetLabelDict, SetLabelDict)
+    State = property(GetState, SetState)
+        

@@ -23,7 +23,6 @@ from bankcontrols import AccountListCtrl, NewTransactionCtrl, SearchCtrl
 from calculator import CollapsableWidget, SimpleCalculator
 from wx.lib.pubsub import Publisher
 
-#TODO: search control, for searching in currently displayed transactions
 
 class ManagePanel(wx.Panel):
     """
@@ -71,7 +70,7 @@ class ManagePanel(wx.Panel):
         # Ensure the calculator is displayed as desired.
         calcWidget.SetExpanded(wx.Config.Get().ReadBool("SHOW_CALC"))
 
-        wx.CallLater(50, lambda: transactionPanel.transactionGrid.ensureVisible(-1))
+        wx.CallLater(50, lambda: transactionPanel.transactionGrid.doResize())
 
     def onCalculatorToggled(self, message):
         """
@@ -182,10 +181,11 @@ class TransactionGrid(gridlib.Grid):
 
         Publisher().subscribe(self.onTransactionRemoved, "REMOVED TRANSACTION")
         Publisher().subscribe(self.onTransactionAdded, "NEW TRANSACTION")
-        Publisher().subscribe(self.onSearch, "SEARCH.INITIATED")
-        Publisher().subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
         #XXX this causes a segfault on amount changes, that's cute
         #Publisher().subscribe(self.onTransactionUpdated, "UPDATED TRANSACTION")
+        Publisher().subscribe(self.onSearch, "SEARCH.INITIATED")
+        Publisher().subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
+        Publisher().subscribe(self.onSearchMoreToggled, "SEARCH.MORETOGGLED")
 
     def GetCellValue(self, row, col):
         """
@@ -241,6 +241,10 @@ class TransactionGrid(gridlib.Grid):
     def onSearchCancelled(self, message):
         self.setAccount(self.Parent.Parent.getCurrentAccount())
         self.Parent.searchActive = False
+        
+    def onSearchMoreToggled(self, message):
+        self.Refresh()
+        #self.doResize()
 
     def onTransactionAdded(self, message):
         #ASSUMPTION: the transaction was of the current account
