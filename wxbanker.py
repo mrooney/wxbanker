@@ -49,7 +49,7 @@ class BankerFrame(wx.Frame):
         pos = config.ReadInt('POS_X'), config.ReadInt('POS_Y')
 
         wx.Frame.__init__(self, None, title="wxBanker", size=size, pos=pos)
-        #ICON: use finance/money app icon
+        self.SetIcon(wx.ArtProvider.GetIcon('coins'))
 
         self.isSaveLocked = False
         self.bank = bank
@@ -168,24 +168,25 @@ if __name__ == "__main__":
     if not config.HasEntry("SHOW_CALC"):
         config.WriteBool("SHOW_CALC", True)
 
-    import sys
-    root = os.path.split(sys.argv[0])[0]
-    if root:
-        # We are not already in the directory, so change to it.
-        os.chdir(root)
-    #ICON: once icon infrastructure is in place, I don't think we need a chdir, we can just the below commented line
-    #bankPath = os.path.join(root, 'bank')
-    bankPath = 'bank'
-
+    # Figure out where the bank database file is, and load it.
+    root = os.path.dirname(__file__)
+    bankPath = os.path.join(root, 'bank')
     bank = Bank(bankPath)
+    
+    # Push our custom art provider.
+    from artprovider import BankArtProvider
+    wx.ArtProvider.Push(BankArtProvider())
+    
+    # Initialize the wxBanker frame!
     frame = BankerFrame(bank)
 
-    #greet the user if it appears this is their first time
+    # Greet the user if it appears this is their first time using wxBanker.
     firstTime = not config.ReadBool("RUN_BEFORE")
     if firstTime:
         Publisher().sendMessage("FIRST RUN")
         config.WriteBool("RUN_BEFORE", True)
 
+    import sys
     if '--inspect' in sys.argv:
         import wx.lib.inspection
         wx.lib.inspection.InspectionTool().Show()

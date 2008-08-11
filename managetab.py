@@ -264,23 +264,24 @@ class TransactionGrid(gridlib.Grid):
 
         if col in (2,3):
             # This is an amount cell, allow calculator options.
-            actions = ["Send to calculator",
-                       "Subtract from calculator",
-                       "Add to calculator",
-                       ]
-            for actionStr in actions:
+            actions = [
+                ("Send to calculator", "calculator_edit"),
+                ("Add to calculator", "calculator_add"),
+                ("Subtract from calculator", "calculator_delete"),
+            ]
+            
+            for actionStr, artHint in actions:
                 item = wx.MenuItem(menu, -1, actionStr)
+                item.SetBitmap(wx.ArtProvider.GetBitmap(artHint))
                 menu.Bind(wx.EVT_MENU, lambda e, s=actionStr: self.onCalculatorAction(row, col, s), source=item)
                 menu.AppendItem(item)
-                #ICON: use appropriate calc icons for these entries
             menu.AppendSeparator()
 
         # Always show the Remove context entry.
         ID = int(self.GetRowLabelValue(row))
         removeItem = wx.MenuItem(menu, -1, "Remove this transaction")
         menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransaction(row, ID), source=removeItem)
-        #ICON: use an images library to get the remove BMP
-        #item.SetBitmap(images.getRemoveBitmap())
+        removeItem.SetBitmap(wx.ArtProvider.GetBitmap('delete'))
         menu.AppendItem(removeItem)
 
         # Show the menu and then destroy it afterwards.

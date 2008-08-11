@@ -150,20 +150,17 @@ class AccountListCtrl(wx.Panel):
         self.staticBox = wx.StaticBox(self, label=self.boxLabel%0)
 
         ## Create and set up the buttons.
-        #ICON: the ADD account button
-        BMP = wx.Bitmap('art/add.bmp')
-        BMP.SetMask(wx.Mask(BMP, wx.WHITE))
+        # The EDIT account button.
+        BMP = wx.ArtProvider.GetBitmap('add')
         self.addButton = addButton = wx.BitmapButton(self, bitmap=BMP)
         addButton.SetToolTipString("Add a new account")
-        #ICON: the REMOVE account button
-        BMP = wx.Bitmap('art/remove.bmp')
-        BMP.SetMask(wx.Mask(BMP, wx.WHITE))
+        # The REMOVE account button.
+        BMP = wx.ArtProvider.GetBitmap('delete')
         self.removeButton = removeButton = wx.BitmapButton(self, bitmap=BMP)
         removeButton.SetToolTipString("Remove the selected account")
         removeButton.Enabled = False
-        #ICON: the EDIT account button
-        BMP = wx.Bitmap('art/edit.bmp')
-        BMP.SetMask(wx.Mask(BMP, wx.WHITE))
+        # The EDIT account button.
+        BMP = wx.ArtProvider.GetBitmap('textfield_rename')
         self.editButton = editButton = wx.BitmapButton(self, bitmap=BMP)
         editButton.SetToolTipString("Edit the name of the selected account")
         editButton.Enabled = False
@@ -184,6 +181,7 @@ class AccountListCtrl(wx.Panel):
 
         # The hide zero-balance accounts option.
         self.hideBox = hideBox = wx.CheckBox(self, label="Hide zero-balance accounts")
+        hideBox.SetToolTipString("When enabled, accounts with a balance of $0.00 will be hidden from the list")
 
         #self.staticBoxSizer = SmoothStaticBoxSizer(self.staticBox, wx.VERTICAL)
         self.staticBoxSizer = wx.StaticBoxSizer(self.staticBox, wx.VERTICAL)
@@ -570,10 +568,9 @@ class NewTransactionCtrl(wx.Panel):
         self.frame = frame
 
         # The add button.
-        BMP = wx.Bitmap('art/add.bmp')
-        BMP.SetMask(wx.Mask(BMP, wx.WHITE))
-        self.newButton = newButton = wx.BitmapButton(self, bitmap=BMP)
-        newButton.SetToolTipString("Enter this transaction")
+        ##BMP = wx.ArtProvider.GetBitmap('money_add')
+        ##self.newButton = newButton = wx.BitmapButton(self, bitmap=BMP)
+        ##newButton.SetToolTipString("Enter this transaction")
 
         # The date control. We want the Generic control, which is a composite control
         # and allows us to bind to its enter, but on Windows with wxPython < 2.8.8.0,
@@ -598,26 +595,55 @@ class NewTransactionCtrl(wx.Panel):
         mainSizer.Add(descCtrl)
         mainSizer.Add(wx.StaticText(self, label="Amount:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
         mainSizer.Add(amountCtrl)
-        mainSizer.Add(newButton, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 5)
+        ##mainSizer.Add(newButton, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 5)
         mainSizer.Add(transferCheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
         mainSizer.Add(wx.StaticText(self, label="("), 0, wx.ALIGN_CENTER_VERTICAL)
         mainSizer.Add(HyperlinkText(self, label="?", onClick=self.onTransferTip), 0, wx.ALIGN_CENTER_VERTICAL)
         mainSizer.Add(wx.StaticText(self, label=")"), 0, wx.ALIGN_CENTER_VERTICAL)
         self.Sizer = mainSizer
+        
+        # Initialize the add button
+        self.updateAddIcon(removeFirst=False)
+        
+        # Now layout the control.
         mainSizer.Layout()
 
         # Initialize necessary bindings.
-        self.Bind(wx.EVT_BUTTON, self.onNewTransaction, source=newButton)
         self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction) # Gives us enter from description/amount.
+        amountCtrl.Bind(wx.EVT_CHAR, self.onAmountChar)
         # Bind to DateCtrl Enter (LP: 252454).
         try:
             dateTextCtrl = self.dateCtrl.Children[0].Children[0]
         except IndexError:
-            # This will fail on Windows, wxPython < 2.8.8.0.
+            # This will fail on MSW + wxPython < 2.8.8.0, nothing we can do.
             pass
         else:
             dateTextCtrl.WindowStyleFlag |= wx.TE_PROCESS_ENTER
             dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
+            
+    def onAmountChar(self, event):
+        wx.CallAfter(self.updateAddIcon)
+        event.Skip()
+        
+    def updateAddIcon(self, removeFirst=True):
+        amountText = self.amountCtrl.Value
+        if amountText and amountText[0] == '-':
+            BMP = wx.ArtProvider.GetBitmap('money_delete')
+        else:
+            BMP = wx.ArtProvider.GetBitmap('money_add')
+            
+        # This is all quite a hack :[
+        # Really we just want to have a SetBitmap on a BitmapButton, instead we must replace the button.
+        self.Freeze()
+        if removeFirst:
+            self.Sizer.Detach(self.newButton)
+            self.newButton.Destroy()
+        self.newButton = wx.BitmapButton(self, bitmap=BMP)
+        self.newButton.SetToolTipString("Enter this transaction")
+        self.Sizer.Insert(6, self.newButton, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 5)
+        self.Layout()
+        self.Thaw()
+        self.newButton.Bind(wx.EVT_BUTTON, self.onNewTransaction)
 
     def getValues(self):
         # First, ensure an account is selected.
