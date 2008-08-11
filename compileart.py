@@ -16,12 +16,11 @@ for file in os.listdir(base):
         append = True
     else:
         print 'Ignoring %s' % file
-        
+
 # Fix < 2.8 compatibility by shipping embeddedimage.py.
 print "Fixing compatibility with wxPython < 2.8...",
 lines = open('silk.py').readlines()
 assert lines[3] == "from wx.lib.embeddedimage import PyEmbeddedImage\n", lines[3]
-lines[3] = "from art.embeddedimage import PyEmbeddedImage\n"
+lines[3] = "from embeddedimage import PyEmbeddedImage\n"
 open('silk.py', 'w').writelines(lines)
 print "fixed!"
-        

@@ -24,18 +24,17 @@ A GUI layer on top of banker.py
 #TODO: a summary tab for viewing graphs and stats like inflow, outflow, net cashflow, etc
 #TODO: metadata info, such as FIXED, UNEXPECTED
 """
-import wx, wx.aui, wx.lib.delayedresult as delayedresult
+import os, wx, wx.aui
 from wx.lib.pubsub import Publisher
-import time, os
 from bankexceptions import NoNumpyException
 
 #tabs
 import managetab
-summary = True
+SUMMARY_TAB = True
 try:
     import summarytab
 except NoNumpyException:
-    summary = False
+    SUMMARY_TAB = False
     print "Numpy not available, disabling Summary tab..."
 
 from banker import Bank
@@ -59,7 +58,7 @@ class BankerFrame(wx.Frame):
         self.managePanel = managetab.ManagePanel(notebook, self)
         notebook.AddPage(self.managePanel, "Transactions")
 
-        if summary:
+        if SUMMARY_TAB:
             self.summaryPanel = summarytab.SummaryPanel(notebook, self)
             notebook.AddPage(self.summaryPanel, "Summary")
 
@@ -172,11 +171,11 @@ if __name__ == "__main__":
     root = os.path.dirname(__file__)
     bankPath = os.path.join(root, 'bank')
     bank = Bank(bankPath)
-    
+
     # Push our custom art provider.
     from artprovider import BankArtProvider
     wx.ArtProvider.Push(BankArtProvider())
-    
+
     # Initialize the wxBanker frame!
     frame = BankerFrame(bank)
 

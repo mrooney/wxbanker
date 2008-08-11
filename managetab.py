@@ -102,7 +102,7 @@ class TransactionPanel(wx.Panel):
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(searchCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL)
         mainSizer.Add(transactionGrid, 1, wx.EXPAND)
-        mainSizer.Add(newTransCtrl, 0, wx.EXPAND|wx.LEFT|wx.TOP, 5)
+        mainSizer.Add(newTransCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5)
 
         self.Sizer = mainSizer
         mainSizer.Layout()
@@ -242,7 +242,7 @@ class TransactionGrid(gridlib.Grid):
     def onSearchCancelled(self, message):
         self.setAccount(self.Parent.Parent.getCurrentAccount())
         self.Parent.searchActive = False
-        
+
     def onSearchMoreToggled(self, message):
         self.Refresh()
         #self.doResize()
@@ -269,7 +269,7 @@ class TransactionGrid(gridlib.Grid):
                 ("Add to calculator", "calculator_add"),
                 ("Subtract from calculator", "calculator_delete"),
             ]
-            
+
             for actionStr, artHint in actions:
                 item = wx.MenuItem(menu, -1, actionStr)
                 item.SetBitmap(wx.ArtProvider.GetBitmap(artHint))

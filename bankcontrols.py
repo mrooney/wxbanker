@@ -589,7 +589,7 @@ class NewTransactionCtrl(wx.Panel):
         # Set up the layout.
         dateCtrl.SetMinSize(dateCtrl.GetBestSize())
         self.mainSizer = mainSizer = wx.BoxSizer()
-        mainSizer.Add(wx.StaticText(self, label="New transaction: "), 0, wx.ALIGN_CENTER_VERTICAL)
+        mainSizer.Add(wx.StaticText(self, label="New Transaction: "), 0, wx.ALIGN_CENTER_VERTICAL)
         mainSizer.Add(dateCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
         mainSizer.Add(wx.StaticText(self, label="Description:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
         mainSizer.Add(descCtrl)
@@ -601,10 +601,10 @@ class NewTransactionCtrl(wx.Panel):
         mainSizer.Add(HyperlinkText(self, label="?", onClick=self.onTransferTip), 0, wx.ALIGN_CENTER_VERTICAL)
         mainSizer.Add(wx.StaticText(self, label=")"), 0, wx.ALIGN_CENTER_VERTICAL)
         self.Sizer = mainSizer
-        
+
         # Initialize the add button
         self.updateAddIcon(removeFirst=False)
-        
+
         # Now layout the control.
         mainSizer.Layout()
 
@@ -620,18 +620,18 @@ class NewTransactionCtrl(wx.Panel):
         else:
             dateTextCtrl.WindowStyleFlag |= wx.TE_PROCESS_ENTER
             dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
-            
+
     def onAmountChar(self, event):
         wx.CallAfter(self.updateAddIcon)
         event.Skip()
-        
+
     def updateAddIcon(self, removeFirst=True):
         amountText = self.amountCtrl.Value
         if amountText and amountText[0] == '-':
             BMP = wx.ArtProvider.GetBitmap('money_delete')
         else:
             BMP = wx.ArtProvider.GetBitmap('money_add')
-            
+
         # This is all quite a hack :[
         # Really we just want to have a SetBitmap on a BitmapButton, instead we must replace the button.
         self.Freeze()
@@ -744,25 +744,25 @@ class CompactableComboBox(wx.ComboBox):
             height = self.Size[1]
             maxTextWidth = max([self.Parent.GetTextExtent(s.strip())[0] for s in comboStrings])
             self.SetMinSize((maxTextWidth + height + 8, height))
-            
+
 
 class MultiStateButton(wx.Button):
     def __init__(self, parent, id=-1, baseLabel="%s", labelDict=None, state=None, style=0):
         wx.Button.__init__(self, parent, id=id, style=style)
         self.BaseLabel = baseLabel
         self._State = state
-        
+
         if labelDict is None:
             labelDict = {None: ""}
         self.LabelDict = labelDict
         self.State = state
-        
+
     def GetLabelDict(self):
         return self._LabelDict
-    
+
     def SetLabelDict(self, ldict):
         self._LabelDict = ldict
-        
+
         # Calculate the width of the button.
         self.Freeze()
         minWidth, minHeight = self.MinSize
@@ -774,14 +774,14 @@ class MultiStateButton(wx.Button):
         # Restore the original State (and Label)
         self.State = self._State
         self.Thaw()
-        
+
     def GetState(self):
         return self._State
-        
+
     def SetState(self, state):
         self._State = state
         self.Label = self.BaseLabel % self.LabelDict[state]
-        
+
     LabelDict = property(GetLabelDict, SetLabelDict)
     State = property(GetState, SetState)
-        
+
