@@ -53,7 +53,13 @@ class SimpleCalculator(wx.Panel):
             elif keycode == wx.WXK_RETURN:
                 char = '='
             else:
-                char = chr(event.KeyCode)
+                try:
+                    char = chr(event.KeyCode)
+                except ValueError:
+                    # It may have been an arrow key press or something else not chr'able.
+                    if event:
+                        event.Skip()
+                    return
         else:
             assert char
 
