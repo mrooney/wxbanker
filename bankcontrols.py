@@ -613,9 +613,6 @@ class NewTransactionCtrl(wx.Panel):
         mainSizer.Add(wx.StaticText(self, label=")"), 0, wx.ALIGN_CENTER)
         self.Sizer = mainSizer
 
-        # Initialize the add button
-        ##self.updateAddIcon(removeFirst=False)
-
         # Now layout the control.
         mainSizer.Layout()
 

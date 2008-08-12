@@ -48,7 +48,7 @@ class BankerFrame(wx.Frame):
         pos = config.ReadInt('POS_X'), config.ReadInt('POS_Y')
 
         wx.Frame.__init__(self, None, title="wxBanker", size=size, pos=pos)
-        self.SetIcon(wx.ArtProvider.GetIcon('coins'))
+        self.SetIcon(wx.ArtProvider.GetIcon('wxART_coins'))
 
         self.isSaveLocked = False
         self.bank = bank
