@@ -173,8 +173,9 @@ if __name__ == "__main__":
     bank = Bank(bankPath)
 
     # Push our custom art provider.
-    from artprovider import BankArtProvider
-    wx.ArtProvider.Push(BankArtProvider())
+    import wx.lib.art.img2pyartprov as img2pyartprov
+    from art import silk
+    wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(silk))
 
     # Initialize the wxBanker frame!
     frame = BankerFrame(bank)
