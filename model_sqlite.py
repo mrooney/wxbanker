@@ -34,7 +34,9 @@ Table: transactions
 +-------------------------------------------------------------------------------------------------------+
 """
 import os, datetime
+import basemodel
 from sqlite3 import dbapi2 as sqlite
+from wx.lib.pubsub import Publisher
 
 class Model:
     def __init__(self, path):
@@ -45,6 +47,9 @@ class Model:
             connection = sqlite.connect(self.path)
 
         self.dbconn = connection
+        
+        self.updateCb = lambda message: self.updateTransaction(message.data)
+        Publisher.subscribe(self.updateCb, "transaction.updated")
 
     def initialize(self):
         connection = sqlite.connect(self.path)
@@ -60,21 +65,15 @@ class Model:
         This method converts this model's specific implementation
         of a transaction into the Bank's generic one.
         """
-        datetup = [int(x) for x in result[4].split('/')]
-        if datetup[0] < 1000:
-            print "You have a bad date, how did that happen?", result
-            datetup[0] += 2000
-        date = datetime.date(*datetup)
-        #print date
-        return [result[0], result[2], result[3], date]
+        return basemodel.Transaction(*result)
 
-    def transaction2result(self, transaction):
+    def transaction2result(self, transObj):
         """
         This method converts the Bank's generic implementation of
         a transaction into this model's specific one.
         """
-        dateStr = "%s/%s/%s"%(transaction[3].year, str(transaction[3].month).zfill(2), str(transaction[3].day).zfill(2))
-        return [transaction[0], transaction[1], transaction[2], dateStr]
+        dateStr = "%s/%s/%s"%(transObj.Date.year, str(transObj.Date.month).zfill(2), str(transObj.Date.day).zfill(2))
+        return [transObj.tID, transObj.Amount, transObj.Description, dateStr]
 
     def getAccounts(self):
         return sorted([result[1] for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()])
@@ -127,8 +126,8 @@ class Model:
             return result
         return self.result2transaction(result)
 
-    def updateTransaction(self, transaction):
-        result = self.transaction2result(transaction)
+    def updateTransaction(self, transObj):
+        result = self.transaction2result(transObj)
         result.append( result.pop(0) ) #move the uid to the back as it is last in the args below
         self.dbconn.cursor().execute('UPDATE transactions SET amount=?, description=?, date=? WHERE id=?', result)
         self.dbconn.commit()
