@@ -265,9 +265,9 @@ class TransactionGrid(gridlib.Grid):
         if col in (2,3):
             # This is an amount cell, allow calculator options.
             actions = [
-                ("Send to calculator", "calculator_edit"),
-                ("Add to calculator", "calculator_add"),
-                ("Subtract from calculator", "calculator_delete"),
+                ("Send to calculator", "wxART_calculator_edit"),
+                ("Add to calculator", "wxART_calculator_add"),
+                ("Subtract from calculator", "wxART_calculator_delete"),
             ]
 
             for actionStr, artHint in actions:
@@ -281,7 +281,7 @@ class TransactionGrid(gridlib.Grid):
         ID = int(self.GetRowLabelValue(row))
         removeItem = wx.MenuItem(menu, -1, "Remove this transaction")
         menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransaction(row, ID), source=removeItem)
-        removeItem.SetBitmap(wx.ArtProvider.GetBitmap('delete'))
+        removeItem.SetBitmap(wx.ArtProvider.GetBitmap('wxART_delete'))
         menu.AppendItem(removeItem)
 
         # Show the menu and then destroy it afterwards.

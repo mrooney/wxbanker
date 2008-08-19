@@ -45,6 +45,7 @@ class SearchCtrl(wx.Panel):
         wx.Panel.__init__(self, parent)
 
         self.searchCtrl = wx.SearchCtrl(self, value="", size=(200, -1), style=wx.TE_PROCESS_ENTER)
+        self.searchCtrl.SetCancelBitmap(wx.ArtProvider.GetBitmap('wxART_cancel'))
         self.searchCtrl.ShowCancelButton(True)
         self.searchCtrl.ShowSearchButton(False)
         self.searchCtrl.DescriptiveText = "Search transactions"
@@ -151,16 +152,16 @@ class AccountListCtrl(wx.Panel):
 
         ## Create and set up the buttons.
         # The EDIT account button.
-        BMP = wx.ArtProvider.GetBitmap('add')
+        BMP = wx.ArtProvider.GetBitmap('wxART_add')
         self.addButton = addButton = wx.BitmapButton(self, bitmap=BMP)
         addButton.SetToolTipString("Add a new account")
         # The REMOVE account button.
-        BMP = wx.ArtProvider.GetBitmap('delete')
+        BMP = wx.ArtProvider.GetBitmap('wxART_delete')
         self.removeButton = removeButton = wx.BitmapButton(self, bitmap=BMP)
         removeButton.SetToolTipString("Remove the selected account")
         removeButton.Enabled = False
         # The EDIT account button.
-        BMP = wx.ArtProvider.GetBitmap('textfield_rename')
+        BMP = wx.ArtProvider.GetBitmap('wxART_textfield_rename')
         self.editButton = editButton = wx.BitmapButton(self, bitmap=BMP)
         editButton.SetToolTipString("Edit the name of the selected account")
         editButton.Enabled = False
@@ -567,11 +568,6 @@ class NewTransactionCtrl(wx.Panel):
         self.parent = parent
         self.frame = frame
 
-        # The add button.
-        ##BMP = wx.ArtProvider.GetBitmap('money_add')
-        ##self.newButton = newButton = wx.BitmapButton(self, bitmap=BMP)
-        ##newButton.SetToolTipString("Enter this transaction")
-
         # The date control. We want the Generic control, which is a composite control
         # and allows us to bind to its enter, but on Windows with wxPython < 2.8.8.0,
         # it won't be available.
@@ -580,37 +576,50 @@ class NewTransactionCtrl(wx.Panel):
         except AttributeError:
             DatePickerClass = wx.DatePickerCtrl
         self.dateCtrl = dateCtrl = DatePickerClass(self, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY)
+        dateCtrl.SetToolTipString("Date")
 
-        # The Description, Amount, and Transfer controls.
-        self.descCtrl = descCtrl = wx.TextCtrl(self, style=wx.TE_PROCESS_ENTER)
-        self.amountCtrl = amountCtrl = wx.TextCtrl(self, size=(70, -1), style=wx.TE_PROCESS_ENTER)
+        # The Description and Amount controls.
+        self.descCtrl = descCtrl = HintedTextCtrl(self, size=(140, -1), style=wx.TE_PROCESS_ENTER, hint="Description", icon="wxART_page_edit")
+        self.amountCtrl = amountCtrl = HintedTextCtrl(self, size=(90, -1), style=wx.TE_PROCESS_ENTER|wx.TE_RIGHT, hint="Amount", icon="wxART_money_dollar")
+
+        # The add button.
+        self.newButton = newButton = wx.BitmapButton(self, bitmap=wx.ArtProvider.GetBitmap('wxART_money_add'))
+        newButton.SetToolTipString("Enter this transaction")
+
+        # The transfer check,
         self.transferCheck = transferCheck = wx.CheckBox(self, label="Transfer")
 
         # Set up the layout.
         dateCtrl.SetMinSize(dateCtrl.GetBestSize())
         self.mainSizer = mainSizer = wx.BoxSizer()
-        mainSizer.Add(wx.StaticText(self, label="New Transaction: "), 0, wx.ALIGN_CENTER_VERTICAL)
+        mainSizer.Add(wx.StaticText(self, label="Transact: "), 0, wx.ALIGN_CENTER)
+        mainSizer.AddSpacer(8)
+        mainSizer.Add(wx.StaticBitmap(self, bitmap=wx.ArtProvider.GetBitmap('wxART_date')), 0, wx.ALIGN_CENTER|wx.ALL, 2)
         mainSizer.Add(dateCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
-        mainSizer.Add(wx.StaticText(self, label="Description:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
-        mainSizer.Add(descCtrl)
-        mainSizer.Add(wx.StaticText(self, label="Amount:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
-        mainSizer.Add(amountCtrl)
-        ##mainSizer.Add(newButton, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 5)
-        mainSizer.Add(transferCheck, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
-        mainSizer.Add(wx.StaticText(self, label="("), 0, wx.ALIGN_CENTER_VERTICAL)
-        mainSizer.Add(HyperlinkText(self, label="?", onClick=self.onTransferTip), 0, wx.ALIGN_CENTER_VERTICAL)
-        mainSizer.Add(wx.StaticText(self, label=")"), 0, wx.ALIGN_CENTER_VERTICAL)
+        mainSizer.AddSpacer(10)
+        #mainSizer.Add(wx.StaticBitmap(self, bitmap=wx.ArtProvider.GetBitmap('wxART_page_edit')), 0, wx.ALIGN_CENTER|wx.ALL, 2)
+        #mainSizer.Add(wx.StaticText(self, label="Description:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
+        mainSizer.Add(descCtrl, 0, wx.ALIGN_CENTER)
+        mainSizer.AddSpacer(10)
+        #mainSizer.Add(wx.StaticText(self, label="Amount:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
+        #mainSizer.Add(wx.StaticBitmap(self, bitmap=wx.ArtProvider.GetBitmap('wxART_money_dollar')), 0, wx.ALIGN_CENTER)
+        mainSizer.Add(amountCtrl, 0, wx.ALIGN_CENTER)
+        mainSizer.AddSpacer(10)
+        mainSizer.Add(newButton, 0, wx.ALIGN_CENTER)
+        mainSizer.AddSpacer(10)
+        mainSizer.Add(transferCheck, 0, wx.ALIGN_CENTER)
+        mainSizer.Add(wx.StaticText(self, label="("), 0, wx.ALIGN_CENTER)
+        mainSizer.Add(HyperlinkText(self, label="?", onClick=self.onTransferTip), 0, wx.ALIGN_CENTER)
+        mainSizer.Add(wx.StaticText(self, label=")"), 0, wx.ALIGN_CENTER)
         self.Sizer = mainSizer
-
-        # Initialize the add button
-        self.updateAddIcon(removeFirst=False)
 
         # Now layout the control.
         mainSizer.Layout()
 
         # Initialize necessary bindings.
         self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction) # Gives us enter from description/amount.
-        amountCtrl.Bind(wx.EVT_CHAR, self.onAmountChar)
+        self.newButton.Bind(wx.EVT_BUTTON, self.onNewTransaction)
+        amountCtrl.Children[0].Bind(wx.EVT_CHAR, self.onAmountChar)
         # Bind to DateCtrl Enter (LP: 252454).
         try:
             dateTextCtrl = self.dateCtrl.Children[0].Children[0]
@@ -628,22 +637,11 @@ class NewTransactionCtrl(wx.Panel):
     def updateAddIcon(self, removeFirst=True):
         amountText = self.amountCtrl.Value
         if amountText and amountText[0] == '-':
-            BMP = wx.ArtProvider.GetBitmap('money_delete')
+            BMP = wx.ArtProvider.GetBitmap('wxART_money_delete')
         else:
-            BMP = wx.ArtProvider.GetBitmap('money_add')
+            BMP = wx.ArtProvider.GetBitmap('wxART_money_add')
 
-        # This is all quite a hack :[
-        # Really we just want to have a SetBitmap on a BitmapButton, instead we must replace the button.
-        self.Freeze()
-        if removeFirst:
-            self.Sizer.Detach(self.newButton)
-            self.newButton.Destroy()
-        self.newButton = wx.BitmapButton(self, bitmap=BMP)
-        self.newButton.SetToolTipString("Enter this transaction")
-        self.Sizer.Insert(6, self.newButton, 0, wx.LEFT|wx.ALIGN_CENTER_VERTICAL, 5)
-        self.Layout()
-        self.Thaw()
-        self.newButton.Bind(wx.EVT_BUTTON, self.onNewTransaction)
+        self.newButton.SetBitmapLabel(BMP)
 
     def getValues(self):
         # First, ensure an account is selected.
@@ -785,3 +783,34 @@ class MultiStateButton(wx.Button):
     LabelDict = property(GetLabelDict, SetLabelDict)
     State = property(GetState, SetState)
 
+
+class HintedTextCtrl(wx.SearchCtrl):
+    def __init__(self, *args, **kwargs):
+        conf = {"hint": "", "icon": None}
+        for kw in conf.keys():
+            if kw in kwargs:
+                conf[kw] = kwargs[kw]
+                del kwargs[kw]
+
+        wx.SearchCtrl.__init__(self, *args, **kwargs)
+        self.ShowCancelButton(False)
+
+        if conf['icon'] is None:
+            self.ShowSearchButton(False)
+        else:
+            self.SetSearchBitmap(wx.ArtProvider.GetBitmap(conf['icon']))
+            self.ShowSearchButton(True)
+
+        self.SetToolTipString(conf['hint'])
+        self.SetDescriptiveText(conf['hint'])
+
+        self.Children[0].Bind(wx.EVT_CHAR, self.onChar)
+
+    def onChar(self, event):
+        if event.KeyCode == wx.WXK_TAB:
+            if event.ShiftDown():
+                self.Navigate(wx.NavigationKeyEvent.IsBackward)
+            else:
+                self.Navigate()
+        else:
+            event.Skip()

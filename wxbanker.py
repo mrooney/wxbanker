@@ -48,7 +48,7 @@ class BankerFrame(wx.Frame):
         pos = config.ReadInt('POS_X'), config.ReadInt('POS_Y')
 
         wx.Frame.__init__(self, None, title="wxBanker", size=size, pos=pos)
-        self.SetIcon(wx.ArtProvider.GetIcon('coins'))
+        self.SetIcon(wx.ArtProvider.GetIcon('wxART_coins'))
 
         self.isSaveLocked = False
         self.bank = bank
@@ -173,8 +173,9 @@ if __name__ == "__main__":
     bank = Bank(bankPath)
 
     # Push our custom art provider.
-    from artprovider import BankArtProvider
-    wx.ArtProvider.Push(BankArtProvider())
+    import wx.lib.art.img2pyartprov as img2pyartprov
+    from art import silk
+    wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(silk))
 
     # Initialize the wxBanker frame!
     frame = BankerFrame(bank)
