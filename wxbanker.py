@@ -27,6 +27,7 @@ A GUI layer on top of banker.py
 import os, wx, wx.aui
 from wx.lib.pubsub import Publisher
 from bankexceptions import NoNumpyException
+from menubar import BankMenuBar
 
 #tabs
 import managetab
@@ -70,7 +71,11 @@ class BankerFrame(wx.Frame):
         self.Bind(wx.EVT_MOVE, self.OnMove)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
-        #self.Fit()
+        menuBar = BankMenuBar()
+        self.SetMenuBar(menuBar)
+        #self.CreateStatusBar()
+        
+        self.Bind(wx.EVT_MENU, menuBar.onMenuEvent)
         self.Show(True)
 
     def OnMove(self, event):
