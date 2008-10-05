@@ -619,14 +619,20 @@ class NewTransactionCtrl(wx.Panel):
         # Initialize necessary bindings.
         self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction) # Gives us enter from description/amount.
         self.newButton.Bind(wx.EVT_BUTTON, self.onNewTransaction)
-        amountCtrl.Children[0].Bind(wx.EVT_CHAR, self.onAmountChar)
-        # Bind to DateCtrl Enter (LP: 252454).
+        
+        try:
+            amountCtrl.Children[0].Bind(wx.EVT_CHAR, self.onAmountChar)
+        except IndexError:
+            # On OSX for example, a SearchCtrl is native and has no Children.
+            pass
+        
         try:
             dateTextCtrl = self.dateCtrl.Children[0].Children[0]
         except IndexError:
             # This will fail on MSW + wxPython < 2.8.8.0, nothing we can do.
             pass
         else:
+            # Bind to DateCtrl Enter (LP: 252454).
             dateTextCtrl.WindowStyleFlag |= wx.TE_PROCESS_ENTER
             dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
 
@@ -804,7 +810,11 @@ class HintedTextCtrl(wx.SearchCtrl):
         self.SetToolTipString(conf['hint'])
         self.SetDescriptiveText(conf['hint'])
 
-        self.Children[0].Bind(wx.EVT_CHAR, self.onChar)
+        try:
+            self.Children[0].Bind(wx.EVT_CHAR, self.onChar)
+        except IndexError:
+            # On OSX for example, a SearchCtrl is native and has no Children.
+            pass
 
     def onChar(self, event):
         if event.KeyCode == wx.WXK_TAB:
