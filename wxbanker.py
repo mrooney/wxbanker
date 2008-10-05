@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/env python
 #
 #    https://launchpad.net/wxbanker
 #    wxbanker.py: Copyright 2007, 2008 Mike Rooney <wxbanker@rowk.com>
@@ -54,7 +54,7 @@ class BankerFrame(wx.Frame):
         self.isSaveLocked = False
         self.bank = bank
 
-        self.notebook = notebook = wx.aui.AuiNotebook(self)
+        self.notebook = notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
 
         self.managePanel = managetab.ManagePanel(notebook, self)
         notebook.AddPage(self.managePanel, "Transactions")
