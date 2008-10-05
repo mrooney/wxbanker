@@ -71,14 +71,14 @@ class BankMenuBar(wx.MenuBar):
         webbrowser.open("https://launchpad.net/wxbanker/+filebug")
         
     def onClickAbout(self, event):
-        wordwrap = lambda s: s
         info = wx.AboutDialogInfo()
         info.Name = "wxBanker"
         info.Version = str(version.NUMBER)
         info.Copyright = "Copyright 2007, 2008 Mike Rooney (wxbanker@rowk.com)"
-        info.Description = wordwrap("A lightweight personal finance management application.")
+        info.Description = "A lightweight personal finance management application."
         info.WebSite = ("https://launchpad.net/wxbanker", "https://launchpad.net/wxbanker")
-        info.Developers = ['Mike Rooney',]
-        info.License = wordwrap(open('gpl.txt').read())
+        info.Developers = ['Mike Rooney (wxbanker@rowk.com)',]
+        info.Artists = ['Mark James (www.famfamfam.com/lab/icons/silk/)',]
+        info.License = open('gpl.txt').read()
         wx.AboutBox(info)
         
