@@ -18,7 +18,7 @@
 
 import wx, wx.grid as gridlib
 import datetime
-from banker import float2str
+from banker import Bank
 from bankcontrols import AccountListCtrl, NewTransactionCtrl, SearchCtrl
 from calculator import CollapsableWidget, SimpleCalculator
 from wx.lib.pubsub import Publisher
@@ -142,7 +142,7 @@ class MoneyCellRenderer(gridlib.PyGridCellRenderer):
         else:
             dc.SetTextForeground("BLACK")
 
-        text = float2str(value)
+        text = Bank().float2str(value)
 
         #right-align horizontal, center vertical
         w, h = dc.GetTextExtent(text)
@@ -153,7 +153,7 @@ class MoneyCellRenderer(gridlib.PyGridCellRenderer):
 
     def GetBestSize(self, grid, attr, dc, row, col):
         dc.SetFont(attr.GetFont())
-        w, h = dc.GetTextExtent(float2str(grid.GetCellValue(row, col)))
+        w, h = dc.GetTextExtent(Bank().float2str(grid.GetCellValue(row, col)))
         return wx.Size(w, h)
 
     def Clone(self):

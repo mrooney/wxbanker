@@ -72,7 +72,7 @@ True
 >>> messages[0]
 (('NEW TRANSACTION',), None)
 >>> balance = b.getBalanceOf("My Account")
->>> float2str(balance)
+>>> b.float2str(balance)
 '$90.27'
 >>> b.renameAccount("My Account", "My Renamed Account")
 >>> len(messages) == 4
@@ -85,14 +85,14 @@ True
 >>> len(messages) == 5
 True
 >>> balance = b.getBalanceOf("My Renamed Account")
->>> float2str(balance)
+>>> b.float2str(balance)
 '$-0.73'
 >>> b.createAccount("Another Account")
 >>> sorted(b.getAccountNames()) == sorted([u'My Renamed Account', u'Another Account'])
 True
 >>> tId = b.makeTransaction("Another Account", -5000.01)
 >>> balance = b.getBalanceOf("Another Account")
->>> float2str(balance)
+>>> b.float2str(balance)
 '$-5,000.01'
 >>> tId1, tId2 = b.makeTransfer("Another Account", "My Renamed Account", 1.02, "Why not?")
 >>> trans = b.getTransactionByID(tId1)
@@ -105,12 +105,12 @@ True
 [..., 1.02, u'Transfer from Another Account (Why not?)']
 >>> trans[-1] == datetime.date.today()
 True
->>> float2str(b.getBalanceOf("My Renamed Account"))
+>>> b.float2str(b.getBalanceOf("My Renamed Account"))
 '$0.29'
->>> float2str(b.getBalanceOf("Another Account"))
+>>> b.float2str(b.getBalanceOf("Another Account"))
 '$-5,001.03'
 >>> balance = b.getTotalBalance()
->>> float2str(balance)
+>>> b.float2str(balance)
 '$-5,000.74'
 >>> b.removeAccount("Another Account")
 >>> b.getAccountNames()
@@ -119,7 +119,7 @@ True
 Traceback (most recent call last):
   ...
 InvalidAccountException: Invalid account 'Another Account' specified.
->>> float2str(b.getTotalBalance())
+>>> b.float2str(b.getTotalBalance())
 '$0.29'
 >>> b.createAccount("Fresh New Account")
 >>> b.getBalanceOf("Fresh New Account")
@@ -142,11 +142,12 @@ Traceback (most recent call last):
 InvalidTransactionException: Unable to find transaction with UID FakeID
 >>> b.close()
 >>> os.remove('test.db')
-
 """
+
 import time, os, datetime, re
 from model_sqlite import Model
 from wx.lib.pubsub import Publisher
+import currencies
 
 
 class Subscriber(list):
@@ -162,70 +163,6 @@ class Subscriber(list):
     def onMessage(self, message):
         self.insert(0, (message.topic, message.data))
 
-def float2str(number, just=0):
-    """
-    Converts a float to a pleasing "money string".
-
-    >>> float2str(1)
-    '$1.00'
-    >>> float2str(-2.1)
-    '$-2.10'
-    >>> float2str(-10.17)
-    '$-10.17'
-    >>> float2str(-777)
-    '$-777.00'
-    >>> float2str(12345.67)
-    '$12,345.67'
-    >>> float2str(12345)
-    '$12,345.00'
-    >>> float2str(-12345.67)
-    '$-12,345.67'
-    >>> float2str(-12345.6)
-    '$-12,345.60'
-    >>> float2str(-123456)
-    '$-123,456.00'
-    >>> float2str(.01)
-    '$0.01'
-    >>> float2str(.01, 8)
-    '   $0.01'
-    >>> float2str(2.1-2.2+.1) #test to ensure no negative zeroes
-    '$0.00'
-    """
-    numStr = '%.2f' % number
-    if numStr == '-0.00': # don't display negative zeroes (LP: 250151)
-        numStr = '0.00'
-    if len(numStr) > 6 + numStr.find('-') + 1: # remember, $ is not added yet
-        numStr = numStr[:len(numStr)-6] + ',' + numStr[len(numStr)-6:]
-    return ('$'+numStr).rjust(just)
-
-def str2float(mstr):
-    """
-    Converts a pleasing "money string" to a float.
-
-    >>> str2float('$1.00') == 1.0
-    True
-    >>> str2float('$-2.10') == -2.1
-    True
-    >>> str2float('$-10.17') == -10.17
-    True
-    >>> str2float('$-777.00') == -777
-    True
-    >>> str2float('$12,345.67') == 12345.67
-    True
-    >>> str2float('$12,345.00') == 12345
-    True
-    >>> str2float('$-12,345.67') == -12345.67
-    True
-    >>> str2float('$-12,345.6') == -12345.6
-    True
-    >>> str2float('$-123,456') == -123456
-    True
-    >>> str2float('$0.01') == 0.01
-    True
-    >>> str2float('   $0.01') == 0.01
-    True
-    """
-    return float(mstr.strip()[1:].replace(',', ''))
 
 def wellFormDate(date):
     """
@@ -279,14 +216,29 @@ class InvalidTransactionException(Exception):
     def __str__(self):
         return "Unable to find transaction with UID %s"%self.uid
 
+    
+class Singleton(object):
+    """ A Pythonic Singleton """
+    def __new__(cls, *args, **kwargs):
+        if '_inst' not in vars(cls):
+            cls._inst = object.__new__(cls, *args, **kwargs)
+        return cls._inst
+    
 
 #The controller class!
-class Bank(object):
+class Bank(Singleton):
     def __init__(self, path=None):
         if path is None:
             path = 'bank'
 
         self.model = Model(path)
+        self.Currency = currencies.USD()
+        
+    def float2str(self, flt):
+        return self.Currency.float2str(flt)
+    
+    def str2float(self, moneystr):
+        return self.Currency.str2float(moneystr)
 
     def getBalanceOf(self, account):
         balance = 0.0
@@ -335,7 +287,7 @@ class Bank(object):
             grandTotal += trans[1]
         totals.append(total) #append whatever is left over
 
-        assert float2str(grandTotal) == float2str(self.getTotalBalance()), (grandTotal, self.getTotalBalance())
+        assert self.float2str(grandTotal) == self.float2str(self.getTotalBalance()), (grandTotal, self.getTotalBalance())
 
         return totals, startDate
 
@@ -539,7 +491,7 @@ def main():
 
             confirm = -1
             while confirm == -1 or confirm.lower() not in ['y', 'n']:
-                confirm = raw_input('Transfer %s from %s to %s? [y/n]: '%( float2str(amount), source, destination ))
+                confirm = raw_input('Transfer %s from %s to %s? [y/n]: '%( bank.float2str(amount), source, destination ))
 
             if confirm == 'y':
                 date = _queryDate()
@@ -554,9 +506,9 @@ def main():
             total = 0
             for account in sorted(bank.getAccountNames()):
                 balance = bank.getBalanceOf(account)
-                print "%s %s"%( (account+':').ljust(20), float2str(balance, 10))
+                print "%s %s"%( (account+':').ljust(20), bank.float2str(balance, 10))
                 total += balance
-            print "%s %s"%( "Total:".ljust(20), float2str(total, 10))
+            print "%s %s"%( "Total:".ljust(20), bank.float2str(total, 10))
 
             wait()
 
@@ -566,8 +518,8 @@ def main():
             for transaction in bank.getTransactionsFrom(accountname):
                 uid, amount, desc, date = transaction
                 total += amount
-                print "%s - %s  %s %s"%( date.strftime('%m/%d/%Y'), desc[:25].ljust(25), float2str(amount, 10), float2str(total, 10) )
-            print "Total: %s"%float2str(total)
+                print "%s - %s  %s %s"%( date.strftime('%m/%d/%Y'), desc[:25].ljust(25), bank.float2str(amount, 10), bank.float2str(total, 10) )
+            print "Total: %s"%bank.float2str(total)
 
             wait()
 

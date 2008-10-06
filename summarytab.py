@@ -23,7 +23,7 @@ try:
 except ImportError:
     raise NoNumpyException()
 
-from banker import float2str
+from banker import Bank
 import datetime
 
 
@@ -200,7 +200,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         dc.DrawRectangle(sx-5, sy-5, 10, 10)  #10by10 square centered on point
         px, py = mDataDict["pointXY"]
         #make a string to display
-        line1, line2 = float2str(py), str(self.pointDates[mDataDict["pIndex"]])
+        line1, line2 = Bank().float2str(py), str(self.pointDates[mDataDict["pIndex"]])
         x1, y1 = dc.GetTextExtent(line1)
         x2, y2 = dc.GetTextExtent(line2)
         dc.DrawText(line1, sx, sy+1)
@@ -220,7 +220,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         myTicks = []
         for tick in ticks:
             floatVal = tick[0]
-            stringVal = float2str(floatVal)
+            stringVal = Bank().float2str(floatVal)
             if stringVal.endswith('.00'):
                 stringVal = stringVal[:-3]
             myTicks.append( (floatVal, stringVal) )
