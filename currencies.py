@@ -1,4 +1,6 @@
 """
+>>> import locale
+>>> locale.setlocale(locale.LC_ALL, '')
 >>> usd = LocalizedCurrency()
 >>> usd.float2str(1)
 '$1.00'
@@ -52,7 +54,6 @@ True
 """
 
 import locale
-locale.setlocale(locale.LC_ALL, '')
 
 class LocalizedCurrency(object):
     def float2str(self, number, just=0):

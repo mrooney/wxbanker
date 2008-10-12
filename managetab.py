@@ -37,7 +37,7 @@ class ManagePanel(wx.Panel):
         self.leftPanel = leftPanel = wx.Panel(self)
         leftPanel.Sizer = wx.BoxSizer(wx.VERTICAL)
 
-        self.accountCtrl = accountCtrl = AccountListCtrl(leftPanel, frame)
+        self.accountCtrl = accountCtrl = AccountListCtrl(leftPanel)
         calcWidget = CollapsableWidget(leftPanel, SimpleCalculator, "Calculator")
 
         leftPanel.Sizer.Add(accountCtrl, 0, wx.EXPAND)
@@ -97,7 +97,7 @@ class TransactionPanel(wx.Panel):
 
         self.searchCtrl = searchCtrl = SearchCtrl(self)
         self.transactionGrid = transactionGrid = TransactionGrid(self, frame)
-        self.newTransCtrl = newTransCtrl = NewTransactionCtrl(self, frame)
+        self.newTransCtrl = newTransCtrl = NewTransactionCtrl(self)
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(searchCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL)

@@ -29,6 +29,10 @@ from wx.lib.pubsub import Publisher
 from bankexceptions import NoNumpyException
 from menubar import BankMenuBar
 
+# Localization
+import locale
+locale.setlocale(locale.LC_ALL, '')
+
 #tabs
 import managetab
 SUMMARY_TAB = True
