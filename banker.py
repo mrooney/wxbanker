@@ -232,7 +232,7 @@ class Bank(Singleton):
             path = 'bank'
 
         self.model = Model(path)
-        self.Currency = currencies.USD()
+        self.Currency = currencies.LocalizedCurrency()
         
     def float2str(self, flt):
         return self.Currency.float2str(flt)
