@@ -28,9 +28,8 @@ import datetime
 
 
 class SummaryPanel(wx.Panel):
-    def __init__(self, parent, frame):
+    def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-        self.frame = frame
         self.plotSettings = {'FitDegree': 2, 'Granularity': 100}
         self.cachedData = None
 
@@ -82,7 +81,7 @@ class SummaryPanel(wx.Panel):
         spanning the balances if there are not enough and averaging balances
         together if there are too many.
         """
-        days, startDate = self.frame.bank.getTotalsEvery(1)
+        days, startDate = Bank().getTotalsEvery(1)
         numDays = len(days)
         delta = float(numDays) / numPoints
         returnPoints = []

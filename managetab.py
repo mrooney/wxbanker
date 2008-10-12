@@ -29,9 +29,8 @@ class ManagePanel(wx.Panel):
     This panel contains the list of accounts on the left
     and the transaction panel on the right.
     """
-    def __init__(self, parent, frame):
+    def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-        self.frame = frame
 
         ## Left side, the account list and calculator
         self.leftPanel = leftPanel = wx.Panel(self)
@@ -49,7 +48,7 @@ class ManagePanel(wx.Panel):
             widget.SetMinSize((accountCtrl.BestSize[0], -1))
 
         ## Right side, the transaction panel:
-        self.transactionPanel = transactionPanel = TransactionPanel(self, frame)
+        self.transactionPanel = transactionPanel = TransactionPanel(self)
 
         mainSizer = wx.BoxSizer()
         self.Sizer = mainSizer
@@ -89,14 +88,12 @@ class ManagePanel(wx.Panel):
 
 
 class TransactionPanel(wx.Panel):
-    def __init__(self, parent, frame):
+    def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-        self.parent = parent
-        self.frame = frame
         self.searchActive = False
 
         self.searchCtrl = searchCtrl = SearchCtrl(self)
-        self.transactionGrid = transactionGrid = TransactionGrid(self, frame)
+        self.transactionGrid = transactionGrid = TransactionGrid(self)
         self.newTransCtrl = newTransCtrl = NewTransactionCtrl(self)
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
@@ -161,10 +158,8 @@ class MoneyCellRenderer(gridlib.PyGridCellRenderer):
 
 
 class TransactionGrid(gridlib.Grid):
-    def __init__(self, parent, frame):
+    def __init__(self, parent):
         gridlib.Grid.__init__(self, parent)
-        self.parent = parent
-        self.frame = frame
         self.changeFrozen = False
 
         self.CreateGrid(0, 4)
@@ -235,7 +230,7 @@ class TransactionGrid(gridlib.Grid):
         else:
             accountName = None
 
-        matches = self.frame.bank.searchTransactions(searchString, accountName=accountName, matchType=match, matchCase=caseSens)
+        matches = Bank().searchTransactions(searchString, accountName=accountName, matchType=match, matchCase=caseSens)
         self.setTransactions(matches)
         self.Parent.searchActive = True
 
@@ -304,7 +299,7 @@ class TransactionGrid(gridlib.Grid):
 
     def onRemoveTransaction(self, row, ID):
         #remove the transaction from the bank
-        self.frame.bank.removeTransaction(ID)
+        Bank().removeTransaction(ID)
 
     def getRowFromID(self, ID):
         for i in range(self.GetNumberRows()):
@@ -344,7 +339,7 @@ class TransactionGrid(gridlib.Grid):
                 self.updateTotalsFrom(event.Row)
 
             self.changeFrozen = True
-            self.frame.bank.updateTransaction(uid, amount, desc, date)
+            Bank().updateTransaction(uid, amount, desc, date)
             self.changeFrozen = False
 
             if refreshNeeded and not self.Parent.searchActive:
@@ -403,7 +398,7 @@ class TransactionGrid(gridlib.Grid):
                 self.DeleteRows(0, numRows)
             return
 
-        transactions = self.frame.bank.getTransactionsFrom(accountName)
+        transactions = Bank().getTransactionsFrom(accountName)
         self.setTransactions(transactions, ensureVisible)
 
     def setTransactions(self, transactions, ensureVisible=-1):

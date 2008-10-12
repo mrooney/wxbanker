@@ -18,36 +18,31 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-"""
-A GUI layer on top of banker.py
-
-#TODO: a summary tab for viewing graphs and stats like inflow, outflow, net cashflow, etc
-#TODO: metadata info, such as FIXED, UNEXPECTED
-"""
-import os, wx, wx.aui
-from wx.lib.pubsub import Publisher
-from bankexceptions import NoNumpyException
-from menubar import BankMenuBar
-
+import os
 # Localization
 import locale
 locale.setlocale(locale.LC_ALL, '')
 
-#tabs
+# wxPython
+import wx, wx.aui
+from wx.lib.pubsub import Publisher
+
+# wxBanker
+from bankexceptions import NoNumpyException
+from menubar import BankMenuBar
+from banker import Bank
+# Tabs
 import managetab
-SUMMARY_TAB = True
 try:
     import summarytab
 except NoNumpyException:
-    SUMMARY_TAB = False
-    print "Numpy not available, disabling Summary tab..."
-
-from banker import Bank
+    summarytab = None
+    print "Warning: Numpy not available, disabling Summary tab. Install numpy to fix this."
 
 
 class BankerFrame(wx.Frame):
-    def __init__(self, bank):
-        #load our window settings
+    def __init__(self):
+        # Load our window settings.
         config = wx.Config.Get()
         size = config.ReadInt('SIZE_X'), config.ReadInt('SIZE_Y')
         pos = config.ReadInt('POS_X'), config.ReadInt('POS_Y')
@@ -56,15 +51,14 @@ class BankerFrame(wx.Frame):
         self.SetIcon(wx.ArtProvider.GetIcon('wxART_coins'))
 
         self.isSaveLocked = False
-        self.bank = bank
 
         self.notebook = notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
 
-        self.managePanel = managetab.ManagePanel(notebook, self)
+        self.managePanel = managetab.ManagePanel(notebook)
         notebook.AddPage(self.managePanel, "Transactions")
 
-        if SUMMARY_TAB:
-            self.summaryPanel = summarytab.SummaryPanel(notebook, self)
+        if summarytab:
+            self.summaryPanel = summarytab.SummaryPanel(notebook)
             notebook.AddPage(self.summaryPanel, "Summary")
 
         self.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.onTabSwitching)
@@ -143,7 +137,7 @@ class BankerFrame(wx.Frame):
 
         self.isSaveLocked = True
         print 'Saving as a result of: %s...'%message,
-        self.bank.save()
+        Bank().save()
 
     def saveConsumer(self, delayedResult):
         try:
@@ -187,7 +181,7 @@ if __name__ == "__main__":
     wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(silk))
 
     # Initialize the wxBanker frame!
-    frame = BankerFrame(bank)
+    frame = BankerFrame()
 
     # Greet the user if it appears this is their first time using wxBanker.
     firstTime = not config.ReadBool("RUN_BEFORE")
