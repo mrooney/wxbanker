@@ -30,6 +30,9 @@ dependencies on your specific operating system.
 
  - Ubuntu/Debian
    - sudo apt-get install python2.5 python-wxgtk2.8 python-numpy
+ 
+ - Fedora
+   - su -c 'yum install python wxPython numpy'
 
  - Mac OSX (PPC or Intel)
    - If you are using Leopard 10.5 or newer, you already have Python 2.5 installed.
