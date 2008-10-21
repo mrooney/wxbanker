@@ -34,7 +34,7 @@ Table: transactions
 +-------------------------------------------------------------------------------------------------------+
 """
 import os, datetime
-import basemodel
+import bankobjects
 from sqlite3 import dbapi2 as sqlite
 from wx.lib.pubsub import Publisher
 
@@ -65,7 +65,7 @@ class Model:
         This method converts this model's specific implementation
         of a transaction into the Bank's generic one.
         """
-        return basemodel.Transaction(*result)
+        return bankobjects.Transaction(*result)
 
     def transaction2result(self, transObj):
         """
@@ -73,7 +73,7 @@ class Model:
         a transaction into this model's specific one.
         """
         dateStr = "%s/%s/%s"%(transObj.Date.year, str(transObj.Date.month).zfill(2), str(transObj.Date.day).zfill(2))
-        return [transObj.tID, transObj.Amount, transObj.Description, dateStr]
+        return [transObj.ID, transObj.Amount, transObj.Description, dateStr]
 
     def getAccounts(self):
         return sorted([result[1] for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()])
@@ -132,10 +132,9 @@ class Model:
         self.dbconn.cursor().execute('UPDATE transactions SET amount=?, description=?, date=? WHERE id=?', result)
         self.dbconn.commit()
 
-    def makeTransaction(self, transaction):
-        result = self.transaction2result(transaction)
+    def makeTransaction(self, tID, amount, description, date):
         cursor = self.dbconn.cursor()
-        cursor.execute('INSERT INTO transactions VALUES (null, ?, ?, ?, ?)', result)
+        cursor.execute('INSERT INTO transactions VALUES (null, ?, ?, ?, ?)', (tID, amount, description, date))
         self.dbconn.commit()
         return cursor.lastrowid
 

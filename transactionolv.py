@@ -16,6 +16,7 @@ TODO (for feature parity):
   - remove
   - calculator options on amounts
 - handle new transactions
+- min column sizes when there aren't any transactions
 EXTRA:
 - custom negative option such as Red, (), or Red and ()
 
@@ -24,7 +25,6 @@ EXTRA:
 import wx
 from wx.lib.pubsub import Publisher
 from ObjectListView import GroupListView, ColumnDefn
-from basemodel import float2str
 from model_sqlite import Model
 
 
@@ -61,7 +61,7 @@ class olvFrame(wx.Frame):
         panel.Sizer = wx.BoxSizer()
 
         m = Model('bank')
-        transactions = m.getTransactionsFrom('Test')
+        transactions = m.getTransactionsFrom('HSBC Checking')
         glv = TransactionOLV(panel, style=wx.LC_REPORT|wx.SUNKEN_BORDER)
         glv.SetObjects(transactions)
 

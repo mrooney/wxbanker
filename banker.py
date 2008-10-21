@@ -47,7 +47,7 @@ True
 >>> len(messages) == 1
 True
 >>> messages[0]
-(('NEW ACCOUNT',), 'My Account')
+(('bank', 'NEW ACCOUNT'), 'My Account')
 >>> b.createAccount("My Account")
 Traceback (most recent call last):
   ...
@@ -63,14 +63,14 @@ True
 >>> len(messages) == 2
 True
 >>> messages[0]
-(('NEW TRANSACTION',), None)
+(('bank', 'NEW TRANSACTION'), None)
 >>> b.getBalanceOf("My Account")
 100.27
 >>> tId = b.makeTransaction("My Account", -10, "ATM Withdrawal", datetime.date(2007, 1, 6))
 >>> len(messages) == 3
 True
 >>> messages[0]
-(('NEW TRANSACTION',), None)
+(('bank', 'NEW TRANSACTION'), None)
 >>> balance = b.getBalanceOf("My Account")
 >>> b.float2str(balance)
 '$90.27'
@@ -78,7 +78,7 @@ True
 >>> len(messages) == 4
 True
 >>> messages[0]
-(('RENAMED ACCOUNT',), ('My Account', 'My Renamed Account'))
+(('bank', 'RENAMED ACCOUNT'), ('My Account', 'My Renamed Account'))
 >>> b.getAccountNames()
 [u'My Renamed Account']
 >>> b.updateTransaction(tId, amount=-101)
@@ -86,32 +86,32 @@ True
 True
 >>> balance = b.getBalanceOf("My Renamed Account")
 >>> b.float2str(balance)
-'$-0.73'
+'-$0.73'
 >>> b.createAccount("Another Account")
 >>> sorted(b.getAccountNames()) == sorted([u'My Renamed Account', u'Another Account'])
 True
 >>> tId = b.makeTransaction("Another Account", -5000.01)
 >>> balance = b.getBalanceOf("Another Account")
 >>> b.float2str(balance)
-'$-5,000.01'
+'-$5,000.01'
 >>> tId1, tId2 = b.makeTransfer("Another Account", "My Renamed Account", 1.02, "Why not?")
 >>> trans = b.getTransactionByID(tId1)
->>> trans[:-1] #doctest: +ELLIPSIS
-[..., -1.02, u'Transfer to My Renamed Account (Why not?)']
->>> trans[-1] == datetime.date.today()
+>>> trans.Amount, trans.Description
+(-1.02, 'Transfer to My Renamed Account (Why not?)')
+>>> trans.Date == datetime.date.today()
 True
 >>> trans = b.getTransactionByID(tId2)
->>> trans[:-1] #doctest: +ELLIPSIS
-[..., 1.02, u'Transfer from Another Account (Why not?)']
->>> trans[-1] == datetime.date.today()
+>>> trans.Amount, trans.Description
+(1.02, 'Transfer from Another Account (Why not?)')
+>>> trans.Date == datetime.date.today()
 True
 >>> b.float2str(b.getBalanceOf("My Renamed Account"))
 '$0.29'
 >>> b.float2str(b.getBalanceOf("Another Account"))
-'$-5,001.03'
+'-$5,001.03'
 >>> balance = b.getTotalBalance()
 >>> b.float2str(balance)
-'$-5,000.74'
+'-$5,000.74'
 >>> b.removeAccount("Another Account")
 >>> b.getAccountNames()
 [u'My Renamed Account']
@@ -147,7 +147,8 @@ InvalidTransactionException: Unable to find transaction with UID FakeID
 import time, os, datetime, re
 from model_sqlite import Model
 from wx.lib.pubsub import Publisher
-import currencies
+import currencies, bankobjects
+import localization
 
 
 class Subscriber(list):
@@ -158,40 +159,10 @@ class Subscriber(list):
     """
     def __init__(self):
         list.__init__(self)
-        Publisher().subscribe(self.onMessage)
+        Publisher().subscribe(self.onMessage, 'bank')
 
     def onMessage(self, message):
         self.insert(0, (message.topic, message.data))
-
-
-def wellFormDate(date):
-    """
-    Takes a date in the form Y-M-D, and ensures it is proper.
-    Abbreviated years must be converted into the real year.
-
-    >>> wellFormDate("2008-01-06")
-    datetime.date(2008, 1, 6)
-    >>> wellFormDate("08-01-06")
-    datetime.date(2008, 1, 6)
-    >>> wellFormDate("86-01-06")
-    datetime.date(1986, 1, 6)
-    >>> wellFormDate("11-01-06")
-    datetime.date(2011, 1, 6)
-    >>> wellFormDate("0-1-6")
-    datetime.date(2000, 1, 6)
-    """
-
-    date = str(date) #if it is a datetime.date object, make it a Y-M-D string.
-    year, m, d = [int(x) for x in date.split("-")]
-    if year < 100:
-        currentYear = datetime.date.today().year
-        currentAbr = currentYear % 100
-        currentBase = currentYear / 100
-        if year <= currentAbr + 10: #allow the user to reasonably refer to future years
-            year += currentBase * 100
-        else:
-            year += (currentBase-1) * 100
-    return datetime.date(year, m, d)
 
 
 #Custom exceptions:
@@ -243,7 +214,7 @@ class Bank(Singleton):
     def getBalanceOf(self, account):
         balance = 0.0
         for transaction in self.getTransactionsFrom(account):
-            balance += transaction[1]
+            balance += transaction.Amount
         return balance
 
     def getTotalBalance(self):
@@ -258,7 +229,7 @@ class Bank(Singleton):
             transactions.extend(self.getTransactionsFrom(accountName))
 
         if sortCmp is None:
-            sortCmp = lambda l,r: cmp(l[3], r[3])
+            sortCmp = lambda l,r: cmp(l.Date, r.Date)
         return sorted(transactions, cmp=sortCmp)
 
     def getTotalsEvery(self, days):
@@ -266,7 +237,7 @@ class Bank(Singleton):
         if len(transactions) == 0:
             return [], None
 
-        startDate = currentDate = transactions[0][3]
+        startDate = currentDate = transactions[0].Date
         #lastMonth = currentDate.month
         offset = datetime.timedelta(days)
 
@@ -274,17 +245,17 @@ class Bank(Singleton):
         total = grandTotal = 0.0
 
         for trans in transactions:
-            if trans[3] < currentDate + offset:
+            if trans.Date < currentDate + offset:
                 #if trans[3].month == lastMonth:
                 #print '---%.2f'%trans[0]
-                total += trans[1]
+                total += trans.Amount
             else:
                 #print currentDate, total
                 totals.append(total)
-                total = trans[1]
+                total = trans.Amount
                 currentDate += offset
                 #lastMonth = trans[3].month
-            grandTotal += trans[1]
+            grandTotal += trans.Amount
         totals.append(total) #append whatever is left over
 
         assert self.float2str(grandTotal) == self.float2str(self.getTotalBalance()), (grandTotal, self.getTotalBalance())
@@ -313,14 +284,14 @@ class Bank(Singleton):
             raise AccountAlreadyExistsException(account)
 
         self.model.createAccount(account)
-        Publisher().sendMessage("NEW ACCOUNT", account)
+        Publisher().sendMessage("bank.NEW ACCOUNT", account)
 
     def removeAccount(self, account):
         if account not in self.getAccountNames():
             raise InvalidAccountException(account)
 
         self.model.removeAccount(account)
-        Publisher().sendMessage("REMOVED ACCOUNT", account)
+        Publisher().sendMessage("bank.REMOVED ACCOUNT", account)
 
     def renameAccount(self, oldName, newName):
         #this will return false if an account is renamed to another one, or to the same thing as it was
@@ -331,21 +302,21 @@ class Bank(Singleton):
             raise AccountAlreadyExistsException(newName)
 
         self.model.renameAccount(oldName, newName)
-        Publisher().sendMessage("RENAMED ACCOUNT", (oldName, newName))
+        Publisher().sendMessage("bank.RENAMED ACCOUNT", (oldName, newName))
 
     def getTransactionsFrom(self, account):
         if account not in self.getAccountNames():
             raise InvalidAccountException(account)
 
         transactions = self.model.getTransactionsFrom(account)
-        return sorted(transactions, cmp=lambda l,r: cmp(l[3], r[3]))
+        return sorted(transactions, cmp=lambda l,r: cmp(l.Date, r.Date))
 
     def removeTransaction(self, ID):
         if self.model.getTransactionById(ID) is None:
             raise InvalidTransactionException(ID)
 
         self.model.removeTransaction(ID)
-        Publisher().sendMessage("REMOVED TRANSACTION", ID)
+        Publisher().sendMessage("bank.REMOVED TRANSACTION", ID)
         return True
 
     def getTransactionByID(self, ID):
@@ -359,14 +330,14 @@ class Bank(Singleton):
         trans = self.model.getTransactionById(uid)
 
         if amount is not None:
-            trans[1] = amount
+            trans.Amount = amount
         if desc is not None:
-            trans[2] = desc
+            trans.Description = desc
         if date is not None:
-            trans[3] = wellFormDate(date)
+            trans.Date = date
 
         self.model.updateTransaction(trans)
-        Publisher().sendMessage("UPDATED TRANSACTION")
+        Publisher().sendMessage("bank.UPDATED TRANSACTION")
 
     def makeTransaction(self, account, amount, desc="", date=None):
         """
@@ -378,12 +349,9 @@ class Bank(Singleton):
 
         if date is None:
             date = datetime.date.today()
-        else:
-            date = wellFormDate(date)
 
-        transaction = (accountId, amount, desc, date)
-        lastRowId = self.model.makeTransaction(transaction)
-        Publisher().sendMessage("NEW TRANSACTION")
+        lastRowId = self.model.makeTransaction(accountId, amount, desc, date)
+        Publisher().sendMessage("bank.NEW TRANSACTION")
         return lastRowId
 
     def searchTransactions(self, searchString, accountName=None, matchType="DESCRIPTION", matchCase=False):

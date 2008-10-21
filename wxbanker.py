@@ -117,12 +117,12 @@ class BankerFrame(wx.Frame):
     def onMessage(self, message, data):
         saveWorthyMessages = [
             "FIRST RUN",
-            "NEW ACCOUNT",
-            "REMOVED ACCOUNT",
-            "RENAMED ACCOUNT",
-            "NEW TRANSACTION",
-            "REMOVED TRANSACTION",
-            "UPDATED TRANSACTION",
+            "bank.NEW ACCOUNT",
+            "bank.REMOVED ACCOUNT",
+            "bank.RENAMED ACCOUNT",
+            "bank.NEW TRANSACTION",
+            "bank.REMOVED TRANSACTION",
+            "bank.UPDATED TRANSACTION",
             ]
 
         if message in saveWorthyMessages:

@@ -106,7 +106,7 @@ class TransactionPanel(wx.Panel):
         mainSizer.Layout()
 
         self.Bind(wx.EVT_SIZE, self.transactionGrid.doResize)
-        for message in ['NEW ACCOUNT', 'REMOVED ACCOUNT', 'VIEW.ACCOUNT_CHANGED']:
+        for message in ['bank.NEW ACCOUNT', 'bank.REMOVED ACCOUNT', 'VIEW.ACCOUNT_CHANGED']:
             Publisher().subscribe(self.onSearchInvalidatingChange, message)
         #self.Bind(wx.EVT_MAXIMIZE, self.doResize) # isn't necessary on GTK, what about Windows?
 
@@ -176,10 +176,10 @@ class TransactionGrid(gridlib.Grid):
         self.Bind(gridlib.EVT_GRID_LABEL_RIGHT_CLICK, self.onCellRightClick)
         self.Bind(gridlib.EVT_GRID_CELL_RIGHT_CLICK, self.onCellRightClick)
 
-        Publisher().subscribe(self.onTransactionRemoved, "REMOVED TRANSACTION")
-        Publisher().subscribe(self.onTransactionAdded, "NEW TRANSACTION")
+        Publisher().subscribe(self.onTransactionRemoved, "bank.REMOVED TRANSACTION")
+        Publisher().subscribe(self.onTransactionAdded, "bank.NEW TRANSACTION")
         #XXX this causes a segfault on amount changes, that's cute
-        #Publisher().subscribe(self.onTransactionUpdated, "UPDATED TRANSACTION")
+        #Publisher().subscribe(self.onTransactionUpdated, "bank.UPDATED TRANSACTION")
         Publisher().subscribe(self.onSearch, "SEARCH.INITIATED")
         Publisher().subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
         Publisher().subscribe(self.onSearchMoreToggled, "SEARCH.MORETOGGLED")
@@ -416,12 +416,11 @@ class TransactionGrid(gridlib.Grid):
         #now fill in all the values
         total = 0.0
         for i, transaction in enumerate(transactions):
-            uid, amount, desc, date = transaction
-            total += amount
-            self.SetRowLabelValue(i, str(uid))
-            self.SetCellValue(i, 0, date.strftime('%m/%d/%Y'))
-            self.SetCellValue(i, 1, desc)
-            self.SetCellValue(i, 2, amount)
+            total += transaction.Amount
+            self.SetRowLabelValue(i, str(transaction.ID))
+            self.SetCellValue(i, 0, transaction.Date.strftime('%m/%d/%Y'))
+            self.SetCellValue(i, 1, transaction.Description)
+            self.SetCellValue(i, 2, transaction.Amount)
             self.SetCellEditor(i, 2, gridlib.GridCellFloatEditor(precision=2))
             self.SetCellValue(i, 3, total)
             self.SetReadOnly(i, 3, True) #make the total read-only

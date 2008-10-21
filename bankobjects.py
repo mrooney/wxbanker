@@ -1,73 +1,6 @@
 from wx.lib.pubsub import Publisher
 import datetime
 
-        
-def float2str(number, just=0):
-    """
-    Converts a float to a pleasing "money string".
-
-    >>> float2str(1)
-    '$1.00'
-    >>> float2str(-2.1)
-    '$-2.10'
-    >>> float2str(-10.17)
-    '$-10.17'
-    >>> float2str(-777)
-    '$-777.00'
-    >>> float2str(12345.67)
-    '$12,345.67'
-    >>> float2str(12345)
-    '$12,345.00'
-    >>> float2str(-12345.67)
-    '$-12,345.67'
-    >>> float2str(-12345.6)
-    '$-12,345.60'
-    >>> float2str(-123456)
-    '$-123,456.00'
-    >>> float2str(.01)
-    '$0.01'
-    >>> float2str(.01, 8)
-    '   $0.01'
-    >>> float2str(2.1-2.2+.1) #test to ensure no negative zeroes
-    '$0.00'
-    """
-    numStr = '%.2f' % number
-    if numStr == '-0.00': # don't display negative zeroes (LP: 250151)
-        numStr = '0.00'
-    if len(numStr) > 6 + numStr.find('-') + 1: # remember, $ is not added yet
-        numStr = numStr[:len(numStr)-6] + ',' + numStr[len(numStr)-6:]
-    return ('$'+numStr).rjust(just)
-
-
-def str2float(mstr):
-    """
-    Converts a pleasing "money string" to a float.
-
-    >>> str2float('$1.00') == 1.0
-    True
-    >>> str2float('$-2.10') == -2.1
-    True
-    >>> str2float('$-10.17') == -10.17
-    True
-    >>> str2float('$-777.00') == -777
-    True
-    >>> str2float('$12,345.67') == 12345.67
-    True
-    >>> str2float('$12,345.00') == 12345
-    True
-    >>> str2float('$-12,345.67') == -12345.67
-    True
-    >>> str2float('$-12,345.6') == -12345.6
-    True
-    >>> str2float('$-123,456') == -123456
-    True
-    >>> str2float('$0.01') == 0.01
-    True
-    >>> str2float('   $0.01') == 0.01
-    True
-    """
-    return float(mstr.strip()[1:].replace(',', ''))
-
 
 def wellFormDate(date):
     """
@@ -152,8 +85,8 @@ class Transaction(LightweightPropertyObject):
         LightweightPropertyObject.__init__(self)
         self.Freeze() # Disable dispatching while we initialize.
         
-        self.tID = tid
-        self.Parent = parent # Necessary?
+        self.ID = tid
+        self.Parent = parent
         self.Date = date
         self.Description = description
         self.Amount = amount
@@ -193,7 +126,7 @@ class TransactionList(LightweightPropertyObject):
         self._Transactions = {}
 
     def Add(self, transaction):
-        self._Transactions[transaction.tID] = transaction
+        self._Transactions[transaction.ID] = transaction
 
     def Get(self, tID):
         return self._Transactions[tID]
@@ -217,13 +150,6 @@ class Account(LightweightPropertyObject):
         self.Transactions.append(Transaction(*args, **kwargs))
 
     #def RemoveTransaction(
-
-    #Name = property(GetName, SetName, doc="The name of this account")
-
-    
-class BaseModel(object):
-    def __init__(self):
-        object.__init__(self)
         
         
 if __name__ == "__main__":
