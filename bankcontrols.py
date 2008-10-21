@@ -20,7 +20,7 @@ import datetime
 import wx
 from wx.lib.pubsub import Publisher
 
-from banker import str2float, float2str, AccountAlreadyExistsException
+from banker import AccountAlreadyExistsException, Bank
 from smoothsizer import SmoothStaticBoxSizer
 
 
@@ -137,9 +137,8 @@ class AccountListCtrl(wx.Panel):
     Accounts can be added, removed, and renamed.
     """
 
-    def __init__(self, parent, frame, autoPopulate = True):
+    def __init__(self, parent, autoPopulate = True):
         wx.Panel.__init__(self, parent)
-        self.parent, self.frame = parent, frame
         # Initialize some attributes to their default values.
         self.editCtrl = self.hiddenIndex = None
         self.currentIndex = None
@@ -209,7 +208,7 @@ class AccountListCtrl(wx.Panel):
 
         # Populate ourselves initially unless explicitly told not to.
         if autoPopulate:
-            for accountName in frame.bank.getAccountNames():
+            for accountName in Bank().getAccountNames():
                 self._PutAccount(accountName)
 
         self.Sizer = self.staticBoxSizer
@@ -336,11 +335,11 @@ class AccountListCtrl(wx.Panel):
         This assumes the account already exists in the database.
         """
         accountName = item
-        balance = self.frame.bank.getBalanceOf(accountName)
+        balance = Bank().getBalanceOf(accountName)
 
         # Create the controls.
         link = HyperlinkText(self, label=accountName+":", url=str(index))
-        totalText = wx.StaticText(self, label=float2str(balance))
+        totalText = wx.StaticText(self, label=Bank().float2str(balance))
         self.hyperLinks.insert(index, link)
         self.totalTexts.insert(index, totalText)
 
@@ -360,20 +359,20 @@ class AccountListCtrl(wx.Panel):
             self.currentIndex += 1
 
         # Update the total text, as sometimes the account already exists.
-        total = str2float(self.totalText.Label)
-        self.totalText.Label = float2str(total + balance)
+        total = Bank().str2float(self.totalText.Label)
+        self.totalText.Label = Bank().float2str(total + balance)
 
         # Update the static label.
         self.staticBox.Label = self.boxLabel % self.GetCount()
 
         self.Layout()
-        self.parent.Layout()
+        self.Parent.Layout()
 
     def _RemoveItem(self, index, fixSel=True):
         linkCtrl = self.hyperLinks[index]
         removedAccount = linkCtrl.Label[:-1]
 
-        balance = str2float(self.totalTexts[index].Label)
+        balance = Bank().str2float(self.totalTexts[index].Label)
 
         del self.hyperLinks[index]
         del self.totalTexts[index]
@@ -398,14 +397,14 @@ class AccountListCtrl(wx.Panel):
             self.SelectVisibleItem(self.currentIndex)
 
         # Update the total text (subtract what was removed).
-        total = str2float(self.totalText.Label)
-        self.totalText.Label = float2str(total - balance)
+        total = Bank().str2float(self.totalText.Label)
+        self.totalText.Label = Bank().float2str(total - balance)
 
         # Update the static label.
         self.staticBox.Label = self.boxLabel % self.GetCount()
 
         self.Layout()
-        self.parent.Layout()
+        self.Parent.Layout()
 
     def updateTotals(self, message=None):
         """
@@ -414,16 +413,16 @@ class AccountListCtrl(wx.Panel):
         total = 0.0
         for linkCtrl, text in zip(self.hyperLinks, self.totalTexts):
             accountName = linkCtrl.Label[:-1]
-            balance = self.frame.bank.getBalanceOf(accountName)
-            text.Label = float2str(balance)
+            balance = Bank().getBalanceOf(accountName)
+            text.Label = Bank().float2str(balance)
             total += balance
-        self.totalTexts[-1].Label = float2str(total)
+        self.totalTexts[-1].Label = Bank().float2str(total)
 
         # Handle a zero-balance account going to non-zero or vice-versa.
         self.onHideCheck()
 
         self.Layout()
-        self.parent.Layout()
+        self.Parent.Layout()
 
     def onAddButton(self, event):
         self.showEditCtrl()
@@ -433,7 +432,7 @@ class AccountListCtrl(wx.Panel):
         # Grab the account name and add it.
         accountName = self.editCtrl.Value
         try:
-            self.frame.bank.createAccount(accountName)
+            Bank().createAccount(accountName)
         except AccountAlreadyExistsException:
             wx.TipWindow(self, "Sorry, an account by that name already exists.")#, maxLength=200)
 
@@ -466,7 +465,7 @@ class AccountListCtrl(wx.Panel):
             self.editCtrl.Bind(wx.EVT_TEXT_ENTER, self.onRenameAccount)
 
         self.Sizer.Insert(pos, self.editCtrl, 0, wx.EXPAND)#, smooth=True)
-        self.parent.Layout()
+        self.Parent.Layout()
 
         if focus:
             self.editCtrl.SetFocus()
@@ -481,7 +480,7 @@ class AccountListCtrl(wx.Panel):
             self.Sizer.Show(self.hiddenIndex)
             self.hiddenIndex = None
 
-        self.parent.Layout()
+        self.Parent.Layout()
 
         # Re-enable the add button.
         self.addButton.Enabled = True
@@ -494,7 +493,7 @@ class AccountListCtrl(wx.Panel):
             if dlg.ShowModal() == wx.ID_YES:
                 # Remove the account from the model.
                 accountName = linkCtrl.Label[:-1]
-                self.frame.bank.removeAccount(accountName)
+                Bank().removeAccount(accountName)
 
     def onRenameButton(self, event):
         if self.currentIndex is not None:
@@ -510,7 +509,7 @@ class AccountListCtrl(wx.Panel):
             return
 
         try:
-            self.frame.bank.renameAccount(oldName, newName)
+            Bank().renameAccount(oldName, newName)
         except AccountAlreadyExistsException:
             #wx.MessageDialog(self, 'An account by that name already exists', 'Error :[', wx.OK | wx.ICON_ERROR).ShowModal()
             wx.TipWindow(self, "Sorry, an account by that name already exists.")#, maxLength=200)
@@ -550,10 +549,10 @@ class AccountListCtrl(wx.Panel):
             # +1 offset is to take into account the buttons at the top.
             self.staticBoxSizer.Show(i+1)
             if checked:
-                if str2float(amountCtrl.Label) == 0:
+                if Bank().str2float(amountCtrl.Label) == 0:
                     self.staticBoxSizer.Hide(i+1)
 
-        self.parent.Layout()
+        self.Parent.Layout()
 
         # We hid the current selection, so select the first available.
         if checked and not self.IsVisible(self.currentIndex):
@@ -563,10 +562,8 @@ class AccountListCtrl(wx.Panel):
 
 
 class NewTransactionCtrl(wx.Panel):
-    def __init__(self, parent, frame):
+    def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-        self.parent = parent
-        self.frame = frame
 
         # The date control. We want the Generic control, which is a composite control
         # and allows us to bind to its enter, but on Windows with wxPython < 2.8.8.0,
@@ -590,19 +587,18 @@ class NewTransactionCtrl(wx.Panel):
         self.transferCheck = transferCheck = wx.CheckBox(self, label="Transfer")
 
         # Set up the layout.
+        print dateCtrl.MinSize
         dateCtrl.SetMinSize(dateCtrl.GetBestSize())
+        print dateCtrl.MinSize
+        #dateCtrl.SetMaxSize((200, 20))
         self.mainSizer = mainSizer = wx.BoxSizer()
         mainSizer.Add(wx.StaticText(self, label="Transact: "), 0, wx.ALIGN_CENTER)
         mainSizer.AddSpacer(8)
         mainSizer.Add(wx.StaticBitmap(self, bitmap=wx.ArtProvider.GetBitmap('wxART_date')), 0, wx.ALIGN_CENTER|wx.ALL, 2)
-        mainSizer.Add(dateCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
+        mainSizer.Add(dateCtrl, 0, wx.ALIGN_CENTER)
         mainSizer.AddSpacer(10)
-        #mainSizer.Add(wx.StaticBitmap(self, bitmap=wx.ArtProvider.GetBitmap('wxART_page_edit')), 0, wx.ALIGN_CENTER|wx.ALL, 2)
-        #mainSizer.Add(wx.StaticText(self, label="Description:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
         mainSizer.Add(descCtrl, 0, wx.ALIGN_CENTER)
         mainSizer.AddSpacer(10)
-        #mainSizer.Add(wx.StaticText(self, label="Amount:"), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT, 10)
-        #mainSizer.Add(wx.StaticBitmap(self, bitmap=wx.ArtProvider.GetBitmap('wxART_money_dollar')), 0, wx.ALIGN_CENTER)
         mainSizer.Add(amountCtrl, 0, wx.ALIGN_CENTER)
         mainSizer.AddSpacer(10)
         mainSizer.Add(newButton, 0, wx.ALIGN_CENTER)
@@ -619,14 +615,20 @@ class NewTransactionCtrl(wx.Panel):
         # Initialize necessary bindings.
         self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction) # Gives us enter from description/amount.
         self.newButton.Bind(wx.EVT_BUTTON, self.onNewTransaction)
-        amountCtrl.Children[0].Bind(wx.EVT_CHAR, self.onAmountChar)
-        # Bind to DateCtrl Enter (LP: 252454).
+        
+        try:
+            amountCtrl.Children[0].Bind(wx.EVT_CHAR, self.onAmountChar)
+        except IndexError:
+            # On OSX for example, a SearchCtrl is native and has no Children.
+            pass
+        
         try:
             dateTextCtrl = self.dateCtrl.Children[0].Children[0]
         except IndexError:
             # This will fail on MSW + wxPython < 2.8.8.0, nothing we can do.
-            pass
+            print "Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 to fix this."
         else:
+            # Bind to DateCtrl Enter (LP: 252454).
             dateTextCtrl.WindowStyleFlag |= wx.TE_PROCESS_ENTER
             dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
 
@@ -645,7 +647,7 @@ class NewTransactionCtrl(wx.Panel):
 
     def getValues(self):
         # First, ensure an account is selected.
-        account = self.parent.parent.getCurrentAccount()
+        account = self.Parent.Parent.getCurrentAccount()
         if account is None:
             dlg = wx.MessageDialog(self,
                                 "Please select an account and then try again.",
@@ -679,7 +681,7 @@ class NewTransactionCtrl(wx.Panel):
         return account, amount, desc, date
 
     def getSourceAccount(self, destination):
-        otherAccounts = self.frame.bank.getAccountNames()
+        otherAccounts = Bank().getAccountNames()
         otherAccounts.remove(destination)
 
         # Create a dialog with the other account names to choose from.
@@ -713,10 +715,10 @@ class NewTransactionCtrl(wx.Panel):
             destination = account
             source = self.getSourceAccount(destination)
             if source is not None:
-                self.frame.bank.makeTransfer(source, destination, amount, desc, date)
+                Bank().makeTransfer(source, destination, amount, desc, date)
                 self.onSuccess()
         else:
-            self.frame.bank.makeTransaction(account, amount, desc, date)
+            Bank().makeTransaction(account, amount, desc, date)
             self.onSuccess()
 
     def onTransferTip(self, event):
@@ -804,7 +806,11 @@ class HintedTextCtrl(wx.SearchCtrl):
         self.SetToolTipString(conf['hint'])
         self.SetDescriptiveText(conf['hint'])
 
-        self.Children[0].Bind(wx.EVT_CHAR, self.onChar)
+        try:
+            self.Children[0].Bind(wx.EVT_CHAR, self.onChar)
+        except IndexError:
+            # On OSX for example, a SearchCtrl is native and has no Children.
+            pass
 
     def onChar(self, event):
         if event.KeyCode == wx.WXK_TAB:

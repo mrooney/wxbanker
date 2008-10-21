@@ -17,20 +17,20 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 from bankexceptions import NoNumpyException
+import localization
 import wx
 try:
     import plot as pyplot
 except ImportError:
     raise NoNumpyException()
 
-from banker import float2str
+from banker import Bank
 import datetime
 
 
 class SummaryPanel(wx.Panel):
-    def __init__(self, parent, frame):
+    def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-        self.frame = frame
         self.plotSettings = {'FitDegree': 2, 'Granularity': 100}
         self.cachedData = None
 
@@ -41,10 +41,10 @@ class SummaryPanel(wx.Panel):
         controlSizer = wx.BoxSizer()
         granCtrl = wx.SpinCtrl(self, min=10, max=1000, initial=self.plotSettings['Granularity'])
         degCtrl = wx.SpinCtrl(self, min=1, max=20, initial=self.plotSettings['FitDegree'])
-        controlSizer.Add(wx.StaticText(self, label="Sample Points"), 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.Add(wx.StaticText(self, label=_("Sample Points")), 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.Add(granCtrl)
         controlSizer.AddSpacer(20)
-        controlSizer.Add(wx.StaticText(self, label="Fit Curve Degree"), 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.Add(wx.StaticText(self, label=_("Fit Curve Degree")), 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.Add(degCtrl)
         controlSizer.Layout()
 
@@ -82,7 +82,7 @@ class SummaryPanel(wx.Panel):
         spanning the balances if there are not enough and averaging balances
         together if there are too many.
         """
-        days, startDate = self.frame.bank.getTotalsEvery(1)
+        days, startDate = Bank().getTotalsEvery(1)
         numDays = len(days)
         delta = float(numDays) / numPoints
         returnPoints = []
@@ -159,13 +159,13 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         #drawPointLabel will need these later
         self.pointDates = pointDates
 
-        line = pyplot.PolyLine(data, width=2, colour="green", legend="Balance")
+        line = pyplot.PolyLine(data, width=2, colour="green", legend=_("Balance"))
         lines = [line]
         if len(uniquePoints) > 1:
             # without more than one unique value, a best fit line doesn't make sense (and also causes freezes!)
             bestfitline = pyplot.PolyBestFitLine(data, N=fitdegree, width=2, colour="blue", legend="Trend")
             lines.append(bestfitline)
-        self.Draw(pyplot.PlotGraphics(lines, "Total Balance Over Time", "Date", "Balance"))
+        self.Draw(pyplot.PlotGraphics(lines, _("Total Balance Over Time"), _("Date"), _("Balance")))
 
     def onMotion(self, event):
         #show closest point (when enbled)
@@ -200,7 +200,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         dc.DrawRectangle(sx-5, sy-5, 10, 10)  #10by10 square centered on point
         px, py = mDataDict["pointXY"]
         #make a string to display
-        line1, line2 = float2str(py), str(self.pointDates[mDataDict["pIndex"]])
+        line1, line2 = Bank().float2str(py), str(self.pointDates[mDataDict["pIndex"]])
         x1, y1 = dc.GetTextExtent(line1)
         x2, y2 = dc.GetTextExtent(line2)
         dc.DrawText(line1, sx, sy+1)
@@ -220,7 +220,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         myTicks = []
         for tick in ticks:
             floatVal = tick[0]
-            stringVal = float2str(floatVal)
+            stringVal = Bank().float2str(floatVal)
             if stringVal.endswith('.00'):
                 stringVal = stringVal[:-3]
             myTicks.append( (floatVal, stringVal) )

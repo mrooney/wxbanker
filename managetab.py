@@ -18,10 +18,11 @@
 
 import wx, wx.grid as gridlib
 import datetime
-from banker import float2str
+from banker import Bank
 from bankcontrols import AccountListCtrl, NewTransactionCtrl, SearchCtrl
 from calculator import CollapsableWidget, SimpleCalculator
 from wx.lib.pubsub import Publisher
+import localization
 
 
 class ManagePanel(wx.Panel):
@@ -29,16 +30,15 @@ class ManagePanel(wx.Panel):
     This panel contains the list of accounts on the left
     and the transaction panel on the right.
     """
-    def __init__(self, parent, frame):
+    def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-        self.frame = frame
 
         ## Left side, the account list and calculator
         self.leftPanel = leftPanel = wx.Panel(self)
         leftPanel.Sizer = wx.BoxSizer(wx.VERTICAL)
 
-        self.accountCtrl = accountCtrl = AccountListCtrl(leftPanel, frame)
-        calcWidget = CollapsableWidget(leftPanel, SimpleCalculator, "Calculator")
+        self.accountCtrl = accountCtrl = AccountListCtrl(leftPanel)
+        calcWidget = CollapsableWidget(leftPanel, SimpleCalculator, _("Calculator"))
 
         leftPanel.Sizer.Add(accountCtrl, 0, wx.EXPAND)
         leftPanel.Sizer.AddStretchSpacer(1)
@@ -49,7 +49,7 @@ class ManagePanel(wx.Panel):
             widget.SetMinSize((accountCtrl.BestSize[0], -1))
 
         ## Right side, the transaction panel:
-        self.transactionPanel = transactionPanel = TransactionPanel(self, frame)
+        self.transactionPanel = transactionPanel = TransactionPanel(self)
 
         mainSizer = wx.BoxSizer()
         self.Sizer = mainSizer
@@ -89,15 +89,13 @@ class ManagePanel(wx.Panel):
 
 
 class TransactionPanel(wx.Panel):
-    def __init__(self, parent, frame):
+    def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-        self.parent = parent
-        self.frame = frame
         self.searchActive = False
 
         self.searchCtrl = searchCtrl = SearchCtrl(self)
-        self.transactionGrid = transactionGrid = TransactionGrid(self, frame)
-        self.newTransCtrl = newTransCtrl = NewTransactionCtrl(self, frame)
+        self.transactionGrid = transactionGrid = TransactionGrid(self)
+        self.newTransCtrl = newTransCtrl = NewTransactionCtrl(self)
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(searchCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL)
@@ -142,7 +140,7 @@ class MoneyCellRenderer(gridlib.PyGridCellRenderer):
         else:
             dc.SetTextForeground("BLACK")
 
-        text = float2str(value)
+        text = Bank().float2str(value)
 
         #right-align horizontal, center vertical
         w, h = dc.GetTextExtent(text)
@@ -153,7 +151,7 @@ class MoneyCellRenderer(gridlib.PyGridCellRenderer):
 
     def GetBestSize(self, grid, attr, dc, row, col):
         dc.SetFont(attr.GetFont())
-        w, h = dc.GetTextExtent(float2str(grid.GetCellValue(row, col)))
+        w, h = dc.GetTextExtent(Bank().float2str(grid.GetCellValue(row, col)))
         return wx.Size(w, h)
 
     def Clone(self):
@@ -161,20 +159,18 @@ class MoneyCellRenderer(gridlib.PyGridCellRenderer):
 
 
 class TransactionGrid(gridlib.Grid):
-    def __init__(self, parent, frame):
+    def __init__(self, parent):
         gridlib.Grid.__init__(self, parent)
-        self.parent = parent
-        self.frame = frame
         self.changeFrozen = False
 
         self.CreateGrid(0, 4)
 
         self.SetRowLabelSize(1)
 
-        self.SetColLabelValue(0, "Date")
-        self.SetColLabelValue(1, "Description")
-        self.SetColLabelValue(2, "Amount")
-        self.SetColLabelValue(3, "Total")
+        self.SetColLabelValue(0, _("Date"))
+        self.SetColLabelValue(1, _("Description"))
+        self.SetColLabelValue(2, _("Amount"))
+        self.SetColLabelValue(3, _("Total"))
 
         self.Bind(gridlib.EVT_GRID_CELL_CHANGE, self.onCellChange)
         self.Bind(gridlib.EVT_GRID_LABEL_RIGHT_CLICK, self.onCellRightClick)
@@ -235,7 +231,7 @@ class TransactionGrid(gridlib.Grid):
         else:
             accountName = None
 
-        matches = self.frame.bank.searchTransactions(searchString, accountName=accountName, matchType=match, matchCase=caseSens)
+        matches = Bank().searchTransactions(searchString, accountName=accountName, matchType=match, matchCase=caseSens)
         self.setTransactions(matches)
         self.Parent.searchActive = True
 
@@ -265,9 +261,9 @@ class TransactionGrid(gridlib.Grid):
         if col in (2,3):
             # This is an amount cell, allow calculator options.
             actions = [
-                ("Send to calculator", "wxART_calculator_edit"),
-                ("Add to calculator", "wxART_calculator_add"),
-                ("Subtract from calculator", "wxART_calculator_delete"),
+                (_("Send to calculator"), "wxART_calculator_edit"),
+                (_("Add to calculator"), "wxART_calculator_add"),
+                (_("Subtract from calculator"), "wxART_calculator_delete"),
             ]
 
             for actionStr, artHint in actions:
@@ -279,7 +275,7 @@ class TransactionGrid(gridlib.Grid):
 
         # Always show the Remove context entry.
         ID = int(self.GetRowLabelValue(row))
-        removeItem = wx.MenuItem(menu, -1, "Remove this transaction")
+        removeItem = wx.MenuItem(menu, -1, _("Remove this transaction"))
         menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransaction(row, ID), source=removeItem)
         removeItem.SetBitmap(wx.ArtProvider.GetBitmap('wxART_delete'))
         menu.AppendItem(removeItem)
@@ -304,7 +300,7 @@ class TransactionGrid(gridlib.Grid):
 
     def onRemoveTransaction(self, row, ID):
         #remove the transaction from the bank
-        self.frame.bank.removeTransaction(ID)
+        Bank().removeTransaction(ID)
 
     def getRowFromID(self, ID):
         for i in range(self.GetNumberRows()):
@@ -344,7 +340,7 @@ class TransactionGrid(gridlib.Grid):
                 self.updateTotalsFrom(event.Row)
 
             self.changeFrozen = True
-            self.frame.bank.updateTransaction(uid, amount, desc, date)
+            Bank().updateTransaction(uid, amount, desc, date)
             self.changeFrozen = False
 
             if refreshNeeded and not self.Parent.searchActive:
@@ -403,7 +399,7 @@ class TransactionGrid(gridlib.Grid):
                 self.DeleteRows(0, numRows)
             return
 
-        transactions = self.frame.bank.getTransactionsFrom(accountName)
+        transactions = Bank().getTransactionsFrom(accountName)
         self.setTransactions(transactions, ensureVisible)
 
     def setTransactions(self, transactions, ensureVisible=-1):
