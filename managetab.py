@@ -22,6 +22,7 @@ from banker import Bank
 from bankcontrols import AccountListCtrl, NewTransactionCtrl, SearchCtrl
 from calculator import CollapsableWidget, SimpleCalculator
 from wx.lib.pubsub import Publisher
+import localization
 
 
 class ManagePanel(wx.Panel):
@@ -37,7 +38,7 @@ class ManagePanel(wx.Panel):
         leftPanel.Sizer = wx.BoxSizer(wx.VERTICAL)
 
         self.accountCtrl = accountCtrl = AccountListCtrl(leftPanel)
-        calcWidget = CollapsableWidget(leftPanel, SimpleCalculator, "Calculator")
+        calcWidget = CollapsableWidget(leftPanel, SimpleCalculator, _("Calculator"))
 
         leftPanel.Sizer.Add(accountCtrl, 0, wx.EXPAND)
         leftPanel.Sizer.AddStretchSpacer(1)
@@ -166,10 +167,10 @@ class TransactionGrid(gridlib.Grid):
 
         self.SetRowLabelSize(1)
 
-        self.SetColLabelValue(0, "Date")
-        self.SetColLabelValue(1, "Description")
-        self.SetColLabelValue(2, "Amount")
-        self.SetColLabelValue(3, "Total")
+        self.SetColLabelValue(0, _("Date"))
+        self.SetColLabelValue(1, _("Description"))
+        self.SetColLabelValue(2, _("Amount"))
+        self.SetColLabelValue(3, _("Total"))
 
         self.Bind(gridlib.EVT_GRID_CELL_CHANGE, self.onCellChange)
         self.Bind(gridlib.EVT_GRID_LABEL_RIGHT_CLICK, self.onCellRightClick)
@@ -260,9 +261,9 @@ class TransactionGrid(gridlib.Grid):
         if col in (2,3):
             # This is an amount cell, allow calculator options.
             actions = [
-                ("Send to calculator", "wxART_calculator_edit"),
-                ("Add to calculator", "wxART_calculator_add"),
-                ("Subtract from calculator", "wxART_calculator_delete"),
+                (_("Send to calculator"), "wxART_calculator_edit"),
+                (_("Add to calculator"), "wxART_calculator_add"),
+                (_("Subtract from calculator"), "wxART_calculator_delete"),
             ]
 
             for actionStr, artHint in actions:
@@ -274,7 +275,7 @@ class TransactionGrid(gridlib.Grid):
 
         # Always show the Remove context entry.
         ID = int(self.GetRowLabelValue(row))
-        removeItem = wx.MenuItem(menu, -1, "Remove this transaction")
+        removeItem = wx.MenuItem(menu, -1, _("Remove this transaction"))
         menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransaction(row, ID), source=removeItem)
         removeItem.SetBitmap(wx.ArtProvider.GetBitmap('wxART_delete'))
         menu.AppendItem(removeItem)

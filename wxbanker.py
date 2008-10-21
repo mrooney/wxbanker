@@ -19,9 +19,6 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
-# Localization
-import locale
-locale.setlocale(locale.LC_ALL, '')
 
 # wxPython
 import wx, wx.aui
@@ -31,13 +28,14 @@ from wx.lib.pubsub import Publisher
 from bankexceptions import NoNumpyException
 from menubar import BankMenuBar
 from banker import Bank
+import localization
 # Tabs
 import managetab
 try:
     import summarytab
 except NoNumpyException:
     summarytab = None
-    print "Warning: Numpy not available, disabling Summary tab. Install numpy to fix this."
+    print "Warning: Numpy module not available, disabling Summary tab. Install numpy to fix this."
 
 
 class BankerFrame(wx.Frame):
@@ -55,11 +53,11 @@ class BankerFrame(wx.Frame):
         self.notebook = notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
 
         self.managePanel = managetab.ManagePanel(notebook)
-        notebook.AddPage(self.managePanel, "Transactions")
+        notebook.AddPage(self.managePanel, _("Transactions"))
 
         if summarytab:
             self.summaryPanel = summarytab.SummaryPanel(notebook)
-            notebook.AddPage(self.summaryPanel, "Summary")
+            notebook.AddPage(self.summaryPanel, _("Summary"))
 
         self.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.onTabSwitching)
 
@@ -105,13 +103,13 @@ class BankerFrame(wx.Frame):
             self.summaryPanel.generateData()
 
     def onFirstRun(self, message):
-        welcomeMsg = "It looks like this is your first time using wxBanker!"
-        welcomeMsg += " To\nget started, add an account using the account\ncontrol in the top left corner."
-        welcomeMsg += "\n\nThe buttons in the account control allow you to add,\nremove, and rename an account, respectively."
-        welcomeMsg += "\n\nOnce you have an account, you can add transactions\nto it (such as your initial balance) using the controls\nbelow the grid on the bottom right."
-        welcomeMsg += "\n\nHave fun!"
+        welcomeMsg = _("It looks like this is your first time using wxBanker!")
+        welcomeMsg += "\n\n" + _("To get started, add an account using the account control in the top left corner.")
+        welcomeMsg += " " + _("The buttons in the account control allow you to add, remove, and rename an account, respectively.")
+        welcomeMsg += "\n\n" + _("Once you have created an account you can add transactions to it (such as your initial balance) using the controls below the grid on the bottom right.")
+        welcomeMsg += "\n\n" + _("Have fun!")
         #wx.TipWindow(self, welcomeMsg, maxLength=300)
-        dlg = wx.MessageDialog(self, welcomeMsg, "Welcome!", style=wx.OK|wx.ICON_INFORMATION)
+        dlg = wx.MessageDialog(self, welcomeMsg, _("Welcome!"), style=wx.OK|wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
 

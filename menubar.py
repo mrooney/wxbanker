@@ -20,7 +20,7 @@
 
 import wx, webbrowser
 from wx.lib.wordwrap import wordwrap
-import version
+import version, localization
 
 class BankMenuBar(wx.MenuBar):
     ID_FAQ = wx.NewId()
@@ -32,19 +32,23 @@ class BankMenuBar(wx.MenuBar):
         
         helpMenu = wx.Menu()
         
-        faqItem = wx.MenuItem(helpMenu, self.ID_FAQ, "View &FAQs", "View Frequently Asked Questions online")
+        ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
+        faqItem = wx.MenuItem(helpMenu, self.ID_FAQ, _("View &FAQs"), _("View Frequently Asked Questions online"))
         faqItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_comments")
         helpMenu.AppendItem(faqItem)
         
-        questionItem = wx.MenuItem(helpMenu, self.ID_QUESTION, "Ask a &Question", "Ask a question online")
+        ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
+        questionItem = wx.MenuItem(helpMenu, self.ID_QUESTION, _("Ask a &Question"), _("Ask a question online"))
         questionItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_user_comment")
         helpMenu.AppendItem(questionItem)
         
-        bugItem = wx.MenuItem(helpMenu, self.ID_REPORTBUG, "&Report a Bug", "Report a bug to the developer online")
+        ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
+        bugItem = wx.MenuItem(helpMenu, self.ID_REPORTBUG, _("&Report a Bug"), _("Report a bug to the developer online"))
         bugItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_bug")
         helpMenu.AppendItem(bugItem)
         
-        aboutItem = helpMenu.Append(wx.ID_ABOUT, "&About", "More information about wxBanker")
+        ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
+        aboutItem = helpMenu.Append(wx.ID_ABOUT, _("&About"), _("More information about wxBanker"))
         
         self.Append(helpMenu, "&Help")
         
@@ -74,8 +78,8 @@ class BankMenuBar(wx.MenuBar):
         info = wx.AboutDialogInfo()
         info.Name = "wxBanker"
         info.Version = str(version.NUMBER)
-        info.Copyright = "Copyright 2007, 2008 Mike Rooney (wxbanker@rowk.com)"
-        info.Description = "A lightweight personal finance management application."
+        info.Copyright = _("Copyright") + " 2007, 2008 Mike Rooney (wxbanker@rowk.com)"
+        info.Description = _("A lightweight personal finance management application.")
         info.WebSite = ("https://launchpad.net/wxbanker", "https://launchpad.net/wxbanker")
         info.Developers = ['Mike Rooney (wxbanker@rowk.com)',]
         info.Artists = ['Mark James (www.famfamfam.com/lab/icons/silk/)',]

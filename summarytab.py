@@ -17,6 +17,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 from bankexceptions import NoNumpyException
+import localization
 import wx
 try:
     import plot as pyplot
@@ -40,10 +41,10 @@ class SummaryPanel(wx.Panel):
         controlSizer = wx.BoxSizer()
         granCtrl = wx.SpinCtrl(self, min=10, max=1000, initial=self.plotSettings['Granularity'])
         degCtrl = wx.SpinCtrl(self, min=1, max=20, initial=self.plotSettings['FitDegree'])
-        controlSizer.Add(wx.StaticText(self, label="Sample Points"), 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.Add(wx.StaticText(self, label=_("Sample Points")), 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.Add(granCtrl)
         controlSizer.AddSpacer(20)
-        controlSizer.Add(wx.StaticText(self, label="Fit Curve Degree"), 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.Add(wx.StaticText(self, label=_("Fit Curve Degree")), 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.Add(degCtrl)
         controlSizer.Layout()
 
@@ -158,13 +159,13 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         #drawPointLabel will need these later
         self.pointDates = pointDates
 
-        line = pyplot.PolyLine(data, width=2, colour="green", legend="Balance")
+        line = pyplot.PolyLine(data, width=2, colour="green", legend=_("Balance"))
         lines = [line]
         if len(uniquePoints) > 1:
             # without more than one unique value, a best fit line doesn't make sense (and also causes freezes!)
             bestfitline = pyplot.PolyBestFitLine(data, N=fitdegree, width=2, colour="blue", legend="Trend")
             lines.append(bestfitline)
-        self.Draw(pyplot.PlotGraphics(lines, "Total Balance Over Time", "Date", "Balance"))
+        self.Draw(pyplot.PlotGraphics(lines, _("Total Balance Over Time"), _("Date"), _("Balance")))
 
     def onMotion(self, event):
         #show closest point (when enbled)
