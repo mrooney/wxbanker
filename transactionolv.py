@@ -47,17 +47,22 @@ class TransactionOLV(GroupListView):
         
     def getTotal(self, transObj):
         """
-        This is a really really bad way to do this, O(N**2) perhaps?
-        It is a "for each item: for each item2 before item", in essence.
+        A fairly hackish implementation, but an improvement!
         """
         i = self.GetIndexOf(transObj)
         if i == 0:
-            total = 0
+            total = 0.0
         else:
-            previousTotal = self.GetValueAt( self.GetObjectAt(i-1), 3 )
+            previousObj = self.GetObjectAt(i-1)
+            try:
+                previousTotal = previousObj._Total
+            except AttributeError:
+                previousTotal = self.getTotal(previousObj)
             
             total = previousTotal + transObj.Amount
+                
             
+        transObj._Total = total
         return total
     
     def setAccount(self, accountName):
