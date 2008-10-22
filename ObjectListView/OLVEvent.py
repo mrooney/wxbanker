@@ -8,6 +8,7 @@
 # License:      wxWindows license
 #----------------------------------------------------------------------------
 # Change log:
+# 2008/08/18  JPP   Added CELL_EDIT_STARTED and CELL_EDIT_FINISHED events
 # 2008/07/16  JPP   Added group-related events
 # 2008/06/19  JPP   Added EVT_SORT
 # 2008/05/26  JPP   Fixed pyLint annoyances
@@ -33,7 +34,9 @@ def _EventMaker():
     return (evt, wx.PyEventBinder(evt))
 
 (olv_EVT_CELL_EDIT_STARTING, EVT_CELL_EDIT_STARTING) = _EventMaker()
+(olv_EVT_CELL_EDIT_STARTED, EVT_CELL_EDIT_STARTED) = _EventMaker()
 (olv_EVT_CELL_EDIT_FINISHING, EVT_CELL_EDIT_FINISHING) = _EventMaker()
+(olv_EVT_CELL_EDIT_FINISHED, EVT_CELL_EDIT_FINISHED) = _EventMaker()
 (olv_EVT_SORT, EVT_SORT) = _EventMaker()
 (olv_EVT_GROUP_CREATING, EVT_GROUP_CREATING) = _EventMaker()
 (olv_EVT_GROUP_SORT, EVT_GROUP_SORT) = _EventMaker()
@@ -83,6 +86,20 @@ class CellEditEvent(VetoableEvent):
 
 #----------------------------------------------------------------------------
 
+class CellEditStartedEvent(CellEditEvent):
+    """
+    A cell has started to be edited.
+
+    All attributes are public and should be considered read-only.
+    """
+
+    def __init__(self, objectListView, rowIndex, subItemIndex, rowModel, cellValue, cellBounds, editor):
+        CellEditEvent.__init__(self, olv_EVT_CELL_EDIT_STARTED)
+        self.SetParameters(objectListView, rowIndex, subItemIndex, rowModel, cellValue, editor)
+        self.cellBounds = cellBounds
+
+#----------------------------------------------------------------------------
+
 class CellEditStartingEvent(CellEditEvent):
     """
     A cell is about to be edited.
@@ -124,9 +141,20 @@ class CellEditStartingEvent(CellEditEvent):
 
 #----------------------------------------------------------------------------
 
-class CellEditFinishingEvent(CellEditEvent):
+class CellEditFinishedEvent(CellEditEvent):
     """
     The user has finished editing a cell.
+    """
+    def __init__(self, objectListView, rowIndex, subItemIndex, rowModel, userCancelled):
+        CellEditEvent.__init__(self, olv_EVT_CELL_EDIT_FINISHED)
+        self.SetParameters(objectListView, rowIndex, subItemIndex, rowModel, None, None)
+        self.userCancelled = userCancelled
+
+#----------------------------------------------------------------------------
+
+class CellEditFinishingEvent(CellEditEvent):
+    """
+    The user is finishing editing a cell.
 
     If this event is vetoed, the edit will be cancelled silently. This is useful if the
     event handler completely handles the model updating.
