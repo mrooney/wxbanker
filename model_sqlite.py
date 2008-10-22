@@ -48,8 +48,8 @@ class Model:
 
         self.dbconn = connection
         
-        self.updateCb = lambda message: self.updateTransaction(message.data)
-        Publisher.subscribe(self.updateCb, "transaction.updated")
+        ##self.updateCb = lambda message: self.updateTransaction(message.data)
+        ##Publisher.subscribe(self.updateCb, "transaction.updated")
 
     def initialize(self):
         connection = sqlite.connect(self.path)

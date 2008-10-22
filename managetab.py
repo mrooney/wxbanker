@@ -20,6 +20,7 @@ import wx, wx.grid as gridlib
 import datetime
 from banker import Bank
 from bankcontrols import AccountListCtrl, NewTransactionCtrl, SearchCtrl
+from transactionolv import TransactionOLV as TransactionCtrl
 from calculator import CollapsableWidget, SimpleCalculator
 from wx.lib.pubsub import Publisher
 import localization
@@ -70,8 +71,8 @@ class ManagePanel(wx.Panel):
         # Ensure the calculator is displayed as desired.
         calcWidget.SetExpanded(wx.Config.Get().ReadBool("SHOW_CALC"))
 
-        wx.CallLater(50, lambda: transactionPanel.transactionGrid.doResize())
-        wx.CallLater(50, lambda: transactionPanel.transactionGrid.ensureVisible(-1)) # GTK
+        ##wx.CallLater(50, lambda: transactionPanel.transactionCtrl.doResize())
+        wx.CallLater(50, lambda: transactionPanel.transactionCtrl.ensureVisible(-1)) # GTK
 
     def onCalculatorToggled(self, message):
         """
@@ -94,24 +95,24 @@ class TransactionPanel(wx.Panel):
         self.searchActive = False
 
         self.searchCtrl = searchCtrl = SearchCtrl(self)
-        self.transactionGrid = transactionGrid = TransactionGrid(self)
+        self.transactionCtrl = transactionCtrl = TransactionCtrl(self)
         self.newTransCtrl = newTransCtrl = NewTransactionCtrl(self)
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(searchCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL)
-        mainSizer.Add(transactionGrid, 1, wx.EXPAND)
+        mainSizer.Add(transactionCtrl, 1, wx.EXPAND)
         mainSizer.Add(newTransCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5)
 
         self.Sizer = mainSizer
         mainSizer.Layout()
 
-        self.Bind(wx.EVT_SIZE, self.transactionGrid.doResize)
+        ##self.Bind(wx.EVT_SIZE, self.transactionCtrl.doResize)
         for message in ['bank.NEW ACCOUNT', 'bank.REMOVED ACCOUNT', 'VIEW.ACCOUNT_CHANGED']:
             Publisher().subscribe(self.onSearchInvalidatingChange, message)
         #self.Bind(wx.EVT_MAXIMIZE, self.doResize) # isn't necessary on GTK, what about Windows?
 
     def setAccount(self, *args, **kwargs):
-        self.transactionGrid.setAccount(*args, **kwargs)
+        self.transactionCtrl.setAccount(*args, **kwargs)
 
     def onSearchInvalidatingChange(self, event):
         """

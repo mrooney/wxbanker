@@ -205,6 +205,8 @@ class Bank(Singleton):
         self.model = Model(path)
         self.Currency = currencies.LocalizedCurrency()
         
+        Publisher.subscribe(self.onTransactionUpdated, "transaction.updated")
+        
     def float2str(self, flt):
         return self.Currency.float2str(flt)
     
@@ -326,18 +328,11 @@ class Bank(Singleton):
 
         return transaction
 
-    def updateTransaction(self, uid, amount=None, desc=None, date=None):
-        trans = self.model.getTransactionById(uid)
-
-        if amount is not None:
-            trans.Amount = amount
-        if desc is not None:
-            trans.Description = desc
-        if date is not None:
-            trans.Date = date
-
-        self.model.updateTransaction(trans)
-        Publisher().sendMessage("bank.UPDATED TRANSACTION")
+    def updateTransaction(self, transaction):
+        ##transaction = self.model.getTransactionById(uid)
+        print 1
+        self.model.updateTransaction(transaction)
+        ##Publisher().sendMessage("bank.UPDATED TRANSACTION")
 
     def makeTransaction(self, account, amount, desc="", date=None):
         """
@@ -381,6 +376,10 @@ class Bank(Singleton):
     def save(self, path=None):
         #write out the changes
         self.model.save()
+        
+    def onTransactionUpdated(self, message):
+        transaction = message.data
+        self.updateTransaction(transaction)
 
 
 #command-line view methods

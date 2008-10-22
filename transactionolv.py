@@ -25,12 +25,13 @@ EXTRA:
 import wx
 from wx.lib.pubsub import Publisher
 from ObjectListView import GroupListView, ColumnDefn
-from model_sqlite import Model
+#from model_sqlite import Model
+from banker import Bank # only temporary until Transactions can do float2str themselves
 
 
 class TransactionOLV(GroupListView):
-    def __init__(self, *args, **kwargs):
-        GroupListView.__init__(self, *args, **kwargs)
+    def __init__(self, parent):
+        GroupListView.__init__(self, parent, style=wx.LC_REPORT|wx.SUNKEN_BORDER)
         self.currentTotal = 0.0
         
         self.showGroups = False
@@ -41,14 +42,22 @@ class TransactionOLV(GroupListView):
         self.SetColumns([
             ColumnDefn("Date", valueGetter="Date", minimumWidth=80),
             ColumnDefn("Description", valueGetter="Description", isSpaceFilling=True, minimumWidth=80),
-            ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=float2str, minimumWidth=80),
-            ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=float2str, minimumWidth=80, isEditable=False),
+            ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=Bank().float2str, minimumWidth=80),
+            ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=Bank().float2str, minimumWidth=80, isEditable=False),
         ])
         
     def getTotal(self, transObj):
         #HACK!
         self.currentTotal += transObj.Amount
         return self.currentTotal
+    
+    def setAccount(self, accountName):
+        transactions = Bank().getTransactionsFrom(accountName)
+        self.SetObjects(transactions)
+        
+    def ensureVisible(self, index):
+        # I wonder if this is needed in OLV? Probably.
+        pass
     
 
 class olvFrame(wx.Frame):
@@ -62,7 +71,7 @@ class olvFrame(wx.Frame):
 
         m = Model('bank')
         transactions = m.getTransactionsFrom('HSBC Checking')
-        glv = TransactionOLV(panel, style=wx.LC_REPORT|wx.SUNKEN_BORDER)
+        glv = TransactionOLV(panel)
         glv.SetObjects(transactions)
 
         panel.Sizer.Add(glv, 1, wx.EXPAND)
