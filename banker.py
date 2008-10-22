@@ -330,7 +330,6 @@ class Bank(Singleton):
 
     def updateTransaction(self, transaction):
         ##transaction = self.model.getTransactionById(uid)
-        print 1
         self.model.updateTransaction(transaction)
         ##Publisher().sendMessage("bank.UPDATED TRANSACTION")
 

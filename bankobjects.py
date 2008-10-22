@@ -74,7 +74,7 @@ class LightweightPropertyObject(object):
         self.freezeCount -= 1
 
 
-class Transaction(LightweightPropertyObject):
+class Transaction(object):
     """
     An object which represents a transaction.
     
@@ -82,42 +82,59 @@ class Transaction(LightweightPropertyObject):
     typically causing the model to make the change.
     """
     def __init__(self, tid, parent, amount, description, date):
-        LightweightPropertyObject.__init__(self)
-        self.Freeze() # Disable dispatching while we initialize.
-        
+        #import time; t = time.time()
+        #LightweightPropertyObject.__init__(self)
+        #print time.time() - t; t = time.time()
+        #self.Freeze() # Disable dispatching while we initialize.
+        self.IsFrozen = True
+        #print time.time() - t; t = time.time()
         self.ID = tid
+        #print time.time() - t; t = time.time()
         self.Parent = parent
+        #print time.time() - t; t = time.time()
         self.Date = date
+        #print time.time() - t; t = time.time()
         self.Description = description
+        #print time.time() - t; t = time.time()
         self.Amount = amount
+        #print time.time() - t; t = time.time()
         
-        self.Thaw() # Allow future parameter changes to dispatch.
-
+        #self.Thaw() # Allow future parameter changes to dispatch.
+        self.IsFrozen = False
+        #print time.time() - t; t = time.time()
+        
+    def GetDate(self):
+        return self._Date
+        
     def SetDate(self, date):
-        date = wellFormDate(date)
-        if not hasattr(self, 'Date') or date != self.Date:
-            object.__setattr__(self, 'Date', date)
+        self._Date = wellFormDate(date)
             
-            if not self.freezeCount:
-                FrozenPublisher.sendMessage("transaction.updated.date", self)
+        if not self.IsFrozen:
+            FrozenPublisher.sendMessage("transaction.updated.date", self)
+            
+    def GetDescription(self):
+        return self._Description
 
     def SetDescription(self, description):
         """Update the description, ensuring it is a string."""
-        description = str(description)
-        if not hasattr(self, 'Description') or description != self.Description:
-            object.__setattr__(self, 'Description', description)
+        self._Description = str(description)
+        
+        if not self.IsFrozen:
+            Publisher.sendMessage("transaction.updated.description", self)
             
-            if not self.freezeCount:
-                Publisher.sendMessage("transaction.updated.description", self)
+    def GetAmount(self):
+        return self._Amount
 
     def SetAmount(self, amount):
         """Update the amount, ensuring it is a float."""
-        amount = float(amount)
-        if not hasattr(self, 'Amount') or amount != self.Amount:
-            object.__setattr__(self, 'Amount', amount)
+        self._Amount = float(amount)
+        
+        if not self.IsFrozen:
+            Publisher.sendMessage("transaction.updated.amount", self)
             
-            if not self.freezeCount:
-                Publisher.sendMessage("transaction.updated.amount", self)
+    Date = property(GetDate, SetDate)
+    Description = property(GetDescription, SetDescription)
+    Amount = property(GetAmount, SetAmount)
 
 
 class TransactionList(LightweightPropertyObject):

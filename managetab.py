@@ -83,7 +83,8 @@ class ManagePanel(wx.Panel):
         wx.Config.Get().WriteBool("SHOW_CALC", shown)
 
     def onChangeAccount(self, message):
-        self.transactionPanel.setAccount(message.data)
+        accountName = message.data
+        self.transactionPanel.setAccount(accountName)
 
     def getCurrentAccount(self):
         return self.accountCtrl.GetCurrentAccount()

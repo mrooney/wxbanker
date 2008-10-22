@@ -32,7 +32,6 @@ from banker import Bank # only temporary until Transactions can do float2str the
 class TransactionOLV(GroupListView):
     def __init__(self, parent):
         GroupListView.__init__(self, parent, style=wx.LC_REPORT|wx.SUNKEN_BORDER)
-        self.currentTotal = 0.0
         
         self.showGroups = False
         self.evenRowsBackColor = wx.Color(224,238,238)
@@ -40,24 +39,35 @@ class TransactionOLV(GroupListView):
         self.cellEditMode = GroupListView.CELLEDIT_SINGLECLICK
         self.SetEmptyListMsg("No transactions entered.")
         self.SetColumns([
-            ColumnDefn("Date", valueGetter="Date", minimumWidth=80),
+            ColumnDefn("Date", valueGetter="Date", minimumWidth=100),
             ColumnDefn("Description", valueGetter="Description", isSpaceFilling=True, minimumWidth=80),
             ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=Bank().float2str, minimumWidth=80),
             ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=Bank().float2str, minimumWidth=80, isEditable=False),
         ])
         
     def getTotal(self, transObj):
-        #HACK!
-        self.currentTotal += transObj.Amount
-        return self.currentTotal
+        """
+        This is a really really bad way to do this, O(N**2) perhaps?
+        It is a "for each item: for each item2 before item", in essence.
+        """
+        i = self.GetIndexOf(transObj)
+        if i == 0:
+            total = 0
+        else:
+            previousTotal = self.GetValueAt( self.GetObjectAt(i-1), 3 )
+            
+            total = previousTotal + transObj.Amount
+            
+        return total
     
     def setAccount(self, accountName):
         transactions = Bank().getTransactionsFrom(accountName)
         self.SetObjects(transactions)
+        self.Parent.Layout() # Necessary for columns to size properly. (GTK)
         
     def ensureVisible(self, index):
         # I wonder if this is needed in OLV? Probably.
-        pass
+        print "ensureVisible STUB: ", index
     
 
 class olvFrame(wx.Frame):
