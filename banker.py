@@ -17,7 +17,18 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 """
+Doctests, which ensure the Bank contains all the functionality expected,
+including failing when it should.
+
+First, set up a generic event subscriber to make sure that events
+are getting published when they should be.
+
+>>> import sys; sys.displayhook = displayhook
 >>> messages = Subscriber()
+
+# Ensure that we have a clean, fresh bank by removing a test one
+# if it already exists.
+
 >>> import os
 >>> if os.path.exists("test.db"): os.remove("test.db")
 >>> b = Bank("test")
@@ -25,6 +36,9 @@
 []
 >>> b.getAllTransactions()
 []
+
+# Now test that the appropriate exceptions are thrown.
+
 >>> print b.getAccountId("My Account")
 Traceback (most recent call last):
   ...
@@ -43,6 +57,9 @@ Traceback (most recent call last):
 InvalidAccountException: Invalid account 'My Account' specified.
 >>> len(messages) == 0
 True
+
+# Now test valid account and transaction manipulation.
+
 >>> b.createAccount("My Account")
 >>> len(messages) == 1
 True
@@ -150,6 +167,13 @@ from wx.lib.pubsub import Publisher
 import currencies, bankobjects
 import localization
 
+def displayhook(value):
+    """
+    Override the default sys.displayhook so
+    _ doesn't get stomped over, which gettext needs.
+    """
+    if value is not None:
+        print repr(value)
 
 class Subscriber(list):
     """
@@ -269,8 +293,8 @@ class Bank(Singleton):
     def makeTransfer(self, source, destination, amount, desc="", date=None):
         if desc:
             desc = ' (%s)'%desc #add parens around the description if they entered one, otherwise we add a blank string which is fine
-        tId1 = self.makeTransaction(source, -amount, ('Transfer to %s'%destination)+desc, date)
-        tId2 = self.makeTransaction(destination, amount, ('Transfer from %s'%source)+desc, date)
+        tId1 = self.makeTransaction(source, -amount, (_('Transfer to %s')%destination)+desc, date)
+        tId2 = self.makeTransaction(destination, amount, (_('Transfer from %s')%source)+desc, date)
         return (tId1, tId2)
 
     def getAccountId(self, account):
@@ -350,7 +374,12 @@ class Bank(Singleton):
         Publisher().sendMessage("bank.NEW TRANSACTION")
         return lastRowId
 
-    def searchTransactions(self, searchString, accountName=None, matchType="DESCRIPTION", matchCase=False):
+    def searchTransactions(self, searchString, accountName=None, matchIndex=1, matchCase=False):
+        """
+        matchIndex: 0: Amount, 1: Description, 2: Date
+        I originally used strings here but passing around and then validating on translated
+        strings seems like a bad and fragile idea.
+        """
         # Handle case-sensitive option.
         reFlag = {False: re.IGNORECASE, True: 0}[matchCase]
 
@@ -359,9 +388,6 @@ class Bank(Singleton):
             potentials = self.getAllTransactions()
         else:
             potentials = self.getTransactionsFrom(accountName)
-
-        # Handle match options.
-        matchIndex = ["AMOUNT", "DESCRIPTION", "DATE"].index(matchType.upper())
 
         # Find all the matches.
         matches = []

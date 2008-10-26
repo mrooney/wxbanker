@@ -35,7 +35,7 @@ try:
     import summarytab
 except NoNumpyException:
     summarytab = None
-    print "Warning: Numpy module not available, disabling Summary tab. Install numpy to fix this."
+    print _("Warning: Numpy module not available, disabling Summary tab. Install numpy to fix this.")
 
 
 class BankerFrame(wx.Frame):
