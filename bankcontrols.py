@@ -22,6 +22,7 @@ from wx.lib.pubsub import Publisher
 
 from banker import AccountAlreadyExistsException, Bank
 from smoothsizer import SmoothStaticBoxSizer
+import localization
 
 
 class HyperlinkText(wx.HyperlinkCtrl):
@@ -48,31 +49,31 @@ class SearchCtrl(wx.Panel):
         self.searchCtrl.SetCancelBitmap(wx.ArtProvider.GetBitmap('wxART_cancel'))
         self.searchCtrl.ShowCancelButton(True)
         self.searchCtrl.ShowSearchButton(False)
-        self.searchCtrl.DescriptiveText = "Search transactions"
+        self.searchCtrl.DescriptiveText = _("Search transactions")
 
-        self.searchInChoices = ["Current Account", "All Accounts"]
+        self.searchInChoices = [_("Current Account"), _("All Accounts")]
         self.searchInBox = CompactableComboBox(self, value=self.searchInChoices[0], choices=self.searchInChoices, style=wx.CB_READONLY)
 
         # The More/Less button.
-        self.moreButton = MultiStateButton(self, baseLabel="%s Options", labelDict={True: "More", False: "Less"}, state=True)
+        self.moreButton = MultiStateButton(self, baseLabel="%s "+_("Options"), labelDict={True: _("More"), False: _("Less")}, state=True)
 
-        self.matchChoices = ["Description", "Amount", "Date"]
-        self.matchBox = CompactableComboBox(self, value=self.matchChoices[0], choices=self.matchChoices, style=wx.CB_READONLY)
+        self.matchChoices = [_("Amount"), _("Description"), _("Date")]
+        self.matchBox = CompactableComboBox(self, value=self.matchChoices[1], choices=self.matchChoices, style=wx.CB_READONLY)
 
-        self.caseCheck = wx.CheckBox(self, label="Case Sensitive")
-        self.caseCheck.SetToolTipString("Whether or not to match based on capitalization")
+        self.caseCheck = wx.CheckBox(self, label=_("Case Sensitive"))
+        self.caseCheck.SetToolTipString(_("Whether or not to match based on capitalization"))
 
         topSizer = wx.BoxSizer()
         #self.Sizer.Add(wx.StaticText(self, label="Search: "))
         topSizer.Add(self.searchCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
         topSizer.AddSpacer(10)
-        topSizer.Add(wx.StaticText(self, label="In: "), 0, wx.ALIGN_CENTER_VERTICAL)
+        topSizer.Add(wx.StaticText(self, label=_("In: ")), 0, wx.ALIGN_CENTER_VERTICAL)
         topSizer.Add(self.searchInBox, 0, wx.ALIGN_CENTER_VERTICAL)
         topSizer.AddSpacer(10)
         topSizer.Add(self.moreButton, 0, wx.ALIGN_CENTER_VERTICAL)
 
         self.moreSizer = moreSizer = wx.BoxSizer()
-        moreSizer.Add(wx.StaticText(self, label="Match: "), 0, wx.ALIGN_CENTER_VERTICAL)
+        moreSizer.Add(wx.StaticText(self, label=_("Match: ")), 0, wx.ALIGN_CENTER_VERTICAL)
         moreSizer.Add(self.matchBox, 0, wx.ALIGN_CENTER_VERTICAL)
         moreSizer.AddSpacer(5)
         moreSizer.Add(self.caseCheck, 0, wx.ALIGN_CENTER_VERTICAL)
@@ -101,8 +102,8 @@ class SearchCtrl(wx.Panel):
         # TODO: enable search button in ctrl and appropriate event handling
         #X TODO: properly handle the state of everything during a search!
         searchString = event.String # For a date, should be YYYY-MM-DD.
-        accountScope = self.searchInBox.Value == self.searchInChoices[0]
-        matchType = self.matchBox.Value
+        accountScope = self.searchInChoices.index(self.searchInBox.Value)
+        matchType = self.matchChoices.index(self.matchBox.Value)
         caseSens = self.caseCheck.Value
 
         searchInfo = (searchString, accountScope, matchType, caseSens)
@@ -120,8 +121,8 @@ class SearchCtrl(wx.Panel):
 
         # Update appropriate strings.
         self.moreButton.State = showLess
-        tipActionStr = {True: "Show", False: "Hide"}[showLess]
-        self.moreButton.SetToolTipString("%s advanced search options" % tipActionStr)
+        tipActionStr = {True: _("Show"), False: _("Hide")}[showLess]
+        self.moreButton.SetToolTipString(_("%s advanced search options") % tipActionStr)
 
         # Give or take the appropriate amount of space.
         self.Parent.Layout()
@@ -142,7 +143,7 @@ class AccountListCtrl(wx.Panel):
         # Initialize some attributes to their default values.
         self.editCtrl = self.hiddenIndex = None
         self.currentIndex = None
-        self.boxLabel = "Accounts (%i)"
+        self.boxLabel = _("Accounts") + " (%i)"
         self.hyperLinks, self.totalTexts = [], []
 
         # Create the staticboxsizer which is the home for everything.
@@ -153,16 +154,16 @@ class AccountListCtrl(wx.Panel):
         # The EDIT account button.
         BMP = wx.ArtProvider.GetBitmap('wxART_add')
         self.addButton = addButton = wx.BitmapButton(self, bitmap=BMP)
-        addButton.SetToolTipString("Add a new account")
+        addButton.SetToolTipString(_("Add a new account"))
         # The REMOVE account button.
         BMP = wx.ArtProvider.GetBitmap('wxART_delete')
         self.removeButton = removeButton = wx.BitmapButton(self, bitmap=BMP)
-        removeButton.SetToolTipString("Remove the selected account")
+        removeButton.SetToolTipString(_("Remove the selected account"))
         removeButton.Enabled = False
         # The EDIT account button.
         BMP = wx.ArtProvider.GetBitmap('wxART_textfield_rename')
         self.editButton = editButton = wx.BitmapButton(self, bitmap=BMP)
-        editButton.SetToolTipString("Edit the name of the selected account")
+        editButton.SetToolTipString(_("Edit the name of the selected account"))
         editButton.Enabled = False
 
         # Layout the buttons.
@@ -175,13 +176,13 @@ class AccountListCtrl(wx.Panel):
         self.totalText = wx.StaticText(self, label="$0.00")
         self.totalTexts.append(self.totalText)
         miniSizer = wx.BoxSizer()
-        miniSizer.Add(wx.StaticText(self, label="Total:"))
+        miniSizer.Add(wx.StaticText(self, label=_("Total")+":"))
         miniSizer.AddStretchSpacer(1)
         miniSizer.Add(self.totalText)
 
         # The hide zero-balance accounts option.
-        self.hideBox = hideBox = wx.CheckBox(self, label="Hide zero-balance accounts")
-        hideBox.SetToolTipString("When enabled, accounts with a balance of $0.00 will be hidden from the list")
+        self.hideBox = hideBox = wx.CheckBox(self, label=_("Hide zero-balance accounts"))
+        hideBox.SetToolTipString(_("When enabled, accounts with a balance of $0.00 will be hidden from the list"))
 
         #self.staticBoxSizer = SmoothStaticBoxSizer(self.staticBox, wx.VERTICAL)
         self.staticBoxSizer = wx.StaticBoxSizer(self.staticBox, wx.VERTICAL)
@@ -434,7 +435,7 @@ class AccountListCtrl(wx.Panel):
         try:
             Bank().createAccount(accountName)
         except AccountAlreadyExistsException:
-            wx.TipWindow(self, "Sorry, an account by that name already exists.")#, maxLength=200)
+            wx.TipWindow(self, _("Sorry, an account by that name already exists."))#, maxLength=200)
 
     def onAccountAdded(self, message):
         """
@@ -488,8 +489,8 @@ class AccountListCtrl(wx.Panel):
     def onRemoveButton(self, event):
         if self.currentIndex is not None:
             linkCtrl = self.hyperLinks[self.currentIndex]
-            warningMsg = "This will permanently remove the account '%s' and all its transactions. Continue?"
-            dlg = wx.MessageDialog(self, warningMsg%linkCtrl.Label[:-1], "Warning", style=wx.YES_NO|wx.ICON_EXCLAMATION)
+            warningMsg = _("This will permanently remove the account '%s' and all its transactions. Continue?")
+            dlg = wx.MessageDialog(self, warningMsg%linkCtrl.Label[:-1], _("Warning"), style=wx.YES_NO|wx.ICON_EXCLAMATION)
             if dlg.ShowModal() == wx.ID_YES:
                 # Remove the account from the model.
                 accountName = linkCtrl.Label[:-1]
@@ -512,7 +513,7 @@ class AccountListCtrl(wx.Panel):
             Bank().renameAccount(oldName, newName)
         except AccountAlreadyExistsException:
             #wx.MessageDialog(self, 'An account by that name already exists', 'Error :[', wx.OK | wx.ICON_ERROR).ShowModal()
-            wx.TipWindow(self, "Sorry, an account by that name already exists.")#, maxLength=200)
+            wx.TipWindow(self, _("Sorry, an account by that name already exists."))#, maxLength=200)
 
     def onAccountRenamed(self, message):
         """
@@ -573,26 +574,23 @@ class NewTransactionCtrl(wx.Panel):
         except AttributeError:
             DatePickerClass = wx.DatePickerCtrl
         self.dateCtrl = dateCtrl = DatePickerClass(self, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY)
-        dateCtrl.SetToolTipString("Date")
+        dateCtrl.SetToolTipString(_("Date"))
 
         # The Description and Amount controls.
-        self.descCtrl = descCtrl = HintedTextCtrl(self, size=(140, -1), style=wx.TE_PROCESS_ENTER, hint="Description", icon="wxART_page_edit")
-        self.amountCtrl = amountCtrl = HintedTextCtrl(self, size=(90, -1), style=wx.TE_PROCESS_ENTER|wx.TE_RIGHT, hint="Amount", icon="wxART_money_dollar")
+        self.descCtrl = descCtrl = HintedTextCtrl(self, size=(140, -1), style=wx.TE_PROCESS_ENTER, hint=_("Description"), icon="wxART_page_edit")
+        self.amountCtrl = amountCtrl = HintedTextCtrl(self, size=(90, -1), style=wx.TE_PROCESS_ENTER|wx.TE_RIGHT, hint=_("Amount"), icon="wxART_money_dollar")
 
         # The add button.
         self.newButton = newButton = wx.BitmapButton(self, bitmap=wx.ArtProvider.GetBitmap('wxART_money_add'))
-        newButton.SetToolTipString("Enter this transaction")
+        newButton.SetToolTipString(_("Enter this transaction"))
 
         # The transfer check,
-        self.transferCheck = transferCheck = wx.CheckBox(self, label="Transfer")
+        self.transferCheck = transferCheck = wx.CheckBox(self, label=_("Transfer"))
 
         # Set up the layout.
-        print dateCtrl.MinSize
-        dateCtrl.SetMinSize(dateCtrl.GetBestSize())
-        print dateCtrl.MinSize
         #dateCtrl.SetMaxSize((200, 20))
         self.mainSizer = mainSizer = wx.BoxSizer()
-        mainSizer.Add(wx.StaticText(self, label="Transact: "), 0, wx.ALIGN_CENTER)
+        mainSizer.Add(wx.StaticText(self, label=_("Transact")+": "), 0, wx.ALIGN_CENTER)
         mainSizer.AddSpacer(8)
         mainSizer.Add(wx.StaticBitmap(self, bitmap=wx.ArtProvider.GetBitmap('wxART_date')), 0, wx.ALIGN_CENTER|wx.ALL, 2)
         mainSizer.Add(dateCtrl, 0, wx.ALIGN_CENTER)
@@ -626,7 +624,7 @@ class NewTransactionCtrl(wx.Panel):
             dateTextCtrl = self.dateCtrl.Children[0].Children[0]
         except IndexError:
             # This will fail on MSW + wxPython < 2.8.8.0, nothing we can do.
-            print "Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 to fix this."
+            print _("Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 to fix this.")
         else:
             # Bind to DateCtrl Enter (LP: 252454).
             dateTextCtrl.WindowStyleFlag |= wx.TE_PROCESS_ENTER
@@ -650,8 +648,8 @@ class NewTransactionCtrl(wx.Panel):
         account = self.Parent.Parent.getCurrentAccount()
         if account is None:
             dlg = wx.MessageDialog(self,
-                                "Please select an account and then try again.",
-                                "No account selected", wx.OK | wx.ICON_ERROR)
+                                _("Please select an account and then try again."),
+                                _("No account selected"), wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
             return
 
@@ -665,13 +663,13 @@ class NewTransactionCtrl(wx.Panel):
             amount = float(amount)
         except:
             if amount == "":
-                baseStr = "No amount entered in the 'Amount' field."
+                baseStr = _("No amount entered in the 'Amount' field.")
             else:
-                baseStr = "'%s' is not a valid amount." % amount
+                baseStr = _("'%s' is not a valid amount.") % amount
 
             dlg = wx.MessageDialog(self,
-                                baseStr + " Please enter a number such as 12.34 or -20.",
-                                "Invalid Transaction Amount", wx.OK | wx.ICON_ERROR)
+                                baseStr + " " + _("Please enter a number such as 12.34 or -20."),
+                                _("Invalid Transaction Amount"), wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
             return
 
@@ -686,7 +684,7 @@ class NewTransactionCtrl(wx.Panel):
 
         # Create a dialog with the other account names to choose from.
         dlg = wx.SingleChoiceDialog(self,
-                'Which account will the money come from?', 'Other accounts',
+                _('Which account will the money come from?'), _('Other accounts'),
                 otherAccounts, wx.CHOICEDLG_STYLE)
 
         if dlg.ShowModal() == wx.ID_OK:
@@ -702,9 +700,9 @@ class NewTransactionCtrl(wx.Panel):
 
         # If a search is active, we have to ask the user what they want to do.
         if self.Parent.searchActive:
-            actionStr = {True: "transfer", False:"transaction"}[isTransfer]
-            msg = 'A search is currently active. Would you like to clear the current search and make this %s in "%s"?' % (actionStr, account)
-            dlg = wx.MessageDialog(self, msg, "Clear search?", style=wx.YES_NO|wx.ICON_WARNING)
+            actionStr = {True: _("transfer"), False: _("transaction")}[isTransfer]
+            msg = _('A search is currently active. Would you like to clear the current search and make this %s in "%s"?') % (actionStr, account)
+            dlg = wx.MessageDialog(self, msg, _("Clear search?"), style=wx.YES_NO|wx.ICON_WARNING)
             result = dlg.ShowModal()
             if result == wx.ID_YES:
                 Publisher().sendMessage("SEARCH.CANCELLED")
@@ -722,8 +720,8 @@ class NewTransactionCtrl(wx.Panel):
             self.onSuccess()
 
     def onTransferTip(self, event):
-        tipStr = "If this box is checked when adding a transaction, you will be prompted for the account to use as the source of the transfer.\n\n"+\
-                 "For example, checking this box and entering a transaction of $50 into this account will also subtract $50 from the account that you choose as the source."
+        tipStr = _("If this box is checked when adding a transaction, you will be prompted for the account to use as the source of the transfer.")+"\n\n"+\
+                 _("For example, checking this box and entering a transaction of $50 into this account will also subtract $50 from the account that you choose as the source.")
         wx.TipWindow(self, tipStr, maxLength=200)
 
     def onSuccess(self):

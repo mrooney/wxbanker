@@ -1,6 +1,7 @@
 """
 >>> import locale
->>> locale.setlocale(locale.LC_ALL, '')
+>>> locale.setlocale(locale.LC_ALL, '') != None
+True
 >>> usd = LocalizedCurrency()
 >>> usd.float2str(1)
 '$1.00'
@@ -140,7 +141,7 @@ if 0:
             self.SepChar = ','
             self.DecChar = '.'
             self.ShortName = "USD"
-            self.LongName = "United States Dollar"
+            self.LongName = _("United States Dollar")
     
 if __name__ == "__main__":
     import doctest

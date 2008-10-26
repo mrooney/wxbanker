@@ -226,12 +226,12 @@ class TransactionGrid(gridlib.Grid):
     def onSearch(self, message):
         searchString, accountScope, match, caseSens = message.data
 
-        if accountScope:
+        if accountScope == 0: # Search in just current account.
             accountName = self.Parent.Parent.getCurrentAccount()
-        else:
+        else: # Search in all accounts.
             accountName = None
 
-        matches = Bank().searchTransactions(searchString, accountName=accountName, matchType=match, matchCase=caseSens)
+        matches = Bank().searchTransactions(searchString, accountName=accountName, matchIndex=match, matchCase=caseSens)
         self.setTransactions(matches)
         self.Parent.searchActive = True
 
