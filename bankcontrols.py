@@ -586,11 +586,7 @@ class NewTransactionCtrl(wx.Panel):
         # The transfer check,
         self.transferCheck = transferCheck = wx.CheckBox(self, label="Transfer")
 
-        # Set up the layout.
-        print dateCtrl.MinSize
-        dateCtrl.SetMinSize(dateCtrl.GetBestSize())
-        print dateCtrl.MinSize
-        #dateCtrl.SetMaxSize((200, 20))
+        # Set up the layout.)
         self.mainSizer = mainSizer = wx.BoxSizer()
         mainSizer.Add(wx.StaticText(self, label="Transact: "), 0, wx.ALIGN_CENTER)
         mainSizer.AddSpacer(8)
@@ -715,10 +711,10 @@ class NewTransactionCtrl(wx.Panel):
             destination = account
             source = self.getSourceAccount(destination)
             if source is not None:
-                Bank().makeTransfer(source, destination, amount, desc, date)
+                Publisher().sendMessage("user.transfer", (source, destination, amount, desc, date))
                 self.onSuccess()
         else:
-            Bank().makeTransaction(account, amount, desc, date)
+            Publisher().sendMessage("user.transaction", (account, amount, desc, date))
             self.onSuccess()
 
     def onTransferTip(self, event):

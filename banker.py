@@ -206,6 +206,8 @@ class Bank(Singleton):
         self.Currency = currencies.LocalizedCurrency()
         
         Publisher.subscribe(self.onTransactionUpdated, "transaction.updated")
+        Publisher.subscribe(self.onMakeTransfer, "user.transfer")
+        Publisher.subscribe(self.onMakeTransfer, "user.transaction")
         
     def float2str(self, flt):
         return self.Currency.float2str(flt)
@@ -379,6 +381,16 @@ class Bank(Singleton):
     def onTransactionUpdated(self, message):
         transaction = message.data
         self.updateTransaction(transaction)
+        
+    def onMakeTransfer(self, message):
+        args = message.data
+        print 'xfering..'
+        self.makeTransfer(*args)
+        
+    def onMakeTransaction(self, message):
+        args = message.data
+        print 'xacting..'
+        self.makeTransaction(*args)
 
 
 #command-line view methods

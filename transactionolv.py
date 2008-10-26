@@ -39,19 +39,21 @@ class TransactionOLV(GroupListView):
         self.cellEditMode = GroupListView.CELLEDIT_SINGLECLICK
         self.SetEmptyListMsg("No transactions entered.")
         self.SetColumns([
-            ColumnDefn("Date", valueGetter="Date", minimumWidth=100),
+            ColumnDefn("Date", valueGetter="Date", minimumWidth=50),
             ColumnDefn("Description", valueGetter="Description", isSpaceFilling=True, minimumWidth=80),
-            ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=Bank().float2str, minimumWidth=80),
-            ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=Bank().float2str, minimumWidth=80, isEditable=False),
+            ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=Bank().float2str, minimumWidth=50),
+            ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=Bank().float2str, minimumWidth=50, isEditable=False),
         ])
+        
+        self.Bind(wx.EVT_RIGHT_DOWN, self.onRightDown)
         
     def getTotal(self, transObj):
         """
-        A fairly hackish implementation, but an improvement!
+        A somewhat hackish implementation, but an improvement!
         """
         i = self.GetIndexOf(transObj)
         if i == 0:
-            total = 0.0
+            total = transObj.Amount
         else:
             previousObj = self.GetObjectAt(i-1)
             try:
@@ -61,7 +63,6 @@ class TransactionOLV(GroupListView):
             
             total = previousTotal + transObj.Amount
                 
-            
         transObj._Total = total
         return total
     
@@ -69,10 +70,15 @@ class TransactionOLV(GroupListView):
         transactions = Bank().getTransactionsFrom(accountName)
         self.SetObjects(transactions)
         self.Parent.Layout() # Necessary for columns to size properly. (GTK)
+        #self.AutoSizeColumns()
         
     def ensureVisible(self, index):
-        # I wonder if this is needed in OLV? Probably.
-        print "ensureVisible STUB: ", index
+        if index < 0:
+            index = self.GetItemCount() + index
+        self.EnsureCellVisible(index, 0)
+        
+    def onRightDown(self, event):
+        event.Skip()
     
 
 class olvFrame(wx.Frame):
