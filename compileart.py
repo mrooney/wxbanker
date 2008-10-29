@@ -60,7 +60,11 @@ for file in os.listdir(base):
     name, ext = [s.lower() for s in file.split('.')]
     if ext in validExts:
         #print 'img2pying %s' % file
-        img2py.img2py(os.path.join(base, file), '%s.py'%base, append=append, imgName=name, catalog=True, functionCompatibile=False)
+        try:
+            img2py.img2py(os.path.join(base, file), '%s.py'%base, append=append, imgName=name, catalog=True, functionCompatible=False)
+        except TypeError:
+            # Try with the typo that existed in wxPython 2.8.8.0 but fixed since 2.8.8.1.
+            img2py.img2py(os.path.join(base, file), '%s.py'%base, append=append, imgName=name, catalog=True, functionCompatibile=False)
         # From now on, we want to append to the original file, not overwrite.
         append = True
     else:

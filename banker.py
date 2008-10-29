@@ -239,24 +239,24 @@ class InvalidTransactionException(Exception):
 
     def __str__(self):
         return "Unable to find transaction with UID %s"%self.uid
-
     
-class Singleton(object):
-    """ A Pythonic Singleton """
-    def __new__(cls, *args, **kwargs):
-        if '_inst' not in vars(cls):
-            cls._inst = object.__new__(cls, *args, **kwargs)
-        return cls._inst
     
-
-#The controller class!
-class Bank(Singleton):
+class Bank(object):
+    """
+    Implements the Borg pattern (http://code.activestate.com/recipes/66531/)
+    to share state and act as a Singleton in ways, but without caring about
+    identity.
+    """
+    __shared_state = {}
     def __init__(self, path=None):
-        if path is None:
-            path = 'bank'
-
-        self.model = Model(path)
-        self.Currency = currencies.LocalizedCurrency()
+        self.__dict__ = self.__shared_state
+        
+        if self.__dict__ == {}:
+            if path is None:
+                path = 'bank'
+    
+            self.model = Model(path)
+            self.Currency = currencies.LocalizedCurrency()
         
     def float2str(self, flt):
         return self.Currency.float2str(flt)
