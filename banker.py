@@ -166,27 +166,7 @@ from model_sqlite import Model
 import  bankobjects
 from wx.lib.pubsub import Publisher
 import localization, currencies
-
-def displayhook(value):
-    """
-    Override the default sys.displayhook so
-    _ doesn't get stomped over, which gettext needs.
-    """
-    if value is not None:
-        print repr(value)
-
-class Subscriber(list):
-    """
-    This class subscribes to all pubsub messages.
-    It is used by the unit tests to ensure proper
-    underlying messaging exists.
-    """
-    def __init__(self):
-        list.__init__(self)
-        Publisher().subscribe(self.onMessage, 'bank')
-
-    def onMessage(self, message):
-        self.insert(0, (message.topic, message.data))
+from testhelpers import displayhook, Subscriber
 
 
 #Custom exceptions:
@@ -210,24 +190,24 @@ class InvalidTransactionException(Exception):
 
     def __str__(self):
         return "Unable to find transaction with UID %s"%self.uid
-
     
-class Singleton(object):
-    """ A Pythonic Singleton """
-    def __new__(cls, *args, **kwargs):
-        if '_inst' not in vars(cls):
-            cls._inst = object.__new__(cls, *args, **kwargs)
-        return cls._inst
     
-
-#The controller class!
-class Bank(Singleton):
+class Bank(object):
+    """
+    Implements the Borg pattern (http://code.activestate.com/recipes/66531/)
+    to share state and act as a Singleton in ways, but without caring about
+    identity.
+    """
+    __shared_state = {}
     def __init__(self, path=None):
-        if path is None:
-            path = 'bank'
-
-        self.model = Model(path)
-        self.Currency = currencies.LocalizedCurrency()
+        self.__dict__ = self.__shared_state
+        
+        if self.__dict__ == {}:
+            if path is None:
+                path = 'bank'
+    
+            self.model = Model(path)
+            self.Currency = currencies.LocalizedCurrency()
         
         Publisher.subscribe(self.onTransactionUpdated, "transaction.updated")
         Publisher.subscribe(self.onMakeTransfer, "user.transfer")
