@@ -165,27 +165,7 @@ import time, os, datetime, re
 from model_sqlite import Model
 from wx.lib.pubsub import Publisher
 import localization, currencies
-
-def displayhook(value):
-    """
-    Override the default sys.displayhook so
-    _ doesn't get stomped over, which gettext needs.
-    """
-    if value is not None:
-        print repr(value)
-
-class Subscriber(list):
-    """
-    This class subscribes to all pubsub messages.
-    It is used by the unit tests to ensure proper
-    underlying messaging exists.
-    """
-    def __init__(self):
-        list.__init__(self)
-        Publisher().subscribe(self.onMessage)
-
-    def onMessage(self, message):
-        self.insert(0, (message.topic, message.data))
+from testhelpers import displayhook, Subscriber
 
 
 def wellFormDate(date):
