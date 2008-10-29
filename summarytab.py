@@ -163,7 +163,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         lines = [line]
         if len(uniquePoints) > 1:
             # without more than one unique value, a best fit line doesn't make sense (and also causes freezes!)
-            bestfitline = pyplot.PolyBestFitLine(data, N=fitdegree, width=2, colour="blue", legend="Trend")
+            bestfitline = pyplot.PolyBestFitLine(data, N=fitdegree, width=2, colour="blue", legend=_("Trend"))
             lines.append(bestfitline)
         self.Draw(pyplot.PlotGraphics(lines, _("Total Balance Over Time"), _("Date"), _("Balance")))
 

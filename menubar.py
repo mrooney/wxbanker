@@ -50,7 +50,7 @@ class BankMenuBar(wx.MenuBar):
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
         aboutItem = helpMenu.Append(wx.ID_ABOUT, _("&About"), _("More information about wxBanker"))
         
-        self.Append(helpMenu, "&Help")
+        self.Append(helpMenu, _("&Help"))
         
         self.Bind(wx.EVT_MENU, self.onClickAbout)
         helpMenu.Bind(wx.EVT_MENU, self.onClickAbout)
