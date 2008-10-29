@@ -18,3 +18,24 @@
 
 class NoNumpyException(Exception):
     pass
+
+class InvalidAccountException(Exception):
+    def __init__(self, account):
+        self.account = account
+
+    def __str__(self):
+        return "Invalid account '%s' specified."%self.account
+
+class AccountAlreadyExistsException(Exception):
+    def __init__(self, account):
+        self.account = account
+
+    def __str__(self):
+        return "Account '%s' already exists."%self.account
+
+class InvalidTransactionException(Exception):
+    def __init__(self, uid):
+        self.uid = uid
+
+    def __str__(self):
+        return "Unable to find transaction with UID %s"%self.uid
