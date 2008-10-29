@@ -1,5 +1,24 @@
+#    https://launchpad.net/wxbanker
+#    calculator.py: Copyright 2007, 2008 Mike Rooney <wxbanker@rowk.com>
+#
+#    This file is part of wxBanker.
+#
+#    wxBanker is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    wxBanker is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
+
 import wx
 from wx.lib.pubsub import Publisher
+import localization
 
 
 class SimpleCalculator(wx.Panel):
@@ -102,7 +121,7 @@ class SimpleCalculator(wx.Panel):
 class CollapsableWidget(wx.CollapsiblePane):
     def __init__(self, parent, widget, name, *args, **kwargs):
         self.clickLabel = "%s" + " %s"%name
-        wx.CollapsiblePane.__init__(self, parent, label=self.clickLabel%"Show", style=wx.CP_DEFAULT_STYLE|wx.CP_NO_TLW_RESIZE)
+        wx.CollapsiblePane.__init__(self, parent, label=self.clickLabel%_("Show"), style=wx.CP_DEFAULT_STYLE|wx.CP_NO_TLW_RESIZE)
 
         pane = self.GetPane()
         self.widget = widget(pane, *args, **kwargs)
@@ -128,9 +147,9 @@ class CollapsableWidget(wx.CollapsiblePane):
 
         # and also change the labels
         if self.IsExpanded():
-            modifier = "Hide"
+            modifier = _("Hide")
         else:
-            modifier = "Show"
+            modifier = _("Show")
         self.Label = self.clickLabel % modifier
 
         Publisher().sendMessage("CALCULATOR.TOGGLED", modifier.upper())
