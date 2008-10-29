@@ -163,9 +163,9 @@ InvalidTransactionException: Unable to find transaction with UID FakeID
 
 import time, os, datetime, re
 from model_sqlite import Model
+import  bankobjects
 from wx.lib.pubsub import Publisher
-import currencies, bankobjects
-import localization
+import localization, currencies
 
 def displayhook(value):
     """
