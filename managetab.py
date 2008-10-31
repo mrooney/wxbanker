@@ -38,7 +38,7 @@ class ManagePanel(wx.Panel):
         leftPanel.Sizer = wx.BoxSizer(wx.VERTICAL)
 
         self.accountCtrl = accountCtrl = AccountListCtrl(leftPanel)
-        calcWidget = CollapsableWidget(leftPanel, SimpleCalculator, _("Calculator"))
+        calcWidget = CollapsableWidget(leftPanel, SimpleCalculator, "Calculator")
 
         leftPanel.Sizer.Add(accountCtrl, 0, wx.EXPAND)
         leftPanel.Sizer.AddStretchSpacer(1)

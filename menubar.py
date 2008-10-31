@@ -1,4 +1,5 @@
 #! /usr/bin/python
+# -*- coding: iso-8859-15 -*-
 #
 #    https://launchpad.net/wxbanker
 #    menubar.py: Copyright 2007, 2008 Mike Rooney <wxbanker@rowk.com>
@@ -18,7 +19,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import wx, webbrowser
+import wx, webbrowser, os
 from wx.lib.wordwrap import wordwrap
 import version, localization
 
@@ -81,8 +82,22 @@ class BankMenuBar(wx.MenuBar):
         info.Copyright = _("Copyright") + " 2007, 2008 Mike Rooney (wxbanker@rowk.com)"
         info.Description = _("A lightweight personal finance management application.")
         info.WebSite = ("https://launchpad.net/wxbanker", "https://launchpad.net/wxbanker")
-        info.Developers = ['Mike Rooney (wxbanker@rowk.com)',]
-        info.Artists = ['Mark James (www.famfamfam.com/lab/icons/silk/)',]
-        info.License = open('gpl.txt').read()
+
+        info.Developers = [
+            'Mike Rooney (wxbanker@rowk.com)',
+        ]
+        info.Artists = [
+            'Mark James (www.famfamfam.com/lab/icons/silk/)',
+        ]
+        
+        translators = [
+            'sl: Primo¸ Jer¨e (jerse@inueni.com)',
+            'es: Diego J. Romero López (diegojromerolopez@gmail.com)',
+        ]
+        info.Translators = [unicode(s, 'iso-8859-15') for s in translators]
+        
+        licenseDir = os.path.dirname(__file__)
+        info.License = open(os.path.join(licenseDir, 'gpl.txt')).read()
+
         wx.AboutBox(info)
         
