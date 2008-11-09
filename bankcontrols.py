@@ -144,7 +144,7 @@ class AccountListCtrl(wx.Panel):
         self.editCtrl = self.hiddenIndex = None
         self.currentIndex = None
         self.boxLabel = _("Accounts") + " (%i)"
-        self.hyperLinks, self.totalTexts = [], []
+        self.hyperLinks, self.totalTexts, self.totalVals = [], [], []
 
         # Create the staticboxsizer which is the home for everything.
         # This *MUST* be created first to ensure proper z-ordering (as per docs).
@@ -175,6 +175,7 @@ class AccountListCtrl(wx.Panel):
         # Set up the "Total" sizer.
         self.totalText = wx.StaticText(self, label="$0.00")
         self.totalTexts.append(self.totalText)
+        self.totalVals.append(0)
         miniSizer = wx.BoxSizer()
         miniSizer.Add(wx.StaticText(self, label=_("Total")+":"))
         miniSizer.AddStretchSpacer(1)
@@ -337,12 +338,14 @@ class AccountListCtrl(wx.Panel):
         """
         accountName = item
         balance = Bank().getBalanceOf(accountName)
+        self.totalVals[-1] += balance
 
         # Create the controls.
         link = HyperlinkText(self, label=accountName+":", url=str(index))
         totalText = wx.StaticText(self, label=Bank().float2str(balance))
         self.hyperLinks.insert(index, link)
         self.totalTexts.insert(index, totalText)
+        self.totalVals.insert(index, balance)
 
         # Put them in an hsizer.
         miniSizer = wx.BoxSizer()
@@ -360,8 +363,7 @@ class AccountListCtrl(wx.Panel):
             self.currentIndex += 1
 
         # Update the total text, as sometimes the account already exists.
-        total = Bank().str2float(self.totalText.Label)
-        self.totalText.Label = Bank().float2str(total + balance)
+        self.totalText.Label = Bank().float2str(self.totalVals[-1])
 
         # Update the static label.
         self.staticBox.Label = self.boxLabel % self.GetCount()
@@ -373,10 +375,12 @@ class AccountListCtrl(wx.Panel):
         linkCtrl = self.hyperLinks[index]
         removedAccount = linkCtrl.Label[:-1]
 
-        balance = Bank().str2float(self.totalTexts[index].Label)
+        # Subtract the balance from the total.
+        self.totalVals[-1] -= self.totalVals[index]
 
         del self.hyperLinks[index]
         del self.totalTexts[index]
+        del self.totalVals[index]
 
         # Renumber the links after this.
         for linkCtrl in self.hyperLinks[index:]:
@@ -398,8 +402,7 @@ class AccountListCtrl(wx.Panel):
             self.SelectVisibleItem(self.currentIndex)
 
         # Update the total text (subtract what was removed).
-        total = Bank().str2float(self.totalText.Label)
-        self.totalText.Label = Bank().float2str(total - balance)
+        self.totalText.Label = Bank().float2str(self.totalVals[-1])
 
         # Update the static label.
         self.staticBox.Label = self.boxLabel % self.GetCount()
@@ -412,12 +415,15 @@ class AccountListCtrl(wx.Panel):
         Update all the total strings.
         """
         total = 0.0
+        self.totalVals = []
         for linkCtrl, text in zip(self.hyperLinks, self.totalTexts):
             accountName = linkCtrl.Label[:-1]
             balance = Bank().getBalanceOf(accountName)
             text.Label = Bank().float2str(balance)
+            self.totalVals.append(balance)
             total += balance
         self.totalTexts[-1].Label = Bank().float2str(total)
+        self.totalVals.append(total)
 
         # Handle a zero-balance account going to non-zero or vice-versa.
         self.onHideCheck()
@@ -550,7 +556,7 @@ class AccountListCtrl(wx.Panel):
             # +1 offset is to take into account the buttons at the top.
             self.staticBoxSizer.Show(i+1)
             if checked:
-                if Bank().str2float(amountCtrl.Label) == 0:
+                if abs(self.totalVals[i]) < .001:
                     self.staticBoxSizer.Hide(i+1)
 
         self.Parent.Layout()

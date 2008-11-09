@@ -93,6 +93,7 @@ class BankMenuBar(wx.MenuBar):
         translators = [
             'sl: Primo¸ Jer¨e (jerse@inueni.com)',
             'es: Diego J. Romero López (diegojromerolopez@gmail.com)',
+            'hi: Ankur Kachru (ankurkachru@gmail.com)',
         ]
         info.Translators = [unicode(s, 'iso-8859-15') for s in translators]
         
