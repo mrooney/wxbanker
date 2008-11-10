@@ -170,7 +170,8 @@ class LocalizedCurrency(BaseCurrency):
         
 UnitedStatesCurrency = BaseCurrency
 
-Currencies = [UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency, LocalizedCurrency]
+
+CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency]
 
 
 if __name__ == "__main__":

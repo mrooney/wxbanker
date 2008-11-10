@@ -35,25 +35,73 @@ Table: transactions
 """
 import os, datetime
 from sqlite3 import dbapi2 as sqlite
+import sqlite3
 
 class Model:
     def __init__(self, path):
+        self.Version = 2
         self.path = path + os.path.extsep + 'db'
+        existed = True
         if not os.path.exists(self.path):
             connection = self.initialize()
+            existed = False
         else:
             connection = sqlite.connect(self.path)
 
         self.dbconn = connection
+        
+        self.Meta = self.getMeta()
+        while self.Meta['VERSION'] < self.Version:
+            assert existed # Sanity check to ensure new dbs don't need to be upgraded.
+            self.upgradeDb(self.Meta['VERSION'])
+            self.Meta = self.getMeta()
+            
+        self.dbconn.commit()
 
     def initialize(self):
         connection = sqlite.connect(self.path)
         cursor = connection.cursor()
 
-        cursor.execute('CREATE TABLE accounts (id INTEGER PRIMARY KEY, name VARCHAR(255))')
+        cursor.execute('CREATE TABLE accounts (id INTEGER PRIMARY KEY, name VARCHAR(255), currency INTEGER)')
         cursor.execute('CREATE TABLE transactions (id INTEGER PRIMARY KEY, accountId INTEGER, amount FLOAT, description VARCHAR(255), date CHAR(10))')
+        
+        cursor.execute('CREATE TABLE meta (id INTEGER PRIMARY KEY, name VARCHAR(255), value VARCHAR(255))')
+        cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('VERSION', '2'))
 
         return connection
+    
+    def getMeta(self):
+        try:
+            results = self.dbconn.cursor().execute('SELECT * FROM meta').fetchall()
+        except sqlite3.OperationalError:
+            meta = {'VERSION': 1}
+        else:
+            meta = {}
+            for uid, key, value in results:
+                meta[key] = value
+            
+        return meta
+    
+    def upgradeDb(self, fromVer):
+        #TODO: make backup first
+        cursor = self.dbconn.cursor()
+        if fromVer == 1:
+            # Add `currency` column to the accounts table with default value 0.
+            cursor.execute('ALTER TABLE accounts ADD currency INTEGER not null DEFAULT 0')
+            # Add metadata table, with version: 2
+            cursor.execute('CREATE TABLE meta (id INTEGER PRIMARY KEY, name VARCHAR(255), value VARCHAR(255))')
+            cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('VERSION', '2'))
+        else:
+            raise Exception("Cannot upgrade database from version %i"%fromVer)
+        
+    def getCurrency(self):
+        # Only necessary as a step in 0.4, in 0.5 this will be an attribute
+        # of an Account and this can be removed.
+        accounts = self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()
+        if not accounts:
+            return 0
+        else:
+            return accounts[0][2]
 
     def result2transaction(self, result):
         """
@@ -80,9 +128,9 @@ class Model:
         return sorted([result[1] for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()])
 
     def createAccount(self, account):
-        self.dbconn.cursor().execute('INSERT INTO accounts VALUES (null, ?)', (account,))
+        self.dbconn.cursor().execute('INSERT INTO accounts VALUES (null, ?, ?)', (account, 0))
         self.dbconn.commit()
-        # ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.
+        # Ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.
         self.clearAccountTransactions(account)
         
     def clearAccountTransactions(self, account):

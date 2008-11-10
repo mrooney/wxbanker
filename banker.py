@@ -214,7 +214,8 @@ class Bank(object):
                 path = 'bank'
     
             self.model = Model(path)
-            self.Currency = currencies.LocalizedCurrency()
+            index = self.model.getCurrency()
+            self.Currency = currencies.CurrencyList[index]()
         
     def float2str(self, flt):
         return self.Currency.float2str(flt)
