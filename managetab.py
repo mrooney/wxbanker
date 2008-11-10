@@ -87,19 +87,24 @@ class ManagePanel(wx.Panel):
     def getCurrentAccount(self):
         return self.accountCtrl.GetCurrentAccount()
 
-
+    
 class TransactionPanel(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
         self.searchActive = False
 
+        subpanel = wx.Panel(self)
+        
         self.searchCtrl = searchCtrl = SearchCtrl(self)
-        self.transactionGrid = transactionGrid = TransactionGrid(self)
+        self.transactionGrid = transactionGrid = TransactionGrid(subpanel)
         self.newTransCtrl = newTransCtrl = NewTransactionCtrl(self)
+        
+        subpanel.Sizer = wx.BoxSizer()
+        subpanel.Sizer.Add(transactionGrid, 1, wx.EXPAND)
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(searchCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL)
-        mainSizer.Add(transactionGrid, 1, wx.EXPAND)
+        mainSizer.Add(subpanel, 1, wx.EXPAND)
         mainSizer.Add(newTransCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5)
 
         self.Sizer = mainSizer
@@ -227,17 +232,17 @@ class TransactionGrid(gridlib.Grid):
         searchString, accountScope, match, caseSens = message.data
 
         if accountScope == 0: # Search in just current account.
-            accountName = self.Parent.Parent.getCurrentAccount()
+            accountName = self.Parent.Parent.Parent.getCurrentAccount()
         else: # Search in all accounts.
             accountName = None
 
         matches = Bank().searchTransactions(searchString, accountName=accountName, matchIndex=match, matchCase=caseSens)
         self.setTransactions(matches)
-        self.Parent.searchActive = True
+        self.Parent.Parent.searchActive = True
 
     def onSearchCancelled(self, message):
-        self.setAccount(self.Parent.Parent.getCurrentAccount())
-        self.Parent.searchActive = False
+        self.setAccount(self.Parent.Parent.Parent.getCurrentAccount())
+        self.Parent.Parent.searchActive = False
 
     def onSearchMoreToggled(self, message):
         self.Refresh()
@@ -245,11 +250,11 @@ class TransactionGrid(gridlib.Grid):
 
     def onTransactionAdded(self, message):
         #ASSUMPTION: the transaction was of the current account
-        self.setAccount(self.Parent.Parent.getCurrentAccount())
+        self.setAccount(self.Parent.Parent.Parent.getCurrentAccount())
 
     def onTransactionUpdated(self, message):
         #ASSUMPTION: the transaction was of the current account
-        self.setAccount(self.Parent.Parent.getCurrentAccount(), ensureVisible=None)
+        self.setAccount(self.Parent.Parent.Parent.getCurrentAccount(), ensureVisible=None)
 
     def onCellRightClick(self, event):
         row, col = event.Row, event.Col # col == -1 -> row label right click
@@ -343,12 +348,12 @@ class TransactionGrid(gridlib.Grid):
             Bank().updateTransaction(uid, amount, desc, date)
             self.changeFrozen = False
 
-            if refreshNeeded and not self.Parent.searchActive:
+            if refreshNeeded and not self.Parent.Parent.searchActive:
                 #this is needed because otherwise the Grid will put the new value in,
                 #even if event.Skip isn't called, for some reason I don't understand.
                 #event.Veto() will cause the OLD value to be put in. so it has to be updated
                 #after the event handlers (ie this function) finish.
-                wx.CallLater(50, lambda: self.setAccount(self.Parent.Parent.getCurrentAccount(), ensureVisible=None))
+                wx.CallLater(50, lambda: self.setAccount(self.Parent.Parent.Parent.getCurrentAccount(), ensureVisible=None))
 
     def updateRowsFrom(self, startingRow=0):
         """
