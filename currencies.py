@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #    https://launchpad.net/wxbanker
 #    currencies.py: Copyright 2007, 2008 Mike Rooney <wxbanker@rowk.com>
 #
@@ -45,33 +46,45 @@
 '   $0.01'
 >>> usd.float2str(2.1-2.2+.1) #test to ensure no negative zeroes
 '$0.00'
+>>> LocalizedCurrency().float2str(1) == '$1.00'
+True
+>>> BaseCurrency().float2str(1) == '$1.00'
+True
+>>> EuroCurrency().float2str(1) == '1.00 €'
+True
+>>> GreatBritainCurrency().float2str(1) == '£1.00'
+True
+>>> JapaneseCurrency().float2str(1) == '￥1'
+True
+>>> RussianCurrency().float2str(1) == '1.00 руб'
+True
 """
 
 import localization, locale
 
 
 class BaseCurrency(object):
-    LOCALECONV = {
-        'currency_symbol': '$',
-        'decimal_point': '.',
-        'frac_digits': 2,
-        'grouping': [3, 3, 0],
-        'int_curr_symbol': 'USD ',
-        'int_frac_digits': 2,
-        'mon_decimal_point': '.',
-        'mon_grouping': [3, 3, 0],
-        'mon_thousands_sep': ',',
-        'n_cs_precedes': 1,
-        'n_sep_by_space': 0,
-        'n_sign_posn': 1,
-        'negative_sign': '-',
-        'p_cs_precedes': 1,
-        'p_sep_by_space': 0,
-        'p_sign_posn': 1,
-        'positive_sign': '',
-        'thousands_sep': ','
-    }
-
+    def __init__(self):
+        self.LOCALECONV = {
+            'currency_symbol': '$',
+            'decimal_point': '.',
+            'frac_digits': 2,
+            'grouping': [3, 3, 0],
+            'int_curr_symbol': 'USD ',
+            'int_frac_digits': 2,
+            'mon_decimal_point': '.',
+            'mon_grouping': [3, 3, 0],
+            'mon_thousands_sep': ',',
+            'n_cs_precedes': 1,
+            'n_sep_by_space': 0,
+            'n_sign_posn': 1,
+            'negative_sign': '-',
+            'p_cs_precedes': 1,
+            'p_sep_by_space': 0,
+            'p_sign_posn': 1,
+            'positive_sign': '',
+            'thousands_sep': ','
+        }
     
     def float2str(self, val, just=0, symbol=True, grouping=True, international=False):
         """
@@ -126,6 +139,7 @@ class BaseCurrency(object):
     
 class EuroCurrency(BaseCurrency):
     def __init__(self):
+        BaseCurrency.__init__(self)
         self.LOCALECONV['mon_decimal_point'] = ','
         self.LOCALECONV['p_sep_by_space'] = 1
         self.LOCALECONV['thousands_sep'] = ' '
@@ -139,11 +153,13 @@ class EuroCurrency(BaseCurrency):
         
 class GreatBritainCurrency(BaseCurrency):
     def __init__(self):
+        BaseCurrency.__init__(self)
         self.LOCALECONV['int_curr_symbol'] = 'GBP '
         self.LOCALECONV['currency_symbol'] = '\xc2\xa3'
         
 class JapaneseCurrency(BaseCurrency):
     def __init__(self):
+        BaseCurrency.__init__(self)
         self.LOCALECONV['int_frac_digits'] = 0
         self.LOCALECONV['frac_digits'] = 0
         self.LOCALECONV['n_sign_posn'] = 4
@@ -155,6 +171,7 @@ class JapaneseCurrency(BaseCurrency):
         
 class RussianCurrency(BaseCurrency):
     def __init__(self):
+        BaseCurrency.__init__(self)
         self.LOCALECONV['p_sep_by_space'] = 1
         self.LOCALECONV['thousands_sep'] = '\xc2\xa0'
         self.LOCALECONV['decimal_point'] = ','
@@ -172,14 +189,10 @@ UnitedStatesCurrency = BaseCurrency
 
 
 CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency]
+CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
+CurrencyStrings[0] += " [Locale]"
 
 
 if __name__ == "__main__":
-    #for c in Currencies:
-    #    c = c()
-    #    print "%s: %s" % (c.LOCALECONV['int_curr_symbol'], c.float2str(1))
-    
     import doctest
-    doctest.testmod(verbose=False)
-
-    
+    doctest.testmod(verbose=True)

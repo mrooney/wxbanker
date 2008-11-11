@@ -163,14 +163,21 @@ class AccountListCtrl(wx.Panel):
         # The EDIT account button.
         BMP = wx.ArtProvider.GetBitmap('wxART_textfield_rename')
         self.editButton = editButton = wx.BitmapButton(self, bitmap=BMP)
-        editButton.SetToolTipString(_("Edit the name of the selected account"))
+        editButton.SetToolTipString(_("Rename the selected account"))
         editButton.Enabled = False
-
+        # The CONFIGURE account button.
+        BMP = wx.ArtProvider.GetBitmap('wxART_cog')
+        self.configureButton = configureButton = wx.BitmapButton(self, bitmap=BMP)
+        configureButton.SetToolTipString(_("Configure the selected account"))
+        configureButton.Enabled = False
+        configureButton.Hide()
+        
         # Layout the buttons.
         buttonSizer = wx.BoxSizer()
         buttonSizer.Add(addButton)
         buttonSizer.Add(removeButton)
         buttonSizer.Add(editButton)
+        buttonSizer.Add(configureButton)
 
         # Set up the "Total" sizer.
         self.totalText = wx.StaticText(self, label="$0.00")
@@ -267,6 +274,7 @@ class AccountListCtrl(wx.Panel):
         # Update the remove/edit buttons.
         self.removeButton.Enabled = index is not None
         self.editButton.Enabled = index is not None
+        self.configureButton.Enabled = index is not None
 
         # Tell the parent we changed.
         Publisher().sendMessage("VIEW.ACCOUNT_CHANGED", account)
