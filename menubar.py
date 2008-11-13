@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-15 -*-
 #
 #    https://launchpad.net/wxbanker
-#    menubar.py: Copyright 2007, 2008 Mike Rooney <wxbanker@rowk.com>
+#    menubar.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
 #
 #    This file is part of wxBanker.
 #
@@ -78,17 +78,16 @@ class BankMenuBar(wx.MenuBar):
         info = wx.AboutDialogInfo()
         info.Name = "wxBanker"
         info.Version = str(version.NUMBER)
-        info.Copyright = _("Copyright") + " 2007, 2008 Mike Rooney (wxbanker@rowk.com)"
+        info.Copyright = _("Copyright") + " 2007, 2008 Mike Rooney (michael@wxbanker.org)"
         info.Description = _("A lightweight personal finance management application.")
         info.WebSite = ("https://launchpad.net/wxbanker", "https://launchpad.net/wxbanker")
 
         info.Developers = [
-            'Mike Rooney (wxbanker@rowk.com)',
+            'Mike Rooney (michael@wxbanker.org)',
         ]
         info.Artists = [
             'Mark James (www.famfamfam.com/lab/icons/silk/)',
         ]
-        
         translators = [
             'sl: Primož Jerše (jerse@inueni.com)',
             'es: Diego J. Romero López (diegojromerolopez@gmail.com)',

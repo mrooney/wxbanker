@@ -1,5 +1,5 @@
 #    https://launchpad.net/wxbanker
-#    model_sqlite.py: Copyright 2007, 2008 Mike Rooney <wxbanker@rowk.com>
+#    model_sqlite.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
 #
 #    This file is part of wxBanker.
 #

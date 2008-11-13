@@ -1,7 +1,7 @@
 #! /usr/bin/python
 #
 #    https://launchpad.net/wxbanker
-#    version.py: Copyright 2007, 2008 Mike Rooney <wxbanker@rowk.com>
+#    version.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
 #
 #    This file is part of wxBanker.
 #

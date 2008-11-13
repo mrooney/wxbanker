@@ -1,5 +1,5 @@
 #    https://launchpad.net/wxbanker
-#    banker.py: Copyright 2007, 2008 Mike Rooney <wxbanker@rowk.com>
+#    banker.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
 #
 #    This file is part of wxBanker.
 #
