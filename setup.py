@@ -20,7 +20,7 @@ setup(
     download_url='https://launchpad.net/wxbanker/+download',
     package_dir = {'wxbanker': ''},
     packages = ["wxbanker", "wxbanker.art"],
-    #requires = ["wx>=2.8",], ## correct?
+    requires = ["wx (>=2.8)"],
     license='GNU GPL',
     platforms='linux',
     scripts = ['bin/wxbanker'],
