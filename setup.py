@@ -2,6 +2,7 @@
 
 from distutils.core import setup
 import os, glob
+import version
 
 #Create an array with all the locale filenames
 I18NFILES = []
@@ -10,6 +11,7 @@ for filepath in glob.glob("locales/*/LC_MESSAGES/*.mo"):
     I18NFILES.append((targetpath, [filepath]))
 
 setup(
+    version = version.NUMBER,
     name = "wxBanker",
     description = "Lightweight personal finance manager",
     author = "Michael Rooney",
