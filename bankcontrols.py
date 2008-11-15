@@ -700,6 +700,7 @@ class NewTransactionCtrl(wx.Panel):
         # If a search is active, we have to ask the user what they want to do.
         if self.Parent.searchActive:
             actionStr = {True: _("transfer"), False: _("transaction")}[isTransfer]
+            ##TRANSLATORS: Example: ...and make this TRANSACTION in "CHECKING ACCOUNT"?
             msg = _('A search is currently active. Would you like to clear the current search and make this %s in "%s"?') % (actionStr, account)
             dlg = wx.MessageDialog(self, msg, _("Clear search?"), style=wx.YES_NO|wx.ICON_WARNING)
             result = dlg.ShowModal()

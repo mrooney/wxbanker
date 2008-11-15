@@ -121,7 +121,7 @@ class SimpleCalculator(wx.Panel):
 class CollapsableWidget(wx.CollapsiblePane):
     def __init__(self, parent, widget, name, *args, **kwargs):
         self.clickLabel = "%s" + " %s"%name
-        wx.CollapsiblePane.__init__(self, parent, label=self.clickLabel%_("Show"), style=wx.CP_DEFAULT_STYLE|wx.CP_NO_TLW_RESIZE)
+        wx.CollapsiblePane.__init__(self, parent, label=_(self.clickLabel%"Show"), style=wx.CP_DEFAULT_STYLE|wx.CP_NO_TLW_RESIZE)
 
         pane = self.GetPane()
         self.widget = widget(pane, *args, **kwargs)
@@ -147,10 +147,10 @@ class CollapsableWidget(wx.CollapsiblePane):
 
         # and also change the labels
         if self.IsExpanded():
-            modifier = _("Hide")
+            modifier = "Hide"
         else:
-            modifier = _("Show")
-        self.Label = self.clickLabel % modifier
+            modifier = "Show"
+        self.Label = _(self.clickLabel % modifier)
 
         Publisher().sendMessage("CALCULATOR.TOGGLED", modifier.upper())
 
