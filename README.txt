@@ -1,6 +1,6 @@
 Hello, and thanks for using wxBanker! If you have any questions,
 comments, or suggestions, please don't hesitate to email me at
-wxbanker@rowk.com. If you find a bug, please file it at
+michael@wxbanker.org. If you find a bug, please file it at
 https://bugs.launchpad.net/wxbanker.
 
 == UPGRADING ==

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 #    https://launchpad.net/wxbanker
-#    wxbanker.py: Copyright 2007, 2008 Mike Rooney <wxbanker@rowk.com>
+#    wxbanker.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
 #
 #    This file is part of wxBanker.
 #
@@ -150,7 +150,8 @@ class BankerFrame(wx.Frame):
         self.isSaveLocked = False
     '''
 
-if __name__ == "__main__":
+
+def main():
     app = wx.App(False)
 
     # Initialize our configuration object.
@@ -193,3 +194,7 @@ if __name__ == "__main__":
         wx.lib.inspection.InspectionTool().Show()
 
     app.MainLoop()
+
+
+if __name__ == "__main__":
+    main()

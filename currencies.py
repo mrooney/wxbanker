@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 #    https://launchpad.net/wxbanker
-#    currencies.py: Copyright 2007, 2008 Mike Rooney <wxbanker@rowk.com>
+#    currencies.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
 #
 #    This file is part of wxBanker.
 #
@@ -17,10 +18,8 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 """
->>> import locale
->>> locale.setlocale(locale.LC_ALL, '') != None
-True
->>> usd = LocalizedCurrency()
+>>> import localization
+>>> usd = UnitedStatesCurrency()
 >>> usd.float2str(1)
 '$1.00'
 >>> usd.float2str(-2.1)
@@ -47,121 +46,153 @@ True
 '   $0.01'
 >>> usd.float2str(2.1-2.2+.1) #test to ensure no negative zeroes
 '$0.00'
-
->>> usd.str2float('$1.00') == 1.0
+>>> LocalizedCurrency().float2str(1) == '$1.00'
 True
->>> usd.str2float('-$2.10') == -2.1
+>>> BaseCurrency().float2str(1) == '$1.00'
 True
->>> usd.str2float('-$10.17') == -10.17
+>>> EuroCurrency().float2str(1) == '1.00 €'
 True
->>> usd.str2float('-$777.00') == -777
+>>> GreatBritainCurrency().float2str(1) == '£1.00'
 True
->>> usd.str2float('$12,345.67') == 12345.67
+>>> JapaneseCurrency().float2str(1) == '￥1'
 True
->>> usd.str2float('$12,345.00') == 12345
-True
->>> usd.str2float('-$12,345.67') == -12345.67
-True
->>> usd.str2float('-$12,345.6') == -12345.6
-True
->>> usd.str2float('-$123,456') == -123456
-True
->>> usd.str2float('$0.01') == 0.01
-True
->>> usd.str2float('   $0.01') == 0.01
+>>> RussianCurrency().float2str(1) == '1.00 руб'
 True
 """
 
-import locale
+import localization, locale
 
-class LocalizedCurrency(object):
-    def float2str(self, number, just=0):
-        if abs(number) < .001: # don't show negative zeroes
-            number = 0
+
+class BaseCurrency(object):
+    def __init__(self):
+        self.LOCALECONV = {
+            'currency_symbol': '$',
+            'decimal_point': '.',
+            'frac_digits': 2,
+            'grouping': [3, 3, 0],
+            'int_curr_symbol': 'USD ',
+            'int_frac_digits': 2,
+            'mon_decimal_point': '.',
+            'mon_grouping': [3, 3, 0],
+            'mon_thousands_sep': ',',
+            'n_cs_precedes': 1,
+            'n_sep_by_space': 0,
+            'n_sign_posn': 1,
+            'negative_sign': '-',
+            'p_cs_precedes': 1,
+            'p_sep_by_space': 0,
+            'p_sign_posn': 1,
+            'positive_sign': '',
+            'thousands_sep': ','
+        }
+    
+    def float2str(self, val, just=0, symbol=True, grouping=True, international=False):
+        """
+        Formats val according to the currency settings in the current locale.
+        Taken from Python 2.5.2 source, Lib/locale.py.
+        """
+        # Don't show negative zeroes!
+        if abs(val) < .001:
+            val = 0
             
-        string = locale.currency(number, grouping=True)
-        jstring = string.rjust(just)
-        return jstring
+        conv = self.LOCALECONV
     
-    def str2float(self, mstr):
-        convDict = locale.localeconv()
-        validChars = "0123456789" + convDict['mon_decimal_point'] + convDict['negative_sign']
+        # check for illegal values
+        digits = conv[international and 'int_frac_digits' or 'frac_digits']
+        if digits == 127:
+            raise ValueError("Currency formatting is not possible using "
+                             "the 'C' locale.")
+    
+        s = locale.format('%%.%if' % digits, abs(val), grouping, monetary=True)
+        # '<' and '>' are markers if the sign must be inserted between symbol and value
+        s = '<' + s + '>'
+    
+        if symbol:
+            smb = conv[international and 'int_curr_symbol' or 'currency_symbol']
+            precedes = conv[val<0 and 'n_cs_precedes' or 'p_cs_precedes']
+            separated = conv[val<0 and 'n_sep_by_space' or 'p_sep_by_space']
+    
+            if precedes:
+                s = smb + (separated and ' ' or '') + s
+            else:
+                s = s + (separated and ' ' or '') + smb
+    
+        sign_pos = conv[val<0 and 'n_sign_posn' or 'p_sign_posn']
+        sign = conv[val<0 and 'negative_sign' or 'positive_sign']
+    
+        if sign_pos == 0:
+            s = '(' + s + ')'
+        elif sign_pos == 1:
+            s = sign + s
+        elif sign_pos == 2:
+            s = s + sign
+        elif sign_pos == 3:
+            s = s.replace('<', sign)
+        elif sign_pos == 4:
+            s = s.replace('>', sign)
+        else:
+            # the default if nothing specified;
+            # this should be the most fitting sign position
+            s = sign + s
+    
+        return s.replace('<', '').replace('>', '').rjust(just)
+    
+class EuroCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['mon_decimal_point'] = ','
+        self.LOCALECONV['p_sep_by_space'] = 1
+        self.LOCALECONV['thousands_sep'] = ' '
+        self.LOCALECONV['decimal_point'] = ','
+        self.LOCALECONV['int_curr_symbol'] = 'EUR '
+        self.LOCALECONV['n_cs_precedes'] = 0
+        self.LOCALECONV['mon_thousands_sep'] = ' '
+        self.LOCALECONV['currency_symbol'] = '\xe2\x82\xac'
+        self.LOCALECONV['n_sep_by_space'] = 1
+        self.LOCALECONV['p_cs_precedes'] = 0
         
-        cleanString = mstr
-        for char in mstr:
-            if char not in validChars:
-                cleanString = cleanString.replace(char, "")
-                
-        return locale.atof(cleanString)
+class GreatBritainCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['int_curr_symbol'] = 'GBP '
+        self.LOCALECONV['currency_symbol'] = '\xc2\xa3'
+        
+class JapaneseCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['int_frac_digits'] = 0
+        self.LOCALECONV['frac_digits'] = 0
+        self.LOCALECONV['n_sign_posn'] = 4
+        self.LOCALECONV['int_curr_symbol'] = 'JPY '
+        self.LOCALECONV['p_sign_posn'] = 4
+        self.LOCALECONV['currency_symbol'] = '\xef\xbf\xa5'
+        self.LOCALECONV['mon_grouping'] = [3, 0]
+        self.LOCALECONV['grouping'] = [3, 0]
+        
+class RussianCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['p_sep_by_space'] = 1
+        self.LOCALECONV['thousands_sep'] = '\xc2\xa0'
+        self.LOCALECONV['decimal_point'] = ','
+        self.LOCALECONV['int_curr_symbol'] = 'RUB '
+        self.LOCALECONV['n_cs_precedes'] = 0
+        self.LOCALECONV['mon_thousands_sep'] = '\xc2\xa0'
+        self.LOCALECONV['currency_symbol'] = '\xd1\x80\xd1\x83\xd0\xb1'
+        self.LOCALECONV['n_sep_by_space'] = 1
+        self.LOCALECONV['p_cs_precedes'] = 0
+        
+class LocalizedCurrency(BaseCurrency):
+    LOCALECONV = locale.localeconv()
+        
+UnitedStatesCurrency = BaseCurrency
 
-if 0:
-    class BaseCurrency(object):
-        def __init__(self):
-            self.Symbol = ''
-            self.SepChar = ','
-            self.DecChar = '.'
-            self.ShortName = ""
-            self.LongName = ""
-        
-        def float2str(self, number, just=0):
-            """
-            Converts a float to a pleasing "money string".
-            """
-            # Step 1: Convert to a float with 2 decimal places.
-            numStr = '%.2f' % number
-            # Step 3: Use the proper decimal character.
-            numStr = numStr.replace('.', self.DecChar)
-            # Step 4: Add separating characters.
-            dollarAmount = str(int(number))
-            dollarAmountSepd = ""
-            i = 1
-            for numChar in reversed(dollarAmount):
-                dollarAmountSepd = numChar + dollarAmountSepd
-                if i%3 == 0 and numChar != '-':
-                    dollarAmountSepd = self.SepChar + dollarAmountSepd
-                    
-            if len(numStr) > 6 + numStr.find('-') + 1: # remember, Symbol is not added yet
-                numStr = numStr[:len(numStr)-6] + self.SepChar + numStr[len(numStr)-6:]
-            # Step 5: Add the currency symbol.
-            numStr = self.Symbol + numStr
-            # Step 2: Don't display negative zeroes (LP: 250151).
-            if numStr == '-0.00':
-                numStr = '0.00'
-            # Step 6: Justify to the optional kwarg.
-            numStr = numStr.rjust(just)
-            # And return.
-            return numStr
-    
-        def str2float(self, mstr):
-            """
-            Converts a pleasing "money string" to a float.
-            """
-            # Step 0: Strip off any stray spaces
-            mstr = mstr.strip()
-            # Step 1: Strip off the currency symbol
-            mstr = mstr[len(self.Symbol):]
-            # Step 2: Remove separators.
-            mstr = mstr.replace(self.SepChar, '')
-            # Step 3: Ensure decimal char is a period.
-            mstr = mstr.replace(self.DecChar, '.')
-            # Step 4: Conver to float
-            floatval = float(mstr)
-            # And return.
-            return floatval
-    
-    
-    class USD(BaseCurrency):
-        """
-        United States Dollar currency.
-        """
-        def __init__(self):
-            self.Symbol = '$'
-            self.SepChar = ','
-            self.DecChar = '.'
-            self.ShortName = "USD"
-            self.LongName = _("United States Dollar")
-    
+
+CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency]
+CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
+CurrencyStrings[0] += " [Locale]"
+
+
 if __name__ == "__main__":
     import doctest
-    doctest.testmod(verbose=False)
-    
+    doctest.testmod(verbose=True)

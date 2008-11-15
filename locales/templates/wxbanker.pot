@@ -3,14 +3,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-26 00:48-0400\n"
+"POT-Creation-Date: 2008-10-30 21:30-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-10-29 13:48+0000\n"
+"X-Launchpad-Export-Date: 2008-11-11 01:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker.py:38
@@ -69,6 +69,10 @@ msgstr ""
 msgid "Balance"
 msgstr ""
 
+#: summarytab.py:166
+msgid "Trend"
+msgstr ""
+
 #: summarytab.py:168
 msgid "Total Balance Over Time"
 msgstr ""
@@ -77,48 +81,48 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: menubar.py:36
+#: menubar.py:37
 msgid "View &FAQs"
 msgstr ""
 
-#: menubar.py:36
+#: menubar.py:37
 msgid "View Frequently Asked Questions online"
 msgstr ""
 
-#: menubar.py:41
+#: menubar.py:42
 msgid "Ask a &Question"
 msgstr ""
 
-#: menubar.py:41
+#: menubar.py:42
 msgid "Ask a question online"
 msgstr ""
 
-#: menubar.py:46
+#: menubar.py:47
 msgid "&Report a Bug"
 msgstr ""
 
-#: menubar.py:46
+#: menubar.py:47
 msgid "Report a bug to the developer online"
 msgstr ""
 
-#: menubar.py:51
+#: menubar.py:52
 msgid "&About"
 msgstr ""
 
-#: menubar.py:51
+#: menubar.py:52
 msgid "More information about wxBanker"
 msgstr ""
 
-#: menubar.py:81
-msgid "Copyright"
+#: menubar.py:54
+msgid "&Help"
 msgstr ""
 
 #: menubar.py:82
-msgid "A lightweight personal finance management application."
+msgid "Copyright"
 msgstr ""
 
-#: managetab.py:41
-msgid "Calculator"
+#: menubar.py:83
+msgid "A lightweight personal finance management application."
 msgstr ""
 
 #: managetab.py:171 bankcontrols.py:60 bankcontrols.py:580
@@ -189,7 +193,7 @@ msgstr ""
 msgid "Match: "
 msgstr ""
 
-#: bankcontrols.py:124
+#: bankcontrols.py:124 calculator.py:124
 msgid "Show"
 msgstr ""
 
@@ -301,40 +305,48 @@ msgstr ""
 msgid "transaction"
 msgstr ""
 
-#: bankcontrols.py:704
+#: bankcontrols.py:705
 #, python-format
 msgid ""
 "A search is currently active. Would you like to clear the current search and "
 "make this %s in \"%s\"?"
 msgstr ""
 
-#: bankcontrols.py:705
+#: bankcontrols.py:706
 msgid "Clear search?"
 msgstr ""
 
-#: bankcontrols.py:723
+#: bankcontrols.py:724
 msgid ""
 "If this box is checked when adding a transaction, you will be prompted for "
 "the account to use as the source of the transfer."
 msgstr ""
 
-#: bankcontrols.py:724
+#: bankcontrols.py:725
 msgid ""
 "For example, checking this box and entering a transaction of $50 into this "
 "account will also subtract $50 from the account that you choose as the "
 "source."
 msgstr ""
 
-#: banker.py:321
+#: banker.py:279
 #, python-format
 msgid "Transfer to %s"
 msgstr ""
 
-#: banker.py:322
+#: banker.py:280
 #, python-format
 msgid "Transfer from %s"
 msgstr ""
 
-#: currencies.py:144
+#: currencies.py:162
 msgid "United States Dollar"
+msgstr ""
+
+#: templater.py:24
+msgid "Hide Calculator"
+msgstr ""
+
+#: templater.py:25
+msgid "Show Calculator"
 msgstr ""

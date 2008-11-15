@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Name=wxBanker
+GenericName=wxBanker Finance Manager
+Comment=A lightweight personal finance manager
+Exec=wxbanker
+Icon=wxbanker
+Terminal=false
+Type=Application
+Categories=GNOME;Application;Office;

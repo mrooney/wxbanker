@@ -16,4 +16,4 @@ and transactions, is in the right place. To do this either:
 
 
 Thanks for using wxBanker. If you have any problems, questions, or
-comments, email me at wxbanker@rowk.com!
+comments, email me at michael@wxbanker.org!

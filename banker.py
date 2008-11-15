@@ -1,5 +1,5 @@
 #    https://launchpad.net/wxbanker
-#    banker.py: Copyright 2007, 2008 Mike Rooney <wxbanker@rowk.com>
+#    banker.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
 #
 #    This file is part of wxBanker.
 #
@@ -185,7 +185,8 @@ class Bank(object):
                 path = 'bank'
     
             self.model = Model(path)
-            self.Currency = currencies.LocalizedCurrency()
+            index = self.model.getCurrency()
+            self.Currency = currencies.CurrencyList[index]()
         
         Publisher.subscribe(self.onTransactionUpdated, "transaction.updated")
         Publisher.subscribe(self.onMakeTransfer, "user.transfer")
