@@ -209,9 +209,17 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
     def _xticks(self, *args):
         ticks = pyplot.PlotCanvas._xticks(self, *args)
         myTicks = []
+        lastTick = None
         for tick in ticks:
             floatVal = tick[0]
             stringVal = str(self.startDate + datetime.timedelta(floatVal))
+            
+            # Don't display this xtick if it isn't different from the last one.
+            if stringVal == lastTick:
+                stringVal = ""
+            else:
+                lastTick = stringVal
+                
             myTicks.append( (floatVal, stringVal) )
         return myTicks
 

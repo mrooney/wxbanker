@@ -187,6 +187,10 @@ class Model:
         cursor.execute('INSERT INTO transactions VALUES (null, ?, ?, ?, ?)', result)
         self.dbconn.commit()
         return cursor.lastrowid
+    
+    def setCurrency(self, currencyIndex):
+        self.dbconn.cursor().execute('UPDATE accounts SET currency=?', (currencyIndex,))
+        self.dbconn.commit()
 
     def close(self):
         self.dbconn.close()

@@ -216,6 +216,8 @@ class Bank(object):
             self.model = Model(path)
             index = self.model.getCurrency()
             self.Currency = currencies.CurrencyList[index]()
+            
+        Publisher().subscribe(self.onCurrencyChanged, "user.currency_changed")
         
     def float2str(self, flt):
         return self.Currency.float2str(flt)
@@ -398,6 +400,15 @@ class Bank(object):
     def save(self, path=None):
         #write out the changes
         self.model.save()
+        
+    def setCurrency(self, currencyIndex):
+        self.model.setCurrency(currencyIndex)
+        self.Currency = currencies.CurrencyList[currencyIndex]()
+        Publisher().sendMessage("model.currency_changed", currencyIndex)
+        
+    def onCurrencyChanged(self, message):
+        currencyIndex = message.data
+        self.setCurrency(currencyIndex)
 
 
 #command-line view methods
