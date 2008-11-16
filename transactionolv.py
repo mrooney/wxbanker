@@ -39,8 +39,7 @@ class TransactionOLV(GroupListView):
         self.cellEditMode = GroupListView.CELLEDIT_SINGLECLICK
         self.SetEmptyListMsg("No transactions entered.")
         self.SetColumns([
-            ColumnDefn("Date", valueGetter="Date", minimumWidth=10),
-            ColumnDefn("Date", valueGetter="Date", minimumWidth=10),
+            ColumnDefn("Date", valueGetter="Date", minimumWidth=90),
             ColumnDefn("Description", valueGetter="Description", isSpaceFilling=True, minimumWidth=80),
             ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=Bank().float2str, minimumWidth=50),
             ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=Bank().float2str, minimumWidth=50, isEditable=False),

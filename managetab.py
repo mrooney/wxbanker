@@ -94,15 +94,10 @@ class TransactionPanel(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
         self.searchActive = False
-
-        subpanel = wx.Panel(self)
         
         self.searchCtrl = searchCtrl = SearchCtrl(self)
         self.transactionCtrl = transactionCtrl = TransactionCtrl(self)
         self.newTransCtrl = newTransCtrl = NewTransactionCtrl(self)
-        
-        subpanel.Sizer = wx.BoxSizer()
-        subpanel.Sizer.Add(transactionGrid, 1, wx.EXPAND)
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(searchCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL)
