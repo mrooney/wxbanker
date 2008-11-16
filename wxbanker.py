@@ -47,6 +47,7 @@ class BankerFrame(wx.Frame):
 
         wx.Frame.__init__(self, None, title="wxBanker", size=size, pos=pos)
         self.SetIcon(wx.ArtProvider.GetIcon('wxART_coins'))
+        
 
         self.isSaveLocked = False
 
