@@ -214,6 +214,7 @@ class AccountListCtrl(wx.Panel):
         Publisher().subscribe(self.onAccountRemoved, "bank.REMOVED ACCOUNT")
         Publisher().subscribe(self.onAccountAdded, "bank.NEW ACCOUNT")
         Publisher().subscribe(self.onAccountRenamed, "bank.RENAMED ACCOUNT")
+        Publisher().subscribe(self.onCurrencyChanged, "model.currency_changed")
 
         # Populate ourselves initially unless explicitly told not to.
         if autoPopulate:
@@ -237,6 +238,12 @@ class AccountListCtrl(wx.Panel):
         #self.Sizer = self.staticBoxSizer
         self.staticBoxSizer.Layout()
         #self.staticBoxSizer.SetSmooth(True)
+        
+    def onCurrencyChanged(self, message):
+        for i, textCtrl in enumerate(self.totalTexts):
+            balance = self.totalVals[i]
+            textCtrl.Label = Bank().float2str(balance)
+        self.Parent.Layout()
 
     def IsVisible(self, index):
         """

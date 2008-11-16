@@ -152,6 +152,7 @@ class BankerFrame(wx.Frame):
 
 
 def main():
+    import wx, os
     app = wx.App(False)
 
     # Initialize our configuration object.

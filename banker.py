@@ -187,6 +187,8 @@ class Bank(object):
             self.model = Model(path)
             index = self.model.getCurrency()
             self.Currency = currencies.CurrencyList[index]()
+            
+        Publisher().subscribe(self.onCurrencyChanged, "user.currency_changed")
         
         Publisher.subscribe(self.onTransactionUpdated, "transaction.updated")
         Publisher.subscribe(self.onMakeTransfer, "user.transfer")
@@ -376,6 +378,15 @@ class Bank(object):
         args = message.data
         print 'xacting..'
         self.makeTransaction(*args)
+        
+    def setCurrency(self, currencyIndex):
+        self.model.setCurrency(currencyIndex)
+        self.Currency = currencies.CurrencyList[currencyIndex]()
+        Publisher().sendMessage("model.currency_changed", currencyIndex)
+        
+    def onCurrencyChanged(self, message):
+        currencyIndex = message.data
+        self.setCurrency(currencyIndex)
 
 
 #command-line view methods

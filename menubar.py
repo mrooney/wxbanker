@@ -20,15 +20,31 @@
 
 import wx, webbrowser, os
 from wx.lib.wordwrap import wordwrap
+from wx.lib.pubsub import Publisher
+
 import version, localization
+from currencies import CurrencyStrings
 
 class BankMenuBar(wx.MenuBar):
     ID_FAQ = wx.NewId()
     ID_QUESTION = wx.NewId()
     ID_REPORTBUG = wx.NewId()
+    IDS_CURRENCIES = [wx.NewId() for i in range(len(CurrencyStrings))]
     
     def __init__(self, *args, **kwargs):
         wx.MenuBar.__init__(self, *args, **kwargs)
+        
+        settingsMenu = wx.Menu()
+        
+        ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
+        currencyMenu = wx.Menu() #(settingsMenu, self.ID_FAQ, _("&Currency"), _("Select currency to display"))
+        currencyMenu.Bitmap = wx.ArtProvider.GetBitmap("wxART_money")
+        settingsMenu.AppendMenu(wx.NewId(), "&Currency", currencyMenu)
+        
+        # Add an entry for each available currency.
+        for i, cstr in enumerate(CurrencyStrings):
+            item = wx.MenuItem(currencyMenu, self.IDS_CURRENCIES[i], cstr)
+            currencyMenu.AppendItem(item)
         
         helpMenu = wx.Menu()
         
@@ -50,20 +66,30 @@ class BankMenuBar(wx.MenuBar):
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
         aboutItem = helpMenu.Append(wx.ID_ABOUT, _("&About"), _("More information about wxBanker"))
         
+        # Add everything to the main menu.
+        self.Append(settingsMenu, _("&Settings"))
         self.Append(helpMenu, _("&Help"))
         
         self.Bind(wx.EVT_MENU, self.onClickAbout)
         helpMenu.Bind(wx.EVT_MENU, self.onClickAbout)
         
     def onMenuEvent(self, event):
-        handler = {
-            self.ID_FAQ: self.onClickFAQs,
-            self.ID_QUESTION: self.onClickAskQuestion,
-            self.ID_REPORTBUG: self.onClickReportBug,
-            wx.ID_ABOUT: self.onClickAbout,
-        }[event.Id]
+        ID = event.Id
         
-        handler(event)
+        if ID in self.IDS_CURRENCIES:
+            self.onSelectCurrency(self.IDS_CURRENCIES.index(ID))
+        else:
+            handler = {
+                self.ID_FAQ: self.onClickFAQs,
+                self.ID_QUESTION: self.onClickAskQuestion,
+                self.ID_REPORTBUG: self.onClickReportBug,
+                wx.ID_ABOUT: self.onClickAbout,
+            }[ID]
+            
+            handler(event)
+            
+    def onSelectCurrency(self, currencyIndex):
+        Publisher().sendMessage("user.currency_changed", currencyIndex)
         
     def onClickFAQs(self, event):
         webbrowser.open("https://answers.launchpad.net/wxbanker/+faqs")
