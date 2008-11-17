@@ -172,9 +172,18 @@ def main():
         config.WriteBool("SHOW_CALC", True)
 
     # Figure out where the bank database file is, and load it.
-    root = os.path.dirname(__file__)
-    bankPath = os.path.join(root, 'bank')
-    bank = Bank(bankPath)
+    #Note: look at wx.StandardPaths.Get().GetUserDataDir() in the future
+    defaultPath = os.path.join(os.path.dirname(__file__), 'bank.db')
+    if 'HOME' in os.environ:
+        # We seem to be on a Unix environment.
+        preferredPath = os.path.join(os.environ['HOME'], '.wxbanker', 'bank.db')
+        if os.path.exists(preferredPath) or not os.path.exists(defaultPath):
+            defaultPath = preferredPath
+            # Ensure that the directory exists.
+            dirName = os.path.dirname(defaultPath)
+            if not os.path.exists(dirName):
+                os.mkdir(dirName)
+    bank = Bank(defaultPath)
 
     # Push our custom art provider.
     import wx.lib.art.img2pyartprov as img2pyartprov

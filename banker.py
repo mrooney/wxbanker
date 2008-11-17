@@ -31,7 +31,7 @@ are getting published when they should be.
 
 >>> import os
 >>> if os.path.exists("test.db"): os.remove("test.db")
->>> b = Bank("test")
+>>> b = Bank("test.db")
 >>> b.getAccountNames()
 []
 >>> b.getAllTransactions()
@@ -210,14 +210,13 @@ class Bank(object):
         self.__dict__ = self.__shared_state
         
         if self.__dict__ == {}:
-            if path is None:
-                path = 'bank'
-    
+            assert path is not None
             self.model = Model(path)
+            
             index = self.model.getCurrency()
             self.Currency = currencies.CurrencyList[index]()
             
-        Publisher().subscribe(self.onCurrencyChanged, "user.currency_changed")
+            Publisher().subscribe(self.onCurrencyChanged, "user.currency_changed")
         
     def float2str(self, flt):
         return self.Currency.float2str(flt)
