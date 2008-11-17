@@ -1,3 +1,24 @@
+#! /usr/bin/python
+#
+#    https://launchpad.net/wxbanker
+#    compileart.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
+#
+#    This file is part of wxBanker.
+#
+#    wxBanker is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    wxBanker is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
+#
+
 """
 A script to generate an img2py catalog module, given a directory full of images.
 
@@ -13,6 +34,29 @@ import os
 
 base = 'silk'
 validExts = ['png',]
+
+header = """#! /usr/bin/python
+#
+#    https://launchpad.net/wxbanker
+#    silk.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
+#
+#    This file is part of wxBanker.
+#
+#    wxBanker is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    wxBanker is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
+#
+"""
+
 testFrame = """
 # Added so that the img2py module is runnable, for a sample of all available art.
 import wx
@@ -81,6 +125,11 @@ print "Adding demo frame and making %s module runnable..."%base,
 for line in testFrame.splitlines(True):
     lines.append(line)
 print "added!"
+
+print "Prepending header (shebang and license)...",
+headerLines = header.splitlines()
+lines = headerLines + lines
+print "prepended!"
 
 print "Saving modified %s.py..."%base,
 open('%s.py'%base, 'w').writelines(lines)

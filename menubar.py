@@ -38,7 +38,7 @@ class BankMenuBar(wx.MenuBar):
         
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
         currencyMenu = wx.Menu() #(settingsMenu, self.ID_FAQ, _("&Currency"), _("Select currency to display"))
-        currencyMenu.Bitmap = wx.ArtProvider.GetBitmap("wxART_money")
+        #currencyMenu.SetBitmap(wx.ArtProvider.GetBitmap("wxART_money"))
         settingsMenu.AppendMenu(wx.NewId(), "&Currency", currencyMenu)
         
         # Add an entry for each available currency.
@@ -122,7 +122,7 @@ class BankMenuBar(wx.MenuBar):
         info.Translators = [unicode(s, 'iso-8859-15') for s in translators]
         
         licenseDir = os.path.dirname(__file__)
-        info.License = open(os.path.join(licenseDir, 'gpl.txt')).read()
+        info.License = open(os.path.join(licenseDir, 'COPYING.txt')).read()
 
         wx.AboutBox(info)
         

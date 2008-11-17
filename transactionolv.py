@@ -39,10 +39,10 @@ class TransactionOLV(GroupListView):
         self.cellEditMode = GroupListView.CELLEDIT_SINGLECLICK
         self.SetEmptyListMsg("No transactions entered.")
         self.SetColumns([
-            ColumnDefn("Date", valueGetter="Date", minimumWidth=90),
-            ColumnDefn("Description", valueGetter="Description", isSpaceFilling=True, minimumWidth=80),
-            ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=Bank().float2str, minimumWidth=50),
-            ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=Bank().float2str, minimumWidth=50, isEditable=False),
+            ColumnDefn("Date", valueGetter="Date", width=-1),
+            ColumnDefn("Description", valueGetter="Description"),
+            ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=Bank().float2str),
+            ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=Bank().float2str, isEditable=False),
         ])
         
         self.Bind(wx.EVT_RIGHT_DOWN, self.onRightDown)

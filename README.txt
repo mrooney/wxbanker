@@ -11,7 +11,7 @@ for simple instructions. It's easy, I promise!
 
 == REQUIREMENTS ==
  - Python >= 2.5
- - wxPython >= 2.8
+ - wxPython >= 2.8.8.0
  * numpy >= 1.04 (completely optional; enables graphing capabilities)
 
 See "INSTALLING" below for instructions on installing these
@@ -25,7 +25,7 @@ dependencies on your specific operating system.
    - Download and install wxPython from:
       http://downloads.sourceforge.net/wxpython/wxPython2.8-win32-unicode-2.8.8.1-py25.exe
    - Optionally, for graphing capabilities, download and install
-      numpy-1.1.0-win32-superpack-python2.5.exe from:
+      numpy-1.1.0-win32-superpack-python2.5.exe or later from:
       http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=175103
 
  - Ubuntu/Debian
@@ -41,14 +41,21 @@ dependencies on your specific operating system.
    - Download and install wxPython from:
       http://downloads.sourceforge.net/wxpython/wxPython2.8-osx-unicode-2.8.8.1-universal-py2.5.dmg
    - Optionally (10.5 only), for graphing capabilities, download and install
-      numpy-1.1.0-py2.5-macosx10.5.dmg from:
+      numpy-1.1.0-py2.5-macosx10.5.dmg or later from:
       http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=175103
 
+      
 Once you have installed Python, wxPython, and optionally numpy
 using the instructions above, you are set. There is no need to
 "install" wxBanker, it just runs from wherever it is located.
 
 See the below section "RUNNING" for instructions on running wxBanker.
+
+Optionally if running Linux, you may choose to more "properly"
+install wxBanker by executing: "sudo python setup.py install" in this
+directory. This will allow you to run 'wxbanker' from anywhere and in
+Gnome create a shortcut under Applications -> Office. This will also
+make future upgrades simpler.
 
 
 == RUNNING ==
