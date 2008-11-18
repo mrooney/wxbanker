@@ -23,7 +23,13 @@ locale.setlocale(locale.LC_ALL, '')
 # Define the domain and localedir.
 import os
 APP = 'wxbanker'
-DIR = os.path.join(os.path.dirname(__file__), 'locales')
+# Figure out the directory...
+if os.path.exists('/usr/share/locale/es/LC_MESSAGES/wxbanker.mo'):
+    DIR = '/usr/share/locale'
+elif os.path.exists('/usr/local/share/locale/es/LC_MESSAGES/wxbanker.mo'):
+    DIR = '/usr/local/share/locale'
+else:
+    DIR = os.path.join(os.path.dirname(__file__), 'locale')
 
 # Install gettext.
 import gettext
