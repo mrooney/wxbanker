@@ -3,14 +3,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-30 21:30-0400\n"
+"POT-Creation-Date: 2008-11-17 21:44-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-11-11 01:08+0000\n"
+"X-Launchpad-Export-Date: 2008-11-18 17:01+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker.py:38
@@ -19,41 +19,41 @@ msgid ""
 "fix this."
 msgstr ""
 
-#: wxbanker.py:56
+#: wxbanker.py:57
 msgid "Transactions"
 msgstr ""
 
-#: wxbanker.py:60
+#: wxbanker.py:61
 msgid "Summary"
 msgstr ""
 
-#: wxbanker.py:106
+#: wxbanker.py:107
 msgid "It looks like this is your first time using wxBanker!"
 msgstr ""
 
-#: wxbanker.py:107
+#: wxbanker.py:108
 msgid ""
 "To get started, add an account using the account control in the top left "
 "corner."
 msgstr ""
 
-#: wxbanker.py:108
+#: wxbanker.py:109
 msgid ""
 "The buttons in the account control allow you to add, remove, and rename an "
 "account, respectively."
 msgstr ""
 
-#: wxbanker.py:109
+#: wxbanker.py:110
 msgid ""
 "Once you have created an account you can add transactions to it (such as "
 "your initial balance) using the controls below the grid on the bottom right."
 msgstr ""
 
-#: wxbanker.py:110
+#: wxbanker.py:111
 msgid "Have fun!"
 msgstr ""
 
-#: wxbanker.py:112
+#: wxbanker.py:113
 msgid "Welcome!"
 msgstr ""
 
@@ -77,79 +77,91 @@ msgstr ""
 msgid "Total Balance Over Time"
 msgstr ""
 
-#: summarytab.py:168 managetab.py:170 bankcontrols.py:60 bankcontrols.py:577
+#: summarytab.py:168 managetab.py:175 bankcontrols.py:60 bankcontrols.py:598
 msgid "Date"
 msgstr ""
 
-#: menubar.py:37
+#: menubar.py:41
+msgid "&Currency"
+msgstr ""
+
+#: menubar.py:41
+msgid "Select currency to display"
+msgstr ""
+
+#: menubar.py:57
 msgid "View &FAQs"
 msgstr ""
 
-#: menubar.py:37
+#: menubar.py:57
 msgid "View Frequently Asked Questions online"
 msgstr ""
 
-#: menubar.py:42
+#: menubar.py:62
 msgid "Ask a &Question"
 msgstr ""
 
-#: menubar.py:42
+#: menubar.py:62
 msgid "Ask a question online"
 msgstr ""
 
-#: menubar.py:47
+#: menubar.py:67
 msgid "&Report a Bug"
 msgstr ""
 
-#: menubar.py:47
+#: menubar.py:67
 msgid "Report a bug to the developer online"
 msgstr ""
 
-#: menubar.py:52
+#: menubar.py:72
 msgid "&About"
 msgstr ""
 
-#: menubar.py:52
+#: menubar.py:72
 msgid "More information about wxBanker"
 msgstr ""
 
-#: menubar.py:54
+#: menubar.py:75
+msgid "&Settings"
+msgstr ""
+
+#: menubar.py:76
 msgid "&Help"
 msgstr ""
 
-#: menubar.py:82
+#: menubar.py:112
 msgid "Copyright"
 msgstr ""
 
-#: menubar.py:83
+#: menubar.py:113
 msgid "A lightweight personal finance management application."
 msgstr ""
 
-#: managetab.py:171 bankcontrols.py:60 bankcontrols.py:580
+#: managetab.py:176 bankcontrols.py:60 bankcontrols.py:601
 msgid "Description"
 msgstr ""
 
-#: managetab.py:172 bankcontrols.py:60 bankcontrols.py:581
+#: managetab.py:177 bankcontrols.py:60 bankcontrols.py:602
 msgid "Amount"
 msgstr ""
 
-#: managetab.py:173 bankcontrols.py:179
+#: managetab.py:178 bankcontrols.py:187
 msgid "Total"
 msgstr ""
 
-#: managetab.py:264
+#: managetab.py:269
 msgid "Send to calculator"
 msgstr ""
 
-#: managetab.py:265
+#: managetab.py:270
 msgid "Add to calculator"
 msgstr ""
 
-#: managetab.py:266
+#: managetab.py:271
 msgid "Subtract from calculator"
 msgstr ""
 
-#: managetab.py:278
+#: managetab.py:283
 msgid "Remove this transaction"
 msgstr ""
 
@@ -219,134 +231,134 @@ msgid "Remove the selected account"
 msgstr ""
 
 #: bankcontrols.py:166
-msgid "Edit the name of the selected account"
+msgid "Rename the selected account"
 msgstr ""
 
-#: bankcontrols.py:184
+#: bankcontrols.py:171
+msgid "Configure the selected account"
+msgstr ""
+
+#: bankcontrols.py:192
 msgid "Hide zero-balance accounts"
 msgstr ""
 
-#: bankcontrols.py:185
+#: bankcontrols.py:193
 msgid ""
 "When enabled, accounts with a balance of $0.00 will be hidden from the list"
 msgstr ""
 
-#: bankcontrols.py:438 bankcontrols.py:516
+#: bankcontrols.py:459 bankcontrols.py:537
 msgid "Sorry, an account by that name already exists."
 msgstr ""
 
-#: bankcontrols.py:492
+#: bankcontrols.py:513
 #, python-format
 msgid ""
 "This will permanently remove the account '%s' and all its transactions. "
 "Continue?"
 msgstr ""
 
-#: bankcontrols.py:493
+#: bankcontrols.py:514
 msgid "Warning"
 msgstr ""
 
-#: bankcontrols.py:585
+#: bankcontrols.py:606
 msgid "Enter this transaction"
 msgstr ""
 
-#: bankcontrols.py:588
+#: bankcontrols.py:609
 msgid "Transfer"
 msgstr ""
 
-#: bankcontrols.py:593
+#: bankcontrols.py:614
 msgid "Transact"
 msgstr ""
 
-#: bankcontrols.py:627
+#: bankcontrols.py:648
 msgid ""
 "Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
 "to fix this."
 msgstr ""
 
-#: bankcontrols.py:651
+#: bankcontrols.py:672
 msgid "Please select an account and then try again."
 msgstr ""
 
-#: bankcontrols.py:652
+#: bankcontrols.py:673
 msgid "No account selected"
 msgstr ""
 
-#: bankcontrols.py:666
+#: bankcontrols.py:687
 msgid "No amount entered in the 'Amount' field."
 msgstr ""
 
-#: bankcontrols.py:668
+#: bankcontrols.py:689
 #, python-format
 msgid "'%s' is not a valid amount."
 msgstr ""
 
-#: bankcontrols.py:671
+#: bankcontrols.py:692
 msgid "Please enter a number such as 12.34 or -20."
 msgstr ""
 
-#: bankcontrols.py:672
+#: bankcontrols.py:693
 msgid "Invalid Transaction Amount"
 msgstr ""
 
-#: bankcontrols.py:687
+#: bankcontrols.py:708
 msgid "Which account will the money come from?"
 msgstr ""
 
-#: bankcontrols.py:687
+#: bankcontrols.py:708
 msgid "Other accounts"
 msgstr ""
 
-#: bankcontrols.py:703
+#: bankcontrols.py:724
 msgid "transfer"
 msgstr ""
 
-#: bankcontrols.py:703
+#: bankcontrols.py:724
 msgid "transaction"
 msgstr ""
 
-#: bankcontrols.py:705
+#: bankcontrols.py:726
 #, python-format
 msgid ""
 "A search is currently active. Would you like to clear the current search and "
 "make this %s in \"%s\"?"
 msgstr ""
 
-#: bankcontrols.py:706
+#: bankcontrols.py:727
 msgid "Clear search?"
 msgstr ""
 
-#: bankcontrols.py:724
+#: bankcontrols.py:745
 msgid ""
 "If this box is checked when adding a transaction, you will be prompted for "
 "the account to use as the source of the transfer."
 msgstr ""
 
-#: bankcontrols.py:725
+#: bankcontrols.py:746
 msgid ""
 "For example, checking this box and entering a transaction of $50 into this "
 "account will also subtract $50 from the account that you choose as the "
 "source."
 msgstr ""
 
-#: banker.py:279
+#: banker.py:281
 #, python-format
 msgid "Transfer to %s"
 msgstr ""
 
-#: banker.py:280
+#: banker.py:282
 #, python-format
 msgid "Transfer from %s"
 msgstr ""
 
-#: currencies.py:162
-msgid "United States Dollar"
-msgstr ""
-
-#: templater.py:24
+#: templater.py:25
 msgid "Hide Calculator"
 msgstr ""
 
-#: templater.py:25
+#: templater.py:26
 msgid "Show Calculator"
 msgstr ""
