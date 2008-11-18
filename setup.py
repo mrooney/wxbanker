@@ -25,7 +25,7 @@ setup(
     platforms='linux',
     scripts = ['bin/wxbanker'],
     data_files = [
-        ("share/applications", ["wxbanker.desktop"]),
+        ("share/applications", ["bin/wxbanker.desktop"]),
         ('share/icons/hicolor/16x16/apps', ['images/16/wxbanker.png']),
         ('share/icons/hicolor/24x24/apps', ['images/24/wxbanker.png']),
         ('share/icons/hicolor/32x32/apps', ['images/32/wxbanker.png']),
