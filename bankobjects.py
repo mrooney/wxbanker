@@ -1,10 +1,6 @@
 from wx.lib.pubsub import Publisher
 import datetime
 
-# Import the decimal module and set precision to 2 places.
-import decimal
-decimal.getcontext().prec = 2
-
 
 class Transaction(object):
     """
@@ -89,7 +85,7 @@ class Transaction(object):
 
     def SetAmount(self, amount):
         """Update the amount, ensuring it is a float."""
-        self._Amount = decimal.Decimal(str(amount))
+        self._Amount = float(amount)
         
         if not self.IsFrozen:
             Publisher.sendMessage("transaction.updated.amount", self)

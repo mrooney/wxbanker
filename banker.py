@@ -161,7 +161,7 @@ InvalidTransactionException: Unable to find transaction with UID FakeID
 >>> os.remove('test.db')
 """
 
-import time, os, datetime, re, decimal
+import time, os, datetime, re
 from model_sqlite import Model
 import  bankobjects
 from wx.lib.pubsub import Publisher
@@ -200,13 +200,13 @@ class Bank(object):
         return self.Currency.str2float(moneystr)
 
     def getBalanceOf(self, account):
-        balance = decimal.Decimal("0.00")
+        balance = 0.0
         for transaction in self.getTransactionsFrom(account):
             balance += transaction.Amount
         return balance
 
     def getTotalBalance(self):
-        total = decimal.Decimal("0.00")
+        total = 0.0
         for account in self.getAccountNames():
             total += self.getBalanceOf(account)
         return total
@@ -230,7 +230,7 @@ class Bank(object):
         offset = datetime.timedelta(days)
 
         totals = []
-        total = grandTotal = decimal.Decimal("0.00")
+        total = grandTotal = 0.0
 
         for trans in transactions:
             if trans.Date < currentDate + offset:

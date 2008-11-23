@@ -153,7 +153,7 @@ class BankerFrame(wx.Frame):
 
 
 def main():
-    import wx, os
+    import wx, os, sys
     app = wx.App(False)
 
     # Initialize our configuration object.
@@ -174,7 +174,7 @@ def main():
     # Figure out where the bank database file is, and load it.
     #Note: look at wx.StandardPaths.Get().GetUserDataDir() in the future
     defaultPath = os.path.join(os.path.dirname(__file__), 'bank.db')
-    if 'HOME' in os.environ:
+    if not '--use-local' in sys.argv and 'HOME' in os.environ:
         # We seem to be on a Unix environment.
         preferredPath = os.path.join(os.environ['HOME'], '.wxbanker', 'bank.db')
         if os.path.exists(preferredPath) or not os.path.exists(defaultPath):
