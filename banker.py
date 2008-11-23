@@ -192,7 +192,7 @@ class Bank(object):
         
         Publisher.subscribe(self.onTransactionUpdated, "transaction.updated")
         Publisher.subscribe(self.onMakeTransfer, "user.transfer")
-        Publisher.subscribe(self.onMakeTransfer, "user.transaction")
+        Publisher.subscribe(self.onMakeTransaction, "user.transaction")
         
     def float2str(self, flt):
         return self.Currency.float2str(flt)

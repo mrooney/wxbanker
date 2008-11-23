@@ -67,7 +67,11 @@ class TransactionOLV(GroupListView):
         return total
     
     def setAccount(self, accountName):
-        transactions = Bank().getTransactionsFrom(accountName)
+        if accountName is None:
+            transactions = []
+        else:
+            transactions = Bank().getTransactionsFrom(accountName)
+        
         self.SetObjects(transactions)
         self.Parent.Layout() # Necessary for columns to size properly. (GTK)
         #self.AutoSizeColumns()
