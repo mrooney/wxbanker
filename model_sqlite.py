@@ -43,7 +43,7 @@ from wx.lib.pubsub import Publisher
 class Model:
     def __init__(self, path):
         self.Version = 2
-        self.path = path + os.path.extsep + 'db'
+        self.path = path
         existed = True
         if not os.path.exists(self.path):
             connection = self.initialize()

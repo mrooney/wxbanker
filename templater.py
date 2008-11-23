@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #    https://launchpad.net/wxbanker
 #    templater.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
 #

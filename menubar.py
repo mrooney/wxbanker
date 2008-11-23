@@ -34,18 +34,23 @@ class BankMenuBar(wx.MenuBar):
     def __init__(self, *args, **kwargs):
         wx.MenuBar.__init__(self, *args, **kwargs)
         
+        # Settings menu.
         settingsMenu = wx.Menu()
         
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
-        currencyMenu = wx.Menu() #(settingsMenu, self.ID_FAQ, _("&Currency"), _("Select currency to display"))
-        #currencyMenu.SetBitmap(wx.ArtProvider.GetBitmap("wxART_money"))
-        settingsMenu.AppendMenu(wx.NewId(), "&Currency", currencyMenu)
+        currencyMenu = wx.MenuItem(settingsMenu, -1, _("&Currency"), _("Select currency to display"))
+        currencyMenu.SetBitmap(wx.ArtProvider.GetBitmap("wxART_money"))
         
+        currencies = wx.Menu()
         # Add an entry for each available currency.
         for i, cstr in enumerate(CurrencyStrings):
-            item = wx.MenuItem(currencyMenu, self.IDS_CURRENCIES[i], cstr)
-            currencyMenu.AppendItem(item)
+            item = wx.MenuItem(currencies, self.IDS_CURRENCIES[i], cstr)
+            currencies.AppendItem(item)
+        currencyMenu.SetSubMenu(currencies)
         
+        settingsMenu.AppendItem(currencyMenu)
+        
+        # Help menu.
         helpMenu = wx.Menu()
         
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
