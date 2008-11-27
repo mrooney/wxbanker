@@ -1,5 +1,5 @@
 #    https://launchpad.net/wxbanker
-#    model_sqlite.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
+#    persistentstore.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
 #
 #    This file is part of wxBanker.
 #
@@ -17,14 +17,12 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-This is an implementation of a Bank Model using sqlite3.
-
-Table: accounts
-+---------------------------------------------------------------+
-| id INTEGER PRIMARY KEY | name VARCHAR(255) | currency INTEGER | 
-|------------------------+-------------------|------------------|
-| 1                      | "My Account"      | 0                |
-+---------------------------------------------------------------+
+Table: accounts                                v2                 v3
++---------------------------------------------------------------+-------------+
+| id INTEGER PRIMARY KEY | name VARCHAR(255) | currency INTEGER | total FLOAT |
+|------------------------+-------------------|------------------|-------------|
+| 1                      | "My Account"      | 0                | 0           |
++---------------------------------------------------------------+-------------+
 
 Table: transactions
 +-------------------------------------------------------------------------------------------------------+
@@ -40,7 +38,11 @@ import sqlite3
 from wx.lib.pubsub import Publisher
 
 
-class Model:
+class PersistentStore:
+    """
+    Handles creating the Model (bankobjects) from the store and writing
+    back the changes.
+    """
     def __init__(self, path):
         self.Version = 2
         self.path = path
@@ -97,18 +99,25 @@ class Model:
             # Add metadata table, with version: 2
             cursor.execute('CREATE TABLE meta (id INTEGER PRIMARY KEY, name VARCHAR(255), value VARCHAR(255))')
             cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('VERSION', '2'))
+        elif fromVer == 2:
+            # Add `total` column to the accounts table.
+            cursor.execute('ALTER TABLE accounts ADD total FLOAT not null DEFAULT 0.0')
+            for account in self.getAccounts():
+                accountTotal = sum([t.Amount for t in self.getTransactionsFrom(account.Name)])
+                print "Setting total for account %s" % account.Name
+                # Set the correct total.
+                cursor.execute('UPDATE accounts SET total=? WHERE name=?', (accountTotal, account.Name))
+            # Update the meta version number.
+            cursor.execute('UPDATE meta SET value=? WHERE name=?', (3, "VERSION"))
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
         
-    def getCurrency(self):
-        # Only necessary as a step in 0.4, in 0.5 this will be an attribute
-        # of an Account and this can be removed.
-        accounts = self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()
-        if not accounts:
-            return 0
-        else:
-            return accounts[0][2]
-
+    def getModel(self):
+        for account in self.getAccounts():
+            for transaction in self.getTransactionsFrom(accountName):
+                Account.AddTransaction(transaction)
+            #AccountList.Add(account)
+            
     def result2transaction(self, result):
         """
         This method converts this model's specific implementation
@@ -123,9 +132,26 @@ class Model:
         """
         dateStr = "%s/%s/%s"%(transObj.Date.year, str(transObj.Date.month).zfill(2), str(transObj.Date.day).zfill(2))
         return [transObj.ID, transObj.Amount, transObj.Description, dateStr]
+    
+    def result2account(self, result):
+        name, currency, total = result[1:]
+        return bankobjects.Account(name, currency, total)
 
     def getAccounts(self):
-        return sorted([result[1] for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()])
+        return sorted([self.result2account(result) for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()])
+            
+            
+class Old:
+    def getCurrency(self):
+        # Only necessary as a step in 0.4, in 0.5 this will be an attribute
+        # of an Account and this can be removed.
+        accounts = self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()
+        if not accounts:
+            return 0
+        else:
+            return accounts[0][2]
+
+
 
     def createAccount(self, account):
         self.dbconn.cursor().execute('INSERT INTO accounts VALUES (null, ?, ?)', (account, 0))
@@ -205,6 +231,7 @@ class Model:
             for trans in cursor.execute("SELECT * FROM transactions WHERE accountId=?", (account[0],)).fetchall():
                 print '  -',trans
 
+                
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
