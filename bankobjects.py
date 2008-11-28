@@ -2,6 +2,71 @@ from wx.lib.pubsub import Publisher
 import datetime
 
 
+class BankModel(object):
+    def __init__(self, store, accountList):
+        self.Store = store
+        self.Accounts = accountList
+
+
+class AccountList(list):
+    def __init__(self, store, accounts):
+        list.__init__(self, accounts)
+        self.Store = store
+        
+    def Create(self, accountName):
+        account = self.Store.CreateAccount(accountName)
+        self.append(account)
+
+
+class Account(object):
+    def __init__(self, name, currency, total=0.0):
+        self._Name = name
+        self._Transactions = None
+        self.Currency = currency
+        self.Total = 0.0
+        
+    def GetTransactions(self):
+        if self._Transactions is None:
+            # Fetch them into self._Transactions
+            pass
+        
+        return self._Transactions
+        
+    def GetName(self):
+        return self._Name
+
+    def SetName(self, name):
+        oldName = self._Name
+        self._Name = name
+        Publisher.sendMessage("account.renamed.%s"%oldName, name)
+
+    def AddTransaction(self, *args, **kwargs):
+        self.TransactionList.Add(Transaction(*args, **kwargs))
+
+    def RemoveTransaction(self, *args, **kwargs):
+        self.TransactionList.Remove(*args, **kwargs)
+        
+    def __cmp__(self, other):
+        return cmp(self.Name, other.Name)
+    
+    Name = property(GetName, SetName)
+    Transactions = property(GetTransactions)
+
+
+class TransactionList(object):
+    def __init__(self):
+        self.Transactions = {}
+
+    def Add(self, transaction):
+        self.Transactions[transaction.ID] = transaction
+
+    def Get(self, tID):
+        return self.Transactions[tID]
+
+    def Remove(self, tID):
+        del self.Transactions[tID]
+        
+
 class Transaction(object):
     """
     An object which represents a transaction.
@@ -93,62 +158,7 @@ class Transaction(object):
     Date = property(GetDate, SetDate)
     Description = property(GetDescription, SetDescription)
     Amount = property(GetAmount, SetAmount)
-
-
-class TransactionList(object):
-    def __init__(self):
-        self.Transactions = {}
-
-    def Add(self, transaction):
-        self.Transactions[transaction.ID] = transaction
-
-    def Get(self, tID):
-        return self.Transactions[tID]
-
-    def Remove(self, tID):
-        del self.Transactions[tID]
-        
-
-class AccountList(list):
-    def __init__(self, accounts):
-        list.__init__(self)
-        self.extend(accounts)
-
-
-class Account(object):
-    def __init__(self, name, currency, total=0.0):
-        self._Name = name
-        self._Transactions = None
-        self.Currency = currency
-        self.Total = 0.0
-        
-    def GetTransactions(self):
-        if self._Transactions is None:
-            # Fetch them into self._Transactions
-            pass
-        
-        return self._Transactions
-        
-    def GetName(self):
-        return self._Name
-
-    def SetName(self, name):
-        oldName = self._Name
-        self._Name = name
-        Publisher.sendMessage("account.renamed.%s"%oldName, name)
-
-    def AddTransaction(self, *args, **kwargs):
-        self.TransactionList.Add(Transaction(*args, **kwargs))
-
-    def RemoveTransaction(self, *args, **kwargs):
-        self.TransactionList.Remove(*args, **kwargs)
-        
-    def __cmp__(self, other):
-        return cmp(self.Name, other.Name)
-    
-    Name = property(GetName, SetName)
-    Transactions = property(GetTransactions)
-        
+               
         
 if __name__ == "__main__":
     import doctest

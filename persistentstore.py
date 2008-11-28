@@ -65,6 +65,19 @@ class PersistentStore:
         
         ##self.updateCb = lambda message: self.updateTransaction(message.data)
         ##Publisher.subscribe(self.updateCb, "transaction.updated")
+        
+    def GetModel(self):
+        print 'Creating model...'
+        accounts = self.getAccounts()
+        accountList = bankobjects.AccountList(self, accounts)
+        bankmodel = bankobjects.BankModel(self, accountList)
+        return bankmodel
+    
+    def CreateAccount(self, accountName):
+        print self.dbconn.cursor().execute('INSERT INTO accounts VALUES (null, ?, ?)', (accountName, 0))
+        self.dbconn.commit()
+        # Ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.
+        self.clearAccountTransactions(accountName)
 
     def initialize(self):
         connection = sqlite.connect(self.path)
@@ -111,12 +124,6 @@ class PersistentStore:
             cursor.execute('UPDATE meta SET value=? WHERE name=?', (3, "VERSION"))
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
-        
-    def getModel(self):
-        for account in self.getAccounts():
-            for transaction in self.getTransactionsFrom(accountName):
-                Account.AddTransaction(transaction)
-            #AccountList.Add(account)
             
     def result2transaction(self, result):
         """
@@ -138,8 +145,25 @@ class PersistentStore:
         return bankobjects.Account(name, currency, total)
 
     def getAccounts(self):
-        return sorted([self.result2account(result) for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()])
-            
+        return [self.result2account(result) for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()]
+        
+    def clearAccountTransactions(self, accountName):
+        accountId = self.getAccountId(accountName)
+        self.dbconn.cursor().execute('DELETE FROM transactions WHERE accountId=?', (accountId,))
+        self.dbconn.commit()
+        
+    def getAccountId(self, accountName):
+        result = self.dbconn.cursor().execute('SELECT * FROM accounts WHERE name=?', (accountName,)).fetchone()
+        if result is not None:
+            return result[0]
+        
+    def __print__(self):
+        cursor = self.dbconn.cursor()
+
+        for account in cursor.execute("SELECT * FROM accounts").fetchall():
+            print account[1]
+            for trans in cursor.execute("SELECT * FROM transactions WHERE accountId=?", (account[0],)).fetchall():
+                print '  -',trans
             
 class Old:
     def getCurrency(self):
@@ -150,19 +174,6 @@ class Old:
             return 0
         else:
             return accounts[0][2]
-
-
-
-    def createAccount(self, account):
-        self.dbconn.cursor().execute('INSERT INTO accounts VALUES (null, ?, ?)', (account, 0))
-        self.dbconn.commit()
-        # Ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.
-        self.clearAccountTransactions(account)
-        
-    def clearAccountTransactions(self, account):
-        accountId = self.getAccountId(account)
-        self.dbconn.cursor().execute('DELETE FROM transactions WHERE accountId=?', (accountId,))
-        self.dbconn.commit()
         
     def removeAccount(self, account):
         # remove all the transactions associated with this account
@@ -181,11 +192,6 @@ class Old:
         for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (accountId,)).fetchall():
             transactions.append(self.result2transaction(result))
         return transactions
-
-    def getAccountId(self, account):
-        result = self.dbconn.cursor().execute('SELECT * FROM accounts WHERE name=?', (account,)).fetchone()
-        if result is not None:
-            return result[0]
 
     def removeTransaction(self, ID):
         result = self.dbconn.cursor().execute('DELETE FROM transactions WHERE id=?', (ID,)).fetchone()
@@ -223,13 +229,6 @@ class Old:
     def save(self):
         self.dbconn.commit()
 
-    def __print__(self):
-        cursor = self.dbconn.cursor()
-
-        for account in cursor.execute("SELECT * FROM accounts").fetchall():
-            print account[1]
-            for trans in cursor.execute("SELECT * FROM transactions WHERE accountId=?", (account[0],)).fetchall():
-                print '  -',trans
 
                 
 if __name__ == "__main__":

@@ -154,57 +154,50 @@ class BankerFrame(wx.Frame):
 
 def main():
     import wx, os, sys
-    app = wx.App(False)
-
-    # Initialize our configuration object.
-    # It is only necessary to initialize any default values we
-    # have which differ from the default values of the types,
-    # so initializing an Int to 0 or a Bool to False is not needed.
-    wx.Config.Set(wx.Config("wxBanker"))
-    config = wx.Config.Get()
-    if not config.HasEntry("SIZE_X"):
-        config.WriteInt("SIZE_X", 800)
-        config.WriteInt("SIZE_Y", 600)
-    if not config.HasEntry("POS_X"):
-        config.WriteInt("POS_X", 100)
-        config.WriteInt("POS_Y", 100)
-    if not config.HasEntry("SHOW_CALC"):
-        config.WriteBool("SHOW_CALC", True)
-
-    # Figure out where the bank database file is, and load it.
-    #Note: look at wx.StandardPaths.Get().GetUserDataDir() in the future
-    defaultPath = os.path.join(os.path.dirname(__file__), 'bank.db')
-    if not '--use-local' in sys.argv and 'HOME' in os.environ:
-        # We seem to be on a Unix environment.
-        preferredPath = os.path.join(os.environ['HOME'], '.wxbanker', 'bank.db')
-        if os.path.exists(preferredPath) or not os.path.exists(defaultPath):
-            defaultPath = preferredPath
-            # Ensure that the directory exists.
-            dirName = os.path.dirname(defaultPath)
-            if not os.path.exists(dirName):
-                os.mkdir(dirName)
-    bank = Bank(defaultPath)
-
-    # Push our custom art provider.
-    import wx.lib.art.img2pyartprov as img2pyartprov
-    from art import silk
-    wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(silk))
-
-    # Initialize the wxBanker frame!
-    frame = BankerFrame()
-
-    # Greet the user if it appears this is their first time using wxBanker.
-    firstTime = not config.ReadBool("RUN_BEFORE")
-    if firstTime:
-        Publisher().sendMessage("FIRST RUN")
-        config.WriteBool("RUN_BEFORE", True)
-
-    import sys
-    if '--inspect' in sys.argv:
-        import wx.lib.inspection
-        wx.lib.inspection.InspectionTool().Show()
-
-    app.MainLoop()
+    
+    bankController = Controller()
+    
+    if '--cli' in sys.argv:
+        import clibanker
+        clibanker.main(bankController)
+    else:
+        app = wx.App(False)
+    
+        # Initialize our configuration object.
+        # It is only necessary to initialize any default values we
+        # have which differ from the default values of the types,
+        # so initializing an Int to 0 or a Bool to False is not needed.
+        wx.Config.Set(wx.Config("wxBanker"))
+        config = wx.Config.Get()
+        if not config.HasEntry("SIZE_X"):
+            config.WriteInt("SIZE_X", 800)
+            config.WriteInt("SIZE_Y", 600)
+        if not config.HasEntry("POS_X"):
+            config.WriteInt("POS_X", 100)
+            config.WriteInt("POS_Y", 100)
+        if not config.HasEntry("SHOW_CALC"):
+            config.WriteBool("SHOW_CALC", True)
+    
+        # Push our custom art provider.
+        import wx.lib.art.img2pyartprov as img2pyartprov
+        from art import silk
+        wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(silk))
+    
+        # Initialize the wxBanker frame!
+        frame = BankerFrame()
+    
+        # Greet the user if it appears this is their first time using wxBanker.
+        firstTime = not config.ReadBool("RUN_BEFORE")
+        if firstTime:
+            Publisher().sendMessage("FIRST RUN")
+            config.WriteBool("RUN_BEFORE", True)
+    
+        import sys
+        if '--inspect' in sys.argv:
+            import wx.lib.inspection
+            wx.lib.inspection.InspectionTool().Show()
+    
+        app.MainLoop()
 
 
 if __name__ == "__main__":
