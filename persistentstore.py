@@ -64,8 +64,7 @@ class PersistentStore:
             
         self.dbconn.commit()
         
-        ##self.updateCb = lambda message: self.updateTransaction(message.data)
-        ##Publisher.subscribe(self.updateCb, "transaction.updated")
+        Publisher.subscribe(self.onTransactionUpdated, "transaction.updated")
         
     def GetModel(self):
         print 'Creating model...'
@@ -174,6 +173,12 @@ class PersistentStore:
         for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (accountId,)).fetchall():
             transactions.append(self.result2transaction(result))
         return transactions
+    
+    def updateTransaction(self, transObj):
+        result = self.transaction2result(transObj)
+        result.append( result.pop(0) ) #move the uid to the back as it is last in the args below
+        self.dbconn.cursor().execute('UPDATE transactions SET amount=?, description=?, date=? WHERE id=?', result)
+        self.dbconn.commit()
         
     def __print__(self):
         cursor = self.dbconn.cursor()
@@ -181,6 +186,9 @@ class PersistentStore:
             print account[1]
             for trans in cursor.execute("SELECT * FROM transactions WHERE accountId=?", (account[0],)).fetchall():
                 print '  -',trans
+                
+    def onTransactionUpdated(self, message):
+        self.updateTransaction(message.data)
             
 class Old:
     def getCurrency(self):
@@ -213,12 +221,6 @@ class Old:
         if result is None:
             return result
         return self.result2transaction(result)
-
-    def updateTransaction(self, transObj):
-        result = self.transaction2result(transObj)
-        result.append( result.pop(0) ) #move the uid to the back as it is last in the args below
-        self.dbconn.cursor().execute('UPDATE transactions SET amount=?, description=?, date=? WHERE id=?', result)
-        self.dbconn.commit()
 
     def makeTransaction(self, tID, amount, description, date):
         cursor = self.dbconn.cursor()
