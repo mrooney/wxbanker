@@ -154,6 +154,7 @@ class BankerFrame(wx.Frame):
 
 def main():
     import wx, os, sys
+    from controller import Controller
     
     bankController = Controller()
     

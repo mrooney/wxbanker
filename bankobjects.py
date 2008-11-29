@@ -1,11 +1,30 @@
 from wx.lib.pubsub import Publisher
 import datetime
+import bankexceptions, currencies
 
 
 class BankModel(object):
     def __init__(self, store, accountList):
         self.Store = store
         self.Accounts = accountList
+        
+    def CreateAccount(self, accountName):
+        return self.Accounts.Create(accountName)
+    
+    def RemoveAccount(self, accountName):
+        return self.Accounts.Remove(accountName)
+        
+    def float2str(self, *args, **kwargs):
+        """
+        Handle representing floats as strings for non
+        account-specific amounts, such as totals.
+        """
+        if len(self.Accounts) == 0:
+            currency = currencies.CurrencyList[0]()
+        else:
+            currency = self.Accounts[0].Currency
+            
+        return currency.float2str(*args, **kwargs)
 
 
 class AccountList(list):
@@ -13,22 +32,44 @@ class AccountList(list):
         list.__init__(self, accounts)
         self.Store = store
         
+    def AccountIndex(self, accountName):
+        for i, account in enumerate(self):
+            if account.Name == accountName:
+                return i
+            
+        return -1
+        
     def Create(self, accountName):
+        # First, ensure an account by that name doesn't already exist.
+        if self.AccountIndex(accountName) >= 0:
+            raise bankexceptions.AccountAlreadyExistsException(accountName)
+        
         account = self.Store.CreateAccount(accountName)
         self.append(account)
+        ##pubsub
+        
+    def Remove(self, accountName):
+        index = self.AccountIndex(accountName)
+        if index == -1:
+            raise bankexceptions.InvalidAccountException(accountName)
+        
+        self.Store.RemoveAccount(accountName)
+        self.pop(index)
+        ##pubsub
 
 
 class Account(object):
-    def __init__(self, name, currency, total=0.0):
+    def __init__(self, store, name, currency=0, balance=0.0):
+        self.Store = store
         self._Name = name
         self._Transactions = None
-        self.Currency = currency
-        self.Total = 0.0
+        self.Currency = currencies.CurrencyList[currency]()
+        self.Balance = 0.0
         
     def GetTransactions(self):
         if self._Transactions is None:
-            # Fetch them into self._Transactions
-            pass
+            transactions = self.Store.getTransactionsFrom(self.Name)
+            self._Transactions = TransactionList(transactions)
         
         return self._Transactions
         
@@ -46,6 +87,9 @@ class Account(object):
     def RemoveTransaction(self, *args, **kwargs):
         self.TransactionList.Remove(*args, **kwargs)
         
+    def float2str(self, *args, **kwargs):
+        return self.Currency.float2str(*args, **kwargs)
+        
     def __cmp__(self, other):
         return cmp(self.Name, other.Name)
     
@@ -54,8 +98,10 @@ class Account(object):
 
 
 class TransactionList(object):
-    def __init__(self):
+    def __init__(self, transactions):
         self.Transactions = {}
+        for transaction in transactions:
+            self.Transactions[t.ID] = transaction
 
     def Add(self, transaction):
         self.Transactions[transaction.ID] = transaction

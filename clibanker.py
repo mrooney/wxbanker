@@ -16,6 +16,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
 
 def wait():
     raw_input("Press enter to continue...")
@@ -27,14 +28,12 @@ def _queryDate():
         date += "/" + str(time.gmtime()[0])
     return date
 
-def _selectAccount(accountNames):
-    accountlist = {}
-    for i, x in enumerate(sorted(accountNames)):
-        accountlist[i] = x
-    accountnum = input("Account?\n"+"\n".join( [ str(i+1)+". "+accountlist[i] for i in accountlist] )+"\n? ")
-    accountname = accountlist[accountnum-1]
+def _selectAccount(accounts):
+    accountlist = sorted(accounts)
+    accountnum = input("Account?\n"+"\n".join( [ str(i+1)+". "+account.Name for i, account in enumerate(accountlist)] )+"\n? ")
+    account = accountlist[accountnum-1]
     clearScreen()
-    return accountname
+    return account
 
 def clearScreen():
     os.system(['clear','cls'][os.name == 'nt'])
@@ -44,6 +43,7 @@ def main(bankController):
     If we are running the actual file, create a command-line
     interface that the user can use.
     """
+    bankmodel = bankController.Model
 
     choice = -1
     while choice != 0:
@@ -61,12 +61,13 @@ def main(bankController):
 
         if choice == 1:
             accountName = raw_input("Account name: ")
-            bank.createAccount(accountName)
-            bank.save()
+            bankmodel.CreateAccount(accountName)
+            #bank.createAccount(accountName)
+            #bank.save()
             wait()
 
         elif choice == 2:
-            accountName = _selectAccount(bank.getAccountNames())
+            accountName = _selectAccount(bankmodel.Accounts)
             amount = input("Amount: $")
             desc = raw_input("Description: ")
             date = _queryDate()
@@ -77,9 +78,9 @@ def main(bankController):
 
         elif choice == 3:
             print 'From:'
-            source = _selectAccount(bank.getAccountNames())
+            source = _selectAccount(bankmodel.Accounts)
             print 'To:'
-            destination = _selectAccount(bank.getAccountNames())
+            destination = _selectAccount(bankmodel.Accounts)
             amount = input('Amount: $')
             desc = raw_input('Description (optional): ')
 
@@ -97,17 +98,17 @@ def main(bankController):
             wait()
 
         elif choice == 4:
-            total = 0
-            for account in sorted(bank.getAccountNames()):
-                balance = bank.getBalanceOf(account)
-                print "%s %s"%( (account+':').ljust(20), bank.float2str(balance, 10))
+            total = 0.0
+            for account in sorted(bankmodel.Accounts):
+                balance = account.Balance
+                print "%s %s"%( (account.Name+':').ljust(20), account.float2str(balance, 10))
                 total += balance
-            print "%s %s"%( "Total:".ljust(20), bank.float2str(total, 10))
+            print "%s %s"%( "Total:".ljust(20), bankmodel.float2str(total, 10))
 
             wait()
 
         elif choice == 5:
-            accountname = _selectAccount(bank.getAccountNames())
+            accountname = _selectAccount(bankmodel.Accounts)
             total = 0.0
             for transaction in bank.getTransactionsFrom(accountname):
                 uid, amount, desc, date = transaction
@@ -118,13 +119,14 @@ def main(bankController):
             wait()
 
         elif choice == 6:
-            accountName = _selectAccount(bank.getAccountNames())
+            account = _selectAccount(bankmodel.Accounts)
             confirm = -1
             while confirm == -1 or confirm.lower() not in ['y', 'n']:
-                confirm = raw_input('Permanently remove account "%s"? [y/n]: '%accountName)
+                confirm = raw_input('Permanently remove account "%s"? [y/n]: '%account.Name)
             if confirm == 'y':
-                bank.removeAccount(accountName)
-                bank.save()
+                bankmodel.RemoveAccount(account.Name)
+                #bank.removeAccount(accountName)
+                #bank.save()
                 print 'Account successfully removed'
             else:
                 print 'Account removal cancelled'
@@ -132,4 +134,5 @@ def main(bankController):
             
             
 if __name__ == "__main__":
-    print "To run the command-line version of wxBanker, run with the 
+    print "To run the command-line version of wxBanker, run with the --cli argument"
+    

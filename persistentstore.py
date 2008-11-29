@@ -18,11 +18,11 @@
 
 """
 Table: accounts                                v2                 v3
-+---------------------------------------------------------------+-------------+
-| id INTEGER PRIMARY KEY | name VARCHAR(255) | currency INTEGER | total FLOAT |
-|------------------------+-------------------|------------------|-------------|
-| 1                      | "My Account"      | 0                | 0           |
-+---------------------------------------------------------------+-------------+
++---------------------------------------------------------------+---------------+
+| id INTEGER PRIMARY KEY | name VARCHAR(255) | currency INTEGER | balance FLOAT |
+|------------------------+-------------------|------------------|---------------|
+| 1                      | "My Account"      | 0                | 0             |
++---------------------------------------------------------------+---------------+
 
 Table: transactions
 +-------------------------------------------------------------------------------------------------------+
@@ -44,7 +44,7 @@ class PersistentStore:
     back the changes.
     """
     def __init__(self, path):
-        self.Version = 2
+        self.Version = 3
         self.path = path
         existed = True
         if not os.path.exists(self.path):
@@ -60,6 +60,7 @@ class PersistentStore:
             assert existed # Sanity check to ensure new dbs don't need to be upgraded.
             self.upgradeDb(self.Meta['VERSION'])
             self.Meta = self.getMeta()
+            print self.Meta
             
         self.dbconn.commit()
         
@@ -74,16 +75,24 @@ class PersistentStore:
         return bankmodel
     
     def CreateAccount(self, accountName):
-        print self.dbconn.cursor().execute('INSERT INTO accounts VALUES (null, ?, ?)', (accountName, 0))
+        self.dbconn.cursor().execute('INSERT INTO accounts VALUES (null, ?, ?, ?)', (accountName, 0, 0.0))
         self.dbconn.commit()
         # Ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.
         self.clearAccountTransactions(accountName)
+        return bankobjects.Account(self, accountName)
+    
+    def RemoveAccount(self, accountName):
+        # First, remove all the transactions associated with this account.
+        # This is necessary to maintain integrity for dbs created at V1 (LP: 249954).
+        self.clearAccountTransactions(accountName)
+        self.dbconn.cursor().execute('DELETE FROM accounts WHERE name=?',(accountName,))
+        self.dbconn.commit()
 
     def initialize(self):
         connection = sqlite.connect(self.path)
         cursor = connection.cursor()
 
-        cursor.execute('CREATE TABLE accounts (id INTEGER PRIMARY KEY, name VARCHAR(255), currency INTEGER)')
+        cursor.execute('CREATE TABLE accounts (id INTEGER PRIMARY KEY, name VARCHAR(255), currency INTEGER, balance FLOAT)')
         cursor.execute('CREATE TABLE transactions (id INTEGER PRIMARY KEY, accountId INTEGER, amount FLOAT, description VARCHAR(255), date CHAR(10))')
         
         cursor.execute('CREATE TABLE meta (id INTEGER PRIMARY KEY, name VARCHAR(255), value VARCHAR(255))')
@@ -114,7 +123,7 @@ class PersistentStore:
             cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('VERSION', '2'))
         elif fromVer == 2:
             # Add `total` column to the accounts table.
-            cursor.execute('ALTER TABLE accounts ADD total FLOAT not null DEFAULT 0.0')
+            cursor.execute('ALTER TABLE accounts ADD balance FLOAT not null DEFAULT 0.0')
             for account in self.getAccounts():
                 accountTotal = sum([t.Amount for t in self.getTransactionsFrom(account.Name)])
                 print "Setting total for account %s" % account.Name
@@ -124,6 +133,8 @@ class PersistentStore:
             cursor.execute('UPDATE meta SET value=? WHERE name=?', (3, "VERSION"))
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
+        
+        self.dbconn.commit()
             
     def result2transaction(self, result):
         """
@@ -141,8 +152,8 @@ class PersistentStore:
         return [transObj.ID, transObj.Amount, transObj.Description, dateStr]
     
     def result2account(self, result):
-        name, currency, total = result[1:]
-        return bankobjects.Account(name, currency, total)
+        name, currency, balance = result[1:]
+        return bankobjects.Account(self, name, currency, balance)
 
     def getAccounts(self):
         return [self.result2account(result) for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()]
@@ -157,9 +168,15 @@ class PersistentStore:
         if result is not None:
             return result[0]
         
+    def getTransactionsFrom(self, account):
+        accountId = self.getAccountId(account)
+        transactions = []
+        for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (accountId,)).fetchall():
+            transactions.append(self.result2transaction(result))
+        return transactions
+        
     def __print__(self):
         cursor = self.dbconn.cursor()
-
         for account in cursor.execute("SELECT * FROM accounts").fetchall():
             print account[1]
             for trans in cursor.execute("SELECT * FROM transactions WHERE accountId=?", (account[0],)).fetchall():
@@ -175,23 +192,13 @@ class Old:
         else:
             return accounts[0][2]
         
-    def removeAccount(self, account):
-        # remove all the transactions associated with this account
-        # this is absolutely necessary to maintain integrity (LP: 249954)
-        self.clearAccountTransactions(account)
-        self.dbconn.cursor().execute('DELETE FROM accounts WHERE name=?',(account,))
-        self.dbconn.commit()
+
 
     def renameAccount(self, oldName, newName):
         self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (newName, oldName))
         self.dbconn.commit()
 
-    def getTransactionsFrom(self, account):
-        accountId = self.getAccountId(account)
-        transactions = []
-        for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (accountId,)).fetchall():
-            transactions.append(self.result2transaction(result))
-        return transactions
+
 
     def removeTransaction(self, ID):
         result = self.dbconn.cursor().execute('DELETE FROM transactions WHERE id=?', (ID,)).fetchone()

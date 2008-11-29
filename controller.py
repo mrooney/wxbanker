@@ -17,7 +17,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 from persistentstore import PersistentStore
-
+import os, sys
 
 class Controller(object):
     def __init__(self, path=None):
