@@ -108,20 +108,25 @@ class Account(object):
     Transactions = property(GetTransactions)
 
 
-class TransactionList(object):
+class TransactionList(list):
     def __init__(self, transactions):
-        self.Transactions = {}
-        for transaction in transactions:
-            self.Transactions[t.ID] = transaction
+        list.__init__(self, transactions)
+        #self.Transactions = {}
+        #for transaction in transactions:
+        #    self.Transactions[transaction.ID] = transaction
 
     def Add(self, transaction):
-        self.Transactions[transaction.ID] = transaction
+        self.append(transaction)
 
     def Get(self, tID):
-        return self.Transactions[tID]
+        for trans in self:
+            if trans.ID == tID:
+                return trans
+            
+        return None
 
     def Remove(self, tID):
-        del self.Transactions[tID]
+        self.remove( self.Get(tID) )
         
 
 class Transaction(object):
