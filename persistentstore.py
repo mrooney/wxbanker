@@ -48,14 +48,17 @@ class PersistentStore:
         self.path = path
         existed = True
         if not os.path.exists(self.path):
+            print 'Initializing', path
             connection = self.initialize()
             existed = False
         else:
+            print 'Loading', path
             connection = sqlite.connect(self.path)
 
         self.dbconn = connection
         
         self.Meta = self.getMeta()
+        print self.Meta
         while self.Meta['VERSION'] < self.Version:
             assert existed # Sanity check to ensure new dbs don't need to be upgraded.
             self.upgradeDb(self.Meta['VERSION'])
@@ -65,6 +68,7 @@ class PersistentStore:
         self.dbconn.commit()
         
         Publisher.subscribe(self.onTransactionUpdated, "transaction.updated")
+        Publisher.subscribe(self.onAccountRenamed, "account.renamed")
         
     def GetModel(self):
         print 'Creating model...'
@@ -107,12 +111,17 @@ class PersistentStore:
         else:
             meta = {}
             for uid, key, value in results:
+                # All values come in as strings but some we want to cast.
+                if key == "VERSION":
+                    value = int(value)
+                    
                 meta[key] = value
             
         return meta
     
     def upgradeDb(self, fromVer):
         #TODO: make backup first
+        print 'Upgrading db from %i' % fromVer
         cursor = self.dbconn.cursor()
         if fromVer == 1:
             # Add `currency` column to the accounts table with default value 0.
@@ -125,9 +134,8 @@ class PersistentStore:
             cursor.execute('ALTER TABLE accounts ADD balance FLOAT not null DEFAULT 0.0')
             for account in self.getAccounts():
                 accountTotal = sum([t.Amount for t in self.getTransactionsFrom(account.Name)])
-                print "Setting total for account %s" % account.Name
                 # Set the correct total.
-                cursor.execute('UPDATE accounts SET total=? WHERE name=?', (accountTotal, account.Name))
+                cursor.execute('UPDATE accounts SET balance=? WHERE name=?', (accountTotal, account.Name))
             # Update the meta version number.
             cursor.execute('UPDATE meta SET value=? WHERE name=?', (3, "VERSION"))
         else:
@@ -171,6 +179,7 @@ class PersistentStore:
         accountId = self.getAccountId(account)
         transactions = []
         for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (accountId,)).fetchall():
+            #print 'result', result
             transactions.append(self.result2transaction(result))
         return transactions
     
@@ -178,6 +187,14 @@ class PersistentStore:
         result = self.transaction2result(transObj)
         result.append( result.pop(0) ) #move the uid to the back as it is last in the args below
         self.dbconn.cursor().execute('UPDATE transactions SET amount=?, description=?, date=? WHERE id=?', result)
+        self.dbconn.commit()
+        
+    def renameAccount(self, oldName, newName):
+        self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (newName, oldName))
+        self.dbconn.commit()
+        
+    def setCurrency(self, currencyIndex):
+        self.dbconn.cursor().execute('UPDATE accounts SET currency=?', (currencyIndex,))
         self.dbconn.commit()
         
     def __print__(self):
@@ -188,8 +205,19 @@ class PersistentStore:
                 print '  -',trans
                 
     def onTransactionUpdated(self, message):
-        self.updateTransaction(message.data)
+        transaction = message.data
+        self.updateTransaction(transaction)
+        
+    def onAccountRenamed(self, message):
+        oldName, newName = message.data
+        self.renameAccount(oldName, newName)
+        
+    def __del__(self):
+        self.dbconn.commit()
+        self.dbconn.close()
+        
             
+        
 class Old:
     def getCurrency(self):
         # Only necessary as a step in 0.4, in 0.5 this will be an attribute
@@ -200,20 +228,12 @@ class Old:
         else:
             return accounts[0][2]
         
-
-
-    def renameAccount(self, oldName, newName):
-        self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (newName, oldName))
-        self.dbconn.commit()
-
-
-
     def removeTransaction(self, ID):
         result = self.dbconn.cursor().execute('DELETE FROM transactions WHERE id=?', (ID,)).fetchone()
         self.dbconn.commit()
-        #the result doesn't appear to be useful here, it is None regardless of whether the DELETE matched anything
-        #the controller already checks for existence of the ID though, so if this doesn't raise an exception, theoretically
-        #everything is fine. So just return True, as there we no errors that we are aware of.
+        # The result doesn't appear to be useful here, it is None regardless of whether the DELETE matched anything
+        # the controller already checks for existence of the ID though, so if this doesn't raise an exception, theoretically
+        # everything is fine. So just return True, as there we no errors that we are aware of.
         return True
 
     def getTransactionById(self, ID):
@@ -228,9 +248,6 @@ class Old:
         self.dbconn.commit()
         return cursor.lastrowid
     
-    def setCurrency(self, currencyIndex):
-        self.dbconn.cursor().execute('UPDATE accounts SET currency=?', (currencyIndex,))
-        self.dbconn.commit()
 
     def close(self):
         self.dbconn.close()

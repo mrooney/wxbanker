@@ -8,6 +8,8 @@ class BankModel(object):
         self.Store = store
         self.Accounts = accountList
         
+        Publisher().subscribe(self.onCurrencyChanged, "user.currency_changed")
+        
     def CreateAccount(self, accountName):
         return self.Accounts.Create(accountName)
     
@@ -25,6 +27,15 @@ class BankModel(object):
             currency = self.Accounts[0].Currency
             
         return currency.float2str(*args, **kwargs)
+        
+    def setCurrency(self, currencyIndex):
+        self.Store.setCurrency(currencyIndex)
+        #self.Currency = currencies.CurrencyList[currencyIndex]()
+        Publisher().sendMessage("currency_changed", currencyIndex)
+        
+    def onCurrencyChanged(self, message):
+        currencyIndex = message.data
+        self.setCurrency(currencyIndex)
 
 
 class AccountList(list):
@@ -64,7 +75,7 @@ class Account(object):
         self._Name = name
         self._Transactions = None
         self.Currency = currencies.CurrencyList[currency]()
-        self.Balance = 0.0
+        self.Balance = balance
         
     def GetTransactions(self):
         if self._Transactions is None:
@@ -79,7 +90,7 @@ class Account(object):
     def SetName(self, name):
         oldName = self._Name
         self._Name = name
-        Publisher.sendMessage("account.renamed.%s"%oldName, name)
+        Publisher.sendMessage("account.renamed.%s"%oldName, (oldName, name))
 
     def AddTransaction(self, *args, **kwargs):
         self.TransactionList.Add(Transaction(*args, **kwargs))

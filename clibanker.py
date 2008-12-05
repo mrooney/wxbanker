@@ -108,13 +108,12 @@ def main(bankController):
             wait()
 
         elif choice == 5:
-            accountname = _selectAccount(bankmodel.Accounts)
+            account = _selectAccount(bankmodel.Accounts)
             total = 0.0
-            for transaction in bank.getTransactionsFrom(accountname):
-                uid, amount, desc, date = transaction
-                total += amount
-                print "%s - %s  %s %s"%( date.strftime('%m/%d/%Y'), desc[:25].ljust(25), bank.float2str(amount, 10), bank.float2str(total, 10) )
-            print "Total: %s"%bank.float2str(total)
+            for trans in account.Transactions:
+                total += trans.Amount
+                print "%s - %s  %s %s"%( trans.Date.strftime('%m/%d/%Y'), trans.Description[:25].ljust(25), account.float2str(trans.Amount, 10), account.float2str(total, 10) )
+            print "Total: %s"%account.float2str(total)
 
             wait()
 

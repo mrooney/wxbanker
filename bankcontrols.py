@@ -214,7 +214,7 @@ class AccountListCtrl(wx.Panel):
         Publisher().subscribe(self.onAccountRemoved, "bank.REMOVED ACCOUNT")
         Publisher().subscribe(self.onAccountAdded, "bank.NEW ACCOUNT")
         Publisher().subscribe(self.onAccountRenamed, "bank.RENAMED ACCOUNT")
-        Publisher().subscribe(self.onCurrencyChanged, "model.currency_changed")
+        Publisher().subscribe(self.onCurrencyChanged, "currency_changed")
 
         # Populate ourselves initially unless explicitly told not to.
         if autoPopulate:
