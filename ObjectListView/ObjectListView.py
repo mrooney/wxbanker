@@ -858,7 +858,14 @@ class ObjectListView(wx.ListCtrl):
         # Calculate how much free space is available in the control
         totalFixedWidth = sum(self.GetColumnWidth(i) for (i, x) in enumerate(self.columns)
                               if not x.isSpaceFilling)
+        
         freeSpace = max(0, self.GetClientSizeTuple()[0] - totalFixedWidth)
+        #import platform
+        #if platform.platform().startswith("Linux"):
+        #    freeSpace = self.MainWindow.GetClientSizeTuple()[0] 
+        #else:
+        #    #freeSpace = max(0, self.GetClientSizeTuple()[0] - totalFixedWidth)
+        #    self.GetClientSizeTuple()[0]
 
         # Calculate the total number of slices the free space will be divided into
         totalProportion = sum(x.freeSpaceProportion for x in self.columns if x.isSpaceFilling)

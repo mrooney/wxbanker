@@ -19,8 +19,7 @@
 import wx, wx.grid as gridlib
 import datetime
 from banker import Bank
-import searchctrl
-from bankcontrols import AccountListCtrl, NewTransactionCtrl
+import searchctrl, accountlistctrl, newtransactionctrl
 from transactionolv import TransactionOLV as TransactionCtrl
 from calculator import CollapsableWidget, SimpleCalculator
 from wx.lib.pubsub import Publisher
@@ -32,14 +31,14 @@ class ManagePanel(wx.Panel):
     This panel contains the list of accounts on the left
     and the transaction panel on the right.
     """
-    def __init__(self, parent):
-        wx.Panel.__init__(self, parent, bankController)
+    def __init__(self, parent, bankController):
+        wx.Panel.__init__(self, parent)
 
         ## Left side, the account list and calculator
         self.leftPanel = leftPanel = wx.Panel(self)
         leftPanel.Sizer = wx.BoxSizer(wx.VERTICAL)
 
-        self.accountCtrl = accountCtrl = AccountListCtrl(leftPanel)
+        self.accountCtrl = accountCtrl = accountlistctrl.AccountListCtrl(leftPanel, bankController)
         calcWidget = CollapsableWidget(leftPanel, SimpleCalculator, "Calculator")
 
         leftPanel.Sizer.Add(accountCtrl, 0, wx.EXPAND)
@@ -98,7 +97,7 @@ class TransactionPanel(wx.Panel):
         
         self.searchCtrl = searchCtrl = searchctrl.SearchCtrl(self, bankController)
         self.transactionCtrl = transactionCtrl = TransactionCtrl(self, bankController)
-        self.newTransCtrl = newTransCtrl = NewTransactionCtrl(self, bankController)
+        self.newTransCtrl = newTransCtrl = newtransactionctrl.NewTransactionCtrl(self, bankController)
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(searchCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL)

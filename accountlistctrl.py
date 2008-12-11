@@ -1,0 +1,475 @@
+#    https://launchpad.net/wxbanker
+#    accountlistctrl.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
+#
+#    This file is part of wxBanker.
+#
+#    wxBanker is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    wxBanker is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
+
+import wx
+import bankcontrols
+from wx.lib.pubsub import Publisher
+
+
+class AccountListCtrl(wx.Panel):
+    """
+    This control manages a clickable list of accounts,
+    displaying their totals to the right of them
+    as well as the grand total as the last entry.
+
+    Accounts can be added, removed, and renamed.
+    """
+
+    def __init__(self, parent, autoPopulate = True):
+        wx.Panel.__init__(self, parent)
+        # Initialize some attributes to their default values.
+        self.editCtrl = self.hiddenIndex = None
+        self.currentIndex = None
+        self.boxLabel = _("Accounts") + " (%i)"
+        self.hyperLinks, self.totalTexts, self.totalVals = [], [], []
+
+        # Create the staticboxsizer which is the home for everything.
+        # This *MUST* be created first to ensure proper z-ordering (as per docs).
+        self.staticBox = wx.StaticBox(self, label=self.boxLabel%0)
+
+        ## Create and set up the buttons.
+        # The EDIT account button.
+        BMP = wx.ArtProvider.GetBitmap('wxART_add')
+        self.addButton = addButton = wx.BitmapButton(self, bitmap=BMP)
+        addButton.SetToolTipString(_("Add a new account"))
+        # The REMOVE account button.
+        BMP = wx.ArtProvider.GetBitmap('wxART_delete')
+        self.removeButton = removeButton = wx.BitmapButton(self, bitmap=BMP)
+        removeButton.SetToolTipString(_("Remove the selected account"))
+        removeButton.Enabled = False
+        # The EDIT account button.
+        BMP = wx.ArtProvider.GetBitmap('wxART_textfield_rename')
+        self.editButton = editButton = wx.BitmapButton(self, bitmap=BMP)
+        editButton.SetToolTipString(_("Rename the selected account"))
+        editButton.Enabled = False
+        # The CONFIGURE account button.
+        BMP = wx.ArtProvider.GetBitmap('wxART_cog')
+        self.configureButton = configureButton = wx.BitmapButton(self, bitmap=BMP)
+        configureButton.SetToolTipString(_("Configure the selected account"))
+        configureButton.Enabled = False
+        configureButton.Hide()
+        
+        # Layout the buttons.
+        buttonSizer = wx.BoxSizer()
+        buttonSizer.Add(addButton)
+        buttonSizer.Add(removeButton)
+        buttonSizer.Add(editButton)
+        buttonSizer.Add(configureButton)
+
+        # Set up the "Total" sizer.
+        self.totalText = wx.StaticText(self, label="$0.00")
+        self.totalTexts.append(self.totalText)
+        self.totalVals.append(0)
+        miniSizer = wx.BoxSizer()
+        miniSizer.Add(wx.StaticText(self, label=_("Total")+":"))
+        miniSizer.AddStretchSpacer(1)
+        miniSizer.Add(self.totalText)
+
+        # The hide zero-balance accounts option.
+        self.hideBox = hideBox = wx.CheckBox(self, label=_("Hide zero-balance accounts"))
+        hideBox.SetToolTipString(_("When enabled, accounts with a balance of $0.00 will be hidden from the list"))
+
+        #self.staticBoxSizer = SmoothStaticBoxSizer(self.staticBox, wx.VERTICAL)
+        self.staticBoxSizer = wx.StaticBoxSizer(self.staticBox, wx.VERTICAL)
+        #self.staticBoxSizer.SetSmooth(False)
+        self.staticBoxSizer.Add(buttonSizer, 0, wx.BOTTOM, 5)#, 0, wx.ALIGN_RIGHT)
+        self.staticBoxSizer.Add(miniSizer, 0, wx.EXPAND)
+        self.staticBoxSizer.Add(hideBox, 0, wx.TOP, 10)
+
+        # Set up the button bindings.
+        addButton.Bind(wx.EVT_BUTTON, self.onAddButton)
+        removeButton.Bind(wx.EVT_BUTTON, self.onRemoveButton)
+        editButton.Bind(wx.EVT_BUTTON, self.onRenameButton)
+        hideBox.Bind(wx.EVT_CHECKBOX, self.onHideCheck)
+        # Set up the link binding.
+        self.Bind(wx.EVT_HYPERLINK, self.onAccountClick)
+
+        # Subscribe to messages we are concerned about.
+        Publisher().subscribe(self.updateTotals, "bank.NEW TRANSACTION")
+        Publisher().subscribe(self.updateTotals, "bank.UPDATED TRANSACTION")
+        Publisher().subscribe(self.updateTotals, "bank.REMOVED TRANSACTION")
+        Publisher().subscribe(self.onAccountRemoved, "bank.REMOVED ACCOUNT")
+        Publisher().subscribe(self.onAccountAdded, "bank.NEW ACCOUNT")
+        Publisher().subscribe(self.onAccountRenamed, "bank.RENAMED ACCOUNT")
+        Publisher().subscribe(self.onCurrencyChanged, "currency_changed")
+
+        # Populate ourselves initially unless explicitly told not to.
+        if autoPopulate:
+            for accountName in Bank().getAccountNames():
+                self._PutAccount(accountName)
+
+        self.Sizer = self.staticBoxSizer
+        # Set the minimum size to the amount it needs to display the edit box.
+        self.Freeze()
+        self.showEditCtrl(focus=False)
+        minWidth = self.staticBoxSizer.CalcMin()[0]
+        self.onHideEditCtrl()
+        self.Thaw()
+        self.staticBoxSizer.SetMinSize((minWidth, -1))
+
+        # Update the checkbox at the end, so everything else is initialized.
+        hideBox.Value = wx.Config.Get().ReadBool("HIDE_ZERO_BALANCE_ACCOUNTS")
+        # Setting the value doesn't trigger an event, so force an update.
+        self.onHideCheck()
+
+        #self.Sizer = self.staticBoxSizer
+        self.staticBoxSizer.Layout()
+        #self.staticBoxSizer.SetSmooth(True)
+        
+    def onCurrencyChanged(self, message):
+        for i, textCtrl in enumerate(self.totalTexts):
+            balance = self.totalVals[i]
+            textCtrl.Label = Bank().float2str(balance)
+        self.Parent.Layout()
+
+    def IsVisible(self, index):
+        """
+        Return whether or not the account at the given
+        index is visible.
+        """
+        if index is None:
+            return False
+
+        if index < 0 or index >= self.GetCount():
+            raise IndexError, "No element at index %i"%index
+
+        # Offset by 1 because the first child is actually the button sizer.
+        return self.staticBoxSizer.GetItem(index+1).IsShown()
+
+    def SelectItem(self, index):
+        """
+        Given an index (zero-based), select the
+        appropriate account.
+        """
+        # Return the old ctrl to an "unselected" state.
+        if self.currentIndex is not None:
+            self.UnhighlightItem(self.currentIndex)
+
+        if index is not None:
+            # Set this as "selected".
+            linkCtrl = self.hyperLinks[index]
+            linkCtrl.Visited = False
+            self.HighlightItem(index)
+            account = linkCtrl.Label[:-1]
+        else:
+            account = None
+
+        self.currentIndex = index
+        # Update the remove/edit buttons.
+        self.removeButton.Enabled = index is not None
+        self.editButton.Enabled = index is not None
+        self.configureButton.Enabled = index is not None
+
+        # Tell the parent we changed.
+        Publisher().sendMessage("VIEW.ACCOUNT_CHANGED", account)
+
+    def SelectVisibleItem(self, index):
+        """
+        Given an index (zero-based), select the
+        visible account at that index.
+        """
+        visibleItems = -1
+        for i in range(self.GetCount()):
+            if self.IsVisible(i):
+                visibleItems += 1
+
+                if index == visibleItems:
+                    self.SelectItem(i)
+                    return
+        else: # If we didn't break (or return).
+            self.SelectItem(None)
+
+    def SelectItemByName(self, name):
+        for i, label in enumerate(self.GetAccounts()):
+            if label == name:
+                self.SelectItem(i)
+
+    def HighlightItem(self, index):
+        #print "Highlighting", self.hyperLinks[index].Label[:-1]
+        self.hyperLinks[index].SetNormalColour(wx.BLACK)
+
+    def UnhighlightItem(self, index):
+        #print "Unhighlighting", self.hyperLinks[index].Label[:-1]
+        self.hyperLinks[index].SetNormalColour(wx.BLUE)
+
+    def GetCount(self):
+        return len(self.hyperLinks)
+
+    def GetAccounts(self):
+        return [link.Label[:-1] for link in self.hyperLinks]
+
+    def GetCurrentAccount(self):
+        if self.currentIndex is not None:
+            return self.GetAccounts()[self.currentIndex]
+        else: # Not necessary, but explicit is clearer here.
+            return None
+
+    def onAccountRemoved(self, message):
+        """
+        Called when an account is removed from the model.
+        """
+        accountName = message.data
+        index = self.GetAccounts().index(accountName)
+        self._RemoveItem(index)
+
+    def _PutAccount(self, accountName):
+        index = 0
+        for label in self.GetAccounts():
+            if accountName < label:
+                break
+            index += 1
+
+        self._InsertItem(index, accountName)
+        return index
+
+    def _InsertItem(self, index, item):
+        """
+        Insert an item (by account name) into the given position.
+
+        This assumes the account already exists in the database.
+        """
+        accountName = item
+        balance = Bank().getBalanceOf(accountName)
+        self.totalVals[-1] += balance
+
+        # Create the controls.
+        link = bankcontrols.HyperlinkText(self, label=accountName+":", url=str(index))
+        totalText = wx.StaticText(self, label=Bank().float2str(balance))
+        self.hyperLinks.insert(index, link)
+        self.totalTexts.insert(index, totalText)
+        self.totalVals.insert(index, balance)
+
+        # Put them in an hsizer.
+        miniSizer = wx.BoxSizer()
+        miniSizer.Add(link)
+        miniSizer.AddStretchSpacer(1)
+        miniSizer.Add(totalText, 0, wx.LEFT, 10)
+
+        # Insert the hsizer into the correct position in the list.
+        self.staticBoxSizer.Insert(index+1, miniSizer, 0, wx.EXPAND|wx.BOTTOM, 3)
+
+        # Renumber the links after this.
+        for linkCtrl in self.hyperLinks[index+1:]:
+            linkCtrl.URL = str( int(linkCtrl.URL)+1 )
+        if self.currentIndex >= index:
+            self.currentIndex += 1
+
+        # Update the total text, as sometimes the account already exists.
+        self.totalText.Label = Bank().float2str(self.totalVals[-1])
+
+        # Update the static label.
+        self.staticBox.Label = self.boxLabel % self.GetCount()
+
+        self.Layout()
+        self.Parent.Layout()
+
+    def _RemoveItem(self, index, fixSel=True):
+        linkCtrl = self.hyperLinks[index]
+        removedAccount = linkCtrl.Label[:-1]
+
+        # Subtract the balance from the total.
+        self.totalVals[-1] -= self.totalVals[index]
+
+        del self.hyperLinks[index]
+        del self.totalTexts[index]
+        del self.totalVals[index]
+
+        # Renumber the links after this.
+        for linkCtrl in self.hyperLinks[index:]:
+            linkCtrl.URL = str( int(linkCtrl.URL)-1 )
+
+        # Actually remove (sort of) the account sizer.
+        self.Sizer.Hide(index+1)
+        self.Sizer.Detach(index+1)
+
+        # Handle selection logic.
+        if fixSel:
+            if self.currentIndex >= self.GetCount():
+                # Select the first one, if there is at least one.
+                if self.GetCount() > 0:
+                    self.currentIndex = 0
+                # Otherwise, select None, as there are no accounts.
+                else:
+                    self.currentIndex = None
+            self.SelectVisibleItem(self.currentIndex)
+
+        # Update the total text (subtract what was removed).
+        self.totalText.Label = Bank().float2str(self.totalVals[-1])
+
+        # Update the static label.
+        self.staticBox.Label = self.boxLabel % self.GetCount()
+
+        self.Layout()
+        self.Parent.Layout()
+
+    def updateTotals(self, message=None):
+        """
+        Update all the total strings.
+        """
+        total = 0.0
+        self.totalVals = []
+        for linkCtrl, text in zip(self.hyperLinks, self.totalTexts):
+            accountName = linkCtrl.Label[:-1]
+            balance = Bank().getBalanceOf(accountName)
+            text.Label = Bank().float2str(balance)
+            self.totalVals.append(balance)
+            total += balance
+        self.totalTexts[-1].Label = Bank().float2str(total)
+        self.totalVals.append(total)
+
+        # Handle a zero-balance account going to non-zero or vice-versa.
+        self.onHideCheck()
+
+        self.Layout()
+        self.Parent.Layout()
+
+    def onAddButton(self, event):
+        self.showEditCtrl()
+        self.addButton.Enabled = False
+
+    def onAddAccount(self, event):
+        # Grab the account name and add it.
+        accountName = self.editCtrl.Value
+        try:
+            Bank().createAccount(accountName)
+        except AccountAlreadyExistsException:
+            wx.TipWindow(self, _("Sorry, an account by that name already exists."))#, maxLength=200)
+
+    def onAccountAdded(self, message):
+        """
+        Called when a new account is created in the model.
+        """
+        accountName = message.data
+        self.onHideEditCtrl() #ASSUMPTION!
+        self._PutAccount(accountName)
+        self.SelectItemByName(accountName)
+
+    def showEditCtrl(self, pos=-1, focus=True):
+        if self.editCtrl:
+            self.editCtrl.Value = ''
+            self.editCtrl.Show()
+        else:
+            self.editCtrl = wx.TextCtrl(self, style=wx.TE_PROCESS_ENTER)
+            self.editCtrl.Bind(wx.EVT_KILL_FOCUS, self.onHideEditCtrl)
+
+        if pos == -1:
+            pos = self.GetCount()+1
+            self.editCtrl.Bind(wx.EVT_TEXT_ENTER, self.onAddAccount)
+        else:
+            self.editCtrl.Value = self.GetAccounts()[pos]
+            self.editCtrl.SetSelection(-1, -1)
+            pos += 1
+            self.Sizer.Hide(pos)
+            self.hiddenIndex = pos
+            self.editCtrl.Bind(wx.EVT_TEXT_ENTER, self.onRenameAccount)
+
+        self.Sizer.Insert(pos, self.editCtrl, 0, wx.EXPAND)#, smooth=True)
+        self.Parent.Layout()
+
+        if focus:
+            self.editCtrl.SetFocus()
+
+    def onHideEditCtrl(self, event=None, restore=True):
+        # Hide and remove the control and re-layout.
+        self.staticBoxSizer.Hide(self.editCtrl)#, smooth=True)
+        self.staticBoxSizer.Detach(self.editCtrl)
+
+        # If it was a rename, we have to re-show the linkctrl.
+        if restore and self.hiddenIndex is not None:
+            self.Sizer.Show(self.hiddenIndex)
+            self.hiddenIndex = None
+
+        self.Parent.Layout()
+
+        # Re-enable the add button.
+        self.addButton.Enabled = True
+
+    def onRemoveButton(self, event):
+        if self.currentIndex is not None:
+            linkCtrl = self.hyperLinks[self.currentIndex]
+            warningMsg = _("This will permanently remove the account '%s' and all its transactions. Continue?")
+            dlg = wx.MessageDialog(self, warningMsg%linkCtrl.Label[:-1], _("Warning"), style=wx.YES_NO|wx.ICON_EXCLAMATION)
+            if dlg.ShowModal() == wx.ID_YES:
+                # Remove the account from the model.
+                accountName = linkCtrl.Label[:-1]
+                Bank().removeAccount(accountName)
+
+    def onRenameButton(self, event):
+        if self.currentIndex is not None:
+            self.showEditCtrl(self.currentIndex)
+
+    def onRenameAccount(self, event):
+        oldName = self.GetAccounts()[self.currentIndex]
+        newName = self.editCtrl.Value
+
+        if oldName == newName:
+            # If there was no change, don't do anything.
+            self.onHideEditCtrl()
+            return
+
+        try:
+            Bank().renameAccount(oldName, newName)
+        except AccountAlreadyExistsException:
+            #wx.MessageDialog(self, 'An account by that name already exists', 'Error :[', wx.OK | wx.ICON_ERROR).ShowModal()
+            wx.TipWindow(self, _("Sorry, an account by that name already exists."))#, maxLength=200)
+
+    def onAccountRenamed(self, message):
+        """
+        Called when an account has been renamed in the model.
+
+        TODO: don't assume it was the current account that was renamed.
+        """
+        oldName, newName = message.data
+        # Hide the edit control.
+        self.onHideEditCtrl(restore=False) #ASSUMPTION!
+        # Just renaming won't put it in the right alpha position, so remove it
+        # and add it again, letting _PutAccount handle the ordering.
+        self.UnhighlightItem(self.currentIndex)
+        self._RemoveItem(self.currentIndex, fixSel=False)
+        self.currentIndex = self._PutAccount(newName)
+        self.HighlightItem(self.currentIndex)
+
+    def onAccountClick(self, event):
+        """
+        This method is called when the current account has
+        been changed by clicking on an account name.
+        """
+        self.SelectItem(int(event.URL))
+
+    def onHideCheck(self, event=None):
+        """
+        This method is called when the user checks/unchecks
+        the option to hide zero-balance accounts.
+        """
+        checked = self.hideBox.IsChecked()
+        for i, amountCtrl in enumerate(self.totalTexts[:-1]):
+            # Show it, in the case of calls from updateTotals where a
+            # zero-balance became a non-zero. otherwise it won't come up.
+            # +1 offset is to take into account the buttons at the top.
+            self.staticBoxSizer.Show(i+1)
+            if checked:
+                if abs(self.totalVals[i]) < .001:
+                    self.staticBoxSizer.Hide(i+1)
+
+        self.Parent.Layout()
+
+        # We hid the current selection, so select the first available.
+        if checked and not self.IsVisible(self.currentIndex):
+            self.SelectVisibleItem(0)
+
+        wx.Config.Get().WriteBool("HIDE_ZERO_BALANCE_ACCOUNTS", checked)
