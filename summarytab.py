@@ -29,7 +29,7 @@ import datetime
 
 
 class SummaryPanel(wx.Panel):
-    def __init__(self, parent):
+    def __init__(self, parent, bankController):
         wx.Panel.__init__(self, parent)
         self.plotSettings = {'FitDegree': 2, 'Granularity': 100}
         self.cachedData = None

@@ -39,7 +39,7 @@ except NoNumpyException:
 
 
 class BankerFrame(wx.Frame):
-    def __init__(self):
+    def __init__(self, bankController):
         # Load our window settings.
         config = wx.Config.Get()
         size = config.ReadInt('SIZE_X'), config.ReadInt('SIZE_Y')
@@ -53,11 +53,11 @@ class BankerFrame(wx.Frame):
 
         self.notebook = notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
 
-        self.managePanel = managetab.ManagePanel(notebook)
+        self.managePanel = managetab.ManagePanel(notebook, bankController)
         notebook.AddPage(self.managePanel, _("Transactions"))
 
         if summarytab:
-            self.summaryPanel = summarytab.SummaryPanel(notebook)
+            self.summaryPanel = summarytab.SummaryPanel(notebook, bankController)
             notebook.AddPage(self.summaryPanel, _("Summary"))
 
         self.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.onTabSwitching)
@@ -114,43 +114,6 @@ class BankerFrame(wx.Frame):
         dlg.ShowModal()
         dlg.Destroy()
 
-    '''
-    def onMessage(self, message, data):
-        saveWorthyMessages = [
-            "FIRST RUN",
-            "bank.NEW ACCOUNT",
-            "bank.REMOVED ACCOUNT",
-            "bank.RENAMED ACCOUNT",
-            "bank.NEW TRANSACTION",
-            "bank.REMOVED TRANSACTION",
-            "bank.UPDATED TRANSACTION",
-            ]
-
-        if message in saveWorthyMessages:
-            delayedresult.startWorker(self.saveConsumer, self.saveProducer, wargs=(message,))
-
-    def saveProducer(self, message):
-        #don't save if another save is pending
-        while self.isSaveLocked:
-            time.sleep(100)
-
-        self.isSaveLocked = True
-        print 'Saving as a result of: %s...'%message,
-        Bank().save()
-
-    def saveConsumer(self, delayedResult):
-        try:
-            result = delayedResult.get()
-            print 'Success'
-        except:
-            print 'Failure'
-            import traceback
-            traceback.print_exc()
-
-        #allow other threads to save
-        self.isSaveLocked = False
-    '''
-
 
 def main():
     import wx, os, sys
@@ -185,7 +148,7 @@ def main():
         wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(silk))
     
         # Initialize the wxBanker frame!
-        frame = BankerFrame()
+        frame = BankerFrame(bankController)
     
         # Greet the user if it appears this is their first time using wxBanker.
         firstTime = not config.ReadBool("RUN_BEFORE")

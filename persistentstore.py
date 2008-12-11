@@ -175,11 +175,10 @@ class PersistentStore:
         if result is not None:
             return result[0]
         
-    def getTransactionsFrom(self, account):
-        accountId = self.getAccountId(account)
+    def getTransactionsFrom(self, accountName):
+        accountId = self.getAccountId(accountName)
         transactions = []
         for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (accountId,)).fetchall():
-            #print 'result', result
             transactions.append(self.result2transaction(result))
         return transactions
     
