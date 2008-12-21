@@ -38,6 +38,7 @@ class AccountListCtrl(wx.Panel):
         self.editCtrl = self.hiddenIndex = None
         self.currentIndex = None
         self.boxLabel = _("Accounts") + " (%i)"
+        self.accountObjects = []
         self.hyperLinks, self.totalTexts, self.totalVals = [], [], []
 
         # Create the staticboxsizer which is the home for everything.
@@ -136,7 +137,7 @@ class AccountListCtrl(wx.Panel):
     def onCurrencyChanged(self, message):
         for i, textCtrl in enumerate(self.totalTexts):
             balance = self.totalVals[i]
-            textCtrl.Label = Bank().float2str(balance)
+            textCtrl.Label = self.Model.float2str(balance)
         self.Parent.Layout()
 
     def IsVisible(self, index):
@@ -167,7 +168,7 @@ class AccountListCtrl(wx.Panel):
             linkCtrl = self.hyperLinks[index]
             linkCtrl.Visited = False
             self.HighlightItem(index)
-            account = linkCtrl.Label[:-1]
+            account = self.accountObjects[index]
         else:
             account = None
 
@@ -196,11 +197,6 @@ class AccountListCtrl(wx.Panel):
         else: # If we didn't break (or return).
             self.SelectItem(None)
 
-    def SelectItemByName(self, name):
-        for i, label in enumerate(self.GetAccounts()):
-            if label == name:
-                self.SelectItem(i)
-
     def HighlightItem(self, index):
         #print "Highlighting", self.hyperLinks[index].Label[:-1]
         self.hyperLinks[index].SetNormalColour(wx.BLACK)
@@ -210,14 +206,11 @@ class AccountListCtrl(wx.Panel):
         self.hyperLinks[index].SetNormalColour(wx.BLUE)
 
     def GetCount(self):
-        return len(self.hyperLinks)
-
-    def GetAccounts(self):
-        return [link.Label[:-1] for link in self.hyperLinks]
+        return len(self.accountObjects)
 
     def GetCurrentAccount(self):
         if self.currentIndex is not None:
-            return self.GetAccounts()[self.currentIndex]
+            return self.accountObjects[self.currentIndex]
         else: # Not necessary, but explicit is clearer here.
             return None
 
@@ -225,23 +218,26 @@ class AccountListCtrl(wx.Panel):
         """
         Called when an account is removed from the model.
         """
-        accountName = message.data
-        index = self.GetAccounts().index(accountName)
+        account = message.data
+        index = self.accountObjects.index(account)
         self._RemoveItem(index)
 
-    def _PutAccount(self, account):
+    def _PutAccount(self, account, select=False):
         index = 0
-        for label in self.GetAccounts():
-            if account.Name < label:
+        for currAccount in self.accountObjects:
+            if account.Name < currAccount.Name:
                 break
             index += 1
 
         self._InsertItem(index, account)
+        
+        if select:
+            self.SelectItem(index)
         return index
 
     def _InsertItem(self, index, account):
         """
-        Insert an item (by account name) into the given position.
+        Insert an item (by account) into the given position.
 
         This assumes the account already exists in the database.
         """
@@ -251,6 +247,7 @@ class AccountListCtrl(wx.Panel):
         # Create the controls.
         link = bankcontrols.HyperlinkText(self, label=account.Name+":", url=str(index))
         totalText = wx.StaticText(self, label=account.float2str(balance))
+        self.accountObjects.insert(index, account)
         self.hyperLinks.insert(index, link)
         self.totalTexts.insert(index, totalText)
         self.totalVals.insert(index, balance)
@@ -286,6 +283,7 @@ class AccountListCtrl(wx.Panel):
         # Subtract the balance from the total.
         self.totalVals[-1] -= self.totalVals[index]
 
+        self.accountObjects.pop(index)
         del self.hyperLinks[index]
         del self.totalTexts[index]
         del self.totalVals[index]
@@ -324,13 +322,12 @@ class AccountListCtrl(wx.Panel):
         """
         total = 0.0
         self.totalVals = []
-        for linkCtrl, text in zip(self.hyperLinks, self.totalTexts):
-            accountName = linkCtrl.Label[:-1]
-            balance = Bank().getBalanceOf(accountName)
-            text.Label = Bank().float2str(balance)
+        for account in self.accountObjects:
+            balance = account.Balance
+            text.Label = account.float2str(balance)
             self.totalVals.append(balance)
             total += balance
-        self.totalTexts[-1].Label = Bank().float2str(total)
+        self.totalTexts[-1].Label = self.Model.float2str(total)
         self.totalVals.append(total)
 
         # Handle a zero-balance account going to non-zero or vice-versa.
@@ -347,7 +344,7 @@ class AccountListCtrl(wx.Panel):
         # Grab the account name and add it.
         accountName = self.editCtrl.Value
         try:
-            Bank().createAccount(accountName)
+            self.Model.CreateAccount(accountName)
         except AccountAlreadyExistsException:
             wx.TipWindow(self, _("Sorry, an account by that name already exists."))#, maxLength=200)
 
@@ -355,10 +352,9 @@ class AccountListCtrl(wx.Panel):
         """
         Called when a new account is created in the model.
         """
-        accountName = message.data
+        account = message.data
         self.onHideEditCtrl() #ASSUMPTION!
-        self._PutAccount(accountName)
-        self.SelectItemByName(accountName)
+        self._PutAccount(account, select=True)
 
     def showEditCtrl(self, pos=-1, focus=True):
         if self.editCtrl:
@@ -372,7 +368,7 @@ class AccountListCtrl(wx.Panel):
             pos = self.GetCount()+1
             self.editCtrl.Bind(wx.EVT_TEXT_ENTER, self.onAddAccount)
         else:
-            self.editCtrl.Value = self.GetAccounts()[pos]
+            self.editCtrl.Value = self.accountObjects[pos].Name
             self.editCtrl.SetSelection(-1, -1)
             pos += 1
             self.Sizer.Hide(pos)
@@ -402,20 +398,20 @@ class AccountListCtrl(wx.Panel):
 
     def onRemoveButton(self, event):
         if self.currentIndex is not None:
-            linkCtrl = self.hyperLinks[self.currentIndex]
+            account = self.accountObjects[self.currentIndex]
             warningMsg = _("This will permanently remove the account '%s' and all its transactions. Continue?")
-            dlg = wx.MessageDialog(self, warningMsg%linkCtrl.Label[:-1], _("Warning"), style=wx.YES_NO|wx.ICON_EXCLAMATION)
+            dlg = wx.MessageDialog(self, warningMsg%account.Name, _("Warning"), style=wx.YES_NO|wx.ICON_EXCLAMATION)
             if dlg.ShowModal() == wx.ID_YES:
                 # Remove the account from the model.
-                accountName = linkCtrl.Label[:-1]
-                Bank().removeAccount(accountName)
+                del account
 
     def onRenameButton(self, event):
         if self.currentIndex is not None:
             self.showEditCtrl(self.currentIndex)
 
     def onRenameAccount(self, event):
-        oldName = self.GetAccounts()[self.currentIndex]
+        account = self.accountObjects[self.currentIndex]
+        oldName = account.Name
         newName = self.editCtrl.Value
 
         if oldName == newName:
@@ -424,7 +420,7 @@ class AccountListCtrl(wx.Panel):
             return
 
         try:
-            Bank().renameAccount(oldName, newName)
+            account.Name = newName
         except AccountAlreadyExistsException:
             #wx.MessageDialog(self, 'An account by that name already exists', 'Error :[', wx.OK | wx.ICON_ERROR).ShowModal()
             wx.TipWindow(self, _("Sorry, an account by that name already exists."))#, maxLength=200)

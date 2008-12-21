@@ -44,6 +44,10 @@ class BankModel(object):
 class AccountList(list):
     def __init__(self, store, accounts):
         list.__init__(self, accounts)
+        # Make sure all the items know their parent list.
+        for account in self:
+            account.Parent = self
+            
         self.Store = store
         
     def AccountIndex(self, accountName):
@@ -66,6 +70,8 @@ class AccountList(list):
             raise bankexceptions.AccountAlreadyExistsException(accountName)
         
         account = self.Store.CreateAccount(accountName)
+        # Make sure this account knows its parent.
+        account.Parent = self
         self.append(account)
         ##pubsub
         
@@ -98,6 +104,7 @@ class Account(object):
         return self._Name
 
     def SetName(self, name):
+        #TODO: raise AccountAlreadyExistsException if name already exists
         oldName = self._Name
         self._Name = name
         Publisher.sendMessage("account.renamed.%s"%oldName, (oldName, name))
@@ -113,6 +120,9 @@ class Account(object):
         
     def __cmp__(self, other):
         return cmp(self.Name, other.Name)
+    
+    def __del__(self):
+        self.Parent.Remove(self.Name)
     
     Name = property(GetName, SetName)
     Transactions = property(GetTransactions)

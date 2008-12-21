@@ -71,11 +71,11 @@ class TransactionOLV(GroupListView):
         transObj._Total = total
         return total
     
-    def setAccount(self, accountName, scrollToBottom=True):
-        if accountName is None:
+    def setAccount(self, account, scrollToBottom=True):
+        if account is None:
             transactions = []
         else:
-            transactions = self.Model.GetAccount(accountName).Transactions
+            transactions = account.Transactions
         
         self.Parent.Freeze()
         self.SetObjects(transactions)
