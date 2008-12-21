@@ -1,8 +1,8 @@
 [Desktop Entry]
 Version=1.0
 Encoding=UTF-8
-Name=wxBanker
-GenericName=wxBanker Finance Manager
+Name=wxBanker Finance Manager
+GenericName=wxBanker finance manager
 Comment=A lightweight personal finance manager
 Exec=wxbanker
 Icon=wxbanker
