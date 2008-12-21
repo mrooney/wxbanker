@@ -7,9 +7,9 @@ IMPLEMENTED:
 - displaying transactions
 - editable amounts/descriptions
 - edits pushed to model
+- total based on total of last transaction
 TODO (for feature parity):
 - editable date
-- total based on total of last transaction
 - totals automatically updates for transaction changes above them
 - display negative amount as Red
 - right-click context menu
@@ -22,11 +22,9 @@ EXTRA:
 
 """
 
-import wx
+import wx, datetime
 from wx.lib.pubsub import Publisher
 from ObjectListView import GroupListView, ColumnDefn
-#from model_sqlite import Model
-from banker import Bank # only temporary until Transactions can do float2str themselves
 
 
 class TransactionOLV(GroupListView):
@@ -40,8 +38,13 @@ class TransactionOLV(GroupListView):
         self.oddRowsBackColor = wx.WHITE
         self.cellEditMode = GroupListView.CELLEDIT_SINGLECLICK
         self.SetEmptyListMsg("No transactions entered.")
+        
+        # Calculate the necessary width for the date column.
+        dateStr = str(datetime.date.today())
+        dateWidth = self.GetTextExtent(dateStr)[0] + 10
+        
         self.SetColumns([
-            ColumnDefn("Date", valueGetter="Date"),
+            ColumnDefn("Date", valueGetter="Date", width=dateWidth),
             ColumnDefn("Description", valueGetter="Description", isSpaceFilling=True),
             ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=self.Model.float2str),
             ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=self.Model.float2str, isEditable=False),
