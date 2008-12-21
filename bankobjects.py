@@ -10,6 +10,9 @@ class BankModel(object):
         
         Publisher().subscribe(self.onCurrencyChanged, "user.currency_changed")
         
+    def GetAccount(self, accountName):
+        return self.Accounts.Get(accountName)
+        
     def CreateAccount(self, accountName):
         return self.Accounts.Create(accountName)
     
@@ -49,6 +52,13 @@ class AccountList(list):
                 return i
             
         return -1
+    
+    def Get(self, accountName):
+        index = self.AccountIndex(accountName)
+        if index == -1:
+            raise bankexceptions.InvalidAccountException(accountName)
+        
+        return self[index]
         
     def Create(self, accountName):
         # First, ensure an account by that name doesn't already exist.

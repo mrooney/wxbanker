@@ -859,13 +859,13 @@ class ObjectListView(wx.ListCtrl):
         totalFixedWidth = sum(self.GetColumnWidth(i) for (i, x) in enumerate(self.columns)
                               if not x.isSpaceFilling)
         
-        freeSpace = max(0, self.GetClientSizeTuple()[0] - totalFixedWidth)
-        #import platform
-        #if platform.platform().startswith("Linux"):
-        #    freeSpace = self.MainWindow.GetClientSizeTuple()[0] 
-        #else:
-        #    #freeSpace = max(0, self.GetClientSizeTuple()[0] - totalFixedWidth)
-        #    self.GetClientSizeTuple()[0]
+        #freeSpace = max(0, self.GetClientSizeTuple()[0] - totalFixedWidth)
+        import platform
+        if platform.platform().startswith("Linux"):
+            freeSpace = self.MainWindow.GetClientSizeTuple()[0]  - totalFixedWidth
+        else:
+            freeSpace = self.GetClientSizeTuple()[0] - totalFixedWidth
+            
 
         # Calculate the total number of slices the free space will be divided into
         totalProportion = sum(x.freeSpaceProportion for x in self.columns if x.isSpaceFilling)

@@ -30,8 +30,10 @@ from banker import Bank # only temporary until Transactions can do float2str the
 
 
 class TransactionOLV(GroupListView):
-    def __init__(self, parent):
+    def __init__(self, parent, bankController):
         GroupListView.__init__(self, parent, style=wx.LC_REPORT|wx.SUNKEN_BORDER)
+        
+        self.Model = bankController.Model
         
         self.showGroups = False
         self.evenRowsBackColor = wx.Color(224,238,238)
@@ -39,10 +41,10 @@ class TransactionOLV(GroupListView):
         self.cellEditMode = GroupListView.CELLEDIT_SINGLECLICK
         self.SetEmptyListMsg("No transactions entered.")
         self.SetColumns([
-            ColumnDefn("Date", valueGetter="Date", width=-1),
-            ColumnDefn("Description", valueGetter="Description"),
-            ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=Bank().float2str),
-            ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=Bank().float2str, isEditable=False),
+            ColumnDefn("Date", valueGetter="Date"),
+            ColumnDefn("Description", valueGetter="Description", isSpaceFilling=True),
+            ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=self.Model.float2str),
+            ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=self.Model.float2str, isEditable=False),
         ])
         
         self.Bind(wx.EVT_RIGHT_DOWN, self.onRightDown)
@@ -66,15 +68,18 @@ class TransactionOLV(GroupListView):
         transObj._Total = total
         return total
     
-    def setAccount(self, accountName):
+    def setAccount(self, accountName, scrollToBottom=True):
         if accountName is None:
             transactions = []
         else:
-            transactions = Bank().getTransactionsFrom(accountName)
+            transactions = self.Model.GetAccount(accountName).Transactions
         
+        self.Parent.Freeze()
         self.SetObjects(transactions)
-        self.Parent.Layout() # Necessary for columns to size properly. (GTK)
-        #self.AutoSizeColumns()
+        wx.CallLater(50, self.frozenResize) # Necessary for columns to size properly. (GTK)
+        
+        if scrollToBottom:
+            self.ensureVisible(-1)
         
     def ensureVisible(self, index):
         if index < 0:
@@ -83,6 +88,10 @@ class TransactionOLV(GroupListView):
         
     def onRightDown(self, event):
         event.Skip()
+        
+    def frozenResize(self):
+        self.Parent.Layout()
+        self.Parent.Thaw()
     
 
 class olvFrame(wx.Frame):

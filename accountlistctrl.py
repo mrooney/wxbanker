@@ -30,8 +30,10 @@ class AccountListCtrl(wx.Panel):
     Accounts can be added, removed, and renamed.
     """
 
-    def __init__(self, parent, autoPopulate = True):
+    def __init__(self, parent, bankController, autoPopulate=True):
         wx.Panel.__init__(self, parent)
+        self.Model = bankController.Model
+        
         # Initialize some attributes to their default values.
         self.editCtrl = self.hiddenIndex = None
         self.currentIndex = None
@@ -110,8 +112,8 @@ class AccountListCtrl(wx.Panel):
 
         # Populate ourselves initially unless explicitly told not to.
         if autoPopulate:
-            for accountName in Bank().getAccountNames():
-                self._PutAccount(accountName)
+            for account in self.Model.Accounts:
+                self._PutAccount(account)
 
         self.Sizer = self.staticBoxSizer
         # Set the minimum size to the amount it needs to display the edit box.
@@ -227,29 +229,28 @@ class AccountListCtrl(wx.Panel):
         index = self.GetAccounts().index(accountName)
         self._RemoveItem(index)
 
-    def _PutAccount(self, accountName):
+    def _PutAccount(self, account):
         index = 0
         for label in self.GetAccounts():
-            if accountName < label:
+            if account.Name < label:
                 break
             index += 1
 
-        self._InsertItem(index, accountName)
+        self._InsertItem(index, account)
         return index
 
-    def _InsertItem(self, index, item):
+    def _InsertItem(self, index, account):
         """
         Insert an item (by account name) into the given position.
 
         This assumes the account already exists in the database.
         """
-        accountName = item
-        balance = Bank().getBalanceOf(accountName)
+        balance = account.Balance
         self.totalVals[-1] += balance
 
         # Create the controls.
-        link = bankcontrols.HyperlinkText(self, label=accountName+":", url=str(index))
-        totalText = wx.StaticText(self, label=Bank().float2str(balance))
+        link = bankcontrols.HyperlinkText(self, label=account.Name+":", url=str(index))
+        totalText = wx.StaticText(self, label=account.float2str(balance))
         self.hyperLinks.insert(index, link)
         self.totalTexts.insert(index, totalText)
         self.totalVals.insert(index, balance)
@@ -270,7 +271,7 @@ class AccountListCtrl(wx.Panel):
             self.currentIndex += 1
 
         # Update the total text, as sometimes the account already exists.
-        self.totalText.Label = Bank().float2str(self.totalVals[-1])
+        self.totalText.Label = account.float2str(self.totalVals[-1])
 
         # Update the static label.
         self.staticBox.Label = self.boxLabel % self.GetCount()

@@ -22,8 +22,9 @@ from wx.lib.pubsub import Publisher
 
 
 class NewTransactionCtrl(wx.Panel):
-    def __init__(self, parent):
+    def __init__(self, parent, bankController):
         wx.Panel.__init__(self, parent)
+        self.Model = bankController.Model
 
         # The date control. We want the Generic control, which is a composite control
         # and allows us to bind to its enter, but on Windows with wxPython < 2.8.8.0,
