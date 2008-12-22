@@ -106,10 +106,13 @@ class Account(object):
         return self._Name
 
     def SetName(self, name):
-        #TODO: raise AccountAlreadyExistsException if name already exists
+        index = self.Parent.AccountIndex(name)
+        if index != -1:
+            raise bankexceptions.AccountAlreadyExistsException(name)
+    
         oldName = self._Name
         self._Name = name
-        Publisher.sendMessage("account.renamed.%s"%oldName, (oldName, name))
+        Publisher.sendMessage("account.renamed.%s"%oldName, (oldName, self))
 
     def AddTransaction(self, *args, **kwargs):
         self.TransactionList.Add(Transaction(*args, **kwargs))

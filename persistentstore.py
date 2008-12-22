@@ -188,8 +188,8 @@ class PersistentStore:
         self.dbconn.cursor().execute('UPDATE transactions SET amount=?, description=?, date=? WHERE id=?', result)
         self.dbconn.commit()
         
-    def renameAccount(self, oldName, newName):
-        self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (newName, oldName))
+    def renameAccount(self, oldName, account):
+        self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (account.Name, oldName))
         self.dbconn.commit()
         
     def setCurrency(self, currencyIndex):
@@ -208,8 +208,8 @@ class PersistentStore:
         self.updateTransaction(transaction)
         
     def onAccountRenamed(self, message):
-        oldName, newName = message.data
-        self.renameAccount(oldName, newName)
+        oldName, account = message.data
+        self.renameAccount(oldName, account)
         
     def __del__(self):
         self.dbconn.commit()

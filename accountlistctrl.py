@@ -108,7 +108,7 @@ class AccountListCtrl(wx.Panel):
         Publisher().subscribe(self.updateTotals, "bank.REMOVED TRANSACTION")
         Publisher().subscribe(self.onAccountRemoved, "bank.REMOVED ACCOUNT")
         Publisher().subscribe(self.onAccountAdded, "account.created")
-        Publisher().subscribe(self.onAccountRenamed, "bank.RENAMED ACCOUNT")
+        Publisher().subscribe(self.onAccountRenamed, "account.renamed")
         Publisher().subscribe(self.onCurrencyChanged, "currency_changed")
 
         # Populate ourselves initially unless explicitly told not to.
@@ -308,7 +308,7 @@ class AccountListCtrl(wx.Panel):
             self.SelectVisibleItem(self.currentIndex)
 
         # Update the total text (subtract what was removed).
-        self.totalText.Label = Bank().float2str(self.totalVals[-1])
+        self.totalText.Label = self.Model.float2str(self.totalVals[-1])
 
         # Update the static label.
         self.staticBox.Label = self.boxLabel % self.GetCount()
@@ -431,14 +431,15 @@ class AccountListCtrl(wx.Panel):
 
         TODO: don't assume it was the current account that was renamed.
         """
-        oldName, newName = message.data
+        oldName, account = message.data
         # Hide the edit control.
         self.onHideEditCtrl(restore=False) #ASSUMPTION!
         # Just renaming won't put it in the right alpha position, so remove it
         # and add it again, letting _PutAccount handle the ordering.
         self.UnhighlightItem(self.currentIndex)
         self._RemoveItem(self.currentIndex, fixSel=False)
-        self.currentIndex = self._PutAccount(newName)
+        self.currentIndex = self._PutAccount(account)
+        # Hightlight but don't select, account is already displayed elsewhere.
         self.HighlightItem(self.currentIndex)
 
     def onAccountClick(self, event):
