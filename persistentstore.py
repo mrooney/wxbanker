@@ -99,7 +99,7 @@ class PersistentStore:
         cursor.execute('CREATE TABLE transactions (id INTEGER PRIMARY KEY, accountId INTEGER, amount FLOAT, description VARCHAR(255), date CHAR(10))')
         
         cursor.execute('CREATE TABLE meta (id INTEGER PRIMARY KEY, name VARCHAR(255), value VARCHAR(255))')
-        cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('VERSION', '2'))
+        cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('VERSION', '3'))
 
         return connection
     

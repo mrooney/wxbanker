@@ -93,6 +93,8 @@ class Account(object):
         self.Currency = currencies.CurrencyList[currency]()
         self.Balance = balance
         
+        Publisher.sendMessage("account.created.%s"%name, self)
+        
     def GetTransactions(self):
         if self._Transactions is None:
             transactions = self.Store.getTransactionsFrom(self.Name)

@@ -95,20 +95,25 @@ class TransactionPanel(wx.Panel):
         wx.Panel.__init__(self, parent)
         self.searchActive = False
         
+        subpanel = wx.Panel(self)
+        
         self.searchCtrl = searchCtrl = searchctrl.SearchCtrl(self, bankController)
-        self.transactionCtrl = transactionCtrl = TransactionCtrl(self, bankController)
+        self.transactionCtrl = transactionCtrl = TransactionCtrl(subpanel, bankController)
         self.newTransCtrl = newTransCtrl = newtransactionctrl.NewTransactionCtrl(self, bankController)
+        
+        subpanel.Sizer = wx.BoxSizer()
+        subpanel.Sizer.Add(transactionCtrl, 1, wx.EXPAND)
 
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(searchCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL)
-        mainSizer.Add(transactionCtrl, 1, wx.EXPAND)
+        mainSizer.Add(subpanel, 1, wx.EXPAND)
         mainSizer.Add(newTransCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5)
 
         self.Sizer = mainSizer
         mainSizer.Layout()
 
         ##self.Bind(wx.EVT_SIZE, self.transactionCtrl.doResize)
-        for message in ['bank.NEW ACCOUNT', 'bank.REMOVED ACCOUNT', 'VIEW.ACCOUNT_CHANGED']:
+        for message in ['model.new account', 'bank.REMOVED ACCOUNT', 'VIEW.ACCOUNT_CHANGED']:
             Publisher().subscribe(self.onSearchInvalidatingChange, message)
         #self.Bind(wx.EVT_MAXIMIZE, self.doResize) # isn't necessary on GTK, what about Windows?
 

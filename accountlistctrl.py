@@ -17,7 +17,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import wx
-import bankcontrols
+import bankcontrols, bankexceptions
 from wx.lib.pubsub import Publisher
 
 
@@ -107,7 +107,7 @@ class AccountListCtrl(wx.Panel):
         Publisher().subscribe(self.updateTotals, "bank.UPDATED TRANSACTION")
         Publisher().subscribe(self.updateTotals, "bank.REMOVED TRANSACTION")
         Publisher().subscribe(self.onAccountRemoved, "bank.REMOVED ACCOUNT")
-        Publisher().subscribe(self.onAccountAdded, "bank.NEW ACCOUNT")
+        Publisher().subscribe(self.onAccountAdded, "account.created")
         Publisher().subscribe(self.onAccountRenamed, "bank.RENAMED ACCOUNT")
         Publisher().subscribe(self.onCurrencyChanged, "currency_changed")
 
@@ -345,7 +345,7 @@ class AccountListCtrl(wx.Panel):
         accountName = self.editCtrl.Value
         try:
             self.Model.CreateAccount(accountName)
-        except AccountAlreadyExistsException:
+        except bankexceptions.AccountAlreadyExistsException:
             wx.TipWindow(self, _("Sorry, an account by that name already exists."))#, maxLength=200)
 
     def onAccountAdded(self, message):
@@ -421,7 +421,7 @@ class AccountListCtrl(wx.Panel):
 
         try:
             account.Name = newName
-        except AccountAlreadyExistsException:
+        except bankexceptions.AccountAlreadyExistsException:
             #wx.MessageDialog(self, 'An account by that name already exists', 'Error :[', wx.OK | wx.ICON_ERROR).ShowModal()
             wx.TipWindow(self, _("Sorry, an account by that name already exists."))#, maxLength=200)
 
