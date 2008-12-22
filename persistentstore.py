@@ -38,6 +38,13 @@ import sqlite3
 from wx.lib.pubsub import Publisher
 
 
+DEBUG = False
+def debug(*args):
+    if DEBUG:
+        for arg in args:
+            print arg,
+        print ""
+
 class PersistentStore:
     """
     Handles creating the Model (bankobjects) from the store and writing
@@ -48,7 +55,7 @@ class PersistentStore:
         self.path = path
         existed = True
         if not os.path.exists(self.path):
-            print 'Initializing', path
+            debug('Initializing', path)
             connection = self.initialize()
             existed = False
         else:
@@ -58,12 +65,12 @@ class PersistentStore:
         self.dbconn = connection
         
         self.Meta = self.getMeta()
-        print self.Meta
+        debug(self.Meta)
         while self.Meta['VERSION'] < self.Version:
             assert existed # Sanity check to ensure new dbs don't need to be upgraded.
             self.upgradeDb(self.Meta['VERSION'])
             self.Meta = self.getMeta()
-            print self.Meta
+            debug(self.Meta)
             
         self.dbconn.commit()
         
@@ -71,7 +78,7 @@ class PersistentStore:
         Publisher.subscribe(self.onAccountRenamed, "account.renamed")
         
     def GetModel(self):
-        print 'Creating model...'
+        debug('Creating model...')
         accounts = self.getAccounts()
         accountList = bankobjects.AccountList(self, accounts)
         bankmodel = bankobjects.BankModel(self, accountList)

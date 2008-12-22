@@ -31,26 +31,23 @@ are getting published when they should be.
 
 >>> import os
 >>> if os.path.exists("test.db"): os.remove("test.db")
->>> b = Bank("test.db")
->>> b.getAccountNames()
-[]
->>> b.getAllTransactions()
+>>> model = controller.Controller("test.db").Model
+>>> model.Accounts
 []
 
 # Now test that the appropriate exceptions are thrown.
 
->>> print b.getAccountId("My Account")
+>>> model.GetAccount("My Account")
 Traceback (most recent call last):
   ...
 InvalidAccountException: Invalid account 'My Account' specified.
->>> b.renameAccount("My Account", "My Renamed Account")
+>>> model.RemoveAccount("My Account")
 Traceback (most recent call last):
   ...
 InvalidAccountException: Invalid account 'My Account' specified.
->>> b.removeAccount("My Account") #should this be an exception?
-Traceback (most recent call last):
-  ...
-InvalidAccountException: Invalid account 'My Account' specified.
+"""
+
+"""
 >>> b.makeTransaction("My Account", 1, "Initial Balance")
 Traceback (most recent call last):
   ...
@@ -161,13 +158,13 @@ InvalidTransactionException: Unable to find transaction with UID FakeID
 >>> os.remove('test.db')
 """
 
-import time, os, datetime, re
-from model_sqlite import Model
-import  bankobjects
+#import time, os, datetime, re
+import os
 from wx.lib.pubsub import Publisher
 import localization, currencies
 from testhelpers import displayhook, Subscriber
-from bankexceptions import AccountAlreadyExistsException, InvalidAccountException, InvalidTransactionException
+import bankexceptions, controller
+#from bankexceptions import AccountAlreadyExistsException, InvalidAccountException, InvalidTransactionException
 
 
 class Bank(object):
