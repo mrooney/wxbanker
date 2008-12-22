@@ -73,7 +73,6 @@ class AccountList(list):
         # Make sure this account knows its parent.
         account.Parent = self
         self.append(account)
-        ##pubsub
         
     def Remove(self, accountName):
         index = self.AccountIndex(accountName)
@@ -81,8 +80,8 @@ class AccountList(list):
             raise bankexceptions.InvalidAccountException(accountName)
         
         self.Store.RemoveAccount(accountName)
-        self.pop(index)
-        ##pubsub
+        account = self.pop(index)
+        Publisher.sendMessage("account.removed.%s"%accountName, account)
 
 
 class Account(object):
@@ -126,7 +125,7 @@ class Account(object):
     def __cmp__(self, other):
         return cmp(self.Name, other.Name)
     
-    def __del__(self):
+    def Remove(self):
         self.Parent.Remove(self.Name)
     
     Name = property(GetName, SetName)

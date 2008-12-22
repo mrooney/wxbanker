@@ -106,7 +106,7 @@ class AccountListCtrl(wx.Panel):
         Publisher().subscribe(self.updateTotals, "bank.NEW TRANSACTION")
         Publisher().subscribe(self.updateTotals, "bank.UPDATED TRANSACTION")
         Publisher().subscribe(self.updateTotals, "bank.REMOVED TRANSACTION")
-        Publisher().subscribe(self.onAccountRemoved, "bank.REMOVED ACCOUNT")
+        Publisher().subscribe(self.onAccountRemoved, "account.removed")
         Publisher().subscribe(self.onAccountAdded, "account.created")
         Publisher().subscribe(self.onAccountRenamed, "account.renamed")
         Publisher().subscribe(self.onCurrencyChanged, "currency_changed")
@@ -403,7 +403,7 @@ class AccountListCtrl(wx.Panel):
             dlg = wx.MessageDialog(self, warningMsg%account.Name, _("Warning"), style=wx.YES_NO|wx.ICON_EXCLAMATION)
             if dlg.ShowModal() == wx.ID_YES:
                 # Remove the account from the model.
-                del account
+                account.Remove()
 
     def onRenameButton(self, event):
         if self.currentIndex is not None:

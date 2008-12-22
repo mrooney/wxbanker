@@ -59,7 +59,7 @@ class PersistentStore:
             connection = self.initialize()
             existed = False
         else:
-            print 'Loading', path
+            debug('Loading', path)
             connection = sqlite.connect(self.path)
 
         self.dbconn = connection

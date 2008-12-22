@@ -45,27 +45,25 @@ InvalidAccountException: Invalid account 'My Account' specified.
 Traceback (most recent call last):
   ...
 InvalidAccountException: Invalid account 'My Account' specified.
-"""
 
-"""
->>> b.makeTransaction("My Account", 1, "Initial Balance")
-Traceback (most recent call last):
-  ...
-InvalidAccountException: Invalid account 'My Account' specified.
 >>> len(messages) == 0
 True
 
 # Now test valid account and transaction manipulation.
 
->>> b.createAccount("My Account")
+>>> model.CreateAccount("My Account")
 >>> len(messages) == 1
 True
->>> messages[0]
-(('bank', 'NEW ACCOUNT'), 'My Account')
->>> b.createAccount("My Account")
+>>> messages[0][1].Name
+'My Account'
+
+>>> model.CreateAccount("My Account")
 Traceback (most recent call last):
   ...
 AccountAlreadyExistsException: Account 'My Account' already exists.
+"""
+
+"""
 >>> len(messages) == 1
 True
 >>> b.getAccountNames()

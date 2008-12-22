@@ -16,11 +16,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import datetime
-import wx
+import wx, datetime
 from wx.lib.pubsub import Publisher
-
-from banker import AccountAlreadyExistsException, Bank
 from smoothsizer import SmoothStaticBoxSizer
 import localization
 
