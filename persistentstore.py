@@ -31,14 +31,14 @@ Table: transactions
 | 1                      | 1                 | 100.00       | "Initial Balance"        | "2007/01/06"   |
 +-------------------------------------------------------------------------------------------------------+
 """
-import os, datetime
+import sys, os, datetime
 import bankobjects
 from sqlite3 import dbapi2 as sqlite
 import sqlite3
 from wx.lib.pubsub import Publisher
 
 
-DEBUG = False
+DEBUG = "--debug" in sys.argv
 def debug(*args):
     if DEBUG:
         for arg in args:
@@ -79,9 +79,15 @@ class PersistentStore:
         
     def GetModel(self):
         debug('Creating model...')
+        
+        if "--sync-balances" in sys.argv:
+            debug("Syncing balances")
+            self.syncBalances()
+            
         accounts = self.getAccounts()
         accountList = bankobjects.AccountList(self, accounts)
         bankmodel = bankobjects.BankModel(self, accountList)
+        
         return bankmodel
     
     def CreateAccount(self, accountName):
@@ -153,16 +159,19 @@ class PersistentStore:
         elif fromVer == 2:
             # Add `total` column to the accounts table.
             cursor.execute('ALTER TABLE accounts ADD balance FLOAT not null DEFAULT 0.0')
-            for account in self.getAccounts():
-                accountTotal = sum([t.Amount for t in self.getTransactionsFrom(account.Name)])
-                # Set the correct total.
-                cursor.execute('UPDATE accounts SET balance=? WHERE name=?', (accountTotal, account.Name))
+            self.syncBalances()
             # Update the meta version number.
             cursor.execute('UPDATE meta SET value=? WHERE name=?', (3, "VERSION"))
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
         
         self.dbconn.commit()
+        
+    def syncBalances(self):
+        for account in self.getAccounts():
+            accountTotal = sum([t.Amount for t in self.getTransactionsFrom(account.Name)])
+            # Set the correct total.
+            self.dbconn.cursor().execute('UPDATE accounts SET balance=? WHERE name=?', (accountTotal, account.Name))
             
     def result2transaction(self, result):
         """
