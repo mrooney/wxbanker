@@ -105,7 +105,7 @@ class AccountListCtrl(wx.Panel):
         # Subscribe to messages we are concerned about.
         Publisher().subscribe(self.updateTotals, "transaction.removed")
         Publisher().subscribe(self.updateTotals, "transaction.created")
-        Publisher().subscribe(self.updateTotals, "transaction.updated")
+        Publisher().subscribe(self.updateTotals, "transaction.updated.amount")
         Publisher().subscribe(self.onAccountRemoved, "account.removed")
         Publisher().subscribe(self.onAccountAdded, "account.created")
         Publisher().subscribe(self.onAccountRenamed, "account.renamed")
@@ -320,6 +320,8 @@ class AccountListCtrl(wx.Panel):
         """
         Update all the total strings.
         """
+        #TODO: only update the first label for the account that changed balance
+        #TODO: only update the totals starting at the changed account
         total = 0.0
         self.totalVals = []
         for account in self.accountObjects:
