@@ -103,9 +103,9 @@ class AccountListCtrl(wx.Panel):
         self.Bind(wx.EVT_HYPERLINK, self.onAccountClick)
 
         # Subscribe to messages we are concerned about.
-        Publisher().subscribe(self.updateTotals, "bank.NEW TRANSACTION")
-        Publisher().subscribe(self.updateTotals, "bank.UPDATED TRANSACTION")
-        Publisher().subscribe(self.updateTotals, "bank.REMOVED TRANSACTION")
+        Publisher().subscribe(self.updateTotals, "transaction.removed")
+        Publisher().subscribe(self.updateTotals, "transaction.created")
+        Publisher().subscribe(self.updateTotals, "transaction.updated")
         Publisher().subscribe(self.onAccountRemoved, "account.removed")
         Publisher().subscribe(self.onAccountAdded, "account.created")
         Publisher().subscribe(self.onAccountRenamed, "account.renamed")

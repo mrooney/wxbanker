@@ -97,6 +97,20 @@ class PersistentStore:
         self.clearAccountTransactions(accountName)
         self.dbconn.cursor().execute('DELETE FROM accounts WHERE name=?',(accountName,))
         self.dbconn.commit()
+        
+    def MakeTransaction(self, accountID, transaction):
+        cursor = self.dbconn.cursor()
+        cursor.execute('INSERT INTO transactions VALUES (null, ?, ?, ?, ?)', (accountID, transaction.Amount, transaction.Description, transaction.Date))
+        self.dbconn.commit()
+        transaction.ID = cursor.lastrowid
+        
+    def RemoveTransaction(self, transaction):
+        result = self.dbconn.cursor().execute('DELETE FROM transactions WHERE id=?', (transaction.ID,)).fetchone()
+        self.dbconn.commit()
+        # The result doesn't appear to be useful here, it is None regardless of whether the DELETE matched anything
+        # the controller already checks for existence of the ID though, so if this doesn't raise an exception, theoretically
+        # everything is fine. So just return True, as there we no errors that we are aware of.
+        return True
 
     def initialize(self):
         connection = sqlite.connect(self.path)
@@ -191,7 +205,7 @@ class PersistentStore:
     
     def updateTransaction(self, transObj):
         result = self.transaction2result(transObj)
-        result.append( result.pop(0) ) #move the uid to the back as it is last in the args below
+        result.append( result.pop(0) ) # Move the uid to the back as it is last in the args below.
         self.dbconn.cursor().execute('UPDATE transactions SET amount=?, description=?, date=? WHERE id=?', result)
         self.dbconn.commit()
         
@@ -222,46 +236,6 @@ class PersistentStore:
         self.dbconn.commit()
         self.dbconn.close()
         
-            
-        
-class Old:
-    def getCurrency(self):
-        # Only necessary as a step in 0.4, in 0.5 this will be an attribute
-        # of an Account and this can be removed.
-        accounts = self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()
-        if not accounts:
-            return 0
-        else:
-            return accounts[0][2]
-        
-    def removeTransaction(self, ID):
-        result = self.dbconn.cursor().execute('DELETE FROM transactions WHERE id=?', (ID,)).fetchone()
-        self.dbconn.commit()
-        # The result doesn't appear to be useful here, it is None regardless of whether the DELETE matched anything
-        # the controller already checks for existence of the ID though, so if this doesn't raise an exception, theoretically
-        # everything is fine. So just return True, as there we no errors that we are aware of.
-        return True
-
-    def getTransactionById(self, ID):
-        result = self.dbconn.cursor().execute('SELECT * FROM transactions WHERE id=?', (ID,)).fetchone()
-        if result is None:
-            return result
-        return self.result2transaction(result)
-
-    def makeTransaction(self, tID, amount, description, date):
-        cursor = self.dbconn.cursor()
-        cursor.execute('INSERT INTO transactions VALUES (null, ?, ?, ?, ?)', (tID, amount, description, date))
-        self.dbconn.commit()
-        return cursor.lastrowid
-    
-
-    def close(self):
-        self.dbconn.close()
-
-    def save(self):
-        self.dbconn.commit()
-
-
                 
 if __name__ == "__main__":
     import doctest

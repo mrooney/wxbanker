@@ -96,8 +96,7 @@ class Account(object):
         
     def GetTransactions(self):
         if self._Transactions is None:
-            transactions = self.Store.getTransactionsFrom(self.Name)
-            self._Transactions = TransactionList(transactions)
+            self._Transactions = self.Store.getTransactionsFrom(self.Name)
         
         return self._Transactions
         
@@ -112,12 +111,20 @@ class Account(object):
         oldName = self._Name
         self._Name = name
         Publisher.sendMessage("account.renamed.%s"%oldName, (oldName, self))
+        
+    def Remove(self):
+        self.Parent.Remove(self.Name)
 
-    def AddTransaction(self, *args, **kwargs):
-        self.TransactionList.Add(Transaction(*args, **kwargs))
+    def AddTransaction(self, amount, description, date, source=None):
+        partialTrans = Transaction(None, self, amount, description, date)
+        self.Store.MakeTransaction(account, transaction)
+        transaction = partialTrans
+        self._Transactions.append(transaction)
 
-    def RemoveTransaction(self, *args, **kwargs):
-        self.TransactionList.Remove(*args, **kwargs)
+    def RemoveTransaction(self, transaction):
+        self.Store.RemoveTransaction(transaction)
+        Publisher.sendMessage("transaction.removed.%s"%self.Name, transaction)
+        self.Transactions.remove(transaction)
         
     def float2str(self, *args, **kwargs):
         return self.Currency.float2str(*args, **kwargs)
@@ -125,32 +132,8 @@ class Account(object):
     def __cmp__(self, other):
         return cmp(self.Name, other.Name)
     
-    def Remove(self):
-        self.Parent.Remove(self.Name)
-    
     Name = property(GetName, SetName)
     Transactions = property(GetTransactions)
-
-
-class TransactionList(list):
-    def __init__(self, transactions):
-        list.__init__(self, transactions)
-        #self.Transactions = {}
-        #for transaction in transactions:
-        #    self.Transactions[transaction.ID] = transaction
-
-    def Add(self, transaction):
-        self.append(transaction)
-
-    def Get(self, tID):
-        for trans in self:
-            if trans.ID == tID:
-                return trans
-            
-        return None
-
-    def Remove(self, tID):
-        self.remove( self.Get(tID) )
         
 
 class Transaction(object):
