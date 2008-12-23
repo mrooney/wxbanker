@@ -179,7 +179,7 @@ class AccountListCtrl(wx.Panel):
         self.configureButton.Enabled = index is not None
 
         # Tell the parent we changed.
-        Publisher().sendMessage("VIEW.ACCOUNT_CHANGED", account)
+        Publisher().sendMessage("view.account changed", account)
 
     def SelectVisibleItem(self, index):
         """

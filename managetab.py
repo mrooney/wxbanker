@@ -58,7 +58,7 @@ class ManagePanel(wx.Panel):
         mainSizer.Add(transactionPanel, 1, wx.EXPAND|wx.ALL, 0)
 
         #subscribe to messages that interest us
-        Publisher().subscribe(self.onChangeAccount, "VIEW.ACCOUNT_CHANGED")
+        Publisher().subscribe(self.onChangeAccount, "view.account changed")
         Publisher().subscribe(self.onCalculatorToggled, "CALCULATOR.TOGGLED")
 
         #select the first item by default, if there are any
@@ -98,7 +98,7 @@ class TransactionPanel(wx.Panel):
         subpanel = wx.Panel(self)
         
         self.searchCtrl = searchCtrl = searchctrl.SearchCtrl(self, bankController)
-        self.transactionCtrl = transactionCtrl = TransactionCtrl(subpanel, bankController)
+        self.transactionCtrl = transactionCtrl = TransactionCtrl(subpanel)
         self.newTransCtrl = newTransCtrl = newtransactionctrl.NewTransactionCtrl(self, bankController)
         
         subpanel.Sizer = wx.BoxSizer()
@@ -113,7 +113,7 @@ class TransactionPanel(wx.Panel):
         mainSizer.Layout()
 
         ##self.Bind(wx.EVT_SIZE, self.transactionCtrl.doResize)
-        for message in ['model.new account', 'bank.REMOVED ACCOUNT', 'VIEW.ACCOUNT_CHANGED']:
+        for message in ["account.created", "account.removed", "view.account changed"]:
             Publisher().subscribe(self.onSearchInvalidatingChange, message)
         #self.Bind(wx.EVT_MAXIMIZE, self.doResize) # isn't necessary on GTK, what about Windows?
 

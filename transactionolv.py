@@ -28,10 +28,9 @@ from ObjectListView import GroupListView, ColumnDefn
 
 
 class TransactionOLV(GroupListView):
-    def __init__(self, parent, bankController):
+    def __init__(self, parent):
         GroupListView.__init__(self, parent, style=wx.LC_REPORT|wx.SUNKEN_BORDER)
-        
-        self.Model = bankController.Model
+        self.CurrentAccount = None
         
         self.showGroups = False
         self.evenRowsBackColor = wx.Color(224,238,238)
@@ -46,8 +45,8 @@ class TransactionOLV(GroupListView):
         self.SetColumns([
             ColumnDefn("Date", valueGetter="Date", width=dateWidth),
             ColumnDefn("Description", valueGetter="Description", isSpaceFilling=True),
-            ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=self.Model.float2str),
-            ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=self.Model.float2str, isEditable=False),
+            ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=self.renderFloat),
+            ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
         ])
         
         self.Bind(wx.EVT_RIGHT_DOWN, self.onRightDown)
@@ -71,7 +70,12 @@ class TransactionOLV(GroupListView):
         transObj._Total = total
         return total
     
+    def renderFloat(self, floatVal):
+        return self.CurrentAccount.float2str(floatVal)
+    
     def setAccount(self, account, scrollToBottom=True):
+        self.CurrentAccount = account
+        
         if account is None:
             transactions = []
         else:
