@@ -91,11 +91,13 @@ class PersistentStore:
         return bankmodel
     
     def CreateAccount(self, accountName):
-        self.dbconn.cursor().execute('INSERT INTO accounts VALUES (null, ?, ?, ?)', (accountName, 0, 0.0))
+        cursor = self.dbconn.cursor()
+        cursor.execute('INSERT INTO accounts VALUES (null, ?, ?, ?)', (accountName, 0, 0.0))
+        ID = cursor.lastrowid
         self.dbconn.commit()
         # Ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.
         self.clearAccountTransactions(accountName)
-        return bankobjects.Account(self, accountName)
+        return bankobjects.Account(self, ID, accountName)
     
     def RemoveAccount(self, accountName):
         # First, remove all the transactions associated with this account.
@@ -104,9 +106,9 @@ class PersistentStore:
         self.dbconn.cursor().execute('DELETE FROM accounts WHERE name=?',(accountName,))
         self.dbconn.commit()
         
-    def MakeTransaction(self, accountID, transaction):
+    def MakeTransaction(self, account, transaction):
         cursor = self.dbconn.cursor()
-        cursor.execute('INSERT INTO transactions VALUES (null, ?, ?, ?, ?)', (accountID, transaction.Amount, transaction.Description, transaction.Date))
+        cursor.execute('INSERT INTO transactions VALUES (null, ?, ?, ?, ?)', (account.ID, transaction.Amount, transaction.Description, transaction.Date))
         self.dbconn.commit()
         transaction.ID = cursor.lastrowid
         
@@ -189,8 +191,8 @@ class PersistentStore:
         return [transObj.ID, transObj.Amount, transObj.Description, dateStr]
     
     def result2account(self, result):
-        name, currency, balance = result[1:]
-        return bankobjects.Account(self, name, currency, balance)
+        ID, name, currency, balance = result
+        return bankobjects.Account(self, ID, name, currency, balance)
 
     def getAccounts(self):
         return [self.result2account(result) for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()]

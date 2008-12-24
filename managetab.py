@@ -99,7 +99,7 @@ class TransactionPanel(wx.Panel):
         
         self.searchCtrl = searchCtrl = searchctrl.SearchCtrl(self, bankController)
         self.transactionCtrl = transactionCtrl = TransactionCtrl(subpanel)
-        self.newTransCtrl = newTransCtrl = newtransactionctrl.NewTransactionCtrl(self, bankController)
+        self.newTransCtrl = newTransCtrl = newtransactionctrl.NewTransactionCtrl(self)
         
         subpanel.Sizer = wx.BoxSizer()
         subpanel.Sizer.Add(transactionCtrl, 1, wx.EXPAND)

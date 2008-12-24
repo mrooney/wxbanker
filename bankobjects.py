@@ -85,8 +85,9 @@ class AccountList(list):
 
 
 class Account(object):
-    def __init__(self, store, name, currency=0, balance=0.0):
+    def __init__(self, store, aID, name, currency=0, balance=0.0):
         self.Store = store
+        self.ID = aID
         self._Name = name
         self._Transactions = None
         self.Currency = currencies.CurrencyList[currency]()
@@ -117,7 +118,7 @@ class Account(object):
 
     def AddTransaction(self, amount, description, date, source=None):
         partialTrans = Transaction(None, self, amount, description, date)
-        self.Store.MakeTransaction(account, transaction)
+        self.Store.MakeTransaction(self, partialTrans)
         transaction = partialTrans
         self._Transactions.append(transaction)
 
@@ -143,10 +144,10 @@ class Transaction(object):
     Changes to this object get sent out via pubsub,
     typically causing the model to make the change.
     """
-    def __init__(self, tid, parent, amount, description, date):
+    def __init__(self, tID, parent, amount, description, date):
         self.IsFrozen = True
         
-        self.ID = tid
+        self.ID = tID
         self.Parent = parent
         self.Date = date
         self.Description = description

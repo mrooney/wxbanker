@@ -16,15 +16,15 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import wx
+import wx, datetime
 import bankcontrols
 from wx.lib.pubsub import Publisher
 
 
 class NewTransactionCtrl(wx.Panel):
-    def __init__(self, parent, bankController):
+    def __init__(self, parent):
         wx.Panel.__init__(self, parent)
-        self.Model = bankController.Model
+        self.CurrentAccount = None
 
         # The date control. We want the Generic control, which is a composite control
         # and allows us to bind to its enter, but on Windows with wxPython < 2.8.8.0,
@@ -88,6 +88,12 @@ class NewTransactionCtrl(wx.Panel):
             # Bind to DateCtrl Enter (LP: 252454).
             dateTextCtrl.WindowStyleFlag |= wx.TE_PROCESS_ENTER
             dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
+            
+        Publisher.subscribe(self.onAccountChanged, "view.account changed")
+        
+    def onAccountChanged(self, message):
+        account = message.data
+        self.CurrentAccount = account
 
     def onAmountChar(self, event):
         wx.CallAfter(self.updateAddIcon)
@@ -103,15 +109,6 @@ class NewTransactionCtrl(wx.Panel):
         self.newButton.SetBitmapLabel(BMP)
 
     def getValues(self):
-        # First, ensure an account is selected.
-        account = self.Parent.Parent.getCurrentAccount()
-        if account is None:
-            dlg = wx.MessageDialog(self,
-                                _("Please select an account and then try again."),
-                                _("No account selected"), wx.OK | wx.ICON_ERROR)
-            dlg.ShowModal()
-            return
-
         # Grab the raw values we will need to parse.
         date = self.dateCtrl.Value
         desc = self.descCtrl.Value
@@ -120,7 +117,7 @@ class NewTransactionCtrl(wx.Panel):
         # Parse the amount.
         try:
             amount = float(amount)
-        except:
+        except ValueError:
             if amount == "":
                 baseStr = _("No amount entered in the 'Amount' field.")
             else:
@@ -131,30 +128,46 @@ class NewTransactionCtrl(wx.Panel):
                                 _("Invalid Transaction Amount"), wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
             return
-
+        
         # Parse the date. This is already validated so we are pretty safe.
         date = datetime.date(date.Year, date.Month+1, date.Day)
 
-        return account, amount, desc, date
+        return amount, desc, date
 
-    def getSourceAccount(self, destination):
-        otherAccounts = Bank().getAccountNames()
-        otherAccounts.remove(destination)
+    def getSourceAccount(self, destinationAccount):
+        accountDict = {}
+        for account in destinationAccount.Parent:
+            accountDict[account.Name] = account
+            
+        # Remove the destination account as a transfer choice.
+        del accountDict[destinationAccount]
 
         # Create a dialog with the other account names to choose from.
         dlg = wx.SingleChoiceDialog(self,
                 _('Which account will the money come from?'), _('Other accounts'),
-                otherAccounts, wx.CHOICEDLG_STYLE)
+                sorted(accountDict.keys()), wx.CHOICEDLG_STYLE)
 
         if dlg.ShowModal() == wx.ID_OK:
-            return dlg.GetStringSelection()
+            accountName = dlg.GetStringSelection()
+            return accountDict[accountName]
 
     def onNewTransaction(self, event):
+        # First, ensure an account is selected.
+        destAccount = self.CurrentAccount
+        if destAccount is None:
+            dlg = wx.MessageDialog(self,
+                                _("Please select an account and then try again."),
+                                _("No account selected"), wx.OK | wx.ICON_ERROR)
+            dlg.ShowModal()
+            return
+        
+        # Grab the transaction values from the control.
         result = self.getValues()
         if result is None:
+            # Validation failed, user was informed.
             return
 
-        account, amount, desc, date = result
+        amount, desc, date = result
         isTransfer = self.transferCheck.Value
 
         # If a search is active, we have to ask the user what they want to do.
@@ -169,15 +182,13 @@ class NewTransactionCtrl(wx.Panel):
             else:
                 return
 
+        source = None
         if isTransfer:
-            destination = account
-            source = self.getSourceAccount(destination)
-            if source is not None:
-                Publisher().sendMessage("user.transfer", (source, destination, amount, desc, date))
-                self.onSuccess()
-        else:
-            Publisher().sendMessage("user.transaction", (account, amount, desc, date))
-            self.onSuccess()
+            source = self.getSourceAccount(destAccount)
+            
+        destAccount.AddTransaction(amount, desc, date, source)
+        self.onSuccess()
+
 
     def onTransferTip(self, event):
         tipStr = _("If this box is checked when adding a transaction, you will be prompted for the account to use as the source of the transfer.")+"\n\n"+\
