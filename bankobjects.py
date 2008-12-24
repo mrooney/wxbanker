@@ -10,6 +10,9 @@ class BankModel(object):
         
         Publisher().subscribe(self.onCurrencyChanged, "user.currency_changed")
         
+    def GetTotal(self):
+        return self.Accounts.GetTotal()
+        
     def GetAccount(self, accountName):
         return self.Accounts.Get(accountName)
         
@@ -49,6 +52,9 @@ class AccountList(list):
             account.Parent = self
             
         self.Store = store
+        
+    def GetTotal(self):
+        return sum([account.Balance for account in self])
         
     def AccountIndex(self, accountName):
         for i, account in enumerate(self):
