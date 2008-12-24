@@ -322,10 +322,12 @@ class AccountListCtrl(wx.Panel):
         """
         #TODO: only update the first label for the account that changed balance
         #TODO: only update the totals starting at the changed account
+        print 'updating totals'
         total = 0.0
         self.totalVals = []
         for account in self.accountObjects:
             balance = account.Balance
+            print '%s: %s' % (account.Name, balance)
             text.Label = account.float2str(balance)
             self.totalVals.append(balance)
             total += balance

@@ -121,6 +121,10 @@ class Account(object):
         self.Store.MakeTransaction(self, partialTrans)
         transaction = partialTrans
         self._Transactions.append(transaction)
+        
+        # Update the balance
+        self.Balance += transaction.Amount
+        # FIXME: send pubsub transaction.created somewhere
 
     def RemoveTransaction(self, transaction):
         self.Store.RemoveTransaction(transaction)
