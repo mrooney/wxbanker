@@ -101,7 +101,7 @@ class AccountListCtrl(wx.Panel):
         self.Bind(wx.EVT_HYPERLINK, self.onAccountClick)
 
         # Subscribe to messages we are concerned about.
-        Publisher().subscribe(self.updateTotals, "account.balance changed")
+        Publisher().subscribe(self.onAccountBalanceChanged, "account.balance changed")
         Publisher().subscribe(self.onAccountRemoved, "account.removed")
         Publisher().subscribe(self.onAccountAdded, "account.created")
         Publisher().subscribe(self.onAccountRenamed, "account.renamed")
@@ -308,16 +308,17 @@ class AccountListCtrl(wx.Panel):
         self.Layout()
         self.Parent.Layout()
 
-    def updateTotals(self, message=None):
+    def onAccountBalanceChanged(self, message):
         """
         Update all the total strings.
         """
-        #TODO: only update the first label for the account that changed balance
-        #TODO: only update the totals starting at the changed account
-        for account, text in zip(self.accountObjects, self.totalTexts):
-            balance = account.Balance
-            text.Label = account.float2str(balance)
-            
+        account = message.data
+        # Figure out the position of the account in our list.
+        index = self.accountObjects.index(account)
+        
+        # Update the total for the changed account.
+        self.totalTexts[index].Label = account.float2str(account.Balance)
+        # Update the grand total.
         self.updateGrandTotal()
 
         # Handle a zero-balance account going to non-zero or vice-versa.
