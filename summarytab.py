@@ -31,11 +31,13 @@ import datetime
 class SummaryPanel(wx.Panel):
     def __init__(self, parent, bankController):
         wx.Panel.__init__(self, parent)
+        self.bankController = bankController
+        
         self.plotSettings = {'FitDegree': 2, 'Granularity': 100}
         self.cachedData = None
 
         # create the plot panel
-        self.plotPanel = AccountPlotCanvas(self)
+        self.plotPanel = AccountPlotCanvas(self, bankController)
 
         # create the controls at the bottom
         controlSizer = wx.BoxSizer()
@@ -82,7 +84,7 @@ class SummaryPanel(wx.Panel):
         spanning the balances if there are not enough and averaging balances
         together if there are too many.
         """
-        days, startDate = Bank().getTotalsEvery(1)
+        days, startDate = self.bankController.Model.GetTotalsEvery(1)
         numDays = len(days)
         delta = float(numDays) / numPoints
         returnPoints = []
@@ -119,8 +121,9 @@ class SummaryPanel(wx.Panel):
         return returnPoints, startDate, delta
 
 class AccountPlotCanvas(pyplot.PlotCanvas):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, bankController, *args, **kwargs):
         pyplot.PlotCanvas.__init__(self, *args, **kwargs)
+        self.bankController = bankController
         self.pointDates = []
         self.startDate = None #TODO: get rid of this and use self.pointDates[0]
         self.SetEnablePointLabel(True)
@@ -200,7 +203,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         dc.DrawRectangle(sx-5, sy-5, 10, 10)  #10by10 square centered on point
         px, py = mDataDict["pointXY"]
         #make a string to display
-        line1, line2 = Bank().float2str(py), str(self.pointDates[mDataDict["pIndex"]])
+        line1, line2 = self.bankController.Model.float2str(py), str(self.pointDates[mDataDict["pIndex"]])
         x1, y1 = dc.GetTextExtent(line1)
         x2, y2 = dc.GetTextExtent(line2)
         dc.DrawText(line1, sx, sy+1)
@@ -228,7 +231,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         myTicks = []
         for tick in ticks:
             floatVal = tick[0]
-            stringVal = Bank().float2str(floatVal)
+            stringVal = self.bankController.Model.float2str(floatVal)
             if stringVal.endswith('.00'):
                 stringVal = stringVal[:-3]
             myTicks.append( (floatVal, stringVal) )
