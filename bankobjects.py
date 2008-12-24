@@ -79,8 +79,8 @@ class AccountList(list):
         if index == -1:
             raise bankexceptions.InvalidAccountException(accountName)
         
-        self.Store.RemoveAccount(accountName)
         account = self.pop(index)
+        self.Store.RemoveAccount(account)
         Publisher.sendMessage("account.removed.%s"%accountName, account)
 
 
@@ -91,13 +91,20 @@ class Account(object):
         self._Name = name
         self._Transactions = None
         self.Currency = currencies.CurrencyList[currency]()
-        self.Balance = balance
+        self._Balance = balance
         
-        Publisher.sendMessage("account.created.%s"%name, self)
+        Publisher.sendMessage("account.created.%s" % name, self)
+        
+    def GetBalance(self):
+        return self._Balance
+    
+    def SetBalance(self, newBalance):
+        self._Balance = newBalance
+        Publisher.sendMessage("account.balance changed.%s" % self.Name, self)
         
     def GetTransactions(self):
         if self._Transactions is None:
-            self._Transactions = self.Store.getTransactionsFrom(self.Name)
+            self._Transactions = self.Store.getTransactionsFrom(self)
         
         return self._Transactions
         
@@ -122,14 +129,16 @@ class Account(object):
         transaction = partialTrans
         self._Transactions.append(transaction)
         
-        # Update the balance
+        # Update the balance.
         self.Balance += transaction.Amount
-        # FIXME: send pubsub transaction.created somewhere
 
     def RemoveTransaction(self, transaction):
         self.Store.RemoveTransaction(transaction)
         Publisher.sendMessage("transaction.removed.%s"%self.Name, transaction)
         self.Transactions.remove(transaction)
+        
+        # Update the balance.
+        self.Balance -= transaction.Amount
         
     def float2str(self, *args, **kwargs):
         return self.Currency.float2str(*args, **kwargs)
@@ -139,6 +148,7 @@ class Account(object):
     
     Name = property(GetName, SetName)
     Transactions = property(GetTransactions)
+    Balance = property(GetBalance, SetBalance)
         
 
 class Transaction(object):

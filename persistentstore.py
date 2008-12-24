@@ -76,6 +76,7 @@ class PersistentStore:
         
         Publisher.subscribe(self.onTransactionUpdated, "transaction.updated")
         Publisher.subscribe(self.onAccountRenamed, "account.renamed")
+        Publisher.subscribe(self.onAccountBalanceChanged, "account.balance changed")
         
     def GetModel(self):
         debug('Creating model...')
@@ -95,15 +96,19 @@ class PersistentStore:
         cursor.execute('INSERT INTO accounts VALUES (null, ?, ?, ?)', (accountName, 0, 0.0))
         ID = cursor.lastrowid
         self.dbconn.commit()
-        # Ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.
-        self.clearAccountTransactions(accountName)
-        return bankobjects.Account(self, ID, accountName)
+        
+        account = bankobjects.Account(self, ID, accountName)
+        
+        # Ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.        
+        self.clearAccountTransactions(account)
+        
+        return account
     
-    def RemoveAccount(self, accountName):
+    def RemoveAccount(self, account):
         # First, remove all the transactions associated with this account.
         # This is necessary to maintain integrity for dbs created at V1 (LP: 249954).
-        self.clearAccountTransactions(accountName)
-        self.dbconn.cursor().execute('DELETE FROM accounts WHERE name=?',(accountName,))
+        self.clearAccountTransactions(account)
+        self.dbconn.cursor().execute('DELETE FROM accounts WHERE id=?',(account.ID,))
         self.dbconn.commit()
         
     def MakeTransaction(self, account, transaction):
@@ -171,7 +176,7 @@ class PersistentStore:
         
     def syncBalances(self):
         for account in self.getAccounts():
-            accountTotal = sum([t.Amount for t in self.getTransactionsFrom(account.Name)])
+            accountTotal = sum([t.Amount for t in self.getTransactionsFrom(account)])
             # Set the correct total.
             self.dbconn.cursor().execute('UPDATE accounts SET balance=? WHERE name=?', (accountTotal, account.Name))
             
@@ -197,20 +202,13 @@ class PersistentStore:
     def getAccounts(self):
         return [self.result2account(result) for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()]
         
-    def clearAccountTransactions(self, accountName):
-        accountId = self.getAccountId(accountName)
-        self.dbconn.cursor().execute('DELETE FROM transactions WHERE accountId=?', (accountId,))
+    def clearAccountTransactions(self, account):
+        self.dbconn.cursor().execute('DELETE FROM transactions WHERE accountId=?', (account.ID,))
         self.dbconn.commit()
         
-    def getAccountId(self, accountName):
-        result = self.dbconn.cursor().execute('SELECT * FROM accounts WHERE name=?', (accountName,)).fetchone()
-        if result is not None:
-            return result[0]
-        
-    def getTransactionsFrom(self, accountName):
-        accountId = self.getAccountId(accountName)
+    def getTransactionsFrom(self, account):
         transactions = []
-        for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (accountId,)).fetchall():
+        for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (account.ID,)).fetchall():
             transactions.append(self.result2transaction(result))
         return transactions
     
@@ -242,6 +240,11 @@ class PersistentStore:
     def onAccountRenamed(self, message):
         oldName, account = message.data
         self.renameAccount(oldName, account)
+        
+    def onAccountBalanceChanged(self, message):
+        account = message.data
+        self.dbconn.cursor().execute("UPDATE accounts SET balance=? WHERE id=?", (account.Balance, account.ID))
+        self.dbconn.commit()
         
     def __del__(self):
         self.dbconn.commit()

@@ -123,7 +123,7 @@ def main(bankController):
             while confirm == -1 or confirm.lower() not in ['y', 'n']:
                 confirm = raw_input('Permanently remove account "%s"? [y/n]: '%account.Name)
             if confirm == 'y':
-                bankmodel.RemoveAccount(account.Name)
+                bankmodel.RemoveAccount(account)
                 #bank.removeAccount(accountName)
                 #bank.save()
                 print 'Account successfully removed'

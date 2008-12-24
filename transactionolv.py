@@ -110,8 +110,9 @@ class olvFrame(wx.Frame):
         self.Sizer.Add(panel, 1, wx.EXPAND)
         panel.Sizer = wx.BoxSizer()
 
-        m = Model('bank')
-        transactions = m.getTransactionsFrom('HSBC Checking')
+        ##m = Model('bank')
+        ##transactions = m.getTransactionsFrom('HSBC Checking')
+        
         glv = TransactionOLV(panel)
         glv.SetObjects(transactions)
 
