@@ -37,7 +37,7 @@ class SummaryPanel(wx.Panel):
         self.cachedData = None
 
         # create the plot panel
-        self.plotPanel = AccountPlotCanvas(self, bankController)
+        self.plotPanel = AccountPlotCanvas(bankController, self)
 
         # create the controls at the bottom
         controlSizer = wx.BoxSizer()

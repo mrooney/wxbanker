@@ -39,7 +39,7 @@ class BankModel(object):
             grandTotal += trans.Amount
         totals.append(total) #append whatever is left over
 
-        assert self.float2str(grandTotal) == self.float2str(self.getTotalBalance()), (grandTotal, self.getTotalBalance())
+        assert self.float2str(grandTotal) == self.float2str(self.GetTotal()), (grandTotal, self.GetTotal())
 
         return totals, startDate
         
