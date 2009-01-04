@@ -22,6 +22,7 @@ class BankModel(object):
             return [], None
         
         transactions.sort()
+        #[t.Print() for t in transactions[-50:]]
 
         startDate = currentDate = transactions[0].Date
         offset = datetime.timedelta(numDays)
@@ -165,6 +166,8 @@ class Account(object):
         transaction = partialTrans
         self._Transactions.append(transaction)
         
+        Publisher.sendMessage("transaction.created.%s" % self.Name, transaction)
+        
         # Update the balance.
         self.Balance += transaction.Amount
 
@@ -274,6 +277,9 @@ class Transaction(object):
         
         if not self.IsFrozen:
             Publisher.sendMessage("transaction.updated.amount", self)
+            
+    def Print(self):
+        print "%i/%i/%i: %s -- %.2f" % (self.Date.year, self.Date.month, self.Date.day, self.Description, self.Amount)
             
     def __cmp__(self, other):
         return cmp(self.Date, other.Date)

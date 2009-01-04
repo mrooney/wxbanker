@@ -8,6 +8,9 @@ IMPLEMENTED:
 - editable amounts/descriptions
 - edits pushed to model
 - total based on total of last transaction
+- handle new transactions
+- min column sizes when there aren't any transactions
+- default sort by date
 TODO (for feature parity):
 - editable date
 - totals automatically updates for transaction changes above them
@@ -15,8 +18,7 @@ TODO (for feature parity):
 - right-click context menu
   - remove
   - calculator options on amounts
-- handle new transactions
-- min column sizes when there aren't any transactions
+
 EXTRA:
 - custom negative option such as Red, (), or Red and ()
 
@@ -48,6 +50,8 @@ class TransactionOLV(GroupListView):
             ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=self.renderFloat),
             ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
         ])
+        
+        self.SortBy(0)
         
         self.Bind(wx.EVT_RIGHT_DOWN, self.onRightDown)
         
@@ -85,8 +89,15 @@ class TransactionOLV(GroupListView):
         self.SetObjects(transactions)
         wx.CallLater(50, self.frozenResize) # Necessary for columns to size properly. (GTK)
         
+        Publisher.unsubscribe(self.onTransactionAdded)
+        Publisher.subscribe(self.onTransactionAdded, "transaction.created.%s" % account.Name)
+        
         if scrollToBottom:
             self.ensureVisible(-1)
+            
+    def onTransactionAdded(self, message):
+        transaction = message.data
+        self.AddObject(transaction)
         
     def ensureVisible(self, index):
         if index < 0:
