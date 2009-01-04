@@ -51,6 +51,7 @@ class TransactionOLV(GroupListView):
             ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
         ])
         
+        # By default, sort by the date column, ascending.
         self.SortBy(0)
         
         self.Bind(wx.EVT_RIGHT_DOWN, self.onRightDown)
@@ -90,14 +91,12 @@ class TransactionOLV(GroupListView):
         wx.CallLater(50, self.frozenResize) # Necessary for columns to size properly. (GTK)
         
         Publisher.unsubscribe(self.onTransactionAdded)
+        Publisher.unsubscribe(self.onTransactionRemoved)
         Publisher.subscribe(self.onTransactionAdded, "transaction.created.%s" % account.Name)
+        Publisher.subscribe(self.onTransactionRemoved, "transaction.removed.%s" % account.Name)
         
         if scrollToBottom:
             self.ensureVisible(-1)
-            
-    def onTransactionAdded(self, message):
-        transaction = message.data
-        self.AddObject(transaction)
         
     def ensureVisible(self, index):
         if index < 0:
@@ -105,12 +104,74 @@ class TransactionOLV(GroupListView):
         self.EnsureCellVisible(index, 0)
         
     def onRightDown(self, event):
-        event.Skip()
+        #get the transaction that was right-clicked, if any
+        #get the column that the click was in
+        #self.showContextMenu(transaction, col)
+        pass
+    
+    def showContextMenu(self, transaction, col):
+        menu = wx.Menu()
+
+        if col in (2,3):
+            # This is an amount cell, allow calculator options.
+            actions = [
+                (_("Send to calculator"), "wxART_calculator_edit"),
+                (_("Add to calculator"), "wxART_calculator_add"),
+                (_("Subtract from calculator"), "wxART_calculator_delete"),
+            ]
+
+            for actionStr, artHint in actions:
+                item = wx.MenuItem(menu, -1, actionStr)
+                item.SetBitmap(wx.ArtProvider.GetBitmap(artHint))
+                menu.Bind(wx.EVT_MENU, lambda e, s=actionStr: self.onCalculatorAction(transaction, col, s), source=item)
+                menu.AppendItem(item)
+            menu.AppendSeparator()
+
+        # Always show the Remove context entry.
+        removeItem = wx.MenuItem(menu, -1, _("Remove this transaction"))
+        menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransaction(transaction), source=removeItem)
+        removeItem.SetBitmap(wx.ArtProvider.GetBitmap('wxART_delete'))
+        menu.AppendItem(removeItem)
+
+        # Show the menu and then destroy it afterwards.
+        self.PopupMenu(menu)
+        menu.Destroy()
+
+    def onCalculatorAction(self, transaction, col, actionStr):
+        """
+        Given an action to perform on the calculator, and the row and col,
+        generate the string of characters necessary to perform that action
+        in the calculator, and push them.
+        """
+        command = actionStr.split(' ')[0].upper()
+        
+        if col == 2:
+            amount = transaction.Amount
+        elif col == 3:
+            amount = transaction._Total
+        else:
+            raise Exception("onCalculatorAction should only be called with col 2 or 3.")
+
+        pushStr = {'SEND': 'C%s', 'SUBTRACT': '-%s=', 'ADD': '+%s='}[command]
+        pushStr %= amount
+
+        Publisher.sendMessage("CALCULATOR.PUSH_CHARS", pushStr)
+
+    def onRemoveTransaction(self, transaction):
+        """Remove the transaction from the account."""
+        self.CurrentAccount.RemoveTransaction(transaction)
         
     def frozenResize(self):
         self.Parent.Layout()
         self.Parent.Thaw()
+        
+    def onTransactionRemoved(self, message):
+        transaction = message.data
+        self.RemoveObject(transaction)
     
+    def onTransactionAdded(self, message):
+        transaction = message.data
+        self.AddObject(transaction)
 
 class olvFrame(wx.Frame):
     def __init__(self, *args, **kwargs):
