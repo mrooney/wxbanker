@@ -130,6 +130,7 @@ class Account(object):
         self.Currency = currencies.CurrencyList[currency]()
         self._Balance = balance
         
+        Publisher.subscribe(self.onTransactionAmountChanged, "transaction.updated.amount")
         Publisher.sendMessage("account.created.%s" % name, self)
         
     def GetBalance(self):
@@ -178,6 +179,11 @@ class Account(object):
         
         # Update the balance.
         self.Balance -= transaction.Amount
+        
+    def onTransactionAmountChanged(self, message):
+        transaction, difference = message.data
+        if transaction in self.Transactions:
+            self.Balance += difference
         
     def float2str(self, *args, **kwargs):
         return self.Currency.float2str(*args, **kwargs)
@@ -273,10 +279,13 @@ class Transaction(object):
 
     def SetAmount(self, amount):
         """Update the amount, ensuring it is a float."""
+        if hasattr(self, "_Amount"):
+            difference = amount - self._Amount
+            
         self._Amount = float(amount)
         
         if not self.IsFrozen:
-            Publisher.sendMessage("transaction.updated.amount", self)
+            Publisher.sendMessage("transaction.updated.amount", (self, difference))
             
     def Print(self):
         print "%i/%i/%i: %s -- %.2f" % (self.Date.year, self.Date.month, self.Date.day, self.Description, self.Amount)

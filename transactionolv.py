@@ -92,8 +92,10 @@ class TransactionOLV(GroupListView):
         
         Publisher.unsubscribe(self.onTransactionAdded)
         Publisher.unsubscribe(self.onTransactionRemoved)
-        Publisher.subscribe(self.onTransactionAdded, "transaction.created.%s" % account.Name)
-        Publisher.subscribe(self.onTransactionRemoved, "transaction.removed.%s" % account.Name)
+        
+        if account:
+            Publisher.subscribe(self.onTransactionAdded, "transaction.created.%s" % account.Name)
+            Publisher.subscribe(self.onTransactionRemoved, "transaction.removed.%s" % account.Name)
         
         if scrollToBottom:
             self.ensureVisible(-1)

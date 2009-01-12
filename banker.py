@@ -360,7 +360,7 @@ class Bank(object):
         self.model.save()
         
     def onTransactionUpdated(self, message):
-        transaction = message.data
+        transaction, difference = message.data
         self.updateTransaction(transaction)
         
     def onMakeTransfer(self, message):

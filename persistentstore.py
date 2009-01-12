@@ -82,7 +82,6 @@ class PersistentStore:
         debug('Creating model...')
         
         if "--sync-balances" in sys.argv:
-            debug("Syncing balances")
             self.syncBalances()
             
         accounts = self.getAccounts()
@@ -175,6 +174,7 @@ class PersistentStore:
         self.dbconn.commit()
         
     def syncBalances(self):
+        debug("Syncing balances...")
         for account in self.getAccounts():
             accountTotal = sum([t.Amount for t in self.getTransactionsFrom(account)])
             # Set the correct total.
@@ -234,7 +234,7 @@ class PersistentStore:
                 print '  -',trans
                 
     def onTransactionUpdated(self, message):
-        transaction = message.data
+        transaction, difference = message.data
         self.updateTransaction(transaction)
         
     def onAccountRenamed(self, message):
