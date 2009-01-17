@@ -36,7 +36,12 @@ def get(transactions, numPoints):
         return [0] * 10, datetime.date.today(), 1.0/2**32
     
     transactions = list(sorted(transactions))
+    
     startDate, endDate = transactions[0].Date, transactions[-1].Date
+    today = datetime.date.today()
+    if today > endDate:
+        endDate = today
+
     distance = (endDate - startDate).days
     daysPerPoint = 1.0 * distance / numPoints
     dppDelta = datetime.timedelta(daysPerPoint)

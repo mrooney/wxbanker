@@ -106,17 +106,11 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
             uniquePoints.add("%.2f"%total)
             currentTime += every
 
-            if i < len(totals)-1:
-                # Don't just += the timeDelta to currentDate, since adding days is all or nothing, ie:
-                #   currentDate + timeDelta == currentDate, where timeDelta < 1 (bad!)
-                # ...so the date will never advance for timeDeltas < 1, no matter how many adds you do.
-                # As such we must start fresh each time and multiply the time delta appropriately.
-                currentDate = startDate + (i+1)*timeDelta
-            else:
-                # This is the last point, so make sure the date is set to today.
-                # Regardless of the date of the last transaction, the total is still
-                # the total as of today, which is what a user expects to see.
-                currentDate = datetime.date.today()
+            # Don't just += the timeDelta to currentDate, since adding days is all or nothing, ie:
+            #   currentDate + timeDelta == currentDate, where timeDelta < 1 (bad!)
+            # ...so the date will never advance for timeDeltas < 1, no matter how many adds you do.
+            # As such we must start fresh each time and multiply the time delta appropriately.
+            currentDate = startDate + (i+1)*timeDelta
 
             pointDates.append(currentDate.strftime('%m/%d/%Y'))
 
