@@ -79,46 +79,7 @@ class SummaryPanel(wx.Panel):
         self.plotPanel.plotBalance(totals, startDate, delta, "Days", fitdegree=self.plotSettings['FitDegree'])
 
     def getPoints(self, numPoints):
-        """
-        A function to turn the daily balances into numPoints number of values,
-        spanning the balances if there are not enough and averaging balances
-        together if there are too many.
-        """
-        days, startDate = self.bankController.Model.GetTotalsEvery(1)
-        numDays = len(days)
-        delta = float(numDays) / numPoints
-        returnPoints = []
-
-        if numDays == 0:
-            return [0.0 for i in range(numPoints)], datetime.date.today(), 1./100000
-        elif numDays <= numPoints:
-            span = numPoints / numDays
-            mod = numPoints % numDays
-            total = 0
-            for val in days:
-                total += val
-                for i in range(span):
-                    returnPoints.append(total)
-            for i in range(mod):
-                returnPoints.append(total)
-        else: # we have too much data, we need to average
-            groupSize = numDays / numPoints
-            total = 0
-            for i in range(numPoints):
-                if i < (numPoints-1):
-                    # average the totals over this period
-                    start = i*groupSize
-                    end = start + groupSize
-                    points = days[start:end]
-                    pointSum = sum(points)
-                    avgVal = pointSum / float(groupSize)
-                    returnPoints.append(total+avgVal)
-                    total += pointSum
-                else:
-                    # this is the last one, so make it the actual total balance!
-                    returnPoints.append(sum(days))
-
-        return returnPoints, startDate, delta
+        return self.bankController.Model.GetXTotals(numPoints)
 
 class AccountPlotCanvas(pyplot.PlotCanvas):
     def __init__(self, bankController, *args, **kwargs):

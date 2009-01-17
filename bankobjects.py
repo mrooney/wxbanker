@@ -1,6 +1,6 @@
 from wx.lib.pubsub import Publisher
 import datetime
-import bankexceptions, currencies
+import bankexceptions, currencies, plotalgo
 
 
 class BankModel(object):
@@ -13,36 +13,12 @@ class BankModel(object):
     def GetTotal(self):
         return self.Accounts.GetTotal()
     
-    def GetTotalsEvery(self, numDays):
+    def GetXTotals(self, numPoints):
         transactions = []
         for account in self.Accounts:
             transactions.extend(account.Transactions)
             
-        if len(transactions) == 0:
-            return [], None
-        
-        transactions.sort()
-        #[t.Print() for t in transactions[-50:]]
-
-        startDate = currentDate = transactions[0].Date
-        offset = datetime.timedelta(numDays)
-
-        totals = []
-        total = grandTotal = 0.0
-
-        for trans in transactions:
-            if trans.Date < currentDate + offset:
-                total += trans.Amount
-            else:
-                totals.append(total)
-                total = trans.Amount
-                currentDate += offset
-            grandTotal += trans.Amount
-        totals.append(total) #append whatever is left over
-
-        assert self.float2str(grandTotal) == self.float2str(self.GetTotal()), (grandTotal, self.GetTotal())
-
-        return totals, startDate
+        return plotalgo.get(transactions, numPoints)
         
     def GetAccount(self, accountName):
         return self.Accounts.Get(accountName)
