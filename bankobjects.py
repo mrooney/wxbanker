@@ -162,10 +162,26 @@ class Account(object):
         self.Parent.Remove(self.Name)
 
     def AddTransaction(self, amount, description, date, source=None):
+        """
+        Enter a transaction in this account, optionally making the opposite
+        transaction in the source account.
+        """
+        if source:
+            if description:
+                description = " (%s)" % description
+            source.AddTransaction(-amount, _("Transfer to %s"%self.Name) + description, date)
+            description = _("Transfer from %s"%source.Name) + description 
+            
         partialTrans = Transaction(None, self, amount, description, date)
         self.Store.MakeTransaction(self, partialTrans)
         transaction = partialTrans
-        self._Transactions.append(transaction)
+        
+        # IMPROVEMENT: using .Transactions on an account which hasn't fetched its
+        # transactions yet will cause it to fetch them all, which is silly to ADD
+        # an account. Ideally have a more aware list from the start which knows
+        # when it needs to be populated, and does so. It probably never stores any
+        # items until then.
+        self.Transactions.append(transaction)
         
         Publisher.sendMessage("transaction.created.%s" % self.Name, transaction)
         

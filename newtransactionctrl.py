@@ -137,11 +137,10 @@ class NewTransactionCtrl(wx.Panel):
     def getSourceAccount(self, destinationAccount):
         accountDict = {}
         for account in destinationAccount.Parent:
-            accountDict[account.Name] = account
+            # Don't add the destination account as a possible source.
+            if account.Name != destinationAccount.Name:
+                accountDict[account.Name] = account
             
-        # Remove the destination account as a transfer choice.
-        del accountDict[destinationAccount]
-
         # Create a dialog with the other account names to choose from.
         dlg = wx.SingleChoiceDialog(self,
                 _('Which account will the money come from?'), _('Other accounts'),
