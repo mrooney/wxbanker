@@ -106,10 +106,14 @@ class TransactionOLV(GroupListView):
         self.EnsureCellVisible(index, 0)
         
     def onRightDown(self, event):
-        #get the transaction that was right-clicked, if any
-        #get the column that the click was in
-        #self.showContextMenu(transaction, col)
-        pass
+        itemID, flag, col = self.HitTestSubItem(event.Position)
+
+        # Don't do anything for right-clicks not on items.
+        if itemID == -1:
+            return
+        
+        transaction = self.GetObjectAt(itemID)
+        self.showContextMenu(transaction, col)
     
     def showContextMenu(self, transaction, col):
         menu = wx.Menu()
