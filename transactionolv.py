@@ -173,32 +173,15 @@ class TransactionOLV(GroupListView):
         
     def onTransactionRemoved(self, message):
         transaction = message.data
+        self.Parent.Freeze()
+        # Remove the item from the list.
         self.RemoveObject(transaction)
+        
+        wx.CallLater(50, self.frozenResize) # Necessary for columns to size properly. (GTK)
     
     def onTransactionAdded(self, message):
         transaction = message.data
         self.AddObject(transaction)
-
-class olvFrame(wx.Frame):
-    def __init__(self, *args, **kwargs):
-        wx.Frame.__init__(self, *args, **kwargs)
-        self.Size = (800, 600)
-        panel = wx.Panel(self)
-        self.Sizer = wx.BoxSizer()
-        self.Sizer.Add(panel, 1, wx.EXPAND)
-        panel.Sizer = wx.BoxSizer()
-
-        ##m = Model('bank')
-        ##transactions = m.getTransactionsFrom('HSBC Checking')
-        
-        glv = TransactionOLV(panel)
-        glv.SetObjects(transactions)
-
-        panel.Sizer.Add(glv, 1, wx.EXPAND)
-        Publisher.subscribe(self.onMessage)
-
-    def onMessage(self, message):
-        print message.topic, message.data
 
 
 if __name__ == "__main__":
