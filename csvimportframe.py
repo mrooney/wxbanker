@@ -121,8 +121,10 @@ class CsvImportFrame(wx.Frame):
         
         file = self.filePickerCtrl.Path
         
+        account = self.targetAccountCtrl.Value
+        
         try:
-            importer.importFile('Sporitelna', file, settings)
+            importer.importFile(account, file, settings)
         except Exception, e:
             print 'Caught exception:', e
         
