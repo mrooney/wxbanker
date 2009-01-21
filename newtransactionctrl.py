@@ -184,6 +184,8 @@ class NewTransactionCtrl(wx.Panel):
         source = None
         if isTransfer:
             source = self.getSourceAccount(destAccount)
+            if source is None:
+                return
             
         destAccount.AddTransaction(amount, desc, date, source)
         self.onSuccess()
