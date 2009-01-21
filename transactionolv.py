@@ -182,6 +182,8 @@ class TransactionOLV(GroupListView):
     def onTransactionAdded(self, message):
         transaction = message.data
         self.AddObject(transaction)
+        #TODO: Perhaps get the actual position and scroll to that, it may not be last.
+        self.ensureVisible(-1)
 
 
 if __name__ == "__main__":
