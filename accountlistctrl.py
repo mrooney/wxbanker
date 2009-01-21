@@ -315,6 +315,8 @@ class AccountListCtrl(wx.Panel):
         account = message.data
         # Figure out the position of the account in our list.
         index = self.accountObjects.index(account)
+        if index < 0:
+            raise Exception("Unable to locate Account in list")
         
         # Update the total for the changed account.
         self.totalTexts[index].Label = account.float2str(account.Balance)
