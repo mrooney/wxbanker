@@ -1,5 +1,5 @@
 import wx
-from csvimporter import CsvImporter, CsvImporterSettings
+from csvimporter import CsvImporter, CsvImporterSettings, CsvImporterProfileManager
 from banker import Bank
 
 class CsvImportFrame(wx.Frame):
@@ -11,14 +11,20 @@ class CsvImportFrame(wx.Frame):
         
         self.dateFormats = ['%Y/%m/%d', '%d/%m/%Y', '%m/%d/%Y']
         self.encodings = ['cp1250', 'utf-8']
+        self.profileManager = CsvImporterProfileManager()
         
         topPanel = wx.Panel(self)
+        topHorizontalSizer = wx.BoxSizer(wx.VERTICAL)
         topSizer = wx.BoxSizer(wx.VERTICAL)
         
         self.initTargetAccountControl(topPanel, topSizer)
-        self.initSettingsControls(topPanel, topSizer)
+
+        horizontalSizer = wx.BoxSizer(wx.HORIZONTAL)
+        topSizer.Add(horizontalSizer, flag=wx.ALL|wx.EXPAND, proportion=1)
+        self.initSettingsControls(topPanel, horizontalSizer)
+
+        self.initSettingsProfilesControl(topPanel, horizontalSizer)
         self.initFileAndActionControls(topPanel, topSizer)
-        
         self.initCtrlValuesFromSettings(self.getDefaultSettings())
         
         # layout sizers
@@ -42,8 +48,11 @@ class CsvImportFrame(wx.Frame):
         self.targetAccountCtrl.Bind(wx.EVT_COMBOBOX, self.onTargetAccountChange)
         staticBoxSizer.Add(self.targetAccountCtrl)
         
-    def initSettingsControls(self, topPanel, topSizer):
+    def initSettingsControls(self, topPanel, parentSizer):
         # csv columns to wxBanker data mapping
+        
+        topSizer = wx.BoxSizer(wx.VERTICAL)
+        parentSizer.Add(topSizer)
         
         staticBox = wx.StaticBox(topPanel, label=_("CSV columns mapping"))
         staticBoxSizer = wx.StaticBoxSizer(staticBox, wx.VERTICAL)
@@ -112,12 +121,36 @@ class CsvImportFrame(wx.Frame):
         self.importButton.Bind(wx.EVT_BUTTON, self.onClickImportButton)
         sizer.Add(self.importButton)
         
+    def initSettingsProfilesControl(self, topPanel, topSizer):
+        staticBox = wx.StaticBox(topPanel, label=_("CSV profiles"))
+        sizer = wx.StaticBoxSizer(staticBox, wx.VERTICAL)
+        topSizer.Add(sizer, flag=wx.ALL|wx.EXPAND, proportion=1)
+        
+        self.profileCtrl = wx.ComboBox(topPanel, choices=self.profileManager.profiles.keys(), size=(110,-1))
+        self.profileCtrl.Bind(wx.EVT_TEXT, self.onProfileCtrlChange)
+        sizer.Add(self.profileCtrl, flag=wx.ALIGN_CENTER)
+        
+        self.loadProfileButton = wx.Button(topPanel, label=_("Load"))
+        self.loadProfileButton.Bind(wx.EVT_BUTTON, self.onClickLoadProfileButton)
+        self.loadProfileButton.Disable()
+        sizer.Add(self.loadProfileButton, flag=wx.ALIGN_CENTER)
+        
+        self.saveProfileButton = wx.Button(topPanel, label=_("Save"))
+        self.saveProfileButton.Bind(wx.EVT_BUTTON, self.onClickSaveProfileButton)
+        self.saveProfileButton.Disable()
+        sizer.Add(self.saveProfileButton, flag=wx.ALIGN_CENTER)
+        
+        self.deleteProfileButton = wx.Button(topPanel, label=_("Delete"))
+        self.deleteProfileButton.Bind(wx.EVT_BUTTON, self.onClickDeleteProfileButton)
+        self.deleteProfileButton.Disable()
+        sizer.Add(self.deleteProfileButton, flag=wx.ALIGN_CENTER)
+        
     def initCtrlValuesFromSettings(self, settings):
         self.amountColumnCtrl.Value = str(settings.amountColumn + 1)
         self.decimalSeparatorCtrl.Value = settings.decimalSeparator
         self.dateColumnCtrl.Value = str(settings.dateColumn + 1)
         self.dateFormatCtrl.Value = settings.dateFormat
-        self.descriptionColumnCtrl.Value = ' '.join([str(i) for i in settings.descriptionColumns])
+        self.descriptionColumnCtrl.Value = ' '.join([str(i + 1) for i in settings.descriptionColumns])
         self.delimiterCtrl.Value = settings.delimiter
         self.skipFirstLineCtrl.Value = settings.skipFirstLine
         self.fileEncodingCtrl.Value = settings.encoding
@@ -172,9 +205,39 @@ class CsvImportFrame(wx.Frame):
     def onTargetAccountChange(self, event):
         if self.filePickerCtrl.Path != '':
             self.importButton.Enable()
+            
+    def onProfileCtrlChange(self, event):
+        if self.profileCtrl.Value != '':
+            self.saveProfileButton.Enable()
+            enabled = self.profileManager.getProfile(self.profileCtrl.Value) != None
+            self.loadProfileButton.Enable(enabled)
+            self.deleteProfileButton.Enable(enabled)
+        else :
+            self.loadProfileButton.Disable()
+            self.saveProfileButton.Disable()
+            self.deleteProfileButton.Disable()
 
     def onClickImportButton(self, event):
         self.runImport()
+
+    def initProfileCtrl(self):
+        self.profileCtrl.Items = self.profileManager.profiles.keys()
+        self.onProfileCtrlChange(None)
+
+    def onClickLoadProfileButton(self, event):
+        key = self.profileCtrl.Value
+        self.initCtrlValuesFromSettings(self.profileManager.getProfile(key))
+        self.initProfileCtrl()
+
+    def onClickSaveProfileButton(self, event):
+        key = self.profileCtrl.Value
+        self.profileManager.saveProfile(key, self.getSettingsFromControls())
+        self.initProfileCtrl()
+
+    def onClickDeleteProfileButton(self, event):
+        key = self.profileCtrl.Value
+        self.profileManager.deleteProfile(key)
+        self.initProfileCtrl()
 
 if __name__ == '__main__':
     app = wx.PySimpleApp()

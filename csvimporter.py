@@ -38,6 +38,21 @@ class CsvImporter:
 class CsvImporterSettings:
     def __init__(self):
         pass
+        
+class CsvImporterProfileManager:
+    profiles = {}
+
+    def __init__(self):
+        self.profiles = {}
+    
+    def getProfile(self, key):
+        return self.profiles.get(key, None)
+        
+    def saveProfile(self, key, settings):
+        self.profiles[key] = settings
+        
+    def deleteProfile(self, key):
+        del self.profiles[key]
 
 class UTF8Recoder:
     """
