@@ -9,6 +9,9 @@ class CsvImportFrame(wx.Frame):
     def __init__(self):
         wx.Frame.__init__(self, None, title=_("CSV import"))
         
+        self.dateFormats = ['%Y/%m/%d', '%d/%m/%Y', '%m/%d/%Y']
+        self.encodings = ['cp1250', 'utf-8']
+        
         topPanel = wx.Panel(self)
         topSizer = wx.BoxSizer(wx.VERTICAL)
         
@@ -36,22 +39,21 @@ class CsvImportFrame(wx.Frame):
         sizer.SetFlexibleDirection(wx.HORIZONTAL)
         staticBoxSizer.Add(sizer, flag=wx.ALL|wx.EXPAND, border=5)
         
-        self.dateColumnCtrl = wx.TextCtrl(topPanel, size=(30,-1), value='1')
+        self.dateColumnCtrl = wx.TextCtrl(topPanel, size=(30,-1))
         sizer.Add(wx.StaticText(topPanel, label=_('Date')), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self.dateColumnCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
-        dateFormats = ['%Y/%m/%d', '%d/%m/%Y', '%m/%d/%Y']
-        self.dateFormatCtrl = wx.ComboBox(topPanel, value=dateFormats[0], choices=dateFormats, size=(110,-1))
+        self.dateFormatCtrl = wx.ComboBox(topPanel, choices=self.dateFormats, size=(110,-1))
         sizer.Add(wx.StaticText(topPanel, label=_('Date format')), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self.dateFormatCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
         
-        self.amountColumnCtrl = wx.TextCtrl(topPanel, size=(30,-1), value='2')
-        self.decimalSeparatorCtrl = wx.TextCtrl(topPanel, size=(20,-1), value='.')
+        self.amountColumnCtrl = wx.TextCtrl(topPanel, size=(30,-1))
+        self.decimalSeparatorCtrl = wx.TextCtrl(topPanel, size=(20,-1))
         sizer.Add(wx.StaticText(topPanel, label=_('Amount')), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self.amountColumnCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(wx.StaticText(topPanel, label=_('Decimal separator')), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self.decimalSeparatorCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
         
-        self.descriptionColumnCtrl = wx.TextCtrl(topPanel, value='3 4 5')
+        self.descriptionColumnCtrl = wx.TextCtrl(topPanel)
         sizer.Add(wx.StaticText(topPanel, label=_('Description')), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self.descriptionColumnCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add((0,0))
@@ -72,12 +74,11 @@ class CsvImportFrame(wx.Frame):
         sizer.Add(self.skipFirstLineCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
         
         sizer.Add(wx.StaticText(topPanel, label=_('Encoding')), flag=wx.ALIGN_CENTER_VERTICAL)
-        encodings = ['cp1250', 'utf-8']
-        self.fileEncodingCtrl = wx.ComboBox(topPanel, value='utf-8', choices=encodings, size=(110,-1))
+        self.fileEncodingCtrl = wx.ComboBox(topPanel, choices=self.encodings, size=(110,-1))
         sizer.Add(self.fileEncodingCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
         
         sizer.Add(wx.StaticText(topPanel, label=_('Column delimiter')), flag=wx.ALIGN_CENTER_VERTICAL)
-        self.delimiterCtrl = wx.TextCtrl(topPanel, value=';', size=(30,-1),)
+        self.delimiterCtrl = wx.TextCtrl(topPanel, size=(30,-1),)
         sizer.Add(self.delimiterCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
         
         # file picker control and import button
@@ -95,16 +96,41 @@ class CsvImportFrame(wx.Frame):
         self.importButton.SetToolTipString(_("Import"))
         self.importButton.Bind(wx.EVT_BUTTON, self.onClickImportButton)
         sizer.Add(self.importButton)
-
+        
+        self.initCtrlValuesFromSettings(self.getDefaultSettings())
+        
         # layout sizers
         topPanel.SetSizer(topSizer)
         topPanel.SetAutoLayout(True)
         topSizer.Fit(self)
         
         self.Show(True)
-    
-    def runImport(self):
-        importer = CsvImporter()
+        
+    def initCtrlValuesFromSettings(self, settings):
+        self.amountColumnCtrl.Value = str(settings.amountColumn + 1)
+        self.decimalSeparatorCtrl.Value = settings.decimalSeparator
+        self.dateColumnCtrl.Value = str(settings.dateColumn + 1)
+        self.dateFormatCtrl.Value = settings.dateFormat
+        self.descriptionColumnCtrl.Value = ' '.join([str(i) for i in settings.descriptionColumns])
+        self.delimiterCtrl.Value = settings.delimiter
+        self.skipFirstLineCtrl.Value = settings.skipFirstLine
+        self.fileEncodingCtrl.Value = settings.encoding
+        
+    def getDefaultSettings(self):
+        settings = CsvImporterSettings()
+
+        settings.amountColumn = 1
+        settings.decimalSeparator = '.'
+        settings.dateColumn = 0
+        settings.dateFormat = self.dateFormats[0]
+        settings.descriptionColumns = [2, 3, 4]
+        settings.delimiter = ';'
+        settings.skipFirstLine = False
+        settings.encoding = 'utf-8'
+        
+        return settings
+
+    def getSettingsFromControls(self):
         settings = CsvImporterSettings()
 
         settings.amountColumn = int(self.amountColumnCtrl.Value) - 1
@@ -119,8 +145,13 @@ class CsvImportFrame(wx.Frame):
         settings.skipFirstLine = self.skipFirstLineCtrl.Value
         settings.encoding = self.fileEncodingCtrl.Value
         
-        file = self.filePickerCtrl.Path
+        return settings
+
+    def runImport(self):
+        importer = CsvImporter()
+        settings = self.getSettingsFromControls()
         
+        file = self.filePickerCtrl.Path
         account = self.targetAccountCtrl.Value
         
         try:
