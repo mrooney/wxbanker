@@ -15,7 +15,20 @@ class CsvImportFrame(wx.Frame):
         topPanel = wx.Panel(self)
         topSizer = wx.BoxSizer(wx.VERTICAL)
         
-        # target Account
+        self.initTargetAccountControl(topPanel, topSizer)
+        self.initSettingsControls(topPanel, topSizer)
+        self.initFileAndActionControls(topPanel, topSizer)
+        
+        self.initCtrlValuesFromSettings(self.getDefaultSettings())
+        
+        # layout sizers
+        topPanel.SetSizer(topSizer)
+        topPanel.SetAutoLayout(True)
+        topSizer.Fit(self)
+        
+        self.Show(True)
+        
+    def initTargetAccountControl(self, topPanel, topSizer):
         staticBox = wx.StaticBox(topPanel, label=_("Target account"))
         staticBoxSizer = wx.StaticBoxSizer(staticBox, wx.VERTICAL)
         topSizer.Add(staticBoxSizer, flag=wx.ALL|wx.EXPAND, border=1)
@@ -29,6 +42,7 @@ class CsvImportFrame(wx.Frame):
         self.targetAccountCtrl.Bind(wx.EVT_COMBOBOX, self.onTargetAccountChange)
         staticBoxSizer.Add(self.targetAccountCtrl)
         
+    def initSettingsControls(self, topPanel, topSizer):
         # csv columns to wxBanker data mapping
         
         staticBox = wx.StaticBox(topPanel, label=_("CSV columns mapping"))
@@ -81,6 +95,7 @@ class CsvImportFrame(wx.Frame):
         self.delimiterCtrl = wx.TextCtrl(topPanel, size=(30,-1),)
         sizer.Add(self.delimiterCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
         
+    def initFileAndActionControls(self, topPanel, topSizer):
         # file picker control and import button
         
         sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -96,15 +111,6 @@ class CsvImportFrame(wx.Frame):
         self.importButton.SetToolTipString(_("Import"))
         self.importButton.Bind(wx.EVT_BUTTON, self.onClickImportButton)
         sizer.Add(self.importButton)
-        
-        self.initCtrlValuesFromSettings(self.getDefaultSettings())
-        
-        # layout sizers
-        topPanel.SetSizer(topSizer)
-        topPanel.SetAutoLayout(True)
-        topSizer.Fit(self)
-        
-        self.Show(True)
         
     def initCtrlValuesFromSettings(self, settings):
         self.amountColumnCtrl.Value = str(settings.amountColumn + 1)
