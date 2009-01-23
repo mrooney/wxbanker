@@ -83,7 +83,16 @@ class Model:
         return meta
     
     def upgradeDb(self, fromVer):
-        #TODO: make backup first
+        # Make a backup
+        source = self.path
+        dest = self.path + ".backup-v%i-%s" % (fromVer, datetime.date.today().strftime("%Y-%m-%d"))
+        import shutil
+        try:
+            shutil.copyfile(source, dest)
+        except IOError:
+            import traceback; traceback.print_exc()
+            raise Exception("Unable to make backup before proceeding with database upgrade...bailing.")
+            
         cursor = self.dbconn.cursor()
         if fromVer == 1:
             # Add `currency` column to the accounts table with default value 0.
@@ -128,7 +137,7 @@ class Model:
         return sorted([result[1] for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()])
 
     def createAccount(self, account):
-        self.dbconn.cursor().execute('INSERT INTO accounts VALUES (null, ?, ?)', (account, 0))
+        self.dbconn.cursor().execute('INSERT INTO accounts (id, name, currency) VALUES (null, ?, ?)', (account, 0))
         self.dbconn.commit()
         # Ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.
         self.clearAccountTransactions(account)
