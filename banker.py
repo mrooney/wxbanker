@@ -29,7 +29,7 @@ are getting published when they should be.
 # Ensure that we have a clean, fresh bank by removing a test one
 # if it already exists.
 
->>> import os
+>>> import os, datetime
 >>> if os.path.exists("test.db"): os.remove("test.db")
 >>> model = controller.Controller("test.db").Model
 >>> model.Accounts
@@ -48,14 +48,14 @@ Traceback (most recent call last):
   ...
 InvalidAccountException: Invalid account 'My Account' specified.
 
->>> len(messages) == 0
-True
+>>> len(messages)
+0
 
 # Now test valid account and transaction manipulation.
 
 >>> model.CreateAccount("My Account")
->>> len(messages) == 1
-True
+>>> len(messages)
+1
 >>> messages[0][1].Name
 'My Account'
 
@@ -63,8 +63,8 @@ True
 Traceback (most recent call last):
   ...
 AccountAlreadyExistsException: Account 'My Account' already exists.
->>> len(messages) == 1
-True
+>>> len(messages)
+1
 >>> len(model.Accounts) == 1
 True
 >>> a = model.Accounts[0]
@@ -73,29 +73,34 @@ True
 >>> a.Balance
 0.0
 >>> t1 = a.AddTransaction(100.27, "Initial Balance")
->>> len(messages) == 3
-True
+>>> len(messages)
+3
 >>> messages[1] == (('transaction', 'created', 'My Account'), t1)
+True
+>>> messages[0] == (('account', 'balance changed', 'My Account'), a)
 True
 >>> a.Balance
 100.27
 >>> model.Balance
 100.27
-"""
-"""
->>> tId = b.makeTransaction("My Account", -10, "ATM Withdrawal", datetime.date(2007, 1, 6))
->>> len(messages) == 3
-True
->>> messages[0]
-(('bank', 'NEW TRANSACTION'), None)
->>> balance = b.getBalanceOf("My Account")
->>> b.float2str(balance)
+>>> t2 = a.AddTransaction(-10, "ATM Withdrawal", datetime.date(2007, 1, 6))
+>>> t2.Amount
+-10.0
+>>> t2.Description
+'ATM Withdrawal'
+>>> t2.Date
+datetime.date(2007, 1, 6)
+>>> len(messages)
+5
+>>> model.float2str(model.Balance)
 '$90.27'
->>> b.renameAccount("My Account", "My Renamed Account")
->>> len(messages) == 4
+>>> a.Name = "My Renamed Account"
+>>> len(messages)
+6
+>>> messages[0] == (('account', 'renamed', 'My Account'), ('My Account', a))
 True
->>> messages[0]
-(('bank', 'RENAMED ACCOUNT'), ('My Account', 'My Renamed Account'))
+"""
+"""
 >>> b.getAccountNames()
 [u'My Renamed Account']
 >>> b.updateTransaction(tId, amount=-101)
