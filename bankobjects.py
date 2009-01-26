@@ -10,8 +10,8 @@ class BankModel(object):
         
         Publisher().subscribe(self.onCurrencyChanged, "user.currency_changed")
         
-    def GetTotal(self):
-        return self.Accounts.GetTotal()
+    def GetBalance(self):
+        return self.Accounts.Balance
     
     def GetXTotals(self, numPoints):
         transactions = []
@@ -50,6 +50,7 @@ class BankModel(object):
         currencyIndex = message.data
         self.setCurrency(currencyIndex)
 
+    Balance = property(GetBalance)
 
 class AccountList(list):
     def __init__(self, store, accounts):
@@ -60,7 +61,7 @@ class AccountList(list):
             
         self.Store = store
         
-    def GetTotal(self):
+    def GetBalance(self):
         return sum([account.Balance for account in self])
         
     def AccountIndex(self, accountName):
@@ -96,6 +97,7 @@ class AccountList(list):
         self.Store.RemoveAccount(account)
         Publisher.sendMessage("account.removed.%s"%accountName, account)
 
+    Balance = property(GetBalance)
 
 class Account(object):
     def __init__(self, store, aID, name, currency=0, balance=0.0):
@@ -137,7 +139,7 @@ class Account(object):
     def Remove(self):
         self.Parent.Remove(self.Name)
 
-    def AddTransaction(self, amount, description, date, source=None):
+    def AddTransaction(self, amount, description, date=None, source=None):
         """
         Enter a transaction in this account, optionally making the opposite
         transaction in the source account.
@@ -145,7 +147,7 @@ class Account(object):
         if source:
             if description:
                 description = " (%s)" % description
-            source.AddTransaction(-amount, _("Transfer to %s"%self.Name) + description, date)
+            otherTrans = source.AddTransaction(-amount, _("Transfer to %s"%self.Name) + description, date)
             description = _("Transfer from %s"%source.Name) + description 
             
         partialTrans = Transaction(None, self, amount, description, date)
@@ -156,13 +158,18 @@ class Account(object):
         # transactions yet will cause it to fetch them all, which is silly to ADD
         # an account. Ideally have a more aware list from the start which knows
         # when it needs to be populated, and does so. It probably never stores any
-        # items until then.
+        # items until then. For transfers this is wasteful on the other account.
         self.Transactions.append(transaction)
         
         Publisher.sendMessage("transaction.created.%s" % self.Name, transaction)
         
         # Update the balance.
         self.Balance += transaction.Amount
+        
+        if source:
+            return transaction, otherTrans
+        else:
+            return transaction
 
     def RemoveTransaction(self, transaction):
         self.Store.RemoveTransaction(transaction)
@@ -238,7 +245,11 @@ class Transaction(object):
         datetime.date(2000, 1, 6)
         >>> _MassageData(datetime.date(2008, 1, 6))
         datetime.date(2008, 1, 6)
+        >>> _MassageData(None) == datetime.date.today()
+        True
         """
+        if date is None:
+            return datetime.date.today()
         # The maximum number of years you can refer to in the future, using an abbreviation.
         # Ex: If it is 2008 and MAX_FUTURE_ABBR is 10, years 9-18 will become 2009-2018,
         # while 19-99 will become 1919-1999.

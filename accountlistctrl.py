@@ -330,7 +330,7 @@ class AccountListCtrl(wx.Panel):
         self.Parent.Layout()
         
     def updateGrandTotal(self):
-        self.totalText.Label = self.Model.float2str( self.Model.GetTotal() )
+        self.totalText.Label = self.Model.float2str( self.Model.Balance )
 
     def onAddButton(self, event):
         self.showEditCtrl()

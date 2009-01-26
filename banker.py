@@ -34,6 +34,8 @@ are getting published when they should be.
 >>> model = controller.Controller("test.db").Model
 >>> model.Accounts
 []
+>>> model.Balance == 0
+True
 
 # Now test that the appropriate exceptions are thrown.
 
@@ -61,23 +63,26 @@ True
 Traceback (most recent call last):
   ...
 AccountAlreadyExistsException: Account 'My Account' already exists.
-"""
-
-"""
 >>> len(messages) == 1
 True
->>> b.getAccountNames()
-[u'My Account']
->>> myId = b.getAccountId("My Account")
->>> b.getBalanceOf("My Account")
-0.0
->>> tId = b.makeTransaction("My Account", 100.27, "Initial Balance")
->>> len(messages) == 2
+>>> len(model.Accounts) == 1
 True
->>> messages[0]
-(('bank', 'NEW TRANSACTION'), None)
->>> b.getBalanceOf("My Account")
+>>> a = model.Accounts[0]
+>>> a.Name
+'My Account'
+>>> a.Balance
+0.0
+>>> t1 = a.AddTransaction(100.27, "Initial Balance")
+>>> len(messages) == 3
+True
+>>> messages[1] == (('transaction', 'created', 'My Account'), t1)
+True
+>>> a.Balance
 100.27
+>>> model.Balance
+100.27
+"""
+"""
 >>> tId = b.makeTransaction("My Account", -10, "ATM Withdrawal", datetime.date(2007, 1, 6))
 >>> len(messages) == 3
 True
