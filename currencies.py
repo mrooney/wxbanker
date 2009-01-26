@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #    https://launchpad.net/wxbanker
 #    currencies.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
@@ -173,11 +174,11 @@ class RussianCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
         self.LOCALECONV['p_sep_by_space'] = 1
-        self.LOCALECONV['thousands_sep'] = u'\xa0'
+        self.LOCALECONV['thousands_sep'] = ' ' #u'\xa0'
         self.LOCALECONV['decimal_point'] = ','
         self.LOCALECONV['int_curr_symbol'] = 'RUB '
         self.LOCALECONV['n_cs_precedes'] = 0
-        self.LOCALECONV['mon_thousands_sep'] = u'\xa0'
+        self.LOCALECONV['mon_thousands_sep'] = ' ' #u'\xa0'
         self.LOCALECONV['currency_symbol'] = 'руб' #'\xd1\x80\xd1\x83\xd0\xb1'
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
