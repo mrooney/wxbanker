@@ -153,8 +153,18 @@ class PersistentStore:
         return meta
     
     def upgradeDb(self, fromVer):
-        #TODO: make backup first
-        print 'Upgrading db from %i' % fromVer
+        # Make a backup
+        source = self.path
+        dest = self.path + ".backup-v%i-%s" % (fromVer, datetime.date.today().strftime("%Y-%m-%d"))
+        debug("Making backup to %s" % dest)
+        import shutil
+        try:
+            shutil.copyfile(source, dest)
+        except IOError:
+            import traceback; traceback.print_exc()
+            raise Exception("Unable to make backup before proceeding with database upgrade...bailing.")
+            
+        debug('Upgrading db from %i' % fromVer)
         cursor = self.dbconn.cursor()
         if fromVer == 1:
             # Add `currency` column to the accounts table with default value 0.
