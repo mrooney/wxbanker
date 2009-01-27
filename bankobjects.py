@@ -337,7 +337,10 @@ class Transaction(object):
         print "%i/%i/%i: %s -- %.2f" % (self.Date.year, self.Date.month, self.Date.day, self.Description, self.Amount)
             
     def __cmp__(self, other):
-        return cmp(self.Date, other.Date)
+        return cmp(
+            (self.Date, self.Amount, self.Description, self.Parent),
+            (other.Date, other.Amount, other.Description, other.Parent)
+        )
     
     def equals(self, other):
         assert isinstance(other, Transaction)

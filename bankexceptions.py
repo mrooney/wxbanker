@@ -33,9 +33,4 @@ class AccountAlreadyExistsException(Exception):
     def __str__(self):
         return "Account '%s' already exists."%self.account
 
-class InvalidTransactionException(Exception):
-    def __init__(self, uid):
-        self.uid = uid
-
-    def __str__(self):
-        return "Unable to find transaction with UID %s"%self.uid
+class InvalidTransactionException(Exception): pass
