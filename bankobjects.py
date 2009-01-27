@@ -1,6 +1,6 @@
 from wx.lib.pubsub import Publisher
 import datetime
-import bankexceptions, currencies, plotalgo
+import bankexceptions, currencies, plotalgo, localization
 
 
 class BankModel(object):
@@ -49,9 +49,13 @@ class BankModel(object):
     def onCurrencyChanged(self, message):
         currencyIndex = message.data
         self.setCurrency(currencyIndex)
+        
+    def equals(self, other):
+        return self.Accounts.equals(other.Accounts)
 
     Balance = property(GetBalance)
 
+    
 class AccountList(list):
     def __init__(self, store, accounts):
         list.__init__(self, accounts)
@@ -87,6 +91,7 @@ class AccountList(list):
         # Make sure this account knows its parent.
         account.Parent = self
         self.append(account)
+        return account
         
     def Remove(self, accountName):
         index = self.AccountIndex(accountName)
@@ -97,8 +102,18 @@ class AccountList(list):
         self.Store.RemoveAccount(account)
         Publisher.sendMessage("account.removed.%s"%accountName, account)
 
+    def equals(self, other):
+        if len(self) != len(other):
+            return False
+        for leftAccount, rightAccount in zip(self, other):
+            if not leftAccount.equals(rightAccount):
+                return False
+            
+        return True
+            
     Balance = property(GetBalance)
 
+    
 class Account(object):
     def __init__(self, store, aID, name, currency=0, balance=0.0):
         self.Store = store
@@ -139,10 +154,10 @@ class Account(object):
     def Remove(self):
         self.Parent.Remove(self.Name)
 
-    def AddTransaction(self, amount, description, date=None, source=None):
+    def AddTransaction(self, amount, description="", date=None, source=None):
         """
         Enter a transaction in this account, optionally making the opposite
-        transaction in the source account.
+        transaction in the source account first.
         """
         if source:
             if description:
@@ -172,6 +187,9 @@ class Account(object):
             return transaction
 
     def RemoveTransaction(self, transaction):
+        if transaction not in self.Transactions:
+            raise bankexceptions.InvalidTransactionException("Transaction does not exist in account '%s'" % self.Name)
+        
         self.Store.RemoveTransaction(transaction)
         Publisher.sendMessage("transaction.removed.%s"%self.Name, transaction)
         self.Transactions.remove(transaction)
@@ -190,10 +208,35 @@ class Account(object):
     def __cmp__(self, other):
         return cmp(self.Name, other.Name)
     
+    def equals(self, other):
+        return (
+            self.Name == other.Name and
+            self.Balance == other.Balance and
+            self.Currency == other.Currency and
+            self.Transactions.equals(other.Transactions)
+        )
+    
     Name = property(GetName, SetName)
     Transactions = property(GetTransactions)
     Balance = property(GetBalance, SetBalance)
         
+    
+class TransactionList(list):
+    def __init__(self, items=None):
+        # list does not understand items=None apparently.
+        if items is None:
+            items = []
+            
+        list.__init__(self, items)
+        
+    def equals(self, other):
+        if not len(self) == len(other):
+            return False
+        for leftTrans, rightTrans in zip(self, other):
+            if not leftTrans.equals(rightTrans):
+                return False
+            
+        return True
 
 class Transaction(object):
     """
@@ -220,7 +263,7 @@ class Transaction(object):
         self._Date = self._MassageDate(date)
             
         if not self.IsFrozen:
-            FrozenPublisher.sendMessage("transaction.updated.date", self)
+            Publisher.sendMessage("transaction.updated.date", (self, None))
             
     def _MassageDate(self, date):
         """
@@ -275,7 +318,7 @@ class Transaction(object):
         self._Description = str(description)
         
         if not self.IsFrozen:
-            Publisher.sendMessage("transaction.updated.description", self)
+            Publisher.sendMessage("transaction.updated.description", (self, None))
             
     def GetAmount(self):
         return self._Amount
@@ -295,6 +338,14 @@ class Transaction(object):
             
     def __cmp__(self, other):
         return cmp(self.Date, other.Date)
+    
+    def equals(self, other):
+        assert isinstance(other, Transaction)
+        return (
+            self.Date == other.Date and
+            self.Description == other.Description and
+            self.Amount == other.Amount
+        )
             
     Date = property(GetDate, SetDate)
     Description = property(GetDescription, SetDescription)

@@ -23,7 +23,6 @@ including failing when it should.
 First, set up a generic event subscriber to make sure that events
 are getting published when they should be.
 
->>> import sys; sys.displayhook = displayhook
 >>> messages = Subscriber()
 
 # Ensure that we have a clean, fresh bank by removing a test one
@@ -53,7 +52,7 @@ InvalidAccountException: Invalid account 'My Account' specified.
 
 # Now test valid account and transaction manipulation.
 
->>> model.CreateAccount("My Account")
+>>> a1 = model.CreateAccount("My Account")
 >>> len(messages)
 1
 >>> messages[0][1].Name
@@ -68,6 +67,8 @@ AccountAlreadyExistsException: Account 'My Account' already exists.
 >>> len(model.Accounts) == 1
 True
 >>> a = model.Accounts[0]
+>>> a is a1
+True
 >>> a.Name
 'My Account'
 >>> a.Balance
@@ -94,74 +95,113 @@ datetime.date(2007, 1, 6)
 5
 >>> model.float2str(model.Balance)
 '$90.27'
+
+#testRenameAccount
 >>> a.Name = "My Renamed Account"
 >>> len(messages)
 6
 >>> messages[0] == (('account', 'renamed', 'My Account'), ('My Account', a))
 True
-"""
-"""
->>> b.getAccountNames()
-[u'My Renamed Account']
->>> b.updateTransaction(tId, amount=-101)
->>> len(messages) == 5
+>>> len(model.Accounts)
+1
+>>> model.Accounts[0].Name
+'My Renamed Account'
+>>> model.RemoveAccount("My Account")
+Traceback (most recent call last):
+  ...
+InvalidAccountException: Invalid account 'My Account' specified.
+
+#testTransactionUpdating
+>>> t1.Amount = -101
+>>> len(messages)
+8
+>>> t1.Amount == -101
 True
->>> balance = b.getBalanceOf("My Renamed Account")
->>> b.float2str(balance)
-'-$0.73'
->>> b.createAccount("Another Account")
->>> sorted(b.getAccountNames()) == sorted([u'My Renamed Account', u'Another Account'])
+>>> model.float2str(model.Balance)
+'-$111.00'
+>>> t1.Description = "Updated description"
+>>> len(messages)
+9
+>>> t1.Description
+'Updated description'
+>>> t1.Date = datetime.date(1986, 1, 6)
+>>> len(messages)
+10
+>>> t1.Date == datetime.date(1986, 1, 6)
 True
->>> tId = b.makeTransaction("Another Account", -5000.01)
->>> balance = b.getBalanceOf("Another Account")
->>> b.float2str(balance)
+
+#testSecondAccount
+>>> a2 = model.CreateAccount("Another Account")
+>>> len(model.Accounts)
+2
+>>> [x.Name for x in sorted(model.Accounts)]
+['Another Account', 'My Renamed Account']
+
+>>> model.GetAccount("My Renamed Account") == a
+True
+>>> model.GetAccount("Another Account") == a2
+True
+
+>>> t = a2.AddTransaction(-5000.01)
+>>> a2.float2str(a2.Balance)
 '-$5,000.01'
->>> tId1, tId2 = b.makeTransfer("Another Account", "My Renamed Account", 1.02, "Why not?")
->>> trans = b.getTransactionByID(tId1)
->>> trans.Amount, trans.Description
-(-1.02, 'Transfer to My Renamed Account (Why not?)')
->>> trans.Date == datetime.date.today()
+>>> model.float2str(model.Balance)
+'-$5,111.01'
+
+#testTransfer
+>>> amount = 1.02
+>>> oldB2, oldB = a2.Balance, a.Balance
+>>> oldTotal = model.Balance
+>>> t1, t2 = a2.AddTransaction(amount, "Why not?", source=a)
+>>> t1.Amount
+1.02
+>>> t2.Amount
+-1.02
+>>> model.Balance == oldTotal
 True
->>> trans = b.getTransactionByID(tId2)
->>> trans.Amount, trans.Description
-(1.02, 'Transfer from Another Account (Why not?)')
->>> trans.Date == datetime.date.today()
+>>> a2.Balance == oldB2 + amount
 True
->>> b.float2str(b.getBalanceOf("My Renamed Account"))
-'$0.29'
->>> b.float2str(b.getBalanceOf("Another Account"))
-'-$5,001.03'
->>> balance = b.getTotalBalance()
->>> b.float2str(balance)
-'-$5,000.74'
->>> b.removeAccount("Another Account")
->>> b.getAccountNames()
-[u'My Renamed Account']
->>> b.getBalanceOf("Another Account")
+>>> a.Balance == oldB - amount
+True
+
+#testRemoveAccount
+>>> oldBalance = a.Balance
+>>> len(model.Accounts)
+2
+>>> a2.Remove()
+>>> len(model.Accounts)
+1
+>>> a = model.Accounts[0]
+>>> a.Name
+'My Renamed Account'
+>>> model.GetAccount("Another Account")
 Traceback (most recent call last):
   ...
 InvalidAccountException: Invalid account 'Another Account' specified.
->>> b.float2str(b.getTotalBalance())
-'$0.29'
->>> b.createAccount("Fresh New Account")
->>> b.getBalanceOf("Fresh New Account")
-0.0
->>> b.getTransactionsFrom("Fresh New Account")
-[]
->>> b.removeTransaction(tId1) #doctest: +ELLIPSIS
-Traceback (most recent call last):
-  ...
-InvalidTransactionException: Unable to find transaction with UID ...
->>> b.removeTransaction(tId2)
+>>> a.Balance = oldBalance
+>>> a.Balance == model.Balance
 True
->>> b.getTransactionByID('FakeID')
+
+>>> a3 = model.CreateAccount("Fresh New Account")
+>>> a3.Balance
+0.0
+>>> a3.Transactions
+[]
+
+>>> t1 in a.Transactions
+False
+>>> t1.Parent == a
+False
+>>> t2 in a.Transactions
+True
+>>> t2.Parent == a
+True
+>>> a.RemoveTransaction(t1)
 Traceback (most recent call last):
   ...
-InvalidTransactionException: Unable to find transaction with UID FakeID
->>> b.removeTransaction('FakeID')
-Traceback (most recent call last):
-  ...
-InvalidTransactionException: Unable to find transaction with UID FakeID
+InvalidTransactionException: Transaction does not exist in account 'My Renamed Account'
+"""
+"""
 >>> b.close()
 >>> os.remove('test.db')
 """
@@ -370,7 +410,7 @@ class Bank(object):
         self.model.save()
         
     def onTransactionUpdated(self, message):
-        transaction, difference = message.data
+        transaction, previousValue = message.data
         self.updateTransaction(transaction)
         
     def onMakeTransfer(self, message):

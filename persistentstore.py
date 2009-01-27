@@ -217,7 +217,7 @@ class PersistentStore:
         self.dbconn.commit()
         
     def getTransactionsFrom(self, account):
-        transactions = []
+        transactions = bankobjects.TransactionList()
         for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (account.ID,)).fetchall():
             transactions.append(self.result2transaction(result))
         return transactions
@@ -244,7 +244,7 @@ class PersistentStore:
                 print '  -',trans
                 
     def onTransactionUpdated(self, message):
-        transaction, difference = message.data
+        transaction, previousValue = message.data
         self.updateTransaction(transaction)
         
     def onAccountRenamed(self, message):
