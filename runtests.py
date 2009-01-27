@@ -25,15 +25,24 @@ def main():
     import sys; sys.displayhook = displayhook
     
     import plotalgo, currencies, bankobjects, controller
-
-    results = []
-    for mod in [plotalgo, currencies, bankobjects, controller]:
+    mods = [plotalgo, currencies, bankobjects, controller]
+    
+    results = {}
+    for mod in mods:
         result = doctest.testmod(mod)
-        results.append(result)
+        results[mod.__name__] = result
 
     import pprint
-    print "(Successes, Failures):"
+    print "(Failures, Total):"
     pprint.pprint(results)
+    failures = sum([v[0] for v in results.values()])
+    tests = sum([v[1] for v in results.values()])
+    
+    if failures:
+        print "FAILED: ",
+    else:
+        print "PASSED: ",
+    print "%i total failures out of %i total tests in %i modules." % (failures, tests, len(mods))
 
 if __name__ == "__main__":
     main()
