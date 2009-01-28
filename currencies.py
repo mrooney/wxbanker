@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #    https://launchpad.net/wxbanker
 #    currencies.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
@@ -147,7 +148,7 @@ class EuroCurrency(BaseCurrency):
         self.LOCALECONV['int_curr_symbol'] = 'EUR '
         self.LOCALECONV['n_cs_precedes'] = 0
         self.LOCALECONV['mon_thousands_sep'] = ' '
-        self.LOCALECONV['currency_symbol'] = '\xe2\x82\xac'
+        self.LOCALECONV['currency_symbol'] = '€' #'\xe2\x82\xac'
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
         
@@ -155,7 +156,7 @@ class GreatBritainCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
         self.LOCALECONV['int_curr_symbol'] = 'GBP '
-        self.LOCALECONV['currency_symbol'] = '\xc2\xa3'
+        self.LOCALECONV['currency_symbol'] = '£' #'\xc2\xa3'
         
 class JapaneseCurrency(BaseCurrency):
     def __init__(self):
@@ -165,7 +166,7 @@ class JapaneseCurrency(BaseCurrency):
         self.LOCALECONV['n_sign_posn'] = 4
         self.LOCALECONV['int_curr_symbol'] = 'JPY '
         self.LOCALECONV['p_sign_posn'] = 4
-        self.LOCALECONV['currency_symbol'] = '\xef\xbf\xa5'
+        self.LOCALECONV['currency_symbol'] = '￥' #'\xef\xbf\xa5'
         self.LOCALECONV['mon_grouping'] = [3, 0]
         self.LOCALECONV['grouping'] = [3, 0]
         
@@ -173,12 +174,12 @@ class RussianCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
         self.LOCALECONV['p_sep_by_space'] = 1
-        self.LOCALECONV['thousands_sep'] = '\xc2\xa0'
+        self.LOCALECONV['thousands_sep'] = ' ' #u'\xa0'
         self.LOCALECONV['decimal_point'] = ','
         self.LOCALECONV['int_curr_symbol'] = 'RUB '
         self.LOCALECONV['n_cs_precedes'] = 0
-        self.LOCALECONV['mon_thousands_sep'] = '\xc2\xa0'
-        self.LOCALECONV['currency_symbol'] = '\xd1\x80\xd1\x83\xd0\xb1'
+        self.LOCALECONV['mon_thousands_sep'] = ' ' #u'\xa0'
+        self.LOCALECONV['currency_symbol'] = 'руб' #'\xd1\x80\xd1\x83\xd0\xb1'
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
         
