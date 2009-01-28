@@ -62,14 +62,14 @@ class CsvImportFrame(wx.Frame):
         sizer.SetFlexibleDirection(wx.HORIZONTAL)
         staticBoxSizer.Add(sizer, flag=wx.ALL|wx.EXPAND, border=5)
         
-        self.dateColumnCtrl = wx.TextCtrl(topPanel, size=(30,-1))
+        self.dateColumnCtrl = wx.SpinCtrl(topPanel, size=(40,-1))
         sizer.Add(wx.StaticText(topPanel, label=_('Date')), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self.dateColumnCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
         self.dateFormatCtrl = wx.ComboBox(topPanel, choices=self.dateFormats, size=(110,-1))
         sizer.Add(wx.StaticText(topPanel, label=_('Date format')), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self.dateFormatCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
         
-        self.amountColumnCtrl = wx.TextCtrl(topPanel, size=(30,-1))
+        self.amountColumnCtrl = wx.SpinCtrl(topPanel, size=(40,-1))
         self.decimalSeparatorCtrl = wx.TextCtrl(topPanel, size=(20,-1))
         sizer.Add(wx.StaticText(topPanel, label=_('Amount')), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self.amountColumnCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
@@ -146,9 +146,9 @@ class CsvImportFrame(wx.Frame):
         sizer.Add(self.deleteProfileButton, flag=wx.ALIGN_CENTER)
         
     def initCtrlValuesFromSettings(self, settings):
-        self.amountColumnCtrl.Value = str(settings.amountColumn + 1)
+        self.amountColumnCtrl.Value = settings.amountColumn + 1
         self.decimalSeparatorCtrl.Value = settings.decimalSeparator
-        self.dateColumnCtrl.Value = str(settings.dateColumn + 1)
+        self.dateColumnCtrl.Value = settings.dateColumn + 1
         self.dateFormatCtrl.Value = settings.dateFormat
         self.descriptionColumnCtrl.Value = ' '.join([str(i + 1) for i in settings.descriptionColumns])
         self.delimiterCtrl.Value = settings.delimiter
