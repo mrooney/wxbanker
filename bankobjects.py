@@ -20,7 +20,7 @@
 
 from wx.lib.pubsub import Publisher
 import datetime
-import bankexceptions, currencies, plotalgo, localization
+import bankexceptions, currencies, plotalgo, localization, debug
 
 
 class BankModel(object):
@@ -219,8 +219,16 @@ class Account(object):
         
     def onTransactionAmountChanged(self, message):
         transaction, difference = message.data
-        if transaction in self.Transactions:
-            self.Balance += difference
+        if self._Transactions is not None:
+            if transaction in self.Transactions:
+                assert transaction.Parent is self, (self.Name, transaction.Parent, transaction.Description, transaction.Amount)
+                debug.debug("Updating balance by %s because I am %s: %s" % (difference, self.Name, transaction))
+                self.Balance += difference
+            else:
+                debug.debug("Ignoring transaction because I am %s: %s" % (self.Name, transaction))
+        else:
+            #debug.debug("Ignoring transaction because I am %s and have not loaded transactions")
+            pass
         
     def float2str(self, *args, **kwargs):
         return self.Currency.float2str(*args, **kwargs)
@@ -351,10 +359,11 @@ class Transaction(object):
         self._Amount = float(amount)
         
         if not self.IsFrozen:
+            debug.debug("Setting transaction amount: ", self)
             Publisher.sendMessage("transaction.updated.amount", (self, difference))
             
-    def Print(self):
-        print "%i/%i/%i: %s -- %.2f" % (self.Date.year, self.Date.month, self.Date.day, self.Description, self.Amount)
+    def __str__(self):
+        return "%i/%i/%i: %s -- %.2f" % (self.Date.year, self.Date.month, self.Date.day, self.Description, self.Amount)
             
     def __cmp__(self, other):
         return cmp(

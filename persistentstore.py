@@ -32,18 +32,11 @@ Table: transactions
 +-------------------------------------------------------------------------------------------------------+
 """
 import sys, os, datetime
-import bankobjects
+import bankobjects, debug
 from sqlite3 import dbapi2 as sqlite
 import sqlite3
 from wx.lib.pubsub import Publisher
 
-
-DEBUG = "--debug" in sys.argv
-def debug(*args):
-    if DEBUG:
-        for arg in args:
-            print arg,
-        print ""
 
 class PersistentStore:
     """
@@ -55,22 +48,22 @@ class PersistentStore:
         self.path = path
         existed = True
         if not os.path.exists(self.path):
-            debug('Initializing', path)
+            debug.debug('Initializing', path)
             connection = self.initialize()
             existed = False
         else:
-            debug('Loading', path)
+            debug.debug('Loading', path)
             connection = sqlite.connect(self.path)
 
         self.dbconn = connection
         
         self.Meta = self.getMeta()
-        debug(self.Meta)
+        debug.debug(self.Meta)
         while self.Meta['VERSION'] < self.Version:
             assert existed # Sanity check to ensure new dbs don't need to be upgraded.
             self.upgradeDb(self.Meta['VERSION'])
             self.Meta = self.getMeta()
-            debug(self.Meta)
+            debug.debug(self.Meta)
             
         self.dbconn.commit()
         
@@ -79,7 +72,7 @@ class PersistentStore:
         Publisher.subscribe(self.onAccountBalanceChanged, "account.balance changed")
         
     def GetModel(self):
-        debug('Creating model...')
+        debug.debug('Creating model...')
         
         if "--sync-balances" in sys.argv:
             self.syncBalances()
@@ -156,7 +149,7 @@ class PersistentStore:
         # Make a backup
         source = self.path
         dest = self.path + ".backup-v%i-%s" % (fromVer, datetime.date.today().strftime("%Y-%m-%d"))
-        debug("Making backup to %s" % dest)
+        debug.debug("Making backup to %s" % dest)
         import shutil
         try:
             shutil.copyfile(source, dest)
@@ -164,7 +157,7 @@ class PersistentStore:
             import traceback; traceback.print_exc()
             raise Exception("Unable to make backup before proceeding with database upgrade...bailing.")
             
-        debug('Upgrading db from %i' % fromVer)
+        debug.debug('Upgrading db from %i' % fromVer)
         cursor = self.dbconn.cursor()
         if fromVer == 1:
             # Add `currency` column to the accounts table with default value 0.
@@ -184,18 +177,11 @@ class PersistentStore:
         self.dbconn.commit()
         
     def syncBalances(self):
-        debug("Syncing balances...")
+        debug.debug("Syncing balances...")
         for account in self.getAccounts():
             accountTotal = sum([t.Amount for t in self.getTransactionsFrom(account)])
             # Set the correct total.
             self.dbconn.cursor().execute('UPDATE accounts SET balance=? WHERE name=?', (accountTotal, account.Name))
-            
-    def result2transaction(self, result):
-        """
-        This method converts this model's specific implementation
-        of a transaction into the Bank's generic one.
-        """
-        return bankobjects.Transaction(*result)
 
     def transaction2result(self, transObj):
         """
@@ -219,7 +205,8 @@ class PersistentStore:
     def getTransactionsFrom(self, account):
         transactions = bankobjects.TransactionList()
         for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (account.ID,)).fetchall():
-            transactions.append(self.result2transaction(result))
+            tid, pid, amount, description, date = result
+            transactions.append(bankobjects.Transaction(tid, account, amount, description, date))
         return transactions
     
     def updateTransaction(self, transObj):
@@ -245,6 +232,7 @@ class PersistentStore:
                 
     def onTransactionUpdated(self, message):
         transaction, previousValue = message.data
+        debug.debug("Persisting transaction change: %s" % transaction)
         self.updateTransaction(transaction)
         
     def onAccountRenamed(self, message):
