@@ -221,14 +221,11 @@ class Account(object):
         transaction, difference = message.data
         if self._Transactions is not None:
             if transaction in self.Transactions:
-                assert transaction.Parent is self, (self.Name, transaction.Parent, transaction.Description, transaction.Amount)
+                #assert transaction.Parent is self, (self.Name, transaction.Parent, transaction.Description, transaction.Amount)
                 debug.debug("Updating balance by %s because I am %s: %s" % (difference, self.Name, transaction))
                 self.Balance += difference
             else:
                 debug.debug("Ignoring transaction because I am %s: %s" % (self.Name, transaction))
-        else:
-            #debug.debug("Ignoring transaction because I am %s and have not loaded transactions")
-            pass
         
     def float2str(self, *args, **kwargs):
         return self.Currency.float2str(*args, **kwargs)
@@ -367,8 +364,8 @@ class Transaction(object):
             
     def __cmp__(self, other):
         return cmp(
-            (self.Date, self),
-            (other.Date, other)
+            (self.Date, id(self)),
+            (other.Date, id(other))
         )
     
     def equals(self, other):
