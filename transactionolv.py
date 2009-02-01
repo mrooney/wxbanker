@@ -11,17 +11,19 @@ IMPLEMENTED:
 - handle new transactions
 - min column sizes when there aren't any transactions
 - default sort by date
-TODO (for feature parity):
-- editable date
-- totals automatically updates for transaction changes above them
 - display negative amount as Red
 - right-click context menu
   - remove
   - calculator options on amounts
-
+- amount editing as %.2f (instead of 2.16999999 etc)
+TODO (for feature parity):
+- editable date
+- done? totals automatically updates for transaction changes above them
 EXTRA:
 - custom negative option such as Red, (), or Red and ()
-
+NEW THINGS:
+- sorting by columns
+- empty account message
 """
 
 import wx, datetime
