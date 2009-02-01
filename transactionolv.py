@@ -68,6 +68,21 @@ class TransactionOLV(GroupListView):
         Publisher().subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
         Publisher().subscribe(self.onSearchMoreToggled, "SEARCH.MORETOGGLED")
         
+    def SetObjects(self, objs, *args, **kwargs):
+        """
+        Override the default SetObjects to properly refresh the auto-size,
+        and clear out any cached Totals as they may not be valid IE when we
+        search and have a subset of transactions.
+        """
+        self.Parent.Freeze()
+
+        # Remove any previously cached totals, to fix search totals.
+        for obj in objs:
+            obj._Total = None
+            
+        GroupListView.SetObjects(self, objs, *args, **kwargs)
+        wx.CallLater(50, self.frozenResize) # Necessary for columns to size properly. (GTK)
+        
     def getTotal(self, transObj):
         """
         A somewhat hackish implementation, but an improvement!
@@ -77,9 +92,9 @@ class TransactionOLV(GroupListView):
             total = transObj.Amount
         else:
             previousObj = self.GetObjectAt(i-1)
-            try:
-                previousTotal = previousObj._Total
-            except AttributeError:
+            
+            previousTotal = previousObj._Total
+            if previousTotal is None:
                 previousTotal = self.getTotal(previousObj)
             
             total = previousTotal + transObj.Amount
@@ -106,9 +121,7 @@ class TransactionOLV(GroupListView):
         else:
             transactions = account.Transactions
         
-        self.Parent.Freeze()
         self.SetObjects(transactions)
-        wx.CallLater(50, self.frozenResize) # Necessary for columns to size properly. (GTK)
         
         Publisher.unsubscribe(self.onTransactionAdded)
         Publisher.unsubscribe(self.onTransactionRemoved)
@@ -216,12 +229,14 @@ class TransactionOLV(GroupListView):
         self.Parent.Parent.searchActive = True
 
     def onSearchCancelled(self, message):
-        self.setAccount(self.CurrentAccount)
-        self.Parent.Parent.searchActive = False
+        # Ignore cancels on an inactive search to avoid silly refreshes.
+        if self.Parent.Parent.searchActive:
+            self.setAccount(self.CurrentAccount)
+            self.Parent.Parent.searchActive = False
 
     def onSearchMoreToggled(self, message):
-        return
-        #self.Refresh()
+        # Perhaps necessary to not glitch overlap on Windows?
+        self.Refresh()
 
 
 if __name__ == "__main__":
