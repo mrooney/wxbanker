@@ -27,7 +27,6 @@ from wx.lib.pubsub import Publisher
 # wxBanker
 from bankexceptions import NoNumpyException
 from menubar import BankMenuBar
-from banker import Bank
 import localization
 # Tabs
 import managetab

@@ -24,7 +24,6 @@ try:
 except ImportError:
     raise NoNumpyException()
 
-from banker import Bank
 import datetime
 
 

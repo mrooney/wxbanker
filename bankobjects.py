@@ -189,11 +189,9 @@ class Account(object):
         self.Store.MakeTransaction(self, partialTrans)
         transaction = partialTrans
         
-        # IMPROVEMENT: using .Transactions on an account which hasn't fetched its
-        # transactions yet will cause it to fetch them all, which is silly to ADD
-        # an account. Ideally have a more aware list from the start which knows
-        # when it needs to be populated, and does so. It probably never stores any
-        # items until then. For transfers this is wasteful on the other account.
+        # Don't fetch all the transactions just to add one, for example transfers
+        # and moves involving an unviewed account.
+        #if self._Transactions is not None:
         self.Transactions.append(transaction)
         
         Publisher.sendMessage("transaction.created.%s" % self.Name, transaction)

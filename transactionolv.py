@@ -18,6 +18,8 @@ IMPLEMENTED:
 - amount editing as %.2f (instead of 2.16999999 etc)
 TODO (for feature parity):
 - editable date
+- disable sorting on Total column
+- searching
 - done? totals automatically updates for transaction changes above them
 EXTRA:
 - custom negative option such as Red, (), or Red and ()
@@ -28,7 +30,8 @@ NEW THINGS:
 
 import wx, datetime
 from wx.lib.pubsub import Publisher
-from ObjectListView import GroupListView, ColumnDefn
+from ObjectListView import GroupListView, ColumnDefn, CellEditorRegistry
+import bankcontrols
 
 
 class TransactionOLV(GroupListView):
@@ -48,7 +51,7 @@ class TransactionOLV(GroupListView):
         dateWidth = self.GetTextExtent(dateStr)[0] + 10
         
         self.SetColumns([
-            ColumnDefn("Date", valueGetter="Date", width=dateWidth),
+            ColumnDefn("Date", valueGetter="Date", width=dateWidth, cellEditorCreator=self.makeDateEditor),
             ColumnDefn("Description", valueGetter="Description", isSpaceFilling=True),
             ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=self.renderFloat),
             ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
@@ -58,6 +61,11 @@ class TransactionOLV(GroupListView):
         self.SortBy(0)
         
         self.Bind(wx.EVT_RIGHT_DOWN, self.onRightDown)
+        CellEditorRegistry().RegisterCreatorFunction(datetime.date, self.makeDateEditor)
+        
+        #Publisher().subscribe(self.onSearch, "SEARCH.INITIATED")
+        #Publisher().subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
+        #Publisher().subscribe(self.onSearchMoreToggled, "SEARCH.MORETOGGLED")
         
     def getTotal(self, transObj):
         """
@@ -77,6 +85,10 @@ class TransactionOLV(GroupListView):
                 
         transObj._Total = total
         return total
+
+    def makeDateEditor(self, row, col):
+        dateCtrl = bankcontrols.DateCtrlFactory(self)
+        return dateCtrl
     
     def rowFormatter2(self, listItem, transaction):
         if transaction.Amount < 0:
@@ -116,11 +128,9 @@ class TransactionOLV(GroupListView):
         itemID, flag, col = self.HitTestSubItem(event.Position)
 
         # Don't do anything for right-clicks not on items.
-        if itemID == -1:
-            return
-        
-        transaction = self.GetObjectAt(itemID)
-        self.showContextMenu(transaction, col)
+        if itemID != -1:
+            transaction = self.GetObjectAt(itemID)
+            self.showContextMenu(transaction, col)
     
     def showContextMenu(self, transaction, col):
         menu = wx.Menu()
@@ -191,6 +201,27 @@ class TransactionOLV(GroupListView):
         self.AddObject(transaction)
         #TODO: Perhaps get the actual position and scroll to that, it may not be last.
         self.ensureVisible(-1)
+        
+    """
+    def onSearch(self, message):
+        searchString, accountScope, match, caseSens = message.data
+
+        if accountScope == 0: # Search in just current account.
+            accountName = self.Parent.Parent.Parent.getCurrentAccount()
+        else: # Search in all accounts.
+            accountName = None
+
+        matches = Bank().searchTransactions(searchString, accountName=accountName, matchIndex=match, matchCase=caseSens)
+        self.setTransactions(matches)
+        self.Parent.Parent.searchActive = True
+
+    def onSearchCancelled(self, message):
+        self.setAccount(self.Parent.Parent.Parent.getCurrentAccount())
+        self.Parent.Parent.searchActive = False
+
+    def onSearchMoreToggled(self, message):
+        self.Refresh()
+    """
 
 
 if __name__ == "__main__":
