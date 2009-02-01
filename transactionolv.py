@@ -37,6 +37,7 @@ class TransactionOLV(GroupListView):
         self.showGroups = False
         self.evenRowsBackColor = wx.Color(224,238,238)
         self.oddRowsBackColor = wx.WHITE
+        self.rowFormatter = self.rowFormatter2
         self.cellEditMode = GroupListView.CELLEDIT_SINGLECLICK
         self.SetEmptyListMsg("No transactions entered.")
         
@@ -74,6 +75,10 @@ class TransactionOLV(GroupListView):
                 
         transObj._Total = total
         return total
+    
+    def rowFormatter2(self, listItem, transaction):
+        if transaction.Amount < 0:
+            listItem.SetTextColour(wx.RED)
     
     def renderFloat(self, floatVal):
         return self.CurrentAccount.float2str(floatVal)

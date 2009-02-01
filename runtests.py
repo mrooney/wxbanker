@@ -38,11 +38,11 @@ def main():
     failures = sum([v[0] for v in results.values()])
     tests = sum([v[1] for v in results.values()])
     
+    print "\n%i total failures out of %i total tests in %i modules." % (failures, tests, len(mods))
     if failures:
-        print "FAILED: ",
+        print "TESTS FAILED.",
     else:
-        print "PASSED: ",
-    print "%i total failures out of %i total tests in %i modules." % (failures, tests, len(mods))
+        print "TESTS PASSED.",
 
 if __name__ == "__main__":
     main()
