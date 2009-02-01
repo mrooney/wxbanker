@@ -22,6 +22,20 @@ from smoothsizer import SmoothStaticBoxSizer
 import localization
 
 
+def DateCtrlFactory(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY):
+    # The date control. We want the Generic control, which is a composite control
+    # and allows us to bind to its enter, but on Windows with wxPython < 2.8.8.0,
+    # it won't be available.
+    try:
+        DatePickerClass = wx.GenericDatePickerCtrl
+    except AttributeError:
+        DatePickerClass = wx.DatePickerCtrl
+        
+    dateCtrl = DatePickerClass(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY)
+    dateCtrl.SetToolTipString(_("Date"))
+    return dateCtrl
+
+
 class HyperlinkText(wx.HyperlinkCtrl):
     def __init__(self, parent, id=-1, label='', url='', style=wx.NO_BORDER | wx.HL_ALIGN_CENTRE, onClick=None, *args, **kwargs):
         # By default, disable the right-click "Copy URL" menu.

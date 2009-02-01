@@ -26,15 +26,7 @@ class NewTransactionCtrl(wx.Panel):
         wx.Panel.__init__(self, parent)
         self.CurrentAccount = None
 
-        # The date control. We want the Generic control, which is a composite control
-        # and allows us to bind to its enter, but on Windows with wxPython < 2.8.8.0,
-        # it won't be available.
-        try:
-            DatePickerClass = wx.GenericDatePickerCtrl
-        except AttributeError:
-            DatePickerClass = wx.DatePickerCtrl
-        self.dateCtrl = dateCtrl = DatePickerClass(self, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY)
-        dateCtrl.SetToolTipString(_("Date"))
+        self.dateCtrl = dateCtrl = bankcontrols.DateCtrlFactory(self)
 
         # The Description and Amount controls.
         self.descCtrl = descCtrl = bankcontrols.HintedTextCtrl(self, size=(140, -1), style=wx.TE_PROCESS_ENTER, hint=_("Description"), icon="wxART_page_edit")
