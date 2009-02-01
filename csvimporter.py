@@ -14,10 +14,12 @@ class CsvImporter:
     def __init__(self):
         pass
     
-    def importFile(self, account, fileName, settings):
+    def getTransactionsFromFile(self, account, fileName, settings):
         csvReader = csv.reader(
             UTF8Recoder(open(fileName, 'rb'), settings['encoding']), 
             delimiter=settings['delimiter'])
+            
+        transactions = []
         
         firstLineSkipped = False
         for row in csvReader:
@@ -32,11 +34,11 @@ class CsvImporter:
                 settings['decimalSeparator'], '.'))
             desc = re.sub('\d+', lambda x: row[int(x.group(0)) - 1], settings['descriptionColumns'])
             tdate = datetime.strptime(row[settings['dateColumn'] -1],
-                settings['dateFormat']).strftime('%Y-%m-%d')
-                
-            print 'Amount:', amount, 'Date:', tdate, 'Description:', desc
-                
-            #Bank().makeTransaction(account, amount, desc, tdate)
+                settings['dateFormat'])#.strftime('%Y-%m-%d')
+
+            transactions.append((None, amount, desc, tdate))
+        
+        return transactions
 
 class CsvImporterProfileManager:
 
@@ -48,7 +50,6 @@ class CsvImporterProfileManager:
         if 'HOME' in os.environ:
             # We seem to be on a Unix environment.
             preferredPath = os.path.join(os.environ['HOME'], '.config', 'wxBanker', configFile)
-            print preferredPath
             if os.path.exists(preferredPath) or not os.path.exists(defaultPath):
                 defaultPath = preferredPath
                 # Ensure that the directory exists.

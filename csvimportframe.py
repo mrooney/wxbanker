@@ -1,6 +1,7 @@
 import wx
 from csvimporter import CsvImporter, CsvImporterProfileManager
 from banker import Bank
+from managetab import TransactionGrid
 
 class CsvImportFrame(wx.Frame):
     """
@@ -16,15 +17,18 @@ class CsvImportFrame(wx.Frame):
         topPanel = wx.Panel(self)
         topHorizontalSizer = wx.BoxSizer(wx.VERTICAL)
         topSizer = wx.BoxSizer(wx.VERTICAL)
-        
-        self.initTargetAccountControl(topPanel, topSizer)
 
         horizontalSizer = wx.BoxSizer(wx.HORIZONTAL)
-        topSizer.Add(horizontalSizer, flag=wx.ALL|wx.EXPAND, proportion=1)
+        topSizer.Add(horizontalSizer)
         self.initSettingsControls(topPanel, horizontalSizer)
-
         self.initSettingsProfilesControl(topPanel, horizontalSizer)
+        
         self.initFileAndActionControls(topPanel, topSizer)
+        self.initTransactionGrid(topPanel, topSizer)
+        
+        self.initTargetAccountControl(topPanel, topSizer)
+        
+        # set default values
         self.initCtrlValuesFromSettings(self.getDefaultSettings())
         
         # layout sizers
@@ -36,7 +40,7 @@ class CsvImportFrame(wx.Frame):
         
     def initTargetAccountControl(self, topPanel, topSizer):
         staticBox = wx.StaticBox(topPanel, label=_("Target account"))
-        staticBoxSizer = wx.StaticBoxSizer(staticBox, wx.VERTICAL)
+        staticBoxSizer = wx.StaticBoxSizer(staticBox, wx.HORIZONTAL)
         topSizer.Add(staticBoxSizer, flag=wx.ALL|wx.EXPAND, border=1)
 
         try:
@@ -47,6 +51,12 @@ class CsvImportFrame(wx.Frame):
         self.targetAccountCtrl = wx.ComboBox(topPanel, style=wx.CB_READONLY, choices=accounts)
         self.targetAccountCtrl.Bind(wx.EVT_COMBOBOX, self.onTargetAccountChange)
         staticBoxSizer.Add(self.targetAccountCtrl)
+        
+        self.importButton = wx.Button(topPanel, label=_("Import"))
+        self.importButton.Disable()
+        self.importButton.SetToolTipString(_("Import"))
+        self.importButton.Bind(wx.EVT_BUTTON, self.onClickImportButton)
+        staticBoxSizer.Add(self.importButton, flag=wx.LEFT, border=5)
         
     def initSettingsControls(self, topPanel, parentSizer):
         # csv columns to wxBanker data mapping
@@ -115,17 +125,24 @@ class CsvImportFrame(wx.Frame):
         self.filePickerCtrl = wx.FilePickerCtrl(topPanel)
         self.filePickerCtrl.Bind(wx.EVT_FILEPICKER_CHANGED, self.onFileChange)
         sizer.Add(self.filePickerCtrl, flag=wx.EXPAND|wx.LEFT|wx.RIGHT, proportion=2, border=10)
-		
-        self.importButton = wx.Button(topPanel, label=_("Import"))
-        self.importButton.Disable()
-        self.importButton.SetToolTipString(_("Import"))
-        self.importButton.Bind(wx.EVT_BUTTON, self.onClickImportButton)
-        sizer.Add(self.importButton)
+        
+        self.previewButton = wx.Button(topPanel, label=_("Preview"))
+        self.previewButton.Disable()
+        self.previewButton.SetToolTipString(_("Prevoew"))
+        self.previewButton.Bind(wx.EVT_BUTTON, self.onClickPreviewButton)
+        sizer.Add(self.previewButton)
+        
+    def initTransactionGrid(self, topPanel, topSizer):
+        sizer = wx.BoxSizer(wx.HORIZONTAL)
+        topSizer.Add(sizer, flag=wx.EXPAND|wx.ALL, proportion=1, border=5)
+        
+        self.transactionGrid = TransactionGrid(topPanel)
+        sizer.Add(self.transactionGrid, flag=wx.ALL|wx.EXPAND, proportion=1)
         
     def initSettingsProfilesControl(self, topPanel, topSizer):
         staticBox = wx.StaticBox(topPanel, label=_("CSV profiles"))
         sizer = wx.StaticBoxSizer(staticBox, wx.VERTICAL)
-        topSizer.Add(sizer, flag=wx.ALL|wx.EXPAND, proportion=1)
+        topSizer.Add(sizer, flag=wx.ALL|wx.EXPAND)
         
         self.profileCtrl = wx.ComboBox(topPanel, choices=self.profileManager.profiles.keys(), size=(110,-1))
         self.profileCtrl.Bind(wx.EVT_TEXT, self.onProfileCtrlChange)
@@ -185,7 +202,7 @@ class CsvImportFrame(wx.Frame):
         
         return settings
 
-    def runImport(self):
+    def runPreview(self):
         importer = CsvImporter()
         settings = self.getSettingsFromControls()
         
@@ -193,13 +210,17 @@ class CsvImportFrame(wx.Frame):
         account = self.targetAccountCtrl.Value
         
         try:
-            importer.importFile(account, file, settings)
+            transactions = importer.getTransactionsFromFile(account, file, settings)
+            self.transactionGrid.setTransactions(transactions)
         except Exception, e:
             print 'Caught exception:', e
+            
+    def importTransactions(self):
+        pass
         
     def onFileChange(self, event):
-        if self.targetAccountCtrl.Value != '':
-            self.importButton.Enable()
+        if self.filePickerCtrl.Path != '':
+            self.previewButton.Enable()
             
     def onTargetAccountChange(self, event):
         if self.filePickerCtrl.Path != '':
@@ -216,8 +237,11 @@ class CsvImportFrame(wx.Frame):
             self.saveProfileButton.Disable()
             self.deleteProfileButton.Disable()
 
+    def onClickPreviewButton(self, event):
+        self.runPreview()
+        
     def onClickImportButton(self, event):
-        self.runImport()
+        self.importTransactions()
 
     def initProfileCtrl(self):
         self.profileCtrl.Items = self.profileManager.profiles.keys()
