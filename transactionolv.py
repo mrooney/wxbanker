@@ -35,9 +35,10 @@ import bankcontrols
 
 
 class TransactionOLV(GroupListView):
-    def __init__(self, parent):
+    def __init__(self, parent, bankController):
         GroupListView.__init__(self, parent, style=wx.LC_REPORT|wx.SUNKEN_BORDER)
         self.CurrentAccount = None
+        self.BankController = bankController
         
         self.showGroups = False
         self.evenRowsBackColor = wx.Color(224,238,238)
@@ -63,9 +64,9 @@ class TransactionOLV(GroupListView):
         self.Bind(wx.EVT_RIGHT_DOWN, self.onRightDown)
         CellEditorRegistry().RegisterCreatorFunction(datetime.date, self.makeDateEditor)
         
-        #Publisher().subscribe(self.onSearch, "SEARCH.INITIATED")
-        #Publisher().subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
-        #Publisher().subscribe(self.onSearchMoreToggled, "SEARCH.MORETOGGLED")
+        Publisher().subscribe(self.onSearch, "SEARCH.INITIATED")
+        Publisher().subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
+        Publisher().subscribe(self.onSearchMoreToggled, "SEARCH.MORETOGGLED")
         
     def getTotal(self, transObj):
         """
@@ -202,26 +203,25 @@ class TransactionOLV(GroupListView):
         #TODO: Perhaps get the actual position and scroll to that, it may not be last.
         self.ensureVisible(-1)
         
-    """
     def onSearch(self, message):
         searchString, accountScope, match, caseSens = message.data
 
         if accountScope == 0: # Search in just current account.
-            accountName = self.Parent.Parent.Parent.getCurrentAccount()
+            account = self.CurrentAccount
         else: # Search in all accounts.
-            accountName = None
+            account = None
 
-        matches = Bank().searchTransactions(searchString, accountName=accountName, matchIndex=match, matchCase=caseSens)
-        self.setTransactions(matches)
+        matches = self.BankController.Model.Search(searchString, account=account, matchIndex=match, matchCase=caseSens)
+        self.SetObjects(matches)
         self.Parent.Parent.searchActive = True
 
     def onSearchCancelled(self, message):
-        self.setAccount(self.Parent.Parent.Parent.getCurrentAccount())
+        self.setAccount(self.CurrentAccount)
         self.Parent.Parent.searchActive = False
 
     def onSearchMoreToggled(self, message):
-        self.Refresh()
-    """
+        return
+        #self.Refresh()
 
 
 if __name__ == "__main__":

@@ -27,6 +27,8 @@ def main():
     import plotalgo, currencies, bankobjects, controller
     mods = [plotalgo, currencies, bankobjects, controller]
     
+    #TODO: remove *.pyc first
+    
     results = {}
     for mod in mods:
         result = doctest.testmod(mod)

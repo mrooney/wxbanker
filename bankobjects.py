@@ -19,7 +19,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 from wx.lib.pubsub import Publisher
-import datetime
+import datetime, re
 import bankexceptions, currencies, plotalgo, localization, debug
 
 
@@ -33,11 +33,15 @@ class BankModel(object):
     def GetBalance(self):
         return self.Accounts.Balance
     
-    def GetXTotals(self, numPoints):
+    def GetTransactions(self):
         transactions = []
         for account in self.Accounts:
             transactions.extend(account.Transactions)
             
+        return transactions
+    
+    def GetXTotals(self, numPoints):
+        transactions = self.GetTransactions()
         return plotalgo.get(transactions, numPoints)
         
     def GetAccount(self, accountName):
@@ -48,6 +52,29 @@ class BankModel(object):
     
     def RemoveAccount(self, accountName):
         return self.Accounts.Remove(accountName)
+    
+    def Search(self, searchString, account=None, matchIndex=1, matchCase=False):
+        """
+        matchIndex: 0: Amount, 1: Description, 2: Date
+        I originally used strings here but passing around and then validating on translated
+        strings seems like a bad and fragile idea.
+        """
+        # Handle case-sensitive option.
+        reFlag = {False: re.IGNORECASE, True: 0}[matchCase]
+
+        # Handle account options.
+        if account is None:
+            potentials = self.GetTransactions()
+        else:
+            potentials = account.Transactions[:]
+
+        # Find all the matches.
+        matches = []
+        for trans in potentials:
+            potentialStr = str((trans.Amount, trans.Description, trans.Date)[matchIndex])
+            if re.findall(searchString, potentialStr, flags=reFlag):
+                matches.append(trans)
+        return matches
         
     def float2str(self, *args, **kwargs):
         """
