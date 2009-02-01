@@ -1,6 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from banker import Bank
 from datetime import date, datetime
-import codecs, csv
+import codecs, csv, os, re
+import simplejson as json
 
 class CsvImporter:
     """
@@ -11,48 +15,77 @@ class CsvImporter:
         pass
     
     def importFile(self, account, fileName, settings):
-        print settings.delimiter
         csvReader = csv.reader(
-            UTF8Recoder(open(fileName, 'rb'), settings.encoding), 
-            delimiter=settings.delimiter)
+            UTF8Recoder(open(fileName, 'rb'), settings['encoding']), 
+            delimiter=settings['delimiter'])
         
         firstLineSkipped = False
         for row in csvReader:
-            if settings.skipFirstLine and not firstLineSkipped:
+            if settings['skipFirstLine'] and not firstLineSkipped:
                 firstLineSkipped = True
                 continue
+                
+            # convert to python unicode strings
+            row = [unicode(s, "utf-8") for s in row]
 
-            amount = float(row[settings.amountColumn].replace(
-                settings.decimalSeparator, '.'))
-            vals = []
-            for column in settings.descriptionColumns:
-                vals.append(row[column])
-            desc = ' / '.join(vals)
-            tdate = datetime.strptime(row[settings.dateColumn],
-                settings.dateFormat).strftime('%Y-%m-%d')
+            amount = float(row[settings['amountColumn'] - 1].replace(
+                settings['decimalSeparator'], '.'))
+            desc = re.sub('\d+', lambda x: row[int(x.group(0)) - 1], settings['descriptionColumns'])
+            tdate = datetime.strptime(row[settings['dateColumn'] -1],
+                settings['dateFormat']).strftime('%Y-%m-%d')
                 
             print 'Amount:', amount, 'Date:', tdate, 'Description:', desc
                 
             #Bank().makeTransaction(account, amount, desc, tdate)
 
-class CsvImporterSettings:
-    def __init__(self):
-        pass
-        
 class CsvImporterProfileManager:
-    profiles = {}
 
     def __init__(self):
-        self.profiles = {}
+        configFile = 'csvImportProfiles.json'
+        
+        # copied from wxbanker.py
+        defaultPath = os.path.join(os.path.dirname(__file__), configFile)
+        if 'HOME' in os.environ:
+            # We seem to be on a Unix environment.
+            preferredPath = os.path.join(os.environ['HOME'], '.config', 'wxBanker', configFile)
+            print preferredPath
+            if os.path.exists(preferredPath) or not os.path.exists(defaultPath):
+                defaultPath = preferredPath
+                # Ensure that the directory exists.
+                dirName = os.path.dirname(defaultPath)
+                if not os.path.exists(dirName):
+                    os.mkdir(dirName)
+        
+        self.configFile = defaultPath
+        self.loadProfiles()
     
     def getProfile(self, key):
         return self.profiles.get(key, None)
         
     def saveProfile(self, key, settings):
         self.profiles[key] = settings
+        self.saveProfiles()
         
     def deleteProfile(self, key):
         del self.profiles[key]
+        
+    def loadProfiles(self):
+        self.profiles = {}
+        try:
+            file = open(self.configFile, 'r')
+            try:
+                self.profiles = json.load(file)
+            finally:
+                file.close()
+        except Exception, e:
+            print "Failed to read CSV profiles file:", e
+        
+    def saveProfiles(self):
+        file = open(self.configFile, 'w')
+        try:
+            json.dump(self.profiles, file, sort_keys=True, indent=4)
+        finally:
+            file.close()
 
 class UTF8Recoder:
     """

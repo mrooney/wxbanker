@@ -1,5 +1,5 @@
 import wx
-from csvimporter import CsvImporter, CsvImporterSettings, CsvImporterProfileManager
+from csvimporter import CsvImporter, CsvImporterProfileManager
 from banker import Bank
 
 class CsvImportFrame(wx.Frame):
@@ -101,7 +101,8 @@ class CsvImportFrame(wx.Frame):
         sizer.Add(self.fileEncodingCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
         
         sizer.Add(wx.StaticText(topPanel, label=_('Column delimiter')), flag=wx.ALIGN_CENTER_VERTICAL)
-        self.delimiterCtrl = wx.TextCtrl(topPanel, size=(30,-1),)
+        self.delimiterCtrl = wx.TextCtrl(topPanel, size=(30,-1))
+        self.delimiterCtrl.SetMaxLength(1)
         sizer.Add(self.delimiterCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
         
     def initFileAndActionControls(self, topPanel, topSizer):
@@ -146,43 +147,41 @@ class CsvImportFrame(wx.Frame):
         sizer.Add(self.deleteProfileButton, flag=wx.ALIGN_CENTER)
         
     def initCtrlValuesFromSettings(self, settings):
-        self.amountColumnCtrl.Value = settings.amountColumn + 1
-        self.decimalSeparatorCtrl.Value = settings.decimalSeparator
-        self.dateColumnCtrl.Value = settings.dateColumn + 1
-        self.dateFormatCtrl.Value = settings.dateFormat
-        self.descriptionColumnCtrl.Value = ' '.join([str(i + 1) for i in settings.descriptionColumns])
-        self.delimiterCtrl.Value = settings.delimiter
-        self.skipFirstLineCtrl.Value = settings.skipFirstLine
-        self.fileEncodingCtrl.Value = settings.encoding
+        self.amountColumnCtrl.Value = settings['amountColumn']
+        self.decimalSeparatorCtrl.Value = settings['decimalSeparator']
+        self.dateColumnCtrl.Value = settings['dateColumn']
+        self.dateFormatCtrl.Value = settings['dateFormat']
+        self.descriptionColumnCtrl.Value = settings['descriptionColumns']
+        self.delimiterCtrl.Value = settings['delimiter']
+        self.skipFirstLineCtrl.Value = settings['skipFirstLine']
+        self.fileEncodingCtrl.Value = settings['encoding']
         
     def getDefaultSettings(self):
-        settings = CsvImporterSettings()
+        settings = {}
 
-        settings.amountColumn = 1
-        settings.decimalSeparator = '.'
-        settings.dateColumn = 0
-        settings.dateFormat = self.dateFormats[0]
-        settings.descriptionColumns = [2, 3, 4]
-        settings.delimiter = ';'
-        settings.skipFirstLine = False
-        settings.encoding = 'utf-8'
+        settings['amountColumn'] = 2
+        settings['decimalSeparator'] = '.'
+        settings['dateColumn'] = 1
+        settings['dateFormat'] = self.dateFormats[0]
+        settings['descriptionColumns'] = "3, 4 (5)"
+        settings['delimiter'] = ';'
+        settings['skipFirstLine'] = False
+        settings['encoding'] = 'utf-8'
         
         return settings
 
     def getSettingsFromControls(self):
-        settings = CsvImporterSettings()
+        settings = {}
 
-        settings.amountColumn = int(self.amountColumnCtrl.Value) - 1
-        settings.decimalSeparator = self.decimalSeparatorCtrl.Value
-        
-        settings.dateColumn = int(self.dateColumnCtrl.Value) - 1
-        settings.dateFormat = self.dateFormatCtrl.Value
-
-        settings.descriptionColumns = [int(col) - 1 for col in self.descriptionColumnCtrl.Value.split()]
-
-        settings.delimiter = str(self.delimiterCtrl.Value)
-        settings.skipFirstLine = self.skipFirstLineCtrl.Value
-        settings.encoding = self.fileEncodingCtrl.Value
+        settings['amountColumn'] = self.amountColumnCtrl.Value
+        settings['decimalSeparator'] = self.decimalSeparatorCtrl.Value
+        settings['dateColumn'] = self.dateColumnCtrl.Value
+        settings['dateFormat'] = self.dateFormatCtrl.Value
+        settings['descriptionColumns'] = self.descriptionColumnCtrl.Value
+        # delimiter must be 1-character string
+        settings['delimiter'] = str(self.delimiterCtrl.Value)
+        settings['skipFirstLine'] = self.skipFirstLineCtrl.Value
+        settings['encoding'] = self.fileEncodingCtrl.Value
         
         return settings
 
