@@ -89,7 +89,7 @@ True
 >>> t2.Amount
 -10.0
 >>> t2.Description
-'ATM Withdrawal'
+u'ATM Withdrawal'
 >>> t2.Date
 datetime.date(2007, 1, 6)
 >>> len(messages)
@@ -124,7 +124,7 @@ True
 >>> len(messages)
 9
 >>> t1.Description
-'Updated description'
+u'Updated description'
 >>> t1.Date = datetime.date(1986, 1, 6)
 >>> len(messages)
 10
@@ -201,6 +201,10 @@ True
 Traceback (most recent call last):
   ...
 InvalidTransactionException: Transaction does not exist in account 'My Renamed Account'
+
+>>> t1.Description = u'\xef\xbf\xa5'
+>>> t1.Description == u'\xef\xbf\xa5'
+True
 """
 """
 >>> b.close()

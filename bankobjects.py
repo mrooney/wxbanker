@@ -365,7 +365,7 @@ class Transaction(object):
 
     def SetDescription(self, description):
         """Update the description, ensuring it is a string."""
-        self._Description = str(description)
+        self._Description = unicode(description)
         
         if not self.IsFrozen:
             Publisher.sendMessage("transaction.updated.description", (self, None))

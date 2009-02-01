@@ -16,10 +16,10 @@ IMPLEMENTED:
   - remove
   - calculator options on amounts
 - amount editing as %.2f (instead of 2.16999999 etc)
+- searching
 TODO (for feature parity):
 - editable date
 - disable sorting on Total column
-- searching
 - done? totals automatically updates for transaction changes above them
 EXTRA:
 - custom negative option such as Red, (), or Red and ()
