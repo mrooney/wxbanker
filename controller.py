@@ -39,10 +39,6 @@ True
 
 # Now test that the appropriate exceptions are thrown.
 
->>> model.GetAccount("My Account")
-Traceback (most recent call last):
-  ...
-InvalidAccountException: Invalid account 'My Account' specified.
 >>> model.RemoveAccount("My Account")
 Traceback (most recent call last):
   ...
@@ -138,11 +134,6 @@ True
 >>> [x.Name for x in sorted(model.Accounts)]
 ['Another Account', 'My Renamed Account']
 
->>> model.GetAccount("My Renamed Account") == a
-True
->>> model.GetAccount("Another Account") == a2
-True
-
 >>> t = a2.AddTransaction(-5000.01)
 >>> a2.float2str(a2.Balance)
 '-$5,000.01'
@@ -169,16 +160,17 @@ True
 >>> oldBalance = a.Balance
 >>> len(model.Accounts)
 2
+>>> a2 in model.Accounts
+True
 >>> a2.Remove()
 >>> len(model.Accounts)
 1
+>>> a2 in model.Accounts
+False
 >>> a = model.Accounts[0]
 >>> a.Name
 'My Renamed Account'
->>> model.GetAccount("Another Account")
-Traceback (most recent call last):
-  ...
-InvalidAccountException: Invalid account 'Another Account' specified.
+
 >>> a.Balance = oldBalance
 >>> a.Balance == model.Balance
 True
@@ -204,6 +196,13 @@ InvalidTransactionException: Transaction does not exist in account 'My Renamed A
 
 >>> t1.Description = u'\xef\xbf\xa5'
 >>> t1.Description == u'\xef\xbf\xa5'
+True
+
+#>>> model.Search(u'\xef\xbf\xa5')
+#[t1]
+
+>>> model2 = Controller("test.db").Model
+>>> model.equals(model2)
 True
 """
 """

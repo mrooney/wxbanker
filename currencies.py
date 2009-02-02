@@ -138,6 +138,9 @@ class BaseCurrency(object):
     
         return s.replace('<', '').replace('>', '').rjust(just)
     
+    def __eq__(self, other):
+        return self.LOCALECONV == other.LOCALECONV
+    
 class EuroCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)

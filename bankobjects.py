@@ -44,9 +44,6 @@ class BankModel(object):
         transactions = self.GetTransactions()
         return plotalgo.get(transactions, numPoints)
         
-    def GetAccount(self, accountName):
-        return self.Accounts.Get(accountName)
-        
     def CreateAccount(self, accountName):
         return self.Accounts.Create(accountName)
     
@@ -71,7 +68,8 @@ class BankModel(object):
         # Find all the matches.
         matches = []
         for trans in potentials:
-            potentialStr = str((trans.Amount, trans.Description, trans.Date)[matchIndex])
+            print unicode(trans.Description), searchString
+            potentialStr = unicode((trans.Amount, trans.Description, trans.Date)[matchIndex])
             if re.findall(searchString, potentialStr, flags=reFlag):
                 matches.append(trans)
         return matches
@@ -121,13 +119,6 @@ class AccountList(list):
                 return i
             
         return -1
-    
-    def Get(self, accountName):
-        index = self.AccountIndex(accountName)
-        if index == -1:
-            raise bankexceptions.InvalidAccountException(accountName)
-        
-        return self[index]
         
     def Create(self, accountName):
         # First, ensure an account by that name doesn't already exist.
