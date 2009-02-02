@@ -1,0 +1,6 @@
+wxbanker (0.4.0.3-0ubuntu1) jaunty; urgency=low
+
+  * Initial release (LP: #297289)
+
+ -- Michael Rooney <mrooney@ubuntu.com>  Sun, 14 Dec 2008 14:07:02 -0500
+
