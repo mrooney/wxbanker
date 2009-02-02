@@ -64,6 +64,8 @@ AccountAlreadyExistsException: Account 'My Account' already exists.
 >>> len(model.Accounts) == 1
 True
 >>> a = model.Accounts[0]
+>>> a == a1
+True
 >>> a is a1
 True
 >>> a.Name
@@ -71,6 +73,8 @@ True
 >>> a.Balance
 0.0
 >>> t1 = a.AddTransaction(100.27, "Initial Balance")
+>>> len(a.Transactions)
+1
 >>> len(messages)
 3
 >>> messages[1] == (('transaction', 'created', 'My Account'), t1)
@@ -171,7 +175,8 @@ False
 >>> a.Name
 'My Renamed Account'
 
->>> a.Balance = oldBalance
+>>> a.Balance == oldBalance
+True
 >>> a.Balance == model.Balance
 True
 
@@ -202,7 +207,7 @@ True
 #[t1]
 
 >>> model2 = Controller("test.db").Model
->>> model.equals(model2)
+>>> model == model2
 True
 """
 """

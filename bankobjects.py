@@ -95,8 +95,8 @@ class BankModel(object):
         currencyIndex = message.data
         self.setCurrency(currencyIndex)
         
-    def equals(self, other):
-        return self.Accounts.equals(other.Accounts)
+    def __eq__(self, other):
+        return self.Accounts == other.Accounts
 
     Balance = property(GetBalance)
 
@@ -140,11 +140,11 @@ class AccountList(list):
         self.Store.RemoveAccount(account)
         Publisher.sendMessage("account.removed.%s"%accountName, account)
 
-    def equals(self, other):
+    def __eq__(self, other):
         if len(self) != len(other):
             return False
         for leftAccount, rightAccount in zip(self, other):
-            if not leftAccount.equals(rightAccount):
+            if not leftAccount == rightAccount:
                 return False
             
         return True
@@ -207,9 +207,8 @@ class Account(object):
         self.Store.MakeTransaction(self, partialTrans)
         transaction = partialTrans
         
-        # Don't fetch all the transactions just to add one, for example transfers
-        # and moves involving an unviewed account.
-        #if self._Transactions is not None:
+        # Ideally we don't load all the transactions here (this is silly on a transfer/move on an
+        # account that hasn't been viewed yet), but there's more important things for now.
         self.Transactions.append(transaction)
         
         Publisher.sendMessage("transaction.created.%s" % self.Name, transaction)
@@ -249,12 +248,12 @@ class Account(object):
     def __cmp__(self, other):
         return cmp(self.Name, other.Name)
     
-    def equals(self, other):
+    def __eq__(self, other):
         return (
             self.Name == other.Name and
             self.Balance == other.Balance and
             self.Currency == other.Currency and
-            self.Transactions.equals(other.Transactions)
+            self.Transactions == other.Transactions
         )
     
     Name = property(GetName, SetName)
@@ -270,11 +269,11 @@ class TransactionList(list):
             
         list.__init__(self, items)
         
-    def equals(self, other):
+    def __eq__(self, other):
         if not len(self) == len(other):
             return False
         for leftTrans, rightTrans in zip(self, other):
-            if not leftTrans.equals(rightTrans):
+            if not leftTrans == rightTrans:
                 return False
             
         return True
@@ -384,12 +383,13 @@ class Transaction(object):
             (other.Date, id(other))
         )
     
-    def equals(self, other):
+    def __eq__(self, other):
         assert isinstance(other, Transaction)
         return (
             self.Date == other.Date and
             self.Description == other.Description and
-            self.Amount == other.Amount
+            self.Amount == other.Amount and
+            self.ID == other.ID
         )
             
     Date = property(GetDate, SetDate)
