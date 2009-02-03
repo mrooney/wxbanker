@@ -27,7 +27,6 @@ from wx.lib.pubsub import Publisher
 # wxBanker
 from bankexceptions import NoNumpyException
 from menubar import BankMenuBar
-from banker import Bank
 import localization
 # Tabs
 import managetab
@@ -39,7 +38,7 @@ except NoNumpyException:
 
 
 class BankerFrame(wx.Frame):
-    def __init__(self):
+    def __init__(self, bankController):
         # Load our window settings.
         config = wx.Config.Get()
         size = config.ReadInt('SIZE_X'), config.ReadInt('SIZE_Y')
@@ -53,11 +52,11 @@ class BankerFrame(wx.Frame):
 
         self.notebook = notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
 
-        self.managePanel = managetab.ManagePanel(notebook)
+        self.managePanel = managetab.ManagePanel(notebook, bankController)
         notebook.AddPage(self.managePanel, _("Transactions"))
 
         if summarytab:
-            self.summaryPanel = summarytab.SummaryPanel(notebook)
+            self.summaryPanel = summarytab.SummaryPanel(notebook, bankController)
             notebook.AddPage(self.summaryPanel, _("Summary"))
 
         self.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.onTabSwitching)
@@ -114,97 +113,54 @@ class BankerFrame(wx.Frame):
         dlg.ShowModal()
         dlg.Destroy()
 
-    '''
-    def onMessage(self, message, data):
-        saveWorthyMessages = [
-            "FIRST RUN",
-            "NEW ACCOUNT",
-            "REMOVED ACCOUNT",
-            "RENAMED ACCOUNT",
-            "NEW TRANSACTION",
-            "REMOVED TRANSACTION",
-            "UPDATED TRANSACTION",
-            ]
-
-        if message in saveWorthyMessages:
-            delayedresult.startWorker(self.saveConsumer, self.saveProducer, wargs=(message,))
-
-    def saveProducer(self, message):
-        #don't save if another save is pending
-        while self.isSaveLocked:
-            time.sleep(100)
-
-        self.isSaveLocked = True
-        print 'Saving as a result of: %s...'%message,
-        Bank().save()
-
-    def saveConsumer(self, delayedResult):
-        try:
-            result = delayedResult.get()
-            print 'Success'
-        except:
-            print 'Failure'
-            import traceback
-            traceback.print_exc()
-
-        #allow other threads to save
-        self.isSaveLocked = False
-    '''
-
 
 def main():
-    import wx, os
-    app = wx.App(False)
-
-    # Initialize our configuration object.
-    # It is only necessary to initialize any default values we
-    # have which differ from the default values of the types,
-    # so initializing an Int to 0 or a Bool to False is not needed.
-    wx.Config.Set(wx.Config("wxBanker"))
-    config = wx.Config.Get()
-    if not config.HasEntry("SIZE_X"):
-        config.WriteInt("SIZE_X", 800)
-        config.WriteInt("SIZE_Y", 600)
-    if not config.HasEntry("POS_X"):
-        config.WriteInt("POS_X", 100)
-        config.WriteInt("POS_Y", 100)
-    if not config.HasEntry("SHOW_CALC"):
-        config.WriteBool("SHOW_CALC", True)
-
-    # Figure out where the bank database file is, and load it.
-    #Note: look at wx.StandardPaths.Get().GetUserDataDir() in the future
-    defaultPath = os.path.join(os.path.dirname(__file__), 'bank.db')
-    if 'HOME' in os.environ:
-        # We seem to be on a Unix environment.
-        preferredPath = os.path.join(os.environ['HOME'], '.wxbanker', 'bank.db')
-        if os.path.exists(preferredPath) or not os.path.exists(defaultPath):
-            defaultPath = preferredPath
-            # Ensure that the directory exists.
-            dirName = os.path.dirname(defaultPath)
-            if not os.path.exists(dirName):
-                os.mkdir(dirName)
-    bank = Bank(defaultPath)
-
-    # Push our custom art provider.
-    import wx.lib.art.img2pyartprov as img2pyartprov
-    from art import silk
-    wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(silk))
-
-    # Initialize the wxBanker frame!
-    frame = BankerFrame()
-
-    # Greet the user if it appears this is their first time using wxBanker.
-    firstTime = not config.ReadBool("RUN_BEFORE")
-    if firstTime:
-        Publisher().sendMessage("FIRST RUN")
-        config.WriteBool("RUN_BEFORE", True)
-
-    import sys
-    if '--inspect' in sys.argv:
-        import wx.lib.inspection
-        wx.lib.inspection.InspectionTool().Show()
-
-    app.MainLoop()
+    import wx, os, sys
+    from controller import Controller
+    
+    bankController = Controller()
+    
+    if '--cli' in sys.argv:
+        import clibanker
+        clibanker.main(bankController)
+    else:
+        app = wx.App(False)
+    
+        # Initialize our configuration object.
+        # It is only necessary to initialize any default values we
+        # have which differ from the default values of the types,
+        # so initializing an Int to 0 or a Bool to False is not needed.
+        wx.Config.Set(wx.Config("wxBanker"))
+        config = wx.Config.Get()
+        if not config.HasEntry("SIZE_X"):
+            config.WriteInt("SIZE_X", 800)
+            config.WriteInt("SIZE_Y", 600)
+        if not config.HasEntry("POS_X"):
+            config.WriteInt("POS_X", 100)
+            config.WriteInt("POS_Y", 100)
+        if not config.HasEntry("SHOW_CALC"):
+            config.WriteBool("SHOW_CALC", True)
+    
+        # Push our custom art provider.
+        import wx.lib.art.img2pyartprov as img2pyartprov
+        from art import silk
+        wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(silk))
+    
+        # Initialize the wxBanker frame!
+        frame = BankerFrame(bankController)
+    
+        # Greet the user if it appears this is their first time using wxBanker.
+        firstTime = not config.ReadBool("RUN_BEFORE")
+        if firstTime:
+            Publisher().sendMessage("FIRST RUN")
+            config.WriteBool("RUN_BEFORE", True)
+    
+        import sys
+        if '--inspect' in sys.argv:
+            import wx.lib.inspection
+            wx.lib.inspection.InspectionTool().Show()
+    
+        app.MainLoop()
 
 
 if __name__ == "__main__":

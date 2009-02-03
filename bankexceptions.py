@@ -1,5 +1,5 @@
 #    https://launchpad.net/wxbanker
-#    bankexceptions.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
+#    bankexceptions.py: Copyright 2007-2009 Mike Rooney <michael@wxbanker.org>
 #
 #    This file is part of wxBanker.
 #
@@ -33,9 +33,4 @@ class AccountAlreadyExistsException(Exception):
     def __str__(self):
         return "Account '%s' already exists."%self.account
 
-class InvalidTransactionException(Exception):
-    def __init__(self, uid):
-        self.uid = uid
-
-    def __str__(self):
-        return "Unable to find transaction with UID %s"%self.uid
+class InvalidTransactionException(Exception): pass

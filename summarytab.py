@@ -24,18 +24,19 @@ try:
 except ImportError:
     raise NoNumpyException()
 
-from banker import Bank
 import datetime
 
 
 class SummaryPanel(wx.Panel):
-    def __init__(self, parent):
+    def __init__(self, parent, bankController):
         wx.Panel.__init__(self, parent)
+        self.bankController = bankController
+        
         self.plotSettings = {'FitDegree': 2, 'Granularity': 100}
         self.cachedData = None
 
         # create the plot panel
-        self.plotPanel = AccountPlotCanvas(self)
+        self.plotPanel = AccountPlotCanvas(bankController, self)
 
         # create the controls at the bottom
         controlSizer = wx.BoxSizer()
@@ -77,50 +78,12 @@ class SummaryPanel(wx.Panel):
         self.plotPanel.plotBalance(totals, startDate, delta, "Days", fitdegree=self.plotSettings['FitDegree'])
 
     def getPoints(self, numPoints):
-        """
-        A function to turn the daily balances into numPoints number of values,
-        spanning the balances if there are not enough and averaging balances
-        together if there are too many.
-        """
-        days, startDate = Bank().getTotalsEvery(1)
-        numDays = len(days)
-        delta = float(numDays) / numPoints
-        returnPoints = []
-
-        if numDays == 0:
-            return [0.0 for i in range(numPoints)], datetime.date.today(), 1./100000
-        elif numDays <= numPoints:
-            span = numPoints / numDays
-            mod = numPoints % numDays
-            total = 0
-            for val in days:
-                total += val
-                for i in range(span):
-                    returnPoints.append(total)
-            for i in range(mod):
-                returnPoints.append(total)
-        else: # we have too much data, we need to average
-            groupSize = numDays / numPoints
-            total = 0
-            for i in range(numPoints):
-                if i < (numPoints-1):
-                    # average the totals over this period
-                    start = i*groupSize
-                    end = start + groupSize
-                    points = days[start:end]
-                    pointSum = sum(points)
-                    avgVal = pointSum / float(groupSize)
-                    returnPoints.append(total+avgVal)
-                    total += pointSum
-                else:
-                    # this is the last one, so make it the actual total balance!
-                    returnPoints.append(sum(days))
-
-        return returnPoints, startDate, delta
+        return self.bankController.Model.GetXTotals(numPoints)
 
 class AccountPlotCanvas(pyplot.PlotCanvas):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, bankController, *args, **kwargs):
         pyplot.PlotCanvas.__init__(self, *args, **kwargs)
+        self.bankController = bankController
         self.pointDates = []
         self.startDate = None #TODO: get rid of this and use self.pointDates[0]
         self.SetEnablePointLabel(True)
@@ -142,17 +105,11 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
             uniquePoints.add("%.2f"%total)
             currentTime += every
 
-            if i < len(totals)-1:
-                # Don't just += the timeDelta to currentDate, since adding days is all or nothing, ie:
-                #   currentDate + timeDelta == currentDate, where timeDelta < 1 (bad!)
-                # ...so the date will never advance for timeDeltas < 1, no matter how many adds you do.
-                # As such we must start fresh each time and multiply the time delta appropriately.
-                currentDate = startDate + (i+1)*timeDelta
-            else:
-                # This is the last point, so make sure the date is set to today.
-                # Regardless of the date of the last transaction, the total is still
-                # the total as of today, which is what a user expects to see.
-                currentDate = datetime.date.today()
+            # Don't just += the timeDelta to currentDate, since adding days is all or nothing, ie:
+            #   currentDate + timeDelta == currentDate, where timeDelta < 1 (bad!)
+            # ...so the date will never advance for timeDeltas < 1, no matter how many adds you do.
+            # As such we must start fresh each time and multiply the time delta appropriately.
+            currentDate = startDate + (i+1)*timeDelta
 
             pointDates.append(currentDate.strftime('%m/%d/%Y'))
 
@@ -200,7 +157,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         dc.DrawRectangle(sx-5, sy-5, 10, 10)  #10by10 square centered on point
         px, py = mDataDict["pointXY"]
         #make a string to display
-        line1, line2 = Bank().float2str(py), str(self.pointDates[mDataDict["pIndex"]])
+        line1, line2 = self.bankController.Model.float2str(py), str(self.pointDates[mDataDict["pIndex"]])
         x1, y1 = dc.GetTextExtent(line1)
         x2, y2 = dc.GetTextExtent(line2)
         dc.DrawText(line1, sx, sy+1)
@@ -228,7 +185,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         myTicks = []
         for tick in ticks:
             floatVal = tick[0]
-            stringVal = Bank().float2str(floatVal)
+            stringVal = self.bankController.Model.float2str(floatVal)
             if stringVal.endswith('.00'):
                 stringVal = stringVal[:-3]
             myTicks.append( (floatVal, stringVal) )
