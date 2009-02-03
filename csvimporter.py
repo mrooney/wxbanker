@@ -4,7 +4,10 @@
 from banker import Bank
 from datetime import date, datetime
 import codecs, csv, os, re
-import simplejson as json
+try:
+    import simplejson as json
+except:
+    json = None
 
 class CsvImporter:
     """

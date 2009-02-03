@@ -1,5 +1,5 @@
 import wx
-from csvimporter import CsvImporter, CsvImporterProfileManager
+from csvimporter import CsvImporter, CsvImporterProfileManager, json
 from banker import Bank
 from managetab import TransactionGrid
 
@@ -143,6 +143,13 @@ class CsvImportFrame(wx.Frame):
         staticBox = wx.StaticBox(topPanel, label=_("CSV profiles"))
         sizer = wx.StaticBoxSizer(staticBox, wx.VERTICAL)
         topSizer.Add(sizer, flag=wx.ALL|wx.EXPAND)
+
+        if not json:
+            info = wx.StaticText(topPanel, label=_('Python simplejson library is needed for csv profile loading/saving.'),
+                style=wx.ALIGN_CENTER)
+            info.Wrap(80)
+            sizer.Add(info, flag=wx.ALIGN_CENTER_VERTICAL)
+            return
         
         self.profileCtrl = wx.ComboBox(topPanel, choices=self.profileManager.profiles.keys(), size=(110,-1))
         self.profileCtrl.Bind(wx.EVT_TEXT, self.onProfileCtrlChange)
