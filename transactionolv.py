@@ -93,8 +93,11 @@ class TransactionOLV(GroupListView):
         else:
             previousObj = self.GetObjectAt(i-1)
             
-            previousTotal = previousObj._Total
-            if previousTotal is None:
+            try:
+                previousTotal = previousObj._Total
+                if previousTotal is None:
+                    raise AttributeError
+            except AttributeError:
                 previousTotal = self.getTotal(previousObj)
             
             total = previousTotal + transObj.Amount
