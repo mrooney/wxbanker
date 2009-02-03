@@ -67,7 +67,7 @@ class BankerFrame(wx.Frame):
         self.Bind(wx.EVT_MOVE, self.OnMove)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
-        menuBar = BankMenuBar()
+        menuBar = BankMenuBar(bankController)
         self.SetMenuBar(menuBar)
         #self.CreateStatusBar()
         

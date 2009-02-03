@@ -33,8 +33,10 @@ class BankMenuBar(wx.MenuBar):
     IDS_CURRENCIES = [wx.NewId() for i in range(len(CurrencyStrings))]
     ID_IMPORT_CSV = wx.NewId()
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, bankController, *args, **kwargs):
         wx.MenuBar.__init__(self, *args, **kwargs)
+        
+        self.bankController = bankController
         
         # Settings menu.
         settingsMenu = wx.Menu()
@@ -142,4 +144,4 @@ class BankMenuBar(wx.MenuBar):
         wx.AboutBox(info)
         
     def onClickImportCsv(self, event):
-        CsvImportFrame()
+        CsvImportFrame(self.bankController)

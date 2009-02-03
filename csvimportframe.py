@@ -1,14 +1,15 @@
 import wx
 from csvimporter import CsvImporter, CsvImporterProfileManager, json
-from banker import Bank
-from managetab import TransactionGrid
+from transactionolv import TransactionOLV as TransactionCtrl
 
 class CsvImportFrame(wx.Frame):
     """
     Window for importing data from a CSV file
     """
-    def __init__(self):
+    def __init__(self, bankController):
         wx.Frame.__init__(self, None, title=_("CSV import"))
+        
+        self.bankModel = bankController.Model
         
         self.dateFormats = ['%Y/%m/%d', '%d/%m/%Y', '%m/%d/%Y']
         self.encodings = ['cp1250', 'utf-8']
@@ -24,7 +25,7 @@ class CsvImportFrame(wx.Frame):
         self.initSettingsProfilesControl(topPanel, horizontalSizer)
         
         self.initFileAndActionControls(topPanel, topSizer)
-        self.initTransactionGrid(topPanel, topSizer)
+        self.initTransactionCtrl(topPanel, topSizer)
         
         self.initTargetAccountControl(topPanel, topSizer)
         
@@ -44,7 +45,7 @@ class CsvImportFrame(wx.Frame):
         topSizer.Add(staticBoxSizer, flag=wx.ALL|wx.EXPAND, border=1)
 
         try:
-            accounts = Bank().getAccountNames()
+            accounts = [acc.GetName() for acc in self.bankModel.Accounts]
         except:
             accounts = []
         
@@ -132,12 +133,12 @@ class CsvImportFrame(wx.Frame):
         self.previewButton.Bind(wx.EVT_BUTTON, self.onClickPreviewButton)
         sizer.Add(self.previewButton)
         
-    def initTransactionGrid(self, topPanel, topSizer):
+    def initTransactionCtrl(self, topPanel, topSizer):
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         topSizer.Add(sizer, flag=wx.EXPAND|wx.ALL, proportion=1, border=5)
         
-        self.transactionGrid = TransactionGrid(topPanel)
-        sizer.Add(self.transactionGrid, flag=wx.ALL|wx.EXPAND, proportion=1)
+        self.transactionCtrl = TransactionCtrl(topPanel, None)
+        sizer.Add(self.transactionCtrl, flag=wx.ALL|wx.EXPAND, proportion=1)
         
     def initSettingsProfilesControl(self, topPanel, topSizer):
         staticBox = wx.StaticBox(topPanel, label=_("CSV profiles"))
@@ -218,7 +219,7 @@ class CsvImportFrame(wx.Frame):
         
         try:
             transactions = importer.getTransactionsFromFile(account, file, settings)
-            self.transactionGrid.setTransactions(transactions)
+            self.transactionCtrl.SetObjects(transactions)
         except Exception, e:
             print 'Caught exception:', e
             

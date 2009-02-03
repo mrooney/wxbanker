@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from banker import Bank
 from datetime import date, datetime
+from bankobjects import Transaction
 import codecs, csv, os, re
 try:
     import simplejson as json
@@ -37,9 +37,9 @@ class CsvImporter:
                 settings['decimalSeparator'], '.'))
             desc = re.sub('\d+', lambda x: row[int(x.group(0)) - 1], settings['descriptionColumns'])
             tdate = datetime.strptime(row[settings['dateColumn'] -1],
-                settings['dateFormat'])#.strftime('%Y-%m-%d')
+                settings['dateFormat']).strftime('%Y-%m-%d')
 
-            transactions.append((None, amount, desc, tdate))
+            transactions.append(Transaction(None, None, amount, desc, tdate))
         
         return transactions
 
