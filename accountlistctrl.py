@@ -351,6 +351,12 @@ class AccountListCtrl(wx.Panel):
         account = message.data
         self.onHideEditCtrl() #ASSUMPTION!
         self._PutAccount(account, select=True)
+        
+    def onEditCtrlKey(self, event):
+        if event.GetKeyCode() == wx.WXK_ESCAPE:
+            self.onHideEditCtrl()
+        else:
+            event.Skip()
 
     def showEditCtrl(self, pos=-1, focus=True):
         if self.editCtrl:
@@ -359,6 +365,7 @@ class AccountListCtrl(wx.Panel):
         else:
             self.editCtrl = wx.TextCtrl(self, style=wx.TE_PROCESS_ENTER)
             self.editCtrl.Bind(wx.EVT_KILL_FOCUS, self.onHideEditCtrl)
+            self.editCtrl.Bind(wx.EVT_KEY_DOWN, self.onEditCtrlKey)
 
         if pos == -1:
             pos = self.GetCount()+1
