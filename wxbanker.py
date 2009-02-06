@@ -125,6 +125,7 @@ def main():
         clibanker.main(bankController)
     else:
         app = wx.App(False)
+        app.Controller = bankController
     
         # Initialize our configuration object.
         # It is only necessary to initialize any default values we
@@ -140,6 +141,8 @@ def main():
             config.WriteInt("POS_Y", 100)
         if not config.HasEntry("SHOW_CALC"):
             config.WriteBool("SHOW_CALC", True)
+        if not config.HasEntry("AUTO-SAVE"):
+            config.WriteBool("AUTO-SAVE", True)
     
         # Push our custom art provider.
         import wx.lib.art.img2pyartprov as img2pyartprov
