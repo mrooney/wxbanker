@@ -140,7 +140,7 @@ def main():
             config.WriteInt("POS_X", 100)
             config.WriteInt("POS_Y", 100)
         if not config.HasEntry("SHOW_CALC"):
-            config.WriteBool("SHOW_CALC", True)
+            config.WriteBool("SHOW_CALC", False)
         if not config.HasEntry("AUTO-SAVE"):
             config.WriteBool("AUTO-SAVE", True)
     

@@ -209,9 +209,20 @@ True
 #>>> model.Search(u'\xef\xbf\xa5')
 #[t1]
 
->>> model2 = Controller("test.db").Model
+>>> model2 = controller.LoadPath("test.db")
 >>> model == model2
 True
+>>> model2.Store.Close()
+
+#auto-save
+>>> controller.AutoSave = False
+>>> controller.AutoSave
+False
+>>> t.Description = "Modified! Did you save?"
+>>> model3 = controller.LoadPath("test.db")
+>>> model == model3
+False
+
 """
 """
 >>> b.close()
@@ -226,24 +237,9 @@ import debug
 class Controller(object):
     def __init__(self, path=None, autoSave=True):
         self._AutoSave = autoSave
+        self.Stores = []
         
-        if path is None:
-            # Figure out where the bank database file is, and load it.
-            #Note: look at wx.StandardPaths.Get().GetUserDataDir() in the future
-            path = os.path.join(os.path.dirname(__file__), 'bank.db')
-            if not '--use-local' in sys.argv and 'HOME' in os.environ:
-                # We seem to be on a Unix environment.
-                preferredPath = os.path.join(os.environ['HOME'], '.wxbanker', 'bank.db')
-                if os.path.exists(preferredPath) or not os.path.exists(path):
-                    path = preferredPath
-                    # Ensure that the directory exists.
-                    dirName = os.path.dirname(path)
-                    if not os.path.exists(dirName):
-                        os.mkdir(dirName)
-        
-        store = PersistentStore(path)
-        self.Stores = [store]
-        self.Model = store.GetModel()
+        self.LoadPath(path)
         
         Publisher.subscribe(self.onAutoSaveToggled, "user.autosave_toggled")
         
@@ -260,6 +256,28 @@ class Controller(object):
         for store in self.Stores:
             debug.debug("Setting auto-save to: %s" % val)
             store.AutoSave = val
+            
+    def LoadPath(self, path):
+        if path is None:
+            # Figure out where the bank database file is, and load it.
+            #Note: look at wx.StandardPaths.Get().GetUserDataDir() in the future
+            path = os.path.join(os.path.dirname(__file__), 'bank.db')
+            if not '--use-local' in sys.argv and 'HOME' in os.environ:
+                # We seem to be on a Unix environment.
+                preferredPath = os.path.join(os.environ['HOME'], '.wxbanker', 'bank.db')
+                if os.path.exists(preferredPath) or not os.path.exists(path):
+                    path = preferredPath
+                    # Ensure that the directory exists.
+                    dirName = os.path.dirname(path)
+                    if not os.path.exists(dirName):
+                        os.mkdir(dirName)
+        
+        store = PersistentStore(path)
+        store.AutoSave = self.AutoSave
+        self.Stores.append(store)
+        
+        self.Model = store.GetModel()
+        return self.Model
         
     AutoSave = property(GetAutoSave, SetAutoSave)
     

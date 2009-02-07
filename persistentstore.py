@@ -119,6 +119,9 @@ class PersistentStore:
         # everything is fine. So just return True, as there we no errors that we are aware of.
         return True
     
+    def Close(self):
+        self.dbconn.close()
+    
     def commitIfAppropriate(self):
         if self.AutoSave:
             debug.debug("Committing db!")
@@ -253,7 +256,7 @@ class PersistentStore:
         
     def __del__(self):
         self.commitIfAppropriate()
-        self.dbconn.close()
+        self.Close()
         
                 
 if __name__ == "__main__":
