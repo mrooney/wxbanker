@@ -1,1 +1,4 @@
+# An extra license is necessary, so we can display it easily, as well as
+# to not diverge from upstream where Windows and OSX are supported and
+# don't necessarily include this license.
 W: wxbanker: extra-license-file usr/share/pyshared/wxbanker/COPYING.txt
