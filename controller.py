@@ -31,7 +31,10 @@ are getting published when they should be.
 
 >>> import os, datetime
 >>> if os.path.exists("test.db"): os.remove("test.db")
->>> model = Controller("test.db").Model
+>>> controller = Controller("test.db")
+>>> controller.AutoSave
+True
+>>> model = controller.Model
 >>> model.Accounts
 []
 >>> model.Balance == 0
@@ -206,21 +209,54 @@ True
 #>>> model.Search(u'\xef\xbf\xa5')
 #[t1]
 
->>> model2 = Controller("test.db").Model
+>>> model2 = controller.LoadPath("test.db")
 >>> model == model2
 True
-"""
-"""
->>> b.close()
->>> os.remove('test.db')
-"""
+>>> controller.Close(model2)
 
+#auto-save
+>>> controller.AutoSave = False
+>>> controller.AutoSave
+False
+>>> t.Description = "Modified! Did you save?"
+>>> model3 = controller.LoadPath("test.db")
+>>> model == model3
+False
+
+"""
+"""
+#*ensure no commits on a store init if not upgrading
+"""
 
 from persistentstore import PersistentStore
 import os, sys
+from wx.lib.pubsub import Publisher
+import debug
 
 class Controller(object):
-    def __init__(self, path=None):
+    def __init__(self, path=None, autoSave=True):
+        self._AutoSave = autoSave
+        self.Models = []
+        
+        self.LoadPath(path)
+        
+        Publisher.subscribe(self.onAutoSaveToggled, "user.autosave_toggled")
+        
+    def onAutoSaveToggled(self, message):
+        val = message.data
+        self.AutoSave = val
+        
+    def GetAutoSave(self):
+        return self._AutoSave
+    
+    def SetAutoSave(self, val):
+        self._AutoSave = val
+        Publisher.sendMessage("controller.autosave_toggled", val)
+        for model in self.Models:
+            debug.debug("Setting auto-save to: %s" % val)
+            model.Store.AutoSave = val
+            
+    def LoadPath(self, path):
         if path is None:
             # Figure out where the bank database file is, and load it.
             #Note: look at wx.StandardPaths.Get().GetUserDataDir() in the future
@@ -236,4 +272,19 @@ class Controller(object):
                         os.mkdir(dirName)
         
         store = PersistentStore(path)
+        store.AutoSave = self.AutoSave
+        
         self.Model = store.GetModel()
+        self.Models.append(self.Model)
+        
+        return self.Model
+    
+    def Close(self, model):
+        if not model in self.Models:
+            raise Exception("model not managed by this controller")
+        
+        self.Models.remove(model)
+        del model
+        
+    AutoSave = property(GetAutoSave, SetAutoSave)
+    

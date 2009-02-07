@@ -6,10 +6,10 @@ class CsvImportFrame(wx.Frame):
     """
     Window for importing data from a CSV file
     """
-    def __init__(self, bankController):
+    def __init__(self):
         wx.Frame.__init__(self, None, title=_("CSV import"))
         
-        self.bankModel = bankController.Model
+        self.bankModel = wx.GetApp().Controller.Model
         
         self.dateFormats = ['%Y/%m/%d', '%d/%m/%Y', '%m/%d/%Y']
         self.encodings = ['cp1250', 'utf-8']

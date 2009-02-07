@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 #    https://launchpad.net/wxbanker
-#    wxbanker.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
+#    wxbanker.py: Copyright 2007-2009 Mike Rooney <michael@wxbanker.org>
 #
 #    This file is part of wxBanker.
 #
@@ -67,7 +67,7 @@ class BankerFrame(wx.Frame):
         self.Bind(wx.EVT_MOVE, self.OnMove)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
-        menuBar = BankMenuBar(bankController)
+        menuBar = BankMenuBar()
         self.SetMenuBar(menuBar)
         #self.CreateStatusBar()
         
@@ -125,6 +125,7 @@ def main():
         clibanker.main(bankController)
     else:
         app = wx.App(False)
+        app.Controller = bankController
     
         # Initialize our configuration object.
         # It is only necessary to initialize any default values we
@@ -139,7 +140,9 @@ def main():
             config.WriteInt("POS_X", 100)
             config.WriteInt("POS_Y", 100)
         if not config.HasEntry("SHOW_CALC"):
-            config.WriteBool("SHOW_CALC", True)
+            config.WriteBool("SHOW_CALC", False)
+        if not config.HasEntry("AUTO-SAVE"):
+            config.WriteBool("AUTO-SAVE", True)
     
         # Push our custom art provider.
         import wx.lib.art.img2pyartprov as img2pyartprov
@@ -154,6 +157,9 @@ def main():
         if firstTime:
             Publisher().sendMessage("FIRST RUN")
             config.WriteBool("RUN_BEFORE", True)
+            
+        # Set the auto-save option as appropriate.
+        bankController.AutoSave = config.ReadBool("AUTO-SAVE")
     
         import sys
         if '--inspect' in sys.argv:
