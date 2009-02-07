@@ -48,6 +48,7 @@ class PersistentStore:
         self.Path = path
         self.AutoSave = autoSave
         existed = True
+        
         if not os.path.exists(self.Path):
             debug.debug('Initializing', self.Path)
             connection = self.initialize()
@@ -55,7 +56,6 @@ class PersistentStore:
         else:
             debug.debug('Loading', self.Path)
             connection = sqlite.connect(self.Path)
-
         self.dbconn = connection
         
         self.Meta = self.getMeta()

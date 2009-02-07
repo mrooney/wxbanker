@@ -225,8 +225,7 @@ False
 
 """
 """
->>> b.close()
->>> os.remove('test.db')
+#*ensure no commits on a store init if not upgrading
 """
 
 from persistentstore import PersistentStore
