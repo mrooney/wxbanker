@@ -212,7 +212,7 @@ True
 >>> model2 = controller.LoadPath("test.db")
 >>> model == model2
 True
->>> model2.Store.Close()
+>>> controller.Close(model2)
 
 #auto-save
 >>> controller.AutoSave = False
@@ -237,7 +237,7 @@ import debug
 class Controller(object):
     def __init__(self, path=None, autoSave=True):
         self._AutoSave = autoSave
-        self.Stores = []
+        self.Models = []
         
         self.LoadPath(path)
         
@@ -253,9 +253,9 @@ class Controller(object):
     def SetAutoSave(self, val):
         self._AutoSave = val
         Publisher.sendMessage("controller.autosave_toggled", val)
-        for store in self.Stores:
+        for model in self.Models:
             debug.debug("Setting auto-save to: %s" % val)
-            store.AutoSave = val
+            model.Store.AutoSave = val
             
     def LoadPath(self, path):
         if path is None:
@@ -274,10 +274,18 @@ class Controller(object):
         
         store = PersistentStore(path)
         store.AutoSave = self.AutoSave
-        self.Stores.append(store)
         
         self.Model = store.GetModel()
+        self.Models.append(self.Model)
+        
         return self.Model
+    
+    def Close(self, model):
+        if not model in self.Models:
+            raise Exception("model not managed by this controller")
+        
+        self.Models.remove(model)
+        del model
         
     AutoSave = property(GetAutoSave, SetAutoSave)
     
