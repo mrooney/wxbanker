@@ -31,7 +31,10 @@ are getting published when they should be.
 
 >>> import os, datetime
 >>> if os.path.exists("test.db"): os.remove("test.db")
->>> model = Controller("test.db").Model
+>>> controller = Controller("test.db")
+>>> controller.AutoSave
+True
+>>> model = controller.Model
 >>> model.Accounts
 []
 >>> model.Balance == 0
@@ -215,12 +218,15 @@ True
 >>> os.remove('test.db')
 """
 
-
 from persistentstore import PersistentStore
 import os, sys
+from wx.lib.pubsub import Publisher
+import debug
 
 class Controller(object):
-    def __init__(self, path=None):
+    def __init__(self, path=None, autoSave=True):
+        self._AutoSave = autoSave
+        
         if path is None:
             # Figure out where the bank database file is, and load it.
             #Note: look at wx.StandardPaths.Get().GetUserDataDir() in the future
@@ -236,4 +242,24 @@ class Controller(object):
                         os.mkdir(dirName)
         
         store = PersistentStore(path)
+        self.Stores = [store]
         self.Model = store.GetModel()
+        
+        Publisher.subscribe(self.onAutoSaveToggled, "user.autosave_toggled")
+        
+    def onAutoSaveToggled(self, message):
+        val = message.data
+        self.AutoSave = val
+        
+    def GetAutoSave(self):
+        return self._AutoSave
+    
+    def SetAutoSave(self, val):
+        self._AutoSave = val
+        Publisher.sendMessage("controller.autosave_toggled", val)
+        for store in self.Stores:
+            debug.debug("Setting auto-save to: %s" % val)
+            store.AutoSave = val
+        
+    AutoSave = property(GetAutoSave, SetAutoSave)
+    

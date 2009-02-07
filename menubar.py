@@ -22,10 +22,11 @@ import wx, webbrowser, os
 from wx.lib.wordwrap import wordwrap
 from wx.lib.pubsub import Publisher
 
-import version, localization
+import version, localization, debug
 from currencies import CurrencyStrings
 
 class BankMenuBar(wx.MenuBar):
+    ID_AUTOSAVE = wx.NewId()
     ID_FAQ = wx.NewId()
     ID_QUESTION = wx.NewId()
     ID_REPORTBUG = wx.NewId()
@@ -33,6 +34,11 @@ class BankMenuBar(wx.MenuBar):
     
     def __init__(self, *args, **kwargs):
         wx.MenuBar.__init__(self, *args, **kwargs)
+        
+        # File menu.
+        fileMenu = wx.Menu()
+        self.saveMenuItem = fileMenu.Append(wx.ID_SAVE)
+        self.autoSaveMenuItem = fileMenu.AppendCheckItem(self.ID_AUTOSAVE, _("Auto-save"), _("Automatically save changes"))
         
         # Settings menu.
         settingsMenu = wx.Menu()
@@ -72,11 +78,14 @@ class BankMenuBar(wx.MenuBar):
         aboutItem = helpMenu.Append(wx.ID_ABOUT, _("&About"), _("More information about wxBanker"))
         
         # Add everything to the main menu.
+        self.Append(fileMenu, _("&File"))
         self.Append(settingsMenu, _("&Settings"))
         self.Append(helpMenu, _("&Help"))
         
         self.Bind(wx.EVT_MENU, self.onClickAbout)
         helpMenu.Bind(wx.EVT_MENU, self.onClickAbout)
+        
+        Publisher.subscribe(self.onAutoSaveToggled, "controller.autosave_toggled")
         
     def onMenuEvent(self, event):
         ID = event.Id
@@ -85,14 +94,25 @@ class BankMenuBar(wx.MenuBar):
             self.onSelectCurrency(self.IDS_CURRENCIES.index(ID))
         else:
             handler = {
+                self.ID_AUTOSAVE: self.onClickAutoSave,
                 self.ID_FAQ: self.onClickFAQs,
                 self.ID_QUESTION: self.onClickAskQuestion,
                 self.ID_REPORTBUG: self.onClickReportBug,
                 wx.ID_ABOUT: self.onClickAbout,
-            }[ID]
+            }.get(ID, lambda e: e.Skip())
             
             handler(event)
             
+    def onAutoSaveToggled(self, message):
+        val = message.data
+        debug.debug("Updating UI for auto-save: %s" % val)
+        
+        self.autoSaveMenuItem.Check(val)
+        self.saveMenuItem.Enable(not val)
+            
+    def onClickAutoSave(self, event):
+        Publisher().sendMessage("user.autosave_toggled", event.Checked())
+        
     def onSelectCurrency(self, currencyIndex):
         Publisher().sendMessage("user.currency_changed", currencyIndex)
         

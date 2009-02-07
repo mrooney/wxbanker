@@ -1,5 +1,5 @@
 #    https://launchpad.net/wxbanker
-#    persistentstore.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
+#    persistentstore.py: Copyright 2007-2009 Mike Rooney <michael@wxbanker.org>
 #
 #    This file is part of wxBanker.
 #
@@ -43,29 +43,31 @@ class PersistentStore:
     Handles creating the Model (bankobjects) from the store and writing
     back the changes.
     """
-    def __init__(self, path):
+    def __init__(self, path, autoSave=True):
         self.Version = 3
-        self.path = path
+        self.Path = path
+        self.AutoSave = autoSave
         existed = True
-        if not os.path.exists(self.path):
-            debug.debug('Initializing', path)
+        if not os.path.exists(self.Path):
+            debug.debug('Initializing', self.Path)
             connection = self.initialize()
             existed = False
         else:
-            debug.debug('Loading', path)
-            connection = sqlite.connect(self.path)
+            debug.debug('Loading', self.Path)
+            connection = sqlite.connect(self.Path)
 
         self.dbconn = connection
         
         self.Meta = self.getMeta()
         debug.debug(self.Meta)
         while self.Meta['VERSION'] < self.Version:
-            assert existed # Sanity check to ensure new dbs don't need to be upgraded.
+            if not existed:
+                raise Exception("New databases should not need an upgrade, but one was attempted!\nPlease file a bug at https://bugs.launchpad.net/wxbanker/+filebug")
             self.upgradeDb(self.Meta['VERSION'])
             self.Meta = self.getMeta()
             debug.debug(self.Meta)
             
-        self.dbconn.commit()
+        self.commitIfAppropriate()
         
         Publisher.subscribe(self.onTransactionUpdated, "transaction.updated")
         Publisher.subscribe(self.onAccountRenamed, "account.renamed")
@@ -87,7 +89,7 @@ class PersistentStore:
         cursor = self.dbconn.cursor()
         cursor.execute('INSERT INTO accounts VALUES (null, ?, ?, ?)', (accountName, 0, 0.0))
         ID = cursor.lastrowid
-        self.dbconn.commit()
+        self.commitIfAppropriate()
         
         account = bankobjects.Account(self, ID, accountName)
         
@@ -101,24 +103,29 @@ class PersistentStore:
         # This is necessary to maintain integrity for dbs created at V1 (LP: 249954).
         self.clearAccountTransactions(account)
         self.dbconn.cursor().execute('DELETE FROM accounts WHERE id=?',(account.ID,))
-        self.dbconn.commit()
+        self.commitIfAppropriate()
         
     def MakeTransaction(self, account, transaction):
         cursor = self.dbconn.cursor()
         cursor.execute('INSERT INTO transactions VALUES (null, ?, ?, ?, ?)', (account.ID, transaction.Amount, transaction.Description, transaction.Date))
-        self.dbconn.commit()
+        self.commitIfAppropriate()
         transaction.ID = cursor.lastrowid
         
     def RemoveTransaction(self, transaction):
         result = self.dbconn.cursor().execute('DELETE FROM transactions WHERE id=?', (transaction.ID,)).fetchone()
-        self.dbconn.commit()
+        self.commitIfAppropriate()
         # The result doesn't appear to be useful here, it is None regardless of whether the DELETE matched anything
         # the controller already checks for existence of the ID though, so if this doesn't raise an exception, theoretically
         # everything is fine. So just return True, as there we no errors that we are aware of.
         return True
+    
+    def commitIfAppropriate(self):
+        if self.AutoSave:
+            debug.debug("Committing db!")
+            self.dbconn.commit()
 
     def initialize(self):
-        connection = sqlite.connect(self.path)
+        connection = sqlite.connect(self.Path)
         cursor = connection.cursor()
 
         cursor.execute('CREATE TABLE accounts (id INTEGER PRIMARY KEY, name VARCHAR(255), currency INTEGER, balance FLOAT)')
@@ -147,8 +154,8 @@ class PersistentStore:
     
     def upgradeDb(self, fromVer):
         # Make a backup
-        source = self.path
-        dest = self.path + ".backup-v%i-%s" % (fromVer, datetime.date.today().strftime("%Y-%m-%d"))
+        source = self.Path
+        dest = self.Path + ".backup-v%i-%s" % (fromVer, datetime.date.today().strftime("%Y-%m-%d"))
         debug.debug("Making backup to %s" % dest)
         import shutil
         try:
@@ -174,7 +181,7 @@ class PersistentStore:
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
         
-        self.dbconn.commit()
+        self.commitIfAppropriate()
         
     def syncBalances(self):
         debug.debug("Syncing balances...")
@@ -200,7 +207,7 @@ class PersistentStore:
         
     def clearAccountTransactions(self, account):
         self.dbconn.cursor().execute('DELETE FROM transactions WHERE accountId=?', (account.ID,))
-        self.dbconn.commit()
+        self.commitIfAppropriate()
         
     def getTransactionsFrom(self, account):
         transactions = bankobjects.TransactionList()
@@ -213,15 +220,15 @@ class PersistentStore:
         result = self.transaction2result(transObj)
         result.append( result.pop(0) ) # Move the uid to the back as it is last in the args below.
         self.dbconn.cursor().execute('UPDATE transactions SET amount=?, description=?, date=? WHERE id=?', result)
-        self.dbconn.commit()
+        self.commitIfAppropriate()
         
     def renameAccount(self, oldName, account):
         self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (account.Name, oldName))
-        self.dbconn.commit()
+        self.commitIfAppropriate()
         
     def setCurrency(self, currencyIndex):
         self.dbconn.cursor().execute('UPDATE accounts SET currency=?', (currencyIndex,))
-        self.dbconn.commit()
+        self.commitIfAppropriate()
         
     def __print__(self):
         cursor = self.dbconn.cursor()
@@ -242,10 +249,10 @@ class PersistentStore:
     def onAccountBalanceChanged(self, message):
         account = message.data
         self.dbconn.cursor().execute("UPDATE accounts SET balance=? WHERE id=?", (account.Balance, account.ID))
-        self.dbconn.commit()
+        self.commitIfAppropriate()
         
     def __del__(self):
-        self.dbconn.commit()
+        self.commitIfAppropriate()
         self.dbconn.close()
         
                 

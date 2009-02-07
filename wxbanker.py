@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 #    https://launchpad.net/wxbanker
-#    wxbanker.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
+#    wxbanker.py: Copyright 2007-2009 Mike Rooney <michael@wxbanker.org>
 #
 #    This file is part of wxBanker.
 #
@@ -157,6 +157,9 @@ def main():
         if firstTime:
             Publisher().sendMessage("FIRST RUN")
             config.WriteBool("RUN_BEFORE", True)
+            
+        # Set the auto-save option as appropriate.
+        bankController.AutoSave = config.ReadBool("AUTO-SAVE")
     
         import sys
         if '--inspect' in sys.argv:
