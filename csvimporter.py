@@ -3,6 +3,7 @@
 
 from datetime import date, datetime
 from bankobjects import Transaction
+from wx.lib.pubsub import Publisher
 import codecs, csv, os, re
 try:
     import simplejson as json
@@ -17,7 +18,7 @@ class CsvImporter:
     def __init__(self):
         pass
     
-    def getTransactionsFromFile(self, account, fileName, settings):
+    def getTransactionsFromFile(self, fileName, settings):
         csvReader = csv.reader(
             UTF8Recoder(open(fileName, 'rb'), settings['encoding']), 
             delimiter=settings['delimiter'])
@@ -41,7 +42,16 @@ class CsvImporter:
 
             transactions.append(Transaction(None, None, amount, desc, tdate))
         
-        return transactions
+        return TransactionContainer(transactions)
+
+class TransactionContainer(object):
+    def __init__(self, transactions):
+        self.Name = "#CSVIMPORT"
+        self.Transactions = transactions
+        
+    def RemoveTransaction(self, transaction):
+        self.Transactions.remove(transaction)
+        Publisher.sendMessage("transaction.removed.%s"%self.Name, transaction)
 
 class CsvImporterProfileManager:
 

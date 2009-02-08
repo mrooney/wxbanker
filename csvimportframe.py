@@ -1,6 +1,6 @@
 import wx
 from csvimporter import CsvImporter, CsvImporterProfileManager, json
-from transactionolv import TransactionOLV as TransactionCtrl
+from transactionolv import TransactionOLV
 
 class CsvImportFrame(wx.Frame):
     """
@@ -8,8 +8,6 @@ class CsvImportFrame(wx.Frame):
     """
     def __init__(self):
         wx.Frame.__init__(self, None, title=_("CSV import"))
-        
-        self.bankModel = wx.GetApp().Controller.Model
         
         self.dateFormats = ['%Y/%m/%d', '%d/%m/%Y', '%m/%d/%Y']
         self.encodings = ['cp1250', 'utf-8']
@@ -45,7 +43,9 @@ class CsvImportFrame(wx.Frame):
         topSizer.Add(staticBoxSizer, flag=wx.ALL|wx.EXPAND, border=1)
 
         try:
-            accounts = [acc.GetName() for acc in self.bankModel.Accounts]
+            bankModel = wx.GetApp().Controller.Model
+            self.accountsDict = dict([(acc.GetName(), acc) for acc in bankModel.Accounts])
+            accounts = self.accountsDict.keys()
         except:
             accounts = []
         
@@ -137,7 +137,8 @@ class CsvImportFrame(wx.Frame):
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         topSizer.Add(sizer, flag=wx.EXPAND|wx.ALL, proportion=1, border=5)
         
-        self.transactionCtrl = TransactionCtrl(topPanel, None)
+        self.transactionCtrl = DetachedTransactionOLV(topPanel, None)
+        self.transactionCtrl.SetMinSize((-1, 200))
         sizer.Add(self.transactionCtrl, flag=wx.ALL|wx.EXPAND, proportion=1)
         
     def initSettingsProfilesControl(self, topPanel, topSizer):
@@ -215,16 +216,18 @@ class CsvImportFrame(wx.Frame):
         settings = self.getSettingsFromControls()
         
         file = self.filePickerCtrl.Path
-        account = self.targetAccountCtrl.Value
         
         try:
-            transactions = importer.getTransactionsFromFile(account, file, settings)
-            self.transactionCtrl.SetObjects(transactions)
+            self.transactionContainer = importer.getTransactionsFromFile(file, settings)
+            self.transactionCtrl.setAccount(self.transactionContainer)
         except Exception, e:
             print 'Caught exception:', e
             
     def importTransactions(self):
-        pass
+        account = self.accountsDict[self.targetAccountCtrl.Value]
+        
+        for t in self.transactionContainer.Transactions:
+            account.AddTransaction(t.Amount, t.Description, t.Date, source=None)
         
     def onFileChange(self, event):
         if self.filePickerCtrl.Path != '':
@@ -269,6 +272,10 @@ class CsvImportFrame(wx.Frame):
         key = self.profileCtrl.Value
         self.profileManager.deleteProfile(key)
         self.initProfileCtrl()
+        
+class DetachedTransactionOLV(TransactionOLV):
+    def renderFloat(self, floatVal):
+        return floatVal
 
 if __name__ == '__main__':
     app = wx.PySimpleApp()
