@@ -52,17 +52,18 @@ class TransactionOLV(GroupListView):
         dateWidth = self.GetTextExtent(dateStr)[0] + 10
         
         self.SetColumns([
-            ColumnDefn("Date", valueGetter="Date", width=dateWidth, cellEditorCreator=self.makeDateEditor),
+            ColumnDefn("", width=0), # Make a bogus first column, since the 1st column isn't editable.
+            ColumnDefn("Date", valueGetter=self.getDateOf, valueSetter=self.setDateOf, width=dateWidth),
             ColumnDefn("Description", valueGetter="Description", isSpaceFilling=True),
             ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=self.renderFloat),
             ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
         ])
+        # Our custom hack in OLV.py line 2017 will render floats appropriately as %.2f
         
         # By default, sort by the date column, ascending.
-        self.SortBy(0)
+        self.SortBy(1)
         
         self.Bind(wx.EVT_RIGHT_DOWN, self.onRightDown)
-        CellEditorRegistry().RegisterCreatorFunction(datetime.date, self.makeDateEditor)
         
         Publisher().subscribe(self.onSearch, "SEARCH.INITIATED")
         Publisher().subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
@@ -82,6 +83,12 @@ class TransactionOLV(GroupListView):
             
         GroupListView.SetObjects(self, objs, *args, **kwargs)
         wx.CallLater(50, self.frozenResize) # Necessary for columns to size properly. (GTK)
+        
+    def getDateOf(self, transaction):
+        return str(transaction.Date)
+    
+    def setDateOf(self, transaction, date):
+        transaction.Date = date
         
     def getTotal(self, transObj):
         """
@@ -104,10 +111,6 @@ class TransactionOLV(GroupListView):
                 
         transObj._Total = total
         return total
-
-    def makeDateEditor(self, row, col):
-        dateCtrl = bankcontrols.DateCtrlFactory(self)
-        return dateCtrl
     
     def rowFormatter2(self, listItem, transaction):
         if transaction.Amount < 0:
