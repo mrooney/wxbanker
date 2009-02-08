@@ -265,6 +265,12 @@ class CsvImportFrame(wx.Frame):
 
     def onClickSaveProfileButton(self, event):
         key = self.profileCtrl.Value
+        if self.profileManager.profiles.has_key(key):
+            d = wx.MessageDialog(self,
+                    message=_("Profile with the name '%s' exists already. Overwrite it ?")%key,
+                    caption=_('Overwrite profile ?'), style=wx.YES_NO)
+            if d.ShowModal() != wx.ID_YES:
+                return
         self.profileManager.saveProfile(key, self.getSettingsFromControls())
         self.initProfileCtrl()
 
