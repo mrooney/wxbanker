@@ -2137,8 +2137,9 @@ class ObjectListView(wx.ListCtrl):
         """
         # Tell the world that the user cancelled the edit
         (rowIndex, subItemIndex) = self.cellBeingEdited
+        rowModel = self.GetObjectAt(rowIndex)
         evt = OLVEvent.CellEditFinishingEvent(self, rowIndex, subItemIndex,
-                                              self.GetObjectAt(rowIndex),
+                                              rowModel,
                                               self.cellEditor.GetValue(),
                                               self.cellEditor,
                                               True)
