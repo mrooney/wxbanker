@@ -2012,7 +2012,7 @@ class ObjectListView(wx.ListCtrl):
         # If the event handler hasn't already configured the editor, do it now.
         if evt.shouldConfigureEditor:
             self.cellEditor.SetFocus()
-            if subItemIndex == 2:
+            if subItemIndex == 3:
                 # Custom wxBanker hack so editing Amounts doesn't show a long float.
                 evt.cellValue = "%.2f" % evt.cellValue
             self.cellEditor.SetValue(evt.cellValue)
