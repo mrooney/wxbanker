@@ -17,10 +17,13 @@ IMPLEMENTED:
   - calculator options on amounts
 - amount editing as %.2f (instead of 2.16999999 etc)
 - searching
-TODO (for feature parity):
 - editable date
+- changing date moves transaction appropriately
+TODO (for feature parity):
 - disable sorting on Total column
 - done? totals automatically updates for transaction changes above them
+- flickerless RefreshObjects
+- flickerless remove transaction
 EXTRA:
 - custom negative option such as Red, (), or Red and ()
 NEW THINGS:
@@ -39,6 +42,7 @@ class TransactionOLV(GroupListView):
         GroupListView.__init__(self, parent, style=wx.LC_REPORT|wx.SUNKEN_BORDER)
         self.CurrentAccount = None
         self.BankController = bankController
+        self.SORT_COL = 1
         
         self.showGroups = False
         self.evenRowsBackColor = wx.Color(224,238,238)
@@ -61,13 +65,15 @@ class TransactionOLV(GroupListView):
         # Our custom hack in OLV.py line 2017 will render floats appropriately as %.2f
         
         # By default, sort by the date column, ascending.
-        self.SortBy(1)
+        self.SortBy(self.SORT_COL)
         
         self.Bind(wx.EVT_RIGHT_DOWN, self.onRightDown)
         
-        Publisher().subscribe(self.onSearch, "SEARCH.INITIATED")
-        Publisher().subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
-        Publisher().subscribe(self.onSearchMoreToggled, "SEARCH.MORETOGGLED")
+        Publisher.subscribe(self.onSearch, "SEARCH.INITIATED")
+        Publisher.subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
+        Publisher.subscribe(self.onSearchMoreToggled, "SEARCH.MORETOGGLED")
+        Publisher.subscribe(self.onTransactionAdded, "transaction.created")
+        Publisher.subscribe(self.onTransactionRemoved, "transaction.removed")
         
     def SetObjects(self, objs, *args, **kwargs):
         """
@@ -89,6 +95,9 @@ class TransactionOLV(GroupListView):
     
     def setDateOf(self, transaction, date):
         transaction.Date = date
+        self.Freeze()
+        self.SortBy(self.SORT_COL)
+        self.Thaw()
         
     def getTotal(self, transObj):
         """
@@ -128,13 +137,6 @@ class TransactionOLV(GroupListView):
             transactions = account.Transactions
         
         self.SetObjects(transactions)
-        
-        Publisher.unsubscribe(self.onTransactionAdded)
-        Publisher.unsubscribe(self.onTransactionRemoved)
-        
-        if account:
-            Publisher.subscribe(self.onTransactionAdded, "transaction.created.%s" % account.Name)
-            Publisher.subscribe(self.onTransactionRemoved, "transaction.removed.%s" % account.Name)
         
         if scrollToBottom:
             self.ensureVisible(-1)
@@ -209,18 +211,20 @@ class TransactionOLV(GroupListView):
         self.Parent.Thaw()
         
     def onTransactionRemoved(self, message):
-        transaction = message.data
-        self.Parent.Freeze()
-        # Remove the item from the list.
-        self.RemoveObject(transaction)
+        account, transaction = message.data
+        if account is self.CurrentAccount:
+            self.Parent.Freeze()
+            # Remove the item from the list.
+            self.RemoveObject(transaction)
         
-        wx.CallLater(50, self.frozenResize) # Necessary for columns to size properly. (GTK)
+            wx.CallLater(50, self.frozenResize) # Necessary for columns to size properly. (GTK)
     
     def onTransactionAdded(self, message):
-        transaction = message.data
-        self.AddObject(transaction)
-        #TODO: Perhaps get the actual position and scroll to that, it may not be last.
-        self.ensureVisible(-1)
+        account, transaction = message.data
+        if account is self.CurrentAccount:
+            self.AddObject(transaction)
+            #TODO: Perhaps get the actual position and scroll to that, it may not be last.
+            self.ensureVisible(-1)
         
     def onSearch(self, message):
         searchString, accountScope, match, caseSens = message.data

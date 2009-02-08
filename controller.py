@@ -80,7 +80,7 @@ True
 1
 >>> len(messages)
 3
->>> messages[1] == (('transaction', 'created', 'My Account'), t1)
+>>> messages[1] == (('transaction', 'created'), (a, t1))
 True
 >>> messages[0] == (('account', 'balance changed', 'My Account'), a)
 True
