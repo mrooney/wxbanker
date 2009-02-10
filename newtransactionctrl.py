@@ -130,7 +130,7 @@ class NewTransactionCtrl(wx.Panel):
         accountDict = {}
         for account in destinationAccount.Parent:
             # Don't add the destination account as a possible source.
-            if account.Name != destinationAccount.Name:
+            if account != destinationAccount:
                 accountDict[account.Name] = account
             
         # Create a dialog with the other account names to choose from.

@@ -211,7 +211,7 @@ class Account(object):
         # account that hasn't been viewed yet), but there's more important things for now.
         self.Transactions.append(transaction)
         
-        Publisher.sendMessage("transaction.created.%s" % self.Name, transaction)
+        Publisher.sendMessage("transaction.created", (self, transaction))
         
         # Update the balance.
         self.Balance += transaction.Amount
@@ -226,7 +226,7 @@ class Account(object):
             raise bankexceptions.InvalidTransactionException("Transaction does not exist in account '%s'" % self.Name)
         
         self.Store.RemoveTransaction(transaction)
-        Publisher.sendMessage("transaction.removed.%s"%self.Name, transaction)
+        Publisher.sendMessage("transaction.removed", (self, transaction))
         self.Transactions.remove(transaction)
         
         # Update the balance.
