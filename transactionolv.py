@@ -55,8 +55,12 @@ class TransactionOLV(GroupListView):
         dateStr = str(datetime.date.today())
         dateWidth = self.GetTextExtent(dateStr)[0] + 10
         
+        # Make a bogus first column, since the 1st column isn't editable.
+        bogusColumn = ColumnDefn("", width=0)
+        bogusColumn.isInternal = True
+        
         self.SetColumns([
-            ColumnDefn("", width=0), # Make a bogus first column, since the 1st column isn't editable.
+            bogusColumn,
             ColumnDefn("Date", valueGetter=self.getDateOf, valueSetter=self.setDateOf, width=dateWidth),
             ColumnDefn("Description", valueGetter="Description", isSpaceFilling=True),
             ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=self.renderFloat),

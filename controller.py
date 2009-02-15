@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #    https://launchpad.net/wxbanker
 #    controller.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
 #
