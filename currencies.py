@@ -59,6 +59,12 @@ True
 True
 >>> RussianCurrency().float2str(1) == '1.00 руб'
 True
+>>> locale.setlocale(locale.LC_ALL, 'ru_RU.utf8')
+'ru_RU.utf8'
+>>> LocalizedCurrency().float2str(1) == '1.00 руб'
+True
+>>> bool(locale.setlocale(locale.LC_ALL, ''))
+True
 """
 
 import localization, locale
@@ -138,6 +144,9 @@ class BaseCurrency(object):
     
         return s.replace('<', '').replace('>', '').rjust(just)
     
+    def __eq__(self, other):
+        return self.LOCALECONV == other.LOCALECONV
+    
 class EuroCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
@@ -184,7 +193,9 @@ class RussianCurrency(BaseCurrency):
         self.LOCALECONV['p_cs_precedes'] = 0
         
 class LocalizedCurrency(BaseCurrency):
-    LOCALECONV = locale.localeconv()
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV = locale.localeconv()
         
 UnitedStatesCurrency = BaseCurrency
 

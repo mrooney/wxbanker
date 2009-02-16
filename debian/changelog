@@ -1,3 +1,10 @@
+wxbanker (0.4.0.3-0ubuntu1) jaunty; urgency=low
+
+  * Fix localized currency display (LP: #327590)
+  * Sync translations from Launchpad
+
+ -- Michael Rooney <mrooney@ubuntu.com>  Sat, 14 Feb 2009 17:47:06 -0500
+
 wxbanker (0.4.0.2~bzr102-0ubuntu1) jaunty; urgency=low
 
   * Initial release (LP: #297289)
