@@ -1,0 +1,20 @@
+Source: wxbanker
+Section: gnome
+Priority: extra
+Maintainer: Michael Rooney <mrooney@ubuntu.com>
+Build-Depends: cdbs, debhelper (>= 7), python-central, python (>= 2.5)
+XS-Python-Version: >= 2.5, << 3.0
+Standards-Version: 3.8.0
+Homepage: http://launchpad.net/wxbanker
+
+Package: wxbanker
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-wxgtk2.8
+Recommends: python-numpy
+XB-Python-Version: ${python:Versions}
+Description: lightweight personal finance manager
+ wxBanker allows you to easily keep track of balances in accounts. Use wxBanker
+ to add, edit, and remove transactions and accounts, make transfers, search
+ transactions, and view a graph of balances over time. An integrated calculator
+ also makes calculations quick and easy.
+
