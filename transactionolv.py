@@ -48,7 +48,7 @@ class TransactionOLV(GroupListView):
         self.evenRowsBackColor = wx.Color(224,238,238)
         self.oddRowsBackColor = wx.WHITE
         self.rowFormatter = self.rowFormatter2
-        self.cellEditMode = GroupListView.CELLEDIT_SINGLECLICK
+        self.cellEditMode = GroupListView.CELLEDIT_DOUBLECLICK
         self.SetEmptyListMsg("No transactions entered.")
         
         # Calculate the necessary width for the date column.
