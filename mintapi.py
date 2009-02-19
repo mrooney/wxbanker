@@ -43,7 +43,8 @@ def main():
     
     for name, aid in mintAccounts:
         accountPage = urllib3.read("https://wwws.mint.com/transaction.event?accountId=%s" % aid)
-        balRegex = """<th>Available [^<]+</th><td class="money">([^<]+)</td>"""
+        #balRegex = """<th>Available [^<]+</th><td class="money">([^<]+)</td>"""
+        balRegex = """<th>Balance</th><td class="money[^>]+>([^<]+)</td>"""
         balance = re.findall(balRegex, accountPage)[0]
         print name, balance
         """https://wwws.mint.com/transactionDownload.event?accountId=223615&comparableType=8&offset=0"""
