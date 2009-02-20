@@ -89,6 +89,8 @@ class BankModel(object):
     def setCurrency(self, currencyIndex):
         self.Store.setCurrency(currencyIndex)
         #self.Currency = currencies.CurrencyList[currencyIndex]()
+        for account in self.Accounts:
+            account.Currency = currencyIndex
         Publisher().sendMessage("currency_changed", currencyIndex)
         
     def onCurrencyChanged(self, message):
@@ -158,11 +160,20 @@ class Account(object):
         self.ID = aID
         self._Name = name
         self._Transactions = None
-        self.Currency = currencies.CurrencyList[currency]()
+        self.Currency = currency
         self._Balance = balance
         
         Publisher.subscribe(self.onTransactionAmountChanged, "transaction.updated.amount")
         Publisher.sendMessage("account.created.%s" % name, self)
+        
+    def SetCurrency(self, currency):
+        if type(currency) == int:
+            self._Currency = currencies.CurrencyList[currency]()
+        else:
+            self._Currency = currency
+            
+    def GetCurrency(self):
+        return self._Currency
         
     def GetBalance(self):
         return self._Balance
@@ -259,6 +270,7 @@ class Account(object):
     Name = property(GetName, SetName)
     Transactions = property(GetTransactions)
     Balance = property(GetBalance, SetBalance)
+    Currency = property(GetCurrency, SetCurrency)
         
     
 class TransactionList(list):

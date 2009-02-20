@@ -19,6 +19,7 @@ IMPLEMENTED:
 - searching
 - editable date
 - changing date moves transaction appropriately
+- handle currency changes
 TODO (for feature parity):
 - disable sorting on Total column
 - done? totals automatically updates for transaction changes above them
@@ -78,6 +79,7 @@ class TransactionOLV(GroupListView):
         Publisher.subscribe(self.onSearchMoreToggled, "SEARCH.MORETOGGLED")
         Publisher.subscribe(self.onTransactionAdded, "transaction.created")
         Publisher.subscribe(self.onTransactionRemoved, "transaction.removed")
+        Publisher.subscribe(self.onCurrencyChanged, "currency_changed")
         
     def SetObjects(self, objs, *args, **kwargs):
         """
@@ -251,6 +253,9 @@ class TransactionOLV(GroupListView):
     def onSearchMoreToggled(self, message):
         # Perhaps necessary to not glitch overlap on Windows?
         self.Refresh()
+        
+    def onCurrencyChanged(self, message):
+        self.RefreshObjects()
 
 
 if __name__ == "__main__":
