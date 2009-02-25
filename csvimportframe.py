@@ -220,8 +220,20 @@ class CsvImportFrame(wx.Frame):
         try:
             self.transactionContainer = importer.getTransactionsFromFile(file, settings)
             self.transactionCtrl.setAccount(self.transactionContainer)
+        except UnicodeDecodeError,e:
+            self.showErrorDialog(_("The file encoding does not seem to be '%s'.") % settings['encoding'])
         except Exception, e:
-            print 'Caught exception:', e
+            self.showErrorDialog()
+        finally:
+            pass
+            
+    def showErrorDialog(self, errDetail = ''):
+        errString = _('An error ocurred during the csv file import.')
+        errCaption = _('CSV import error')
+
+        dlg = wx.MessageDialog(self, errString + '\n' + errDetail, errCaption, wx.OK | wx.ICON_ERROR)
+        dlg.ShowModal()
+        dlg.Destroy()
             
     def importTransactions(self):
         account = self.accountsDict[self.targetAccountCtrl.Value]
