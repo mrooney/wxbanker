@@ -10,7 +10,7 @@ class CsvImportFrame(wx.Frame):
         wx.Frame.__init__(self, None, title=_("CSV import"))
         
         self.dateFormats = ['%Y/%m/%d', '%d/%m/%Y', '%m/%d/%Y']
-        self.encodings = ['cp1250', 'utf-8']
+        self.encodings = ['cp1250', 'iso8859-1', 'iso8859-2', 'utf-8']
         self.profileManager = CsvImporterProfileManager()
         self.transactionContainer = None
         
@@ -222,17 +222,17 @@ class CsvImportFrame(wx.Frame):
             self.transactionContainer = importer.getTransactionsFromFile(file, settings)
             self.transactionCtrl.setAccount(self.transactionContainer)
         except UnicodeDecodeError,e:
-            self.showErrorDialog(_("The file encoding does not seem to be '%s'.") % settings['encoding'])
+            self.showErrorDialog(_("The file encoding does not seem to be '%s'.") % settings['encoding'], e)
         except Exception, e:
-            self.showErrorDialog()
+            self.showErrorDialog(exc=e)
         finally:
             self.toggleImportButton()
             
-    def showErrorDialog(self, errDetail = ''):
+    def showErrorDialog(self, errDetail = '', exc = None):
         errString = _('An error ocurred during the csv file import.')
         errCaption = _('CSV import error')
 
-        dlg = wx.MessageDialog(self, errString + '\n' + errDetail, errCaption, wx.OK | wx.ICON_ERROR)
+        dlg = wx.MessageDialog(self, errString + '\n' + errDetail + '\n\n[%s]' % str(exc), errCaption, wx.OK | wx.ICON_ERROR)
         dlg.ShowModal()
         dlg.Destroy()
             
