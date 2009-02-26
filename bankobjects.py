@@ -40,8 +40,12 @@ class BankModel(object):
             
         return transactions
     
-    def GetXTotals(self, numPoints):
-        transactions = self.GetTransactions()
+    def GetXTotals(self, numPoints, account=None):
+        if account is None:
+            transactions = self.GetTransactions()
+        else:
+            transactions = account.Transactions[:]
+            
         return plotalgo.get(transactions, numPoints)
         
     def CreateAccount(self, accountName):

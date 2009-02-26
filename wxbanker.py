@@ -99,8 +99,9 @@ class BankerFrame(wx.Frame):
 
     def onTabSwitching(self, event):
         tabIndex = event.Selection
+        # If we are switching to the summary (graph) tab, update it!
         if tabIndex == 1:
-            self.summaryPanel.generateData()
+            self.summaryPanel.update()
 
     def onFirstRun(self, message):
         welcomeMsg = _("It looks like this is your first time using wxBanker!")

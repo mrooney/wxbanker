@@ -32,7 +32,7 @@ class SummaryPanel(wx.Panel):
         wx.Panel.__init__(self, parent)
         self.bankController = bankController
         
-        self.plotSettings = {'FitDegree': 2, 'Granularity': 100}
+        self.plotSettings = {'FitDegree': 2, 'Granularity': 100, 'Account': None}
         self.cachedData = None
 
         # create the plot panel
@@ -40,8 +40,12 @@ class SummaryPanel(wx.Panel):
 
         # create the controls at the bottom
         controlSizer = wx.BoxSizer()
+        self.accountList = wx.ComboBox(self, style=wx.CB_READONLY)
         granCtrl = wx.SpinCtrl(self, min=10, max=1000, initial=self.plotSettings['Granularity'])
         degCtrl = wx.SpinCtrl(self, min=1, max=20, initial=self.plotSettings['FitDegree'])
+        controlSizer.Add(wx.StaticText(self, label=_("Account")), 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.Add(self.accountList, 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.AddSpacer(20)
         controlSizer.Add(wx.StaticText(self, label=_("Sample Points")), 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.Add(granCtrl)
         controlSizer.AddSpacer(20)
@@ -54,11 +58,26 @@ class SummaryPanel(wx.Panel):
         self.Sizer.Add(self.plotPanel, 1, wx.EXPAND)
         self.plotPanel.SetShowScrollbars(False)
         self.Sizer.Add(controlSizer, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 3)
+        
+        # fill in the accounts
+        self.updateAccountList(layout=False)
+        
         self.Layout()
 
         # bind to the spin buttons
         granCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinGran)
         degCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinFitDeg)
+        self.accountList.Bind(wx.EVT_COMBOBOX, self.onAccountSelect)
+        
+    def onAccountSelect(self, event):
+        index = event.Int
+        if index == 0:
+            account = None
+        else:
+            account = self.accountList.GetClientData(index)
+            
+        self.plotSettings['Account'] = account
+        self.generateData()
 
     def onSpinGran(self, event):
         self.plotSettings['Granularity'] = event.EventObject.Value
@@ -67,6 +86,27 @@ class SummaryPanel(wx.Panel):
     def onSpinFitDeg(self, event):
         self.plotSettings['FitDegree'] = event.EventObject.Value
         self.generateData(useCache=True)
+        
+    def update(self):
+        self.updateAccountList()
+        self.generateData()
+        
+    def updateAccountList(self, layout=True):
+        self.accountList.Clear()
+        
+        setToAll = True
+        
+        self.accountList.Append(_("All accounts"))
+        for i, account in enumerate(self.bankController.Model.Accounts):
+            self.accountList.Append(account.Name, account)
+            if account is self.plotSettings['Account']:
+                self.accountList.SetSelection(i+1) # +1 since All accounts
+                setToAll = False
+                
+        if setToAll:
+            self.accountList.SetSelection(0)
+            # Make sure to set this, in case it was set to a deleted account.
+            self.plotSettings['Account'] = None
 
     def generateData(self, useCache=False):
         if useCache and self.cachedData is not None:
@@ -78,7 +118,7 @@ class SummaryPanel(wx.Panel):
         self.plotPanel.plotBalance(totals, startDate, delta, "Days", fitdegree=self.plotSettings['FitDegree'])
 
     def getPoints(self, numPoints):
-        return self.bankController.Model.GetXTotals(numPoints)
+        return self.bankController.Model.GetXTotals(numPoints, self.plotSettings['Account'])
 
 class AccountPlotCanvas(pyplot.PlotCanvas):
     def __init__(self, bankController, *args, **kwargs):
