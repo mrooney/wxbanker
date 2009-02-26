@@ -85,9 +85,9 @@ class PersistentStore:
         
         return bankmodel
     
-    def CreateAccount(self, accountName):
+    def CreateAccount(self, accountName, currency=0):
         cursor = self.dbconn.cursor()
-        cursor.execute('INSERT INTO accounts VALUES (null, ?, ?, ?)', (accountName, 0, 0.0))
+        cursor.execute('INSERT INTO accounts VALUES (null, ?, ?, ?)', (accountName, currency, 0.0))
         ID = cursor.lastrowid
         self.commitIfAppropriate()
         
