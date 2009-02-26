@@ -21,15 +21,17 @@ IMPLEMENTED:
 - changing date moves transaction appropriately
 - handle currency changes
 TODO (for feature parity):
-- disable sorting on Total column
 - done? totals automatically updates for transaction changes above them
+- disable sorting on Total column
+- flickerless repositioning when changing date
 - flickerless RefreshObjects
 - flickerless remove transaction
-EXTRA:
-- custom negative option such as Red, (), or Red and ()
 NEW THINGS:
 - sorting by columns
 - empty account message
+- fixed:
+ - slow resizing
+ - unnecessary scrollbars sometimes
 """
 
 import wx, datetime
