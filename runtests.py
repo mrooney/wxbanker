@@ -42,9 +42,14 @@ def main():
     
     print "\n%i total failures out of %i total tests in %i modules." % (failures, tests, len(mods))
     if failures:
-        print "TESTS FAILED.",
+        print "TESTS FAILED."
     else:
-        print "TESTS PASSED.",
+        print "TESTS PASSED."
+        
+    import unittest, unittests
+    unittest.TestProgram(unittests)
+    
+    
 
 if __name__ == "__main__":
     main()
