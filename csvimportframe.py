@@ -12,13 +12,14 @@ class CsvImportFrame(wx.Frame):
         self.dateFormats = ['%Y/%m/%d', '%d/%m/%Y', '%m/%d/%Y']
         self.encodings = ['cp1250', 'utf-8']
         self.profileManager = CsvImporterProfileManager()
+        self.transactionContainer = None
         
         topPanel = wx.Panel(self)
         topHorizontalSizer = wx.BoxSizer(wx.VERTICAL)
         topSizer = wx.BoxSizer(wx.VERTICAL)
 
         horizontalSizer = wx.BoxSizer(wx.HORIZONTAL)
-        topSizer.Add(horizontalSizer)
+        topSizer.Add(horizontalSizer, flag=wx.EXPAND)
         self.initSettingsControls(topPanel, horizontalSizer)
         self.initSettingsProfilesControl(topPanel, horizontalSizer)
         
@@ -63,7 +64,7 @@ class CsvImportFrame(wx.Frame):
         # csv columns to wxBanker data mapping
         
         topSizer = wx.BoxSizer(wx.VERTICAL)
-        parentSizer.Add(topSizer)
+        parentSizer.Add(topSizer, flag=wx.EXPAND, proportion=1)
         
         staticBox = wx.StaticBox(topPanel, label=_("CSV columns mapping"))
         staticBoxSizer = wx.StaticBoxSizer(staticBox, wx.VERTICAL)
@@ -225,7 +226,7 @@ class CsvImportFrame(wx.Frame):
         except Exception, e:
             self.showErrorDialog()
         finally:
-            pass
+            self.toggleImportButton()
             
     def showErrorDialog(self, errDetail = ''):
         errString = _('An error ocurred during the csv file import.')
@@ -240,14 +241,16 @@ class CsvImportFrame(wx.Frame):
         
         for t in self.transactionContainer.Transactions:
             account.AddTransaction(t.Amount, t.Description, t.Date, source=None)
+
+    def toggleImportButton(self):
+        self.importButton.Enable(self.targetAccountCtrl.Value != '' and self.transactionContainer is not None) 
         
     def onFileChange(self, event):
         if self.filePickerCtrl.Path != '':
             self.previewButton.Enable()
             
     def onTargetAccountChange(self, event):
-        if self.filePickerCtrl.Path != '':
-            self.importButton.Enable()
+        self.toggleImportButton()
             
     def onProfileCtrlChange(self, event):
         if self.profileCtrl.Value != '':
