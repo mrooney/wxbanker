@@ -24,8 +24,8 @@ def main():
     from testhelpers import displayhook
     import sys; sys.displayhook = displayhook
     
-    import plotalgo, currencies, bankobjects, controller
-    mods = [plotalgo, currencies, bankobjects, controller]
+    import plotalgo, currencies, bankobjects, controller, currconvert
+    mods = [plotalgo, currencies, bankobjects, controller, currconvert]
     
     #TODO: remove *.pyc first
     
