@@ -1,7 +1,9 @@
 == UPGRADING ==
 Upgrading wxBanker to a new version is very easy. The most important
 part is ensuring your bank.db file, which holds all of your accounts
-and transactions, is in the right place. To do this either:
+and transactions, is in the right place. If you are upgrading from
+version 0.4 or later, this is handled automatically for you. If not,
+move it manually by either:
 
 *) On Linux/OSX, move bank.db to ~/.wxbanker/bank.db, creating the
    .wxbanker folder if necessary. This is the recommended approach

@@ -5,14 +5,16 @@ https://bugs.launchpad.net/wxbanker.
 
 == UPGRADING ==
 
-If you are upgrading from a previous release, please see UPGRADING.txt
-for simple instructions. It's easy, I promise!
+If you are upgrading from a release of wxBanker 0.3 OR EARLIER,
+please see UPGRADING.txt for simple instructions. It's easy, I
+promise! If you are upgrading from wxBanker 0.4 or later, There
+is nothing special that you need to do.
 
 
 == REQUIREMENTS ==
  - Python >= 2.5
  - wxPython >= 2.8.8.0
- * numpy >= 1.04 (completely optional; enables graphing capabilities)
+ * numpy >= 1.04 (optional; enables graphing capabilities)
 
 See "INSTALLING" below for instructions on installing these
 dependencies on your specific operating system.
