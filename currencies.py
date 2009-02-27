@@ -214,12 +214,12 @@ try:
 except UnicodeDecodeError:
     # save the current locale's encoding for use in float2str
     _locale_encoding = locale.getlocale()[1]
+    
+def GetCurrencyInt(currency):
+    for i, curr in enumerate(CurrencyList):
+        if isinstance(currency, curr):
+            return i
+    return -1
 
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
 CurrencyStrings[0] += " [Locale]"
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()
-    

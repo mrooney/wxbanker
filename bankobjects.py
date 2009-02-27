@@ -92,7 +92,6 @@ class BankModel(object):
         
     def setCurrency(self, currencyIndex):
         self.Store.setCurrency(currencyIndex)
-        #self.Currency = currencies.CurrencyList[currencyIndex]()
         for account in self.Accounts:
             account.Currency = currencyIndex
         Publisher().sendMessage("currency_changed", currencyIndex)
@@ -123,15 +122,19 @@ class AccountList(list):
         for i, account in enumerate(self):
             if account.Name == accountName:
                 return i
-            
         return -1
         
     def Create(self, accountName):
         # First, ensure an account by that name doesn't already exist.
         if self.AccountIndex(accountName) >= 0:
             raise bankexceptions.AccountAlreadyExistsException(accountName)
+
+        currency = 0
+        if len(self):
+            # If the list contains items, the currency needs to be consistent.
+            currency = self[-1].Currency
         
-        account = self.Store.CreateAccount(accountName)
+        account = self.Store.CreateAccount(accountName, currency)
         # Make sure this account knows its parent.
         account.Parent = self
         self.append(account)

@@ -32,7 +32,7 @@ Table: transactions
 +-------------------------------------------------------------------------------------------------------+
 """
 import sys, os, datetime
-import bankobjects, debug
+import bankobjects, currencies, debug
 from sqlite3 import dbapi2 as sqlite
 import sqlite3
 from wx.lib.pubsub import Publisher
@@ -86,12 +86,18 @@ class PersistentStore:
         return bankmodel
     
     def CreateAccount(self, accountName, currency=0):
+        if isinstance(currency, currencies.BaseCurrency):
+            currency = currencies.GetCurrencyInt(currency)
+
+        if type(currency) != int or currency < 0:
+            raise Exception("Currency code must be int and >= 0")
+        
         cursor = self.dbconn.cursor()
         cursor.execute('INSERT INTO accounts VALUES (null, ?, ?, ?)', (accountName, currency, 0.0))
         ID = cursor.lastrowid
         self.commitIfAppropriate()
         
-        account = bankobjects.Account(self, ID, accountName)
+        account = bankobjects.Account(self, ID, accountName, currency)
         
         # Ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.        
         self.clearAccountTransactions(account)
