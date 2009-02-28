@@ -230,9 +230,10 @@ False
 """
 
 from persistentstore import PersistentStore
-import os, sys
+import wx, os, sys
 from wx.lib.pubsub import Publisher
 import debug
+
 
 class Controller(object):
     def __init__(self, path=None, autoSave=True):
@@ -252,6 +253,7 @@ class Controller(object):
     
     def SetAutoSave(self, val):
         self._AutoSave = val
+        wx.Config.Get().WriteBool("AUTO-SAVE", val)
         Publisher.sendMessage("controller.autosave_toggled", val)
         for model in self.Models:
             debug.debug("Setting auto-save to: %s" % val)
