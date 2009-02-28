@@ -26,7 +26,7 @@ class CurrencyTestCase(unittest.TestCase):
     def testCurrencyDisplay(self):
         import currencies as c
         self.assertEquals(c.LocalizedCurrency().float2str(1), u'$1.00')
-        self.assertEquals(c.BaseCurrency().float2str(1), u'$1.00')
+        self.assertEquals(c.UnitedStatesCurrency().float2str(1), u'$1.00')
         self.assertEquals(c.EuroCurrency().float2str(1), u'1.00 €')
         self.assertEquals(c.GreatBritainCurrency().float2str(1), u'£1.00')
         self.assertEquals(c.JapaneseCurrency().float2str(1), u'￥1')

@@ -61,11 +61,9 @@ import localization, locale
 class BaseCurrency(object):
     def __init__(self):
         self.LOCALECONV = {
-            'currency_symbol': '$',
             'decimal_point': '.',
             'frac_digits': 2,
             'grouping': [3, 3, 0],
-            'int_curr_symbol': 'USD ',
             'int_frac_digits': 2,
             'mon_decimal_point': '.',
             'mon_grouping': [3, 3, 0],
@@ -144,6 +142,12 @@ class BaseCurrency(object):
     
     CurrencyNick = property(GetCurrencyNick)
     
+class UnitedStatesCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['currency_symbol'] = '$'
+        self.LOCALECONV['int_curr_symbol'] = 'USD '
+    
 class EuroCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
@@ -198,8 +202,6 @@ class LocalizedCurrency(BaseCurrency):
         if self._locale_encoding is not None:
             self.LOCALECONV.update((k, unicode(v, self._locale_encoding)) for k, v in self.LOCALECONV.iteritems() if type(v) is str)
 
-        
-UnitedStatesCurrency = BaseCurrency
 
 CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency]
 
