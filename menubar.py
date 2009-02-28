@@ -74,6 +74,8 @@ class BankMenuBar(wx.MenuBar):
         bugItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_bug")
         helpMenu.AppendItem(bugItem)
         
+        helpMenu.AppendSeparator()
+        
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
         aboutItem = helpMenu.Append(wx.ID_ABOUT, _("&About"), _("More information about wxBanker"))
         
