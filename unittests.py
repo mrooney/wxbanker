@@ -20,7 +20,7 @@
 
 import unittest, os
 
-import controller
+import controller, wxbanker
 
 class CurrencyTests(unittest.TestCase):
     def testCurrencyDisplay(self):
@@ -57,6 +57,29 @@ class ModelTests(unittest.TestCase):
         if os.path.exists("test.db"):
             os.remove("test.db")
             
+            
+class GUITests(unittest.TestCase):
+    def setUp(self):
+        self.ConfigPath = os.path.expanduser("~/.wxBanker")
+        self.ConfigPathBackup = self.ConfigPath + ".backup"
+        if os.path.exists("test.db"):
+            os.remove("test.db")
+        if os.path.exists(self.ConfigPath):
+            os.rename(self.ConfigPath, self.ConfigPathBackup)
+        
+        self.App = wxbanker.init("test.db")
+        self.Frame = self.App.TopWindow
+        
+    def testAutoSaveSetAndSaveDisabled(self):
+        self.assertTrue( self.Frame.MenuBar.autoSaveMenuItem.IsChecked() )
+        self.assertFalse( self.Frame.MenuBar.saveMenuItem.IsEnabled() )
+    
+    def tearDown(self):
+        if os.path.exists("test.db"):
+            os.remove("test.db")
+        if os.path.exists(self.ConfigPathBackup):
+            os.rename(self.ConfigPathBackup, self.ConfigPath)
+        
 
 if __name__ == '__main__':
     unittest.main()

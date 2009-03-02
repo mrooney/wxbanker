@@ -32,7 +32,7 @@ class BankMenuBar(wx.MenuBar):
     ID_REPORTBUG = wx.NewId()
     IDS_CURRENCIES = [wx.NewId() for i in range(len(CurrencyStrings))]
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, autosave, *args, **kwargs):
         wx.MenuBar.__init__(self, *args, **kwargs)
         
         # File menu.
@@ -87,6 +87,7 @@ class BankMenuBar(wx.MenuBar):
         self.Bind(wx.EVT_MENU, self.onClickAbout)
         helpMenu.Bind(wx.EVT_MENU, self.onClickAbout)
         
+        self.toggleAutoSave(autosave)
         Publisher.subscribe(self.onAutoSaveToggled, "controller.autosave_toggled")
         
     def onMenuEvent(self, event):
@@ -106,11 +107,12 @@ class BankMenuBar(wx.MenuBar):
             handler(event)
             
     def onAutoSaveToggled(self, message):
-        val = message.data
-        debug.debug("Updating UI for auto-save: %s" % val)
+        self.toggleAutoSave(message.data)
         
-        self.autoSaveMenuItem.Check(val)
-        self.saveMenuItem.Enable(not val)
+    def toggleAutoSave(self, autosave):
+        debug.debug("Updating UI for auto-save: %s" % autosave)
+        self.autoSaveMenuItem.Check(autosave)
+        self.saveMenuItem.Enable(not autosave)
             
     def onClickAutoSave(self, event):
         Publisher().sendMessage("user.autosave_toggled", event.Checked())

@@ -64,12 +64,11 @@ class BankerFrame(wx.Frame):
         self.Bind(wx.EVT_MOVE, self.OnMove)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
-        menuBar = BankMenuBar()
+        menuBar = BankMenuBar(bankController.AutoSave)
         self.SetMenuBar(menuBar)
         #self.CreateStatusBar()
         
         self.Bind(wx.EVT_MENU, menuBar.onMenuEvent)
-        self.Show(True)
 
     def OnMove(self, event):
         config = wx.Config.Get()
@@ -112,11 +111,11 @@ class BankerFrame(wx.Frame):
         dlg.Destroy()
 
 
-def main():
+def init(path=None):
     import wx, os, sys
     from controller import Controller
     
-    bankController = Controller()
+    bankController = Controller(path)
     
     if '--cli' in sys.argv:
         import clibanker
@@ -139,12 +138,19 @@ def main():
             Publisher().sendMessage("FIRST RUN")
             wx.Config().WriteBool("RUN_BEFORE", True)
     
-        import sys
-        if '--inspect' in sys.argv:
-            import wx.lib.inspection
-            wx.lib.inspection.InspectionTool().Show()
+        return app
     
-        app.MainLoop()
+
+def main():
+    app = init()
+    app.TopWindow.Show()
+    
+    import sys
+    if '--inspect' in sys.argv:
+        import wx.lib.inspection
+        wx.lib.inspection.InspectionTool().Show()
+    
+    app.MainLoop()
 
 
 if __name__ == "__main__":
