@@ -46,9 +46,6 @@ class BankerFrame(wx.Frame):
 
         wx.Frame.__init__(self, None, title="wxBanker", size=size, pos=pos)
         self.SetIcon(wx.ArtProvider.GetIcon('wxART_coins'))
-        
-
-        self.isSaveLocked = False
 
         self.notebook = notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
 
@@ -128,23 +125,6 @@ def main():
         app = wx.App(False)
         app.Controller = bankController
     
-        # Initialize our configuration object.
-        # It is only necessary to initialize any default values we
-        # have which differ from the default values of the types,
-        # so initializing an Int to 0 or a Bool to False is not needed.
-        wx.Config.Set(wx.Config("wxBanker"))
-        config = wx.Config.Get()
-        if not config.HasEntry("SIZE_X"):
-            config.WriteInt("SIZE_X", 800)
-            config.WriteInt("SIZE_Y", 600)
-        if not config.HasEntry("POS_X"):
-            config.WriteInt("POS_X", 100)
-            config.WriteInt("POS_Y", 100)
-        if not config.HasEntry("SHOW_CALC"):
-            config.WriteBool("SHOW_CALC", False)
-        if not config.HasEntry("AUTO-SAVE"):
-            config.WriteBool("AUTO-SAVE", True)
-    
         # Push our custom art provider.
         import wx.lib.art.img2pyartprov as img2pyartprov
         from art import silk
@@ -154,13 +134,10 @@ def main():
         frame = BankerFrame(bankController)
     
         # Greet the user if it appears this is their first time using wxBanker.
-        firstTime = not config.ReadBool("RUN_BEFORE")
+        firstTime = not wx.Config().ReadBool("RUN_BEFORE")
         if firstTime:
             Publisher().sendMessage("FIRST RUN")
-            config.WriteBool("RUN_BEFORE", True)
-            
-        # Set the auto-save option as appropriate.
-        bankController.AutoSave = config.ReadBool("AUTO-SAVE")
+            wx.Config().WriteBool("RUN_BEFORE", True)
     
         import sys
         if '--inspect' in sys.argv:

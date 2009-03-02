@@ -22,7 +22,7 @@ import unittest, os
 
 import controller
 
-class CurrencyTestCase(unittest.TestCase):
+class CurrencyTests(unittest.TestCase):
     def testCurrencyDisplay(self):
         import currencies as c
         self.assertEquals(c.LocalizedCurrency().float2str(1), u'$1.00')
