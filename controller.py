@@ -35,8 +35,6 @@ are getting published when they should be.
 >>> import os, datetime
 >>> if os.path.exists("test.db"): os.remove("test.db")
 >>> controller = Controller("test.db")
->>> controller.AutoSave
-True
 >>> model = controller.Model
 >>> model.Accounts
 []
@@ -209,20 +207,16 @@ InvalidTransactionException: Transaction does not exist in account 'My Renamed A
 >>> t1.Description == u'\xef\xbf\xa5'
 True
 
-#>>> model.Search(u'\xef\xbf\xa5')
-#[t1]
-
->>> model2 = controller.LoadPath("test.db")
->>> model == model2
-True
->>> controller.Close(model2)
+#>>> model.Search(u'\xef\xbf\xa5') == [t1]
+#True
 
 #auto-save
 >>> controller.AutoSave = False
 >>> controller.AutoSave
 False
+>>> import shutil; shutil.copy("test.db", "test2.db")
 >>> t.Description = "Modified! Did you save?"
->>> model3 = controller.LoadPath("test.db")
+>>> model3 = controller.LoadPath("test2.db")
 >>> model == model3
 False
 
