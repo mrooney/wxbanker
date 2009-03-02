@@ -78,7 +78,6 @@ class BaseCurrency(object):
             'positive_sign': '',
             'thousands_sep': ','
         }
-        self._locale_encoding = None
         
     def GetCurrencyNick(self):
         return self.LOCALECONV["int_curr_symbol"].strip()
@@ -102,7 +101,7 @@ class BaseCurrency(object):
     
         s = locale.format('%%.%if' % digits, abs(val), grouping, monetary=True)
         # locale.localeconv bug http://bugs.python.org/issue1995 workaround
-        if self._locale_encoding is not None:
+        if _locale_encoding is not None:
             s = unicode(s, _locale_encoding)
         # '<' and '>' are markers if the sign must be inserted between symbol and value
         s = '<' + s + '>'
@@ -199,8 +198,8 @@ class LocalizedCurrency(BaseCurrency):
         self.LOCALECONV = locale.localeconv()
         
         # workaround for the locale.localeconv() bug
-        if self._locale_encoding is not None:
-            self.LOCALECONV.update((k, unicode(v, self._locale_encoding)) for k, v in self.LOCALECONV.iteritems() if type(v) is str)
+        if _locale_encoding is not None:
+            self.LOCALECONV.update((k, unicode(v, _locale_encoding)) for k, v in self.LOCALECONV.iteritems() if type(v) is str)
 
 
 CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency]

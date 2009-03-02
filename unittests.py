@@ -24,13 +24,24 @@ import controller, wxbanker
 
 class CurrencyTests(unittest.TestCase):
     def testCurrencyDisplay(self):
-        import currencies as c
+        import currencies as c, locale
+
+        self.assertEquals(locale.setlocale(locale.LC_ALL, 'en_US.utf8'), 'en_US.utf8')
         self.assertEquals(c.LocalizedCurrency().float2str(1), u'$1.00')
         self.assertEquals(c.UnitedStatesCurrency().float2str(1), u'$1.00')
         self.assertEquals(c.EuroCurrency().float2str(1), u'1.00 €')
         self.assertEquals(c.GreatBritainCurrency().float2str(1), u'£1.00')
         self.assertEquals(c.JapaneseCurrency().float2str(1), u'￥1')
         self.assertEquals(c.RussianCurrency().float2str(1), u'1.00 руб')
+    
+    def testLocaleFormatWorkaround(self):
+        ''' test locale.format() thousand separator workaround '''
+        import currencies as c, locale
+        self.assertEquals(locale.setlocale(locale.LC_ALL, 'ru_RU.utf8'), 'ru_RU.utf8')
+        
+        # must not throw an exception
+        for curr in c.CurrencyList:
+            curr().float2str(1000)
     
 class ModelTests(unittest.TestCase):
     def setUp(self):
