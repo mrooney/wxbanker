@@ -26,6 +26,8 @@ are getting published when they should be.
 
 >>> from testhelpers import Subscriber
 >>> messages = Subscriber()
+>>> len(messages)
+0
 
 # Ensure that we have a clean, fresh bank by removing a test one
 # if it already exists.
@@ -33,8 +35,6 @@ are getting published when they should be.
 >>> import os, datetime
 >>> if os.path.exists("test.db"): os.remove("test.db")
 >>> controller = Controller("test.db")
->>> controller.AutoSave
-True
 >>> model = controller.Model
 >>> model.Accounts
 []
@@ -49,13 +49,13 @@ Traceback (most recent call last):
 InvalidAccountException: Invalid account 'My Account' specified.
 
 >>> len(messages)
-0
+1
 
 # Now test valid account and transaction manipulation.
 
 >>> a1 = model.CreateAccount("My Account")
 >>> len(messages)
-1
+2
 >>> messages[0][1].Name
 'My Account'
 
@@ -64,7 +64,7 @@ Traceback (most recent call last):
   ...
 AccountAlreadyExistsException: Account 'My Account' already exists.
 >>> len(messages)
-1
+2
 >>> len(model.Accounts) == 1
 True
 >>> a = model.Accounts[0]
@@ -80,7 +80,7 @@ True
 >>> len(a.Transactions)
 1
 >>> len(messages)
-3
+4
 >>> messages[1] == (('transaction', 'created'), (a, t1))
 True
 >>> messages[0] == (('account', 'balance changed', 'My Account'), a)
@@ -97,14 +97,14 @@ u'ATM Withdrawal'
 >>> t2.Date
 datetime.date(2007, 1, 6)
 >>> len(messages)
-5
+6
 >>> model.float2str(model.Balance)
 '$90.27'
 
 #testRenameAccount
 >>> a.Name = "My Renamed Account"
 >>> len(messages)
-6
+7
 >>> messages[0] == (('account', 'renamed', 'My Account'), ('My Account', a))
 True
 >>> len(model.Accounts)
@@ -119,19 +119,19 @@ InvalidAccountException: Invalid account 'My Account' specified.
 #testTransactionUpdating
 >>> t1.Amount = -101
 >>> len(messages)
-8
+9
 >>> t1.Amount == -101
 True
 >>> model.float2str(model.Balance)
 '-$111.00'
 >>> t1.Description = "Updated description"
 >>> len(messages)
-9
+10
 >>> t1.Description
 u'Updated description'
 >>> t1.Date = datetime.date(1986, 1, 6)
 >>> len(messages)
-10
+11
 >>> t1.Date == datetime.date(1986, 1, 6)
 True
 
@@ -207,20 +207,16 @@ InvalidTransactionException: Transaction does not exist in account 'My Renamed A
 >>> t1.Description == u'\xef\xbf\xa5'
 True
 
-#>>> model.Search(u'\xef\xbf\xa5')
-#[t1]
-
->>> model2 = controller.LoadPath("test.db")
->>> model == model2
-True
->>> controller.Close(model2)
+#>>> model.Search(u'\xef\xbf\xa5') == [t1]
+#True
 
 #auto-save
 >>> controller.AutoSave = False
 >>> controller.AutoSave
 False
+>>> import shutil; shutil.copy("test.db", "test2.db")
 >>> t.Description = "Modified! Did you save?"
->>> model3 = controller.LoadPath("test.db")
+>>> model3 = controller.LoadPath("test2.db")
 >>> model == model3
 False
 
@@ -241,8 +237,30 @@ class Controller(object):
         self.Models = []
         
         self.LoadPath(path)
+        self.InitConfig()
         
         Publisher.subscribe(self.onAutoSaveToggled, "user.autosave_toggled")
+        
+    def InitConfig(self):
+        # Initialize our configuration object.
+        # It is only necessary to initialize any default values we
+        # have which differ from the default values of the types,
+        # so initializing an Int to 0 or a Bool to False is not needed.
+        wx.Config.Set(wx.Config("wxBanker"))
+        config = wx.Config.Get()
+        if not config.HasEntry("SIZE_X"):
+            config.WriteInt("SIZE_X", 800)
+            config.WriteInt("SIZE_Y", 600)
+        if not config.HasEntry("POS_X"):
+            config.WriteInt("POS_X", 100)
+            config.WriteInt("POS_Y", 100)
+        if not config.HasEntry("SHOW_CALC"):
+            config.WriteBool("SHOW_CALC", False)
+        if not config.HasEntry("AUTO-SAVE"):
+            config.WriteBool("AUTO-SAVE", True)
+            
+        # Set the auto-save option as appropriate.
+        self.AutoSave = config.ReadBool("AUTO-SAVE")
         
     def onAutoSaveToggled(self, message):
         val = message.data
