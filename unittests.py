@@ -38,6 +38,7 @@ class CurrencyTests(unittest.TestCase):
         ''' test locale.format() thousand separator workaround '''
         import currencies as c, locale
         self.assertEquals(locale.setlocale(locale.LC_ALL, 'ru_RU.utf8'), 'ru_RU.utf8')
+        reload(c)
         
         # must not throw an exception
         for curr in c.CurrencyList:
