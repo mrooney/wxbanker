@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.%
 
-import unittest, os, shutil, locale
+import unittest, os, shutil, locale, wx
 import controller, wxbanker, bankobjects, currencies as c
 
 class LocaleTests(unittest.TestCase):
@@ -132,6 +132,10 @@ class GUITests(unittest.TestCase):
     def testAutoSaveSetAndSaveDisabled(self):
         self.assertTrue( self.Frame.MenuBar.autoSaveMenuItem.IsChecked() )
         self.assertFalse( self.Frame.MenuBar.saveMenuItem.IsEnabled() )
+        
+    #def testAppHasController(self):
+    #    app = wx.GetApp()
+    #    self.assertTrue( hasattr(app, "Controller") )
     
     def tearDown(self):
         if os.path.exists("test.db"):

@@ -246,6 +246,9 @@ class Controller(object):
         # It is only necessary to initialize any default values we
         # have which differ from the default values of the types,
         # so initializing an Int to 0 or a Bool to False is not needed.
+        self.wxApp = wx.App(False)
+        self.wxApp.Controller = self
+            
         wx.Config.Set(wx.Config("wxBanker"))
         config = wx.Config.Get()
         if not config.HasEntry("SIZE_X"):
