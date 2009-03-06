@@ -19,6 +19,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.%
 
 import unittest, os, shutil, locale, wx
+from wx.lib.pubsub import Publisher
 import controller, wxbanker, bankobjects, currencies as c
 
 class LocaleTests(unittest.TestCase):
@@ -109,6 +110,31 @@ class ModelTests(unittest.TestCase):
         model3 = self.Controller.LoadPath("test2.db")
         self.assertFalse(model1 is model3)
         self.assertNotEqual(model1, model3)
+        
+    def testSaveEventSaves(self):
+        self.Controller.AutoSave = False
+        model1 = self.Controller.Model
+        
+        # Create an account, don't save.
+        self.assertEqual(len(model1.Accounts), 0)
+        model1.CreateAccount("Hello!")
+        self.assertEqual(len(model1.Accounts), 1)
+        
+        # Make sure that account doesn't exist on a new model
+        shutil.copy("test.db", "test2.db")
+        model2 = self.Controller.LoadPath("test2.db")
+        self.assertEqual(len(model2.Accounts), 0)
+        self.assertNotEqual(model1, model2)
+        
+        # Save
+        Publisher.sendMessage("user.saved")
+        
+        # Make sure it DOES exist after saving.
+        shutil.copy("test.db", "test3.db")
+        model3 = self.Controller.LoadPath("test3.db")
+        self.assertEqual(len(model3.Accounts), 1)
+        self.assertEqual(model1, model3)
+        self.assertNotEqual(model2, model3)
         
     def tearDown(self):
         if os.path.exists("test.db"):

@@ -97,6 +97,7 @@ class BankMenuBar(wx.MenuBar):
             self.onSelectCurrency(self.IDS_CURRENCIES.index(ID))
         else:
             handler = {
+                wx.ID_SAVE: self.onClickSave,
                 self.ID_AUTOSAVE: self.onClickAutoSave,
                 self.ID_FAQ: self.onClickFAQs,
                 self.ID_QUESTION: self.onClickAskQuestion,
@@ -113,6 +114,9 @@ class BankMenuBar(wx.MenuBar):
         debug.debug("Updating UI for auto-save: %s" % autosave)
         self.autoSaveMenuItem.Check(autosave)
         self.saveMenuItem.Enable(not autosave)
+        
+    def onClickSave(self, event):
+        Publisher().sendMessage("user.saved")
             
     def onClickAutoSave(self, event):
         Publisher().sendMessage("user.autosave_toggled", event.Checked())

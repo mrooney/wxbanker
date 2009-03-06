@@ -125,13 +125,16 @@ class PersistentStore:
         # everything is fine. So just return True, as there we no errors that we are aware of.
         return True
     
+    def Save(self):
+        debug.debug("Committing db!")
+        self.dbconn.commit()
+    
     def Close(self):
         self.dbconn.close()
     
     def commitIfAppropriate(self):
         if self.AutoSave:
-            debug.debug("Committing db!")
-            self.dbconn.commit()
+            self.Save()
 
     def initialize(self):
         connection = sqlite.connect(self.Path)

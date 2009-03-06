@@ -236,10 +236,11 @@ class Controller(object):
         self._AutoSave = autoSave
         self.Models = []
         
-        self.LoadPath(path)
+        self.LoadPath(path, use=True)
         self.InitConfig()
         
         Publisher.subscribe(self.onAutoSaveToggled, "user.autosave_toggled")
+        Publisher.subscribe(self.onSaveRequest, "user.saved")
         
     def InitConfig(self):
         # Initialize our configuration object.
@@ -269,6 +270,9 @@ class Controller(object):
         val = message.data
         self.AutoSave = val
         
+    def onSaveRequest(self, message):
+        self.Model.Save()
+        
     def GetAutoSave(self):
         return self._AutoSave
     
@@ -280,7 +284,7 @@ class Controller(object):
             debug.debug("Setting auto-save to: %s" % val)
             model.Store.AutoSave = val
             
-    def LoadPath(self, path):
+    def LoadPath(self, path, use=False):
         if path is None:
             # Figure out where the bank database file is, and load it.
             #Note: look at wx.StandardPaths.Get().GetUserDataDir() in the future
@@ -297,11 +301,13 @@ class Controller(object):
         
         store = PersistentStore(path)
         store.AutoSave = self.AutoSave
+        model = store.GetModel()
         
-        self.Model = store.GetModel()
-        self.Models.append(self.Model)
+        self.Models.append(model)
+        if use:
+            self.Model = model
         
-        return self.Model
+        return model
     
     def Close(self, model):
         if not model in self.Models:
