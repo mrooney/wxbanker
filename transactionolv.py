@@ -159,30 +159,35 @@ class TransactionOLV(GroupListView):
 
         # Don't do anything for right-clicks not on items.
         if itemID != -1:
-            transaction = self.GetObjectAt(itemID)
-            self.showContextMenu(transaction, col)
+            if not self.GetItemState(itemID, wx.LIST_STATE_SELECTED):
+                self.DeselectAll()
+                self.Select(itemID)
+            transactions = self.GetSelectedObjects()
+            self.showContextMenu(transactions, col)
     
-    def showContextMenu(self, transaction, col):
+    def showContextMenu(self, transactions, col):
         menu = wx.Menu()
 
-        if col in (3,4):
+        if col == 3 or col == 4 and len(transactions) == 1:
             # This is an amount cell, allow calculator options.
+            amount = col == 3 and sum(map(lambda t: t.Amount, transactions)) or transactions[0]._Total
+            str = self.BankController.Model.float2str(amount)
             actions = [
-                (_("Send to calculator"), "wxART_calculator_edit"),
-                (_("Add to calculator"), "wxART_calculator_add"),
-                (_("Subtract from calculator"), "wxART_calculator_delete"),
+                (_("Send %s to calculator")%str, "wxART_calculator_edit"),
+                (_("Add %s to calculator")%str, "wxART_calculator_add"),
+                (_("Subtract %s from calculator")%str, "wxART_calculator_delete"),
             ]
 
             for actionStr, artHint in actions:
                 item = wx.MenuItem(menu, -1, actionStr)
                 item.SetBitmap(wx.ArtProvider.GetBitmap(artHint))
-                menu.Bind(wx.EVT_MENU, lambda e, s=actionStr: self.onCalculatorAction(transaction, col, s), source=item)
+                menu.Bind(wx.EVT_MENU, lambda e, s=actionStr: self.onCalculatorAction(transactions, col, s), source=item)
                 menu.AppendItem(item)
             menu.AppendSeparator()
 
         # Always show the Remove context entry.
-        removeItem = wx.MenuItem(menu, -1, _("Remove this transaction"))
-        menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransaction(transaction), source=removeItem)
+        removeItem = wx.MenuItem(menu, -1, _("Remove selected transactions"))
+        menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransactions(transactions), source=removeItem)
         removeItem.SetBitmap(wx.ArtProvider.GetBitmap('wxART_delete'))
         menu.AppendItem(removeItem)
 
@@ -190,7 +195,7 @@ class TransactionOLV(GroupListView):
         self.PopupMenu(menu)
         menu.Destroy()
 
-    def onCalculatorAction(self, transaction, col, actionStr):
+    def onCalculatorAction(self, transactions, col, actionStr):
         """
         Given an action to perform on the calculator, and the row and col,
         generate the string of characters necessary to perform that action
@@ -199,9 +204,12 @@ class TransactionOLV(GroupListView):
         command = actionStr.split(' ')[0].upper()
         
         if col == 3:
-            amount = transaction.Amount
+            amount = sum(map(lambda t: t.Amount, transactions))
         elif col == 4:
-            amount = transaction._Total
+            if len(transactions) > 1:
+                # don't sum Totals for multiple transactions since it makes no sense
+                return
+            amount = transactions[0]._Total
         else:
             raise Exception("onCalculatorAction should only be called with col 3 or 4.")
 
@@ -210,9 +218,10 @@ class TransactionOLV(GroupListView):
 
         Publisher.sendMessage("CALCULATOR.PUSH_CHARS", pushStr)
 
-    def onRemoveTransaction(self, transaction):
+    def onRemoveTransactions(self, transactions):
         """Remove the transaction from the account."""
-        self.CurrentAccount.RemoveTransaction(transaction)
+        for transaction in transactions:
+            self.CurrentAccount.RemoveTransaction(transaction)
         
     def frozenResize(self):
         self.Parent.Layout()
