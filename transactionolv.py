@@ -159,6 +159,9 @@ class TransactionOLV(GroupListView):
 
         # Don't do anything for right-clicks not on items.
         if itemID != -1:
+            if not self.GetItemState(itemID, wx.LIST_STATE_SELECTED):
+                self.DeselectAll()
+                self.Select(itemID)
             transaction = self.GetObjectAt(itemID)
             self.showContextMenu(transaction, col)
     
