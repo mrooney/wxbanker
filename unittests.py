@@ -18,14 +18,12 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.%
 
-import unittest, os, shutil
+import unittest, os, shutil, locale, wx
+from wx.lib.pubsub import Publisher
+import controller, wxbanker, bankobjects, currencies as c
 
-import controller, wxbanker
-
-class CurrencyTests(unittest.TestCase):
+class LocaleTests(unittest.TestCase):
     def testCurrencyDisplay(self):
-        import currencies as c, locale
-
         self.assertEquals(locale.setlocale(locale.LC_ALL, 'en_US.utf8'), 'en_US.utf8')
         self.assertEquals(c.LocalizedCurrency().float2str(1), u'$1.00')
         self.assertEquals(c.UnitedStatesCurrency().float2str(1), u'$1.00')
@@ -33,10 +31,13 @@ class CurrencyTests(unittest.TestCase):
         self.assertEquals(c.GreatBritainCurrency().float2str(1), u'£1.00')
         self.assertEquals(c.JapaneseCurrency().float2str(1), u'￥1')
         self.assertEquals(c.RussianCurrency().float2str(1), u'1.00 руб')
+        
+    def testDateParsing(self):
+        self.assertEquals(locale.setlocale(locale.LC_ALL, 'en_US.utf8'), 'en_US.utf8')
+        
     
     def testLocaleFormatWorkaround(self):
         ''' test locale.format() thousand separator workaround '''
-        import currencies as c, locale
         self.assertEquals(locale.setlocale(locale.LC_ALL, 'ru_RU.utf8'), 'ru_RU.utf8')
         reload(c)
         
@@ -110,6 +111,31 @@ class ModelTests(unittest.TestCase):
         self.assertFalse(model1 is model3)
         self.assertNotEqual(model1, model3)
         
+    def testSaveEventSaves(self):
+        self.Controller.AutoSave = False
+        model1 = self.Controller.Model
+        
+        # Create an account, don't save.
+        self.assertEqual(len(model1.Accounts), 0)
+        model1.CreateAccount("Hello!")
+        self.assertEqual(len(model1.Accounts), 1)
+        
+        # Make sure that account doesn't exist on a new model
+        shutil.copy("test.db", "test2.db")
+        model2 = self.Controller.LoadPath("test2.db")
+        self.assertEqual(len(model2.Accounts), 0)
+        self.assertNotEqual(model1, model2)
+        
+        # Save
+        Publisher.sendMessage("user.saved")
+        
+        # Make sure it DOES exist after saving.
+        shutil.copy("test.db", "test3.db")
+        model3 = self.Controller.LoadPath("test3.db")
+        self.assertEqual(len(model3.Accounts), 1)
+        self.assertEqual(model1, model3)
+        self.assertNotEqual(model2, model3)
+        
     def tearDown(self):
         if os.path.exists("test.db"):
             os.remove("test.db")
@@ -132,6 +158,10 @@ class GUITests(unittest.TestCase):
     def testAutoSaveSetAndSaveDisabled(self):
         self.assertTrue( self.Frame.MenuBar.autoSaveMenuItem.IsChecked() )
         self.assertFalse( self.Frame.MenuBar.saveMenuItem.IsEnabled() )
+        
+    #def testAppHasController(self):
+    #    app = wx.GetApp()
+    #    self.assertTrue( hasattr(app, "Controller") )
     
     def tearDown(self):
         if os.path.exists("test.db"):

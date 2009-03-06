@@ -121,9 +121,6 @@ def init(path=None):
         import clibanker
         clibanker.main(bankController)
     else:
-        app = wx.App(False)
-        app.Controller = bankController
-    
         # Push our custom art provider.
         import wx.lib.art.img2pyartprov as img2pyartprov
         from art import silk
@@ -138,7 +135,7 @@ def init(path=None):
             Publisher().sendMessage("FIRST RUN")
             wx.Config().WriteBool("RUN_BEFORE", True)
     
-        return app
+        return bankController.wxApp
     
 
 def main():

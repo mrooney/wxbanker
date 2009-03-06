@@ -206,7 +206,8 @@ CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBrit
 
 # workaround for a locale.localeconv bug http://bugs.python.org/issue1995 
 # test if float2str raises exceptions, apply a workaround if it does
-# TODO: needs regression test
+# NOTE: this happens once at import time, a runtime locale change will require
+#       a module reload for this workaround to take effect.
 # TODO: can float2str just be updated from python 3.0?
 try:
     _locale_encoding = None

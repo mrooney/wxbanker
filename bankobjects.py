@@ -77,6 +77,9 @@ class BankModel(object):
             if re.findall(searchString, potentialStr, flags=reFlag):
                 matches.append(trans)
         return matches
+    
+    def Save(self):
+        self.Store.Save()
         
     def float2str(self, *args, **kwargs):
         """
