@@ -167,10 +167,11 @@ class TransactionOLV(GroupListView):
 
         if col in (3,4):
             # This is an amount cell, allow calculator options.
+            str = self.BankController.Model.float2str(col == 3 and transaction.Amount or transaction._Total)
             actions = [
-                (_("Send to calculator"), "wxART_calculator_edit"),
-                (_("Add to calculator"), "wxART_calculator_add"),
-                (_("Subtract from calculator"), "wxART_calculator_delete"),
+                (_("Send %s to calculator")%str, "wxART_calculator_edit"),
+                (_("Add %s to calculator")%str, "wxART_calculator_add"),
+                (_("Subtract %s from calculator")%str, "wxART_calculator_delete"),
             ]
 
             for actionStr, artHint in actions:
