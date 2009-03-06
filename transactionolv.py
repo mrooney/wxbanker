@@ -64,10 +64,10 @@ class TransactionOLV(GroupListView):
         
         self.SetColumns([
             bogusColumn,
-            ColumnDefn("Date", valueGetter=self.getDateOf, valueSetter=self.setDateOf, width=dateWidth),
-            ColumnDefn("Description", valueGetter="Description", isSpaceFilling=True),
-            ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=self.renderFloat),
-            ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
+            ColumnDefn(_("Date"), valueGetter=self.getDateOf, valueSetter=self.setDateOf, width=dateWidth),
+            ColumnDefn(_("Description"), valueGetter="Description", isSpaceFilling=True),
+            ColumnDefn(_("Amount"), "right", valueGetter="Amount", stringConverter=self.renderFloat),
+            ColumnDefn(_("Total"), "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
         ])
         # Our custom hack in OLV.py line 2017 will render floats appropriately as %.2f
         
@@ -165,7 +165,7 @@ class TransactionOLV(GroupListView):
     def showContextMenu(self, transaction, col):
         menu = wx.Menu()
 
-        if col in (2,3):
+        if col in (3,4):
             # This is an amount cell, allow calculator options.
             actions = [
                 (_("Send to calculator"), "wxART_calculator_edit"),
@@ -198,12 +198,12 @@ class TransactionOLV(GroupListView):
         """
         command = actionStr.split(' ')[0].upper()
         
-        if col == 2:
+        if col == 3:
             amount = transaction.Amount
-        elif col == 3:
+        elif col == 4:
             amount = transaction._Total
         else:
-            raise Exception("onCalculatorAction should only be called with col 2 or 3.")
+            raise Exception("onCalculatorAction should only be called with col 3 or 4.")
 
         pushStr = {'SEND': 'C%s', 'SUBTRACT': '-%s=', 'ADD': '+%s='}[command]
         pushStr %= amount
