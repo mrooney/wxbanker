@@ -64,10 +64,10 @@ class TransactionOLV(GroupListView):
         
         self.SetColumns([
             bogusColumn,
-            ColumnDefn("Date", valueGetter=self.getDateOf, valueSetter=self.setDateOf, width=dateWidth),
-            ColumnDefn("Description", valueGetter="Description", isSpaceFilling=True),
-            ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=self.renderFloat),
-            ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
+            ColumnDefn(_("Date"), valueGetter=self.getDateOf, valueSetter=self.setDateOf, width=dateWidth),
+            ColumnDefn(_("Description"), valueGetter="Description", isSpaceFilling=True),
+            ColumnDefn(_("Amount"), "right", valueGetter="Amount", stringConverter=self.renderFloat),
+            ColumnDefn(_("Total"), "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
         ])
         # Our custom hack in OLV.py line 2017 will render floats appropriately as %.2f
         
