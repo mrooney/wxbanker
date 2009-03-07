@@ -168,14 +168,18 @@ class TransactionOLV(GroupListView):
     def showContextMenu(self, transactions, col):
         menu = wx.Menu()
 
-        if col == 3 or col == 4 and len(transactions) == 1:
+        if col in (3,4):
             # This is an amount cell, allow calculator options.
-            amount = col == 3 and sum(map(lambda t: t.Amount, transactions)) or transactions[0]._Total
-            str = self.BankController.Model.float2str(amount)
+            if col == 3:
+                amount = sum((t.Amount for t in transactions))
+            else:
+                amount = transactions[-1]._Total
+            val = self.BankController.Model.float2str(amount)
+            
             actions = [
-                (_("Send %s to calculator")%str, "wxART_calculator_edit"),
-                (_("Add %s to calculator")%str, "wxART_calculator_add"),
-                (_("Subtract %s from calculator")%str, "wxART_calculator_delete"),
+                (_("Send %s to calculator") % val, "wxART_calculator_edit"),
+                (_("Add %s to calculator") % val, "wxART_calculator_add"),
+                (_("Subtract %s from calculator") % val, "wxART_calculator_delete"),
             ]
 
             for actionStr, artHint in actions:
@@ -186,7 +190,12 @@ class TransactionOLV(GroupListView):
             menu.AppendSeparator()
 
         # Always show the Remove context entry.
-        removeItem = wx.MenuItem(menu, -1, _("Remove selected transactions"))
+        if len(transactions) == 1:
+            removeStr = _("Remove this transaction")
+        else:
+            removeStr = _("Remove these %i transactions") % len(transactions)
+            
+        removeItem = wx.MenuItem(menu, -1, removeStr)
         menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransactions(transactions), source=removeItem)
         removeItem.SetBitmap(wx.ArtProvider.GetBitmap('wxART_delete'))
         menu.AppendItem(removeItem)
@@ -204,12 +213,10 @@ class TransactionOLV(GroupListView):
         command = actionStr.split(' ')[0].upper()
         
         if col == 3:
-            amount = sum(map(lambda t: t.Amount, transactions))
+            amount = sum((t.Amount for t in transactions))
         elif col == 4:
-            if len(transactions) > 1:
-                # don't sum Totals for multiple transactions since it makes no sense
-                return
-            amount = transactions[0]._Total
+            # Use the last total, if multiple are selected.
+            amount = transactions[-1]._Total
         else:
             raise Exception("onCalculatorAction should only be called with col 3 or 4.")
 
@@ -220,6 +227,7 @@ class TransactionOLV(GroupListView):
 
     def onRemoveTransactions(self, transactions):
         """Remove the transaction from the account."""
+        #TODO: each call in the loop is going to force a freeze, resize, and thaw. Ideally batch this.
         for transaction in transactions:
             self.CurrentAccount.RemoveTransaction(transaction)
         

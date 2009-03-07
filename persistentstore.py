@@ -47,6 +47,7 @@ class PersistentStore:
         self.Version = 3
         self.Path = path
         self.AutoSave = autoSave
+        self.Dirty = False
         existed = True
         
         if not os.path.exists(self.Path):
@@ -128,6 +129,7 @@ class PersistentStore:
     def Save(self):
         debug.debug("Committing db!")
         self.dbconn.commit()
+        self.Dirty = False
     
     def Close(self):
         self.dbconn.close()
@@ -135,6 +137,8 @@ class PersistentStore:
     def commitIfAppropriate(self):
         if self.AutoSave:
             self.Save()
+        else:
+            self.Dirty = True
 
     def initialize(self):
         connection = sqlite.connect(self.Path)
