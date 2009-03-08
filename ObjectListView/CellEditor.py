@@ -172,7 +172,7 @@ class BooleanEditor(wx.Choice):
 
     def __init__(self, *args, **kwargs):
         kwargs["choices"] = ["True", "False"]
-        wx.Choice.__init__(self, *args, **kwargs)
+        wx.Choice.__init__(self, size=(0,0), *args, **kwargs)
 
     def GetValue(self):
         "Get the value from the editor"
@@ -198,7 +198,7 @@ class BaseCellTextEditor(wx.TextCtrl):
                 style |= (wx.TE_CENTRE | wx.TE_MULTILINE)
             else:
                 style |= olv.columns[subItemIndex].GetAlignmentForText()
-        wx.TextCtrl.__init__(self, olv, style=style, **kwargs)
+        wx.TextCtrl.__init__(self, olv, style=style, size=(0,0), **kwargs)
 
         # With the MULTILINE flag, the text control always has a vertical
         # scrollbar, which looks stupid. I don't know how to get rid of it.
@@ -411,7 +411,7 @@ class DateEditor(wx.DatePickerCtrl):
     """
 
     def __init__(self, *args, **kwargs):
-        wx.DatePickerCtrl.__init__(self, *args, **kwargs)
+        wx.DatePickerCtrl.__init__(self, size=(0,0), *args, **kwargs)
         self.SetValue(None)
 
     def SetValue(self, value):
