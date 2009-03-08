@@ -58,8 +58,8 @@ class TransactionOLV(GroupListView):
         dateStr = str(datetime.date.today())
         dateWidth = self.GetTextExtent(dateStr)[0] + 10
         
-        # Make a bogus first column, since the 1st column isn't editable.
-        bogusColumn = ColumnDefn("", width=0)
+        # Make a bogus first column, since the 1st column isn't editable in CELLEDIT_SINGLECLICK mode.
+        bogusColumn = ColumnDefn("", fixedWidth=0)
         bogusColumn.isInternal = True
         
         self.SetColumns([
