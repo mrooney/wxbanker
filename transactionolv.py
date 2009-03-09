@@ -147,7 +147,7 @@ class TransactionOLV(GroupListView):
         self.SetObjects(transactions)
         
         if scrollToBottom:
-            self.ensureVisible(-1)
+            wx.CallLater(50, lambda: self.ensureVisible(-1))
         
     def ensureVisible(self, index):
         length = self.GetItemCount()
@@ -251,7 +251,7 @@ class TransactionOLV(GroupListView):
         if account is self.CurrentAccount:
             self.AddObject(transaction)
             #TODO: Perhaps get the actual position and scroll to that, it may not be last.
-            self.ensureVisible(-1)
+            wx.CallLater(50, lambda: self.ensureVisible(-1))
         
     def onSearch(self, message):
         searchString, accountScope, match, caseSens = message.data
