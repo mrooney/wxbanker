@@ -150,9 +150,12 @@ class TransactionOLV(GroupListView):
             self.ensureVisible(-1)
         
     def ensureVisible(self, index):
-        if index < 0:
-            index = self.GetItemCount() + index
-        self.EnsureCellVisible(index, 0)
+        length = self.GetItemCount()
+        # If there are no items, ensure a no-op (LP: #338697)
+        if length:
+            if index < 0:
+                index = length + index
+            self.EnsureCellVisible(index, 0)
         
     def onRightDown(self, event):
         itemID, flag, col = self.HitTestSubItem(event.Position)
