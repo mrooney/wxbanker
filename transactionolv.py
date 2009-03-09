@@ -89,14 +89,11 @@ class TransactionOLV(GroupListView):
         and clear out any cached Totals as they may not be valid IE when we
         search and have a subset of transactions.
         """
-        self.Parent.Freeze()
-
         # Remove any previously cached totals, to fix search totals.
         for obj in objs:
             obj._Total = None
             
         GroupListView.SetObjects(self, objs, *args, **kwargs)
-        wx.CallLater(50, self.frozenResize) # Necessary for columns to size properly. (GTK)
         
     def getDateOf(self, transaction):
         return str(transaction.Date)
@@ -240,11 +237,8 @@ class TransactionOLV(GroupListView):
     def onTransactionRemoved(self, message):
         account, transaction = message.data
         if account is self.CurrentAccount:
-            self.Parent.Freeze()
             # Remove the item from the list.
             self.RemoveObject(transaction)
-        
-            wx.CallLater(50, self.frozenResize) # Necessary for columns to size properly. (GTK)
     
     def onTransactionAdded(self, message):
         account, transaction = message.data
