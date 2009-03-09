@@ -563,6 +563,8 @@ class ObjectListView(wx.ListCtrl):
                 boundedWidth = col.CalcBoundedWidth(colWidth)
                 if colWidth != boundedWidth:
                     self.SetColumnWidth(iCol, boundedWidth)
+        # wxbanker patch to sourceforge bug 2674878
+        self._ResizeSpaceFillingColumns()
 
 
     def Check(self, modelObject):
