@@ -2532,6 +2532,9 @@ class FastObjectListView(AbstractVirtualObjectListView):
         self._BuildInnerList()
         self._Freeze()
         try:
+            # wxbanker patch to sourceforge bug 2679500
+            wx.ListCtrl.DeleteAllItems(self)
+            ###
             self.SetItemCount(len(self.innerList))
             self.RefreshObjects()
 
