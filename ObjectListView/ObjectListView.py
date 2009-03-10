@@ -2171,6 +2171,41 @@ class ObjectListView(wx.ListCtrl):
         self.SetFocus()
 
 
+    def _Freeze(self):
+        """
+        Freeze() wrapper, may call _MSWFreeze
+        """
+        self.Freeze()
+
+
+    def _Thaw(self):
+        """
+        Thaw() wrapper, may be call _MSWThaw
+        """
+        self.Thaw()
+
+
+    def _MSWFreeze(self):
+        """
+        Freeze() for Microsoft Windows.
+        If the control is an only child of its parent freeze the parent.
+        """
+        if len(self.Parent.GetChildren()) == 1:
+            self.Parent.Freeze()
+        else:
+            self.Freeze()
+
+
+    def _MSWThaw(self):
+        """
+        Thaw() for Microsoft Windows.
+        """
+        if len(self.Parent.GetChildren()) == 1:
+            self.Parent.Thaw()
+        else:
+            self.Thaw()
+
+
 ########################################################################
 
 class AbstractVirtualObjectListView(ObjectListView):
@@ -2356,41 +2391,6 @@ class AbstractVirtualObjectListView(ObjectListView):
             self.lastGetObject = self.objectGetter(index)
 
         return self.lastGetObject
-
-
-    def _Freeze(self):
-        """
-        Freeze() wrapper, may call _MSWFreeze
-        """
-        self.Freeze()
-
-
-    def _Thaw(self):
-        """
-        Thaw() wrapper, may be call _MSWThaw
-        """
-        self.Thaw()
-
-
-    def _MSWFreeze(self):
-        """
-        Freeze() for Microsoft Windows.
-        If the control is an only child of its parent freeze the parent.
-        """
-        if len(self.Parent.GetChildren()) == 1:
-            self.Parent.Freeze()
-        else:
-            self.Freeze()
-
-
-    def _MSWThaw(self):
-        """
-        Thaw() for Microsoft Windows.
-        """
-        if len(self.Parent.GetChildren()) == 1:
-            self.Parent.Thaw()
-        else:
-            self.Thaw()
 
 
 ########################################################################
