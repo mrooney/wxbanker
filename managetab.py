@@ -63,15 +63,12 @@ class ManagePanel(wx.Panel):
         #select the first item by default, if there are any
         #we use a CallLater to allow everything else to finish creation as well,
         #otherwise it won't get scrolled to the bottom initially as it should.
-        accountCtrl.SelectVisibleItem(0)
+        wx.CallLater(50, lambda: accountCtrl.SelectVisibleItem(0))
 
         self.Layout()
 
         # Ensure the calculator is displayed as desired.
         calcWidget.SetExpanded(wx.Config.Get().ReadBool("SHOW_CALC"))
-
-        ##wx.CallLater(50, lambda: transactionPanel.transactionCtrl.doResize())
-        wx.CallLater(50, lambda: transactionPanel.transactionCtrl.ensureVisible(-1)) # GTK
 
     def onCalculatorToggled(self, message):
         """
