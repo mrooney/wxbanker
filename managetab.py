@@ -62,10 +62,7 @@ class ManagePanel(wx.Panel):
 
         # Select the first account by default, if there are any.
         # Windows needs a delay, to work around LP #339860
-        if wx.Platform == "__WXMSW__":
-            wx.CallLater(50, accountCtrl.SelectVisibleItem, 0)
-        else:
-            accountCtrl.SelectVisibleItem(0)
+        wx.CallLater(50, accountCtrl.SelectVisibleItem, 0)
 
         self.Layout()
 

@@ -95,6 +95,10 @@ class TransactionOLV(GroupListView):
             
         GroupListView.SetObjects(self, objs, *args, **kwargs)
         
+        # Force a re-size here, in the case that the vscrollbar-needed state
+        # changed by this set account, to size correctly.
+        wx.CallLater(50, self._ResizeSpaceFillingColumns)
+        
     def getDateOf(self, transaction):
         return str(transaction.Date)
     
