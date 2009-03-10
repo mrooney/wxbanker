@@ -287,6 +287,12 @@ class ObjectListView(wx.ListCtrl):
         else:
             StaticText = wx.StaticText
 
+        # Freeze/Thaw overrides for MS Windows
+        # self.Freeze doesn't freeze the header, at least on MSW
+        if wx.Platform == "__WXMSW__":
+            self._Freeze = self._MSWFreeze
+            self._Thaw = self._MSWThaw
+
         self.stEmptyListMsg = StaticText(self, -1, "This list is empty",
             wx.Point(0, 0), wx.Size(0, 0), wx.ALIGN_CENTER | wx.ST_NO_AUTORESIZE | wx.FULL_REPAINT_ON_RESIZE)
         self.stEmptyListMsg.Hide()
@@ -511,7 +517,7 @@ class ObjectListView(wx.ListCtrl):
             return self.SetObjects(modelObjects)
 
         try:
-            self.Freeze()
+            self._Freeze()
             originalSize = len(self.innerList)
             self.modelObjects.extend(modelObjects)
             self._BuildInnerList()
@@ -522,7 +528,7 @@ class ObjectListView(wx.ListCtrl):
                 self._InsertUpdateItem(item, originalSize+i, x, True)
             self._SortItemsNow()
         finally:
-            self.Thaw()
+            self._Thaw()
 
 
     def AddNamedImages(self, name, smallImage=None, normalImage=None):
@@ -741,7 +747,7 @@ class ObjectListView(wx.ListCtrl):
         """
         self._SortObjects()
         self._BuildInnerList()
-        self.Freeze()
+        self._Freeze()
         try:
             wx.ListCtrl.DeleteAllItems(self)
             if len(self.innerList) == 0 or len(self.columns) == 0:
@@ -761,7 +767,7 @@ class ObjectListView(wx.ListCtrl):
             # Auto-resize once all the data has been added
             self.AutoSizeColumns()
         finally:
-            self.Thaw()
+            self._Thaw()
 
 
     def RefreshIndex(self, index, modelObject):
@@ -804,11 +810,11 @@ class ObjectListView(wx.ListCtrl):
         Refresh all the objects in the given list
         """
         try:
-            self.Freeze()
+            self._Freeze()
             for x in aList:
                 self.RefreshObject(x)
         finally:
-            self.Thaw()
+            self._Thaw()
 
 
     def RemoveObject(self, modelObject):
@@ -2352,6 +2358,40 @@ class AbstractVirtualObjectListView(ObjectListView):
         return self.lastGetObject
 
 
+    def _Freeze(self):
+        """
+        Freeze() wrapper, may call _MSWFreeze
+        """
+        self.Freeze()
+
+
+    def _Thaw(self):
+        """
+        Thaw() wrapper, may be call _MSWThaw
+        """
+        self.Thaw()
+
+
+    def _MSWFreeze(self):
+        """
+        Freeze() for Microsoft Windows.
+        If the control is an only child of its parent freeze the parent.
+        """
+        if len(self.Parent.GetChildren()) == 1:
+            self.Parent.Freeze()
+        else:
+            self.Freeze()
+
+
+    def _MSWThaw(self):
+        """
+        Thaw() for Microsoft Windows.
+        """
+        if len(self.Parent.GetChildren()) == 1:
+            self.Parent.Thaw()
+        else:
+            self.Thaw()
+
 
 ########################################################################
 
@@ -2490,11 +2530,15 @@ class FastObjectListView(AbstractVirtualObjectListView):
         self.lastGetObjectIndex = -1
         self._SortObjects()
         self._BuildInnerList()
-        self.SetItemCount(len(self.innerList))
-        self.RefreshObjects()
+        self._Freeze()
+        try:
+            self.SetItemCount(len(self.innerList))
+            self.RefreshObjects()
 
-        # Auto-resize once all the data has been added
-        self.AutoSizeColumns()
+            # Auto-resize once all the data has been added
+            self.AutoSizeColumns()
+        finally:
+            self._Thaw()
 
 
     def RefreshObjects(self, aList=None):
