@@ -130,10 +130,11 @@ def init(path=None):
         frame = BankerFrame(bankController)
     
         # Greet the user if it appears this is their first time using wxBanker.
-        firstTime = not wx.Config().ReadBool("RUN_BEFORE")
+        config = wx.Config.Get()
+        firstTime = not config.ReadBool("RUN_BEFORE")
         if firstTime:
             Publisher().sendMessage("FIRST RUN")
-            wx.Config().WriteBool("RUN_BEFORE", True)
+            config.WriteBool("RUN_BEFORE", True)
     
         return bankController.wxApp
     

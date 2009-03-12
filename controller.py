@@ -250,8 +250,8 @@ class Controller(object):
         self.wxApp = wx.App(False)
         self.wxApp.Controller = self
             
-        wx.Config.Set(wx.Config("wxBanker"))
-        config = wx.Config.Get()
+        config = wx.Config("wxBanker")
+        wx.Config.Set(config)
         if not config.HasEntry("SIZE_X"):
             config.WriteInt("SIZE_X", 800)
             config.WriteInt("SIZE_Y", 600)
