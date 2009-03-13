@@ -72,7 +72,7 @@ class BankModel(object):
         # Find all the matches.
         matches = []
         for trans in potentials:
-            print unicode(trans.Description), searchString
+            #print unicode(trans.Description), searchString
             potentialStr = unicode((trans.Amount, trans.Description, trans.Date)[matchIndex])
             if re.findall(searchString, potentialStr, flags=reFlag):
                 matches.append(trans)
