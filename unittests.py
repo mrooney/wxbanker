@@ -159,9 +159,9 @@ class GUITests(unittest.TestCase):
         self.assertTrue( self.Frame.MenuBar.autoSaveMenuItem.IsChecked() )
         self.assertFalse( self.Frame.MenuBar.saveMenuItem.IsEnabled() )
         
-    #def testAppHasController(self):
-    #    app = wx.GetApp()
-    #    self.assertTrue( hasattr(app, "Controller") )
+    def testAppHasController(self):
+        app = wx.GetApp()
+        self.assertTrue( hasattr(app, "Controller") )
     
     def tearDown(self):
         if os.path.exists("test.db"):
