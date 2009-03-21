@@ -230,28 +230,48 @@ class Account(object):
         
         # Ideally we don't load all the transactions here (this is silly on a transfer/move on an
         # account that hasn't been viewed yet), but there's more important things for now.
-        self.Transactions.append(transaction)
-        
-        Publisher.sendMessage("transaction.created", (self, transaction))
-        
-        # Update the balance.
-        self.Balance += transaction.Amount
+        self._AddTransaction(transaction)
         
         if source:
             return transaction, otherTrans
         else:
             return transaction
-
-    def RemoveTransaction(self, transaction):
+            
+    def _AddTransaction(self, transaction):
+        """
+        Add a transaction, send the message, update internal data
+        """
+        
+        self.Transactions.append(transaction)
+        Publisher.sendMessage("transaction.created", (self, transaction))
+        self.Balance += transaction.Amount
+        
+    def CheckTransactionAccount(self, transaction):
         if transaction not in self.Transactions:
             raise bankexceptions.InvalidTransactionException("Transaction does not exist in account '%s'" % self.Name)
-        
+
+    def RemoveTransaction(self, transaction):
+        self.CheckTransactionAccount(transaction)
         self.Store.RemoveTransaction(transaction)
+        self._RemoveTransaction(transaction)
+        
+    def _RemoveTransaction(self, transaction):
+        """
+        Remove a transaction, send the message, update internal data
+        """
+
         Publisher.sendMessage("transaction.removed", (self, transaction))
         self.Transactions.remove(transaction)
-        
-        # Update the balance.
         self.Balance -= transaction.Amount
+        
+    def MoveTransactions(self, transactions, targetAccount):
+        for t in transactions:
+            self.CheckTransactionAccount(t)
+        
+        self.Store.MoveTransactions(transactions, targetAccount)
+        for t in transactions:
+            self._RemoveTransaction(t)
+            targetAccount._AddTransaction(t)
         
     def onTransactionAmountChanged(self, message):
         transaction, difference = message.data
