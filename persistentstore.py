@@ -126,9 +126,6 @@ class PersistentStore:
         # everything is fine. So just return True, as there we no errors that we are aware of.
         return True
         
-    def MoveTransaction(self, transaction, targetAccount):
-        self.MoveTransaction([transaction], targetAccount)
-
     def MoveTransactions(self, transactions, targetAccount):
         cursor = self.dbconn.cursor()
         self.dbconn.cursor().execute('UPDATE transactions SET accountId=? WHERE id IN (?)',

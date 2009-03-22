@@ -207,7 +207,7 @@ class TransactionOLV(GroupListView):
         
         moveToAccountItem = wx.MenuItem(menu, -1, moveStr)
         accountsMenu = wx.Menu()
-        for account in self.BankController.Model.Accounts:
+        for account in self.CurrentAccount.Parent:
             accountItem = wx.MenuItem(menu, -1, account.GetName())
             accountsMenu.AppendItem(accountItem)
             accountsMenu.Bind(wx.EVT_MENU, lambda e, account=account: self.onMoveTransactions(transactions, account), source=accountItem)

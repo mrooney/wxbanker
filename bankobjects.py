@@ -259,7 +259,6 @@ class Account(object):
         """
         Remove a transaction, send the message, update internal data
         """
-
         Publisher.sendMessage("transaction.removed", (self, transaction))
         self.Transactions.remove(transaction)
         self.Balance -= transaction.Amount
