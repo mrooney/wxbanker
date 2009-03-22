@@ -195,13 +195,26 @@ class TransactionOLV(GroupListView):
         # Always show the Remove context entry.
         if len(transactions) == 1:
             removeStr = _("Remove this transaction")
+            moveStr = _("Move this transaction to account")
         else:
             removeStr = _("Remove these %i transactions") % len(transactions)
+            moveStr = _("Move these %i transactions to account") % len(transactions)
             
         removeItem = wx.MenuItem(menu, -1, removeStr)
         menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransactions(transactions), source=removeItem)
         removeItem.SetBitmap(wx.ArtProvider.GetBitmap('wxART_delete'))
         menu.AppendItem(removeItem)
+        
+        moveToAccountItem = wx.MenuItem(menu, -1, moveStr)
+        accountsMenu = wx.Menu()
+        for account in self.BankController.Model.Accounts:
+            accountItem = wx.MenuItem(menu, -1, account.GetName())
+            accountsMenu.AppendItem(accountItem)
+            accountsMenu.Bind(wx.EVT_MENU, lambda e, account=account: self.onMoveTransactions(transactions, account), source=accountItem)
+            if account == self.CurrentAccount:
+                accountItem.Enable(False)
+        moveToAccountItem.SetSubMenu(accountsMenu)
+        menu.AppendItem(moveToAccountItem)
 
         # Show the menu and then destroy it afterwards.
         self.PopupMenu(menu)
@@ -233,6 +246,10 @@ class TransactionOLV(GroupListView):
         #TODO: each call in the loop is going to force a freeze, resize, and thaw. Ideally batch this.
         for transaction in transactions:
             self.CurrentAccount.RemoveTransaction(transaction)
+            
+    def onMoveTransactions(self, transactions, targetAccount):
+        """Move the transactions to the target account."""
+        self.CurrentAccount.MoveTransactions(transactions, targetAccount)
         
     def frozenResize(self):
         self.Parent.Layout()
