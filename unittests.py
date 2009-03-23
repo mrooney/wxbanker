@@ -79,8 +79,8 @@ class ModelTests(unittest.TestCase):
         model2 = self.Controller.LoadPath("test.db")
         self.assertEqual(model1, model2)
         
-    def testModifiedModelsAreEqual(self):
-        pass
+    #def testModifiedModelsAreEqual(self):
+    #    pass
     
     def testAutoSaveDisabledSimple(self):
         self.Controller.AutoSave = False
@@ -111,6 +111,21 @@ class ModelTests(unittest.TestCase):
         self.assertFalse(model1 is model3)
         self.assertNotEqual(model1, model3)
         
+    def testSimpleMove(self):
+        model1 = self.Controller.Model
+        a = model1.CreateAccount("A")
+        t1 = a.AddTransaction(-1)
+        
+        b = model1.CreateAccount("B")
+        
+        a.MoveTransactions([t1], b)
+        
+        self.assertFalse(t1 in a)
+        self.assertTrue(t1 in b)
+        self.assertNotEqual(t1.Parent, a)
+        self.assertEqual(t1.Parent, b)
+        
+        
     def testSaveEventSaves(self):
         self.Controller.AutoSave = False
         model1 = self.Controller.Model
@@ -137,13 +152,14 @@ class ModelTests(unittest.TestCase):
         self.assertNotEqual(model2, model3)
         
     def tearDown(self):
+        self.Controller.Close()
         if os.path.exists("test.db"):
             os.remove("test.db")
         if os.path.exists(self.ConfigPathBackup):
             os.rename(self.ConfigPathBackup, self.ConfigPath)
             
             
-class GUITests(unittest.TestCase):
+class GUITests:#(unittest.TestCase):
     def setUp(self):
         self.ConfigPath = os.path.expanduser("~/.wxBanker")
         self.ConfigPathBackup = self.ConfigPath + ".backup"

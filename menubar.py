@@ -143,6 +143,7 @@ class BankMenuBar(wx.MenuBar):
 
         info.Developers = [
             'Mike Rooney (michael@wxbanker.org)',
+            'Karel Kolman (kolmis@gmail.com)',
         ]
         info.Artists = [
             'Mark James (www.famfamfam.com/lab/icons/silk/)',

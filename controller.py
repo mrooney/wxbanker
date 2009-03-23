@@ -309,12 +309,19 @@ class Controller(object):
         
         return model
     
-    def Close(self, model):
-        if not model in self.Models:
-            raise Exception("model not managed by this controller")
+    def Close(self, model=None):
+        if model is None:
+            models = self.Models
+        else:
+            models = model
+            
+        for model in models:
+            if not model in self.Models:
+                raise Exception("model not managed by this controller")
         
-        self.Models.remove(model)
-        del model
+            model.Store.Close()
+            self.Models.remove(model)
+            del model
         
     AutoSave = property(GetAutoSave, SetAutoSave)
     
