@@ -176,6 +176,9 @@ class Account(object):
         Publisher.subscribe(self.onTransactionAmountChanged, "transaction.updated.amount")
         Publisher.sendMessage("account.created.%s" % name, self)
         
+    def GetSiblings(self):
+        return (account for account in self.Parent if account is not self)
+        
     def SetCurrency(self, currency):
         if type(currency) == int:
             self._Currency = currencies.CurrencyList[currency]()
@@ -213,64 +216,61 @@ class Account(object):
     def Remove(self):
         self.Parent.Remove(self.Name)
 
-    def AddTransaction(self, amount, description="", date=None, source=None):
+    def AddTransaction(self, amount=None, description="", date=None, source=None, transaction=None):
         """
         Enter a transaction in this account, optionally making the opposite
         transaction in the source account first.
         """
-        if source:
-            if description:
-                description = " (%s)" % description
-            otherTrans = source.AddTransaction(-amount, _("Transfer to %s"%self.Name) + description, date)
-            description = _("Transfer from %s"%source.Name) + description 
+        if transaction:
+            # It is "partial" because its ID and parent aren't necessarily correct.
+            partialTrans = transaction
+        elif amount is not None:
+            # No transaction object was given, we need to make one.
+            if source:
+                if description:
+                    description = " (%s)" % description
+                otherTrans = source.AddTransaction(-amount, _("Transfer to %s"%self.Name) + description, date)
+                description = _("Transfer from %s"%source.Name) + description 
+                
+            partialTrans = Transaction(None, self, amount, description, date)
+        else:
+            raise Exception("AddTransaction: Must provide either transaction arguments or a transaction object.")
             
-        partialTrans = Transaction(None, self, amount, description, date)
         self.Store.MakeTransaction(self, partialTrans)
         transaction = partialTrans
         
         # Ideally we don't load all the transactions here (this is silly on a transfer/move on an
         # account that hasn't been viewed yet), but there's more important things for now.
-        self._AddTransaction(transaction)
+        self.Transactions.append(transaction)
+        
+        Publisher.sendMessage("transaction.created", (self, transaction))
+        
+        # Update the balance.
+        self.Balance += transaction.Amount
         
         if source:
             return transaction, otherTrans
         else:
             return transaction
-            
-    def _AddTransaction(self, transaction):
-        """
-        Add a transaction, send the message, update internal data
-        """
-        
-        self.Transactions.append(transaction)
-        Publisher.sendMessage("transaction.created", (self, transaction))
-        self.Balance += transaction.Amount
-        
-    def CheckTransactionAccount(self, transaction):
-        if transaction not in self.Transactions:
-            raise bankexceptions.InvalidTransactionException("Transaction does not exist in account '%s'" % self.Name)
 
     def RemoveTransaction(self, transaction):
-        self.CheckTransactionAccount(transaction)
-        self.Store.RemoveTransaction(transaction)
-        self._RemoveTransaction(transaction)
+        if transaction not in self.Transactions:
+            raise bankexceptions.InvalidTransactionException("Transaction does not exist in account '%s'" % self.Name)
         
-    def _RemoveTransaction(self, transaction):
-        """
-        Remove a transaction, send the message, update internal data
-        """
+        self.Store.RemoveTransaction(transaction)
         Publisher.sendMessage("transaction.removed", (self, transaction))
         self.Transactions.remove(transaction)
+        
+        # Update the balance.
         self.Balance -= transaction.Amount
         
-    def MoveTransactions(self, transactions, targetAccount):
-        for t in transactions:
-            self.CheckTransactionAccount(t)
+    def MoveTransaction(self, transaction):
+        self.MoveTransactions([transaction])
         
-        self.Store.MoveTransactions(transactions, targetAccount)
+    def MoveTransactions(self, transactions, destAccount):
         for t in transactions:
-            self._RemoveTransaction(t)
-            targetAccount._AddTransaction(t)
+            self.RemoveTransaction(t)
+            destAccount.AddTransaction(transaction=t)
         
     def onTransactionAmountChanged(self, message):
         transaction, difference = message.data
@@ -309,6 +309,14 @@ class TransactionList(list):
             items = []
             
         list.__init__(self, items)
+    
+    def append(self, transaction):
+        list.append(self, transaction)
+        transaction.Parent = self
+        
+    def remove(self, transaction):
+        list.remove(self, transaction)
+        transaction.Parent = None
         
     def __eq__(self, other):
         if not len(self) == len(other):

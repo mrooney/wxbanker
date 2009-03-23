@@ -205,14 +205,13 @@ class TransactionOLV(GroupListView):
         removeItem.SetBitmap(wx.ArtProvider.GetBitmap('wxART_delete'))
         menu.AppendItem(removeItem)
         
+        # Create the sub-menu of sibling accounts to the move to.
         moveToAccountItem = wx.MenuItem(menu, -1, moveStr)
         accountsMenu = wx.Menu()
-        for account in self.CurrentAccount.Parent:
+        for account in self.CurrentAccount.GetSiblings():
             accountItem = wx.MenuItem(menu, -1, account.GetName())
             accountsMenu.AppendItem(accountItem)
             accountsMenu.Bind(wx.EVT_MENU, lambda e, account=account: self.onMoveTransactions(transactions, account), source=accountItem)
-            if account == self.CurrentAccount:
-                accountItem.Enable(False)
         moveToAccountItem.SetSubMenu(accountsMenu)
         menu.AppendItem(moveToAccountItem)
 

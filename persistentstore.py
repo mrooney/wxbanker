@@ -125,13 +125,7 @@ class PersistentStore:
         # the controller already checks for existence of the ID though, so if this doesn't raise an exception, theoretically
         # everything is fine. So just return True, as there we no errors that we are aware of.
         return True
-        
-    def MoveTransactions(self, transactions, targetAccount):
-        cursor = self.dbconn.cursor()
-        self.dbconn.cursor().execute('UPDATE transactions SET accountId=? WHERE id IN (?)',
-            (targetAccount.ID, ','.join([str(t.ID) for t in transactions])))
-        self.commitIfAppropriate()
-
+    
     def Save(self):
         debug.debug("Committing db!")
         self.dbconn.commit()
