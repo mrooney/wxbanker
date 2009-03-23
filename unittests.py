@@ -47,6 +47,7 @@ class LocaleTests(unittest.TestCase):
     
 class ModelTests(unittest.TestCase):
     def setUp(self):
+        Publisher.unsubAll()
         self.ConfigPath = os.path.expanduser("~/.wxBanker")
         self.ConfigPathBackup = self.ConfigPath + ".backup"
         if os.path.exists("test.db"):
@@ -118,13 +119,18 @@ class ModelTests(unittest.TestCase):
         
         b = model1.CreateAccount("B")
         
-        a.MoveTransactions([t1], b)
+        a.MoveTransaction(t1, b)
         
-        self.assertFalse(t1 in a)
-        self.assertTrue(t1 in b)
+        self.assertFalse(t1 in a.Transactions)
+        self.assertTrue(t1 in b.Transactions)
         self.assertNotEqual(t1.Parent, a)
         self.assertEqual(t1.Parent, b)
         
+    def testTransactionPropertyBug(self):
+        model1 = self.Controller.Model
+        a = model1.CreateAccount("A")
+        t1 = a.AddTransaction(-1)
+        self.assertEqual(len(a.Transactions), 1)
         
     def testSaveEventSaves(self):
         self.Controller.AutoSave = False

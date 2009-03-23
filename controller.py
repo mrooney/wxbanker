@@ -313,7 +313,7 @@ class Controller(object):
         if model is None:
             models = self.Models
         else:
-            models = model
+            models = [model]
             
         for model in models:
             if not model in self.Models:

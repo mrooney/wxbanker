@@ -224,6 +224,7 @@ class Account(object):
         if transaction:
             # It is "partial" because its ID and parent aren't necessarily correct.
             partialTrans = transaction
+            partialTrans.Parent = self
         elif amount is not None:
             # No transaction object was given, we need to make one.
             if source:
@@ -239,10 +240,10 @@ class Account(object):
         self.Store.MakeTransaction(self, partialTrans)
         transaction = partialTrans
         
-        # Ideally we don't load all the transactions here (this is silly on a transfer/move on an
-        # account that hasn't been viewed yet), but there's more important things for now.
-        self.Transactions.append(transaction)
-        
+        # Don't append if there aren't transactions loaded yet, it is already in the model and will appear on a load. (LP: 347385).
+        if self._Transactions is not None:
+            self.Transactions.append(transaction)
+
         Publisher.sendMessage("transaction.created", (self, transaction))
         
         # Update the balance.
@@ -258,14 +259,15 @@ class Account(object):
             raise bankexceptions.InvalidTransactionException("Transaction does not exist in account '%s'" % self.Name)
         
         self.Store.RemoveTransaction(transaction)
+        transaction.Parent = None
         Publisher.sendMessage("transaction.removed", (self, transaction))
         self.Transactions.remove(transaction)
         
         # Update the balance.
         self.Balance -= transaction.Amount
         
-    def MoveTransaction(self, transaction):
-        self.MoveTransactions([transaction])
+    def MoveTransaction(self, transaction, destAccount):
+        self.MoveTransactions([transaction], destAccount)
         
     def MoveTransactions(self, transactions, destAccount):
         for t in transactions:
@@ -309,14 +311,6 @@ class TransactionList(list):
             items = []
             
         list.__init__(self, items)
-    
-    def append(self, transaction):
-        list.append(self, transaction)
-        transaction.Parent = self
-        
-    def remove(self, transaction):
-        list.remove(self, transaction)
-        transaction.Parent = None
         
     def __eq__(self, other):
         if not len(self) == len(other):
