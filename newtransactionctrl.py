@@ -128,10 +128,8 @@ class NewTransactionCtrl(wx.Panel):
 
     def getSourceAccount(self, destinationAccount):
         accountDict = {}
-        for account in destinationAccount.Parent:
-            # Don't add the destination account as a possible source.
-            if account != destinationAccount:
-                accountDict[account.Name] = account
+        for account in destinationAccount.GetSiblings():
+            accountDict[account.Name] = account
             
         # Create a dialog with the other account names to choose from.
         dlg = wx.SingleChoiceDialog(self,
