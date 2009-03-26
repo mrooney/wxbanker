@@ -215,6 +215,12 @@ class Account(object):
         
     def Remove(self):
         self.Parent.Remove(self.Name)
+        
+    def AddTransactions(self, transactions):
+        Publisher.sendMessage("batch.start")
+        for t in transactions:
+            self.AddTransaction(transaction=t)
+        Publisher.sendMessage("batch.end")
 
     def AddTransaction(self, amount=None, description="", date=None, source=None, transaction=None):
         """
@@ -255,24 +261,35 @@ class Account(object):
             return transaction
 
     def RemoveTransaction(self, transaction):
-        if transaction not in self.Transactions:
-            raise bankexceptions.InvalidTransactionException("Transaction does not exist in account '%s'" % self.Name)
+        self.RemoveTransactions([transaction])
         
-        self.Store.RemoveTransaction(transaction)
-        transaction.Parent = None
-        Publisher.sendMessage("transaction.removed", (self, transaction))
-        self.Transactions.remove(transaction)
-        
+    def RemoveTransactions(self, transactions):
+        Publisher.sendMessage("batch.start")
+        # Accumulate the difference and update the balance just once. Cuts 33% time of removals.
+        difference = 0
+        # Send the message for all transactions at once, cuts _97%_ of time! OLV is slow here I guess.
+        Publisher.sendMessage("transactions.removed", (self, transactions))
+        for transaction in transactions:
+            if transaction not in self.Transactions:
+                raise bankexceptions.InvalidTransactionException("Transaction does not exist in account '%s'" % self.Name)
+            
+            self.Store.RemoveTransaction(transaction)
+            transaction.Parent = None
+            self.Transactions.remove(transaction)
+            difference += transaction.Amount
+            
         # Update the balance.
-        self.Balance -= transaction.Amount
+        self.Balance -= difference
+        Publisher.sendMessage("batch.end")
         
     def MoveTransaction(self, transaction, destAccount):
         self.MoveTransactions([transaction], destAccount)
         
     def MoveTransactions(self, transactions, destAccount):
-        for t in transactions:
-            self.RemoveTransaction(t)
-            destAccount.AddTransaction(transaction=t)
+        Publisher.sendMessage("batch.start")
+        self.RemoveTransactions(transactions)
+        destAccount.AddTransactions(transactions)
+        Publisher.sendMessage("batch.end")
         
     def onTransactionAmountChanged(self, message):
         transaction, difference = message.data

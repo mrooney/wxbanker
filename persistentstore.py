@@ -48,6 +48,7 @@ class PersistentStore:
         self.Path = path
         self.AutoSave = autoSave
         self.Dirty = False
+        self.BatchDepth = 0
         existed = True
         
         if not os.path.exists(self.Path):
@@ -73,6 +74,7 @@ class PersistentStore:
         Publisher.subscribe(self.onTransactionUpdated, "transaction.updated")
         Publisher.subscribe(self.onAccountRenamed, "account.renamed")
         Publisher.subscribe(self.onAccountBalanceChanged, "account.balance changed")
+        Publisher.subscribe(self.onBatchEvent, "batch")
         
     def GetModel(self):
         debug.debug('Creating model...')
@@ -133,9 +135,25 @@ class PersistentStore:
     
     def Close(self):
         self.dbconn.close()
+        
+    def onBatchEvent(self, message):
+        batchType = message.topic[1].lower()
+        if batchType == "start":
+            self.BatchDepth += 1
+        elif batchType == "end":
+            if self.BatchDepth == 0:
+                raise Exception("Cannot end a batch that has not started.")
+            
+            self.BatchDepth -= 1
+            # If the batching is over, perhaps we should save.
+            if self.BatchDepth == 0 and self.Dirty:
+                self.commitIfAppropriate()
+        else:
+            raise Exception("Expected batch type of 'start' or 'end', got '%s'" % batchType)
     
     def commitIfAppropriate(self):
-        if self.AutoSave:
+        # Don't commit if there is a batch in progress.
+        if self.AutoSave and not self.BatchDepth:
             self.Save()
         else:
             self.Dirty = True

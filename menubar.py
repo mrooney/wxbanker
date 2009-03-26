@@ -24,6 +24,7 @@ from wx.lib.pubsub import Publisher
 
 import version, localization, debug
 from currencies import CurrencyStrings
+from csvimportframe import CsvImportFrame
 
 class BankMenuBar(wx.MenuBar):
     ID_AUTOSAVE = wx.NewId()
@@ -31,6 +32,7 @@ class BankMenuBar(wx.MenuBar):
     ID_QUESTION = wx.NewId()
     ID_REPORTBUG = wx.NewId()
     IDS_CURRENCIES = [wx.NewId() for i in range(len(CurrencyStrings))]
+    ID_IMPORT_CSV = wx.NewId()
     
     def __init__(self, autosave, *args, **kwargs):
         wx.MenuBar.__init__(self, *args, **kwargs)
@@ -55,6 +57,13 @@ class BankMenuBar(wx.MenuBar):
         currencyMenu.SetSubMenu(currencies)
         
         settingsMenu.AppendItem(currencyMenu)
+        
+        # Tools menu.
+        toolsMenu = wx.Menu()
+        
+        importCsvMenu = wx.MenuItem(toolsMenu, self.ID_IMPORT_CSV, _("CSV Import"), _("Import transactions from a CSV file"))
+        importCsvMenu.Bitmap = wx.ArtProvider.GetBitmap("wxART_table_lightning")
+        toolsMenu.AppendItem(importCsvMenu)
         
         # Help menu.
         helpMenu = wx.Menu()
@@ -82,6 +91,7 @@ class BankMenuBar(wx.MenuBar):
         # Add everything to the main menu.
         self.Append(fileMenu, _("&File"))
         self.Append(settingsMenu, _("&Settings"))
+        self.Append(toolsMenu, _("&Tools"))
         self.Append(helpMenu, _("&Help"))
         
         self.Bind(wx.EVT_MENU, self.onClickAbout)
@@ -102,6 +112,7 @@ class BankMenuBar(wx.MenuBar):
                 self.ID_FAQ: self.onClickFAQs,
                 self.ID_QUESTION: self.onClickAskQuestion,
                 self.ID_REPORTBUG: self.onClickReportBug,
+                self.ID_IMPORT_CSV: self.onClickImportCsv,
                 wx.ID_ABOUT: self.onClickAbout,
             }.get(ID, lambda e: e.Skip())
             
@@ -160,3 +171,5 @@ class BankMenuBar(wx.MenuBar):
 
         wx.AboutBox(info)
         
+    def onClickImportCsv(self, event):
+        CsvImportFrame()
