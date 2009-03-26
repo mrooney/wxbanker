@@ -26,6 +26,7 @@ TODO (for feature parity):
 - flickerless repositioning when changing date
 - flickerless RefreshObjects
 - flickerless remove transaction
+- handle batch events at UI level
 NEW THINGS:
 - sorting by columns
 - empty account message
@@ -80,7 +81,7 @@ class TransactionOLV(GroupListView):
         Publisher.subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
         Publisher.subscribe(self.onSearchMoreToggled, "SEARCH.MORETOGGLED")
         Publisher.subscribe(self.onTransactionAdded, "transaction.created")
-        Publisher.subscribe(self.onTransactionRemoved, "transaction.removed")
+        Publisher.subscribe(self.onTransactionsRemoved, "transactions.removed")
         Publisher.subscribe(self.onCurrencyChanged, "currency_changed")
         
     def SetObjects(self, objs, *args, **kwargs):
@@ -146,7 +147,8 @@ class TransactionOLV(GroupListView):
             transactions = account.Transactions
         
         self.SetObjects(transactions)
-        
+        # Unselect everything.
+        self.SelectObjects([], deselectOthers=True)
         if scrollToBottom:
             self.ensureVisible(-1)
         
@@ -241,10 +243,8 @@ class TransactionOLV(GroupListView):
         Publisher.sendMessage("CALCULATOR.PUSH_CHARS", pushStr)
 
     def onRemoveTransactions(self, transactions):
-        """Remove the transaction from the account."""
-        #TODO: each call in the loop is going to force a freeze, resize, and thaw. Ideally batch this.
-        for transaction in transactions:
-            self.CurrentAccount.RemoveTransaction(transaction)
+        """Remove the transactions from the account."""
+        self.CurrentAccount.RemoveTransactions(transactions)
             
     def onMoveTransactions(self, transactions, targetAccount):
         """Move the transactions to the target account."""
@@ -254,11 +254,11 @@ class TransactionOLV(GroupListView):
         self.Parent.Layout()
         self.Parent.Thaw()
         
-    def onTransactionRemoved(self, message):
-        account, transaction = message.data
+    def onTransactionsRemoved(self, message):
+        account, transactions = message.data
         if account is self.CurrentAccount:
             # Remove the item from the list.
-            self.RemoveObject(transaction)
+            self.RemoveObjects(transactions)
     
     def onTransactionAdded(self, message):
         account, transaction = message.data

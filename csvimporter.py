@@ -51,7 +51,7 @@ class TransactionContainer(object):
         
     def RemoveTransaction(self, transaction):
         self.Transactions.remove(transaction)
-        Publisher.sendMessage("transaction.removed", (self, transaction))
+        Publisher.sendMessage("transactions.removed", (self, [transaction]))
 
 class CsvImporterProfileManager:
 
