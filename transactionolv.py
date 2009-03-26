@@ -53,7 +53,7 @@ class TransactionOLV(GroupListView):
         self.oddRowsBackColor = wx.WHITE
         self.rowFormatter = self.rowFormatter2
         self.cellEditMode = GroupListView.CELLEDIT_DOUBLECLICK
-        self.SetEmptyListMsg("No transactions entered.")
+        self.SetEmptyListMsg(_("No transactions entered."))
         
         # Calculate the necessary width for the date column.
         dateStr = str(datetime.date.today())
@@ -77,12 +77,17 @@ class TransactionOLV(GroupListView):
         
         self.Bind(wx.EVT_RIGHT_DOWN, self.onRightDown)
         
-        Publisher.subscribe(self.onSearch, "SEARCH.INITIATED")
-        Publisher.subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
-        Publisher.subscribe(self.onSearchMoreToggled, "SEARCH.MORETOGGLED")
-        Publisher.subscribe(self.onTransactionAdded, "transaction.created")
-        Publisher.subscribe(self.onTransactionsRemoved, "transactions.removed")
-        Publisher.subscribe(self.onCurrencyChanged, "currency_changed")
+        self.Subscriptions = (
+            (self.onSearch, "SEARCH.INITIATED"),
+            (self.onSearchCancelled, "SEARCH.CANCELLED"),
+            (self.onSearchMoreToggled, "SEARCH.MORETOGGLED"),
+            (self.onTransactionAdded, "transaction.created"),
+            (self.onTransactionsRemoved, "transactions.removed"),
+            (self.onCurrencyChanged, "currency_changed"),
+        )
+        
+        for callback, topic in self.Subscriptions:
+            Publisher.subscribe(callback, topic)
         
     def SetObjects(self, objs, *args, **kwargs):
         """
@@ -292,7 +297,10 @@ class TransactionOLV(GroupListView):
         
     def onCurrencyChanged(self, message):
         self.RefreshObjects()
-
+        
+    def __del__(self):
+        for callback, topic in self.Subscriptions:
+            Publisher.unsubscribe(callback)
 
 if __name__ == "__main__":
     app = wx.App(False)
