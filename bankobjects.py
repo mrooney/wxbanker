@@ -286,9 +286,10 @@ class Account(object):
         self.MoveTransactions([transaction], destAccount)
         
     def MoveTransactions(self, transactions, destAccount):
-        for t in transactions:
-            self.RemoveTransaction(t)
-            destAccount.AddTransaction(transaction=t)
+        Publisher.sendMessage("batch.start")
+        self.RemoveTransactions(transactions)
+        destAccount.AddTransactions(transactions)
+        Publisher.sendMessage("batch.end")
         
     def onTransactionAmountChanged(self, message):
         transaction, difference = message.data
