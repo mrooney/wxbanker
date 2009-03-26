@@ -61,7 +61,8 @@ class BankMenuBar(wx.MenuBar):
         # Tools menu.
         toolsMenu = wx.Menu()
         
-        importCsvMenu = wx.MenuItem(toolsMenu, self.ID_IMPORT_CSV, _("Import from CSV"), _("Import transactions from a CSV file"))
+        importCsvMenu = wx.MenuItem(toolsMenu, self.ID_IMPORT_CSV, _("CSV Import"), _("Import transactions from a CSV file"))
+        importCsvMenu.Bitmap = wx.ArtProvider.GetBitmap("wxART_table_lightning")
         toolsMenu.AppendItem(importCsvMenu)
         
         # Help menu.

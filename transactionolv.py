@@ -170,10 +170,10 @@ class TransactionOLV(GroupListView):
             transactions = self.GetSelectedObjects()
             self.showContextMenu(transactions, col)
     
-    def showContextMenu(self, transactions, col):
+    def showContextMenu(self, transactions, col, removeOnly=False):
         menu = wx.Menu()
 
-        if col in (3,4):
+        if not removeOnly and col in (3,4):
             # This is an amount cell, allow calculator options.
             if col == 3:
                 amount = sum((t.Amount for t in transactions))
@@ -207,15 +207,16 @@ class TransactionOLV(GroupListView):
         removeItem.SetBitmap(wx.ArtProvider.GetBitmap('wxART_delete'))
         menu.AppendItem(removeItem)
         
-        # Create the sub-menu of sibling accounts to the move to.
-        moveToAccountItem = wx.MenuItem(menu, -1, moveStr)
-        accountsMenu = wx.Menu()
-        for account in self.CurrentAccount.GetSiblings():
-            accountItem = wx.MenuItem(menu, -1, account.GetName())
-            accountsMenu.AppendItem(accountItem)
-            accountsMenu.Bind(wx.EVT_MENU, lambda e, account=account: self.onMoveTransactions(transactions, account), source=accountItem)
-        moveToAccountItem.SetSubMenu(accountsMenu)
-        menu.AppendItem(moveToAccountItem)
+        if not removeOnly:
+            # Create the sub-menu of sibling accounts to the move to.
+            moveToAccountItem = wx.MenuItem(menu, -1, moveStr)
+            accountsMenu = wx.Menu()
+            for account in self.CurrentAccount.GetSiblings():
+                accountItem = wx.MenuItem(menu, -1, account.GetName())
+                accountsMenu.AppendItem(accountItem)
+                accountsMenu.Bind(wx.EVT_MENU, lambda e, account=account: self.onMoveTransactions(transactions, account), source=accountItem)
+            moveToAccountItem.SetSubMenu(accountsMenu)
+            menu.AppendItem(moveToAccountItem)
 
         # Show the menu and then destroy it afterwards.
         self.PopupMenu(menu)

@@ -215,6 +215,12 @@ class Account(object):
         
     def Remove(self):
         self.Parent.Remove(self.Name)
+        
+    def AddTransactions(self, transactions):
+        Publisher.sendMessage("batch.start")
+        for t in transactions:
+            self.AddTransaction(transaction=t)
+        Publisher.sendMessage("batch.end")
 
     def AddTransaction(self, amount=None, description="", date=None, source=None, transaction=None):
         """

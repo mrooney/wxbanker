@@ -238,9 +238,7 @@ class CsvImportFrame(wx.Frame):
             
     def importTransactions(self):
         account = self.accountsDict[self.targetAccountCtrl.Value]
-        
-        for t in self.transactionContainer.Transactions:
-            account.AddTransaction(t.Amount, t.Description, t.Date, source=None)
+        account.AddTransactions(self.transactionContainer.Transactions)
 
     def toggleImportButton(self):
         self.importButton.Enable(self.targetAccountCtrl.Value != '' and self.transactionContainer is not None) 
@@ -297,6 +295,9 @@ class CsvImportFrame(wx.Frame):
 class DetachedTransactionOLV(TransactionOLV):
     def renderFloat(self, floatVal):
         return floatVal
+    
+    def showContextMenu(self, transactions, col):
+        TransactionOLV.showContextMenu(self, transactions, col, removeOnly=True)
 
 if __name__ == '__main__':
     app = wx.PySimpleApp()
