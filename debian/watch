@@ -1,3 +1,0 @@
-version=3
-opts=dversionmangle=s/~bzr\d*// \
-https://launchpad.net/wxbanker/+download http://launchpad.net/wxbanker/.*/wxbanker-([\d.]+).tar.gz
