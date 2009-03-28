@@ -209,17 +209,6 @@ True
 
 #>>> model.Search(u'\xef\xbf\xa5') == [t1]
 #True
-
-#auto-save
->>> controller.AutoSave = False
->>> controller.AutoSave
-False
->>> import shutil; shutil.copy("test.db", "test2.db")
->>> t.Description = "Modified! Did you save?"
->>> model3 = controller.LoadPath("test2.db")
->>> model == model3
-False
-
 """
 """
 #*ensure no commits on a store init if not upgrading
@@ -310,18 +299,20 @@ class Controller(object):
         return model
     
     def Close(self, model=None):
-        if model is None:
-            models = self.Models
-        else:
-            models = [model]
+        if model is None: models = self.Models
+        else: models = [model]
             
         for model in models:
-            if not model in self.Models:
+            # We can't use in here, since we need the is operator, not ==
+            if not any((m is model for m in self.Models)):
                 raise Exception("model not managed by this controller")
         
             model.Store.Close()
-            self.Models.remove(model)
-            del model
-        
+            # Again we can't use remove, different models can be ==
+            for i, m in enumerate(self.Models):
+                if m is model:
+                    self.Models.pop(i)
+                    break
+
     AutoSave = property(GetAutoSave, SetAutoSave)
     

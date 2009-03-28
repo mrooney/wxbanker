@@ -58,7 +58,8 @@ class BankerFrame(wx.Frame):
 
         self.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.onTabSwitching)
 
-        Publisher().subscribe(self.onFirstRun, "FIRST RUN")
+        Publisher.subscribe(self.onFirstRun, "first run")
+        Publisher.subscribe(self.onWarning, "warning")
 
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_MOVE, self.OnMove)
@@ -91,7 +92,8 @@ class BankerFrame(wx.Frame):
         event.Skip()
 
     def OnClose(self, event):
-        event.Skip()
+        event.Skip() # This must be first, so handlers can override it.
+        Publisher.sendMessage("exiting", event)
 
     def onTabSwitching(self, event):
         tabIndex = event.Selection
@@ -109,6 +111,22 @@ class BankerFrame(wx.Frame):
         dlg = wx.MessageDialog(self, welcomeMsg, _("Welcome!"), style=wx.OK|wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
+        
+    def onWarning(self, message):
+        warning = message.topic[1]
+        if warning == "dirty exit":
+            event = message.data
+            title = _("Save changes?")
+            msg = _("You have made changes since the last save. Would you like to save before exiting?")
+            msg += "\n\n" + _("Note that enabling auto-save from the File menu will eliminate the need for manual saving.")
+            dlg = wx.MessageDialog(self, msg, title, style=wx.CANCEL|wx.YES_NO|wx.ICON_WARNING)
+            result = dlg.ShowModal()
+            if result == wx.ID_YES:
+                Publisher.sendMessage("user.saved")
+            elif result == wx.ID_CANCEL:
+                # The user cancelled the close, so cancel the event skip.
+                event.Skip(False)
+            dlg.Destroy()
 
 
 def init(path=None):
@@ -133,7 +151,7 @@ def init(path=None):
         config = wx.Config.Get()
         firstTime = not config.ReadBool("RUN_BEFORE")
         if firstTime:
-            Publisher().sendMessage("FIRST RUN")
+            Publisher().sendMessage("first run")
             config.WriteBool("RUN_BEFORE", True)
     
         return bankController.wxApp

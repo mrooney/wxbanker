@@ -105,6 +105,13 @@ class BankModel(object):
         
     def __eq__(self, other):
         return self.Accounts == other.Accounts
+    
+    def Print(self):
+        print "Model: %s" % self.Balance
+        for a in self.Accounts:
+            print "  %s: %s" % (a.Name, a.Balance)
+            for t in a.Transactions:
+                print t
 
     Balance = property(GetBalance)
 
