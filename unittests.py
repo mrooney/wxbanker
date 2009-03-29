@@ -95,11 +95,25 @@ class ModelTests(unittest.TestCase):
 
         self.assertNotEqual(model1, model2)
         
+    def testLoadingTransactionsPreservesReferences(self):
+        a = self.Model.CreateAccount("A")
+        t = a.AddTransaction(1, "First")
+        self.assertEqual(t.Description, "First")
+        
+        # When we do a.Transactions, the list gets loaded with new
+        # transaction objects, so let's see if the containership test works.
+        self.assertTrue(t in a.Transactions)
+        
+        # 't' is the original transaction object created before Transactions
+        # was loaded, but it should be in the list due to magic.
+        t.Description = "Second"
+        self.assertEqual(a.Transactions[0].Description, "Second")
+        
     def testAutoSaveDisabledComplex(self):
         model1 = self.Controller.Model
         a1 = model1.CreateAccount("Checking Account")
         t1 = a1.AddTransaction(-10, "Description 1")
-        
+
         model2 = self.Controller.LoadPath("test.db")
         self.assertEqual(model1, model2)
         self.Controller.Close(model2)
@@ -117,11 +131,12 @@ class ModelTests(unittest.TestCase):
         self.Controller.Close(model4)
         
         t1.Description = "Description 2"
-        
-        print "\n";model1.Print()
         model5 = self.Controller.LoadPath("test.db")
-        print "\n";model5.Print()
         self.assertNotEqual(model1, model5)
+        
+        model1.Save()
+        model6 = self.Controller.LoadPath("test.db")
+        self.assertEqual(model1, model6)
         
     def testEnablingAutoSaveSaves(self):
         pass

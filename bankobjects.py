@@ -177,6 +177,7 @@ class Account(object):
         self.ID = aID
         self._Name = name
         self._Transactions = None
+        self._preTransactions = []
         self.Currency = currency
         self._Balance = balance
         
@@ -205,6 +206,19 @@ class Account(object):
     def GetTransactions(self):
         if self._Transactions is None:
             self._Transactions = self.Store.getTransactionsFrom(self)
+            
+            # If transactions were added before this list was pulled, and then an attribute
+            # is changed on one of them (Amount/Description/Date), it won't be
+            # reflected on the new account at run-time because it has a replacement instance
+            # for that transaction. So we need to swap it in.
+            if self._preTransactions:
+                # Iterate over this first (and thus once) since it is probably larger than _pre.
+                for i, newT in enumerate(self._Transactions):
+                    for oldT in self._preTransactions:
+                        if oldT == newT:
+                            self._Transactions[i] = oldT
+                            break
+                
         
         return self._Transactions
         
@@ -256,6 +270,9 @@ class Account(object):
         # Don't append if there aren't transactions loaded yet, it is already in the model and will appear on a load. (LP: 347385).
         if self._Transactions is not None:
             self.Transactions.append(transaction)
+        else:
+            # We will need to do some magic with these later when transactions are loaded.
+            self._preTransactions.append(transaction)
 
         Publisher.sendMessage("transaction.created", (self, transaction))
         
@@ -446,8 +463,8 @@ class Transaction(object):
             
     def __cmp__(self, other):
         return cmp(
-            (self.Date, id(self)),
-            (other.Date, id(other))
+            (self.Date, self.ID),
+            (other.Date, other.ID)
         )
     
     def __eq__(self, other):
