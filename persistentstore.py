@@ -135,8 +135,9 @@ class PersistentStore:
         return True
     
     def Save(self):
-        debug.debug("Committing db!")
+        import time; t = time.time()
         self.dbconn.commit()
+        debug.debug("Committed in %s seconds" % (time.time()-t))
         self.Dirty = False
     
     def Close(self):
