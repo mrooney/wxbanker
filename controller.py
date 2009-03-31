@@ -273,6 +273,10 @@ class Controller(object):
             debug.debug("Setting auto-save to: %s" % val)
             model.Store.AutoSave = val
             
+        # If the user enables auto-save, we want to also save.
+        if self.AutoSave:
+            Publisher.sendMessage("user.saved")
+            
     def LoadPath(self, path, use=False):
         if path is None:
             # Figure out where the bank database file is, and load it.
