@@ -80,10 +80,10 @@ True
 >>> len(a.Transactions)
 1
 >>> len(messages)
-5
->>> messages[1] == (('transaction', 'created'), (a, t1))
+7
+>>> messages[2] == (('transaction', 'created'), (a, t1))
 True
->>> messages[0] == (('account', 'balance changed', 'My Account'), a)
+>>> messages[1] == (('account', 'balance changed', 'My Account'), a)
 True
 >>> a.Balance
 100.27
@@ -97,14 +97,14 @@ u'ATM Withdrawal'
 >>> t2.Date
 datetime.date(2007, 1, 6)
 >>> len(messages)
-7
+11
 >>> model.float2str(model.Balance)
 '$90.27'
 
 #testRenameAccount
 >>> a.Name = "My Renamed Account"
 >>> len(messages)
-8
+12
 >>> messages[0] == (('account', 'renamed', 'My Account'), ('My Account', a))
 True
 >>> len(model.Accounts)
@@ -119,19 +119,19 @@ InvalidAccountException: Invalid account 'My Account' specified.
 #testTransactionUpdating
 >>> t1.Amount = -101
 >>> len(messages)
-10
+14
 >>> t1.Amount == -101
 True
 >>> model.float2str(model.Balance)
 '-$111.00'
 >>> t1.Description = "Updated description"
 >>> len(messages)
-11
+15
 >>> t1.Description
 u'Updated description'
 >>> t1.Date = datetime.date(1986, 1, 6)
 >>> len(messages)
-12
+16
 >>> t1.Date == datetime.date(1986, 1, 6)
 True
 
