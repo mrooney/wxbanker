@@ -248,6 +248,7 @@ class Account(object):
         Enter a transaction in this account, optionally making the opposite
         transaction in the source account first.
         """
+        Publisher.sendMessage("batch.start")
         if transaction:
             # It is "partial" because its ID and parent aren't necessarily correct.
             partialTrans = transaction
@@ -278,6 +279,7 @@ class Account(object):
         
         # Update the balance.
         self.Balance += transaction.Amount
+        Publisher.sendMessage("batch.end")
         
         if source:
             return transaction, otherTrans
