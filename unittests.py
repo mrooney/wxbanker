@@ -257,7 +257,7 @@ class ModelTests(unittest.TestCase):
             os.rename(self.ConfigPathBackup, self.ConfigPath)
             
             
-class GUITests:#(unittest.TestCase):
+class GUITests(unittest.TestCase):
     def setUp(self):
         self.ConfigPath = os.path.expanduser("~/.wxBanker")
         self.ConfigPathBackup = self.ConfigPath + ".backup"
