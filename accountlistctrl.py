@@ -29,7 +29,8 @@ class AccountListCtrl(wx.Panel):
 
     Accounts can be added, removed, and renamed.
     """
-
+    ID_TIMER = wx.NewId()
+    
     def __init__(self, parent, bankController, autoPopulate=True):
         wx.Panel.__init__(self, parent)
         self.Model = bankController.Model
@@ -50,8 +51,8 @@ class AccountListCtrl(wx.Panel):
         self.childSizer = childSizer = wx.BoxSizer(wx.VERTICAL)
 
         ## Create and set up the buttons.
-        # The EDIT account button.
-        BMP = wx.ArtProvider.GetBitmap('wxART_add')
+        # The ADD account button.
+        BMP = self.addBMP = wx.ArtProvider.GetBitmap('wxART_add')
         self.addButton = addButton = wx.BitmapButton(self.childPanel, bitmap=BMP)
         addButton.SetToolTipString(_("Add a new account"))
         # The REMOVE account button.
@@ -135,6 +136,29 @@ class AccountListCtrl(wx.Panel):
 
         self.staticBoxSizer.Layout()
         #self.staticBoxSizer.SetSmooth(True)
+        
+        # Set up the timer, which will flash the add account bitmap if there aren't any accounts.
+        self.Timer = wx.Timer(self, self.ID_TIMER)
+        self.FlashState = 0
+        wx.EVT_TIMER(self, self.ID_TIMER, self.onFlashTimer)
+        if not self.GetCount():
+            self.startFlashTimer()
+            
+    def onFlashTimer(self, event):
+        if self.FlashState:
+            self.addButton.SetBitmapLabel(self.addBMP)
+        else:
+            self.addButton.SetBitmapLabel(wx.EmptyBitmapRGBA(16,16))
+        
+        # Now toggle the flash state.
+        self.FlashState = not self.FlashState
+        
+    def stopFlashTimer(self):
+        self.Timer.Stop()
+        self.addButton.SetBitmapLabel(self.addBMP)
+        
+    def startFlashTimer(self):
+        self.Timer.Start(1250)
         
     def onCurrencyChanged(self, message):
         # Update all the accounts.
@@ -225,6 +249,10 @@ class AccountListCtrl(wx.Panel):
         account = message.data
         index = self.accountObjects.index(account)
         self._RemoveItem(index)
+        
+        # Start flashing the add button if there are no accounts.
+        if not self.GetCount():
+            self.startFlashTimer()
 
     def _PutAccount(self, account, select=False):
         index = 0
@@ -357,6 +385,9 @@ class AccountListCtrl(wx.Panel):
         account = message.data
         self.onHideEditCtrl() #ASSUMPTION!
         self._PutAccount(account, select=True)
+        
+        # Stop flashing the add button if it was, since there is now an account.
+        self.stopFlashTimer()
         
     def onEditCtrlKey(self, event):
         if event.GetKeyCode() == wx.WXK_ESCAPE:
