@@ -140,13 +140,17 @@ class ModelTests(unittest.TestCase):
         self.Model.CreateAccount("A")
         
         # The model has unsaved changes, a new one should be different.
-        self.assertNotEqual(self.Model, self.Model.Store.GetModel())
+        model2 = self.Controller.LoadPath("test.db")
+        self.assertNotEqual(self.Model, model2)
+        self.Controller.Close(model2)
         
         # Setting AutoSave to true should trigger a save.
-        self.AutoSave = True
+        self.Controller.AutoSave = True
         
         # Now a newly loaded should be equal.
-        self.assertEqual(self.Model, self.Model.Store.GetModel())
+        model3 = self.Controller.LoadPath("test.db")
+        self.assertEqual(self.Model, model3)
+        self.Controller.Close(model3)
         
         
     def testSimpleMove(self):
