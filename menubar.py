@@ -34,6 +34,7 @@ class BankMenuBar(wx.MenuBar):
     ID_REQUESTFEATURE = wx.NewId()
     ID_TRANSLATE = wx.NewId()
     IDS_CURRENCIES = [wx.NewId() for i in range(len(CurrencyStrings))]
+    ID_REQUESTCURRENCY = wx.NewId()
     ID_IMPORT_CSV = wx.NewId()
     
     def __init__(self, autosave, *args, **kwargs):
@@ -56,6 +57,10 @@ class BankMenuBar(wx.MenuBar):
         for i, cstr in enumerate(CurrencyStrings):
             item = wx.MenuItem(currencies, self.IDS_CURRENCIES[i], cstr)
             currencies.AppendItem(item)
+        # Add an entry to request a new currency.
+        requestCurrencyItem = wx.MenuItem(currencies, self.ID_REQUESTCURRENCY, _("Request a Currency"))
+        requestCurrencyItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_lightning")
+        currencies.AppendItem(requestCurrencyItem)
         currencyMenu.SetSubMenu(currencies)
         
         settingsMenu.AppendItem(currencyMenu)
@@ -128,6 +133,7 @@ class BankMenuBar(wx.MenuBar):
                 self.ID_TRANSLATE: self.onClickTranslate,
                 self.ID_IMPORT_CSV: self.onClickImportCsv,
                 wx.ID_ABOUT: self.onClickAbout,
+                self.ID_REQUESTCURRENCY: self.onClickRequestCurrency,
             }.get(ID, lambda e: e.Skip())
             
             handler(event)
@@ -163,6 +169,9 @@ class BankMenuBar(wx.MenuBar):
         
     def onClickTranslate(self, event):
         webbrowser.open("https://translations.launchpad.net/wxbanker")
+        
+    def onClickRequestCurrency(self, event):
+        webbrowser.open("https://answers.launchpad.net/wxbanker/+faq/477")
         
     def onClickAbout(self, event):
         info = wx.AboutDialogInfo()
