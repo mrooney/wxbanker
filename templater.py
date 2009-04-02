@@ -25,27 +25,13 @@ _ = lambda s: s
 _("Hide Calculator")
 _("Show Calculator")
 
-import commands
+import commands, os, pprint
 
-translatableFiles = [
-    "wxbanker.py",
-    "summarytab.py",
-    "menubar.py",
-    "managetab.py",
-    "bankcontrols.py",
-    "banker.py",
-    "currencies.py",
-    "localization.py",
-    "version.py",
-    "calculator.py",
-    "templater.py",
-]
-
-
+translatableFiles = [f for f in os.listdir(".") if f.endswith(".py")]
 
 def gentemplate(name="wxbanker.pot"):
     #run command, to `name`
-    command = "xgettext %s" % " ".join(translatableFiles) + " --output=%s"%name
+    command = "xgettext %s" % " ".join(translatableFiles) + " --output=locale/%s"%name
     print commands.getstatusoutput(command)
 
 if __name__ == "__main__":
