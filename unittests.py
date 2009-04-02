@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.%
 
-import unittest, os, shutil, locale, wx
+import unittest, os, locale, wx
 from wx.lib.pubsub import Publisher
 import controller, wxbanker, bankobjects, currencies as c
 
@@ -41,7 +41,7 @@ class LocaleTests(unittest.TestCase):
         self.assertEquals(locale.setlocale(locale.LC_ALL, 'ru_RU.utf8'), 'ru_RU.utf8')
         reload(c)
         
-        # must not throw an exception
+        # The test is that none of these calls throw an exception.
         for curr in c.CurrencyList:
             curr().float2str(1000)
     
@@ -56,6 +56,7 @@ class ModelTests(unittest.TestCase):
             os.rename(self.ConfigPath, self.ConfigPathBackup)
             
         self.Controller = controller.Controller("test.db")
+        self.Model = self.Controller.Model
         
     def testControllerIsAutoSavingByDefault(self):
         self.assertTrue( self.Controller.AutoSave )
@@ -79,9 +80,6 @@ class ModelTests(unittest.TestCase):
         model1 = self.Controller.Model
         model2 = self.Controller.LoadPath("test.db")
         self.assertEqual(model1, model2)
-        
-    #def testModifiedModelsAreEqual(self):
-    #    pass
     
     def testAutoSaveDisabledSimple(self):
         self.Controller.AutoSave = False
@@ -94,23 +92,66 @@ class ModelTests(unittest.TestCase):
 
         self.assertNotEqual(model1, model2)
         
+    def testLoadingTransactionsPreservesReferences(self):
+        a = self.Model.CreateAccount("A")
+        t = a.AddTransaction(1, "First")
+        self.assertEqual(t.Description, "First")
+        
+        # When we do a.Transactions, the list gets loaded with new
+        # transaction objects, so let's see if the containership test works.
+        self.assertTrue(t in a.Transactions)
+        
+        # 't' is the original transaction object created before Transactions
+        # was loaded, but it should be in the list due to magic.
+        t.Description = "Second"
+        self.assertEqual(a.Transactions[0].Description, "Second")
+        
     def testAutoSaveDisabledComplex(self):
         model1 = self.Controller.Model
         a1 = model1.CreateAccount("Checking Account")
         t1 = a1.AddTransaction(-10, "Description 1")
-        
+
         model2 = self.Controller.LoadPath("test.db")
         self.assertEqual(model1, model2)
         self.Controller.Close(model2)
         
-        shutil.copy("test.db", "test2.db")
         self.Controller.AutoSave = False
-        #t1.Description = "Description 2"
-        t2 = a1.AddTransaction(-10, "Description 1")
-        
-        model3 = self.Controller.LoadPath("test2.db")
+        t2 = a1.AddTransaction(-10, "Description 3")
+        model3 = self.Controller.LoadPath("test.db")
         self.assertFalse(model1 is model3)
         self.assertNotEqual(model1, model3)
+        self.Controller.Close(model3)
+        
+        model1.Save()
+        model4 = self.Controller.LoadPath("test.db")
+        self.assertEqual(model1, model4)
+        self.Controller.Close(model4)
+        
+        t1.Description = "Description 2"
+        model5 = self.Controller.LoadPath("test.db")
+        self.assertNotEqual(model1, model5)
+        
+        model1.Save()
+        model6 = self.Controller.LoadPath("test.db")
+        self.assertEqual(model1, model6)
+        
+    def testEnablingAutoSaveSaves(self):
+        self.Controller.AutoSave = False
+        self.Model.CreateAccount("A")
+        
+        # The model has unsaved changes, a new one should be different.
+        model2 = self.Controller.LoadPath("test.db")
+        self.assertNotEqual(self.Model, model2)
+        self.Controller.Close(model2)
+        
+        # Setting AutoSave to true should trigger a save.
+        self.Controller.AutoSave = True
+        
+        # Now a newly loaded should be equal.
+        model3 = self.Controller.LoadPath("test.db")
+        self.assertEqual(self.Model, model3)
+        self.Controller.Close(model3)
+        
         
     def testSimpleMove(self):
         model1 = self.Controller.Model
@@ -142,8 +183,7 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(len(model1.Accounts), 1)
         
         # Make sure that account doesn't exist on a new model
-        shutil.copy("test.db", "test2.db")
-        model2 = self.Controller.LoadPath("test2.db")
+        model2 = self.Controller.LoadPath("test.db")
         self.assertEqual(len(model2.Accounts), 0)
         self.assertNotEqual(model1, model2)
         
@@ -151,11 +191,63 @@ class ModelTests(unittest.TestCase):
         Publisher.sendMessage("user.saved")
         
         # Make sure it DOES exist after saving.
-        shutil.copy("test.db", "test3.db")
-        model3 = self.Controller.LoadPath("test3.db")
+        model3 = self.Controller.LoadPath("test.db")
         self.assertEqual(len(model3.Accounts), 1)
         self.assertEqual(model1, model3)
         self.assertNotEqual(model2, model3)
+        
+    def testRenameIsStored(self):
+        model1 = self.Controller.Model
+        a = model1.CreateAccount("A")
+        a.Name = "B"
+        
+        model2 = model1.Store.GetModel()
+        self.assertEqual(model1, model2)
+        
+    def testBalanceIsStored(self):
+        model1 = self.Controller.Model
+        a1 = model1.CreateAccount("A")
+        self.assertEqual(a1.Balance, 0)
+        
+        a1.AddTransaction(1)
+        self.assertEqual(a1.Balance, 1)
+        
+        model2 = model1.Store.GetModel()
+        a2 = model2.Accounts[0]
+        self.assertEqual(model1, model2)
+        self.assertEqual(a1.Balance, a2.Balance)
+        
+    def testTransactionChangeIsStored(self):
+        model1 = self.Controller.Model
+        a1 = model1.CreateAccount("A")
+
+        t1 = a1.AddTransaction(-1.25)
+        
+        t1.Description = "new"
+        t1.Amount = -1.50
+        
+        model2 = model1.Store.GetModel()
+        self.assertEqual(model1, model2)
+        
+    def testDirtyExitWarns(self):
+        """
+        This test is kind of hilarious. We want to make sure we are warned of
+        exiting with a dirty model, so we create an account, register a callback
+        which will change its name when the dirty warning goes out, then trigger
+        a dirty exit and make sure the account name has changed.
+        """
+        self.Controller.AutoSave = False
+        a = self.Model.CreateAccount("Unwarned!")
+
+        # Create and register our callback to test for the warning message.
+        def cb(message):
+            a.Name = "Warned"
+        Publisher.subscribe(cb, "warning.dirty exit")
+            
+        # Now send the exiting message, which should cause our callback to fire if everything is well.
+        Publisher.sendMessage("exiting")
+        
+        self.assertEqual(a.Name, "Warned")
         
     def tearDown(self):
         self.Controller.Close()
@@ -165,7 +257,7 @@ class ModelTests(unittest.TestCase):
             os.rename(self.ConfigPathBackup, self.ConfigPath)
             
             
-class GUITests:#(unittest.TestCase):
+class GUITests(unittest.TestCase):
     def setUp(self):
         self.ConfigPath = os.path.expanduser("~/.wxBanker")
         self.ConfigPathBackup = self.ConfigPath + ".backup"

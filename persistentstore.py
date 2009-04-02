@@ -71,10 +71,16 @@ class PersistentStore:
             
         self.commitIfAppropriate()
         
-        Publisher.subscribe(self.onTransactionUpdated, "transaction.updated")
-        Publisher.subscribe(self.onAccountRenamed, "account.renamed")
-        Publisher.subscribe(self.onAccountBalanceChanged, "account.balance changed")
-        Publisher.subscribe(self.onBatchEvent, "batch")
+        self.Subscriptions = (
+            (self.onTransactionUpdated, "transaction.updated"),
+            (self.onAccountRenamed, "account.renamed"),
+            (self.onAccountBalanceChanged, "account.balance changed"),
+            (self.onBatchEvent, "batch"),
+            (self.onExit, "exiting"),
+        )
+        
+        for callback, topic in self.Subscriptions:
+            Publisher.subscribe(callback, topic)
         
     def GetModel(self):
         debug.debug('Creating model...')
@@ -129,12 +135,15 @@ class PersistentStore:
         return True
     
     def Save(self):
-        debug.debug("Committing db!")
+        import time; t = time.time()
         self.dbconn.commit()
+        debug.debug("Committed in %s seconds" % (time.time()-t))
         self.Dirty = False
     
     def Close(self):
         self.dbconn.close()
+        for callback, topic in self.Subscriptions:
+            Publisher.unsubscribe(callback)
         
     def onBatchEvent(self, message):
         batchType = message.topic[1].lower()
@@ -284,6 +293,10 @@ class PersistentStore:
         account = message.data
         self.dbconn.cursor().execute("UPDATE accounts SET balance=? WHERE id=?", (account.Balance, account.ID))
         self.commitIfAppropriate()
+        
+    def onExit(self, message):
+        if self.Dirty:
+            Publisher.sendMessage("warning.dirty exit", message.data)
         
     def __del__(self):
         self.commitIfAppropriate()

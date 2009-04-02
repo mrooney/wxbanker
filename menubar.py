@@ -31,7 +31,10 @@ class BankMenuBar(wx.MenuBar):
     ID_FAQ = wx.NewId()
     ID_QUESTION = wx.NewId()
     ID_REPORTBUG = wx.NewId()
+    ID_REQUESTFEATURE = wx.NewId()
+    ID_TRANSLATE = wx.NewId()
     IDS_CURRENCIES = [wx.NewId() for i in range(len(CurrencyStrings))]
+    ID_REQUESTCURRENCY = wx.NewId()
     ID_IMPORT_CSV = wx.NewId()
     
     def __init__(self, autosave, *args, **kwargs):
@@ -54,6 +57,10 @@ class BankMenuBar(wx.MenuBar):
         for i, cstr in enumerate(CurrencyStrings):
             item = wx.MenuItem(currencies, self.IDS_CURRENCIES[i], cstr)
             currencies.AppendItem(item)
+        # Add an entry to request a new currency.
+        requestCurrencyItem = wx.MenuItem(currencies, self.ID_REQUESTCURRENCY, _("Request a Currency"))
+        requestCurrencyItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_lightning")
+        currencies.AppendItem(requestCurrencyItem)
         currencyMenu.SetSubMenu(currencies)
         
         settingsMenu.AppendItem(currencyMenu)
@@ -82,6 +89,16 @@ class BankMenuBar(wx.MenuBar):
         bugItem = wx.MenuItem(helpMenu, self.ID_REPORTBUG, _("&Report a Bug"), _("Report a bug to the developer online"))
         bugItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_bug")
         helpMenu.AppendItem(bugItem)
+        
+        ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
+        featureItem = wx.MenuItem(helpMenu, self.ID_REQUESTFEATURE, _("Request a Fea&ture"), _("Request a new feature to be implemented"))
+        featureItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_lightbulb")
+        helpMenu.AppendItem(featureItem)
+        
+        ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
+        translateItem = wx.MenuItem(helpMenu, self.ID_TRANSLATE, _("Tran&slate wxBanker"), _("Translate wxBanker to another language"))
+        translateItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_flag_blue")
+        helpMenu.AppendItem(translateItem)
         
         helpMenu.AppendSeparator()
         
@@ -112,8 +129,11 @@ class BankMenuBar(wx.MenuBar):
                 self.ID_FAQ: self.onClickFAQs,
                 self.ID_QUESTION: self.onClickAskQuestion,
                 self.ID_REPORTBUG: self.onClickReportBug,
+                self.ID_REQUESTFEATURE: self.onClickRequestFeature,
+                self.ID_TRANSLATE: self.onClickTranslate,
                 self.ID_IMPORT_CSV: self.onClickImportCsv,
                 wx.ID_ABOUT: self.onClickAbout,
+                self.ID_REQUESTCURRENCY: self.onClickRequestCurrency,
             }.get(ID, lambda e: e.Skip())
             
             handler(event)
@@ -143,6 +163,15 @@ class BankMenuBar(wx.MenuBar):
         
     def onClickReportBug(self, event):
         webbrowser.open("https://launchpad.net/wxbanker/+filebug")
+        
+    def onClickRequestFeature(self, event):
+        webbrowser.open("https://blueprints.launchpad.net/wxbanker")
+        
+    def onClickTranslate(self, event):
+        webbrowser.open("https://translations.launchpad.net/wxbanker")
+        
+    def onClickRequestCurrency(self, event):
+        webbrowser.open("https://answers.launchpad.net/wxbanker/+faq/477")
         
     def onClickAbout(self, event):
         info = wx.AboutDialogInfo()

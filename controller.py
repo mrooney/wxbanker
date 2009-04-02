@@ -49,13 +49,13 @@ Traceback (most recent call last):
 InvalidAccountException: Invalid account 'My Account' specified.
 
 >>> len(messages)
-1
+2
 
 # Now test valid account and transaction manipulation.
 
 >>> a1 = model.CreateAccount("My Account")
 >>> len(messages)
-2
+3
 >>> messages[0][1].Name
 'My Account'
 
@@ -64,7 +64,7 @@ Traceback (most recent call last):
   ...
 AccountAlreadyExistsException: Account 'My Account' already exists.
 >>> len(messages)
-2
+3
 >>> len(model.Accounts) == 1
 True
 >>> a = model.Accounts[0]
@@ -80,10 +80,10 @@ True
 >>> len(a.Transactions)
 1
 >>> len(messages)
-4
->>> messages[1] == (('transaction', 'created'), (a, t1))
+7
+>>> messages[2] == (('transaction', 'created'), (a, t1))
 True
->>> messages[0] == (('account', 'balance changed', 'My Account'), a)
+>>> messages[1] == (('account', 'balance changed', 'My Account'), a)
 True
 >>> a.Balance
 100.27
@@ -97,14 +97,14 @@ u'ATM Withdrawal'
 >>> t2.Date
 datetime.date(2007, 1, 6)
 >>> len(messages)
-6
+11
 >>> model.float2str(model.Balance)
 '$90.27'
 
 #testRenameAccount
 >>> a.Name = "My Renamed Account"
 >>> len(messages)
-7
+12
 >>> messages[0] == (('account', 'renamed', 'My Account'), ('My Account', a))
 True
 >>> len(model.Accounts)
@@ -119,19 +119,19 @@ InvalidAccountException: Invalid account 'My Account' specified.
 #testTransactionUpdating
 >>> t1.Amount = -101
 >>> len(messages)
-9
+14
 >>> t1.Amount == -101
 True
 >>> model.float2str(model.Balance)
 '-$111.00'
 >>> t1.Description = "Updated description"
 >>> len(messages)
-10
+15
 >>> t1.Description
 u'Updated description'
 >>> t1.Date = datetime.date(1986, 1, 6)
 >>> len(messages)
-11
+16
 >>> t1.Date == datetime.date(1986, 1, 6)
 True
 
@@ -209,17 +209,6 @@ True
 
 #>>> model.Search(u'\xef\xbf\xa5') == [t1]
 #True
-
-#auto-save
->>> controller.AutoSave = False
->>> controller.AutoSave
-False
->>> import shutil; shutil.copy("test.db", "test2.db")
->>> t.Description = "Modified! Did you save?"
->>> model3 = controller.LoadPath("test2.db")
->>> model == model3
-False
-
 """
 """
 #*ensure no commits on a store init if not upgrading
@@ -284,6 +273,10 @@ class Controller(object):
             debug.debug("Setting auto-save to: %s" % val)
             model.Store.AutoSave = val
             
+        # If the user enables auto-save, we want to also save.
+        if self.AutoSave:
+            Publisher.sendMessage("user.saved")
+            
     def LoadPath(self, path, use=False):
         if path is None:
             # Figure out where the bank database file is, and load it.
@@ -310,18 +303,20 @@ class Controller(object):
         return model
     
     def Close(self, model=None):
-        if model is None:
-            models = self.Models
-        else:
-            models = [model]
+        if model is None: models = self.Models
+        else: models = [model]
             
         for model in models:
-            if not model in self.Models:
+            # We can't use in here, since we need the is operator, not ==
+            if not any((m is model for m in self.Models)):
                 raise Exception("model not managed by this controller")
         
             model.Store.Close()
-            self.Models.remove(model)
-            del model
-        
+            # Again we can't use remove, different models can be ==
+            for i, m in enumerate(self.Models):
+                if m is model:
+                    self.Models.pop(i)
+                    break
+
     AutoSave = property(GetAutoSave, SetAutoSave)
     

@@ -130,7 +130,7 @@ class CsvImportFrame(wx.Frame):
         
         self.previewButton = wx.Button(topPanel, label=_("Preview"))
         self.previewButton.Disable()
-        self.previewButton.SetToolTipString(_("Prevoew"))
+        self.previewButton.SetToolTipString(_("Preview"))
         self.previewButton.Bind(wx.EVT_BUTTON, self.onClickPreviewButton)
         sizer.Add(self.previewButton)
         
@@ -293,6 +293,10 @@ class CsvImportFrame(wx.Frame):
         self.initProfileCtrl()
         
 class DetachedTransactionOLV(TransactionOLV):
+    def __init__(self, *args, **kwargs):
+        TransactionOLV.__init__(self, *args, **kwargs)
+        self.SetEmptyListMsg(_('Select file and click "Preview"'))
+        
     def renderFloat(self, floatVal):
         return floatVal
     
