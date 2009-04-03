@@ -1,0 +1,15 @@
+wxbanker (0.5) all; urgency=low
+
+  * refactor of infrastructure which greatly speeds up all operations, especially loading accounts and transactions
+  * new, slicker transaction list control allowing for sorting and fixing many bugs in the previous grid
+  * new CSV import tool (Tools->CSV Import) to import transactions from .csv files such as from online banks
+  * ability to view a graph for a specific account in the summary tab
+  * right-click option added for moving selected transaction(s) to another account
+  * right-click menu can now operate on multiple transactions, allowing for batch removing and calculating
+  * option to disable automatic saving (File->Auto-Save)
+  * more user feedback options in Help such as translate and request a feature
+  * new account button blinks when there are no accounts
+  * improved locale support, and more translations
+  * much improved testing framework
+
+ -- Michael Rooney <mrooney@ubuntu.com>  Fri, 03 Apr 2009 13:49:05 -0700
