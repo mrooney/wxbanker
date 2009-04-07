@@ -35,7 +35,7 @@ class SearchCtrl(wx.Panel):
         self.searchInBox = bankcontrols.CompactableComboBox(self, value=self.searchInChoices[0], choices=self.searchInChoices, style=wx.CB_READONLY)
 
         # The More/Less button.
-        self.moreButton = bankcontrols.MultiStateButton(self, baseLabel="%s "+_("Options"), labelDict={True: _("More"), False: _("Less")}, state=True)
+        self.moreButton = bankcontrols.MultiStateButton(self, labelDict={True: _("More options"), False: _("Less options")}, state=True)
 
         self.matchChoices = [_("Amount"), _("Description"), _("Date")]
         self.matchBox = bankcontrols.CompactableComboBox(self, value=self.matchChoices[1], choices=self.matchChoices, style=wx.CB_READONLY)
@@ -96,10 +96,13 @@ class SearchCtrl(wx.Panel):
         showLess = self.Sizer.IsShown(self.moreSizer)
         self.Sizer.Show(self.moreSizer, not showLess)
 
-        # Update appropriate strings.
+        # Update appropriate strings, and make them fully translatable.
         self.moreButton.State = showLess
-        tipActionStr = {True: _("Show"), False: _("Hide")}[showLess]
-        self.moreButton.SetToolTipString(_("%s advanced search options") % tipActionStr)
+        if showLess:
+            tipActionStr = _("Show advanced search options")
+        else:
+            tipActionStr = _("Hide advanced search options")
+        self.moreButton.SetToolTipString(tipActionStr)
 
         # Give or take the appropriate amount of space.
         self.Parent.Layout()

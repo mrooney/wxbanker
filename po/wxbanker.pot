@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-01 20:23-0700\n"
+"POT-Creation-Date: 2009-04-07 10:39-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -173,11 +173,11 @@ msgstr ""
 msgid "Warning"
 msgstr ""
 
-#: templater.py:25
+#: templater.py:27
 msgid "Hide Calculator"
 msgstr ""
 
-#: templater.py:26
+#: templater.py:28
 msgid "Show Calculator"
 msgstr ""
 
@@ -357,15 +357,11 @@ msgid "All Accounts"
 msgstr ""
 
 #: searchctrl.py:38
-msgid "Options"
+msgid "More options"
 msgstr ""
 
 #: searchctrl.py:38
-msgid "More"
-msgstr ""
-
-#: searchctrl.py:38
-msgid "Less"
+msgid "Less options"
 msgstr ""
 
 #: searchctrl.py:43
@@ -384,17 +380,16 @@ msgstr ""
 msgid "Match: "
 msgstr ""
 
-#: searchctrl.py:101 calculator.py:124
-msgid "Show"
-msgstr ""
-
-#: searchctrl.py:101
-msgid "Hide"
-msgstr ""
-
 #: searchctrl.py:102
-#, python-format
-msgid "%s advanced search options"
+msgid "Show advanced search options"
+msgstr ""
+
+#: searchctrl.py:104
+msgid "Hide advanced search options"
+msgstr ""
+
+#: calculator.py:124
+msgid "Show"
 msgstr ""
 
 #: wxbanker.py:37
