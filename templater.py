@@ -31,7 +31,7 @@ _("Show Calculator")
 def gentemplate(name="wxbanker.pot"):
     """Generate a .pot template with the given name."""
     translatableFiles = [f for f in os.listdir(".") if f.endswith(".py")]
-    command = "xgettext %s" % " ".join(translatableFiles) + " --output=locale/%s"%name
+    command = "xgettext %s" % " ".join(translatableFiles) + " --output=po/%s"%name
     print commands.getstatusoutput(command)
     
 def export2import(exportDir):

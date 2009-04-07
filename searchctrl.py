@@ -96,10 +96,13 @@ class SearchCtrl(wx.Panel):
         showLess = self.Sizer.IsShown(self.moreSizer)
         self.Sizer.Show(self.moreSizer, not showLess)
 
-        # Update appropriate strings.
+        # Update appropriate strings, and make them fully translatable.
         self.moreButton.State = showLess
-        tipActionStr = {True: _("Show"), False: _("Hide")}[showLess]
-        self.moreButton.SetToolTipString(_("%s advanced search options") % tipActionStr)
+        if showLess:
+            tipActionStr = _("Show advanced search options")
+        else:
+            tipActionStr = _("Hide advanced search options")
+        self.moreButton.SetToolTipString(tipActionStr)
 
         # Give or take the appropriate amount of space.
         self.Parent.Layout()
