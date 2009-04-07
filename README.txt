@@ -1,20 +1,21 @@
 Hello, and thanks for using wxBanker! If you have any questions,
 comments, or suggestions, please don't hesitate to email me at
-michael@wxbanker.org. If you find a bug, please file it at
+mrooney@ubuntu.com. If you find a bug, please file it at
 https://bugs.launchpad.net/wxbanker.
 
 == UPGRADING ==
 
-If you are upgrading from a release of wxBanker 0.3 OR EARLIER,
-please see UPGRADING.txt for simple instructions. It's easy, I
-promise! If you are upgrading from wxBanker 0.4 or later, There
-is nothing special that you need to do.
+If you are upgrading from wxBanker 0.4 or later, there
+is nothing special that you need to do. If you are upgrading
+from a release of wxBanker 0.3 OR EARLIER, please see UPGRADING.txt
+for simple instructions. It's easy, I promise!
 
 
 == REQUIREMENTS ==
  - Python >= 2.5
  - wxPython >= 2.8.8.0
  * numpy >= 1.04 (optional; enables graphing capabilities)
+ * python-simplejson (optional; enables csv import)
 
 See "INSTALLING" below for instructions on installing these
 dependencies on your specific operating system.
@@ -23,15 +24,15 @@ dependencies on your specific operating system.
 == INSTALLING ==
  - Windows 2000/XP/Vista:
    - Download and install python from:
-      http://www.python.org/ftp/python/2.5.2/python-2.5.2.msi
+      http://www.python.org/ftp/python/2.5.4/python-2.5.4.msi
    - Download and install wxPython from:
-      http://downloads.sourceforge.net/wxpython/wxPython2.8-win32-unicode-2.8.8.1-py25.exe
+      http://downloads.sourceforge.net/wxpython/wxPython2.8-win32-unicode-2.8.9.2-py25.exe
    - Optionally, for graphing capabilities, download and install
       numpy-1.1.0-win32-superpack-python2.5.exe or later from:
       http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=175103
 
  - Ubuntu/Debian
-   - sudo apt-get install python2.5 python-wxgtk2.8 python-numpy
+   - sudo apt-get install python-wxgtk2.8 python-numpy python-simplejson
  
  - Fedora
    - su -c 'yum install python wxPython numpy'
@@ -39,9 +40,9 @@ dependencies on your specific operating system.
  - Mac OSX (PPC or Intel)
    - If you are using Leopard 10.5 or newer, you already have Python 2.5 installed.
      Otherwise, download and install python from:
-      http://www.python.org/ftp/python/2.5.2/python-2.5.2-macosx.dmg
+      http://www.python.org/ftp/python/2.5.4/python-2.5.4-macosx.dmg
    - Download and install wxPython from:
-      http://downloads.sourceforge.net/wxpython/wxPython2.8-osx-unicode-2.8.8.1-universal-py2.5.dmg
+      http://downloads.sourceforge.net/wxpython/wxPython2.8-osx-unicode-2.8.9.2-universal-py2.5.dmg
    - Optionally (10.5 only), for graphing capabilities, download and install
       numpy-1.1.0-py2.5-macosx10.5.dmg or later from:
       http://sourceforge.net/project/showfiles.php?group_id=1369&package_id=175103
