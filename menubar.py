@@ -189,9 +189,10 @@ class BankMenuBar(wx.MenuBar):
             'Mark James (www.famfamfam.com/lab/icons/silk/)',
         ]
         translators = [
-            'sl: Primo¸ Jer¨e (jerse@inueni.com)',
-            'es: Diego J. Romero López (diegojromerolopez@gmail.com)',
-            'hi: Ankur Kachru (ankurkachru@gmail.com)',
+            "sl: Primo¸ Jer¨e (jerse@inueni.com)",
+            "es: Diego J. Romero López (diegojromerolopez@gmail.com)",
+            "hi: Ankur Kachru (ankurkachru@gmail.com)",
+            "pl: Tomasz 'Zen' Napierala (tomasz@napierala.org)",
         ]
         info.Translators = [unicode(s, 'iso-8859-15') for s in translators]
         
