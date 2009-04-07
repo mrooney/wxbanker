@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #    https://launchpad.net/wxbanker
 #    mintapi.py: Copyright 2007-2009 Mike Rooney <michael@wxbanker.org>
 #

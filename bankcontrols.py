@@ -26,13 +26,35 @@ def DateCtrlFactory(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY):
     # The date control. We want the Generic control, which is a composite control
     # and allows us to bind to its enter, but on Windows with wxPython < 2.8.8.0,
     # it won't be available.
+    doBind = False
     try:
         DatePickerClass = wx.GenericDatePickerCtrl
+        doBind = True
     except AttributeError:
         DatePickerClass = wx.DatePickerCtrl
         
     dateCtrl = DatePickerClass(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY)
     dateCtrl.SetToolTipString(_("Date"))
+    
+    if doBind:
+        def onDateChar(event):
+            key = event.GetKeyCode()
+            incr = 0
+            if key == wx.WXK_DOWN:
+                incr = -1
+            elif key == wx.WXK_UP:
+                incr = 1
+            else:
+                event.Skip()
+                
+            if incr:
+                dateCtrl.Value += incr*wx.DateSpan(days=1)
+    
+        try:
+            dateCtrl.Children[0].Children[0].Bind(wx.EVT_KEY_DOWN, onDateChar)
+        except Exception:
+            print "Unable to bind to dateCtrl's text field, that's odd! Please file a bug: https://bugs.launchpad.net/wxbanker/+filebug"
+        
     return dateCtrl
 
 
