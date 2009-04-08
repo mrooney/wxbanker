@@ -24,4 +24,4 @@ move it manually by either:
 
 
 Thanks for using wxBanker. If you have any problems, questions, or
-comments, check out wxbanker.org or email me at michael@wxbanker.org!
+comments, check out wxbanker.org or email me at mrooney@ubuntu.com!

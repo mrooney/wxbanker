@@ -1,25 +1,25 @@
+#!/usr/bin/env python
+#
+#    https://launchpad.net/wxbanker
+#    transactionolv.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
+#
+#    This file is part of wxBanker.
+#
+#    wxBanker is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    wxBanker is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 """
 A refactor of TransactionGrid, using ObjectListView.
 
-Can we bind this to the list so inserts and removals and automatically handled?
-
-IMPLEMENTED:
-- displaying transactions
-- editable amounts/descriptions
-- edits pushed to model
-- total based on total of last transaction
-- handle new transactions
-- min column sizes when there aren't any transactions
-- default sort by date
-- display negative amount as Red
-- right-click context menu
-  - remove
-  - calculator options on amounts
-- amount editing as %.2f (instead of 2.16999999 etc)
-- searching
-- editable date
-- changing date moves transaction appropriately
-- handle currency changes
 TODO (for feature parity):
 - done? totals automatically updates for transaction changes above them
 - disable sorting on Total column
@@ -27,12 +27,6 @@ TODO (for feature parity):
 - flickerless RefreshObjects
 - flickerless remove transaction
 - handle batch events at UI level
-NEW THINGS:
-- sorting by columns
-- empty account message
-- fixed:
- - slow resizing
- - unnecessary scrollbars sometimes
 """
 
 import wx, datetime
@@ -301,8 +295,3 @@ class TransactionOLV(GroupListView):
     def __del__(self):
         for callback, topic in self.Subscriptions:
             Publisher.unsubscribe(callback)
-
-if __name__ == "__main__":
-    app = wx.App(False)
-    olvFrame(None).Show()
-    app.MainLoop()
