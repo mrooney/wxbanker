@@ -107,7 +107,6 @@ class TransactionPanel(wx.Panel):
         self.Sizer = mainSizer
         mainSizer.Layout()
 
-        ##self.Bind(wx.EVT_SIZE, self.transactionCtrl.doResize)
         for message in ["account.created", "account.removed", "view.account changed"]:
             Publisher().subscribe(self.onSearchInvalidatingChange, message)
 
