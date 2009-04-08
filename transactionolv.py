@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 #    https://launchpad.net/wxbanker
-#    wxbanker.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
+#    transactionolv.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -295,8 +295,3 @@ class TransactionOLV(GroupListView):
     def __del__(self):
         for callback, topic in self.Subscriptions:
             Publisher.unsubscribe(callback)
-
-if __name__ == "__main__":
-    app = wx.App(False)
-    olvFrame(None).Show()
-    app.MainLoop()
