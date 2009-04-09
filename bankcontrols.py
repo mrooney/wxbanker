@@ -70,9 +70,6 @@ class HyperlinkText(wx.HyperlinkCtrl):
         if callable:
             self.Bind(wx.EVT_HYPERLINK, onClick)
 
-    def SetVisited(self, visited):
-        print visited
-
 
 class CompactableComboBox(wx.ComboBox):
     def Compact(self):

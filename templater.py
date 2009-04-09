@@ -17,7 +17,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, commands, shutil, pprint
+import os, commands, shutil, pprint, tarfile
 
 """
 Some strings are displayed dynamically, and so we need to "hard code"
@@ -26,6 +26,7 @@ the possibilities here so they get in the templates and translated.
 _ = lambda s: s
 _("Hide Calculator")
 _("Show Calculator")
+_("Transact") # Keep this here for now, might want it.
 
 
 def gentemplate(name="wxbanker.pot"):
@@ -34,9 +35,22 @@ def gentemplate(name="wxbanker.pot"):
     command = "xgettext %s" % " ".join(translatableFiles) + " --output=po/%s"%name
     print commands.getstatusoutput(command)
     
-def export2import(exportDir):
+def export2import(tarOrExtracted):
     """Launchpad does not support importing exported po files without some massage."""
-    #TODO: support being given a .tar.gz export and extract it
+    try:
+        isTar = tarfile.is_tarfile(tarOrExtracted)
+    except Exception:
+        isTar = False
+        
+    if isTar:
+        tar = tarfile.open(tarOrExtracted)
+        tar.extractall("tmp")
+        exportDir = "tmp"
+    elif os.path.isdir(tarOrExtracted):
+        exportDir = tarOrExtracted
+    else:
+        raise Exception("Must pass location of either tar.gz file or extracted directory")
+        
     os.chdir(exportDir)
 
     def nameto(po, d):
@@ -64,7 +78,11 @@ def export2import(exportDir):
             # Name it properly and move it to po/
             nameto(item, "po/")
         
-    #TODO: tar.gz the po directory
+    #tarfile.open("massaged.tar.gz", "w|gz")
 
 if __name__ == "__main__":
-    gentemplate()
+    import sys
+    if sys.argv[1] == "-lp":
+        export2import(sys.argv[2])
+    else:
+        gentemplate()
