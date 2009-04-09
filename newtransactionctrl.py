@@ -79,9 +79,14 @@ class NewTransactionCtrl(wx.Panel):
         else:
             # Bind to DateCtrl Enter (LP: 252454).
             dateTextCtrl.WindowStyleFlag |= wx.TE_PROCESS_ENTER
-            dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
+            dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onDateEnter)
             
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
+        
+    def onDateEnter(self, event):
+        # Force a focus-out/tab to work around LP #311934
+        self.dateCtrl.Navigate()
+        self.onNewTransaction()
         
     def onAccountChanged(self, message):
         account = message.data
@@ -140,7 +145,7 @@ class NewTransactionCtrl(wx.Panel):
             accountName = dlg.GetStringSelection()
             return accountDict[accountName]
 
-    def onNewTransaction(self, event):
+    def onNewTransaction(self, event=None):
         # First, ensure an account is selected.
         destAccount = self.CurrentAccount
         if destAccount is None:
