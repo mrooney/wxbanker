@@ -18,7 +18,16 @@
 
 import wx
 
-class AccountConfigDialog(wx.Frame):
+class AccountConfigDialog(wx.Dialog):
     def __init__(self, parent, account):
-        pass
+        wx.Dialog.__init__(self, parent, title=account.Name)
+        
+        self.Sizer = wx.BoxSizer()
+        self.Sizer.Add(wx.StaticText(self, -1, "Hello."))
+        
+    def createMintConfigPanel(self):
+        panel = wx.Panel(self)
+        
+        
+        
     

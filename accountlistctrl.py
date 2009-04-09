@@ -19,6 +19,7 @@
 import wx
 import bankcontrols, bankexceptions
 from wx.lib.pubsub import Publisher
+import accountconfigdialog
 
 
 class AccountListCtrl(wx.Panel):
@@ -70,7 +71,7 @@ class AccountListCtrl(wx.Panel):
         self.configureButton = configureButton = wx.BitmapButton(self.childPanel, bitmap=BMP)
         configureButton.SetToolTipString(_("Configure the selected account"))
         configureButton.Enabled = False
-        configureButton.Hide()
+        #configureButton.Hide()
         
         # Layout the buttons.
         buttonSizer = wx.BoxSizer()
@@ -104,6 +105,7 @@ class AccountListCtrl(wx.Panel):
         addButton.Bind(wx.EVT_BUTTON, self.onAddButton)
         removeButton.Bind(wx.EVT_BUTTON, self.onRemoveButton)
         editButton.Bind(wx.EVT_BUTTON, self.onRenameButton)
+        configureButton.Bind(wx.EVT_BUTTON, self.onConfigureButton)
         hideBox.Bind(wx.EVT_CHECKBOX, self.onHideCheck)
         # Set up the link binding.
         self.Bind(wx.EVT_HYPERLINK, self.onAccountClick)
@@ -444,6 +446,10 @@ class AccountListCtrl(wx.Panel):
             if dlg.ShowModal() == wx.ID_YES:
                 # Remove the account from the model.
                 account.Remove()
+                
+    def onConfigureButton(self, event):
+        dlg = accountconfigdialog.AccountConfigDialog(self, self.GetCurrentAccount())
+        dlg.ShowModal()
 
     def onRenameButton(self, event):
         if self.currentIndex is not None:
