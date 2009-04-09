@@ -193,7 +193,7 @@ class BankMenuBar(wx.MenuBar):
             "es: Diego J. Romero López (diegojromerolopez@gmail.com)",
             "hi: Ankur Kachru (ankurkachru@gmail.com)",
             "pl: Tomasz 'Zen' Napierala (tomasz@napierala.org)",
-            "fr: Steve Dodier",
+            "fr: Steve Dodier <steve.dodier@gmail.com>",
         ]
         info.Translators = [unicode(s, 'iso-8859-15') for s in translators]
         
