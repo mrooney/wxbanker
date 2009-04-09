@@ -38,24 +38,32 @@ class NewTransactionCtrl(wx.Panel):
 
         # The transfer check.
         self.transferCheck = transferCheck = wx.CheckBox(self, label=_("Transfer"))
+        
+        # The recurs check.
+        self.recursCheck = recursCheck = wx.CheckBox(self, label=_("Recurring"))
+        
+        transferSizer = wx.BoxSizer()
+        transferSizer.Add(transferCheck, 0, wx.ALIGN_CENTER)
+        transferSizer.Add(wx.StaticText(self, label="("), 0, wx.ALIGN_CENTER)
+        transferSizer.Add(bankcontrols.HyperlinkText(self, label="?", onClick=self.onTransferTip), 0, wx.ALIGN_CENTER)
+        transferSizer.Add(wx.StaticText(self, label=")"), 0, wx.ALIGN_CENTER)
+
+        checkSizer = wx.BoxSizer(wx.VERTICAL)
+        checkSizer.Add(transferSizer)
+        checkSizer.Add(self.recursCheck)
 
         # Set up the layout.
         self.mainSizer = mainSizer = wx.BoxSizer()
-        mainSizer.Add(wx.StaticText(self, label=_("Transact")+": "), 0, wx.ALIGN_CENTER)
-        mainSizer.AddSpacer(8)
         mainSizer.Add(wx.StaticBitmap(self, bitmap=wx.ArtProvider.GetBitmap('wxART_date')), 0, wx.ALIGN_CENTER|wx.ALL, 2)
         mainSizer.Add(dateCtrl, 0, wx.ALIGN_CENTER)
-        mainSizer.AddSpacer(10)
-        mainSizer.Add(descCtrl, 0, wx.ALIGN_CENTER)
-        mainSizer.AddSpacer(10)
+        mainSizer.AddSpacer(5)
+        mainSizer.Add(descCtrl, 1, wx.ALIGN_CENTER)
+        mainSizer.AddSpacer(5)
         mainSizer.Add(amountCtrl, 0, wx.ALIGN_CENTER)
-        mainSizer.AddSpacer(10)
+        mainSizer.AddSpacer(5)
         mainSizer.Add(newButton, 0, wx.ALIGN_CENTER)
-        mainSizer.AddSpacer(10)
-        mainSizer.Add(transferCheck, 0, wx.ALIGN_CENTER)
-        mainSizer.Add(wx.StaticText(self, label="("), 0, wx.ALIGN_CENTER)
-        mainSizer.Add(bankcontrols.HyperlinkText(self, label="?", onClick=self.onTransferTip), 0, wx.ALIGN_CENTER)
-        mainSizer.Add(wx.StaticText(self, label=")"), 0, wx.ALIGN_CENTER)
+        mainSizer.AddSpacer(5)
+        mainSizer.Add(checkSizer, 0, wx.ALIGN_CENTER)
         self.Sizer = mainSizer
 
         # Now layout the control.

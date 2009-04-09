@@ -43,6 +43,7 @@ class ManagePanel(wx.Panel):
         leftPanel.Sizer.Add(accountCtrl, 0, wx.EXPAND)
         leftPanel.Sizer.AddStretchSpacer(1)
         leftPanel.Sizer.Add(calcWidget, 0, wx.EXPAND)
+        #leftPanel.Sizer.Add(wx.StaticText(leftPanel, label=_("Transact")+":"), 0, wx.ALIGN_RIGHT|wx.TOP, 5)
 
         # Force the calculator widget (and parent) to take on the desired size.
         for widget in [calcWidget.widget, leftPanel]:
@@ -51,10 +52,9 @@ class ManagePanel(wx.Panel):
         ## Right side, the transaction panel:
         self.transactionPanel = transactionPanel = TransactionPanel(self, bankController)
 
-        mainSizer = wx.BoxSizer()
-        self.Sizer = mainSizer
-        mainSizer.Add(leftPanel, 0, wx.EXPAND|wx.ALL, 5)
-        mainSizer.Add(transactionPanel, 1, wx.EXPAND|wx.ALL, 0)
+        self.Sizer = topSizer = wx.BoxSizer()
+        topSizer.Add(leftPanel, 0, wx.EXPAND|wx.ALL, 5)
+        topSizer.Add(transactionPanel, 1, wx.EXPAND|wx.ALL, 0)
 
         #subscribe to messages that interest us
         Publisher().subscribe(self.onChangeAccount, "view.account changed")
@@ -94,18 +94,15 @@ class TransactionPanel(wx.Panel):
         
         self.searchCtrl = searchCtrl = searchctrl.SearchCtrl(self, bankController)
         self.transactionCtrl = transactionCtrl = TransactionCtrl(subpanel, bankController)
-        self.newTransCtrl = newTransCtrl = newtransactionctrl.NewTransactionCtrl(self)
+        newTransCtrl = newtransactionctrl.NewTransactionCtrl(self)
         
         subpanel.Sizer = wx.BoxSizer()
         subpanel.Sizer.Add(transactionCtrl, 1, wx.EXPAND)
 
-        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        self.Sizer = mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(searchCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL)
         mainSizer.Add(subpanel, 1, wx.EXPAND)
-        mainSizer.Add(newTransCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.TOP, 5)
-
-        self.Sizer = mainSizer
-        mainSizer.Layout()
+        mainSizer.Add(newTransCtrl, 0, wx.EXPAND)
 
         for message in ["account.created", "account.removed", "view.account changed"]:
             Publisher().subscribe(self.onSearchInvalidatingChange, message)
