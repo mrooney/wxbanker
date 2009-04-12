@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-07 10:39-0700\n"
+"POT-Creation-Date: 2009-04-12 15:40-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,7 +33,7 @@ msgid "CSV columns mapping"
 msgstr ""
 
 #: csvimportframe.py:78 bankcontrols.py:35 summarytab.py:165
-#: transactionolv.py:68 searchctrl.py:40
+#: transactionolv.py:62 searchctrl.py:42
 msgid "Date"
 msgstr ""
 
@@ -41,8 +41,8 @@ msgstr ""
 msgid "Date format"
 msgstr ""
 
-#: csvimportframe.py:86 newtransactionctrl.py:33 transactionolv.py:70
-#: searchctrl.py:40
+#: csvimportframe.py:86 newtransactionctrl.py:33 transactionolv.py:64
+#: searchctrl.py:42
 msgid "Amount"
 msgstr ""
 
@@ -50,8 +50,8 @@ msgstr ""
 msgid "Decimal separator"
 msgstr ""
 
-#: csvimportframe.py:92 newtransactionctrl.py:32 transactionolv.py:69
-#: searchctrl.py:40
+#: csvimportframe.py:92 newtransactionctrl.py:32 transactionolv.py:63
+#: searchctrl.py:42
 msgid "Description"
 msgstr ""
 
@@ -145,7 +145,7 @@ msgstr ""
 msgid "Configure the selected account"
 msgstr ""
 
-#: accountlistctrl.py:86 transactionolv.py:71
+#: accountlistctrl.py:86 transactionolv.py:65
 msgid "Total"
 msgstr ""
 
@@ -204,65 +204,65 @@ msgid ""
 "to fix this."
 msgstr ""
 
-#: newtransactionctrl.py:114
+#: newtransactionctrl.py:119
 msgid "No amount entered in the 'Amount' field."
 msgstr ""
 
-#: newtransactionctrl.py:116
+#: newtransactionctrl.py:121
 #, python-format
 msgid "'%s' is not a valid amount."
 msgstr ""
 
-#: newtransactionctrl.py:119
+#: newtransactionctrl.py:124
 msgid "Please enter a number such as 12.34 or -20."
 msgstr ""
 
-#: newtransactionctrl.py:120
+#: newtransactionctrl.py:125
 msgid "Invalid Transaction Amount"
 msgstr ""
 
-#: newtransactionctrl.py:136
+#: newtransactionctrl.py:141
 msgid "Which account will the money come from?"
 msgstr ""
 
-#: newtransactionctrl.py:136
+#: newtransactionctrl.py:141
 msgid "Other accounts"
 msgstr ""
 
-#: newtransactionctrl.py:148
+#: newtransactionctrl.py:153
 msgid "Please select an account and then try again."
 msgstr ""
 
-#: newtransactionctrl.py:149
+#: newtransactionctrl.py:154
 msgid "No account selected"
 msgstr ""
 
-#: newtransactionctrl.py:164
+#: newtransactionctrl.py:169
 msgid "transfer"
 msgstr ""
 
-#: newtransactionctrl.py:164
+#: newtransactionctrl.py:169
 msgid "transaction"
 msgstr ""
 
-#: newtransactionctrl.py:166
+#: newtransactionctrl.py:171
 #, python-format
 msgid ""
 "A search is currently active. Would you like to clear the current search and "
 "make this %s in \"%s\"?"
 msgstr ""
 
-#: newtransactionctrl.py:167
+#: newtransactionctrl.py:172
 msgid "Clear search?"
 msgstr ""
 
-#: newtransactionctrl.py:185
+#: newtransactionctrl.py:190
 msgid ""
 "If this box is checked when adding a transaction, you will be prompted for "
 "the account to use as the source of the transfer."
 msgstr ""
 
-#: newtransactionctrl.py:186
+#: newtransactionctrl.py:191
 msgid ""
 "For example, checking this box and entering a transaction of $50 into this "
 "account will also subtract $50 from the account that you choose as the "
@@ -297,39 +297,39 @@ msgstr ""
 msgid "Total Balance Over Time"
 msgstr ""
 
-#: transactionolv.py:56
+#: transactionolv.py:50
 msgid "No transactions entered."
 msgstr ""
 
-#: transactionolv.py:190
+#: transactionolv.py:184
 #, python-format
 msgid "Send %s to calculator"
 msgstr ""
 
-#: transactionolv.py:191
+#: transactionolv.py:185
 #, python-format
 msgid "Add %s to calculator"
 msgstr ""
 
-#: transactionolv.py:192
+#: transactionolv.py:186
 #, python-format
 msgid "Subtract %s from calculator"
 msgstr ""
 
-#: transactionolv.py:204
+#: transactionolv.py:198
 msgid "Remove this transaction"
 msgstr ""
 
-#: transactionolv.py:205
+#: transactionolv.py:199
 msgid "Move this transaction to account"
 msgstr ""
 
-#: transactionolv.py:207
+#: transactionolv.py:201
 #, python-format
 msgid "Remove these %i transactions"
 msgstr ""
 
-#: transactionolv.py:208
+#: transactionolv.py:202
 #, python-format
 msgid "Move these %i transactions to account"
 msgstr ""
@@ -356,35 +356,35 @@ msgstr ""
 msgid "All Accounts"
 msgstr ""
 
-#: searchctrl.py:38
+#: searchctrl.py:40
 msgid "More options"
 msgstr ""
 
-#: searchctrl.py:38
+#: searchctrl.py:40
 msgid "Less options"
 msgstr ""
 
-#: searchctrl.py:43
+#: searchctrl.py:45
 msgid "Case Sensitive"
 msgstr ""
 
-#: searchctrl.py:44
+#: searchctrl.py:46
 msgid "Whether or not to match based on capitalization"
 msgstr ""
 
-#: searchctrl.py:50
+#: searchctrl.py:52
 msgid "In: "
 msgstr ""
 
-#: searchctrl.py:56
+#: searchctrl.py:58
 msgid "Match: "
 msgstr ""
 
-#: searchctrl.py:102
+#: searchctrl.py:104
 msgid "Show advanced search options"
 msgstr ""
 
-#: searchctrl.py:104
+#: searchctrl.py:106
 msgid "Hide advanced search options"
 msgstr ""
 
