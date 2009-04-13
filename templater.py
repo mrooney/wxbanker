@@ -62,7 +62,11 @@ def export2import(tarOrExtracted):
         shutil.move(newname, d)
     
     for x in os.listdir("po"):
-        os.remove(os.path.join("po", x))
+        path = os.path.join("po", x)
+        if x.endswith(".po"):
+            nameto(path, "po/")
+        else:
+            os.remove(path)
     
     for item in os.listdir("."):
         if os.path.isdir(item):
