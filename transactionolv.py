@@ -40,7 +40,6 @@ class TransactionOLV(GroupListView):
         GroupListView.__init__(self, parent, style=wx.LC_REPORT|wx.SUNKEN_BORDER)
         self.CurrentAccount = None
         self.BankController = bankController
-        self.SORT_COL = 1
         
         self.showGroups = False
         self.evenRowsBackColor = wx.Color(224,238,238)
@@ -53,20 +52,21 @@ class TransactionOLV(GroupListView):
         dateStr = str(datetime.date.today())
         dateWidth = self.GetTextExtent(dateStr)[0] + 10
         
-        # Make a bogus first column, since the 1st column isn't editable in CELLEDIT_SINGLECLICK mode.
-        bogusColumn = ColumnDefn("", fixedWidth=0)
-        bogusColumn.isInternal = True
+        # Define some constants to use throughout.
+        self.COL_DATE = 0
+        self.COL_AMOUNT = 2
+        self.COL_TOTAL = 3
         
         self.SetColumns([
-            bogusColumn,
             ColumnDefn(_("Date"), valueGetter=self.getDateOf, valueSetter=self.setDateOf, width=dateWidth),
             ColumnDefn(_("Description"), valueGetter="Description", isSpaceFilling=True),
             ColumnDefn(_("Amount"), "right", valueGetter="Amount", stringConverter=self.renderFloat),
             ColumnDefn(_("Total"), "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
         ])
-        # Our custom hack in OLV.py line 2017 will render floats appropriately as %.2f
+        # Our custom hack in OLV.py:2017 will render amount floats appropriately as %.2f when editing.
         
         # By default, sort by the date column, ascending.
+        self.SORT_COL = self.COL_DATE
         self.SortBy(self.SORT_COL)
         
         self.Bind(wx.EVT_RIGHT_DOWN, self.onRightDown)
@@ -172,9 +172,9 @@ class TransactionOLV(GroupListView):
     def showContextMenu(self, transactions, col, removeOnly=False):
         menu = wx.Menu()
 
-        if not removeOnly and col in (3,4):
+        if not removeOnly and col in (self.COL_AMOUNT, self.COL_TOTAL):
             # This is an amount cell, allow calculator options.
-            if col == 3:
+            if col == self.COL_AMOUNT:
                 amount = sum((t.Amount for t in transactions))
             else:
                 amount = transactions[-1]._Total
@@ -229,13 +229,13 @@ class TransactionOLV(GroupListView):
         """
         command = actionStr.split(' ')[0].upper()
         
-        if col == 3:
+        if col == self.COL_AMOUNT:
             amount = sum((t.Amount for t in transactions))
-        elif col == 4:
+        elif col == self.COL_TOTAL:
             # Use the last total, if multiple are selected.
             amount = transactions[-1]._Total
         else:
-            raise Exception("onCalculatorAction should only be called with col 3 or 4.")
+            raise Exception("onCalculatorAction should only be called with COL_AMOUNT or COL_TOTAL")
 
         pushStr = {'SEND': 'C%s', 'SUBTRACT': '-%s=', 'ADD': '+%s='}[command]
         pushStr %= amount
