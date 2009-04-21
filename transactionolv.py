@@ -186,10 +186,10 @@ class TransactionOLV(GroupListView):
                 (_("Subtract %s from calculator") % val, "wxART_calculator_delete"),
             ]
 
-            for actionStr, artHint in actions:
+            for i, (actionStr, artHint) in enumerate(actions):
                 item = wx.MenuItem(menu, -1, actionStr)
                 item.SetBitmap(wx.ArtProvider.GetBitmap(artHint))
-                menu.Bind(wx.EVT_MENU, lambda e, s=actionStr: self.onCalculatorAction(transactions, col, s), source=item)
+                menu.Bind(wx.EVT_MENU, lambda e, i=i: self.onCalculatorAction(transactions, col, i), source=item)
                 menu.AppendItem(item)
             menu.AppendSeparator()
 
@@ -221,14 +221,12 @@ class TransactionOLV(GroupListView):
         self.PopupMenu(menu)
         menu.Destroy()
 
-    def onCalculatorAction(self, transactions, col, actionStr):
+    def onCalculatorAction(self, transactions, col, i):
         """
         Given an action to perform on the calculator, and the row and col,
         generate the string of characters necessary to perform that action
         in the calculator, and push them.
         """
-        command = actionStr.split(' ')[0].upper()
-        
         if col == 3:
             amount = sum((t.Amount for t in transactions))
         elif col == 4:
@@ -237,7 +235,7 @@ class TransactionOLV(GroupListView):
         else:
             raise Exception("onCalculatorAction should only be called with col 3 or 4.")
 
-        pushStr = {'SEND': 'C%s', 'SUBTRACT': '-%s=', 'ADD': '+%s='}[command]
+        pushStr = ('C%s', '+%s=', '-%s=')[i] # Send, Add, Subtract commands
         pushStr %= amount
 
         Publisher.sendMessage("CALCULATOR.PUSH_CHARS", pushStr)
