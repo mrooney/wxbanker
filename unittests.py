@@ -34,7 +34,7 @@ class LocaleTests(unittest.TestCase):
         
     def testDateParsing(self):
         self.assertEquals(locale.setlocale(locale.LC_ALL, 'en_US.utf8'), 'en_US.utf8')
-        
+        pass
     
     def testLocaleFormatWorkaround(self):
         ''' test locale.format() thousand separator workaround '''
@@ -266,7 +266,7 @@ class GUITests(unittest.TestCase):
         if os.path.exists(self.ConfigPath):
             os.rename(self.ConfigPath, self.ConfigPathBackup)
         
-        self.App = wxbanker.init("test.db")
+        self.App = wxbanker.init("test.db", welcome=False)
         self.Frame = self.App.TopWindow
         
     def testAutoSaveSetAndSaveDisabled(self):
@@ -274,8 +274,11 @@ class GUITests(unittest.TestCase):
         self.assertFalse( self.Frame.MenuBar.saveMenuItem.IsEnabled() )
         
     def testAppHasController(self):
-        app = wx.GetApp()
-        self.assertTrue( hasattr(app, "Controller") )
+        self.assertTrue( hasattr(self.App, "Controller") )
+        
+    def testCanAddAndRemoveUnicodeAccount(self):
+        self.App.Controller.Model.CreateAccount(u"Lópezहिंदी")
+        self.Frame.managePanel.accountCtrl.onRemoveButton(None)
     
     def tearDown(self):
         if os.path.exists("test.db"):

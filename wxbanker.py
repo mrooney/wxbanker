@@ -38,7 +38,7 @@ except NoNumpyException:
 
 
 class BankerFrame(wx.Frame):
-    def __init__(self, bankController):
+    def __init__(self, bankController, welcome):
         # Load our window settings.
         config = wx.Config.Get()
         size = config.ReadInt('SIZE_X'), config.ReadInt('SIZE_Y')
@@ -58,8 +58,9 @@ class BankerFrame(wx.Frame):
 
         self.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.onTabSwitching)
 
-        Publisher.subscribe(self.onFirstRun, "first run")
         Publisher.subscribe(self.onWarning, "warning")
+        if welcome:
+            Publisher.subscribe(self.onFirstRun, "first run")
 
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_MOVE, self.OnMove)
@@ -129,7 +130,7 @@ class BankerFrame(wx.Frame):
             dlg.Destroy()
 
 
-def init(path=None):
+def init(path=None, welcome=True):
     import wx, os, sys
     from controller import Controller
     
@@ -145,7 +146,7 @@ def init(path=None):
         wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(silk))
     
         # Initialize the wxBanker frame!
-        frame = BankerFrame(bankController)
+        frame = BankerFrame(bankController, welcome)
     
         # Greet the user if it appears this is their first time using wxBanker.
         config = wx.Config.Get()
