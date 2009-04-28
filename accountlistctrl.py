@@ -441,7 +441,7 @@ class AccountListCtrl(wx.Panel):
     def onRemoveButton(self, event):
         if self.currentIndex is not None:
             account = self.accountObjects[self.currentIndex]
-            warningMsg = _("This will permanently remove the account '%s' and all its transactions. Continue?").decode("utf-8")
+            warningMsg = _("This will permanently remove the account '%s' and all its transactions. Continue?")
             dlg = wx.MessageDialog(self, warningMsg%account.Name, _("Warning"), style=wx.YES_NO|wx.ICON_EXCLAMATION)
             if dlg.ShowModal() == wx.ID_YES:
                 # Remove the account from the model.
