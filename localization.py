@@ -33,7 +33,7 @@ else:
 
 # Install gettext.
 import gettext
-gettext.install(APP, DIR)
+gettext.install(APP, DIR, unicode=True)
 
 # Check if the user forced a language with --lang=XX.
 import sys
