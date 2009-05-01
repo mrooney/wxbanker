@@ -1,7 +1,10 @@
 [Desktop Entry]
 Name=wxBanker Finance Manager
-GenericName=wxBanker finance manager
+Name[fr]=Gestionnaire de finances wxBanker
+GenericName=Finance Manager
+GenericName[fr]=Gestionnaire de Finances
 Comment=A lightweight personal finance manager
+Comment[fr]=Un gestionnaire de finances personnelles léger
 Exec=wxbanker
 Icon=wxbanker
 Terminal=false
