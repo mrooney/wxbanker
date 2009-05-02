@@ -130,7 +130,7 @@ class CsvImportFrame(wx.Frame):
         
         self.previewButton = wx.Button(topPanel, label=_("Preview"))
         self.previewButton.Disable()
-        self.previewButton.SetToolTipString(_("Prevoew"))
+        self.previewButton.SetToolTipString(_("Preview"))
         self.previewButton.Bind(wx.EVT_BUTTON, self.onClickPreviewButton)
         sizer.Add(self.previewButton)
         
@@ -238,9 +238,7 @@ class CsvImportFrame(wx.Frame):
             
     def importTransactions(self):
         account = self.accountsDict[self.targetAccountCtrl.Value]
-        
-        for t in self.transactionContainer.Transactions:
-            account.AddTransaction(t.Amount, t.Description, t.Date, source=None)
+        account.AddTransactions(self.transactionContainer.Transactions)
 
     def toggleImportButton(self):
         self.importButton.Enable(self.targetAccountCtrl.Value != '' and self.transactionContainer is not None) 
@@ -295,8 +293,15 @@ class CsvImportFrame(wx.Frame):
         self.initProfileCtrl()
         
 class DetachedTransactionOLV(TransactionOLV):
+    def __init__(self, *args, **kwargs):
+        TransactionOLV.__init__(self, *args, **kwargs)
+        self.SetEmptyListMsg(_('Select file and click "Preview"'))
+        
     def renderFloat(self, floatVal):
         return floatVal
+    
+    def showContextMenu(self, transactions, col):
+        TransactionOLV.showContextMenu(self, transactions, col, removeOnly=True)
 
 if __name__ == '__main__':
     app = wx.PySimpleApp()

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 #    https://launchpad.net/wxbanker
-#    bankobjects.py: Copyright 2007-2009 Mike Rooney <michael@wxbanker.org>
+#    bankobjects.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -40,8 +40,12 @@ class BankModel(object):
             
         return transactions
     
-    def GetXTotals(self, numPoints):
-        transactions = self.GetTransactions()
+    def GetXTotals(self, numPoints, account=None):
+        if account is None:
+            transactions = self.GetTransactions()
+        else:
+            transactions = account.Transactions[:]
+            
         return plotalgo.get(transactions, numPoints)
         
     def CreateAccount(self, accountName):
@@ -68,11 +72,14 @@ class BankModel(object):
         # Find all the matches.
         matches = []
         for trans in potentials:
-            print unicode(trans.Description), searchString
+            #print unicode(trans.Description), searchString
             potentialStr = unicode((trans.Amount, trans.Description, trans.Date)[matchIndex])
             if re.findall(searchString, potentialStr, flags=reFlag):
                 matches.append(trans)
         return matches
+    
+    def Save(self):
+        self.Store.Save()
         
     def float2str(self, *args, **kwargs):
         """
@@ -88,7 +95,8 @@ class BankModel(object):
         
     def setCurrency(self, currencyIndex):
         self.Store.setCurrency(currencyIndex)
-        #self.Currency = currencies.CurrencyList[currencyIndex]()
+        for account in self.Accounts:
+            account.Currency = currencyIndex
         Publisher().sendMessage("currency_changed", currencyIndex)
         
     def onCurrencyChanged(self, message):
@@ -97,6 +105,13 @@ class BankModel(object):
         
     def __eq__(self, other):
         return self.Accounts == other.Accounts
+    
+    def Print(self):
+        print "Model: %s" % self.Balance
+        for a in self.Accounts:
+            print "  %s: %s" % (a.Name, a.Balance)
+            for t in a.Transactions:
+                print t
 
     Balance = property(GetBalance)
 
@@ -117,15 +132,19 @@ class AccountList(list):
         for i, account in enumerate(self):
             if account.Name == accountName:
                 return i
-            
         return -1
         
     def Create(self, accountName):
         # First, ensure an account by that name doesn't already exist.
         if self.AccountIndex(accountName) >= 0:
             raise bankexceptions.AccountAlreadyExistsException(accountName)
+
+        currency = 0
+        if len(self):
+            # If the list contains items, the currency needs to be consistent.
+            currency = self[-1].Currency
         
-        account = self.Store.CreateAccount(accountName)
+        account = self.Store.CreateAccount(accountName, currency)
         # Make sure this account knows its parent.
         account.Parent = self
         self.append(account)
@@ -158,11 +177,24 @@ class Account(object):
         self.ID = aID
         self._Name = name
         self._Transactions = None
-        self.Currency = currencies.CurrencyList[currency]()
+        self._preTransactions = []
+        self.Currency = currency
         self._Balance = balance
         
         Publisher.subscribe(self.onTransactionAmountChanged, "transaction.updated.amount")
         Publisher.sendMessage("account.created.%s" % name, self)
+        
+    def GetSiblings(self):
+        return (account for account in self.Parent if account is not self)
+        
+    def SetCurrency(self, currency):
+        if type(currency) == int:
+            self._Currency = currencies.CurrencyList[currency]()
+        else:
+            self._Currency = currency
+            
+    def GetCurrency(self):
+        return self._Currency
         
     def GetBalance(self):
         return self._Balance
@@ -174,6 +206,19 @@ class Account(object):
     def GetTransactions(self):
         if self._Transactions is None:
             self._Transactions = self.Store.getTransactionsFrom(self)
+            
+            # If transactions were added before this list was pulled, and then an attribute
+            # is changed on one of them (Amount/Description/Date), it won't be
+            # reflected on the new account at run-time because it has a replacement instance
+            # for that transaction. So we need to swap it in.
+            if self._preTransactions:
+                # Iterate over this first (and thus once) since it is probably larger than _pre.
+                for i, newT in enumerate(self._Transactions):
+                    for oldT in self._preTransactions:
+                        if oldT == newT:
+                            self._Transactions[i] = oldT
+                            break
+                
         
         return self._Transactions
         
@@ -191,30 +236,50 @@ class Account(object):
         
     def Remove(self):
         self.Parent.Remove(self.Name)
+        
+    def AddTransactions(self, transactions):
+        Publisher.sendMessage("batch.start")
+        for t in transactions:
+            self.AddTransaction(transaction=t)
+        Publisher.sendMessage("batch.end")
 
-    def AddTransaction(self, amount, description="", date=None, source=None):
+    def AddTransaction(self, amount=None, description="", date=None, source=None, transaction=None):
         """
         Enter a transaction in this account, optionally making the opposite
         transaction in the source account first.
         """
-        if source:
-            if description:
-                description = " (%s)" % description
-            otherTrans = source.AddTransaction(-amount, _("Transfer to %s"%self.Name) + description, date)
-            description = _("Transfer from %s"%source.Name) + description 
+        Publisher.sendMessage("batch.start")
+        if transaction:
+            # It is "partial" because its ID and parent aren't necessarily correct.
+            partialTrans = transaction
+            partialTrans.Parent = self
+        elif amount is not None:
+            # No transaction object was given, we need to make one.
+            if source:
+                if description:
+                    description = " (%s)" % description
+                otherTrans = source.AddTransaction(-amount, _("Transfer to %s"%self.Name) + description, date)
+                description = _("Transfer from %s"%source.Name) + description 
+                
+            partialTrans = Transaction(None, self, amount, description, date)
+        else:
+            raise Exception("AddTransaction: Must provide either transaction arguments or a transaction object.")
             
-        partialTrans = Transaction(None, self, amount, description, date)
         self.Store.MakeTransaction(self, partialTrans)
         transaction = partialTrans
         
-        # Ideally we don't load all the transactions here (this is silly on a transfer/move on an
-        # account that hasn't been viewed yet), but there's more important things for now.
-        self.Transactions.append(transaction)
-        
+        # Don't append if there aren't transactions loaded yet, it is already in the model and will appear on a load. (LP: 347385).
+        if self._Transactions is not None:
+            self.Transactions.append(transaction)
+        else:
+            # We will need to do some magic with these later when transactions are loaded.
+            self._preTransactions.append(transaction)
+
         Publisher.sendMessage("transaction.created", (self, transaction))
         
         # Update the balance.
         self.Balance += transaction.Amount
+        Publisher.sendMessage("batch.end")
         
         if source:
             return transaction, otherTrans
@@ -222,15 +287,35 @@ class Account(object):
             return transaction
 
     def RemoveTransaction(self, transaction):
-        if transaction not in self.Transactions:
-            raise bankexceptions.InvalidTransactionException("Transaction does not exist in account '%s'" % self.Name)
+        self.RemoveTransactions([transaction])
         
-        self.Store.RemoveTransaction(transaction)
-        Publisher.sendMessage("transaction.removed", (self, transaction))
-        self.Transactions.remove(transaction)
-        
+    def RemoveTransactions(self, transactions):
+        Publisher.sendMessage("batch.start")
+        # Accumulate the difference and update the balance just once. Cuts 33% time of removals.
+        difference = 0
+        # Send the message for all transactions at once, cuts _97%_ of time! OLV is slow here I guess.
+        Publisher.sendMessage("transactions.removed", (self, transactions))
+        for transaction in transactions:
+            if transaction not in self.Transactions:
+                raise bankexceptions.InvalidTransactionException("Transaction does not exist in account '%s'" % self.Name)
+            
+            self.Store.RemoveTransaction(transaction)
+            transaction.Parent = None
+            self.Transactions.remove(transaction)
+            difference += transaction.Amount
+            
         # Update the balance.
-        self.Balance -= transaction.Amount
+        self.Balance -= difference
+        Publisher.sendMessage("batch.end")
+        
+    def MoveTransaction(self, transaction, destAccount):
+        self.MoveTransactions([transaction], destAccount)
+        
+    def MoveTransactions(self, transactions, destAccount):
+        Publisher.sendMessage("batch.start")
+        self.RemoveTransactions(transactions)
+        destAccount.AddTransactions(transactions)
+        Publisher.sendMessage("batch.end")
         
     def onTransactionAmountChanged(self, message):
         transaction, difference = message.data
@@ -259,6 +344,7 @@ class Account(object):
     Name = property(GetName, SetName)
     Transactions = property(GetTransactions)
     Balance = property(GetBalance, SetBalance)
+    Currency = property(GetCurrency, SetCurrency)
         
     
 class TransactionList(list):
@@ -379,8 +465,8 @@ class Transaction(object):
             
     def __cmp__(self, other):
         return cmp(
-            (self.Date, id(self)),
-            (other.Date, id(other))
+            (self.Date, self.ID),
+            (other.Date, other.ID)
         )
     
     def __eq__(self, other):

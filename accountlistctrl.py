@@ -1,5 +1,5 @@
 #    https://launchpad.net/wxbanker
-#    accountlistctrl.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
+#    accountlistctrl.py: Copyright 2007, 2008 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -29,7 +29,8 @@ class AccountListCtrl(wx.Panel):
 
     Accounts can be added, removed, and renamed.
     """
-
+    ID_TIMER = wx.NewId()
+    
     def __init__(self, parent, bankController, autoPopulate=True):
         wx.Panel.__init__(self, parent)
         self.Model = bankController.Model
@@ -43,28 +44,33 @@ class AccountListCtrl(wx.Panel):
         # Create the staticboxsizer which is the home for everything.
         # This *MUST* be created first to ensure proper z-ordering (as per docs).
         self.staticBox = wx.StaticBox(self, label=self.boxLabel%0)
+        
+        # Create a single panel to be the "child" of the static box sizer,
+        # to work around a wxPython regression that prevents tooltips. lp: xxxxxx
+        self.childPanel = wx.Panel(self)
+        self.childSizer = childSizer = wx.BoxSizer(wx.VERTICAL)
 
         ## Create and set up the buttons.
-        # The EDIT account button.
-        BMP = wx.ArtProvider.GetBitmap('wxART_add')
-        self.addButton = addButton = wx.BitmapButton(self, bitmap=BMP)
+        # The ADD account button.
+        BMP = self.addBMP = wx.ArtProvider.GetBitmap('wxART_add')
+        self.addButton = addButton = wx.BitmapButton(self.childPanel, bitmap=BMP)
         addButton.SetToolTipString(_("Add a new account"))
         # The REMOVE account button.
         BMP = wx.ArtProvider.GetBitmap('wxART_delete')
-        self.removeButton = removeButton = wx.BitmapButton(self, bitmap=BMP)
+        self.removeButton = removeButton = wx.BitmapButton(self.childPanel, bitmap=BMP)
         removeButton.SetToolTipString(_("Remove the selected account"))
         removeButton.Enabled = False
         # The EDIT account button.
         BMP = wx.ArtProvider.GetBitmap('wxART_textfield_rename')
-        self.editButton = editButton = wx.BitmapButton(self, bitmap=BMP)
+        self.editButton = editButton = wx.BitmapButton(self.childPanel, bitmap=BMP)
         editButton.SetToolTipString(_("Rename the selected account"))
         editButton.Enabled = False
         # The CONFIGURE account button.
         BMP = wx.ArtProvider.GetBitmap('wxART_cog')
-        self.configureButton = configureButton = wx.BitmapButton(self, bitmap=BMP)
+        self.configureButton = configureButton = wx.BitmapButton(self.childPanel, bitmap=BMP)
         configureButton.SetToolTipString(_("Configure the selected account"))
         configureButton.Enabled = False
-        #configureButton.Hide()
+        configureButton.Hide()
         
         # Layout the buttons.
         buttonSizer = wx.BoxSizer()
@@ -74,23 +80,25 @@ class AccountListCtrl(wx.Panel):
         buttonSizer.Add(configureButton)
 
         # Set up the "Total" sizer.
-        self.totalText = wx.StaticText(self, label="$0.00")
+        self.totalText = wx.StaticText(self.childPanel, label="$0.00")
         self.totalTexts.append(self.totalText)
         miniSizer = wx.BoxSizer()
-        miniSizer.Add(wx.StaticText(self, label=_("Total")+":"))
+        miniSizer.Add(wx.StaticText(self.childPanel, label=_("Total")+":"))
         miniSizer.AddStretchSpacer(1)
         miniSizer.Add(self.totalText)
 
         # The hide zero-balance accounts option.
-        self.hideBox = hideBox = wx.CheckBox(self, label=_("Hide zero-balance accounts"))
+        self.hideBox = hideBox = wx.CheckBox(self.childPanel, label=_("Hide zero-balance accounts"))
         hideBox.SetToolTipString(_("When enabled, accounts with a balance of $0.00 will be hidden from the list"))
 
         #self.staticBoxSizer = SmoothStaticBoxSizer(self.staticBox, wx.VERTICAL)
         self.staticBoxSizer = wx.StaticBoxSizer(self.staticBox, wx.VERTICAL)
         #self.staticBoxSizer.SetSmooth(False)
-        self.staticBoxSizer.Add(buttonSizer, 0, wx.BOTTOM, 5)#, 0, wx.ALIGN_RIGHT)
-        self.staticBoxSizer.Add(miniSizer, 0, wx.EXPAND)
-        self.staticBoxSizer.Add(hideBox, 0, wx.TOP, 10)
+        childSizer.Add(buttonSizer, 0, wx.BOTTOM, 5)#, 0, wx.ALIGN_RIGHT)
+        childSizer.Add(miniSizer, 0, wx.EXPAND)
+        childSizer.Add(hideBox, 0, wx.TOP, 10)
+        self.childPanel.Sizer = childSizer
+        self.staticBoxSizer.Add(self.childPanel, 1, wx.EXPAND)
 
         # Set up the button bindings.
         addButton.Bind(wx.EVT_BUTTON, self.onAddButton)
@@ -126,9 +134,31 @@ class AccountListCtrl(wx.Panel):
         # Setting the value doesn't trigger an event, so force an update.
         self.onHideCheck()
 
-        #self.Sizer = self.staticBoxSizer
         self.staticBoxSizer.Layout()
         #self.staticBoxSizer.SetSmooth(True)
+        
+        # Set up the timer, which will flash the add account bitmap if there aren't any accounts.
+        self.Timer = wx.Timer(self, self.ID_TIMER)
+        self.FlashState = 0
+        wx.EVT_TIMER(self, self.ID_TIMER, self.onFlashTimer)
+        if not self.GetCount():
+            self.startFlashTimer()
+            
+    def onFlashTimer(self, event):
+        if self.FlashState:
+            self.addButton.SetBitmapLabel(self.addBMP)
+        else:
+            self.addButton.SetBitmapLabel(wx.EmptyBitmapRGBA(16,16))
+        
+        # Now toggle the flash state.
+        self.FlashState = not self.FlashState
+        
+    def stopFlashTimer(self):
+        self.Timer.Stop()
+        self.addButton.SetBitmapLabel(self.addBMP)
+        
+    def startFlashTimer(self):
+        self.Timer.Start(1250)
         
     def onCurrencyChanged(self, message):
         # Update all the accounts.
@@ -150,7 +180,7 @@ class AccountListCtrl(wx.Panel):
             raise IndexError, "No element at index %i"%index
 
         # Offset by 1 because the first child is actually the button sizer.
-        return self.staticBoxSizer.GetItem(index+1).IsShown()
+        return self.childSizer.GetItem(index+1).IsShown()
 
     def SelectItem(self, index):
         """
@@ -219,6 +249,10 @@ class AccountListCtrl(wx.Panel):
         account = message.data
         index = self.accountObjects.index(account)
         self._RemoveItem(index)
+        
+        # Start flashing the add button if there are no accounts.
+        if not self.GetCount():
+            self.startFlashTimer()
 
     def _PutAccount(self, account, select=False):
         index = 0
@@ -242,8 +276,8 @@ class AccountListCtrl(wx.Panel):
         balance = account.Balance
 
         # Create the controls.
-        link = bankcontrols.HyperlinkText(self, label=account.Name+":", url=str(index))
-        totalText = wx.StaticText(self, label=account.float2str(balance))
+        link = bankcontrols.HyperlinkText(self.childPanel, label=account.Name+":", url=str(index))
+        totalText = wx.StaticText(self.childPanel, label=account.float2str(balance))
         self.accountObjects.insert(index, account)
         self.hyperLinks.insert(index, link)
         self.totalTexts.insert(index, totalText)
@@ -255,7 +289,7 @@ class AccountListCtrl(wx.Panel):
         miniSizer.Add(totalText, 0, wx.LEFT, 10)
 
         # Insert the hsizer into the correct position in the list.
-        self.staticBoxSizer.Insert(index+1, miniSizer, 0, wx.EXPAND|wx.BOTTOM, 3)
+        self.childSizer.Insert(index+1, miniSizer, 0, wx.EXPAND|wx.BOTTOM, 3)
 
         # Renumber the links after this.
         for linkCtrl in self.hyperLinks[index+1:]:
@@ -285,8 +319,8 @@ class AccountListCtrl(wx.Panel):
             linkCtrl.URL = str( int(linkCtrl.URL)-1 )
 
         # Actually remove (sort of) the account sizer.
-        self.Sizer.Hide(index+1)
-        self.Sizer.Detach(index+1)
+        self.childSizer.Hide(index+1)
+        self.childSizer.Detach(index+1)
 
         # Handle selection logic.
         if fixSel:
@@ -352,6 +386,9 @@ class AccountListCtrl(wx.Panel):
         self.onHideEditCtrl() #ASSUMPTION!
         self._PutAccount(account, select=True)
         
+        # Stop flashing the add button if it was, since there is now an account.
+        self.stopFlashTimer()
+        
     def onEditCtrlKey(self, event):
         if event.GetKeyCode() == wx.WXK_ESCAPE:
             self.onHideEditCtrl()
@@ -363,7 +400,7 @@ class AccountListCtrl(wx.Panel):
             self.editCtrl.Value = ''
             self.editCtrl.Show()
         else:
-            self.editCtrl = wx.TextCtrl(self, style=wx.TE_PROCESS_ENTER)
+            self.editCtrl = wx.TextCtrl(self.childPanel, style=wx.TE_PROCESS_ENTER)
             self.editCtrl.Bind(wx.EVT_KILL_FOCUS, self.onHideEditCtrl)
             self.editCtrl.Bind(wx.EVT_KEY_DOWN, self.onEditCtrlKey)
 
@@ -374,11 +411,11 @@ class AccountListCtrl(wx.Panel):
             self.editCtrl.Value = self.accountObjects[pos].Name
             self.editCtrl.SetSelection(-1, -1)
             pos += 1
-            self.Sizer.Hide(pos)
+            self.childSizer.Hide(pos)
             self.hiddenIndex = pos
             self.editCtrl.Bind(wx.EVT_TEXT_ENTER, self.onRenameAccount)
 
-        self.Sizer.Insert(pos, self.editCtrl, 0, wx.EXPAND)#, smooth=True)
+        self.childSizer.Insert(pos, self.editCtrl, 0, wx.EXPAND)#, smooth=True)
         self.Parent.Layout()
 
         if focus:
@@ -386,12 +423,12 @@ class AccountListCtrl(wx.Panel):
 
     def onHideEditCtrl(self, event=None, restore=True):
         # Hide and remove the control and re-layout.
-        self.staticBoxSizer.Hide(self.editCtrl)#, smooth=True)
-        self.staticBoxSizer.Detach(self.editCtrl)
+        self.childSizer.Hide(self.editCtrl)#, smooth=True)
+        self.childSizer.Detach(self.editCtrl)
 
         # If it was a rename, we have to re-show the linkctrl.
         if restore and self.hiddenIndex is not None:
-            self.Sizer.Show(self.hiddenIndex)
+            self.childSizer.Show(self.hiddenIndex)
             self.hiddenIndex = None
 
         self.Parent.Layout()
@@ -402,7 +439,7 @@ class AccountListCtrl(wx.Panel):
     def onRemoveButton(self, event):
         if self.currentIndex is not None:
             account = self.accountObjects[self.currentIndex]
-            warningMsg = _("This will permanently remove the account '%s' and all its transactions. Continue?")
+            warningMsg = _("This will permanently remove the account '%s' and all its transactions. Continue?").decode("utf-8")
             dlg = wx.MessageDialog(self, warningMsg%account.Name, _("Warning"), style=wx.YES_NO|wx.ICON_EXCLAMATION)
             if dlg.ShowModal() == wx.ID_YES:
                 # Remove the account from the model.
@@ -462,10 +499,10 @@ class AccountListCtrl(wx.Panel):
             # Show it, in the case of calls from updateTotals where a
             # zero-balance became a non-zero. otherwise it won't come up.
             # +1 offset is to take into account the buttons at the top.
-            self.staticBoxSizer.Show(i+1)
+            self.childSizer.Show(i+1)
             if checked:
                 if abs(account.Balance) < .001:
-                    self.staticBoxSizer.Hide(i+1)
+                    self.childSizer.Hide(i+1)
 
         self.Parent.Layout()
 

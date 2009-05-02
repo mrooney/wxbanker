@@ -1,34 +1,32 @@
+#!/usr/bin/env python
+#
+#    https://launchpad.net/wxbanker
+#    transactionolv.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
+#
+#    This file is part of wxBanker.
+#
+#    wxBanker is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    wxBanker is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 """
 A refactor of TransactionGrid, using ObjectListView.
 
-Can we bind this to the list so inserts and removals and automatically handled?
-
-IMPLEMENTED:
-- displaying transactions
-- editable amounts/descriptions
-- edits pushed to model
-- total based on total of last transaction
-- handle new transactions
-- min column sizes when there aren't any transactions
-- default sort by date
-- display negative amount as Red
-- right-click context menu
-  - remove
-  - calculator options on amounts
-- amount editing as %.2f (instead of 2.16999999 etc)
-- searching
-- editable date
-- changing date moves transaction appropriately
 TODO (for feature parity):
-- disable sorting on Total column
 - done? totals automatically updates for transaction changes above them
+- disable sorting on Total column
+- flickerless repositioning when changing date
 - flickerless RefreshObjects
 - flickerless remove transaction
-EXTRA:
-- custom negative option such as Red, (), or Red and ()
-NEW THINGS:
-- sorting by columns
-- empty account message
+- handle batch events at UI level
 """
 
 import wx, datetime
@@ -48,19 +46,23 @@ class TransactionOLV(GroupListView):
         self.evenRowsBackColor = wx.Color(224,238,238)
         self.oddRowsBackColor = wx.WHITE
         self.rowFormatter = self.rowFormatter2
-        self.cellEditMode = GroupListView.CELLEDIT_SINGLECLICK
-        self.SetEmptyListMsg("No transactions entered.")
+        self.cellEditMode = GroupListView.CELLEDIT_DOUBLECLICK
+        self.SetEmptyListMsg(_("No transactions entered."))
         
         # Calculate the necessary width for the date column.
         dateStr = str(datetime.date.today())
         dateWidth = self.GetTextExtent(dateStr)[0] + 10
         
+        # Make a bogus first column, since the 1st column isn't editable in CELLEDIT_SINGLECLICK mode.
+        bogusColumn = ColumnDefn("", fixedWidth=0)
+        bogusColumn.isInternal = True
+        
         self.SetColumns([
-            ColumnDefn("", width=0), # Make a bogus first column, since the 1st column isn't editable.
-            ColumnDefn("Date", valueGetter=self.getDateOf, valueSetter=self.setDateOf, width=dateWidth),
-            ColumnDefn("Description", valueGetter="Description", isSpaceFilling=True),
-            ColumnDefn("Amount", "right", valueGetter="Amount", stringConverter=self.renderFloat),
-            ColumnDefn("Total", "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
+            bogusColumn,
+            ColumnDefn(_("Date"), valueGetter=self.getDateOf, valueSetter=self.setDateOf, width=dateWidth),
+            ColumnDefn(_("Description"), valueGetter="Description", isSpaceFilling=True),
+            ColumnDefn(_("Amount"), "right", valueGetter="Amount", stringConverter=self.renderFloat),
+            ColumnDefn(_("Total"), "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
         ])
         # Our custom hack in OLV.py line 2017 will render floats appropriately as %.2f
         
@@ -69,11 +71,17 @@ class TransactionOLV(GroupListView):
         
         self.Bind(wx.EVT_RIGHT_DOWN, self.onRightDown)
         
-        Publisher.subscribe(self.onSearch, "SEARCH.INITIATED")
-        Publisher.subscribe(self.onSearchCancelled, "SEARCH.CANCELLED")
-        Publisher.subscribe(self.onSearchMoreToggled, "SEARCH.MORETOGGLED")
-        Publisher.subscribe(self.onTransactionAdded, "transaction.created")
-        Publisher.subscribe(self.onTransactionRemoved, "transaction.removed")
+        self.Subscriptions = (
+            (self.onSearch, "SEARCH.INITIATED"),
+            (self.onSearchCancelled, "SEARCH.CANCELLED"),
+            (self.onSearchMoreToggled, "SEARCH.MORETOGGLED"),
+            (self.onTransactionAdded, "transaction.created"),
+            (self.onTransactionsRemoved, "transactions.removed"),
+            (self.onCurrencyChanged, "currency_changed"),
+        )
+        
+        for callback, topic in self.Subscriptions:
+            Publisher.subscribe(callback, topic)
         
     def SetObjects(self, objs, *args, **kwargs):
         """
@@ -81,14 +89,15 @@ class TransactionOLV(GroupListView):
         and clear out any cached Totals as they may not be valid IE when we
         search and have a subset of transactions.
         """
-        self.Parent.Freeze()
-
         # Remove any previously cached totals, to fix search totals.
         for obj in objs:
             obj._Total = None
             
         GroupListView.SetObjects(self, objs, *args, **kwargs)
-        wx.CallLater(50, self.frozenResize) # Necessary for columns to size properly. (GTK)
+        
+        # Force a re-size here, in the case that the vscrollbar-needed state
+        # changed by this set account, to size correctly.
+        wx.CallLater(50, self._ResizeSpaceFillingColumns)
         
     def getDateOf(self, transaction):
         return str(transaction.Date)
@@ -137,87 +146,117 @@ class TransactionOLV(GroupListView):
             transactions = account.Transactions
         
         self.SetObjects(transactions)
-        
+        # Unselect everything.
+        self.SelectObjects([], deselectOthers=True)
         if scrollToBottom:
             self.ensureVisible(-1)
         
     def ensureVisible(self, index):
-        if index < 0:
-            index = self.GetItemCount() + index
-        self.EnsureCellVisible(index, 0)
+        length = self.GetItemCount()
+        # If there are no items, ensure a no-op (LP: #338697)
+        if length:
+            if index < 0:
+                index = length + index
+            self.EnsureCellVisible(index, 0)
         
     def onRightDown(self, event):
         itemID, flag, col = self.HitTestSubItem(event.Position)
 
         # Don't do anything for right-clicks not on items.
         if itemID != -1:
-            transaction = self.GetObjectAt(itemID)
-            self.showContextMenu(transaction, col)
+            if not self.GetItemState(itemID, wx.LIST_STATE_SELECTED):
+                self._SelectAndFocus(itemID)
+            transactions = self.GetSelectedObjects()
+            self.showContextMenu(transactions, col)
     
-    def showContextMenu(self, transaction, col):
+    def showContextMenu(self, transactions, col, removeOnly=False):
         menu = wx.Menu()
 
-        if col in (2,3):
+        if not removeOnly and col in (3,4):
             # This is an amount cell, allow calculator options.
+            if col == 3:
+                amount = sum((t.Amount for t in transactions))
+            else:
+                amount = transactions[-1]._Total
+            val = self.BankController.Model.float2str(amount)
+            
             actions = [
-                (_("Send to calculator"), "wxART_calculator_edit"),
-                (_("Add to calculator"), "wxART_calculator_add"),
-                (_("Subtract from calculator"), "wxART_calculator_delete"),
+                (_("Send %s to calculator") % val, "wxART_calculator_edit"),
+                (_("Add %s to calculator") % val, "wxART_calculator_add"),
+                (_("Subtract %s from calculator") % val, "wxART_calculator_delete"),
             ]
 
-            for actionStr, artHint in actions:
+            for i, (actionStr, artHint) in enumerate(actions):
                 item = wx.MenuItem(menu, -1, actionStr)
                 item.SetBitmap(wx.ArtProvider.GetBitmap(artHint))
-                menu.Bind(wx.EVT_MENU, lambda e, s=actionStr: self.onCalculatorAction(transaction, col, s), source=item)
+                menu.Bind(wx.EVT_MENU, lambda e, i=i: self.onCalculatorAction(transactions, col, i), source=item)
                 menu.AppendItem(item)
             menu.AppendSeparator()
 
         # Always show the Remove context entry.
-        removeItem = wx.MenuItem(menu, -1, _("Remove this transaction"))
-        menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransaction(transaction), source=removeItem)
+        if len(transactions) == 1:
+            removeStr = _("Remove this transaction")
+            moveStr = _("Move this transaction to account")
+        else:
+            removeStr = _("Remove these %i transactions") % len(transactions)
+            moveStr = _("Move these %i transactions to account") % len(transactions)
+            
+        removeItem = wx.MenuItem(menu, -1, removeStr)
+        menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransactions(transactions), source=removeItem)
         removeItem.SetBitmap(wx.ArtProvider.GetBitmap('wxART_delete'))
         menu.AppendItem(removeItem)
+        
+        if not removeOnly:
+            # Create the sub-menu of sibling accounts to the move to.
+            moveToAccountItem = wx.MenuItem(menu, -1, moveStr)
+            accountsMenu = wx.Menu()
+            for account in self.CurrentAccount.GetSiblings():
+                accountItem = wx.MenuItem(menu, -1, account.GetName())
+                accountsMenu.AppendItem(accountItem)
+                accountsMenu.Bind(wx.EVT_MENU, lambda e, account=account: self.onMoveTransactions(transactions, account), source=accountItem)
+            moveToAccountItem.SetSubMenu(accountsMenu)
+            menu.AppendItem(moveToAccountItem)
 
         # Show the menu and then destroy it afterwards.
         self.PopupMenu(menu)
         menu.Destroy()
 
-    def onCalculatorAction(self, transaction, col, actionStr):
+    def onCalculatorAction(self, transactions, col, i):
         """
         Given an action to perform on the calculator, and the row and col,
         generate the string of characters necessary to perform that action
         in the calculator, and push them.
         """
-        command = actionStr.split(' ')[0].upper()
-        
-        if col == 2:
-            amount = transaction.Amount
-        elif col == 3:
-            amount = transaction._Total
+        if col == 3:
+            amount = sum((t.Amount for t in transactions))
+        elif col == 4:
+            # Use the last total, if multiple are selected.
+            amount = transactions[-1]._Total
         else:
-            raise Exception("onCalculatorAction should only be called with col 2 or 3.")
+            raise Exception("onCalculatorAction should only be called with col 3 or 4.")
 
-        pushStr = {'SEND': 'C%s', 'SUBTRACT': '-%s=', 'ADD': '+%s='}[command]
+        pushStr = ('C%s', '+%s=', '-%s=')[i] # Send, Add, Subtract commands
         pushStr %= amount
 
         Publisher.sendMessage("CALCULATOR.PUSH_CHARS", pushStr)
 
-    def onRemoveTransaction(self, transaction):
-        """Remove the transaction from the account."""
-        self.CurrentAccount.RemoveTransaction(transaction)
+    def onRemoveTransactions(self, transactions):
+        """Remove the transactions from the account."""
+        self.CurrentAccount.RemoveTransactions(transactions)
+            
+    def onMoveTransactions(self, transactions, targetAccount):
+        """Move the transactions to the target account."""
+        self.CurrentAccount.MoveTransactions(transactions, targetAccount)
         
     def frozenResize(self):
         self.Parent.Layout()
         self.Parent.Thaw()
         
-    def onTransactionRemoved(self, message):
-        account, transaction = message.data
+    def onTransactionsRemoved(self, message):
+        account, transactions = message.data
         if account is self.CurrentAccount:
-            self.Parent.Freeze()
             # Remove the item from the list.
-            self.RemoveObject(transaction)
-        
-            wx.CallLater(50, self.frozenResize) # Necessary for columns to size properly. (GTK)
+            self.RemoveObjects(transactions)
     
     def onTransactionAdded(self, message):
         account, transaction = message.data
@@ -247,9 +286,10 @@ class TransactionOLV(GroupListView):
     def onSearchMoreToggled(self, message):
         # Perhaps necessary to not glitch overlap on Windows?
         self.Refresh()
-
-
-if __name__ == "__main__":
-    app = wx.App(False)
-    olvFrame(None).Show()
-    app.MainLoop()
+        
+    def onCurrencyChanged(self, message):
+        self.RefreshObjects()
+        
+    def __del__(self):
+        for callback, topic in self.Subscriptions:
+            Publisher.unsubscribe(callback)

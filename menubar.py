@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-15 -*-
 #
 #    https://launchpad.net/wxbanker
-#    menubar.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
+#    menubar.py: Copyright 2007, 2008 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -31,10 +31,13 @@ class BankMenuBar(wx.MenuBar):
     ID_FAQ = wx.NewId()
     ID_QUESTION = wx.NewId()
     ID_REPORTBUG = wx.NewId()
+    ID_REQUESTFEATURE = wx.NewId()
+    ID_TRANSLATE = wx.NewId()
     IDS_CURRENCIES = [wx.NewId() for i in range(len(CurrencyStrings))]
+    ID_REQUESTCURRENCY = wx.NewId()
     ID_IMPORT_CSV = wx.NewId()
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, autosave, *args, **kwargs):
         wx.MenuBar.__init__(self, *args, **kwargs)
         
         # File menu.
@@ -54,6 +57,10 @@ class BankMenuBar(wx.MenuBar):
         for i, cstr in enumerate(CurrencyStrings):
             item = wx.MenuItem(currencies, self.IDS_CURRENCIES[i], cstr)
             currencies.AppendItem(item)
+        # Add an entry to request a new currency.
+        requestCurrencyItem = wx.MenuItem(currencies, self.ID_REQUESTCURRENCY, _("Request a Currency"))
+        requestCurrencyItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_lightning")
+        currencies.AppendItem(requestCurrencyItem)
         currencyMenu.SetSubMenu(currencies)
         
         settingsMenu.AppendItem(currencyMenu)
@@ -61,7 +68,8 @@ class BankMenuBar(wx.MenuBar):
         # Tools menu.
         toolsMenu = wx.Menu()
         
-        importCsvMenu = wx.MenuItem(toolsMenu, self.ID_IMPORT_CSV, _("Import from CSV"), _("Import transactions from a CSV file"))
+        importCsvMenu = wx.MenuItem(toolsMenu, self.ID_IMPORT_CSV, _("CSV Import"), _("Import transactions from a CSV file"))
+        importCsvMenu.Bitmap = wx.ArtProvider.GetBitmap("wxART_table_lightning")
         toolsMenu.AppendItem(importCsvMenu)
         
         # Help menu.
@@ -83,6 +91,18 @@ class BankMenuBar(wx.MenuBar):
         helpMenu.AppendItem(bugItem)
         
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
+        featureItem = wx.MenuItem(helpMenu, self.ID_REQUESTFEATURE, _("Request a Fea&ture"), _("Request a new feature to be implemented"))
+        featureItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_lightbulb")
+        helpMenu.AppendItem(featureItem)
+        
+        ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
+        translateItem = wx.MenuItem(helpMenu, self.ID_TRANSLATE, _("Tran&slate wxBanker"), _("Translate wxBanker to another language"))
+        translateItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_flag_blue")
+        helpMenu.AppendItem(translateItem)
+        
+        helpMenu.AppendSeparator()
+        
+        ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
         aboutItem = helpMenu.Append(wx.ID_ABOUT, _("&About"), _("More information about wxBanker"))
         
         # Add everything to the main menu.
@@ -94,6 +114,7 @@ class BankMenuBar(wx.MenuBar):
         self.Bind(wx.EVT_MENU, self.onClickAbout)
         helpMenu.Bind(wx.EVT_MENU, self.onClickAbout)
         
+        self.toggleAutoSave(autosave)
         Publisher.subscribe(self.onAutoSaveToggled, "controller.autosave_toggled")
         
     def onMenuEvent(self, event):
@@ -103,22 +124,30 @@ class BankMenuBar(wx.MenuBar):
             self.onSelectCurrency(self.IDS_CURRENCIES.index(ID))
         else:
             handler = {
+                wx.ID_SAVE: self.onClickSave,
                 self.ID_AUTOSAVE: self.onClickAutoSave,
                 self.ID_FAQ: self.onClickFAQs,
                 self.ID_QUESTION: self.onClickAskQuestion,
                 self.ID_REPORTBUG: self.onClickReportBug,
+                self.ID_REQUESTFEATURE: self.onClickRequestFeature,
+                self.ID_TRANSLATE: self.onClickTranslate,
                 self.ID_IMPORT_CSV: self.onClickImportCsv,
                 wx.ID_ABOUT: self.onClickAbout,
+                self.ID_REQUESTCURRENCY: self.onClickRequestCurrency,
             }.get(ID, lambda e: e.Skip())
             
             handler(event)
             
     def onAutoSaveToggled(self, message):
-        val = message.data
-        debug.debug("Updating UI for auto-save: %s" % val)
+        self.toggleAutoSave(message.data)
         
-        self.autoSaveMenuItem.Check(val)
-        self.saveMenuItem.Enable(not val)
+    def toggleAutoSave(self, autosave):
+        debug.debug("Updating UI for auto-save: %s" % autosave)
+        self.autoSaveMenuItem.Check(autosave)
+        self.saveMenuItem.Enable(not autosave)
+        
+    def onClickSave(self, event):
+        Publisher().sendMessage("user.saved")
             
     def onClickAutoSave(self, event):
         Publisher().sendMessage("user.autosave_toggled", event.Checked())
@@ -135,24 +164,36 @@ class BankMenuBar(wx.MenuBar):
     def onClickReportBug(self, event):
         webbrowser.open("https://launchpad.net/wxbanker/+filebug")
         
+    def onClickRequestFeature(self, event):
+        webbrowser.open("https://blueprints.launchpad.net/wxbanker")
+        
+    def onClickTranslate(self, event):
+        webbrowser.open("https://translations.launchpad.net/wxbanker")
+        
+    def onClickRequestCurrency(self, event):
+        webbrowser.open("https://answers.launchpad.net/wxbanker/+faq/477")
+        
     def onClickAbout(self, event):
         info = wx.AboutDialogInfo()
         info.Name = "wxBanker"
         info.Version = str(version.NUMBER)
-        info.Copyright = _("Copyright") + " 2007, 2008 Mike Rooney (michael@wxbanker.org)"
+        info.Copyright = _("Copyright") + " 2007, 2008 Mike Rooney (mrooney@ubuntu.com)"
         info.Description = _("A lightweight personal finance management application.")
         info.WebSite = ("https://launchpad.net/wxbanker", "https://launchpad.net/wxbanker")
 
         info.Developers = [
-            'Mike Rooney (michael@wxbanker.org)',
+            'Mike Rooney (mrooney@ubuntu.com)',
+            'Karel Kolman (kolmis@gmail.com)',
         ]
         info.Artists = [
             'Mark James (www.famfamfam.com/lab/icons/silk/)',
         ]
         translators = [
-            'sl: Primož Jerše (jerse@inueni.com)',
-            'es: Diego J. Romero López (diegojromerolopez@gmail.com)',
-            'hi: Ankur Kachru (ankurkachru@gmail.com)',
+            "sl: Primož Jerše (jerse@inueni.com)",
+            "es: Diego J. Romero López (diegojromerolopez@gmail.com)",
+            "hi: Ankur Kachru (ankurkachru@gmail.com)",
+            "pl: Tomasz 'Zen' Napierala (tomasz@napierala.org)",
+            "fr: Steve Dodier <steve.dodier@gmail.com>",
         ]
         info.Translators = [unicode(s, 'iso-8859-15') for s in translators]
         

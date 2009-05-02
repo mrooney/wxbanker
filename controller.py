@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 #    https://launchpad.net/wxbanker
-#    controller.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
+#    controller.py: Copyright 2007, 2008 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -25,6 +26,8 @@ are getting published when they should be.
 
 >>> from testhelpers import Subscriber
 >>> messages = Subscriber()
+>>> len(messages)
+0
 
 # Ensure that we have a clean, fresh bank by removing a test one
 # if it already exists.
@@ -32,8 +35,6 @@ are getting published when they should be.
 >>> import os, datetime
 >>> if os.path.exists("test.db"): os.remove("test.db")
 >>> controller = Controller("test.db")
->>> controller.AutoSave
-True
 >>> model = controller.Model
 >>> model.Accounts
 []
@@ -48,13 +49,13 @@ Traceback (most recent call last):
 InvalidAccountException: Invalid account 'My Account' specified.
 
 >>> len(messages)
-0
+2
 
 # Now test valid account and transaction manipulation.
 
 >>> a1 = model.CreateAccount("My Account")
 >>> len(messages)
-1
+3
 >>> messages[0][1].Name
 'My Account'
 
@@ -63,7 +64,7 @@ Traceback (most recent call last):
   ...
 AccountAlreadyExistsException: Account 'My Account' already exists.
 >>> len(messages)
-1
+3
 >>> len(model.Accounts) == 1
 True
 >>> a = model.Accounts[0]
@@ -79,10 +80,10 @@ True
 >>> len(a.Transactions)
 1
 >>> len(messages)
-3
->>> messages[1] == (('transaction', 'created'), (a, t1))
+7
+>>> messages[2] == (('transaction', 'created'), (a, t1))
 True
->>> messages[0] == (('account', 'balance changed', 'My Account'), a)
+>>> messages[1] == (('account', 'balance changed', 'My Account'), a)
 True
 >>> a.Balance
 100.27
@@ -96,14 +97,14 @@ u'ATM Withdrawal'
 >>> t2.Date
 datetime.date(2007, 1, 6)
 >>> len(messages)
-5
+11
 >>> model.float2str(model.Balance)
 '$90.27'
 
 #testRenameAccount
 >>> a.Name = "My Renamed Account"
 >>> len(messages)
-6
+12
 >>> messages[0] == (('account', 'renamed', 'My Account'), ('My Account', a))
 True
 >>> len(model.Accounts)
@@ -118,19 +119,19 @@ InvalidAccountException: Invalid account 'My Account' specified.
 #testTransactionUpdating
 >>> t1.Amount = -101
 >>> len(messages)
-8
+14
 >>> t1.Amount == -101
 True
 >>> model.float2str(model.Balance)
 '-$111.00'
 >>> t1.Description = "Updated description"
 >>> len(messages)
-9
+15
 >>> t1.Description
 u'Updated description'
 >>> t1.Date = datetime.date(1986, 1, 6)
 >>> len(messages)
-10
+16
 >>> t1.Date == datetime.date(1986, 1, 6)
 True
 
@@ -206,57 +207,77 @@ InvalidTransactionException: Transaction does not exist in account 'My Renamed A
 >>> t1.Description == u'\xef\xbf\xa5'
 True
 
-#>>> model.Search(u'\xef\xbf\xa5')
-#[t1]
-
->>> model2 = controller.LoadPath("test.db")
->>> model == model2
-True
->>> controller.Close(model2)
-
-#auto-save
->>> controller.AutoSave = False
->>> controller.AutoSave
-False
->>> t.Description = "Modified! Did you save?"
->>> model3 = controller.LoadPath("test.db")
->>> model == model3
-False
-
+#>>> model.Search(u'\xef\xbf\xa5') == [t1]
+#True
 """
 """
 #*ensure no commits on a store init if not upgrading
 """
 
 from persistentstore import PersistentStore
-import os, sys
+import wx, os, sys
 from wx.lib.pubsub import Publisher
 import debug
+
 
 class Controller(object):
     def __init__(self, path=None, autoSave=True):
         self._AutoSave = autoSave
         self.Models = []
         
-        self.LoadPath(path)
+        self.LoadPath(path, use=True)
+        self.InitConfig()
         
         Publisher.subscribe(self.onAutoSaveToggled, "user.autosave_toggled")
+        Publisher.subscribe(self.onSaveRequest, "user.saved")
+        
+    def InitConfig(self):
+        # Initialize our configuration object.
+        # It is only necessary to initialize any default values we
+        # have which differ from the default values of the types,
+        # so initializing an Int to 0 or a Bool to False is not needed.
+        self.wxApp = wx.App(False)
+        self.wxApp.Controller = self
+            
+        config = wx.Config("wxBanker")
+        wx.Config.Set(config)
+        if not config.HasEntry("SIZE_X"):
+            config.WriteInt("SIZE_X", 800)
+            config.WriteInt("SIZE_Y", 600)
+        if not config.HasEntry("POS_X"):
+            config.WriteInt("POS_X", 100)
+            config.WriteInt("POS_Y", 100)
+        if not config.HasEntry("SHOW_CALC"):
+            config.WriteBool("SHOW_CALC", False)
+        if not config.HasEntry("AUTO-SAVE"):
+            config.WriteBool("AUTO-SAVE", True)
+            
+        # Set the auto-save option as appropriate.
+        self.AutoSave = config.ReadBool("AUTO-SAVE")
         
     def onAutoSaveToggled(self, message):
         val = message.data
         self.AutoSave = val
+        
+    def onSaveRequest(self, message):
+        self.Model.Save()
         
     def GetAutoSave(self):
         return self._AutoSave
     
     def SetAutoSave(self, val):
         self._AutoSave = val
+        wx.Config.Get().WriteBool("AUTO-SAVE", val)
         Publisher.sendMessage("controller.autosave_toggled", val)
         for model in self.Models:
             debug.debug("Setting auto-save to: %s" % val)
             model.Store.AutoSave = val
             
-    def LoadPath(self, path):
+        # If the user enables auto-save, we want to also save.
+        if self.AutoSave:
+            Publisher.sendMessage("user.saved")
+            
+    def LoadPath(self, path, use=False):
         if path is None:
             # Figure out where the bank database file is, and load it.
             #Note: look at wx.StandardPaths.Get().GetUserDataDir() in the future
@@ -273,18 +294,29 @@ class Controller(object):
         
         store = PersistentStore(path)
         store.AutoSave = self.AutoSave
+        model = store.GetModel()
         
-        self.Model = store.GetModel()
-        self.Models.append(self.Model)
+        self.Models.append(model)
+        if use:
+            self.Model = model
         
-        return self.Model
+        return model
     
-    def Close(self, model):
-        if not model in self.Models:
-            raise Exception("model not managed by this controller")
+    def Close(self, model=None):
+        if model is None: models = self.Models
+        else: models = [model]
+            
+        for model in models:
+            # We can't use in here, since we need the is operator, not ==
+            if not any((m is model for m in self.Models)):
+                raise Exception("model not managed by this controller")
         
-        self.Models.remove(model)
-        del model
-        
+            model.Store.Close()
+            # Again we can't use remove, different models can be ==
+            for i, m in enumerate(self.Models):
+                if m is model:
+                    self.Models.pop(i)
+                    break
+
     AutoSave = property(GetAutoSave, SetAutoSave)
     

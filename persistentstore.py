@@ -1,5 +1,5 @@
 #    https://launchpad.net/wxbanker
-#    persistentstore.py: Copyright 2007-2009 Mike Rooney <michael@wxbanker.org>
+#    persistentstore.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -32,7 +32,7 @@ Table: transactions
 +-------------------------------------------------------------------------------------------------------+
 """
 import sys, os, datetime
-import bankobjects, debug
+import bankobjects, currencies, debug
 from sqlite3 import dbapi2 as sqlite
 import sqlite3
 from wx.lib.pubsub import Publisher
@@ -47,6 +47,8 @@ class PersistentStore:
         self.Version = 3
         self.Path = path
         self.AutoSave = autoSave
+        self.Dirty = False
+        self.BatchDepth = 0
         existed = True
         
         if not os.path.exists(self.Path):
@@ -69,9 +71,16 @@ class PersistentStore:
             
         self.commitIfAppropriate()
         
-        Publisher.subscribe(self.onTransactionUpdated, "transaction.updated")
-        Publisher.subscribe(self.onAccountRenamed, "account.renamed")
-        Publisher.subscribe(self.onAccountBalanceChanged, "account.balance changed")
+        self.Subscriptions = (
+            (self.onTransactionUpdated, "transaction.updated"),
+            (self.onAccountRenamed, "account.renamed"),
+            (self.onAccountBalanceChanged, "account.balance changed"),
+            (self.onBatchEvent, "batch"),
+            (self.onExit, "exiting"),
+        )
+        
+        for callback, topic in self.Subscriptions:
+            Publisher.subscribe(callback, topic)
         
     def GetModel(self):
         debug.debug('Creating model...')
@@ -85,13 +94,19 @@ class PersistentStore:
         
         return bankmodel
     
-    def CreateAccount(self, accountName):
+    def CreateAccount(self, accountName, currency=0):
+        if isinstance(currency, currencies.BaseCurrency):
+            currency = currencies.GetCurrencyInt(currency)
+
+        if type(currency) != int or currency < 0:
+            raise Exception("Currency code must be int and >= 0")
+        
         cursor = self.dbconn.cursor()
-        cursor.execute('INSERT INTO accounts VALUES (null, ?, ?, ?)', (accountName, 0, 0.0))
+        cursor.execute('INSERT INTO accounts VALUES (null, ?, ?, ?)', (accountName, currency, 0.0))
         ID = cursor.lastrowid
         self.commitIfAppropriate()
         
-        account = bankobjects.Account(self, ID, accountName)
+        account = bankobjects.Account(self, ID, accountName, currency)
         
         # Ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.        
         self.clearAccountTransactions(account)
@@ -119,13 +134,38 @@ class PersistentStore:
         # everything is fine. So just return True, as there we no errors that we are aware of.
         return True
     
+    def Save(self):
+        import time; t = time.time()
+        self.dbconn.commit()
+        debug.debug("Committed in %s seconds" % (time.time()-t))
+        self.Dirty = False
+    
     def Close(self):
         self.dbconn.close()
+        for callback, topic in self.Subscriptions:
+            Publisher.unsubscribe(callback)
+        
+    def onBatchEvent(self, message):
+        batchType = message.topic[1].lower()
+        if batchType == "start":
+            self.BatchDepth += 1
+        elif batchType == "end":
+            if self.BatchDepth == 0:
+                raise Exception("Cannot end a batch that has not started.")
+            
+            self.BatchDepth -= 1
+            # If the batching is over, perhaps we should save.
+            if self.BatchDepth == 0 and self.Dirty:
+                self.commitIfAppropriate()
+        else:
+            raise Exception("Expected batch type of 'start' or 'end', got '%s'" % batchType)
     
     def commitIfAppropriate(self):
-        if self.AutoSave:
-            debug.debug("Committing db!")
-            self.dbconn.commit()
+        # Don't commit if there is a batch in progress.
+        if self.AutoSave and not self.BatchDepth:
+            self.Save()
+        else:
+            self.Dirty = True
 
     def initialize(self):
         connection = sqlite.connect(self.Path)
@@ -253,6 +293,10 @@ class PersistentStore:
         account = message.data
         self.dbconn.cursor().execute("UPDATE accounts SET balance=? WHERE id=?", (account.Balance, account.ID))
         self.commitIfAppropriate()
+        
+    def onExit(self, message):
+        if self.Dirty:
+            Publisher.sendMessage("warning.dirty exit", message.data)
         
     def __del__(self):
         self.commitIfAppropriate()

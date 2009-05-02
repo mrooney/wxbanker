@@ -1,0 +1,553 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-04-12 15:40-0700\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: csvimportframe.py:10
+msgid "CSV import"
+msgstr ""
+
+#: csvimportframe.py:42
+msgid "Target account"
+msgstr ""
+
+#: csvimportframe.py:57 csvimportframe.py:59
+msgid "Import"
+msgstr ""
+
+#: csvimportframe.py:69
+msgid "CSV columns mapping"
+msgstr ""
+
+#: csvimportframe.py:78 bankcontrols.py:35 summarytab.py:165
+#: transactionolv.py:62 searchctrl.py:42
+msgid "Date"
+msgstr ""
+
+#: csvimportframe.py:81
+msgid "Date format"
+msgstr ""
+
+#: csvimportframe.py:86 newtransactionctrl.py:33 transactionolv.py:64
+#: searchctrl.py:42
+msgid "Amount"
+msgstr ""
+
+#: csvimportframe.py:88
+msgid "Decimal separator"
+msgstr ""
+
+#: csvimportframe.py:92 newtransactionctrl.py:32 transactionolv.py:63
+#: searchctrl.py:42
+msgid "Description"
+msgstr ""
+
+#: csvimportframe.py:99
+msgid "CSV file settings"
+msgstr ""
+
+#: csvimportframe.py:108
+msgid "Skip first line"
+msgstr ""
+
+#: csvimportframe.py:111
+msgid "Encoding"
+msgstr ""
+
+#: csvimportframe.py:115
+msgid "Column delimiter"
+msgstr ""
+
+#: csvimportframe.py:126
+msgid "File to import"
+msgstr ""
+
+#: csvimportframe.py:131 csvimportframe.py:133
+msgid "Preview"
+msgstr ""
+
+#: csvimportframe.py:146
+msgid "CSV profiles"
+msgstr ""
+
+#: csvimportframe.py:151
+msgid "Python simplejson library is needed for csv profile loading/saving."
+msgstr ""
+
+#: csvimportframe.py:161
+msgid "Load"
+msgstr ""
+
+#: csvimportframe.py:166
+msgid "Save"
+msgstr ""
+
+#: csvimportframe.py:171
+msgid "Delete"
+msgstr ""
+
+#: csvimportframe.py:225
+#, python-format
+msgid "The file encoding does not seem to be '%s'."
+msgstr ""
+
+#: csvimportframe.py:232
+msgid "An error ocurred during the csv file import."
+msgstr ""
+
+#: csvimportframe.py:233
+msgid "CSV import error"
+msgstr ""
+
+#: csvimportframe.py:283
+#, python-format
+msgid "Profile with the name '%s' exists already. Overwrite it ?"
+msgstr ""
+
+#: csvimportframe.py:284
+msgid "Overwrite profile ?"
+msgstr ""
+
+#: csvimportframe.py:298
+msgid "Select file and click \"Preview\""
+msgstr ""
+
+#: accountlistctrl.py:41
+msgid "Accounts"
+msgstr ""
+
+#: accountlistctrl.py:57
+msgid "Add a new account"
+msgstr ""
+
+#: accountlistctrl.py:61
+msgid "Remove the selected account"
+msgstr ""
+
+#: accountlistctrl.py:66
+msgid "Rename the selected account"
+msgstr ""
+
+#: accountlistctrl.py:71
+msgid "Configure the selected account"
+msgstr ""
+
+#: accountlistctrl.py:86 transactionolv.py:65
+msgid "Total"
+msgstr ""
+
+#: accountlistctrl.py:91
+msgid "Hide zero-balance accounts"
+msgstr ""
+
+#: accountlistctrl.py:92
+msgid ""
+"When enabled, accounts with a balance of $0.00 will be hidden from the list"
+msgstr ""
+
+#: accountlistctrl.py:379 accountlistctrl.py:466
+msgid "Sorry, an account by that name already exists."
+msgstr ""
+
+#: accountlistctrl.py:442
+#, python-format
+msgid ""
+"This will permanently remove the account '%s' and all its transactions. "
+"Continue?"
+msgstr ""
+
+#: accountlistctrl.py:443
+msgid "Warning"
+msgstr ""
+
+#: templater.py:27
+msgid "Hide Calculator"
+msgstr ""
+
+#: templater.py:28
+msgid "Show Calculator"
+msgstr ""
+
+#: currconvert.py:68 currconvert.py:70
+#, python-format
+msgid "No exchange rate for currency \"%s\""
+msgstr ""
+
+#: newtransactionctrl.py:37
+msgid "Enter this transaction"
+msgstr ""
+
+#: newtransactionctrl.py:40
+msgid "Transfer"
+msgstr ""
+
+#: newtransactionctrl.py:44
+msgid "Transact"
+msgstr ""
+
+#: newtransactionctrl.py:78
+msgid ""
+"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
+"to fix this."
+msgstr ""
+
+#: newtransactionctrl.py:119
+msgid "No amount entered in the 'Amount' field."
+msgstr ""
+
+#: newtransactionctrl.py:121
+#, python-format
+msgid "'%s' is not a valid amount."
+msgstr ""
+
+#: newtransactionctrl.py:124
+msgid "Please enter a number such as 12.34 or -20."
+msgstr ""
+
+#: newtransactionctrl.py:125
+msgid "Invalid Transaction Amount"
+msgstr ""
+
+#: newtransactionctrl.py:141
+msgid "Which account will the money come from?"
+msgstr ""
+
+#: newtransactionctrl.py:141
+msgid "Other accounts"
+msgstr ""
+
+#: newtransactionctrl.py:153
+msgid "Please select an account and then try again."
+msgstr ""
+
+#: newtransactionctrl.py:154
+msgid "No account selected"
+msgstr ""
+
+#: newtransactionctrl.py:169
+msgid "transfer"
+msgstr ""
+
+#: newtransactionctrl.py:169
+msgid "transaction"
+msgstr ""
+
+#: newtransactionctrl.py:171
+#, python-format
+msgid ""
+"A search is currently active. Would you like to clear the current search and "
+"make this %s in \"%s\"?"
+msgstr ""
+
+#: newtransactionctrl.py:172
+msgid "Clear search?"
+msgstr ""
+
+#: newtransactionctrl.py:190
+msgid ""
+"If this box is checked when adding a transaction, you will be prompted for "
+"the account to use as the source of the transfer."
+msgstr ""
+
+#: newtransactionctrl.py:191
+msgid ""
+"For example, checking this box and entering a transaction of $50 into this "
+"account will also subtract $50 from the account that you choose as the "
+"source."
+msgstr ""
+
+#: summarytab.py:46
+msgid "Account"
+msgstr ""
+
+#: summarytab.py:49
+msgid "Sample Points"
+msgstr ""
+
+#: summarytab.py:52
+msgid "Fit Curve Degree"
+msgstr ""
+
+#: summarytab.py:99
+msgid "All accounts"
+msgstr ""
+
+#: summarytab.py:159 summarytab.py:165
+msgid "Balance"
+msgstr ""
+
+#: summarytab.py:163
+msgid "Trend"
+msgstr ""
+
+#: summarytab.py:165
+msgid "Total Balance Over Time"
+msgstr ""
+
+#: transactionolv.py:50
+msgid "No transactions entered."
+msgstr ""
+
+#: transactionolv.py:184
+#, python-format
+msgid "Send %s to calculator"
+msgstr ""
+
+#: transactionolv.py:185
+#, python-format
+msgid "Add %s to calculator"
+msgstr ""
+
+#: transactionolv.py:186
+#, python-format
+msgid "Subtract %s from calculator"
+msgstr ""
+
+#: transactionolv.py:198
+msgid "Remove this transaction"
+msgstr ""
+
+#: transactionolv.py:199
+msgid "Move this transaction to account"
+msgstr ""
+
+#: transactionolv.py:201
+#, python-format
+msgid "Remove these %i transactions"
+msgstr ""
+
+#: transactionolv.py:202
+#, python-format
+msgid "Move these %i transactions to account"
+msgstr ""
+
+#: bankobjects.py:261
+#, python-format
+msgid "Transfer to %s"
+msgstr ""
+
+#: bankobjects.py:262
+#, python-format
+msgid "Transfer from %s"
+msgstr ""
+
+#: searchctrl.py:32
+msgid "Search transactions"
+msgstr ""
+
+#: searchctrl.py:34
+msgid "Current Account"
+msgstr ""
+
+#: searchctrl.py:34
+msgid "All Accounts"
+msgstr ""
+
+#: searchctrl.py:40
+msgid "More options"
+msgstr ""
+
+#: searchctrl.py:40
+msgid "Less options"
+msgstr ""
+
+#: searchctrl.py:45
+msgid "Case Sensitive"
+msgstr ""
+
+#: searchctrl.py:46
+msgid "Whether or not to match based on capitalization"
+msgstr ""
+
+#: searchctrl.py:52
+msgid "In: "
+msgstr ""
+
+#: searchctrl.py:58
+msgid "Match: "
+msgstr ""
+
+#: searchctrl.py:104
+msgid "Show advanced search options"
+msgstr ""
+
+#: searchctrl.py:106
+msgid "Hide advanced search options"
+msgstr ""
+
+#: calculator.py:124
+msgid "Show"
+msgstr ""
+
+#: wxbanker.py:37
+msgid ""
+"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
+"fix this."
+msgstr ""
+
+#: wxbanker.py:53
+msgid "Transactions"
+msgstr ""
+
+#: wxbanker.py:57
+msgid "Summary"
+msgstr ""
+
+#: wxbanker.py:105
+msgid "It looks like this is your first time using wxBanker!"
+msgstr ""
+
+#: wxbanker.py:106
+msgid ""
+"To get started, add an account using the account control in the top left "
+"corner."
+msgstr ""
+
+#: wxbanker.py:107
+msgid ""
+"The buttons in the account control allow you to add, remove, and rename an "
+"account, respectively."
+msgstr ""
+
+#: wxbanker.py:108
+msgid ""
+"Once you have created an account you can add transactions to it (such as "
+"your initial balance) using the controls below the grid on the bottom right."
+msgstr ""
+
+#: wxbanker.py:109
+msgid "Have fun!"
+msgstr ""
+
+#: wxbanker.py:111
+msgid "Welcome!"
+msgstr ""
+
+#: wxbanker.py:119
+msgid "Save changes?"
+msgstr ""
+
+#: wxbanker.py:120
+msgid ""
+"You have made changes since the last save. Would you like to save before "
+"exiting?"
+msgstr ""
+
+#: wxbanker.py:121
+msgid ""
+"Note that enabling auto-save from the File menu will eliminate the need for "
+"manual saving."
+msgstr ""
+
+#: menubar.py:46
+msgid "Auto-save"
+msgstr ""
+
+#: menubar.py:46
+msgid "Automatically save changes"
+msgstr ""
+
+#: menubar.py:52
+msgid "&Currency"
+msgstr ""
+
+#: menubar.py:52
+msgid "Select currency to display"
+msgstr ""
+
+#: menubar.py:61
+msgid "Request a Currency"
+msgstr ""
+
+#: menubar.py:71
+msgid "CSV Import"
+msgstr ""
+
+#: menubar.py:71
+msgid "Import transactions from a CSV file"
+msgstr ""
+
+#: menubar.py:79
+msgid "View &FAQs"
+msgstr ""
+
+#: menubar.py:79
+msgid "View Frequently Asked Questions online"
+msgstr ""
+
+#: menubar.py:84
+msgid "Ask a &Question"
+msgstr ""
+
+#: menubar.py:84
+msgid "Ask a question online"
+msgstr ""
+
+#: menubar.py:89
+msgid "&Report a Bug"
+msgstr ""
+
+#: menubar.py:89
+msgid "Report a bug to the developer online"
+msgstr ""
+
+#: menubar.py:94
+msgid "Request a Fea&ture"
+msgstr ""
+
+#: menubar.py:94
+msgid "Request a new feature to be implemented"
+msgstr ""
+
+#: menubar.py:99
+msgid "Tran&slate wxBanker"
+msgstr ""
+
+#: menubar.py:99
+msgid "Translate wxBanker to another language"
+msgstr ""
+
+#: menubar.py:106
+msgid "&About"
+msgstr ""
+
+#: menubar.py:106
+msgid "More information about wxBanker"
+msgstr ""
+
+#: menubar.py:109
+msgid "&File"
+msgstr ""
+
+#: menubar.py:110
+msgid "&Settings"
+msgstr ""
+
+#: menubar.py:111
+msgid "&Tools"
+msgstr ""
+
+#: menubar.py:112
+msgid "&Help"
+msgstr ""
+
+#: menubar.py:180
+msgid "Copyright"
+msgstr ""
+
+#: menubar.py:181
+msgid "A lightweight personal finance management application."
+msgstr ""

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 #    https://launchpad.net/wxbanker
-#    runtests.py: Copyright 2007-2009 Mike Rooney <michael@wxbanker.org>
+#    runtests.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -24,8 +24,8 @@ def main():
     from testhelpers import displayhook
     import sys; sys.displayhook = displayhook
     
-    import plotalgo, currencies, bankobjects, controller
-    mods = [plotalgo, currencies, bankobjects, controller]
+    import plotalgo, currencies, bankobjects, controller, currconvert
+    mods = [plotalgo, currencies, bankobjects, controller, currconvert]
     
     #TODO: remove *.pyc first
     
@@ -42,9 +42,14 @@ def main():
     
     print "\n%i total failures out of %i total tests in %i modules." % (failures, tests, len(mods))
     if failures:
-        print "TESTS FAILED.",
+        print "TESTS FAILED."
     else:
-        print "TESTS PASSED.",
+        print "TESTS PASSED."
+        
+    import unittest, unittests
+    unittest.TestProgram(unittests)
+    
+    
 
 if __name__ == "__main__":
     main()

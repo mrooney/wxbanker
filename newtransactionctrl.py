@@ -1,5 +1,5 @@
 #    https://launchpad.net/wxbanker
-#    newtransactionctrl.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
+#    newtransactionctrl.py: Copyright 2007, 2008 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -79,9 +79,14 @@ class NewTransactionCtrl(wx.Panel):
         else:
             # Bind to DateCtrl Enter (LP: 252454).
             dateTextCtrl.WindowStyleFlag |= wx.TE_PROCESS_ENTER
-            dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction)
+            dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onDateEnter)
             
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
+        
+    def onDateEnter(self, event):
+        # Force a focus-out/tab to work around LP #311934
+        self.dateCtrl.Navigate()
+        self.onNewTransaction()
         
     def onAccountChanged(self, message):
         account = message.data
@@ -128,10 +133,8 @@ class NewTransactionCtrl(wx.Panel):
 
     def getSourceAccount(self, destinationAccount):
         accountDict = {}
-        for account in destinationAccount.Parent:
-            # Don't add the destination account as a possible source.
-            if account != destinationAccount:
-                accountDict[account.Name] = account
+        for account in destinationAccount.GetSiblings():
+            accountDict[account.Name] = account
             
         # Create a dialog with the other account names to choose from.
         dlg = wx.SingleChoiceDialog(self,
@@ -142,7 +145,7 @@ class NewTransactionCtrl(wx.Panel):
             accountName = dlg.GetStringSelection()
             return accountDict[accountName]
 
-    def onNewTransaction(self, event):
+    def onNewTransaction(self, event=None):
         # First, ensure an account is selected.
         destAccount = self.CurrentAccount
         if destAccount is None:

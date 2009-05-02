@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 #    https://launchpad.net/wxbanker
-#    wxbanker.py: Copyright 2007-2009 Mike Rooney <michael@wxbanker.org>
+#    wxbanker.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -46,9 +46,6 @@ class BankerFrame(wx.Frame):
 
         wx.Frame.__init__(self, None, title="wxBanker", size=size, pos=pos)
         self.SetIcon(wx.ArtProvider.GetIcon('wxART_coins'))
-        
-
-        self.isSaveLocked = False
 
         self.notebook = notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
 
@@ -61,18 +58,18 @@ class BankerFrame(wx.Frame):
 
         self.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.onTabSwitching)
 
-        Publisher().subscribe(self.onFirstRun, "FIRST RUN")
+        Publisher.subscribe(self.onFirstRun, "first run")
+        Publisher.subscribe(self.onWarning, "warning")
 
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_MOVE, self.OnMove)
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
-        menuBar = BankMenuBar()
+        menuBar = BankMenuBar(bankController.AutoSave)
         self.SetMenuBar(menuBar)
         #self.CreateStatusBar()
         
         self.Bind(wx.EVT_MENU, menuBar.onMenuEvent)
-        self.Show(True)
 
     def OnMove(self, event):
         config = wx.Config.Get()
@@ -95,12 +92,14 @@ class BankerFrame(wx.Frame):
         event.Skip()
 
     def OnClose(self, event):
-        event.Skip()
+        event.Skip() # This must be first, so handlers can override it.
+        Publisher.sendMessage("exiting", event)
 
     def onTabSwitching(self, event):
         tabIndex = event.Selection
+        # If we are switching to the summary (graph) tab, update it!
         if tabIndex == 1:
-            self.summaryPanel.generateData()
+            self.summaryPanel.update()
 
     def onFirstRun(self, message):
         welcomeMsg = _("It looks like this is your first time using wxBanker!")
@@ -112,38 +111,34 @@ class BankerFrame(wx.Frame):
         dlg = wx.MessageDialog(self, welcomeMsg, _("Welcome!"), style=wx.OK|wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
+        
+    def onWarning(self, message):
+        warning = message.topic[1]
+        if warning == "dirty exit":
+            event = message.data
+            title = _("Save changes?")
+            msg = _("You have made changes since the last save. Would you like to save before exiting?")
+            msg += "\n\n" + _("Note that enabling auto-save from the File menu will eliminate the need for manual saving.")
+            dlg = wx.MessageDialog(self, msg, title, style=wx.CANCEL|wx.YES_NO|wx.ICON_WARNING)
+            result = dlg.ShowModal()
+            if result == wx.ID_YES:
+                Publisher.sendMessage("user.saved")
+            elif result == wx.ID_CANCEL:
+                # The user cancelled the close, so cancel the event skip.
+                event.Skip(False)
+            dlg.Destroy()
 
 
-def main():
+def init(path=None):
     import wx, os, sys
     from controller import Controller
     
-    bankController = Controller()
+    bankController = Controller(path)
     
     if '--cli' in sys.argv:
         import clibanker
         clibanker.main(bankController)
     else:
-        app = wx.App(False)
-        app.Controller = bankController
-    
-        # Initialize our configuration object.
-        # It is only necessary to initialize any default values we
-        # have which differ from the default values of the types,
-        # so initializing an Int to 0 or a Bool to False is not needed.
-        wx.Config.Set(wx.Config("wxBanker"))
-        config = wx.Config.Get()
-        if not config.HasEntry("SIZE_X"):
-            config.WriteInt("SIZE_X", 800)
-            config.WriteInt("SIZE_Y", 600)
-        if not config.HasEntry("POS_X"):
-            config.WriteInt("POS_X", 100)
-            config.WriteInt("POS_Y", 100)
-        if not config.HasEntry("SHOW_CALC"):
-            config.WriteBool("SHOW_CALC", False)
-        if not config.HasEntry("AUTO-SAVE"):
-            config.WriteBool("AUTO-SAVE", True)
-    
         # Push our custom art provider.
         import wx.lib.art.img2pyartprov as img2pyartprov
         from art import silk
@@ -153,20 +148,25 @@ def main():
         frame = BankerFrame(bankController)
     
         # Greet the user if it appears this is their first time using wxBanker.
+        config = wx.Config.Get()
         firstTime = not config.ReadBool("RUN_BEFORE")
         if firstTime:
-            Publisher().sendMessage("FIRST RUN")
+            Publisher().sendMessage("first run")
             config.WriteBool("RUN_BEFORE", True)
-            
-        # Set the auto-save option as appropriate.
-        bankController.AutoSave = config.ReadBool("AUTO-SAVE")
     
-        import sys
-        if '--inspect' in sys.argv:
-            import wx.lib.inspection
-            wx.lib.inspection.InspectionTool().Show()
+        return bankController.wxApp
     
-        app.MainLoop()
+
+def main():
+    app = init()
+    app.TopWindow.Show()
+    
+    import sys
+    if '--inspect' in sys.argv:
+        import wx.lib.inspection
+        wx.lib.inspection.InspectionTool().Show()
+    
+    app.MainLoop()
 
 
 if __name__ == "__main__":

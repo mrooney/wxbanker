@@ -49,9 +49,10 @@ class TransactionContainer(object):
         self.Name = "#CSVIMPORT"
         self.Transactions = transactions
         
-    def RemoveTransaction(self, transaction):
-        self.Transactions.remove(transaction)
-        Publisher.sendMessage("transaction.removed", (self, transaction))
+    def RemoveTransactions(self, transactions):
+        for t in transactions:
+            self.Transactions.remove(t)
+        Publisher.sendMessage("transactions.removed", (self, transactions))
 
 class CsvImporterProfileManager:
 

@@ -563,6 +563,8 @@ class ObjectListView(wx.ListCtrl):
                 boundedWidth = col.CalcBoundedWidth(colWidth)
                 if colWidth != boundedWidth:
                     self.SetColumnWidth(iCol, boundedWidth)
+        # wxbanker patch to sourceforge bug 2674878
+        self._ResizeSpaceFillingColumns()
 
 
     def Check(self, modelObject):
@@ -2488,8 +2490,13 @@ class FastObjectListView(AbstractVirtualObjectListView):
         self.lastGetObjectIndex = -1
         self._SortObjects()
         self._BuildInnerList()
+        # wxbanker patch to sourceforge bug 2679500
+        if wx.Platform == "__WXMSW__":
+            wx.ListCtrl.DeleteAllItems(self)
+        ###
         self.SetItemCount(len(self.innerList))
         self.RefreshObjects()
+
 
         # Auto-resize once all the data has been added
         self.AutoSizeColumns()

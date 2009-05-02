@@ -1,5 +1,5 @@
 #    https://launchpad.net/wxbanker
-#    managetab.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
+#    managetab.py: Copyright 2007, 2008 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -60,18 +60,14 @@ class ManagePanel(wx.Panel):
         Publisher().subscribe(self.onChangeAccount, "view.account changed")
         Publisher().subscribe(self.onCalculatorToggled, "CALCULATOR.TOGGLED")
 
-        #select the first item by default, if there are any
-        #we use a CallLater to allow everything else to finish creation as well,
-        #otherwise it won't get scrolled to the bottom initially as it should.
-        accountCtrl.SelectVisibleItem(0)
+        # Select the first account by default, if there are any.
+        # Windows needs a delay, to work around LP #339860
+        wx.CallLater(50, accountCtrl.SelectVisibleItem, 0)
 
         self.Layout()
 
         # Ensure the calculator is displayed as desired.
         calcWidget.SetExpanded(wx.Config.Get().ReadBool("SHOW_CALC"))
-
-        ##wx.CallLater(50, lambda: transactionPanel.transactionCtrl.doResize())
-        wx.CallLater(50, lambda: transactionPanel.transactionCtrl.ensureVisible(-1)) # GTK
 
     def onCalculatorToggled(self, message):
         """
@@ -111,10 +107,8 @@ class TransactionPanel(wx.Panel):
         self.Sizer = mainSizer
         mainSizer.Layout()
 
-        ##self.Bind(wx.EVT_SIZE, self.transactionCtrl.doResize)
         for message in ["account.created", "account.removed", "view.account changed"]:
             Publisher().subscribe(self.onSearchInvalidatingChange, message)
-        #self.Bind(wx.EVT_MAXIMIZE, self.doResize) # isn't necessary on GTK, what about Windows?
 
     def setAccount(self, *args, **kwargs):
         self.transactionCtrl.setAccount(*args, **kwargs)

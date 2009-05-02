@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #    https://launchpad.net/wxbanker
-#    setup.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
+#    setup.py: Copyright 2007, 2008 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -32,11 +32,11 @@ setup(
     name = "wxBanker",
     description = "Lightweight personal finance manager",
     author = "Michael Rooney",
-    author_email = "michael@wxbanker.org",
+    author_email = "mrooney@ubuntu.com",
     url = "http://wxbanker.org",
     download_url='https://launchpad.net/wxbanker/+download',
     package_dir = {'wxbanker': ''},
-    packages = ["wxbanker", "wxbanker.art"],
+    packages = ["wxbanker", "wxbanker.art", "wxbanker.ObjectListView"],
     package_data = {'wxbanker': ['*.txt']},
     requires = ["wx (>=2.8)"],
     license='GNU GPL',

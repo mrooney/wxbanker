@@ -1,7 +1,7 @@
 #! /usr/bin/python
 #
 #    https://launchpad.net/wxbanker
-#    version.py: Copyright 2007, 2008 Mike Rooney <michael@wxbanker.org>
+#    version.py: Copyright 2007, 2008 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -18,4 +18,4 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-NUMBER = "0.5a"
+NUMBER = "0.5"
