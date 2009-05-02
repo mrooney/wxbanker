@@ -215,7 +215,8 @@ True
 """
 
 from persistentstore import PersistentStore
-import wx, os, sys
+import wx
+import fileservice as fs
 from wx.lib.pubsub import Publisher
 import debug
 
@@ -279,18 +280,7 @@ class Controller(object):
             
     def LoadPath(self, path, use=False):
         if path is None:
-            # Figure out where the bank database file is, and load it.
-            #Note: look at wx.StandardPaths.Get().GetUserDataDir() in the future
-            path = os.path.join(os.path.dirname(__file__), 'bank.db')
-            if not '--use-local' in sys.argv and 'HOME' in os.environ:
-                # We seem to be on a Unix environment.
-                preferredPath = os.path.join(os.environ['HOME'], '.wxbanker', 'bank.db')
-                if os.path.exists(preferredPath) or not os.path.exists(path):
-                    path = preferredPath
-                    # Ensure that the directory exists.
-                    dirName = os.path.dirname(path)
-                    if not os.path.exists(dirName):
-                        os.mkdir(dirName)
+            path=fs.getDateFilePath('bank.db')
         
         store = PersistentStore(path)
         store.AutoSave = self.AutoSave
