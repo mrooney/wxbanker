@@ -36,7 +36,7 @@ def __getFilePath(filename):
     return path
     
 
-def getDateFilePath(filename):
+def getDataFilePath(filename):
     return __getFilePath(filename)
     
 def getConfigFilePath(filename):

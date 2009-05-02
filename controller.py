@@ -280,7 +280,7 @@ class Controller(object):
             
     def LoadPath(self, path, use=False):
         if path is None:
-            path=fs.getDateFilePath('bank.db')
+            path=fs.getDataFilePath('bank.db')
         
         store = PersistentStore(path)
         store.AutoSave = self.AutoSave
