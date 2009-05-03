@@ -226,8 +226,8 @@ class Controller(object):
         self._AutoSave = autoSave
         self.Models = []
         
-        self.LoadPath(path, use=True)
         self.InitConfig()
+        self.LoadPath(path, use=True)
         
         Publisher.subscribe(self.onAutoSaveToggled, "user.autosave_toggled")
         Publisher.subscribe(self.onSaveRequest, "user.saved")
@@ -238,9 +238,9 @@ class Controller(object):
         # have which differ from the default values of the types,
         # so initializing an Int to 0 or a Bool to False is not needed.
         self.wxApp = wx.App(False)
+        self.wxApp.SetAppName("wxBanker")
         self.wxApp.Controller = self
-            
-        config = wx.Config("wxBanker")
+        config = wx.Config(localFilename=fs.getConfigFilePath('wxBanker.cfg'))
         wx.Config.Set(config)
         if not config.HasEntry("SIZE_X"):
             config.WriteInt("SIZE_X", 800)
