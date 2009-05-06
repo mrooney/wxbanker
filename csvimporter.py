@@ -33,9 +33,8 @@ class CsvImporter:
                 
             # convert to python unicode strings
             row = [unicode(s, "utf-8") for s in row]
-
-            amount = float(row[settings['amountColumn'] - 1].replace(
-                settings['decimalSeparator'], '.'))
+            
+            amount = self.parseAmount(row[settings['amountColumn'] - 1], settings)
             desc = re.sub('\d+', lambda x: row[int(x.group(0)) - 1], settings['descriptionColumns'])
             tdate = datetime.strptime(row[settings['dateColumn'] -1],
                 settings['dateFormat']).strftime('%Y-%m-%d')
@@ -43,6 +42,15 @@ class CsvImporter:
             transactions.append(Transaction(None, None, amount, desc, tdate))
         
         return TransactionContainer(transactions)
+        
+    def parseAmount(self, val, settings):
+        # strip non-digit chars on both ends
+        val = re.sub(r'^[^0-9+\-]+', '', val)
+        val = re.sub(r'[^0-9]+$', '', val)
+        # replace separators with python internal ones
+        val = val.replace(settings['decimalSeparator'], '.')
+        val = val.replace(settings['thousandSeparator'], '')
+        return float(val)
 
 class TransactionContainer(object):
     def __init__(self, transactions):
