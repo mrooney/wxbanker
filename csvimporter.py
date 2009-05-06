@@ -44,13 +44,13 @@ class CsvImporter:
         return TransactionContainer(transactions)
         
     def parseAmount(self, val, settings):
-        # strip non-digit chars on both ends
-        val = re.sub(r'^[^0-9+\-]+', '', val)
-        val = re.sub(r'[^0-9]+$', '', val)
-        # replace separators with python internal ones
         val = val.replace(settings['decimalSeparator'], '.')
-        val = val.replace(settings['thousandSeparator'], '')
-        return float(val)
+        amountStr = ""
+        for char in val:
+            if char.isdigit() or char in "-.":
+                amountStr += char
+                
+        return float(amountStr)
 
 class TransactionContainer(object):
     def __init__(self, transactions):
