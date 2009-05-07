@@ -20,9 +20,10 @@
 
 import unittest
 
-# specify the modules to test
-# TODO assemble the list by listing .py files in this directory
+# Specify the modules to test.
+# TODO: assemble the list by listing .py files in this directory
 modules = ["csvimportertests", "guitests", "modeltests", "localetests"]
-
 suite = unittest.TestLoader().loadTestsFromNames(modules)
-unittest.TextTestRunner(verbosity=2).run(suite)
+
+if __name__ == "__main__":
+    unittest.TextTestRunner(verbosity=2).run(suite)
