@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #    https://launchpad.net/wxbanker
-#    currencies.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
+#    modeltests.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -16,35 +16,12 @@
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.%
+#    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import unittest, os, locale, wx
+import sys; sys.path.append("../")
+import os, controller, unittest
 from wx.lib.pubsub import Publisher
-import controller, wxbanker, bankobjects, currencies as c
 
-class LocaleTests(unittest.TestCase):
-    def testCurrencyDisplay(self):
-        self.assertEquals(locale.setlocale(locale.LC_ALL, 'en_US.utf8'), 'en_US.utf8')
-        self.assertEquals(c.LocalizedCurrency().float2str(1), u'$1.00')
-        self.assertEquals(c.UnitedStatesCurrency().float2str(1), u'$1.00')
-        self.assertEquals(c.EuroCurrency().float2str(1), u'1.00 €')
-        self.assertEquals(c.GreatBritainCurrency().float2str(1), u'£1.00')
-        self.assertEquals(c.JapaneseCurrency().float2str(1), u'￥1')
-        self.assertEquals(c.RussianCurrency().float2str(1), u'1.00 руб')
-        
-    def testDateParsing(self):
-        self.assertEquals(locale.setlocale(locale.LC_ALL, 'en_US.utf8'), 'en_US.utf8')
-        pass
-    
-    def testLocaleFormatWorkaround(self):
-        ''' test locale.format() thousand separator workaround '''
-        self.assertEquals(locale.setlocale(locale.LC_ALL, 'ru_RU.utf8'), 'ru_RU.utf8')
-        reload(c)
-        
-        # The test is that none of these calls throw an exception.
-        for curr in c.CurrencyList:
-            curr().float2str(1000)
-    
 class ModelTests(unittest.TestCase):
     def setUp(self):
         Publisher.unsubAll()
@@ -255,37 +232,3 @@ class ModelTests(unittest.TestCase):
             os.remove("test.db")
         if os.path.exists(self.ConfigPathBackup):
             os.rename(self.ConfigPathBackup, self.ConfigPath)
-            
-            
-class GUITests(unittest.TestCase):
-    def setUp(self):
-        self.ConfigPath = os.path.expanduser("~/.wxBanker")
-        self.ConfigPathBackup = self.ConfigPath + ".backup"
-        if os.path.exists("test.db"):
-            os.remove("test.db")
-        if os.path.exists(self.ConfigPath):
-            os.rename(self.ConfigPath, self.ConfigPathBackup)
-        
-        self.App = wxbanker.init("test.db", welcome=False)
-        self.Frame = self.App.TopWindow
-        
-    def testAutoSaveSetAndSaveDisabled(self):
-        self.assertTrue( self.Frame.MenuBar.autoSaveMenuItem.IsChecked() )
-        self.assertFalse( self.Frame.MenuBar.saveMenuItem.IsEnabled() )
-        
-    def testAppHasController(self):
-        self.assertTrue( hasattr(self.App, "Controller") )
-        
-    def testCanAddAndRemoveUnicodeAccount(self):
-        self.App.Controller.Model.CreateAccount(u"Lópezहिंदी")
-        self.Frame.managePanel.accountCtrl.onRemoveButton(None)
-    
-    def tearDown(self):
-        if os.path.exists("test.db"):
-            os.remove("test.db")
-        if os.path.exists(self.ConfigPathBackup):
-            os.rename(self.ConfigPathBackup, self.ConfigPath)
-        
-
-if __name__ == '__main__':
-    unittest.main()

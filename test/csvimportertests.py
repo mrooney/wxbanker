@@ -16,7 +16,7 @@
 #    GNU General Public License for more details.
 #
 #    You should have received a copy of the GNU General Public License
-#    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.%
+#    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import unittest, sys
 sys.path.append('../')
@@ -28,10 +28,7 @@ class CsvImporterTest(unittest.TestCase):
         self.importer = CsvImporter()
     
     def testParseAmountWithSpaceAsThousandsSep(self):
-        ''' regression test for lp bug #370571 '''
+        # Regression test for LP: #370571
         decimalSeparator = ','
         self.assertEquals(self.importer.parseAmount('-1 000,00', decimalSeparator), -1000.0)
         self.assertEquals(self.importer.parseAmount('$ -1 000,00 ', decimalSeparator), -1000.0)
-
-if __name__ == '__main__':
-    unittest.main()
