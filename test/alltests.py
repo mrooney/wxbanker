@@ -18,20 +18,11 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import unittest, sys
-sys.path.append('../')
+import unittest
 
-from csvimporter import CsvImporter
+# specify the modules to test
+# TODO assemble the list by listing .py files in this directory
+modules = ['csvimportertest']
 
-class CsvImporterTest(unittest.TestCase):
-    def setUp(self):
-        self.importer = CsvImporter()
-    
-    def testParseAmount(self):
-        ''' regression test for lp bug #370571 '''
-        decimalSeparator = ','
-        self.assertEquals(self.importer.parseAmount('-1 000,00', decimalSeparator), -1000.0)
-        self.assertEquals(self.importer.parseAmount('$ -1 000,00 ', decimalSeparator), -1000.0)
-
-if __name__ == '__main__':
-    unittest.main()
+suite = unittest.TestLoader().loadTestsFromNames(modules)
+unittest.TextTestRunner(verbosity=2).run(suite)
