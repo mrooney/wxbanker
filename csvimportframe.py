@@ -70,7 +70,7 @@ class CsvImportFrame(wx.Frame):
         staticBoxSizer = wx.StaticBoxSizer(staticBox, wx.VERTICAL)
         topSizer.Add(staticBoxSizer, flag=wx.ALL|wx.EXPAND, border=1)
         
-        sizer = wx.FlexGridSizer(rows=3, cols=6, hgap=15, vgap=0)
+        sizer = wx.FlexGridSizer(rows=3, cols=4, hgap=15, vgap=0)
         sizer.SetFlexibleDirection(wx.HORIZONTAL)
         staticBoxSizer.Add(sizer, flag=wx.ALL|wx.EXPAND, border=5)
         
@@ -80,24 +80,17 @@ class CsvImportFrame(wx.Frame):
         self.dateFormatCtrl = wx.ComboBox(topPanel, choices=self.dateFormats, size=(110,-1))
         sizer.Add(wx.StaticText(topPanel, label=_('Date format')), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self.dateFormatCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
-        sizer.Add((0,0))
-        sizer.Add((0,0))
         
         self.amountColumnCtrl = wx.SpinCtrl(topPanel, size=(40,-1))
         self.decimalSeparatorCtrl = wx.TextCtrl(topPanel, size=(20,-1))
-        self.thousandSeparatorCtrl = wx.TextCtrl(topPanel, size=(20,-1))
         sizer.Add(wx.StaticText(topPanel, label=_('Amount')), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self.amountColumnCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(wx.StaticText(topPanel, label=_('Decimal separator')), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self.decimalSeparatorCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
-        sizer.Add(wx.StaticText(topPanel, label=_('Thousand separator')), flag=wx.ALIGN_CENTER_VERTICAL)
-        sizer.Add(self.thousandSeparatorCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
         
         self.descriptionColumnCtrl = wx.TextCtrl(topPanel)
         sizer.Add(wx.StaticText(topPanel, label=_('Description')), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self.descriptionColumnCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
-        sizer.Add((0,0))
-        sizer.Add((0,0))
         sizer.Add((0,0))
         sizer.Add((0,0))
         
@@ -181,27 +174,20 @@ class CsvImportFrame(wx.Frame):
         sizer.Add(self.deleteProfileButton, flag=wx.ALIGN_CENTER)
         
     def initCtrlValuesFromSettings(self, settings):
-        defaults = self.getDefaultSettings()
-
-        def getval(x):
-            return settings.get(x) or defaults[x]
-
-        self.amountColumnCtrl.Value = getval('amountColumn')
-        self.decimalSeparatorCtrl.Value = getval('decimalSeparator')
-        self.thousandSeparatorCtrl.Value = getval('thousandSeparator')
-        self.dateColumnCtrl.Value = getval('dateColumn')
-        self.dateFormatCtrl.Value = getval('dateFormat')
-        self.descriptionColumnCtrl.Value = getval('descriptionColumns')
-        self.delimiterCtrl.Value = getval('delimiter')
-        self.skipFirstLineCtrl.Value = getval('skipFirstLine')
-        self.fileEncodingCtrl.Value = getval('encoding')
+        self.amountColumnCtrl.Value = settings['amountColumn']
+        self.decimalSeparatorCtrl.Value = settings['decimalSeparator']
+        self.dateColumnCtrl.Value = settings['dateColumn']
+        self.dateFormatCtrl.Value = settings['dateFormat']
+        self.descriptionColumnCtrl.Value = settings['descriptionColumns']
+        self.delimiterCtrl.Value = settings['delimiter']
+        self.skipFirstLineCtrl.Value = settings['skipFirstLine']
+        self.fileEncodingCtrl.Value = settings['encoding']
         
     def getDefaultSettings(self):
         settings = {}
 
         settings['amountColumn'] = 2
         settings['decimalSeparator'] = '.'
-        settings['thousandSeparator'] = ' '
         settings['dateColumn'] = 1
         settings['dateFormat'] = self.dateFormats[0]
         settings['descriptionColumns'] = "3, 4 (5)"
@@ -216,7 +202,6 @@ class CsvImportFrame(wx.Frame):
 
         settings['amountColumn'] = self.amountColumnCtrl.Value
         settings['decimalSeparator'] = self.decimalSeparatorCtrl.Value
-        settings['thousandSeparator'] = self.thousandSeparatorCtrl.Value
         settings['dateColumn'] = self.dateColumnCtrl.Value
         settings['dateFormat'] = self.dateFormatCtrl.Value
         settings['descriptionColumns'] = self.descriptionColumnCtrl.Value
