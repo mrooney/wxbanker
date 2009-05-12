@@ -21,10 +21,10 @@
 import testbase
 import unittest, os 
 
-# find the modules to test
-ignores = ['__init__.py', 'testbase.py', 'alltests.py']
-files = filter(lambda x: x.endswith(".py") and x not in ignores, os.listdir(os.path.dirname(__file__)))
-modules = [m.replace(".py", "") for m in files]
+# Find the modules to test.
+ignores = ('__init__.py', 'testbase.py', 'alltests.py')
+files = (f for f in os.listdir(testbase.testdir) if f.endswith(".py") and f not in ignores)
+modules = (m.replace(".py", "") for m in files)
 
 suite = unittest.TestLoader().loadTestsFromNames(modules)
 

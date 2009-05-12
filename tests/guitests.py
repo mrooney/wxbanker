@@ -44,6 +44,8 @@ class GUITests(unittest.TestCase):
         
     def testCanAddAndRemoveUnicodeAccount(self):
         self.App.Controller.Model.CreateAccount(u"Lópezहिंदी")
+        # Make sure the account ctrl has the first (0th) selection.
+        self.assertEqual(0, self.Frame.managePanel.accountCtrl.currentIndex)
         self.Frame.managePanel.accountCtrl.onRemoveButton(None)
     
     def tearDown(self):

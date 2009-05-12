@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #    https://launchpad.net/wxbanker
-#    alltests.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
+#    testbase.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
