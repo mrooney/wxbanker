@@ -46,8 +46,8 @@ def main():
     else:
         print "TESTS PASSED."
         
-    import unittest, unittests
-    unittest.TestProgram(unittests)
+    from tests import alltests
+    alltests.main()
     
     
 

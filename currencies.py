@@ -58,6 +58,17 @@ True
 import localization, locale
 
 
+def createFromLocale():
+    """Create a currency from the current locale."""
+    new = {}
+    local = LocalizedCurrency()
+    base = BaseCurrency()
+    for key, val in local.LOCALECONV.items():
+        if not base.LOCALECONV.has_key(key) or base.LOCALECONV[key] != val:
+            new[key] = val
+            print "self.LOCALECONV['%s'] = %r" % (key, val)
+    #print new
+
 class BaseCurrency(object):
     def __init__(self):
         self.LOCALECONV = {
@@ -192,6 +203,20 @@ class RussianCurrency(BaseCurrency):
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
         
+class UkranianCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['mon_decimal_point'] = u','
+        self.LOCALECONV['p_sep_by_space'] = 2
+        self.LOCALECONV['thousands_sep'] = ' '#u'\xa0'
+        self.LOCALECONV['decimal_point'] = u','
+        self.LOCALECONV['int_curr_symbol'] = u'UAH '
+        self.LOCALECONV['n_cs_precedes'] = 0
+        self.LOCALECONV['mon_thousands_sep'] = ' ' #u'\xa0'
+        self.LOCALECONV['currency_symbol'] = u'гр' #u'\u0433\u0440'
+        self.LOCALECONV['n_sep_by_space'] = 1
+        self.LOCALECONV['p_cs_precedes'] = 0
+        
 class LocalizedCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
@@ -202,7 +227,7 @@ class LocalizedCurrency(BaseCurrency):
             self.LOCALECONV.update((k, unicode(v, _locale_encoding)) for k, v in self.LOCALECONV.iteritems() if type(v) is str)
 
 
-CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency]
+CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency, UkranianCurrency]
 
 # workaround for a locale.localeconv bug http://bugs.python.org/issue1995 
 # test if float2str raises exceptions, apply a workaround if it does

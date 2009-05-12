@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #    https://launchpad.net/wxbanker
-#    alltests.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
+#    csvimportertests.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -18,12 +18,16 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
+import os, sys; sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 import unittest
+from csvimporter import CsvImporter
 
-# Specify the modules to test.
-# TODO: assemble the list by listing .py files in this directory
-modules = ["csvimportertests", "guitests", "modeltests", "localetests"]
-suite = unittest.TestLoader().loadTestsFromNames(modules)
-
-if __name__ == "__main__":
-    unittest.TextTestRunner(verbosity=2).run(suite)
+class CsvImporterTest(unittest.TestCase):
+    def setUp(self):
+        self.importer = CsvImporter()
+    
+    def testParseAmountWithSpaceAsThousandsSep(self):
+        # Regression test for LP: #370571
+        decimalSeparator = ','
+        self.assertEquals(self.importer.parseAmount('-1 000,00', decimalSeparator), -1000.0)
+        self.assertEquals(self.importer.parseAmount('$ -1 000,00 ', decimalSeparator), -1000.0)

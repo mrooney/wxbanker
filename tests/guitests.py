@@ -20,8 +20,8 @@
 
 # Here we must insert since if wxbanker is installed on the system this would
 # otherwise pull in that package first.
-import sys; sys.path.insert(0, "../")
-import os, controller, unittest, wxbanker
+import os, sys; sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+import controller, unittest, wxbanker
 from wx.lib.pubsub import Publisher
 
 class GUITests(unittest.TestCase):
