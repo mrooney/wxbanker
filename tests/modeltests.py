@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, sys; sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+import testbase, os
 import controller, unittest
 from wx.lib.pubsub import Publisher
 
@@ -232,3 +232,6 @@ class ModelTests(unittest.TestCase):
             os.remove("test.db")
         if os.path.exists(self.ConfigPathBackup):
             os.rename(self.ConfigPathBackup, self.ConfigPath)
+            
+if __name__ == "__main__":
+    unittest.main()

@@ -18,12 +18,14 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, sys; sys.path.insert(0, os.path.dirname(__file__))
-import unittest
+import testbase
+import unittest, os 
 
-# Specify the modules to test.
-# TODO: assemble the list by listing .py files in this directory
-modules = ["csvimportertests", "guitests", "modeltests", "localetests"]
+# find the modules to test
+ignores = ['__init__.py', 'testbase.py', 'alltests.py']
+files = filter(lambda x: x.endswith(".py") and x not in ignores, os.listdir(os.path.dirname(__file__)))
+modules = [m.replace(".py", "") for m in files]
+
 suite = unittest.TestLoader().loadTestsFromNames(modules)
 
 def main():

@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, sys; sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+import testbase
 import unittest, locale, currencies as c
 
 class LocaleTests(unittest.TestCase):
@@ -43,3 +43,6 @@ class LocaleTests(unittest.TestCase):
         # The test is that none of these calls throw an exception.
         for curr in c.CurrencyList:
             curr().float2str(1000)
+
+if __name__ == "__main__":
+    unittest.main()
