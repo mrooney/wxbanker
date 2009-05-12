@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, sys; sys.path.insert(0, os.path.dirname(__file__))
+import testbase
 import unittest
 
 # Specify the modules to test.
