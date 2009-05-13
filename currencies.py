@@ -237,7 +237,7 @@ CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBrit
 try:
     _locale_encoding = None
     for curr in CurrencyList:
-        curr().float2str(1000)
+        unicode(curr().float2str(1000))
 except UnicodeDecodeError:
     # save the current locale's encoding for use in float2str
     _locale_encoding = locale.getlocale()[1]

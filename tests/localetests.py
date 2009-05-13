@@ -35,14 +35,17 @@ class LocaleTests(unittest.TestCase):
         #INCOMPLETE
         self.assertEquals(locale.setlocale(locale.LC_ALL, 'en_US.utf8'), 'en_US.utf8')
     
-    def testLocaleFormatWorkaround(self):
-        ''' test locale.format() thousand separator workaround '''
-        self.assertEquals(locale.setlocale(locale.LC_ALL, 'ru_RU.utf8'), 'ru_RU.utf8')
-        reload(c)
+    def testLocaleCurrencyRobustness(self):
+        # Test locale.format() thousand separator workaround.
+        # Also calculator bug LP: #375308
+        for loc in ['en_US.utf8', 'ru_RU.utf8', 'fr_FR.utf8']:
+            self.assertEquals(locale.setlocale(locale.LC_ALL, loc), loc)
+            reload(c)
         
-        # The test is that none of these calls throw an exception.
-        for curr in c.CurrencyList:
-            curr().float2str(1000)
+            # The test is that none of these calls throw an exception.
+            # (including the unicode conversion)
+            for curr in c.CurrencyList:
+                unicode(curr().float2str(1000))
 
 if __name__ == "__main__":
     unittest.main()
