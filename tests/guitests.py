@@ -24,7 +24,6 @@ from wx.lib.pubsub import Publisher
 
 class GUITests(unittest.TestCase):
     def setUp(self):
-        Publisher.unsubAll()
         self.ConfigPath = os.path.expanduser("~/.wxBanker")
         self.ConfigPathBackup = self.ConfigPath + ".backup"
         if os.path.exists("test.db"):

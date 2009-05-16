@@ -129,7 +129,6 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(self.Model, model3)
         self.Controller.Close(model3)
         
-        
     def testSimpleMove(self):
         model1 = self.Controller.Model
         a = model1.CreateAccount("A")
@@ -172,6 +171,12 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(len(model3.Accounts), 1)
         self.assertEqual(model1, model3)
         self.assertNotEqual(model2, model3)
+        
+    def testModelIsNotCached(self):
+        # If this test fails, test*IsStored tests will pass but are no longer testing for regressions!
+        model1 = self.Controller.Model
+        model2 = model1.Store.GetModel()
+        self.assertFalse(model1 is model2)
         
     def testRenameIsStored(self):
         model1 = self.Controller.Model
@@ -232,6 +237,7 @@ class ModelTests(unittest.TestCase):
             os.remove("test.db")
         if os.path.exists(self.ConfigPathBackup):
             os.rename(self.ConfigPathBackup, self.ConfigPath)
+        Publisher.unsubAll()
             
 if __name__ == "__main__":
     unittest.main()
