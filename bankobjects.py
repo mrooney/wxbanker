@@ -184,6 +184,9 @@ class Account(object):
         Publisher.subscribe(self.onTransactionAmountChanged, "transaction.updated.amount")
         Publisher.sendMessage("account.created.%s" % name, self)
         
+    def ParseAmount(self, strAmount):
+        return float(strAmount)
+        
     def GetSiblings(self):
         return (account for account in self.Parent if account is not self)
         

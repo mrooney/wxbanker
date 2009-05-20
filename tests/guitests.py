@@ -46,6 +46,21 @@ class GUITests(unittest.TestCase):
         # Make sure the account ctrl has the first (0th) selection.
         self.assertEqual(0, self.Frame.managePanel.accountCtrl.currentIndex)
         self.Frame.managePanel.accountCtrl.onRemoveButton(None)
+        
+    def testCanAddTransaction(self):
+        model = self.App.Controller.Model
+        tctrl = self.Frame.managePanel.transactionPanel.newTransCtrl
+        a = model.CreateAccount("testCanAddTransaction")
+        
+        self.assertEquals(len(a.Transactions), 0)
+        self.assertEquals(a.Balance, 0)
+        
+        tctrl.amountCtrl.Value = "12.34"
+        tctrl.onNewTransaction()
+        
+        self.assertEquals(len(a.Transactions), 1)
+        self.assertEquals(a.Balance, 12.34)
+        
     
     def tearDown(self):
         if os.path.exists("test.db"):

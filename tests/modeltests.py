@@ -35,6 +35,13 @@ class ModelTests(unittest.TestCase):
         self.Controller = controller.Controller("test.db")
         self.Model = self.Controller.Model
         
+    def testRobustTransactionAmountParsing(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("Test")
+        
+        t1 = a.AddTransaction("10")
+        self.assertEquals(t1.Amount, 10)
+        
     def testControllerIsAutoSavingByDefault(self):
         self.assertTrue( self.Controller.AutoSave )
     

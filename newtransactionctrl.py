@@ -121,7 +121,7 @@ class NewTransactionCtrl(wx.Panel):
 
         # Parse the amount.
         try:
-            amount = float(amount)
+            amount = self.CurrentAccount.ParseAmount(amount)
         except ValueError:
             if amount == "":
                 baseStr = _("No amount entered in the 'Amount' field.")
