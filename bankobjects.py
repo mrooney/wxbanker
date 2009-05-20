@@ -185,6 +185,28 @@ class Account(object):
         Publisher.sendMessage("account.created.%s" % name, self)
         
     def ParseAmount(self, strAmount):
+        """
+        Robustly parse an amount. Remove ANY spaces, so they can be used as padding
+        or thousands separators. Find the thing intended as a decimal, if any,
+        and replace it with a period, removing anything else that may be a thousands sep.
+        """
+        # Remove any spaces anywhere.
+        strAmount = strAmount.replace(" ", "")
+        
+        # Iterate over the string in reverse to locate decimal sep.
+        decimalPos = None
+        for i in range(min(3, len(strAmount))):
+            pos = -(i+1)
+            char = strAmount[pos]
+            if char in ",." and i <= 2:
+                decimalPos = pos + 1
+                break
+        strAmount = strAmount.replace(",", "")
+        strAmount = strAmount.replace(".", "")
+        
+        if decimalPos:
+            strAmount = strAmount[:decimalPos] + "." + strAmount[decimalPos:]
+            
         return float(strAmount)
         
     def GetSiblings(self):
