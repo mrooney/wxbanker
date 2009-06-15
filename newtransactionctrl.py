@@ -20,6 +20,95 @@ import wx, datetime
 import bankcontrols
 from wx.lib.pubsub import Publisher
 
+class RecurringPanel(wx.Panel):
+    def __init__(self, parent):
+        wx.Panel.__init__(self, parent)
+        
+        self.repeatsCombo = wx.Choice(self, choices=(_("Weekly"), _("Monthly"), _("Yearly")))
+        self.everyText = wx.StaticText(self)
+        self.everySpin = wx.SpinCtrl(self, min=1, max=130, initial=1)
+        self.everySpin.MinSize = (50, -1)
+        self.repeatsOnText = wx.StaticText(self)
+        self.startDateCtrl = bankcontrols.DateCtrlFactory(self)
+        self.endDateCtrl = bankcontrols.DateCtrlFactory(self)
+        
+        self.repeatsOnChecksWeekly = []
+        self.repeatsOnSizerWeekly = wx.BoxSizer()
+        today = datetime.date.today().weekday()
+        for i, label in enumerate(_("MTWTFSS")):
+            cb = wx.CheckBox(self, label=label)
+            cb.SetValue(i==today)
+            self.repeatsOnChecksWeekly.append(cb)
+            self.repeatsOnSizerWeekly.Add(cb, flag=wx.ALIGN_CENTER)
+            
+        self.repeatsOnChecksMonthly = []
+        self.repeatsOnSizerMonthly = wx.BoxSizer()
+        for i in range(12):
+            cb = wx.CheckBox(self, label=str(i+1))
+            cb.SetValue(True)
+            self.repeatsOnChecksMonthly.append(cb)
+            self.repeatsOnSizerMonthly.Add(cb, flag=wx.ALIGN_CENTER)
+        
+        self.topSizer = wx.BoxSizer()
+        self.bottomSizer = wx.BoxSizer()
+        
+        self.topSizer.Add(wx.StaticText(self, label=_("Repeats:")), flag=wx.ALIGN_CENTER)
+        self.topSizer.Add(self.repeatsCombo, flag=wx.ALIGN_CENTER)
+        self.topSizer.AddSpacer(15)
+        self.topSizer.Add(wx.StaticText(self, label=_("Every")), flag=wx.ALIGN_CENTER)
+        self.topSizer.AddSpacer(3)
+        self.topSizer.Add(self.everySpin, flag=wx.ALIGN_CENTER)
+        self.topSizer.AddSpacer(3)
+        self.topSizer.Add(self.everyText, flag=wx.ALIGN_CENTER)
+        self.topSizer.AddSpacer(15)
+        self.topSizer.Add(wx.StaticText(self, label=_("Starts:")), flag=wx.ALIGN_CENTER)
+        self.topSizer.Add(self.startDateCtrl, flag=wx.ALIGN_CENTER)
+        self.topSizer.AddSpacer(5)
+        self.topSizer.Add(wx.StaticText(self, label=_("Ends:")), flag=wx.ALIGN_CENTER)
+        self.topSizer.Add(self.endDateCtrl, flag=wx.ALIGN_CENTER)
+        
+        self.bottomSizer.AddSpacer(10)
+        self.bottomSizer.Add(self.repeatsOnText, flag=wx.ALIGN_CENTER)
+        self.bottomSizer.Add(self.repeatsOnSizerWeekly, flag=wx.ALIGN_CENTER)
+        self.bottomSizer.Add(self.repeatsOnSizerMonthly, flag=wx.ALIGN_CENTER)
+        self.bottomSizer.Hide(self.repeatsOnSizerWeekly)
+        self.bottomSizer.Hide(self.repeatsOnSizerMonthly)
+        
+        
+        self.Sizer = wx.BoxSizer(wx.VERTICAL)
+        self.Sizer.Add(self.topSizer)
+        self.Sizer.AddSpacer(3)
+        self.Sizer.Add(self.bottomSizer)
+        
+        self.update()
+        self.repeatsCombo.Bind(wx.EVT_CHOICE, self.update)
+        
+    def update(self, event=None):
+        self.Freeze()
+        self.Sizer.Show(self.bottomSizer)
+        self.bottomSizer.Hide(self.repeatsOnSizerWeekly)
+        self.bottomSizer.Hide(self.repeatsOnSizerMonthly)
+        self.bottomSizer.Hide(self.repeatsOnText)
+
+        repeatType = self.repeatsCombo.Selection
+        if repeatType == 0:
+            everyText = _("weeks")
+            self.repeatsOnText.Label = label=_("Repeats on days:")
+            self.bottomSizer.Show(self.repeatsOnText)
+            self.bottomSizer.Show(self.repeatsOnSizerWeekly)
+        elif repeatType == 1:
+            everyText = _("months")
+            self.repeatsOnText.Label = label=_("Repeats on months:")
+            self.bottomSizer.Show(self.repeatsOnText)
+            self.bottomSizer.Show(self.repeatsOnSizerMonthly)
+        elif repeatType == 2:
+            everyText = _("years")
+            self.Sizer.Hide(self.bottomSizer)
+            
+        self.everyText.Label = everyText
+        
+        self.Thaw()
+        self.Parent.Parent.Layout()
 
 class NewTransactionCtrl(wx.Panel):
     def __init__(self, parent):
@@ -51,27 +140,31 @@ class NewTransactionCtrl(wx.Panel):
         checkSizer = wx.BoxSizer(wx.VERTICAL)
         checkSizer.Add(transferSizer)
         checkSizer.Add(self.recursCheck)
+        
+        self.recurringPanel = RecurringPanel(self)
 
         # Set up the layout.
-        self.mainSizer = mainSizer = wx.BoxSizer()
-        mainSizer.Add(wx.StaticBitmap(self, bitmap=wx.ArtProvider.GetBitmap('wxART_date')), 0, wx.ALIGN_CENTER|wx.ALL, 2)
-        mainSizer.Add(dateCtrl, 0, wx.ALIGN_CENTER)
-        mainSizer.AddSpacer(5)
-        mainSizer.Add(descCtrl, 1, wx.ALIGN_CENTER)
-        mainSizer.AddSpacer(5)
-        mainSizer.Add(amountCtrl, 0, wx.ALIGN_CENTER)
-        mainSizer.AddSpacer(5)
-        mainSizer.Add(newButton, 0, wx.ALIGN_CENTER)
-        mainSizer.AddSpacer(5)
-        mainSizer.Add(checkSizer, 0, wx.ALIGN_CENTER)
-        self.Sizer = mainSizer
+        hSizer = wx.BoxSizer()
+        hSizer.Add(wx.StaticBitmap(self, bitmap=wx.ArtProvider.GetBitmap('wxART_date')), 0, wx.ALIGN_CENTER|wx.ALL, 2)
+        hSizer.Add(dateCtrl, 0, wx.ALIGN_CENTER)
+        hSizer.AddSpacer(5)
+        hSizer.Add(descCtrl, 1, wx.ALIGN_CENTER)
+        hSizer.AddSpacer(5)
+        hSizer.Add(amountCtrl, 0, wx.ALIGN_CENTER)
+        hSizer.AddSpacer(5)
+        hSizer.Add(newButton, 0, wx.ALIGN_CENTER)
+        hSizer.AddSpacer(5)
+        hSizer.Add(checkSizer, 0, wx.ALIGN_CENTER)
 
-        # Now layout the control.
-        mainSizer.Layout()
+        self.Sizer = wx.BoxSizer(wx.VERTICAL)
+        self.Sizer.Add(self.recurringPanel, 0, wx.EXPAND)
+        self.Sizer.Add(hSizer, 0, wx.EXPAND)
+        self.Sizer.Hide(self.recurringPanel)
 
         # Initialize necessary bindings.
         self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction) # Gives us enter from description/amount.
         self.newButton.Bind(wx.EVT_BUTTON, self.onNewTransaction)
+        self.recursCheck.Bind(wx.EVT_CHECKBOX, self.onRecurringCheck)
         
         try:
             amountCtrl.Children[0].Bind(wx.EVT_CHAR, self.onAmountChar)
@@ -90,6 +183,12 @@ class NewTransactionCtrl(wx.Panel):
             dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onDateEnter)
             
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
+        
+    def onRecurringCheck(self, event):
+        self.Parent.Freeze()
+        self.Sizer.Show(self.recurringPanel, self.recursCheck.IsChecked())
+        self.Parent.Layout()
+        self.Parent.Thaw()
         
     def onDateEnter(self, event):
         # Force a focus-out/tab to work around LP #311934
