@@ -44,7 +44,6 @@ class SearchCtrl(wx.Panel):
         self.caseCheck.SetToolTipString(_("Whether or not to match based on capitalization"))
 
         topSizer = wx.BoxSizer()
-        #self.Sizer.Add(wx.StaticText(self, label="Search: "))
         topSizer.Add(self.searchCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
         topSizer.AddSpacer(10)
         topSizer.Add(wx.StaticText(self, label=_("In: ")), 0, wx.ALIGN_CENTER_VERTICAL)
@@ -65,20 +64,25 @@ class SearchCtrl(wx.Panel):
         self.matchBox.Compact()
         self.Layout()
 
-        #self.matchBox.Bind(wx.EVT_COMBOBOX, self.onMatchCombo)
         self.searchCtrl.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, self.onCancel)
         #self.searchCtrl.Bind(wx.EVT_SEARCHCTRL_SEARCH_BTN, self.onSearch)
         self.searchCtrl.Bind(wx.EVT_TEXT_ENTER, self.onSearch)
         self.moreButton.Bind(wx.EVT_BUTTON, self.onToggleMore)
+        # Bindings to search on settings change automatically.
+        self.matchBox.Bind(wx.EVT_COMBOBOX, self.onSearchTrigger)
+        self.searchInBox.Bind(wx.EVT_COMBOBOX, self.onSearchTrigger)
+        self.caseCheck.Bind(wx.EVT_CHECKBOX, self.onSearchTrigger)
 
         # Initially hide the extra search options.
         self.onToggleMore()
+        
+    def onSearchTrigger(self, event):
+        event.Skip()
+        self.onSearch()
 
-    def onSearch(self, event):
-        # TODO: sort by [Amount, Description, Date] ...no, best handled by grid ctrl
-        # TODO: order [Ascending, Descending]
+    def onSearch(self, event=None):
         # TODO: enable search button in ctrl and appropriate event handling
-        searchString = event.String # For a date, should be YYYY-MM-DD.
+        searchString = self.searchCtrl.Value # For a date, should be YYYY-MM-DD.
         accountScope = self.searchInChoices.index(self.searchInBox.Value)
         matchType = self.matchChoices.index(self.matchBox.Value)
         caseSens = self.caseCheck.Value
