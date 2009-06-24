@@ -40,7 +40,11 @@ class TransferPanel(wx.Panel):
         self.Sizer.Add(self.accountSelection, flag=wx.ALIGN_CENTER)
         
     def GetAccounts(self, currentAccount):
-        otherAccount = self.accountDict[self.accountSelection.GetStringSelection()]
+        stringSel = self.accountSelection.GetStringSelection()
+        if stringSel == "":
+            return None
+            
+        otherAccount = self.accountDict[stringSel]
         if self.fromRadio.Value:
             source, destination = otherAccount, currentAccount
         else:
@@ -317,7 +321,14 @@ class NewTransactionCtrl(wx.Panel):
 
         sourceAccount = None
         if isTransfer:
-            sourceAccount, destAccount = self.transferPanel.GetAccounts(destAccount)
+            result = self.transferPanel.GetAccounts(destAccount)
+            if result is None:
+                dlg = wx.MessageDialog(self,
+                                       _("This transaction is marked as a transfer. Please select the transfer account."),
+                                       _("No account selected"), wx.OK | wx.ICON_ERROR)
+                dlg.ShowModal()
+                return
+            sourceAccount, destAccount = result
             
         destAccount.AddTransaction(amount, desc, date, sourceAccount)
         self.onSuccess()
