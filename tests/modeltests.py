@@ -262,6 +262,27 @@ class ModelTests(unittest.TestCase):
         
         self.assertEqual(a.Name, "Warned")
         
+    def testAnnouncedAccountHasParent(self):
+        """
+        Make sure the account has a Parent when it announces itself. To do this
+        we need to test this in a listener.
+        """
+        parent = []
+        def listener(message):
+            account = message.data
+            parent.append(account.Parent)
+            
+        # Subscribe our listener
+        Publisher.subscribe(listener, "account.created")
+        # Create an account, which should trigger the listener
+        baby = self.Model.CreateAccount("Baby")
+        # Make sure the listener updated state appropriately
+        self.assertTrue(parent)
+        
+    def testNewAccountCanGetSiblings(self):
+        baby = self.Model.CreateAccount("Baby")
+        self.assertEqual(list(baby.GetSiblings()), [])
+        
     def tearDown(self):
         self.Controller.Close()
         if os.path.exists("test.db"):

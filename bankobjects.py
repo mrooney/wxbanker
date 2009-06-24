@@ -148,6 +148,7 @@ class AccountList(list):
         # Make sure this account knows its parent.
         account.Parent = self
         self.append(account)
+        Publisher.sendMessage("account.created.%s" % accountName, account)
         return account
         
     def Remove(self, accountName):
@@ -182,7 +183,6 @@ class Account(object):
         self._Balance = balance
         
         Publisher.subscribe(self.onTransactionAmountChanged, "transaction.updated.amount")
-        Publisher.sendMessage("account.created.%s" % name, self)
         
     def ParseAmount(self, strAmount):
         """

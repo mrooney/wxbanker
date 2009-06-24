@@ -20,6 +20,47 @@ import wx, datetime
 import bankcontrols
 from wx.lib.pubsub import Publisher
 
+class TransferPanel(wx.Panel):
+    def __init__(self, parent):
+        wx.Panel.__init__(self, parent)
+        self.accountDict = {}
+        self.nullChoice = ["----------"]
+        
+        self.fromRadio = wx.RadioButton(self, label=_("From"), style=wx.RB_GROUP)
+        self.toRadio = wx.RadioButton(self, label=_("To"))
+        self.accountSelection = wx.Choice(self, choices=self.nullChoice)
+        
+        self.Sizer = wx.BoxSizer()
+        self.Sizer.Add(wx.StaticText(self, label=_("Transfer:")), flag=wx.ALIGN_CENTER)
+        self.Sizer.AddSpacer(3)
+        self.Sizer.Add(self.fromRadio, flag=wx.ALIGN_CENTER)
+        self.Sizer.Add(self.toRadio, flag=wx.ALIGN_CENTER)
+        self.Sizer.AddSpacer(8)
+        self.Sizer.Add(wx.StaticText(self, label=_("Account:")), flag=wx.ALIGN_CENTER)
+        self.Sizer.Add(self.accountSelection, flag=wx.ALIGN_CENTER)
+        
+    def GetAccounts(self, currentAccount):
+        otherAccount = self.accountDict[self.accountSelection.GetStringSelection()]
+        if self.fromRadio.Value:
+            source, destination = otherAccount, currentAccount
+        else:
+            source, destination = currentAccount, otherAccount
+            
+        return source, destination
+    
+    def Update(self, selectedAccount):
+        if selectedAccount:
+            self.accountDict = {}
+            for account in selectedAccount.GetSiblings():
+                self.accountDict[account.Name] = account
+            choices = self.accountDict.keys()
+        else:
+            choices = self.nullChoice
+            
+        # Update the choices.
+        self.accountSelection.SetItems(choices)
+        
+
 class RecurringPanel(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
@@ -130,18 +171,13 @@ class NewTransactionCtrl(wx.Panel):
         
         # The recurs check.
         self.recursCheck = recursCheck = wx.CheckBox(self, label=_("Recurring"))
-        
-        transferSizer = wx.BoxSizer()
-        transferSizer.Add(transferCheck, 0, wx.ALIGN_CENTER)
-        transferSizer.Add(wx.StaticText(self, label="("), 0, wx.ALIGN_CENTER)
-        transferSizer.Add(bankcontrols.HyperlinkText(self, label="?", onClick=self.onTransferTip), 0, wx.ALIGN_CENTER)
-        transferSizer.Add(wx.StaticText(self, label=")"), 0, wx.ALIGN_CENTER)
 
         checkSizer = wx.BoxSizer(wx.VERTICAL)
-        checkSizer.Add(transferSizer)
+        checkSizer.Add(self.transferCheck)
         checkSizer.Add(self.recursCheck)
         
         self.recurringPanel = RecurringPanel(self)
+        self.transferPanel = TransferPanel(self)
 
         # Set up the layout.
         hSizer = wx.BoxSizer()
@@ -157,14 +193,17 @@ class NewTransactionCtrl(wx.Panel):
         hSizer.Add(checkSizer, 0, wx.ALIGN_CENTER)
 
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
-        self.Sizer.Add(self.recurringPanel, 0, wx.EXPAND)
+        self.Sizer.Add(self.recurringPanel, 0, wx.EXPAND|wx.TOP, 5)
+        self.Sizer.Add(self.transferPanel, 0, wx.EXPAND|wx.TOP, 5)
         self.Sizer.Add(hSizer, 0, wx.EXPAND)
         self.Sizer.Hide(self.recurringPanel)
+        self.Sizer.Hide(self.transferPanel)
 
         # Initialize necessary bindings.
         self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction) # Gives us enter from description/amount.
         self.newButton.Bind(wx.EVT_BUTTON, self.onNewTransaction)
         self.recursCheck.Bind(wx.EVT_CHECKBOX, self.onRecurringCheck)
+        self.transferCheck.Bind(wx.EVT_CHECKBOX, self.onTransferCheck)
         
         try:
             amountCtrl.Children[0].Bind(wx.EVT_CHAR, self.onAmountChar)
@@ -185,8 +224,14 @@ class NewTransactionCtrl(wx.Panel):
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
         
     def onRecurringCheck(self, event):
+        self.toggleVisibilityOf(self.recurringPanel, self.recursCheck.IsChecked())
+
+    def onTransferCheck(self, event):
+        self.toggleVisibilityOf(self.transferPanel, self.transferCheck.IsChecked())
+        
+    def toggleVisibilityOf(self, control, visibility):
         self.Parent.Freeze()
-        self.Sizer.Show(self.recurringPanel, self.recursCheck.IsChecked())
+        self.Sizer.Show(control, visibility)
         self.Parent.Layout()
         self.Parent.Thaw()
         
@@ -198,6 +243,7 @@ class NewTransactionCtrl(wx.Panel):
     def onAccountChanged(self, message):
         account = message.data
         self.CurrentAccount = account
+        self.transferPanel.Update(account)
 
     def onAmountChar(self, event):
         wx.CallAfter(self.updateAddIcon)
@@ -238,20 +284,6 @@ class NewTransactionCtrl(wx.Panel):
 
         return amount, desc, date
 
-    def getSourceAccount(self, destinationAccount):
-        accountDict = {}
-        for account in destinationAccount.GetSiblings():
-            accountDict[account.Name] = account
-            
-        # Create a dialog with the other account names to choose from.
-        dlg = wx.SingleChoiceDialog(self,
-                _('Which account will the money come from?'), _('Other accounts'),
-                sorted(accountDict.keys()), wx.CHOICEDLG_STYLE)
-
-        if dlg.ShowModal() == wx.ID_OK:
-            accountName = dlg.GetStringSelection()
-            return accountDict[accountName]
-
     def onNewTransaction(self, event=None):
         # First, ensure an account is selected.
         destAccount = self.CurrentAccount
@@ -283,13 +315,11 @@ class NewTransactionCtrl(wx.Panel):
             else:
                 return
 
-        source = None
+        sourceAccount = None
         if isTransfer:
-            source = self.getSourceAccount(destAccount)
-            if source is None:
-                return
+            sourceAccount, destAccount = self.transferPanel.GetAccounts(destAccount)
             
-        destAccount.AddTransaction(amount, desc, date, source)
+        destAccount.AddTransaction(amount, desc, date, sourceAccount)
         self.onSuccess()
 
 
