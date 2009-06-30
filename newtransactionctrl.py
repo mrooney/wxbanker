@@ -80,11 +80,12 @@ class RecurringPanel(wx.Panel):
         self.repeatsOnChecksWeekly = []
         self.repeatsOnSizerWeekly = wx.BoxSizer()
         today = datetime.date.today().weekday()
-        for i, label in enumerate(_("MTWTFSS")):
+        days = (_("Mon"), _("Tue"), _("Wed"), _("Thu"), _("Fri"), _("Sat"), _("Sun"))
+        for i, label in enumerate(days):
             cb = wx.CheckBox(self, label=label)
             cb.SetValue(i==today)
             self.repeatsOnChecksWeekly.append(cb)
-            self.repeatsOnSizerWeekly.Add(cb, flag=wx.ALIGN_CENTER)
+            self.repeatsOnSizerWeekly.Add(cb, 0, wx.ALIGN_CENTER|wx.LEFT, 5)
             
         self.repeatsOnChecksMonthly = []
         self.repeatsOnSizerMonthly = wx.BoxSizer()
@@ -125,10 +126,24 @@ class RecurringPanel(wx.Panel):
         self.Sizer.AddSpacer(3)
         self.Sizer.Add(self.bottomSizer)
         
-        self.update()
-        self.repeatsCombo.Bind(wx.EVT_CHOICE, self.update)
+        self.Update()
+        self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update)
+        print self.GetSettings()
         
-    def update(self, event=None):
+    def GetSettings(self):
+        repeatType = self.repeatsCombo.GetSelection()
+        repeatEvery = self.everySpin.GetValue()
+        start = self.startDateCtrl.GetValue()
+        end = self.endDateCtrl.GetValue()
+        
+        repeatsOn = ""
+        if repeatType in (0,1): # Weekly, Monthly
+            checkList = (self.repeatsOnChecksWeekly, self.repeatsOnChecksMonthly)[repeatType]
+            repeatsOn = ",".join(str(int(check.Value)) for check in checkList)
+            
+        return (repeatType, repeatEvery, repeatsOn, start, end)
+        
+    def Update(self, event=None):
         self.Freeze()
         self.Sizer.Show(self.bottomSizer)
         self.bottomSizer.Hide(self.repeatsOnSizerWeekly)
