@@ -17,38 +17,62 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import urllib3, re
-import pprint, getpass
+import urllib3, re, getpass
+urllib3.enablecookies()
 
-def main():
-    urllib3.enablecookies()
+class MintLoginException(Exception): pass
 
-    username = raw_input("Username: ")
-    password = getpass.getpass("Password: ")
-    
-    result = urllib3.post("https://wwws.mint.com/loginUserSubmit.xevent", {"username": username, "password": password, "task": "L", "nextPage": ""})
-    #open("output.html", "w").write(result)
-    #result = open("output.html").read()
-    if "forgot your password?" in result.lower():
-        raise Exception("Mint.com login failed!")
 
-    accountsRegex = """<a class="" href="transaction.event\?accountId=([0-9]+)">([^<]+)</a></h4><h6><span class="last-updated">[^<]+</span>([^<]+)</h6>"""
-    mintAccounts = []
-    for account in re.findall(accountsRegex, result):
-        aid = account[0]
-        name = "%s %s" % (account[1], account[2])
-        mintAccounts.append((name, aid))
-        
-    mintAccounts.sort()
-    #pprint.pprint(mintAccounts)
-    
-    for name, aid in mintAccounts:
-        accountPage = urllib3.read("https://wwws.mint.com/transaction.event?accountId=%s" % aid)
-        #balRegex = """<th>Available [^<]+</th><td class="money">([^<]+)</td>"""
+class MintDotCom:
+    def __init__(self, user, passwd):
+        self._username = user
+        self._passwd = passwd
+        self._cachedSummary = None
+
+    def Login(self):
+        result = urllib3.post("https://wwws.mint.com/loginUserSubmit.xevent", {"username": self._username, "password": self._passwd, "task": "L", "nextPage": ""})
+        if "forgot your password?" in result.lower():
+            raise MintLoginException("Invalid credentials")
+        self._cachedSummary = result
+
+    def ListAccounts(self):
+        if self._cachedSummary is None:
+            self.Login()
+
+        accountsRegex = """<a class="" href="transaction.event\?accountId=([0-9]+)">([^<]+)</a></h4><h6><span class="last-updated">[^<]+</span>([^<]+)</h6>"""
+        mintAccounts = []
+        for account in re.findall(accountsRegex, self._cachedSummary):
+            aid = account[0]
+            name = "%s %s" % (account[1], account[2])
+            mintAccounts.append((name, aid))
+
+        mintAccounts.sort()
+        return mintAccounts
+
+    def GetAccountBalance(self, accountid):
+        accountPage = urllib3.read("https://wwws.mint.com/transaction.event?accountId=%s" % accountid)
         balRegex = """<th>Balance</th><td class="money[^>]+>([^<]+)</td>"""
         balance = re.findall(balRegex, accountPage)[0]
-        print name, balance
-        """https://wwws.mint.com/transactionDownload.event?accountId=223615&comparableType=8&offset=0"""
+        return balance
+
+    def GetAccountTransactionsCSV(self, accountid):
+        return urllib3.read("https://wwws.mint.com/transactionDownload.event?accountId=%s&comparableType=8&offset=0" % accountid)
+
+
+def main():
+    import pprint
+    username = raw_input("Username: ")
+    password = getpass.getpass("Password: ")
+
+    mint = MintDotCom(username, password)
+    accounts = mint.ListAccounts()
+    pprint.pprint(accounts)
+
+    for account in accounts:
+        print account[0], mint.GetAccountBalance(account[1])
+
+    print mint.GetAccountTransactionsCSV(account[1])
+        
     
 if __name__ == "__main__":
     main()
