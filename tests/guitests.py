@@ -18,8 +18,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import testbase, os
-import controller, unittest, wxbanker
+import testbase, wxbanker, controller, unittest
+import os
 from wx.lib.pubsub import Publisher
 
 class GUITests(unittest.TestCase):

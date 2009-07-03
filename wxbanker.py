@@ -21,7 +21,16 @@
 import os
 
 # wxPython
-import wx, wx.aui
+try:
+    import wxversion
+except ImportError:
+    # Maybe we don't have wxversion but still have wx >= 2.8?
+    import wx, wx.aui
+else:
+    # Okay, let's try to get >= 2.8
+    wxversion.ensureMinimal("2.8")
+    import wx, wx.aui
+    
 from wx.lib.pubsub import Publisher
 
 # wxBanker

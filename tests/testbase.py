@@ -29,3 +29,6 @@ rootdir = os.path.dirname(testdir)
 
 sys.path.insert(0, testdir)
 sys.path.insert(0, rootdir)
+
+# Import wxbanker here so wx gets initialized first, so wxversion calls work properly.
+import wxbanker
