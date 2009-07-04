@@ -76,6 +76,12 @@ class RecurringPanel(wx.Panel):
         self.repeatsOnText = wx.StaticText(self)
         self.startDateCtrl = bankcontrols.DateCtrlFactory(self)
         self.endDateCtrl = bankcontrols.DateCtrlFactory(self)
+        self.endsNeverRadio = wx.RadioButton(self, label=_("Never"), style=wx.RB_GROUP)
+        self.endsSometimeRadio = wx.RadioButton(self, label=("On:"))
+        
+        # Make 'Never' the default.
+        self.endsNeverRadio.SetValue(True)
+        self.endDateCtrl.Value += wx.DateSpan(days=-1, years=1)
         
         self.repeatsOnChecksWeekly = []
         self.repeatsOnSizerWeekly = wx.BoxSizer()
@@ -109,8 +115,12 @@ class RecurringPanel(wx.Panel):
         self.topSizer.AddSpacer(15)
         self.topSizer.Add(wx.StaticText(self, label=_("Starts:")), flag=wx.ALIGN_CENTER)
         self.topSizer.Add(self.startDateCtrl, flag=wx.ALIGN_CENTER)
-        self.topSizer.AddSpacer(5)
+        self.topSizer.AddSpacer(8)
         self.topSizer.Add(wx.StaticText(self, label=_("Ends:")), flag=wx.ALIGN_CENTER)
+        self.topSizer.AddSpacer(3)
+        self.topSizer.Add(self.endsNeverRadio, flag=wx.ALIGN_CENTER)
+        self.topSizer.AddSpacer(3)
+        self.topSizer.Add(self.endsSometimeRadio, flag=wx.ALIGN_CENTER)
         self.topSizer.Add(self.endDateCtrl, flag=wx.ALIGN_CENTER)
         
         self.bottomSizer.AddSpacer(10)
@@ -134,7 +144,11 @@ class RecurringPanel(wx.Panel):
         repeatType = self.repeatsCombo.GetSelection()
         repeatEvery = self.everySpin.GetValue()
         start = self.startDateCtrl.GetValue()
-        end = self.endDateCtrl.GetValue()
+        
+        if self.endsNeverRadio.GetValue():
+            end = None
+        else:
+            end = self.endDateCtrl.GetValue()
         
         repeatsOn = ""
         if repeatType in (0,1): # Weekly, Monthly
@@ -345,8 +359,13 @@ class NewTransactionCtrl(wx.Panel):
                 return
             sourceAccount, destAccount = result
             
-        destAccount.AddTransaction(amount, desc, date, sourceAccount)
-        self.onSuccess()
+        # Now let's see if this is a recurring transaction
+        if self.recursCheck.GetValue():
+            # Just do some debugging for now.
+            print self.recurringPanel.GetSettings()
+        else:
+            destAccount.AddTransaction(amount, desc, date, sourceAccount)
+            self.onSuccess()
 
 
     def onTransferTip(self, event):
