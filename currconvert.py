@@ -40,15 +40,15 @@ class CurrencyConverter(object):
         self.Exchanges = {"EUR": 1.0}
         self.OriginalPath = os.path.join(os.path.dirname(__file__), "exchanges.xml")
         self._loadExchanges()
-        
+
     def _loadExchanges(self):
         tree = ElementTree.fromstring(open(self.OriginalPath).read())
-        
+
         exchanges = tree.getchildren()[-1].getchildren()[0].getchildren()
         for e in exchanges:
             self.Exchanges[e.get("currency")] = float(e.get("rate"))
-        
-    
+
+
     def Convert(self, amount, original, destination):
         """
         Convert an amount from one currency to another. In order to this we
@@ -57,26 +57,25 @@ class CurrencyConverter(object):
         """
         if original == destination:
             return amount
-        
+
         fromStr = original.CurrencyNick
         toStr = destination.CurrencyNick
-        
+
         fromRate = self.Exchanges.get(fromStr)
         toRate = self.Exchanges.get(toStr)
-        
+
         if fromRate is None:
             raise ConversionException(_('No exchange rate for currency "%s"') % fromRate)
         if toRate is None:
             raise ConversionException(_('No exchange rate for currency "%s"') % toRate)
-        
+
         middle = amount * (1.0 / fromRate)
         end = middle * toRate
-        
+
         return end
-        
-        
-    
+
+
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    

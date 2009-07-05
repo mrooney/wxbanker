@@ -31,11 +31,11 @@ class AccountListCtrl(wx.Panel):
     Accounts can be added, removed, and renamed.
     """
     ID_TIMER = wx.NewId()
-    
+
     def __init__(self, parent, bankController, autoPopulate=True):
         wx.Panel.__init__(self, parent)
         self.Model = bankController.Model
-        
+
         # Initialize some attributes to their default values.
         self.editCtrl = self.hiddenIndex = None
         self.currentIndex = None
@@ -45,7 +45,7 @@ class AccountListCtrl(wx.Panel):
         # Create the staticboxsizer which is the home for everything.
         # This *MUST* be created first to ensure proper z-ordering (as per docs).
         self.staticBox = wx.StaticBox(self, label=self.boxLabel%0)
-        
+
         # Create a single panel to be the "child" of the static box sizer,
         # to work around a wxPython regression that prevents tooltips. lp: xxxxxx
         self.childPanel = wx.Panel(self)
@@ -72,7 +72,7 @@ class AccountListCtrl(wx.Panel):
         configureButton.SetToolTipString(_("Configure the selected account"))
         configureButton.Enabled = False
         #configureButton.Hide()
-        
+
         # Layout the buttons.
         buttonSizer = wx.BoxSizer()
         buttonSizer.Add(addButton)
@@ -138,30 +138,30 @@ class AccountListCtrl(wx.Panel):
 
         self.staticBoxSizer.Layout()
         #self.staticBoxSizer.SetSmooth(True)
-        
+
         # Set up the timer, which will flash the add account bitmap if there aren't any accounts.
         self.Timer = wx.Timer(self, self.ID_TIMER)
         self.FlashState = 0
         wx.EVT_TIMER(self, self.ID_TIMER, self.onFlashTimer)
         if not self.GetCount():
             self.startFlashTimer()
-            
+
     def onFlashTimer(self, event):
         if self.FlashState:
             self.addButton.SetBitmapLabel(self.addBMP)
         else:
             self.addButton.SetBitmapLabel(wx.EmptyBitmapRGBA(16,16))
-        
+
         # Now toggle the flash state.
         self.FlashState = not self.FlashState
-        
+
     def stopFlashTimer(self):
         self.Timer.Stop()
         self.addButton.SetBitmapLabel(self.addBMP)
-        
+
     def startFlashTimer(self):
         self.Timer.Start(1250)
-        
+
     def onCurrencyChanged(self, message):
         # Update all the accounts.
         for account, textCtrl in zip(self.accountObjects, self.totalTexts):
@@ -251,7 +251,7 @@ class AccountListCtrl(wx.Panel):
         account = message.data
         index = self.accountObjects.index(account)
         self._RemoveItem(index)
-        
+
         # Start flashing the add button if there are no accounts.
         if not self.GetCount():
             self.startFlashTimer()
@@ -264,7 +264,7 @@ class AccountListCtrl(wx.Panel):
             index += 1
 
         self._InsertItem(index, account)
-        
+
         if select:
             self.SelectItem(index)
         return index
@@ -353,7 +353,7 @@ class AccountListCtrl(wx.Panel):
         index = self.accountObjects.index(account)
         if index < 0:
             raise Exception("Unable to locate Account in list")
-        
+
         # Update the total for the changed account.
         self.totalTexts[index].Label = account.float2str(account.Balance)
         # Update the grand total.
@@ -364,7 +364,7 @@ class AccountListCtrl(wx.Panel):
 
         self.Layout()
         self.Parent.Layout()
-        
+
     def updateGrandTotal(self):
         self.totalText.Label = self.Model.float2str( self.Model.Balance )
 
@@ -387,10 +387,10 @@ class AccountListCtrl(wx.Panel):
         account = message.data
         self.onHideEditCtrl() #ASSUMPTION!
         self._PutAccount(account, select=True)
-        
+
         # Stop flashing the add button if it was, since there is now an account.
         self.stopFlashTimer()
-        
+
     def onEditCtrlKey(self, event):
         if event.GetKeyCode() == wx.WXK_ESCAPE:
             self.onHideEditCtrl()
@@ -446,7 +446,7 @@ class AccountListCtrl(wx.Panel):
             if dlg.ShowModal() == wx.ID_YES:
                 # Remove the account from the model.
                 account.Remove()
-                
+
     def onConfigureButton(self, event):
         dlg = accountconfigdialog.AccountConfigDialog(self, self.GetCurrentAccount())
         dlg.ShowModal()

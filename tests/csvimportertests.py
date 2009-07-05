@@ -25,7 +25,7 @@ from csvimporter import CsvImporter
 class CsvImporterTest(unittest.TestCase):
     def setUp(self):
         self.importer = CsvImporter()
-    
+
     def testParseAmountWithSpaceAsThousandsSep(self):
         # Regression test for LP: #370571
         decimalSeparator = ','

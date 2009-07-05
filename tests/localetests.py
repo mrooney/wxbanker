@@ -30,18 +30,18 @@ class LocaleTests(unittest.TestCase):
         self.assertEquals(c.GreatBritainCurrency().float2str(1), u'£1.00')
         self.assertEquals(c.JapaneseCurrency().float2str(1), u'￥1')
         self.assertEquals(c.RussianCurrency().float2str(1), u'1.00 руб')
-        
+
     def testDateParsing(self):
         #INCOMPLETE
         self.assertEquals(locale.setlocale(locale.LC_ALL, 'en_US.utf8'), 'en_US.utf8')
-    
+
     def testLocaleCurrencyRobustness(self):
         # Test locale.format() thousand separator workaround.
         # Also calculator bug LP: #375308
         for loc in ['en_US.utf8', 'ru_RU.utf8', 'fr_FR.utf8']:
             self.assertEquals(locale.setlocale(locale.LC_ALL, loc), loc)
             reload(c)
-        
+
             # The test is that none of these calls throw an exception.
             # (including the unicode conversion)
             for curr in c.CurrencyList:

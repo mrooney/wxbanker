@@ -31,7 +31,7 @@ def read(url, postVars=None):
         result = None
     else:
         result = con.read()
-        
+
     return result
 
 def post(url, varDict):

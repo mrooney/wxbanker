@@ -130,8 +130,7 @@ def main(bankController):
             else:
                 print 'Account removal cancelled'
             wait()
-            
-            
+
+
 if __name__ == "__main__":
     print "To run the command-line version of wxBanker, run with the --cli argument"
-    

@@ -89,10 +89,10 @@ class BaseCurrency(object):
             'positive_sign': '',
             'thousands_sep': ','
         }
-        
+
     def GetCurrencyNick(self):
         return self.LOCALECONV["int_curr_symbol"].strip()
-    
+
     def float2str(self, val, just=0, symbol=True, grouping=True, international=False):
         """
         Formats val according to the currency settings in the current locale.
@@ -101,35 +101,35 @@ class BaseCurrency(object):
         # Don't show negative zeroes!
         if abs(val) < .001:
             val = 0
-            
+
         conv = self.LOCALECONV
-    
+
         # check for illegal values
         digits = conv[international and 'int_frac_digits' or 'frac_digits']
         if digits == 127:
             raise ValueError("Currency formatting is not possible using "
                              "the 'C' locale.")
-    
+
         s = locale.format('%%.%if' % digits, abs(val), grouping, monetary=True)
         # locale.localeconv bug http://bugs.python.org/issue1995 workaround
         if _locale_encoding is not None:
             s = unicode(s, _locale_encoding)
         # '<' and '>' are markers if the sign must be inserted between symbol and value
         s = '<' + s + '>'
-    
+
         if symbol:
             smb = conv[international and 'int_curr_symbol' or 'currency_symbol']
             precedes = conv[val<0 and 'n_cs_precedes' or 'p_cs_precedes']
             separated = conv[val<0 and 'n_sep_by_space' or 'p_sep_by_space']
-    
+
             if precedes:
                 s = smb + (separated and ' ' or '') + s
             else:
                 s = s + (separated and ' ' or '') + smb
-    
+
         sign_pos = conv[val<0 and 'n_sign_posn' or 'p_sign_posn']
         sign = conv[val<0 and 'negative_sign' or 'positive_sign']
-    
+
         if sign_pos == 0:
             s = '(' + s + ')'
         elif sign_pos == 1:
@@ -144,20 +144,20 @@ class BaseCurrency(object):
             # the default if nothing specified;
             # this should be the most fitting sign position
             s = sign + s
-    
+
         return s.replace('<', '').replace('>', '').rjust(just)
-    
+
     def __eq__(self, other):
         return self.LOCALECONV == other.LOCALECONV
-    
+
     CurrencyNick = property(GetCurrencyNick)
-    
+
 class UnitedStatesCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
         self.LOCALECONV['currency_symbol'] = '$'
         self.LOCALECONV['int_curr_symbol'] = 'USD '
-    
+
 class EuroCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
@@ -171,13 +171,13 @@ class EuroCurrency(BaseCurrency):
         self.LOCALECONV['currency_symbol'] = u'€' #'\xe2\x82\xac'
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
-        
+
 class GreatBritainCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
         self.LOCALECONV['int_curr_symbol'] = 'GBP '
         self.LOCALECONV['currency_symbol'] = u'£' #'\xc2\xa3'
-        
+
 class JapaneseCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
@@ -189,7 +189,7 @@ class JapaneseCurrency(BaseCurrency):
         self.LOCALECONV['currency_symbol'] = u'￥' #'\xef\xbf\xa5'
         self.LOCALECONV['mon_grouping'] = [3, 0]
         self.LOCALECONV['grouping'] = [3, 0]
-        
+
 class RussianCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
@@ -202,7 +202,7 @@ class RussianCurrency(BaseCurrency):
         self.LOCALECONV['currency_symbol'] = u'руб' #'\xd1\x80\xd1\x83\xd0\xb1'
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
-        
+
 class UkranianCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
@@ -216,12 +216,12 @@ class UkranianCurrency(BaseCurrency):
         self.LOCALECONV['currency_symbol'] = u'гр' #u'\u0433\u0440'
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
-        
+
 class LocalizedCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
         self.LOCALECONV = locale.localeconv()
-        
+
         # workaround for the locale.localeconv() bug
         if _locale_encoding is not None:
             self.LOCALECONV.update((k, unicode(v, _locale_encoding)) for k, v in self.LOCALECONV.iteritems() if type(v) is str)
@@ -229,7 +229,7 @@ class LocalizedCurrency(BaseCurrency):
 
 CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency, UkranianCurrency]
 
-# workaround for a locale.localeconv bug http://bugs.python.org/issue1995 
+# workaround for a locale.localeconv bug http://bugs.python.org/issue1995
 # test if float2str raises exceptions, apply a workaround if it does
 # NOTE: this happens once at import time, a runtime locale change will require
 #       a module reload for this workaround to take effect.
@@ -241,7 +241,7 @@ try:
 except UnicodeDecodeError:
     # save the current locale's encoding for use in float2str
     _locale_encoding = locale.getlocale()[1]
-    
+
 def GetCurrencyInt(currency):
     for i, curr in enumerate(CurrencyList):
         if isinstance(currency, curr):

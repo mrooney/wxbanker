@@ -32,10 +32,10 @@ def DateCtrlFactory(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY):
         doBind = True
     except AttributeError:
         DatePickerClass = wx.DatePickerCtrl
-        
+
     dateCtrl = DatePickerClass(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY)
     dateCtrl.SetToolTipString(_("Date"))
-    
+
     if doBind:
         def onDateChar(event):
             key = event.GetKeyCode()
@@ -46,15 +46,15 @@ def DateCtrlFactory(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY):
                 incr = 1
             else:
                 event.Skip()
-                
+
             if incr:
                 dateCtrl.Value += incr*wx.DateSpan(days=1)
-    
+
         try:
             dateCtrl.Children[0].Children[0].Bind(wx.EVT_KEY_DOWN, onDateChar)
         except Exception:
             print "Unable to bind to dateCtrl's text field, that's odd! Please file a bug: https://bugs.launchpad.net/wxbanker/+filebug"
-        
+
     return dateCtrl
 
 

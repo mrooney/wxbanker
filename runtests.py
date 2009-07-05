@@ -23,12 +23,12 @@ import doctest, wxbanker
 def main():
     from testhelpers import displayhook
     import sys; sys.displayhook = displayhook
-    
+
     import plotalgo, currencies, bankobjects, controller, currconvert
     mods = [plotalgo, currencies, bankobjects, controller, currconvert]
-    
+
     #TODO: remove *.pyc first
-    
+
     results = {}
     for mod in mods:
         result = doctest.testmod(mod)
@@ -39,17 +39,17 @@ def main():
     pprint.pprint(results)
     failures = sum([v[0] for v in results.values()])
     tests = sum([v[1] for v in results.values()])
-    
+
     print "\n%i total failures out of %i total tests in %i modules." % (failures, tests, len(mods))
     if failures:
         print "TESTS FAILED."
     else:
         print "TESTS PASSED."
-        
+
     from tests import alltests
     alltests.main()
-    
-    
+
+
 
 if __name__ == "__main__":
     main()

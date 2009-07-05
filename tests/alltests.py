@@ -19,7 +19,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import testbase
-import unittest, os 
+import unittest, os
 
 # Find the modules to test.
 ignores = ('__init__.py', 'testbase.py', 'alltests.py')

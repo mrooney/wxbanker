@@ -36,22 +36,22 @@ class BankMenuBar(wx.MenuBar):
     IDS_CURRENCIES = [wx.NewId() for i in range(len(CurrencyStrings))]
     ID_REQUESTCURRENCY = wx.NewId()
     ID_IMPORT_CSV = wx.NewId()
-    
+
     def __init__(self, autosave, *args, **kwargs):
         wx.MenuBar.__init__(self, *args, **kwargs)
-        
+
         # File menu.
         fileMenu = wx.Menu()
         self.saveMenuItem = fileMenu.Append(wx.ID_SAVE)
         self.autoSaveMenuItem = fileMenu.AppendCheckItem(self.ID_AUTOSAVE, _("Auto-save"), _("Automatically save changes"))
-        
+
         # Settings menu.
         settingsMenu = wx.Menu()
-        
+
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
         currencyMenu = wx.MenuItem(settingsMenu, -1, _("&Currency"), _("Select currency to display"))
         currencyMenu.SetBitmap(wx.ArtProvider.GetBitmap("wxART_money"))
-        
+
         currencies = wx.Menu()
         # Add an entry for each available currency.
         for i, cstr in enumerate(CurrencyStrings):
@@ -62,64 +62,64 @@ class BankMenuBar(wx.MenuBar):
         requestCurrencyItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_lightning")
         currencies.AppendItem(requestCurrencyItem)
         currencyMenu.SetSubMenu(currencies)
-        
+
         settingsMenu.AppendItem(currencyMenu)
-        
+
         # Tools menu.
         toolsMenu = wx.Menu()
-        
+
         importCsvMenu = wx.MenuItem(toolsMenu, self.ID_IMPORT_CSV, _("CSV Import"), _("Import transactions from a CSV file"))
         importCsvMenu.Bitmap = wx.ArtProvider.GetBitmap("wxART_table_lightning")
         toolsMenu.AppendItem(importCsvMenu)
-        
+
         # Help menu.
         helpMenu = wx.Menu()
-        
+
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
         faqItem = wx.MenuItem(helpMenu, self.ID_FAQ, _("View &FAQs"), _("View Frequently Asked Questions online"))
         faqItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_comments")
         helpMenu.AppendItem(faqItem)
-        
+
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
         questionItem = wx.MenuItem(helpMenu, self.ID_QUESTION, _("Ask a &Question"), _("Ask a question online"))
         questionItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_user_comment")
         helpMenu.AppendItem(questionItem)
-        
+
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
         bugItem = wx.MenuItem(helpMenu, self.ID_REPORTBUG, _("&Report a Bug"), _("Report a bug to the developer online"))
         bugItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_bug")
         helpMenu.AppendItem(bugItem)
-        
+
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
         featureItem = wx.MenuItem(helpMenu, self.ID_REQUESTFEATURE, _("Request a Fea&ture"), _("Request a new feature to be implemented"))
         featureItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_lightbulb")
         helpMenu.AppendItem(featureItem)
-        
+
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
         translateItem = wx.MenuItem(helpMenu, self.ID_TRANSLATE, _("Tran&slate wxBanker"), _("Translate wxBanker to another language"))
         translateItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_flag_blue")
         helpMenu.AppendItem(translateItem)
-        
+
         helpMenu.AppendSeparator()
-        
+
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
         aboutItem = helpMenu.Append(wx.ID_ABOUT, _("&About"), _("More information about wxBanker"))
-        
+
         # Add everything to the main menu.
         self.Append(fileMenu, _("&File"))
         self.Append(settingsMenu, _("&Settings"))
         self.Append(toolsMenu, _("&Tools"))
         self.Append(helpMenu, _("&Help"))
-        
+
         self.Bind(wx.EVT_MENU, self.onClickAbout)
         helpMenu.Bind(wx.EVT_MENU, self.onClickAbout)
-        
+
         self.toggleAutoSave(autosave)
         Publisher.subscribe(self.onAutoSaveToggled, "controller.autosave_toggled")
-        
+
     def onMenuEvent(self, event):
         ID = event.Id
-        
+
         if ID in self.IDS_CURRENCIES:
             self.onSelectCurrency(self.IDS_CURRENCIES.index(ID))
         else:
@@ -135,44 +135,44 @@ class BankMenuBar(wx.MenuBar):
                 wx.ID_ABOUT: self.onClickAbout,
                 self.ID_REQUESTCURRENCY: self.onClickRequestCurrency,
             }.get(ID, lambda e: e.Skip())
-            
+
             handler(event)
-            
+
     def onAutoSaveToggled(self, message):
         self.toggleAutoSave(message.data)
-        
+
     def toggleAutoSave(self, autosave):
         debug.debug("Updating UI for auto-save: %s" % autosave)
         self.autoSaveMenuItem.Check(autosave)
         self.saveMenuItem.Enable(not autosave)
-        
+
     def onClickSave(self, event):
         Publisher().sendMessage("user.saved")
-            
+
     def onClickAutoSave(self, event):
         Publisher().sendMessage("user.autosave_toggled", event.Checked())
-        
+
     def onSelectCurrency(self, currencyIndex):
         Publisher().sendMessage("user.currency_changed", currencyIndex)
-        
+
     def onClickFAQs(self, event):
         webbrowser.open("https://answers.launchpad.net/wxbanker/+faqs")
-        
+
     def onClickAskQuestion(self, event):
         webbrowser.open("https://launchpad.net/wxbanker/+addquestion")
-        
+
     def onClickReportBug(self, event):
         webbrowser.open("https://launchpad.net/wxbanker/+filebug")
-        
+
     def onClickRequestFeature(self, event):
         webbrowser.open("https://blueprints.launchpad.net/wxbanker")
-        
+
     def onClickTranslate(self, event):
         webbrowser.open("https://translations.launchpad.net/wxbanker")
-        
+
     def onClickRequestCurrency(self, event):
         webbrowser.open("https://answers.launchpad.net/wxbanker/+faq/477")
-        
+
     def onClickAbout(self, event):
         info = wx.AboutDialogInfo()
         info.Name = "wxBanker"
@@ -196,11 +196,11 @@ class BankMenuBar(wx.MenuBar):
             "fr: Steve Dodier <steve.dodier@gmail.com>",
         ]
         info.Translators = [unicode(s, 'iso-8859-15') for s in translators]
-        
+
         licenseDir = os.path.dirname(__file__)
         info.License = open(os.path.join(licenseDir, 'COPYING.txt')).read()
 
         wx.AboutBox(info)
-        
+
     def onClickImportCsv(self, event):
         CsvImportFrame()

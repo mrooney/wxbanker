@@ -27,33 +27,33 @@ class BankModel(object):
     def __init__(self, store, accountList):
         self.Store = store
         self.Accounts = accountList
-        
+
         Publisher().subscribe(self.onCurrencyChanged, "user.currency_changed")
-        
+
     def GetBalance(self):
         return self.Accounts.Balance
-    
+
     def GetTransactions(self):
         transactions = []
         for account in self.Accounts:
             transactions.extend(account.Transactions)
-            
+
         return transactions
-    
+
     def GetXTotals(self, numPoints, account=None):
         if account is None:
             transactions = self.GetTransactions()
         else:
             transactions = account.Transactions[:]
-            
+
         return plotalgo.get(transactions, numPoints)
-        
+
     def CreateAccount(self, accountName):
         return self.Accounts.Create(accountName)
-    
+
     def RemoveAccount(self, accountName):
         return self.Accounts.Remove(accountName)
-    
+
     def Search(self, searchString, account=None, matchIndex=1, matchCase=False):
         """
         matchIndex: 0: Amount, 1: Description, 2: Date
@@ -77,10 +77,10 @@ class BankModel(object):
             if re.findall(searchString, potentialStr, flags=reFlag):
                 matches.append(trans)
         return matches
-    
+
     def Save(self):
         self.Store.Save()
-        
+
     def float2str(self, *args, **kwargs):
         """
         Handle representing floats as strings for non
@@ -90,22 +90,22 @@ class BankModel(object):
             currency = currencies.CurrencyList[0]()
         else:
             currency = self.Accounts[0].Currency
-            
+
         return currency.float2str(*args, **kwargs)
-        
+
     def setCurrency(self, currencyIndex):
         self.Store.setCurrency(currencyIndex)
         for account in self.Accounts:
             account.Currency = currencyIndex
         Publisher().sendMessage("currency_changed", currencyIndex)
-        
+
     def onCurrencyChanged(self, message):
         currencyIndex = message.data
         self.setCurrency(currencyIndex)
-        
+
     def __eq__(self, other):
         return self.Accounts == other.Accounts
-    
+
     def Print(self):
         print "Model: %s" % self.Balance
         for a in self.Accounts:
@@ -115,25 +115,25 @@ class BankModel(object):
 
     Balance = property(GetBalance)
 
-    
+
 class AccountList(list):
     def __init__(self, store, accounts):
         list.__init__(self, accounts)
         # Make sure all the items know their parent list.
         for account in self:
             account.Parent = self
-            
+
         self.Store = store
-        
+
     def GetBalance(self):
         return sum([account.Balance for account in self])
-        
+
     def AccountIndex(self, accountName):
         for i, account in enumerate(self):
             if account.Name == accountName:
                 return i
         return -1
-        
+
     def Create(self, accountName):
         # First, ensure an account by that name doesn't already exist.
         if self.AccountIndex(accountName) >= 0:
@@ -143,19 +143,19 @@ class AccountList(list):
         if len(self):
             # If the list contains items, the currency needs to be consistent.
             currency = self[-1].Currency
-        
+
         account = self.Store.CreateAccount(accountName, currency)
         # Make sure this account knows its parent.
         account.Parent = self
         self.append(account)
         Publisher.sendMessage("account.created.%s" % accountName, account)
         return account
-        
+
     def Remove(self, accountName):
         index = self.AccountIndex(accountName)
         if index == -1:
             raise bankexceptions.InvalidAccountException(accountName)
-        
+
         account = self.pop(index)
         self.Store.RemoveAccount(account)
         Publisher.sendMessage("account.removed.%s"%accountName, account)
@@ -166,12 +166,12 @@ class AccountList(list):
         for leftAccount, rightAccount in zip(self, other):
             if not leftAccount == rightAccount:
                 return False
-            
+
         return True
-            
+
     Balance = property(GetBalance)
 
-    
+
 class Account(object):
     def __init__(self, store, aID, name, currency=0, balance=0.0):
         self.Store = store
@@ -181,9 +181,9 @@ class Account(object):
         self._preTransactions = []
         self.Currency = currency
         self._Balance = balance
-        
+
         Publisher.subscribe(self.onTransactionAmountChanged, "transaction.updated.amount")
-        
+
     def ParseAmount(self, strAmount):
         """
         Robustly parse an amount. Remove ANY spaces, so they can be used as padding
@@ -192,7 +192,7 @@ class Account(object):
         """
         # Remove any spaces anywhere.
         strAmount = strAmount.replace(" ", "")
-        
+
         # Iterate over the string in reverse to locate decimal sep.
         decimalPos = None
         for i in range(min(3, len(strAmount))):
@@ -203,35 +203,35 @@ class Account(object):
                 break
         strAmount = strAmount.replace(",", "")
         strAmount = strAmount.replace(".", "")
-        
+
         if decimalPos:
             strAmount = strAmount[:decimalPos] + "." + strAmount[decimalPos:]
-            
+
         return float(strAmount)
-        
+
     def GetSiblings(self):
         return (account for account in self.Parent if account is not self)
-        
+
     def SetCurrency(self, currency):
         if type(currency) == int:
             self._Currency = currencies.CurrencyList[currency]()
         else:
             self._Currency = currency
-            
+
     def GetCurrency(self):
         return self._Currency
-        
+
     def GetBalance(self):
         return self._Balance
-    
+
     def SetBalance(self, newBalance):
         self._Balance = newBalance
         Publisher.sendMessage("account.balance changed.%s" % self.Name, self)
-        
+
     def GetTransactions(self):
         if self._Transactions is None:
             self._Transactions = self.Store.getTransactionsFrom(self)
-            
+
             # If transactions were added before this list was pulled, and then an attribute
             # is changed on one of them (Amount/Description/Date), it won't be
             # reflected on the new account at run-time because it has a replacement instance
@@ -243,10 +243,10 @@ class Account(object):
                         if oldT == newT:
                             self._Transactions[i] = oldT
                             break
-                
-        
+
+
         return self._Transactions
-        
+
     def GetName(self):
         return self._Name
 
@@ -254,14 +254,14 @@ class Account(object):
         index = self.Parent.AccountIndex(name)
         if index != -1:
             raise bankexceptions.AccountAlreadyExistsException(name)
-    
+
         oldName = self._Name
         self._Name = name
         Publisher.sendMessage("account.renamed.%s"%oldName, (oldName, self))
-        
+
     def Remove(self):
         self.Parent.Remove(self.Name)
-        
+
     def AddTransactions(self, transactions):
         Publisher.sendMessage("batch.start")
         for t in transactions:
@@ -284,15 +284,15 @@ class Account(object):
                 if description:
                     description = " (%s)" % description
                 otherTrans = source.AddTransaction(-amount, _("Transfer to %s"%self.Name) + description, date)
-                description = _("Transfer from %s"%source.Name) + description 
-                
+                description = _("Transfer from %s"%source.Name) + description
+
             partialTrans = Transaction(None, self, amount, description, date)
         else:
             raise Exception("AddTransaction: Must provide either transaction arguments or a transaction object.")
-            
+
         self.Store.MakeTransaction(self, partialTrans)
         transaction = partialTrans
-        
+
         # Don't append if there aren't transactions loaded yet, it is already in the model and will appear on a load. (LP: 347385).
         if self._Transactions is not None:
             self.Transactions.append(transaction)
@@ -301,11 +301,11 @@ class Account(object):
             self._preTransactions.append(transaction)
 
         Publisher.sendMessage("transaction.created", (self, transaction))
-        
+
         # Update the balance.
         self.Balance += transaction.Amount
         Publisher.sendMessage("batch.end")
-        
+
         if source:
             return transaction, otherTrans
         else:
@@ -313,7 +313,7 @@ class Account(object):
 
     def RemoveTransaction(self, transaction):
         self.RemoveTransactions([transaction])
-        
+
     def RemoveTransactions(self, transactions):
         Publisher.sendMessage("batch.start")
         # Accumulate the difference and update the balance just once. Cuts 33% time of removals.
@@ -323,25 +323,25 @@ class Account(object):
         for transaction in transactions:
             if transaction not in self.Transactions:
                 raise bankexceptions.InvalidTransactionException("Transaction does not exist in account '%s'" % self.Name)
-            
+
             self.Store.RemoveTransaction(transaction)
             transaction.Parent = None
             self.Transactions.remove(transaction)
             difference += transaction.Amount
-            
+
         # Update the balance.
         self.Balance -= difference
         Publisher.sendMessage("batch.end")
-        
+
     def MoveTransaction(self, transaction, destAccount):
         self.MoveTransactions([transaction], destAccount)
-        
+
     def MoveTransactions(self, transactions, destAccount):
         Publisher.sendMessage("batch.start")
         self.RemoveTransactions(transactions)
         destAccount.AddTransactions(transactions)
         Publisher.sendMessage("batch.end")
-        
+
     def onTransactionAmountChanged(self, message):
         transaction, difference = message.data
         if self._Transactions is not None:
@@ -351,13 +351,13 @@ class Account(object):
                 self.Balance += difference
             else:
                 debug.debug("Ignoring transaction because I am %s: %s" % (self.Name, transaction))
-        
+
     def float2str(self, *args, **kwargs):
         return self.Currency.float2str(*args, **kwargs)
-        
+
     def __cmp__(self, other):
         return cmp(self.Name, other.Name)
-    
+
     def __eq__(self, other):
         return (
             self.Name == other.Name and
@@ -365,66 +365,66 @@ class Account(object):
             self.Currency == other.Currency and
             self.Transactions == other.Transactions
         )
-    
+
     Name = property(GetName, SetName)
     Transactions = property(GetTransactions)
     Balance = property(GetBalance, SetBalance)
     Currency = property(GetCurrency, SetCurrency)
-        
-    
+
+
 class TransactionList(list):
     def __init__(self, items=None):
         # list does not understand items=None apparently.
         if items is None:
             items = []
-            
+
         list.__init__(self, items)
-        
+
     def __eq__(self, other):
         if not len(self) == len(other):
             return False
         for leftTrans, rightTrans in zip(self, other):
             if not leftTrans == rightTrans:
                 return False
-            
+
         return True
-        
+
 
 class Transaction(object):
     """
     An object which represents a transaction.
-    
+
     Changes to this object get sent out via pubsub,
     typically causing the model to make the change.
     """
     def __init__(self, tID, parent, amount, description, date):
         self.IsFrozen = True
-        
+
         self.ID = tID
         self.Parent = parent
         self.Date = date
         self.Description = description
         self.Amount = amount
-        
+
         self.IsFrozen = False
-        
+
     def GetDate(self):
         return self._Date
-        
+
     def SetDate(self, date):
         self._Date = self._MassageDate(date)
-            
+
         if not self.IsFrozen:
             Publisher.sendMessage("transaction.updated.date", (self, None))
-            
+
     def _MassageDate(self, date):
         """
         Takes a date and returns a valid datetime.date object.
         `date` can be a datetime object, or a string.
         In the case of a string, valid separators are '-' and '/'.
-        
+
         Abbreviated years will be converted into the "intended" year.
-    
+
         >>> _MassageData = Transaction(None, None, 0, "", '2001/01/01')._MassageDate
         >>> _MassageData("2008-01-06")
         datetime.date(2008, 1, 6)
@@ -461,17 +461,17 @@ class Transaction(object):
             else:
                 year += (currentBase-1) * 100
         return datetime.date(year, m, d)
-            
+
     def GetDescription(self):
         return self._Description
 
     def SetDescription(self, description):
         """Update the description, ensuring it is a string."""
         self._Description = unicode(description)
-        
+
         if not self.IsFrozen:
             Publisher.sendMessage("transaction.updated.description", (self, None))
-            
+
     def GetAmount(self):
         return self._Amount
 
@@ -479,22 +479,22 @@ class Transaction(object):
         """Update the amount, ensuring it is a float."""
         if hasattr(self, "_Amount"):
             difference = amount - self._Amount
-            
+
         self._Amount = float(amount)
-        
+
         if not self.IsFrozen:
             debug.debug("Setting transaction amount: ", self)
             Publisher.sendMessage("transaction.updated.amount", (self, difference))
-            
+
     def __str__(self):
         return "%i/%i/%i: %s -- %.2f" % (self.Date.year, self.Date.month, self.Date.day, self.Description, self.Amount)
-            
+
     def __cmp__(self, other):
         return cmp(
             (self.Date, self.ID),
             (other.Date, other.ID)
         )
-    
+
     def __eq__(self, other):
         assert isinstance(other, Transaction)
         return (
@@ -503,12 +503,12 @@ class Transaction(object):
             self.Amount == other.Amount and
             self.ID == other.ID
         )
-            
+
     Date = property(GetDate, SetDate)
     Description = property(GetDescription, SetDescription)
     Amount = property(GetAmount, SetAmount)
 
-    
+
 class RecurringTransaction(Transaction):
     def __init__(self, tID, parent, amount, description, date, source, repeatType, repeatEvery, repeatOn, startDate, endDate):
         Transaction.__init__(self, tID, parent, amount, description, date)
@@ -517,7 +517,7 @@ class RecurringTransaction(Transaction):
         self.RepeatOn = repeatOn
         self.StartDate = startDate
         self.EndDate = endDate
-        
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)

@@ -75,7 +75,7 @@ class SearchCtrl(wx.Panel):
 
         # Initially hide the extra search options.
         self.onToggleMore()
-        
+
     def onSearchTrigger(self, event):
         event.Skip()
         self.onSearch()
@@ -111,4 +111,3 @@ class SearchCtrl(wx.Panel):
         # Give or take the appropriate amount of space.
         self.Parent.Layout()
         Publisher().sendMessage("SEARCH.MORETOGGLED")
-        

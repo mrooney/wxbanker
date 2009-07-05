@@ -50,7 +50,7 @@ class PersistentStore:
         self.Dirty = False
         self.BatchDepth = 0
         existed = True
-        
+
         if not os.path.exists(self.Path):
             debug.debug('Initializing', self.Path)
             connection = self.initialize()
@@ -59,7 +59,7 @@ class PersistentStore:
             debug.debug('Loading', self.Path)
             connection = sqlite.connect(self.Path)
         self.dbconn = connection
-        
+
         self.Meta = self.getMeta()
         debug.debug(self.Meta)
         while self.Meta['VERSION'] < self.Version:
@@ -68,9 +68,9 @@ class PersistentStore:
             self.upgradeDb(self.Meta['VERSION'])
             self.Meta = self.getMeta()
             debug.debug(self.Meta)
-            
+
         self.commitIfAppropriate()
-        
+
         self.Subscriptions = (
             (self.onTransactionUpdated, "transaction.updated"),
             (self.onAccountRenamed, "account.renamed"),
@@ -78,54 +78,54 @@ class PersistentStore:
             (self.onBatchEvent, "batch"),
             (self.onExit, "exiting"),
         )
-        
+
         for callback, topic in self.Subscriptions:
             Publisher.subscribe(callback, topic)
-        
+
     def GetModel(self):
         debug.debug('Creating model...')
-        
+
         if "--sync-balances" in sys.argv:
             self.syncBalances()
-            
+
         accounts = self.getAccounts()
         accountList = bankobjects.AccountList(self, accounts)
         bankmodel = bankobjects.BankModel(self, accountList)
-        
+
         return bankmodel
-    
+
     def CreateAccount(self, accountName, currency=0):
         if isinstance(currency, currencies.BaseCurrency):
             currency = currencies.GetCurrencyInt(currency)
 
         if type(currency) != int or currency < 0:
             raise Exception("Currency code must be int and >= 0")
-        
+
         cursor = self.dbconn.cursor()
         cursor.execute('INSERT INTO accounts VALUES (null, ?, ?, ?)', (accountName, currency, 0.0))
         ID = cursor.lastrowid
         self.commitIfAppropriate()
-        
+
         account = bankobjects.Account(self, ID, accountName, currency)
-        
-        # Ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.        
+
+        # Ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.
         self.clearAccountTransactions(account)
-        
+
         return account
-    
+
     def RemoveAccount(self, account):
         # First, remove all the transactions associated with this account.
         # This is necessary to maintain integrity for dbs created at V1 (LP: 249954).
         self.clearAccountTransactions(account)
         self.dbconn.cursor().execute('DELETE FROM accounts WHERE id=?',(account.ID,))
         self.commitIfAppropriate()
-        
+
     def MakeTransaction(self, account, transaction):
         cursor = self.dbconn.cursor()
         cursor.execute('INSERT INTO transactions VALUES (null, ?, ?, ?, ?)', (account.ID, transaction.Amount, transaction.Description, transaction.Date))
         self.commitIfAppropriate()
         transaction.ID = cursor.lastrowid
-        
+
     def RemoveTransaction(self, transaction):
         result = self.dbconn.cursor().execute('DELETE FROM transactions WHERE id=?', (transaction.ID,)).fetchone()
         self.commitIfAppropriate()
@@ -133,18 +133,18 @@ class PersistentStore:
         # the controller already checks for existence of the ID though, so if this doesn't raise an exception, theoretically
         # everything is fine. So just return True, as there we no errors that we are aware of.
         return True
-    
+
     def Save(self):
         import time; t = time.time()
         self.dbconn.commit()
         debug.debug("Committed in %s seconds" % (time.time()-t))
         self.Dirty = False
-    
+
     def Close(self):
         self.dbconn.close()
         for callback, topic in self.Subscriptions:
             Publisher.unsubscribe(callback)
-        
+
     def onBatchEvent(self, message):
         batchType = message.topic[1].lower()
         if batchType == "start":
@@ -152,14 +152,14 @@ class PersistentStore:
         elif batchType == "end":
             if self.BatchDepth == 0:
                 raise Exception("Cannot end a batch that has not started.")
-            
+
             self.BatchDepth -= 1
             # If the batching is over, perhaps we should save.
             if self.BatchDepth == 0 and self.Dirty:
                 self.commitIfAppropriate()
         else:
             raise Exception("Expected batch type of 'start' or 'end', got '%s'" % batchType)
-    
+
     def commitIfAppropriate(self):
         # Don't commit if there is a batch in progress.
         if self.AutoSave and not self.BatchDepth:
@@ -173,12 +173,12 @@ class PersistentStore:
 
         cursor.execute('CREATE TABLE accounts (id INTEGER PRIMARY KEY, name VARCHAR(255), currency INTEGER, balance FLOAT)')
         cursor.execute('CREATE TABLE transactions (id INTEGER PRIMARY KEY, accountId INTEGER, amount FLOAT, description VARCHAR(255), date CHAR(10))')
-        
+
         cursor.execute('CREATE TABLE meta (id INTEGER PRIMARY KEY, name VARCHAR(255), value VARCHAR(255))')
         cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('VERSION', '3'))
 
         return connection
-    
+
     def getMeta(self):
         try:
             results = self.dbconn.cursor().execute('SELECT * FROM meta').fetchall()
@@ -190,11 +190,11 @@ class PersistentStore:
                 # All values come in as strings but some we want to cast.
                 if key == "VERSION":
                     value = int(value)
-                    
+
                 meta[key] = value
-            
+
         return meta
-    
+
     def upgradeDb(self, fromVer):
         # Make a backup
         source = self.Path
@@ -206,7 +206,7 @@ class PersistentStore:
         except IOError:
             import traceback; traceback.print_exc()
             raise Exception("Unable to make backup before proceeding with database upgrade...bailing.")
-            
+
         debug.debug('Upgrading db from %i' % fromVer)
         cursor = self.dbconn.cursor()
         if fromVer == 1:
@@ -223,9 +223,9 @@ class PersistentStore:
             cursor.execute('UPDATE meta SET value=? WHERE name=?', (3, "VERSION"))
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
-        
+
         self.commitIfAppropriate()
-        
+
     def syncBalances(self):
         debug.debug("Syncing balances...")
         for account in self.getAccounts():
@@ -240,69 +240,69 @@ class PersistentStore:
         """
         dateStr = "%s/%s/%s"%(transObj.Date.year, str(transObj.Date.month).zfill(2), str(transObj.Date.day).zfill(2))
         return [transObj.ID, transObj.Amount, transObj.Description, dateStr]
-    
+
     def result2account(self, result):
         ID, name, currency, balance = result
         return bankobjects.Account(self, ID, name, currency, balance)
 
     def getAccounts(self):
         return [self.result2account(result) for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()]
-        
+
     def clearAccountTransactions(self, account):
         self.dbconn.cursor().execute('DELETE FROM transactions WHERE accountId=?', (account.ID,))
         self.commitIfAppropriate()
-        
+
     def getTransactionsFrom(self, account):
         transactions = bankobjects.TransactionList()
         for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (account.ID,)).fetchall():
             tid, pid, amount, description, date = result
             transactions.append(bankobjects.Transaction(tid, account, amount, description, date))
         return transactions
-    
+
     def updateTransaction(self, transObj):
         result = self.transaction2result(transObj)
         result.append( result.pop(0) ) # Move the uid to the back as it is last in the args below.
         self.dbconn.cursor().execute('UPDATE transactions SET amount=?, description=?, date=? WHERE id=?', result)
         self.commitIfAppropriate()
-        
+
     def renameAccount(self, oldName, account):
         self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (account.Name, oldName))
         self.commitIfAppropriate()
-        
+
     def setCurrency(self, currencyIndex):
         self.dbconn.cursor().execute('UPDATE accounts SET currency=?', (currencyIndex,))
         self.commitIfAppropriate()
-        
+
     def __print__(self):
         cursor = self.dbconn.cursor()
         for account in cursor.execute("SELECT * FROM accounts").fetchall():
             print account[1]
             for trans in cursor.execute("SELECT * FROM transactions WHERE accountId=?", (account[0],)).fetchall():
                 print '  -',trans
-                
+
     def onTransactionUpdated(self, message):
         transaction, previousValue = message.data
         debug.debug("Persisting transaction change: %s" % transaction)
         self.updateTransaction(transaction)
-        
+
     def onAccountRenamed(self, message):
         oldName, account = message.data
         self.renameAccount(oldName, account)
-        
+
     def onAccountBalanceChanged(self, message):
         account = message.data
         self.dbconn.cursor().execute("UPDATE accounts SET balance=? WHERE id=?", (account.Balance, account.ID))
         self.commitIfAppropriate()
-        
+
     def onExit(self, message):
         if self.Dirty:
             Publisher.sendMessage("warning.dirty exit", message.data)
-        
+
     def __del__(self):
         self.commitIfAppropriate()
         self.Close()
-        
-                
+
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()

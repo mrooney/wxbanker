@@ -224,13 +224,13 @@ class Controller(object):
     def __init__(self, path=None, autoSave=True):
         self._AutoSave = autoSave
         self.Models = []
-        
+
         self.LoadPath(path, use=True)
         self.InitConfig()
-        
+
         Publisher.subscribe(self.onAutoSaveToggled, "user.autosave_toggled")
         Publisher.subscribe(self.onSaveRequest, "user.saved")
-        
+
     def InitConfig(self):
         # Initialize our configuration object.
         # It is only necessary to initialize any default values we
@@ -238,7 +238,7 @@ class Controller(object):
         # so initializing an Int to 0 or a Bool to False is not needed.
         self.wxApp = wx.App(False)
         self.wxApp.Controller = self
-            
+
         config = wx.Config("wxBanker")
         wx.Config.Set(config)
         if not config.HasEntry("SIZE_X"):
@@ -251,20 +251,20 @@ class Controller(object):
             config.WriteBool("SHOW_CALC", False)
         if not config.HasEntry("AUTO-SAVE"):
             config.WriteBool("AUTO-SAVE", True)
-            
+
         # Set the auto-save option as appropriate.
         self.AutoSave = config.ReadBool("AUTO-SAVE")
-        
+
     def onAutoSaveToggled(self, message):
         val = message.data
         self.AutoSave = val
-        
+
     def onSaveRequest(self, message):
         self.Model.Save()
-        
+
     def GetAutoSave(self):
         return self._AutoSave
-    
+
     def SetAutoSave(self, val):
         self._AutoSave = val
         wx.Config.Get().WriteBool("AUTO-SAVE", val)
@@ -272,11 +272,11 @@ class Controller(object):
         for model in self.Models:
             debug.debug("Setting auto-save to: %s" % val)
             model.Store.AutoSave = val
-            
+
         # If the user enables auto-save, we want to also save.
         if self.AutoSave:
             Publisher.sendMessage("user.saved")
-            
+
     def LoadPath(self, path, use=False):
         if path is None:
             # Figure out where the bank database file is, and load it.
@@ -291,26 +291,26 @@ class Controller(object):
                     dirName = os.path.dirname(path)
                     if not os.path.exists(dirName):
                         os.mkdir(dirName)
-        
+
         store = PersistentStore(path)
         store.AutoSave = self.AutoSave
         model = store.GetModel()
-        
+
         self.Models.append(model)
         if use:
             self.Model = model
-        
+
         return model
-    
+
     def Close(self, model=None):
         if model is None: models = self.Models
         else: models = [model]
-            
+
         for model in models:
             # We can't use in here, since we need the is operator, not ==
             if not any((m is model for m in self.Models)):
                 raise Exception("model not managed by this controller")
-        
+
             model.Store.Close()
             # Again we can't use remove, different models can be ==
             for i, m in enumerate(self.Models):
@@ -319,4 +319,4 @@ class Controller(object):
                     break
 
     AutoSave = property(GetAutoSave, SetAutoSave)
-    
+

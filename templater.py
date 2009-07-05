@@ -34,14 +34,14 @@ def gentemplate(name="wxbanker.pot"):
     translatableFiles = [f for f in os.listdir(".") if f.endswith(".py")]
     command = "xgettext %s" % " ".join(translatableFiles) + " --output=po/%s"%name
     print commands.getstatusoutput(command)
-    
+
 def export2import(tarOrExtracted):
     """Launchpad does not support importing exported po files without some massage."""
     try:
         isTar = tarfile.is_tarfile(tarOrExtracted)
     except Exception:
         isTar = False
-        
+
     if isTar:
         tar = tarfile.open(tarOrExtracted)
         tar.extractall("tmp")
@@ -50,7 +50,7 @@ def export2import(tarOrExtracted):
         exportDir = tarOrExtracted
     else:
         raise Exception("Must pass location of either tar.gz file or extracted directory")
-        
+
     os.chdir(exportDir)
 
     def nameto(po, d):
@@ -60,14 +60,14 @@ def export2import(tarOrExtracted):
         newname = "%s.po" % locale
         os.rename(po, newname)
         shutil.move(newname, d)
-    
+
     for x in os.listdir("po"):
         path = os.path.join("po", x)
         if x.endswith(".po"):
             nameto(path, "po/")
         else:
             os.remove(path)
-    
+
     for item in os.listdir("."):
         if os.path.isdir(item):
             if item != "po":
@@ -81,7 +81,7 @@ def export2import(tarOrExtracted):
         elif item.endswith(".po"):
             # Name it properly and move it to po/
             nameto(item, "po/")
-        
+
     #tarfile.open("massaged.tar.gz", "w|gz")
 
 if __name__ == "__main__":

@@ -84,18 +84,18 @@ class ManagePanel(wx.Panel):
     def getCurrentAccount(self):
         return self.accountCtrl.GetCurrentAccount()
 
-    
+
 class TransactionPanel(wx.Panel):
     def __init__(self, parent, bankController):
         wx.Panel.__init__(self, parent)
         self.searchActive = False
-        
+
         subpanel = wx.Panel(self)
-        
+
         self.searchCtrl = searchCtrl = searchctrl.SearchCtrl(self, bankController)
         self.transactionCtrl = transactionCtrl = TransactionCtrl(subpanel, bankController)
         self.newTransCtrl = newTransCtrl = newtransactionctrl.NewTransactionCtrl(self)
-        
+
         subpanel.Sizer = wx.BoxSizer()
         subpanel.Sizer.Add(transactionCtrl, 1, wx.EXPAND)
 

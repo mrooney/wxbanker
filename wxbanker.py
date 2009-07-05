@@ -30,7 +30,7 @@ else:
     # Okay, let's try to get >= 2.8
     wxversion.ensureMinimal("2.8")
     import wx, wx.aui
-    
+
 from wx.lib.pubsub import Publisher
 
 # wxBanker
@@ -78,7 +78,7 @@ class BankerFrame(wx.Frame):
         menuBar = BankMenuBar(bankController.AutoSave)
         self.SetMenuBar(menuBar)
         #self.CreateStatusBar()
-        
+
         self.Bind(wx.EVT_MENU, menuBar.onMenuEvent)
 
     def OnMove(self, event):
@@ -121,7 +121,7 @@ class BankerFrame(wx.Frame):
         dlg = wx.MessageDialog(self, welcomeMsg, _("Welcome!"), style=wx.OK|wx.ICON_INFORMATION)
         dlg.ShowModal()
         dlg.Destroy()
-        
+
     def onWarning(self, message):
         warning = message.topic[1]
         if warning == "dirty exit":
@@ -142,9 +142,9 @@ class BankerFrame(wx.Frame):
 def init(path=None, welcome=True):
     import wx, os, sys
     from controller import Controller
-    
+
     bankController = Controller(path)
-    
+
     if '--cli' in sys.argv:
         import clibanker
         clibanker.main(bankController)
@@ -153,29 +153,29 @@ def init(path=None, welcome=True):
         import wx.lib.art.img2pyartprov as img2pyartprov
         from art import silk
         wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(silk))
-    
+
         # Initialize the wxBanker frame!
         frame = BankerFrame(bankController, welcome)
-    
+
         # Greet the user if it appears this is their first time using wxBanker.
         config = wx.Config.Get()
         firstTime = not config.ReadBool("RUN_BEFORE")
         if firstTime:
             Publisher().sendMessage("first run")
             config.WriteBool("RUN_BEFORE", True)
-    
+
         return bankController.wxApp
-    
+
 
 def main():
     app = init()
     app.TopWindow.Show()
-    
+
     import sys
     if '--inspect' in sys.argv:
         import wx.lib.inspection
         wx.lib.inspection.InspectionTool().Show()
-    
+
     app.MainLoop()
 
 

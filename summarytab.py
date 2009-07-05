@@ -31,7 +31,7 @@ class SummaryPanel(wx.Panel):
     def __init__(self, parent, bankController):
         wx.Panel.__init__(self, parent)
         self.bankController = bankController
-        
+
         self.plotSettings = {'FitDegree': 2, 'Granularity': 100, 'Account': None}
         self.cachedData = None
 
@@ -58,24 +58,24 @@ class SummaryPanel(wx.Panel):
         self.Sizer.Add(self.plotPanel, 1, wx.EXPAND)
         self.plotPanel.SetShowScrollbars(False)
         self.Sizer.Add(controlSizer, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 3)
-        
+
         # fill in the accounts
         self.updateAccountList(layout=False)
-        
+
         self.Layout()
 
         # bind to the spin buttons
         granCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinGran)
         degCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinFitDeg)
         self.accountList.Bind(wx.EVT_COMBOBOX, self.onAccountSelect)
-        
+
     def onAccountSelect(self, event):
         index = event.Int
         if index == 0:
             account = None
         else:
             account = self.accountList.GetClientData(index)
-            
+
         self.plotSettings['Account'] = account
         self.generateData()
 
@@ -86,23 +86,23 @@ class SummaryPanel(wx.Panel):
     def onSpinFitDeg(self, event):
         self.plotSettings['FitDegree'] = event.EventObject.Value
         self.generateData(useCache=True)
-        
+
     def update(self):
         self.updateAccountList()
         self.generateData()
-        
+
     def updateAccountList(self, layout=True):
         self.accountList.Clear()
-        
+
         setToAll = True
-        
+
         self.accountList.Append(_("All accounts"))
         for i, account in enumerate(self.bankController.Model.Accounts):
             self.accountList.Append(account.Name, account)
             if account is self.plotSettings['Account']:
                 self.accountList.SetSelection(i+1) # +1 since All accounts
                 setToAll = False
-                
+
         if setToAll:
             self.accountList.SetSelection(0)
             # Make sure to set this, in case it was set to a deleted account.
@@ -210,13 +210,13 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         for tick in ticks:
             floatVal = tick[0]
             stringVal = str(self.startDate + datetime.timedelta(floatVal))
-            
+
             # Don't display this xtick if it isn't different from the last one.
             if stringVal == lastTick:
                 stringVal = ""
             else:
                 lastTick = stringVal
-                
+
             myTicks.append( (floatVal, stringVal) )
         return myTicks
 

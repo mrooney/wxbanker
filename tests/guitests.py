@@ -30,43 +30,43 @@ class GUITests(unittest.TestCase):
             os.remove("test.db")
         if os.path.exists(self.ConfigPath):
             os.rename(self.ConfigPath, self.ConfigPathBackup)
-        
+
         self.App = wxbanker.init("test.db", welcome=False)
         self.Frame = self.App.TopWindow
-        
+
     def testAutoSaveSetAndSaveDisabled(self):
         self.assertTrue( self.Frame.MenuBar.autoSaveMenuItem.IsChecked() )
         self.assertFalse( self.Frame.MenuBar.saveMenuItem.IsEnabled() )
-        
+
     def testAppHasController(self):
         self.assertTrue( hasattr(self.App, "Controller") )
-        
+
     def testCanAddAndRemoveUnicodeAccount(self):
         self.App.Controller.Model.CreateAccount(u"Lópezहिंदी")
         # Make sure the account ctrl has the first (0th) selection.
         self.assertEqual(0, self.Frame.managePanel.accountCtrl.currentIndex)
         self.Frame.managePanel.accountCtrl.onRemoveButton(None)
-        
+
     def testCanAddTransaction(self):
         model = self.App.Controller.Model
         tctrl = self.Frame.managePanel.transactionPanel.newTransCtrl
         a = model.CreateAccount("testCanAddTransaction")
-        
+
         self.assertEquals(len(a.Transactions), 0)
         self.assertEquals(a.Balance, 0)
-        
+
         tctrl.amountCtrl.Value = "12.34"
         tctrl.onNewTransaction()
-        
+
         self.assertEquals(len(a.Transactions), 1)
         self.assertEquals(a.Balance, 12.34)
-        
-    
+
+
     def tearDown(self):
         if os.path.exists("test.db"):
             os.remove("test.db")
         if os.path.exists(self.ConfigPathBackup):
             os.rename(self.ConfigPathBackup, self.ConfigPath)
-            
+
 if __name__ == "__main__":
     unittest.main()

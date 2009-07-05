@@ -23,7 +23,7 @@ import datetime, bankobjects
 def makeTransaction(date, amount):
     """A tiny wrapper to make tests below shorter."""
     return bankobjects.Transaction(None, None, amount, "", date)
-    
+
 def get(transactions, numPoints):
     """
     # First, rename the function for convenience
@@ -66,12 +66,12 @@ def get(transactions, numPoints):
     """
     # Don't ever return 0 as the dpp, you can't graph without SOME x delta.
     smallDelta = 1.0/2**32
-    
+
     if transactions == []:
         return [0] * 10, datetime.date.today(), smallDelta
-    
+
     transactions = list(sorted(transactions))
-    
+
     startDate, endDate = transactions[0].Date, transactions[-1].Date
     today = datetime.date.today()
     if today > endDate:
@@ -80,20 +80,19 @@ def get(transactions, numPoints):
     distance = (endDate - startDate).days
     daysPerPoint = 1.0 * distance / numPoints
     dppDelta = datetime.timedelta(daysPerPoint)
-    
+
     points = [0.0]
     tindex = 0
     for i in range(numPoints):
         while tindex < len(transactions) and transactions[tindex].Date <= startDate + (dppDelta * (i+1)):
             points[i] += transactions[tindex].Amount
             tindex += 1
-        
+
         points.append(points[-1])
-        
+
     return points[:-1], startDate, daysPerPoint or smallDelta
-    
-    
+
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=1)
-    

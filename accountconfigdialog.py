@@ -27,7 +27,7 @@ class AccountConfigDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent, title=account.Name)
 
         self.headerText = wx.StaticText(self, -1, _("wxBanker can synchronize account balances online if you have an account with mint.com"))
-        
+
         self.usernameBox = wx.TextCtrl(self)
         self.passwordBox = wx.TextCtrl(self, style=wx.TE_PASSWORD)
         self.saveAuthCheck = wx.CheckBox(self, label="Save Mint.com authentication in keyring")
@@ -38,7 +38,7 @@ class AccountConfigDialog(wx.Dialog):
         gridSizer.Add(self.usernameBox)
         gridSizer.Add(wx.StaticText(self, label=_("Password")))
         gridSizer.Add(self.passwordBox)
-        
+
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
         self.Sizer.Add(self.headerText)
         self.Sizer.AddSpacer(10)
@@ -47,10 +47,10 @@ class AccountConfigDialog(wx.Dialog):
         self.Sizer.AddStretchSpacer(1)
         self.Sizer.Add(self.closeButton)
         self.saveAuthCheck.Enable(bool(gnomekeyring))
-        
+
     def createMintConfigPanel(self):
         panel = wx.Panel(self)
-        
-        
-        
-    
+
+
+
+
