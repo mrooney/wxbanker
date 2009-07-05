@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #    https://launchpad.net/wxbanker
-#    setup.py: Copyright 2007, 2008 Mike Rooney <mrooney@ubuntu.com>
+#    setup.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
