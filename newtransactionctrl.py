@@ -69,7 +69,12 @@ class RecurringPanel(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
         
-        self.repeatsCombo = wx.Choice(self, choices=(_("Weekly"), _("Monthly"), _("Yearly")))
+        # The daily option is useful if you have something which happens every 30 days, for example.
+        # Some billing cycles work this way, and the date slowly shifts down monthly.
+        self.repeatsCombo = wx.Choice(self, choices=(_("Daily"), _("Weekly"), _("Monthly"), _("Yearly")))
+        # Set the default to weekly.
+        self.repeatsCombo.SetSelection(1)
+        
         self.everyText = wx.StaticText(self)
         self.everySpin = wx.SpinCtrl(self, min=1, max=130, initial=1)
         self.everySpin.MinSize = (50, -1)
@@ -119,7 +124,6 @@ class RecurringPanel(wx.Panel):
         self.bottomSizer.AddSpacer(10)
         self.bottomSizer.Add(self.repeatsOnText, flag=wx.ALIGN_CENTER)
         self.bottomSizer.Add(self.repeatsOnSizerWeekly, flag=wx.ALIGN_CENTER)
-        self.bottomSizer.Hide(self.repeatsOnSizerWeekly)
         
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
         self.Sizer.Add(self.topSizer)
@@ -140,29 +144,26 @@ class RecurringPanel(wx.Panel):
             end = self.endDateCtrl.GetValue()
         
         repeatsOn = ""
-        if repeatType == 0: # Weekly
+        if repeatType == 1: # Weekly
             repeatsOn = ",".join(str(int(check.Value)) for check in self.repeatsOnChecksWeekly)
             
         return (repeatType, repeatEvery, repeatsOn, end)
         
     def Update(self, event=None):
         self.Freeze()
-        self.Sizer.Show(self.bottomSizer)
-        self.bottomSizer.Hide(self.repeatsOnSizerWeekly)
-        self.bottomSizer.Hide(self.repeatsOnText)
+        self.Sizer.Hide(self.bottomSizer)
 
         repeatType = self.repeatsCombo.Selection
         if repeatType == 0:
+            everyText = _("days")
+        elif repeatType == 1:
             everyText = _("weeks")
             self.repeatsOnText.Label = label=_("Repeats on days:")
-            self.bottomSizer.Show(self.repeatsOnText)
-            self.bottomSizer.Show(self.repeatsOnSizerWeekly)
-        elif repeatType == 1:
-            everyText = _("months")
-            self.Sizer.Hide(self.bottomSizer)
+            self.Sizer.Show(self.bottomSizer)
         elif repeatType == 2:
+            everyText = _("months")
+        elif repeatType == 3:
             everyText = _("years")
-            self.Sizer.Hide(self.bottomSizer)
             
         self.everyText.Label = everyText
         
