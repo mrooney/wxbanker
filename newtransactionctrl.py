@@ -91,14 +91,6 @@ class RecurringPanel(wx.Panel):
             cb.SetValue(i==today)
             self.repeatsOnChecksWeekly.append(cb)
             self.repeatsOnSizerWeekly.Add(cb, 0, wx.ALIGN_CENTER|wx.LEFT, 5)
-            
-        self.repeatsOnChecksMonthly = []
-        self.repeatsOnSizerMonthly = wx.BoxSizer()
-        for i in range(12):
-            cb = wx.CheckBox(self, label=str(i+1))
-            cb.SetValue(True)
-            self.repeatsOnChecksMonthly.append(cb)
-            self.repeatsOnSizerMonthly.Add(cb, flag=wx.ALIGN_CENTER)
         
         # The vertical sizer for when the recurring transaction stops ocurring.
         endsSizer = wx.BoxSizer(wx.VERTICAL)
@@ -127,10 +119,7 @@ class RecurringPanel(wx.Panel):
         self.bottomSizer.AddSpacer(10)
         self.bottomSizer.Add(self.repeatsOnText, flag=wx.ALIGN_CENTER)
         self.bottomSizer.Add(self.repeatsOnSizerWeekly, flag=wx.ALIGN_CENTER)
-        self.bottomSizer.Add(self.repeatsOnSizerMonthly, flag=wx.ALIGN_CENTER)
         self.bottomSizer.Hide(self.repeatsOnSizerWeekly)
-        self.bottomSizer.Hide(self.repeatsOnSizerMonthly)
-        
         
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
         self.Sizer.Add(self.topSizer)
@@ -151,9 +140,8 @@ class RecurringPanel(wx.Panel):
             end = self.endDateCtrl.GetValue()
         
         repeatsOn = ""
-        if repeatType in (0,1): # Weekly, Monthly
-            checkList = (self.repeatsOnChecksWeekly, self.repeatsOnChecksMonthly)[repeatType]
-            repeatsOn = ",".join(str(int(check.Value)) for check in checkList)
+        if repeatType == 0: # Weekly
+            repeatsOn = ",".join(str(int(check.Value)) for check in self.repeatsOnChecksWeekly)
             
         return (repeatType, repeatEvery, repeatsOn, end)
         
@@ -161,7 +149,6 @@ class RecurringPanel(wx.Panel):
         self.Freeze()
         self.Sizer.Show(self.bottomSizer)
         self.bottomSizer.Hide(self.repeatsOnSizerWeekly)
-        self.bottomSizer.Hide(self.repeatsOnSizerMonthly)
         self.bottomSizer.Hide(self.repeatsOnText)
 
         repeatType = self.repeatsCombo.Selection
@@ -172,9 +159,7 @@ class RecurringPanel(wx.Panel):
             self.bottomSizer.Show(self.repeatsOnSizerWeekly)
         elif repeatType == 1:
             everyText = _("months")
-            self.repeatsOnText.Label = label=_("Repeats on months:")
-            self.bottomSizer.Show(self.repeatsOnText)
-            self.bottomSizer.Show(self.repeatsOnSizerMonthly)
+            self.Sizer.Hide(self.bottomSizer)
         elif repeatType == 2:
             everyText = _("years")
             self.Sizer.Hide(self.bottomSizer)
