@@ -388,6 +388,7 @@ class TransactionList(list):
                 return False
             
         return True
+        
 
 class Transaction(object):
     """
@@ -506,7 +507,16 @@ class Transaction(object):
     Date = property(GetDate, SetDate)
     Description = property(GetDescription, SetDescription)
     Amount = property(GetAmount, SetAmount)
-               
+
+    
+class RecurringTransaction(Transaction):
+    def __init__(self, tID, parent, amount, description, date, source, repeatType, repeatEvery, repeatOn, startDate, endDate):
+        Transaction.__init__(self, tID, parent, amount, description, date)
+        self.RepeatType = repeatType
+        self.RepeatEvery = repeatEvery
+        self.RepeatOn = repeatOn
+        self.StartDate = startDate
+        self.EndDate = endDate
         
 if __name__ == "__main__":
     import doctest

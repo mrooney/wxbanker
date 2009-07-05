@@ -74,7 +74,6 @@ class RecurringPanel(wx.Panel):
         self.everySpin = wx.SpinCtrl(self, min=1, max=130, initial=1)
         self.everySpin.MinSize = (50, -1)
         self.repeatsOnText = wx.StaticText(self)
-        self.startDateCtrl = bankcontrols.DateCtrlFactory(self)
         self.endDateCtrl = bankcontrols.DateCtrlFactory(self)
         self.endsNeverRadio = wx.RadioButton(self, label=_("Never"), style=wx.RB_GROUP)
         self.endsSometimeRadio = wx.RadioButton(self, label=("On:"))
@@ -101,6 +100,14 @@ class RecurringPanel(wx.Panel):
             self.repeatsOnChecksMonthly.append(cb)
             self.repeatsOnSizerMonthly.Add(cb, flag=wx.ALIGN_CENTER)
         
+        # The vertical sizer for when the recurring transaction stops ocurring.
+        endsSizer = wx.BoxSizer(wx.VERTICAL)
+        endsDateSizer = wx.BoxSizer()
+        endsSizer.Add(self.endsNeverRadio)
+        endsDateSizer.Add(self.endsSometimeRadio)
+        endsDateSizer.Add(self.endDateCtrl)
+        endsSizer.Add(endsDateSizer)
+        
         self.topSizer = wx.BoxSizer()
         self.bottomSizer = wx.BoxSizer()
         
@@ -113,15 +120,9 @@ class RecurringPanel(wx.Panel):
         self.topSizer.AddSpacer(3)
         self.topSizer.Add(self.everyText, flag=wx.ALIGN_CENTER)
         self.topSizer.AddSpacer(15)
-        self.topSizer.Add(wx.StaticText(self, label=_("Starts:")), flag=wx.ALIGN_CENTER)
-        self.topSizer.Add(self.startDateCtrl, flag=wx.ALIGN_CENTER)
-        self.topSizer.AddSpacer(8)
         self.topSizer.Add(wx.StaticText(self, label=_("Ends:")), flag=wx.ALIGN_CENTER)
         self.topSizer.AddSpacer(3)
-        self.topSizer.Add(self.endsNeverRadio, flag=wx.ALIGN_CENTER)
-        self.topSizer.AddSpacer(3)
-        self.topSizer.Add(self.endsSometimeRadio, flag=wx.ALIGN_CENTER)
-        self.topSizer.Add(self.endDateCtrl, flag=wx.ALIGN_CENTER)
+        self.topSizer.Add(endsSizer)
         
         self.bottomSizer.AddSpacer(10)
         self.bottomSizer.Add(self.repeatsOnText, flag=wx.ALIGN_CENTER)
@@ -138,12 +139,11 @@ class RecurringPanel(wx.Panel):
         
         self.Update()
         self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update)
-        print self.GetSettings()
         
     def GetSettings(self):
         repeatType = self.repeatsCombo.GetSelection()
         repeatEvery = self.everySpin.GetValue()
-        start = self.startDateCtrl.GetValue()
+        #start = self.startDateCtrl.GetValue()
         
         if self.endsNeverRadio.GetValue():
             end = None
@@ -155,7 +155,7 @@ class RecurringPanel(wx.Panel):
             checkList = (self.repeatsOnChecksWeekly, self.repeatsOnChecksMonthly)[repeatType]
             repeatsOn = ",".join(str(int(check.Value)) for check in checkList)
             
-        return (repeatType, repeatEvery, repeatsOn, start, end)
+        return (repeatType, repeatEvery, repeatsOn, end)
         
     def Update(self, event=None):
         self.Freeze()
@@ -190,6 +190,7 @@ class NewTransactionCtrl(wx.Panel):
         self.CurrentAccount = None
 
         self.dateCtrl = dateCtrl = bankcontrols.DateCtrlFactory(self)
+        self.startText = wx.StaticText(self, label=_("Starts:"))
 
         # The Description and Amount controls.
         self.descCtrl = descCtrl = bankcontrols.HintedTextCtrl(self, size=(140, -1), style=wx.TE_PROCESS_ENTER, hint=_("Description"), icon="wxART_page_edit")
@@ -214,6 +215,7 @@ class NewTransactionCtrl(wx.Panel):
 
         # Set up the layout.
         hSizer = wx.BoxSizer()
+        hSizer.Add(self.startText, flag=wx.ALIGN_CENTER)
         hSizer.Add(wx.StaticBitmap(self, bitmap=wx.ArtProvider.GetBitmap('wxART_date')), 0, wx.ALIGN_CENTER|wx.ALL, 2)
         hSizer.Add(dateCtrl, 0, wx.ALIGN_CENTER)
         hSizer.AddSpacer(5)
@@ -229,6 +231,8 @@ class NewTransactionCtrl(wx.Panel):
         self.Sizer.Add(self.recurringPanel, 0, wx.EXPAND|wx.TOP, 5)
         self.Sizer.Add(self.transferPanel, 0, wx.EXPAND|wx.TOP, 5)
         self.Sizer.Add(hSizer, 0, wx.EXPAND)
+        
+        self.startText.Hide()
         self.Sizer.Hide(self.recurringPanel)
         self.Sizer.Hide(self.transferPanel)
 
@@ -257,7 +261,9 @@ class NewTransactionCtrl(wx.Panel):
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
         
     def onRecurringCheck(self, event):
-        self.toggleVisibilityOf(self.recurringPanel, self.recursCheck.IsChecked())
+        recurring = self.recursCheck.IsChecked()
+        self.toggleVisibilityOf(self.recurringPanel, recurring)
+        self.startText.Show(recurring)
 
     def onTransferCheck(self, event):
         self.toggleVisibilityOf(self.transferPanel, self.transferCheck.IsChecked())
