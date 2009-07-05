@@ -26,17 +26,16 @@ class TransferPanel(wx.Panel):
         self.accountDict = {}
         self.nullChoice = ["----------"]
         
-        self.fromRadio = wx.RadioButton(self, label=_("From"), style=wx.RB_GROUP)
-        self.toRadio = wx.RadioButton(self, label=_("To"))
+        self.fromtoBox = wx.Choice(self, choices=[_("from"), _("to")])
         self.accountSelection = wx.Choice(self, choices=self.nullChoice)
         
         self.Sizer = wx.BoxSizer()
-        self.Sizer.Add(wx.StaticText(self, label=_("Transfer:")), flag=wx.ALIGN_CENTER)
+        self.Sizer.Add(wx.StaticText(self, label=_("Transfer")), flag=wx.ALIGN_CENTER)
         self.Sizer.AddSpacer(3)
-        self.Sizer.Add(self.fromRadio, flag=wx.ALIGN_CENTER)
-        self.Sizer.Add(self.toRadio, flag=wx.ALIGN_CENTER)
+        self.Sizer.Add(self.fromtoBox, flag=wx.ALIGN_CENTER)
         self.Sizer.AddSpacer(8)
-        self.Sizer.Add(wx.StaticText(self, label=_("Account:")), flag=wx.ALIGN_CENTER)
+        self.Sizer.Add(wx.StaticText(self, label=_("account:")), flag=wx.ALIGN_CENTER)
+        self.Sizer.AddSpacer(3)
         self.Sizer.Add(self.accountSelection, flag=wx.ALIGN_CENTER)
         
     def GetAccounts(self, currentAccount):
@@ -45,7 +44,7 @@ class TransferPanel(wx.Panel):
             return None
             
         otherAccount = self.accountDict[stringSel]
-        if self.fromRadio.Value:
+        if self.fromtoBox.Selection == 0:
             source, destination = otherAccount, currentAccount
         else:
             source, destination = currentAccount, otherAccount
