@@ -409,6 +409,7 @@ class Transaction(object):
         self.Date = date
         self.Description = description
         self.Amount = amount
+        self.LinkedTransaction = None
 
         self.IsFrozen = False
 
@@ -490,6 +491,23 @@ class Transaction(object):
             debug.debug("Setting transaction amount: ", self)
             Publisher.sendMessage("transaction.updated.amount", (self, difference))
 
+    def GetLinkedTransaction(self):
+        return self._LinkedTransaction
+
+    def SetLinkedTransaction(self, transaction):
+        self._LinkedTransaction = transaction
+
+    def GetLinkedTransactionID(self):
+        """
+        This exists to make it easy to compare linked transactions in __eq__, where it needs to be done based on ID
+        so we don't recurse forever in comparisons.
+        """
+        print self.LinkedTransaction
+        if self.LinkedTransaction:
+            return self.LinkedTransaction.ID
+        else:
+            return None
+
     def __str__(self):
         return "%i/%i/%i: %s -- %.2f" % (self.Date.year, self.Date.month, self.Date.day, self.Description, self.Amount)
 
@@ -500,18 +518,22 @@ class Transaction(object):
         )
 
     def __eq__(self, other):
+        if other is None:
+            return False
+
         assert isinstance(other, Transaction), other
         return (
             self.Date == other.Date and
             self.Description == other.Description and
             self.Amount == other.Amount and
+            self.GetLinkedTransactionID() == other.GetLinkedTransactionID() and
             self.ID == other.ID
         )
 
     Date = property(GetDate, SetDate)
     Description = property(GetDescription, SetDescription)
     Amount = property(GetAmount, SetAmount)
-
+    LinkedTransaction = property(GetLinkedTransaction, SetLinkedTransaction)
 
 class RecurringTransaction(Transaction):
     def __init__(self, tID, parent, amount, description, date, source, repeatType, repeatEvery, repeatOn, startDate, endDate):
