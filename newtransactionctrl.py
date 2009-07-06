@@ -20,6 +20,23 @@ import wx, datetime
 import bankcontrols
 from wx.lib.pubsub import Publisher
 
+class RecurringSummaryText(wx.Panel):
+    def __init__(self, parent):
+        wx.Panel.__init__(self, parent)
+        self.SetBackgroundColour(wx.BLACK)
+
+        self.contentPanel = wx.Panel(self)
+        self.contentPanel.SetBackgroundColour(wx.Color(224,238,238))
+        self.Sizer = wx.BoxSizer()
+        self.Sizer.Add(self.contentPanel, 1, wx.EXPAND|wx.ALL, 1)
+
+        self.summaryText = wx.StaticText(self.contentPanel)
+        self.contentPanel.Sizer = wx.BoxSizer()
+        self.contentPanel.Sizer.Add(self.summaryText, 0, wx.ALIGN_CENTER|wx.ALL, 2)
+
+    def SetLabel(self, text):
+        self.summaryText.Label = text
+
 class TransferPanel(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
@@ -104,6 +121,9 @@ class RecurringPanel(wx.Panel):
         endsDateSizer.Add(self.endDateCtrl)
         endsSizer.Add(endsDateSizer)
 
+        # The control which will summarize the recurring transaction
+        self.summaryCtrl = RecurringSummaryText(self)
+
         self.topSizer = wx.BoxSizer()
         self.bottomSizer = wx.BoxSizer()
 
@@ -128,14 +148,15 @@ class RecurringPanel(wx.Panel):
         self.Sizer.Add(self.topSizer)
         self.Sizer.AddSpacer(3)
         self.Sizer.Add(self.bottomSizer)
+        self.Sizer.Add(self.summaryCtrl, 0, wx.ALIGN_CENTER)
 
         self.Update()
         self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update)
+        self.everySpin.Bind(wx.EVT_SPINCTRL, self.Update)
 
     def GetSettings(self):
         repeatType = self.repeatsCombo.GetSelection()
         repeatEvery = self.everySpin.GetValue()
-        #start = self.startDateCtrl.GetValue()
 
         if self.endsNeverRadio.GetValue():
             end = None
@@ -152,19 +173,38 @@ class RecurringPanel(wx.Panel):
         self.Freeze()
         self.Sizer.Hide(self.bottomSizer)
 
-        repeatType = self.repeatsCombo.Selection
+        repeatType, every, repeatsOn, end = self.GetSettings()
+        summary = "Summary"
         if repeatType == 0:
             everyText = _("days")
+            if every == 1:
+                summary = _("Daily")
+            else:
+                summary = _("Every %i days") % every
         elif repeatType == 1:
             everyText = _("weeks")
             self.repeatsOnText.Label = label=_("Repeats on days:")
             self.Sizer.Show(self.bottomSizer)
+            if repeatsOn == "1,1,1,1,1,0,0":
+                summary = _("Weekly on weekdays")
+            elif repeatsOn == "0,0,0,0,0,1,1":
+                summary = _("Weekly on weekends")
+            else:
+                pluralDayNames = (_("Mondays"), _("Tuesdays"), _("Wednesdays"), _("Thursdays"), _("Fridays"), _("Saturdays"), _("Sundays"))
+                repeatDays = tuple(day for i, day in enumerate(pluralDayNames) if repeatsOn.replace(",","")[i] == "1")
+                if len(repeatDays) == 0:
+                    summary = "Never"
+                elif len(repeatDays) == 1:
+                    summary = _("Weekly on %s") % repeatDays[0]
+                else:
+                    summary = _("Weekly on %s") % ((", ".join(repeatDays[:-1])) + (_(" and %s") % repeatDays[-1]))
         elif repeatType == 2:
             everyText = _("months")
         elif repeatType == 3:
             everyText = _("years")
 
         self.everyText.Label = everyText
+        self.summaryCtrl.SetLabel(summary)
 
         self.Thaw()
         self.Parent.Parent.Layout()
@@ -190,6 +230,7 @@ class NewTransactionCtrl(wx.Panel):
 
         # The recurs check.
         self.recursCheck = recursCheck = wx.CheckBox(self, label=_("Recurring"))
+        self.recursCheck.SetBackgroundColour(wx.RED)
 
         checkSizer = wx.BoxSizer(wx.VERTICAL)
         checkSizer.Add(self.transferCheck)

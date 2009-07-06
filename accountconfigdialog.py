@@ -25,7 +25,7 @@ except ImportError:
 class AccountConfigDialog(wx.Dialog):
     def __init__(self, parent, account):
         wx.Dialog.__init__(self, parent, title=account.Name)
-
+        self.SetBackgroundColour(wx.RED)
         self.headerText = wx.StaticText(self, -1, _("wxBanker can synchronize account balances online if you have an account with mint.com"))
 
         self.usernameBox = wx.TextCtrl(self)
