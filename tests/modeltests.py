@@ -213,15 +213,14 @@ class ModelTests(unittest.TestCase):
     def testModelIsNotCached(self):
         # If this test fails, test*IsStored tests will pass but are no longer testing for regressions!
         model1 = self.Controller.Model
-        model2 = model1.Store.GetModel()
+        model2 = model1.Store.GetModel(useCached=False)
         self.assertFalse(model1 is model2)
 
     def testRenameIsStored(self):
         model1 = self.Controller.Model
         a = model1.CreateAccount("A")
         a.Name = "B"
-
-        model2 = model1.Store.GetModel()
+        model2 = model1.Store.GetModel(useCached=False)
         self.assertEqual(model1, model2)
 
     def testBalanceIsStored(self):
@@ -231,8 +230,7 @@ class ModelTests(unittest.TestCase):
 
         a1.AddTransaction(1)
         self.assertEqual(a1.Balance, 1)
-
-        model2 = model1.Store.GetModel()
+        model2 = model1.Store.GetModel(useCached=False)
         a2 = model2.Accounts[0]
         self.assertEqual(model1, model2)
         self.assertEqual(a1.Balance, a2.Balance)
@@ -245,8 +243,7 @@ class ModelTests(unittest.TestCase):
 
         t1.Description = "new"
         t1.Amount = -1.50
-
-        model2 = model1.Store.GetModel()
+        model2 = model1.Store.GetModel(useCached=False)
         self.assertEqual(model1, model2)
 
     def testDirtyExitWarns(self):

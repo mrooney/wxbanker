@@ -49,6 +49,7 @@ class PersistentStore:
         self.AutoSave = autoSave
         self.Dirty = False
         self.BatchDepth = 0
+        self.cachedModel = None
         existed = True
 
         if not os.path.exists(self.Path):
@@ -82,17 +83,19 @@ class PersistentStore:
         for callback, topic in self.Subscriptions:
             Publisher.subscribe(callback, topic)
 
-    def GetModel(self):
-        debug.debug('Creating model...')
+    def GetModel(self, useCached=True):
+        if self.cachedModel is None or not useCached:
+            debug.debug('Creating model...')
 
-        if "--sync-balances" in sys.argv:
-            self.syncBalances()
+            # Syncronize cached account balances with the actual. If this needs to be used a bug exists, file it!
+            if "--sync-balances" in sys.argv:
+                self.syncBalances()
 
-        accounts = self.getAccounts()
-        accountList = bankobjects.AccountList(self, accounts)
-        bankmodel = bankobjects.BankModel(self, accountList)
+            accounts = self.getAccounts()
+            accountList = bankobjects.AccountList(self, accounts)
+            self.cachedModel = bankobjects.BankModel(self, accountList)
 
-        return bankmodel
+        return self.cachedModel
 
     def CreateAccount(self, accountName, currency=0):
         if isinstance(currency, currencies.BaseCurrency):
