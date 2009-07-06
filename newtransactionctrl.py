@@ -140,7 +140,7 @@ class RecurringPanel(wx.Panel):
         self.topSizer.AddSpacer(3)
         self.topSizer.Add(endsSizer)
 
-        self.bottomSizer.AddSpacer(10)
+        #self.bottomSizer.AddSpacer(10)
         self.bottomSizer.Add(self.repeatsOnText, flag=wx.ALIGN_CENTER)
         self.bottomSizer.Add(self.repeatsOnSizerWeekly, flag=wx.ALIGN_CENTER)
 
@@ -148,11 +148,15 @@ class RecurringPanel(wx.Panel):
         self.Sizer.Add(self.topSizer)
         self.Sizer.AddSpacer(3)
         self.Sizer.Add(self.bottomSizer)
+        self.Sizer.AddSpacer(3)
         self.Sizer.Add(self.summaryCtrl, 0, wx.ALIGN_CENTER)
 
         self.Update()
-        self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update)
+        #self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update)
         self.everySpin.Bind(wx.EVT_SPINCTRL, self.Update)
+        self.Bind(wx.EVT_CHOICE, self.Update)
+        self.Bind(wx.EVT_CHECKBOX, self.Update)
+        self.Bind(wx.EVT_RADIOBUTTON, self.Update)
 
     def GetSettings(self):
         repeatType = self.repeatsCombo.GetSelection()
@@ -189,6 +193,8 @@ class RecurringPanel(wx.Panel):
                 summary = _("Weekly on weekdays")
             elif repeatsOn == "0,0,0,0,0,1,1":
                 summary = _("Weekly on weekends")
+            elif repeatsOn == "1,1,1,1,1,1,1":
+                summary = _("Daily")
             else:
                 pluralDayNames = (_("Mondays"), _("Tuesdays"), _("Wednesdays"), _("Thursdays"), _("Fridays"), _("Saturdays"), _("Sundays"))
                 repeatDays = tuple(day for i, day in enumerate(pluralDayNames) if repeatsOn.replace(",","")[i] == "1")
@@ -200,8 +206,20 @@ class RecurringPanel(wx.Panel):
                     summary = _("Weekly on %s") % ((", ".join(repeatDays[:-1])) + (_(" and %s") % repeatDays[-1]))
         elif repeatType == 2:
             everyText = _("months")
+            if every == 1:
+                summary = _("Monthly")
+            else:
+                summary = _("Every %i months") % every
         elif repeatType == 3:
             everyText = _("years")
+            if every == 1:
+                summary = _("Annually")
+            else:
+                summary = _("Every %i years") % every
+
+        # If the recurring ends at some point, add that information to the summary text.
+        if end:
+            summary += " " + _("until %s") % end.FormatISODate()
 
         self.everyText.Label = everyText
         self.summaryCtrl.SetLabel(summary)
