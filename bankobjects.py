@@ -290,8 +290,12 @@ class Account(object):
         else:
             raise Exception("AddTransaction: Must provide either transaction arguments or a transaction object.")
 
-        self.Store.MakeTransaction(self, partialTrans)
-        transaction = partialTrans
+        transaction = self.Store.MakeTransaction(self, partialTrans)
+
+        # If it was a transfer, link them together
+        if source:
+            transaction.LinkedTransaction = otherTrans
+            otherTrans.LinkedTransaction = transaction
 
         # Don't append if there aren't transactions loaded yet, it is already in the model and will appear on a load. (LP: 347385).
         if self._Transactions is not None:
@@ -496,7 +500,7 @@ class Transaction(object):
         )
 
     def __eq__(self, other):
-        assert isinstance(other, Transaction)
+        assert isinstance(other, Transaction), other
         return (
             self.Date == other.Date and
             self.Description == other.Description and

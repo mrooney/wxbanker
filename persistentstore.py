@@ -125,6 +125,7 @@ class PersistentStore:
         cursor.execute('INSERT INTO transactions VALUES (null, ?, ?, ?, ?)', (account.ID, transaction.Amount, transaction.Description, transaction.Date))
         self.commitIfAppropriate()
         transaction.ID = cursor.lastrowid
+        return transaction
 
     def RemoveTransaction(self, transaction):
         result = self.dbconn.cursor().execute('DELETE FROM transactions WHERE id=?', (transaction.ID,)).fetchone()

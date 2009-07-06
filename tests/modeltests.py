@@ -35,6 +35,13 @@ class ModelTests(unittest.TestCase):
         self.Controller = controller.Controller("test.db")
         self.Model = self.Controller.Model
 
+    def createLinkedTransfers(self):
+        a = self.Model.CreateAccount("A")
+        b = self.Model.CreateAccount("B")
+        atrans, btrans = a.AddTransaction(1, "test", None, source=b)
+
+        return atrans, btrans
+
     def testRobustTransactionAmountParsing(self):
         model = self.Controller.Model
         a = model.CreateAccount("Test")
@@ -282,6 +289,22 @@ class ModelTests(unittest.TestCase):
     def testNewAccountCanGetSiblings(self):
         baby = self.Model.CreateAccount("Baby")
         self.assertEqual(list(baby.GetSiblings()), [])
+
+    def testTransfersAreLinked(self):
+        atrans, btrans = self.createLinkedTransfers()
+
+        self.assertTrue(atrans.Parent == a)
+        self.assertTrue(btrans.Parent == b)
+
+        self.assertTrue(atrans.LinkedTransaction == btrans)
+        self.assertTrue(btrans.LinkedTransaction == atrans)
+
+        return a, b
+
+    def testLinkedTransferIsStored(self):
+        atrans, btrans = self.createLinkedTransfers()
+
+        #self.Controller.GetModel
 
     def tearDown(self):
         self.Controller.Close()
