@@ -17,7 +17,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 from bankexceptions import NoNumpyException
-import localization
+import localization, bankcontrols
 import wx
 try:
     import plot as pyplot
@@ -25,6 +25,12 @@ except ImportError:
     raise NoNumpyException()
 
 import datetime
+
+
+def pydate2wxdate(date):
+    tt = date.timetuple()
+    dmy = (tt[2], tt[1]-1, tt[0])
+    return wx.DateTimeFromDMY(*dmy)
 
 
 class SummaryPanel(wx.Panel):
@@ -43,15 +49,23 @@ class SummaryPanel(wx.Panel):
         self.accountList = wx.ComboBox(self, style=wx.CB_READONLY)
         granCtrl = wx.SpinCtrl(self, min=10, max=1000, initial=self.plotSettings['Granularity'])
         degCtrl = wx.SpinCtrl(self, min=1, max=20, initial=self.plotSettings['FitDegree'])
+        # the date range controls
+        self.startDate = bankcontrols.DateCtrlFactory(self)
+        self.endDate = bankcontrols.DateCtrlFactory(self)
+
         controlSizer.Add(wx.StaticText(self, label=_("Account")), 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.Add(self.accountList, 0, wx.ALIGN_CENTER_VERTICAL)
-        controlSizer.AddSpacer(20)
+        controlSizer.AddSpacer(10)
+        controlSizer.Add(wx.StaticText(self, label=_("From")), 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.Add(self.startDate)
+        controlSizer.Add(wx.StaticText(self, label=_("to")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.RIGHT, 5)
+        controlSizer.Add(self.endDate)
+        controlSizer.AddSpacer(10)
         controlSizer.Add(wx.StaticText(self, label=_("Sample Points")), 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.Add(granCtrl)
-        controlSizer.AddSpacer(20)
+        controlSizer.AddSpacer(10)
         controlSizer.Add(wx.StaticText(self, label=_("Fit Curve Degree")), 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.Add(degCtrl)
-        controlSizer.Layout()
 
         # put it all together
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
@@ -114,6 +128,10 @@ class SummaryPanel(wx.Panel):
         else:
             totals, startDate, delta = self.getPoints(self.plotSettings['Granularity'])
             self.cachedData = totals, startDate, delta
+
+            endDate = startDate + (datetime.timedelta(days=delta) * len(totals))
+            self.startDate.Value = pydate2wxdate(startDate)
+            self.endDate.Value = pydate2wxdate(endDate)
 
         self.plotPanel.plotBalance(totals, startDate, delta, "Days", fitdegree=self.plotSettings['FitDegree'])
 
