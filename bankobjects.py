@@ -40,11 +40,15 @@ class BankModel(object):
 
         return transactions
 
-    def GetXTotals(self, numPoints, account=None):
+    def GetXTotals(self, numPoints, account=None, daterange=None):
         if account is None:
             transactions = self.GetTransactions()
         else:
             transactions = account.Transactions[:]
+
+        if daterange:
+            start, end = daterange
+
 
         return plotalgo.get(transactions, numPoints)
 
@@ -502,7 +506,6 @@ class Transaction(object):
         This exists to make it easy to compare linked transactions in __eq__, where it needs to be done based on ID
         so we don't recurse forever in comparisons.
         """
-        print self.LinkedTransaction
         if self.LinkedTransaction:
             return self.LinkedTransaction.ID
         else:
