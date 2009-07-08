@@ -22,16 +22,16 @@ import testbase, bankobjects
 import unittest, datetime
 from plotalgo import get
 
+# Set up some constants / shortcuts
+today = datetime.date.today()
+one = datetime.timedelta(1)
 def makeTransaction(date, amount):
     """A tiny wrapper to make tests below shorter."""
     return bankobjects.Transaction(None, None, amount, "", date)
-
 T = makeTransaction
-today = datetime.date.today()
-one = datetime.timedelta(1)
 
 
-class SummaryTests(unittest.TestCase):
+class SummaryTests(testbase.TestCaseWithController):
     def testGetTenPointsWithNoTransactions(self):
         result = get([], 10)
         self.assertEqual(result[0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
