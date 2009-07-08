@@ -27,7 +27,7 @@ one = datetime.timedelta(1)
 
 
 class SummaryTests(testbase.TestCaseWithController):
-    def get(self, transactionsData, numPoints):
+    def get(self, transactionsData, *args):
         # Remove all existing accounts, it is assumed that none exist
         for account in self.Model.Accounts:
             self.Model.RemoveAccount(account.Name)
@@ -36,7 +36,7 @@ class SummaryTests(testbase.TestCaseWithController):
         for (date, amount) in transactionsData:
             a.AddTransaction(amount=amount, date=date)
 
-        return self.Model.GetXTotals(numPoints)
+        return self.Model.GetXTotals(*args)
 
     def testGetTenPointsWithNoTransactions(self):
         result = self.get([], 10)
@@ -70,7 +70,24 @@ class SummaryTests(testbase.TestCaseWithController):
         self.assertEqual(self.get([(today-one*9, 1), (today, 2)], 10)[0], [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 3.0])
         self.assertEqual(self.get([(today, 1), (today+one*2, 2), (today+one*9, 3)], 10)[0], [1.0, 1.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 6.0])
 
+    def testGetPointsWithRange(self):
+        daterange = (today+one, today+one*2)
+        points, start, dpp = self.get([(today, 3), (today+one, 5), (today+one*2, 7), (today+one*3, 11)], 2, None, daterange)
+        self.assertEqual(points, [5.0, 12.0])
+        self.assertEqual(start, today+one)
+        self.assertEqual(dpp, 0.5)
 
+    def testGetPointsWithRangeNoTransactions(self):
+        result = self.get([], 10, None, (today-one, today+one))
+        self.assertEqual(result[0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+        self.assertEqual(result[1], datetime.date.today())
+        # Make sure it is close to zero but not zero.
+        self.assertNotEqual(result[2], 0)
+        self.assertAlmostEqual(result[2], 0)
+
+    def testRaisesExceptionOnInvalidDateRange(self):
+        self.assertRaises(bankobjects.InvalidDateRangeException, lambda: self.get([(today, 1)], 1, None, (today-one, today)))
+        self.assertRaises(bankobjects.InvalidDateRangeException, lambda: self.get([(today, 1)], 10, None, (today, today+one)))
 
 if __name__ == "__main__":
     unittest.main()
