@@ -48,7 +48,7 @@ class BankModel(object):
 
         if daterange:
             start, end = daterange
-
+            #TODO: crop transactions based on start, end
 
         return plotalgo.get(transactions, numPoints)
 

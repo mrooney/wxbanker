@@ -20,20 +20,26 @@
 
 import testbase, bankobjects
 import unittest, datetime
-from plotalgo import get
 
 # Set up some constants / shortcuts
 today = datetime.date.today()
 one = datetime.timedelta(1)
-def makeTransaction(date, amount):
-    """A tiny wrapper to make tests below shorter."""
-    return bankobjects.Transaction(None, None, amount, "", date)
-T = makeTransaction
 
 
 class SummaryTests(testbase.TestCaseWithController):
+    def get(self, transactionsData, numPoints):
+        # Remove all existing accounts, it is assumed that none exist
+        for account in self.Model.Accounts:
+            self.Model.RemoveAccount(account.Name)
+
+        a = self.Model.CreateAccount("A")
+        for (date, amount) in transactionsData:
+            a.AddTransaction(amount=amount, date=date)
+
+        return self.Model.GetXTotals(numPoints)
+
     def testGetTenPointsWithNoTransactions(self):
-        result = get([], 10)
+        result = self.get([], 10)
         self.assertEqual(result[0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
         self.assertEqual(result[1], datetime.date.today())
         # Make sure it is close to zero but not zero.
@@ -41,28 +47,28 @@ class SummaryTests(testbase.TestCaseWithController):
         self.assertAlmostEqual(result[2], 0)
 
     def testGetPointsWithOneTransaction(self):
-        result = get([T("2008/1/6", 1)], 3)
+        result = self.get([("2008/1/6", 1)], 3)
         self.assertEqual(result[0], [1.0, 1.0, 1.0])
 
-        result = get([T(today, 1)], 2)
+        result = self.get([(today, 1)], 2)
         self.assertEqual(result[0], [1.0, 1.0])
         self.assertEqual(result[1], today)
         self.assertNotEqual(result[2], 0)
 
     def testGetOnePointWithTwoTransactionsYesterdayAndToday(self):
-        result = get([T(today-one, 1), T(today, 2)], 1)
+        result = self.get([(today-one, 1), (today, 2)], 1)
         self.assertEqual(result[0], [3.0])
         self.assertEqual(result[1], today - one)
         self.assertEqual(result[2], 1.0)
 
     def testGetPointsWithTwoSequentialDays(self):
-        self.assertEqual(get([T(today-one, 1), T(today, 2)], 4)[0], [1.0, 1.0, 1.0, 3.0])
-        self.assertEqual(get([T(today, 1), T(today+one, 2)], 2)[0], [1.0, 3.0])
-        self.assertEqual(get([T(today, 1), T(today+one, 2)], 3)[0], [1.0, 1.0, 3.0])
+        self.assertEqual(self.get([(today-one, 1), (today, 2)], 4)[0], [1.0, 1.0, 1.0, 3.0])
+        self.assertEqual(self.get([(today, 1), (today+one, 2)], 2)[0], [1.0, 3.0])
+        self.assertEqual(self.get([(today, 1), (today+one, 2)], 3)[0], [1.0, 1.0, 3.0])
 
     def testGetPointsWithNonSequentialDays(self):
-        self.assertEqual(get([T(today-one*9, 1), T(today, 2)], 10)[0], [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 3.0])
-        self.assertEqual(get([T(today, 1), T(today+one*2, 2), T(today+one*9, 3)], 10)[0], [1.0, 1.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 6.0])
+        self.assertEqual(self.get([(today-one*9, 1), (today, 2)], 10)[0], [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 3.0])
+        self.assertEqual(self.get([(today, 1), (today+one*2, 2), (today+one*9, 3)], 10)[0], [1.0, 1.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 6.0])
 
 
 
