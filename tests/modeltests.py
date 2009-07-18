@@ -290,11 +290,14 @@ class ModelTests(unittest.TestCase):
     def testTransfersAreLinked(self):
         a, b, atrans, btrans = self.createLinkedTransfers()
 
-        self.assertTrue(atrans.Parent == a)
-        self.assertTrue(btrans.Parent == b)
+        self.assertEqual(atrans.Parent, a)
+        self.assertEqual(btrans.Parent, b)
 
-        self.assertTrue(atrans.LinkedTransaction == btrans)
-        self.assertTrue(btrans.LinkedTransaction == atrans)
+        self.assertEqual(atrans.LinkedTransaction, btrans)
+        self.assertEqual(btrans.LinkedTransaction, atrans)
+
+        self.assertEqual(a.Transactions, [atrans])
+        self.assertEqual(b.Transactions, [btrans])
 
     def testLinkedTransferIsStored(self):
         a, b, atrans, btrans = self.createLinkedTransfers()
