@@ -507,6 +507,9 @@ class Transaction(object):
     def SetLinkedTransaction(self, transaction):
         self._LinkedTransaction = transaction
 
+        if not self.IsFrozen:
+            Publisher.sendMessage("transaction.updated.link", (self, None))
+
     def GetLinkedTransactionID(self):
         """
         This exists to make it easy to compare linked transactions in __eq__, where it needs to be done based on ID

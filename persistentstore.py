@@ -24,12 +24,12 @@ Table: accounts                                v2                 v3
 | 1                      | "My Account"      | 0                | 0             |
 +---------------------------------------------------------------+---------------+
 
-Table: transactions
-+-------------------------------------------------------------------------------------------------------+
-| id INTEGER PRIMARY KEY | accountId INTEGER | amount FLOAT | description VARCHAR(255) | date CHAR(10)) |
-|------------------------+-------------------+--------------+--------------------------+----------------|
-| 1                      | 1                 | 100.00       | "Initial Balance"        | "2007/01/06"   |
-+-------------------------------------------------------------------------------------------------------+
+Table: transactions                                                                                       v4
++-------------------------------------------------------------------------------------------------------+----------------+
+| id INTEGER PRIMARY KEY | accountId INTEGER | amount FLOAT | description VARCHAR(255) | date CHAR(10)) | linkId INTEGER |
+|------------------------+-------------------+--------------+--------------------------+----------------|----------------|
+| 1                      | 1                 | 100.00       | "Initial Balance"        | "2007/01/06"   | null           |
++-------------------------------------------------------------------------------------------------------+----------------+
 """
 import sys, os, datetime
 import bankobjects, currencies, debug
@@ -44,7 +44,7 @@ class PersistentStore:
     back the changes.
     """
     def __init__(self, path, autoSave=True):
-        self.Version = 3
+        self.Version = 4
         self.Path = path
         self.AutoSave = autoSave
         self.Dirty = False
@@ -125,7 +125,7 @@ class PersistentStore:
 
     def MakeTransaction(self, account, transaction):
         cursor = self.dbconn.cursor()
-        cursor.execute('INSERT INTO transactions VALUES (null, ?, ?, ?, ?)', (account.ID, transaction.Amount, transaction.Description, transaction.Date))
+        cursor.execute('INSERT INTO transactions VALUES (null, ?, ?, ?, ?, ?)', [account.ID] + self.transaction2result(transaction)[1:])
         self.commitIfAppropriate()
         transaction.ID = cursor.lastrowid
         return transaction
@@ -176,10 +176,10 @@ class PersistentStore:
         cursor = connection.cursor()
 
         cursor.execute('CREATE TABLE accounts (id INTEGER PRIMARY KEY, name VARCHAR(255), currency INTEGER, balance FLOAT)')
-        cursor.execute('CREATE TABLE transactions (id INTEGER PRIMARY KEY, accountId INTEGER, amount FLOAT, description VARCHAR(255), date CHAR(10))')
+        cursor.execute('CREATE TABLE transactions (id INTEGER PRIMARY KEY, accountId INTEGER, amount FLOAT, description VARCHAR(255), date CHAR(10), linkId INTEGER)')
 
         cursor.execute('CREATE TABLE meta (id INTEGER PRIMARY KEY, name VARCHAR(255), value VARCHAR(255))')
-        cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('VERSION', '3'))
+        cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('VERSION', '4'))
 
         return connection
 
@@ -213,6 +213,8 @@ class PersistentStore:
 
         debug.debug('Upgrading db from %i' % fromVer)
         cursor = self.dbconn.cursor()
+        metaVer = None
+
         if fromVer == 1:
             # Add `currency` column to the accounts table with default value 0.
             cursor.execute('ALTER TABLE accounts ADD currency INTEGER not null DEFAULT 0')
@@ -224,9 +226,17 @@ class PersistentStore:
             cursor.execute('ALTER TABLE accounts ADD balance FLOAT not null DEFAULT 0.0')
             self.syncBalances()
             # Update the meta version number.
-            cursor.execute('UPDATE meta SET value=? WHERE name=?', (3, "VERSION"))
+            metaVer = 3
+        elif fromVer == 3:
+            # Add `linkId` column to transactions for transfers.
+            cursor.execute('ALTER TABLE transactions ADD linkId INTEGER')
+            metaVer = 4
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
+
+        # Update the meta version if appropriate.
+        if metaVer:
+            cursor.execute('UPDATE meta SET value=? WHERE name=?', (metaVer, "VERSION"))
 
         self.commitIfAppropriate()
 
@@ -243,7 +253,7 @@ class PersistentStore:
         a transaction into this model's specific one.
         """
         dateStr = "%s/%s/%s"%(transObj.Date.year, str(transObj.Date.month).zfill(2), str(transObj.Date.day).zfill(2))
-        return [transObj.ID, transObj.Amount, transObj.Description, dateStr]
+        return [transObj.ID, transObj.Amount, transObj.Description, dateStr, transObj.GetLinkedTransactionID()]
 
     def result2account(self, result):
         ID, name, currency, balance = result
@@ -259,14 +269,16 @@ class PersistentStore:
     def getTransactionsFrom(self, account):
         transactions = bankobjects.TransactionList()
         for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (account.ID,)).fetchall():
-            tid, pid, amount, description, date = result
-            transactions.append(bankobjects.Transaction(tid, account, amount, description, date))
+            tid, pid, amount, description, date, link = result
+            t = bankobjects.Transaction(tid, account, amount, description, date)
+            t.LinkedTransaction = link
+            transactions.append(t)
         return transactions
 
     def updateTransaction(self, transObj):
         result = self.transaction2result(transObj)
         result.append( result.pop(0) ) # Move the uid to the back as it is last in the args below.
-        self.dbconn.cursor().execute('UPDATE transactions SET amount=?, description=?, date=? WHERE id=?', result)
+        self.dbconn.cursor().execute('UPDATE transactions SET amount=?, description=?, date=?, linkId=? WHERE id=?', result)
         self.commitIfAppropriate()
 
     def renameAccount(self, oldName, account):
