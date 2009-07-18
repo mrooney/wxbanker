@@ -240,7 +240,9 @@ class Account(object):
                 # Iterate over this first (and thus once) since it is probably larger than _pre.
                 for i, newT in enumerate(self._Transactions):
                     for oldT in self._preTransactions:
-                        if oldT == newT:
+                        # Compare just IDs otherwise TDD is impossible; new attributes not yet stored
+                        # will cause the objects to not be properly replaced and break tests.
+                        if oldT.ID == newT.ID:
                             self._Transactions[i] = oldT
                             break
 
@@ -502,7 +504,7 @@ class Transaction(object):
         This exists to make it easy to compare linked transactions in __eq__, where it needs to be done based on ID
         so we don't recurse forever in comparisons.
         """
-        print self.LinkedTransaction
+        #print self.LinkedTransaction
         if self.LinkedTransaction:
             return self.LinkedTransaction.ID
         else:
