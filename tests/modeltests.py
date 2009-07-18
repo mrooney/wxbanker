@@ -301,7 +301,24 @@ class ModelTests(unittest.TestCase):
         model1 = self.Controller.Model
 
         model2 = model1.Store.GetModel(useCached=False)
-        self.assertFalse(model1 == model2)
+        self.assertTrue(model1 == model2)
+
+    def testDeletingTransferDeletesBoth(self):
+        a, b, atrans, btrans = self.createLinkedTransfers()
+        model = self.Controller.Model
+
+        self.assertEqual(len(model.Accounts), 2)
+        self.assertEqual(model.GetTransactions(), [atrans, btrans])
+        self.assertEqual(model.Balance, 0)
+        self.assertEqual(len(a.Transactions), 1)
+        self.assertEqual(len(b.Transactions), 1)
+
+        a.RemoveTransaction(atrans)
+
+        self.assertEqual(len(a.Transactions), 0)
+        self.assertEqual(len(b.Transactions), 0)
+        self.assertEqual(model.GetTransactions(), [])
+        self.assertEqual(model.Balance, 0)
 
     def tearDown(self):
         self.Controller.Close()

@@ -330,6 +330,14 @@ class Account(object):
             if transaction not in self.Transactions:
                 raise bankexceptions.InvalidTransactionException("Transaction does not exist in account '%s'" % self.Name)
 
+            # If this transaction was a transfer, delete the other transaction as well.
+            if transaction.LinkedTransaction:
+                link = transaction.LinkedTransaction
+                # Kill the other transaction's link to this one, otherwise this is quite recursive.
+                link.LinkedTransaction = None
+                link.Remove()
+
+            # Now remove this transaction.
             self.Store.RemoveTransaction(transaction)
             transaction.Parent = None
             self.Transactions.remove(transaction)
@@ -509,6 +517,9 @@ class Transaction(object):
             return self.LinkedTransaction.ID
         else:
             return None
+
+    def Remove(self):
+        return self.Parent.RemoveTransaction(self)
 
     def __str__(self):
         return "%i/%i/%i: %s -- %.2f" % (self.Date.year, self.Date.month, self.Date.day, self.Description, self.Amount)
