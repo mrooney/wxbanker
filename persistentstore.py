@@ -266,14 +266,29 @@ class PersistentStore:
         self.dbconn.cursor().execute('DELETE FROM transactions WHERE accountId=?', (account.ID,))
         self.commitIfAppropriate()
 
+    def result2transaction(self, result, linkedTransaction=None):
+        tid, pid, amount, description, date, linkId = result
+        t = bankobjects.Transaction(tid, pid, amount, description, date)
+
+        # Handle linked transactions.
+        if linkedTransaction:
+            t.LinkedTransaction = linkedTransaction
+        elif linkId:
+            t.LinkedTransaction = self.getTransactionById(linkId, linked=t)
+
+        return t
+
     def getTransactionsFrom(self, account):
         transactions = bankobjects.TransactionList()
         for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (account.ID,)).fetchall():
-            tid, pid, amount, description, date, link = result
-            t = bankobjects.Transaction(tid, account, amount, description, date)
-            t.LinkedTransaction = link
+            t = self.result2transaction(result)
             transactions.append(t)
         return transactions
+
+    def getTransactionById(self, id, linked=None):
+        result = self.dbconn.cursor().execute('SELECT * FROM transactions WHERE id=? LIMIT 1', (id,)).fetchone()
+        transaction = self.result2transaction(result, linkedTransaction=linked)
+        return transaction
 
     def updateTransaction(self, transObj):
         result = self.transaction2result(transObj)
