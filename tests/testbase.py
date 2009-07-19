@@ -31,4 +31,26 @@ sys.path.insert(0, testdir)
 sys.path.insert(0, rootdir)
 
 # Import wxbanker here so wx gets initialized first, so wxversion calls work properly.
-import wxbanker
+import wxbanker, controller, unittest
+from wx.lib.pubsub import Publisher
+
+class TestCaseWithController(unittest.TestCase):
+    def setUp(self):
+        Publisher.unsubAll()
+        self.ConfigPath = os.path.expanduser("~/.wxBanker")
+        self.ConfigPathBackup = self.ConfigPath + ".backup"
+        if os.path.exists("test.db"):
+            os.remove("test.db")
+        if os.path.exists(self.ConfigPath):
+            os.rename(self.ConfigPath, self.ConfigPathBackup)
+
+        self.Controller = controller.Controller("test.db")
+        self.Model = self.Controller.Model
+
+    def tearDown(self):
+        self.Controller.Close()
+        if os.path.exists("test.db"):
+            os.remove("test.db")
+        if os.path.exists(self.ConfigPathBackup):
+            os.rename(self.ConfigPathBackup, self.ConfigPath)
+        Publisher.unsubAll()

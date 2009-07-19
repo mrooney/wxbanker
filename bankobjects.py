@@ -20,7 +20,10 @@
 
 from wx.lib.pubsub import Publisher
 import datetime, re
-import bankexceptions, currencies, plotalgo, localization, debug
+import bankexceptions, currencies, localization, debug
+
+
+class InvalidDateRangeException(Exception): pass
 
 
 class BankModel(object):
@@ -40,13 +43,63 @@ class BankModel(object):
 
         return transactions
 
-    def GetXTotals(self, numPoints, account=None):
+    def GetXTotals(self, numPoints, account=None, daterange=None):
+        """
+        Get totals every so many days, optionally within a specific account
+        and/or date range. This is particularly useful when we want to
+        graph a summary of account balances.
+        """
         if account is None:
             transactions = self.GetTransactions()
         else:
             transactions = account.Transactions[:]
+        transactions = list(sorted(transactions))
 
-        return plotalgo.get(transactions, numPoints)
+        # Don't ever return 0 as the dpp, you can't graph without SOME x delta.
+        smallDelta = 1.0/2**32
+
+        # If there aren't any transactions, return 0 for every point and start at today.
+        if transactions == []:
+            return [0] * 10, datetime.date.today(), smallDelta
+
+        # Crop transactions around the date range, if supplied.
+        if daterange:
+            start, end = daterange
+            if start < transactions[0].Date or end > transactions[-1].Date:
+                raise InvalidDateRangeException("Dates must be within the first and last transaction dates.")
+
+            starti, endi = 0, -1
+            for i, t in enumerate(transactions):
+                if not starti and t.Date >= start:
+                    starti = i
+                if t.Date > end:
+                    endi = i
+                    break
+            transactions = transactions[starti:endi]
+
+        # Figure out the actual start and end dates we end up with.
+        startDate, endDate = transactions[0].Date, transactions[-1].Date
+        today = datetime.date.today()
+        # If the last transaction was before today, we still want to graph until today.
+        if today > endDate:
+            endDate = today
+
+        # Figure out the fraction of a day that exists between each point.
+        distance = (endDate - startDate).days
+        daysPerPoint = 1.0 * distance / numPoints
+        dppDelta = datetime.timedelta(daysPerPoint)
+
+        # Generate all the points.
+        points = [0.0]
+        tindex = 0
+        for i in range(numPoints):
+            while tindex < len(transactions) and transactions[tindex].Date <= startDate + (dppDelta * (i+1)):
+                points[i] += transactions[tindex].Amount
+                tindex += 1
+
+            points.append(points[-1])
+
+        return points[:-1], startDate, daysPerPoint or smallDelta
 
     def CreateAccount(self, accountName):
         return self.Accounts.Create(accountName)
@@ -514,7 +567,6 @@ class Transaction(object):
         This exists to make it easy to compare linked transactions in __eq__, where it needs to be done based on ID
         so we don't recurse forever in comparisons.
         """
-        #print self.LinkedTransaction
         if self.LinkedTransaction:
             return self.LinkedTransaction.ID
         else:
