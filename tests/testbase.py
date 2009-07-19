@@ -20,13 +20,10 @@
 
 import os, sys
 
-# make sure path contains both the test dir and its parent (wxbanker root dir)
-# we must insert since if wxbanker is installed on the system this would
-# otherwise pull in that package first.
-
+# Make sure path contains both the test dir and its parent (wxbanker root dir).
 testdir = os.path.dirname(__file__)
 rootdir = os.path.dirname(testdir)
-
+# We must insert since if wxbanker is installed on the system this would otherwise pull in that package first.
 sys.path.insert(0, testdir)
 sys.path.insert(0, rootdir)
 
@@ -35,13 +32,11 @@ import wxbanker, controller, unittest
 from wx.lib.pubsub import Publisher
 
 class TestCaseWithController(unittest.TestCase):
-    def createLinkedTransfers(self):
-        a = self.Model.CreateAccount("A")
-        b = self.Model.CreateAccount("B")
-        atrans, btrans = a.AddTransaction(1, "test", None, source=b)
-
-        return a, b, atrans, btrans
-    
+    """
+    This is an abstract test case which handles setting up a database
+    (by default in memory) with a controller and model. It also
+    makes sure not to stomp over an existing config file.
+    """
     def setUp(self, path=":memory:"):
         Publisher.unsubAll()
         self.ConfigPath = os.path.expanduser("~/.wxBanker")
@@ -55,8 +50,18 @@ class TestCaseWithController(unittest.TestCase):
         self.Controller.Close()
         os.rename(self.ConfigPathBackup, self.ConfigPath)
         Publisher.unsubAll()
+        
+    def createLinkedTransfers(self):
+        a = self.Model.CreateAccount("A")
+        b = self.Model.CreateAccount("B")
+        atrans, btrans = a.AddTransaction(1, "test", None, source=b)
+        return a, b, atrans, btrans
 
 class TestCaseWithControllerOnDisk(TestCaseWithController):
+    """
+    An extension of TestCaseWithController which puts the db
+    on disk and handles clean up of it.
+    """
     DBFILE = "test.db"
     
     def removeTestDbIfExists(self):

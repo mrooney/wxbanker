@@ -23,6 +23,10 @@ import controller, unittest
 from wx.lib.pubsub import Publisher
 
 class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
+    """
+    These are tests which require an actual database on disk.
+    Thankfully using PRAGMA synchronous=off makes these still very quick.
+    """
     def testAutoSaveDisabledSimple(self):
         self.Controller.AutoSave = False
         self.assertFalse( self.Controller.AutoSave )
