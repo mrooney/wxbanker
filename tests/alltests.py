@@ -28,9 +28,7 @@ doctests = ["../"+f for f in ("currencies.py", "bankobjects.py", "controller.py"
 modules = [m.replace(".py", "") for m in files]
 
 def main():
-    if "--hudson" in sys.argv:
-        # Hudson can't run the UI tests since it is headless.
-        modules.remove("guitests")
+    if "--xml" in sys.argv:
         import xmlrunner
         runner = xmlrunner.XMLTestRunner(filename="pyunit.xml")
     else:
