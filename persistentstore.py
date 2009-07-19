@@ -50,6 +50,7 @@ class PersistentStore:
         self.Dirty = False
         self.BatchDepth = 0
         self.cachedModel = None
+        existed = False
 
         if not os.path.exists(self.Path):
             debug.debug('Initializing', self.Path)
@@ -57,12 +58,14 @@ class PersistentStore:
         else:
             debug.debug('Loading', self.Path)
             connection = sqlite.connect(self.Path)
+            existed = True
         self.dbconn = connection
 
         self.Meta = self.getMeta()
         debug.debug(self.Meta)
         while self.Meta['VERSION'] < self.Version:
-            self.upgradeDb(self.Meta['VERSION'])
+            # If we are creating a new db, we don't need to backup each iteration.
+            self.upgradeDb(self.Meta['VERSION'], backup=existed)
             self.Meta = self.getMeta()
             debug.debug(self.Meta)
 
@@ -198,17 +201,18 @@ class PersistentStore:
 
         return meta
 
-    def upgradeDb(self, fromVer):
-        # Make a backup
-        source = self.Path
-        dest = self.Path + ".backup-v%i-%s" % (fromVer, datetime.date.today().strftime("%Y-%m-%d"))
-        debug.debug("Making backup to %s" % dest)
-        import shutil
-        try:
-            shutil.copyfile(source, dest)
-        except IOError:
-            import traceback; traceback.print_exc()
-            raise Exception("Unable to make backup before proceeding with database upgrade...bailing.")
+    def upgradeDb(self, fromVer, backup=True):
+        if backup:
+            # Make a backup
+            source = self.Path
+            dest = self.Path + ".backup-v%i-%s" % (fromVer, datetime.date.today().strftime("%Y-%m-%d"))
+            debug.debug("Making backup to %s" % dest)
+            import shutil
+            try:
+                shutil.copyfile(source, dest)
+            except IOError:
+                import traceback; traceback.print_exc()
+                raise Exception("Unable to make backup before proceeding with database upgrade...bailing.")
 
         debug.debug('Upgrading db from %i' % fromVer)
         cursor = self.dbconn.cursor()

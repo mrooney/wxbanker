@@ -93,7 +93,7 @@ class ModelTests(unittest.TestCase):
 
     def testBlankModelsAreEqual(self):
         model1 = self.Controller.Model
-        model2 = self.Controller.LoadPath("test.db")
+        model2 = self.Controller.LoadPath(":memory:")
         self.assertEqual(model1, model2)
 
     def testAutoSaveDisabledSimple(self):
