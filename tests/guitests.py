@@ -19,7 +19,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import testbase, wxbanker, controller, unittest
-import os
+import os, wx
 from wx.lib.pubsub import Publisher
 
 class GUITests(testbase.TestCaseHandlingConfig):
@@ -39,7 +39,11 @@ class GUITests(testbase.TestCaseHandlingConfig):
         self.App.Controller.Model.CreateAccount(u"Lópezहिंदी")
         # Make sure the account ctrl has the first (0th) selection.
         self.assertEqual(0, self.Frame.managePanel.accountCtrl.currentIndex)
+        # Mock out the account removal dialog in-place to just return "Yes"
+        self.Frame.managePanel.accountCtrl.showModal = lambda *args, **kwargs: wx.ID_YES
+        # Now remove the account and make sure there is no selection.
         self.Frame.managePanel.accountCtrl.onRemoveButton(None)
+        self.assertEqual(None, self.Frame.managePanel.accountCtrl.currentIndex)
 
     def testCanAddTransaction(self):
         model = self.App.Controller.Model
