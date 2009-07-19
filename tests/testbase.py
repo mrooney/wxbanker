@@ -37,19 +37,25 @@ class TestCaseWithController(unittest.TestCase):
     (by default in memory) with a controller and model. It also
     makes sure not to stomp over an existing config file.
     """
-    def setUp(self, path=":memory:"):
-        Publisher.unsubAll()
+    UNSUBSCRIBE = True
+    def setUp(self, path=":memory:", unsubscribe=True):
+        if self.UNSUBSCRIBE:
+            Publisher.unsubAll()
+        
         self.ConfigPath = os.path.expanduser("~/.wxBanker")
         self.ConfigPathBackup = self.ConfigPath + ".backup"
         if os.path.exists(self.ConfigPath):
             os.rename(self.ConfigPath, self.ConfigPathBackup)
-        self.Controller = controller.Controller(path)
-        self.Model = self.Controller.Model
+            
+        if self.UNSUBSCRIBE:
+            self.Controller = controller.Controller(path)
+            self.Model = self.Controller.Model
         
     def tearDown(self):
-        self.Controller.Close()
+        if self.UNSUBSCRIBE:
+            self.Controller.Close()
         os.rename(self.ConfigPathBackup, self.ConfigPath)
-        Publisher.unsubAll()
+        if self.UNSUBSCRIBE: Publisher.unsubAll()
         
     def createLinkedTransfers(self):
         a = self.Model.CreateAccount("A")

@@ -22,16 +22,11 @@ import testbase, wxbanker, controller, unittest
 import os
 from wx.lib.pubsub import Publisher
 
-class GUITests(unittest.TestCase):
+class GUITests(testbase.TestCaseWithController):
+    UNSUBSCRIBE = False # The UI needs subscriptions!
     def setUp(self):
-        self.ConfigPath = os.path.expanduser("~/.wxBanker")
-        self.ConfigPathBackup = self.ConfigPath + ".backup"
-        if os.path.exists("test.db"):
-            os.remove("test.db")
-        if os.path.exists(self.ConfigPath):
-            os.rename(self.ConfigPath, self.ConfigPathBackup)
-
-        self.App = wxbanker.init("test.db", welcome=False)
+        testbase.TestCaseWithController.setUp(self)
+        self.App = wxbanker.init(":memory:", welcome=False)
         self.Frame = self.App.TopWindow
 
     def testAutoSaveSetAndSaveDisabled(self):
@@ -60,13 +55,6 @@ class GUITests(unittest.TestCase):
 
         self.assertEquals(len(a.Transactions), 1)
         self.assertEquals(a.Balance, 12.34)
-
-
-    def tearDown(self):
-        if os.path.exists("test.db"):
-            os.remove("test.db")
-        if os.path.exists(self.ConfigPathBackup):
-            os.rename(self.ConfigPathBackup, self.ConfigPath)
 
 if __name__ == "__main__":
     unittest.main()
