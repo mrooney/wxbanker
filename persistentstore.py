@@ -44,7 +44,7 @@ class PersistentStore:
     back the changes.
     """
     def __init__(self, path, autoSave=True):
-        self.Version = 4
+        self.Version = 5
         self.Path = path
         self.AutoSave = autoSave
         self.Dirty = False
@@ -231,6 +231,12 @@ class PersistentStore:
             # Add `linkId` column to transactions for transfers.
             cursor.execute('ALTER TABLE transactions ADD linkId INTEGER')
             metaVer = 4
+        elif fromVer == 4:
+            # Add recurring transactions table.
+            transactionBase = "id INTEGER PRIMARY KEY, accountId INTEGER, amount FLOAT, description VARCHAR(255), date CHAR(10)"
+            recurringExtra = "repeatType INTEGER, repeatEvery INTEGER, repeatsOn VARCHAR(255), endDate CHAR(10)"
+            cursor.execute('CREATE TABLE recurring_transactions (%s, %s)' % (transactionBase, recurringExtra))
+            metaVer = 5
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
 
