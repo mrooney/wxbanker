@@ -103,7 +103,6 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         self.assertEqual(model1, model3)
         self.assertNotEqual(model2, model3)
         
-
     def testModelIsNotCached(self):
         # If this test fails, test*IsStored tests will pass but are no longer testing for regressions!
         model1 = self.Controller.Model

@@ -44,22 +44,30 @@ class PersistentStore:
     back the changes.
     """
     def __init__(self, path, autoSave=True):
+        self.Subscriptions = []
         self.Version = 5
         self.Path = path
         self.AutoSave = False
         self.Dirty = False
         self.BatchDepth = 0
         self.cachedModel = None
-        existed = False
-
+        existed = True
+        
+        # See if the path already exists to decide what to do.
         if not os.path.exists(self.Path):
+            existed = False
+            
+        # Initialize the connection and optimize it.
+        connection = sqlite.connect(self.Path)
+        connection.execute("PRAGMA synchronous=OFF;")
+        self.dbconn = connection
+        
+        # If the db doesn't exist, initialize it.
+        if not existed:
             debug.debug('Initializing', self.Path)
-            connection = self.initialize()
+            self.initialize()
         else:
             debug.debug('Loading', self.Path)
-            connection = sqlite.connect(self.Path)
-            existed = True
-        self.dbconn = connection
 
         self.Meta = self.getMeta()
         debug.debug(self.Meta)
@@ -83,8 +91,6 @@ class PersistentStore:
         for callback, topic in self.Subscriptions:
             Publisher.subscribe(callback, topic)
             
-        
-
     def GetModel(self, useCached=True):
         if self.cachedModel is None or not useCached:
             debug.debug('Creating model...')
@@ -174,16 +180,13 @@ class PersistentStore:
             self.Dirty = True
 
     def initialize(self):
-        connection = sqlite.connect(self.Path)
-        cursor = connection.cursor()
+        cursor = self.dbconn.cursor()
 
         cursor.execute('CREATE TABLE accounts (id INTEGER PRIMARY KEY, name VARCHAR(255), currency INTEGER)')
         cursor.execute('CREATE TABLE transactions (id INTEGER PRIMARY KEY, accountId INTEGER, amount FLOAT, description VARCHAR(255), date CHAR(10))')
 
         cursor.execute('CREATE TABLE meta (id INTEGER PRIMARY KEY, name VARCHAR(255), value VARCHAR(255))')
         cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('VERSION', '2'))
-
-        return connection
 
     def getMeta(self):
         try:
