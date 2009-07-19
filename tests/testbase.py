@@ -35,22 +35,38 @@ import wxbanker, controller, unittest
 from wx.lib.pubsub import Publisher
 
 class TestCaseWithController(unittest.TestCase):
-    def setUp(self):
+    def createLinkedTransfers(self):
+        a = self.Model.CreateAccount("A")
+        b = self.Model.CreateAccount("B")
+        atrans, btrans = a.AddTransaction(1, "test", None, source=b)
+
+        return a, b, atrans, btrans
+    
+    def setUp(self, path=":memory:"):
         Publisher.unsubAll()
         self.ConfigPath = os.path.expanduser("~/.wxBanker")
         self.ConfigPathBackup = self.ConfigPath + ".backup"
-        if os.path.exists("test.db"):
-            os.remove("test.db")
         if os.path.exists(self.ConfigPath):
             os.rename(self.ConfigPath, self.ConfigPathBackup)
-
-        self.Controller = controller.Controller("test.db")
+        self.Controller = controller.Controller(path)
         self.Model = self.Controller.Model
-
+        
     def tearDown(self):
         self.Controller.Close()
-        if os.path.exists("test.db"):
-            os.remove("test.db")
-        if os.path.exists(self.ConfigPathBackup):
-            os.rename(self.ConfigPathBackup, self.ConfigPath)
+        os.rename(self.ConfigPathBackup, self.ConfigPath)
         Publisher.unsubAll()
+
+class TestCaseWithControllerOnDisk(TestCaseWithController):
+    DBFILE = "test.db"
+    
+    def removeTestDbIfExists(self):
+        if os.path.exists(self.DBFILE):
+            os.remove(self.DBFILE)
+    
+    def setUp(self):
+        self.removeTestDbIfExists()
+        TestCaseWithController.setUp(self, path=self.DBFILE)
+
+    def tearDown(self):
+        TestCaseWithController.tearDown(self)
+        self.removeTestDbIfExists()

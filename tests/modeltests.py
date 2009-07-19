@@ -23,13 +23,6 @@ import controller, unittest
 from wx.lib.pubsub import Publisher
 
 class ModelTests(testbase.TestCaseWithController):
-    def createLinkedTransfers(self):
-        a = self.Model.CreateAccount("A")
-        b = self.Model.CreateAccount("B")
-        atrans, btrans = a.AddTransaction(1, "test", None, source=b)
-
-        return a, b, atrans, btrans
-
     def testRobustTransactionAmountParsing(self):
         model = self.Controller.Model
         a = model.CreateAccount("Test")
@@ -84,17 +77,6 @@ class ModelTests(testbase.TestCaseWithController):
         model2 = self.Controller.LoadPath(":memory:")
         self.assertEqual(model1, model2)
 
-    def testAutoSaveDisabledSimple(self):
-        self.Controller.AutoSave = False
-        self.assertFalse( self.Controller.AutoSave )
-
-        model1 = self.Controller.Model
-        a1 = model1.CreateAccount("Checking Account")
-
-        model2 = self.Controller.LoadPath("test.db")
-
-        self.assertNotEqual(model1, model2)
-
     def testLoadingTransactionsPreservesReferences(self):
         a = self.Model.CreateAccount("A")
         t = a.AddTransaction(1, "First")
@@ -108,52 +90,6 @@ class ModelTests(testbase.TestCaseWithController):
         # was loaded, but it should be in the list due to magic.
         t.Description = "Second"
         self.assertEqual(a.Transactions[0].Description, "Second")
-
-    def testAutoSaveDisabledComplex(self):
-        model1 = self.Controller.Model
-        a1 = model1.CreateAccount("Checking Account")
-        t1 = a1.AddTransaction(-10, "Description 1")
-
-        model2 = self.Controller.LoadPath("test.db")
-        self.assertEqual(model1, model2)
-        self.Controller.Close(model2)
-
-        self.Controller.AutoSave = False
-        t2 = a1.AddTransaction(-10, "Description 3")
-        model3 = self.Controller.LoadPath("test.db")
-        self.assertFalse(model1 is model3)
-        self.assertNotEqual(model1, model3)
-        self.Controller.Close(model3)
-
-        model1.Save()
-        model4 = self.Controller.LoadPath("test.db")
-        self.assertEqual(model1, model4)
-        self.Controller.Close(model4)
-
-        t1.Description = "Description 2"
-        model5 = self.Controller.LoadPath("test.db")
-        self.assertNotEqual(model1, model5)
-
-        model1.Save()
-        model6 = self.Controller.LoadPath("test.db")
-        self.assertEqual(model1, model6)
-
-    def testEnablingAutoSaveSaves(self):
-        self.Controller.AutoSave = False
-        self.Model.CreateAccount("A")
-
-        # The model has unsaved changes, a new one should be different.
-        model2 = self.Controller.LoadPath("test.db")
-        self.assertNotEqual(self.Model, model2)
-        self.Controller.Close(model2)
-
-        # Setting AutoSave to true should trigger a save.
-        self.Controller.AutoSave = True
-
-        # Now a newly loaded should be equal.
-        model3 = self.Controller.LoadPath("test.db")
-        self.assertEqual(self.Model, model3)
-        self.Controller.Close(model3)
 
     def testSimpleMove(self):
         model1 = self.Controller.Model
@@ -174,65 +110,6 @@ class ModelTests(testbase.TestCaseWithController):
         a = model1.CreateAccount("A")
         t1 = a.AddTransaction(-1)
         self.assertEqual(len(a.Transactions), 1)
-
-    def testSaveEventSaves(self):
-        self.Controller.AutoSave = False
-        model1 = self.Controller.Model
-
-        # Create an account, don't save.
-        self.assertEqual(len(model1.Accounts), 0)
-        model1.CreateAccount("Hello!")
-        self.assertEqual(len(model1.Accounts), 1)
-
-        # Make sure that account doesn't exist on a new model
-        model2 = self.Controller.LoadPath("test.db")
-        self.assertEqual(len(model2.Accounts), 0)
-        self.assertNotEqual(model1, model2)
-
-        # Save
-        Publisher.sendMessage("user.saved")
-
-        # Make sure it DOES exist after saving.
-        model3 = self.Controller.LoadPath("test.db")
-        self.assertEqual(len(model3.Accounts), 1)
-        self.assertEqual(model1, model3)
-        self.assertNotEqual(model2, model3)
-
-    def testModelIsNotCached(self):
-        # If this test fails, test*IsStored tests will pass but are no longer testing for regressions!
-        model1 = self.Controller.Model
-        model2 = model1.Store.GetModel(useCached=False)
-        self.assertFalse(model1 is model2)
-
-    def testRenameIsStored(self):
-        model1 = self.Controller.Model
-        a = model1.CreateAccount("A")
-        a.Name = "B"
-        model2 = model1.Store.GetModel(useCached=False)
-        self.assertEqual(model1, model2)
-
-    def testBalanceIsStored(self):
-        model1 = self.Controller.Model
-        a1 = model1.CreateAccount("A")
-        self.assertEqual(a1.Balance, 0)
-
-        a1.AddTransaction(1)
-        self.assertEqual(a1.Balance, 1)
-        model2 = model1.Store.GetModel(useCached=False)
-        a2 = model2.Accounts[0]
-        self.assertEqual(model1, model2)
-        self.assertEqual(a1.Balance, a2.Balance)
-
-    def testTransactionChangeIsStored(self):
-        model1 = self.Controller.Model
-        a1 = model1.CreateAccount("A")
-
-        t1 = a1.AddTransaction(-1.25)
-
-        t1.Description = "new"
-        t1.Amount = -1.50
-        model2 = model1.Store.GetModel(useCached=False)
-        self.assertEqual(model1, model2)
 
     def testDirtyExitWarns(self):
         """
@@ -286,13 +163,6 @@ class ModelTests(testbase.TestCaseWithController):
 
         self.assertEqual(a.Transactions, [atrans])
         self.assertEqual(b.Transactions, [btrans])
-
-    def testLinkedTransferIsStored(self):
-        a, b, atrans, btrans = self.createLinkedTransfers()
-        model1 = self.Controller.Model
-
-        model2 = model1.Store.GetModel(useCached=False)
-        self.assertTrue(model1 == model2)
 
     def testDeletingTransferDeletesBoth(self):
         a, b, atrans, btrans = self.createLinkedTransfers()
