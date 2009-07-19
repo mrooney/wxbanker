@@ -72,7 +72,6 @@ class BankModel(object):
         # Find all the matches.
         matches = []
         for trans in potentials:
-            #print unicode(trans.Description), searchString
             potentialStr = unicode((trans.Amount, trans.Description, trans.Date)[matchIndex])
             if re.findall(searchString, potentialStr, flags=reFlag):
                 matches.append(trans)
@@ -552,12 +551,11 @@ class Transaction(object):
     LinkedTransaction = property(GetLinkedTransaction, SetLinkedTransaction)
 
 class RecurringTransaction(Transaction):
-    def __init__(self, tID, parent, amount, description, date, source, repeatType, repeatEvery, repeatOn, startDate, endDate):
+    def __init__(self, tID, parent, amount, description, date, source, repeatType, repeatEvery, repeatOn, endDate):
         Transaction.__init__(self, tID, parent, amount, description, date)
         self.RepeatType = repeatType
         self.RepeatEvery = repeatEvery
         self.RepeatOn = repeatOn
-        self.StartDate = startDate
         self.EndDate = endDate
 
 if __name__ == "__main__":
