@@ -18,45 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-"""
->>> import localization
->>> usd = UnitedStatesCurrency()
->>> usd.float2str(1)
-'$1.00'
->>> usd.float2str(-2.1)
-'-$2.10'
->>> usd.float2str(-10.17)
-'-$10.17'
->>> usd.float2str(-777)
-'-$777.00'
->>> usd.float2str(12345.67)
-'$12,345.67'
->>> usd.float2str(12345)
-'$12,345.00'
->>> usd.float2str(-12345.67)
-'-$12,345.67'
->>> usd.float2str(-12345.6)
-'-$12,345.60'
->>> usd.float2str(-123456)
-'-$123,456.00'
->>> usd.float2str(1234567890)
-'$1,234,567,890.00'
->>> usd.float2str(.01)
-'$0.01'
->>> usd.float2str(.01, 8)
-'   $0.01'
->>> usd.float2str(2.1-2.2+.1) == u'$0.00' #test to ensure no negative zeroes
-True
->>> locale.setlocale(locale.LC_ALL, 'ru_RU.utf8')
-'ru_RU.utf8'
->>> LocalizedCurrency().float2str(1) == '1.00 руб'
-True
->>> bool(locale.setlocale(locale.LC_ALL, ''))
-True
-"""
-
 import localization, locale
-
 
 def createFromLocale():
     """Create a currency from the current locale."""

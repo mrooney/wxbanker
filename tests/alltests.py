@@ -19,11 +19,12 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import testbase
-import unittest, os, sys
+import unittest, doctest, os, sys
 
 # Find the modules to test.
 ignores = ('__init__.py', 'testbase.py', 'alltests.py', 'xmlrunner.py')
 files = [f for f in os.listdir(testbase.testdir) if f.endswith(".py") and f not in ignores]
+doctests = ["../"+f for f in ("currencies.py", "bankobjects.py", "controller.py", "currconvert.py")]
 modules = [m.replace(".py", "") for m in files]
 
 def main():
@@ -36,6 +37,8 @@ def main():
         runner = unittest.TextTestRunner()
 
     suite = unittest.TestLoader().loadTestsFromNames(modules)
+    #for filepath in doctests:
+    #    suite.addTest(doctest.DocFileTest(filepath))
     runner.run(suite)
 
 if __name__ == "__main__":
