@@ -19,17 +19,24 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import testbase
-import unittest, os
+import unittest, os, sys
 
 # Find the modules to test.
 ignores = ('__init__.py', 'testbase.py', 'alltests.py')
-files = (f for f in os.listdir(testbase.testdir) if f.endswith(".py") and f not in ignores)
-modules = (m.replace(".py", "") for m in files)
-
-suite = unittest.TestLoader().loadTestsFromNames(modules)
+files = [f for f in os.listdir(testbase.testdir) if f.endswith(".py") and f not in ignores]
+modules = [m.replace(".py", "") for m in files]
 
 def main():
-    unittest.TextTestRunner(verbosity=2).run(suite)
+    if "--hudson" in sys.argv:
+        # Hudson can't run the UI tests since it is headless.
+        modules.remove("guitests")
+        import xmlrunner
+        runner = xmlrunner.XMLTestRunner(filename="pyunit.xml")
+    else:
+        runner = unittest.TextTestRunner()
+
+    suite = unittest.TestLoader().loadTestsFromNames(modules)
+    runner.run(suite)
 
 if __name__ == "__main__":
     main()
