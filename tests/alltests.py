@@ -22,7 +22,7 @@ import testbase
 import unittest, os, sys
 
 # Find the modules to test.
-ignores = ('__init__.py', 'testbase.py', 'alltests.py')
+ignores = ('__init__.py', 'testbase.py', 'alltests.py', 'xmlrunner.py')
 files = [f for f in os.listdir(testbase.testdir) if f.endswith(".py") and f not in ignores]
 modules = [m.replace(".py", "") for m in files]
 
