@@ -46,16 +46,14 @@ class PersistentStore:
     def __init__(self, path, autoSave=True):
         self.Version = 5
         self.Path = path
-        self.AutoSave = autoSave
+        self.AutoSave = False
         self.Dirty = False
         self.BatchDepth = 0
         self.cachedModel = None
-        existed = True
 
         if not os.path.exists(self.Path):
             debug.debug('Initializing', self.Path)
             connection = self.initialize()
-            existed = False
         else:
             debug.debug('Loading', self.Path)
             connection = sqlite.connect(self.Path)
@@ -64,12 +62,11 @@ class PersistentStore:
         self.Meta = self.getMeta()
         debug.debug(self.Meta)
         while self.Meta['VERSION'] < self.Version:
-            if not existed:
-                raise Exception("New databases should not need an upgrade, but one was attempted!\nPlease file a bug at https://bugs.launchpad.net/wxbanker/+filebug")
             self.upgradeDb(self.Meta['VERSION'])
             self.Meta = self.getMeta()
             debug.debug(self.Meta)
 
+        self.AutoSave = autoSave
         self.commitIfAppropriate()
 
         self.Subscriptions = (
@@ -79,9 +76,11 @@ class PersistentStore:
             (self.onBatchEvent, "batch"),
             (self.onExit, "exiting"),
         )
-
+        
         for callback, topic in self.Subscriptions:
             Publisher.subscribe(callback, topic)
+            
+        
 
     def GetModel(self, useCached=True):
         if self.cachedModel is None or not useCached:
@@ -175,11 +174,11 @@ class PersistentStore:
         connection = sqlite.connect(self.Path)
         cursor = connection.cursor()
 
-        cursor.execute('CREATE TABLE accounts (id INTEGER PRIMARY KEY, name VARCHAR(255), currency INTEGER, balance FLOAT)')
-        cursor.execute('CREATE TABLE transactions (id INTEGER PRIMARY KEY, accountId INTEGER, amount FLOAT, description VARCHAR(255), date CHAR(10), linkId INTEGER)')
+        cursor.execute('CREATE TABLE accounts (id INTEGER PRIMARY KEY, name VARCHAR(255), currency INTEGER)')
+        cursor.execute('CREATE TABLE transactions (id INTEGER PRIMARY KEY, accountId INTEGER, amount FLOAT, description VARCHAR(255), date CHAR(10))')
 
         cursor.execute('CREATE TABLE meta (id INTEGER PRIMARY KEY, name VARCHAR(255), value VARCHAR(255))')
-        cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('VERSION', '4'))
+        cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('VERSION', '2'))
 
         return connection
 
