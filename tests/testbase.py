@@ -31,31 +31,34 @@ sys.path.insert(0, rootdir)
 import wxbanker, controller, unittest
 from wx.lib.pubsub import Publisher
 
-class TestCaseWithController(unittest.TestCase):
+class TestCaseHandlingConfig(unittest.TestCase):
     """
-    This is an abstract test case which handles setting up a database
-    (by default in memory) with a controller and model. It also
-    makes sure not to stomp over an existing config file.
+    Handle not stomping over the config file.
     """
-    UNSUBSCRIBE = True
-    def setUp(self, path=":memory:", unsubscribe=True):
-        if self.UNSUBSCRIBE:
-            Publisher.unsubAll()
-        
+    def setUp(self):
         self.ConfigPath = os.path.expanduser("~/.wxBanker")
         self.ConfigPathBackup = self.ConfigPath + ".backup"
         if os.path.exists(self.ConfigPath):
             os.rename(self.ConfigPath, self.ConfigPathBackup)
             
-        if self.UNSUBSCRIBE:
-            self.Controller = controller.Controller(path)
-            self.Model = self.Controller.Model
+    def tearDown(self):
+        os.rename(self.ConfigPathBackup, self.ConfigPath)
+
+class TestCaseWithController(TestCaseHandlingConfig):
+    """
+    This is an abstract test case which handles setting up a database
+    (by default in memory) with a controller and model.
+    """
+    def setUp(self, path=":memory:"):
+        TestCaseHandlingConfig.setUp(self)
+        Publisher.unsubAll()
+        self.Controller = controller.Controller(path)
+        self.Model = self.Controller.Model
         
     def tearDown(self):
-        if self.UNSUBSCRIBE:
-            self.Controller.Close()
-        os.rename(self.ConfigPathBackup, self.ConfigPath)
-        if self.UNSUBSCRIBE: Publisher.unsubAll()
+        self.Controller.Close()
+        Publisher.unsubAll()
+        TestCaseHandlingConfig.tearDown(self)
         
     def createLinkedTransfers(self):
         a = self.Model.CreateAccount("A")

@@ -22,10 +22,9 @@ import testbase, wxbanker, controller, unittest
 import os
 from wx.lib.pubsub import Publisher
 
-class GUITests(testbase.TestCaseWithController):
-    UNSUBSCRIBE = False # The UI needs subscriptions!
+class GUITests(testbase.TestCaseHandlingConfig):
     def setUp(self):
-        testbase.TestCaseWithController.setUp(self)
+        testbase.TestCaseHandlingConfig.setUp(self)
         self.App = wxbanker.init(":memory:", welcome=False)
         self.Frame = self.App.TopWindow
 
