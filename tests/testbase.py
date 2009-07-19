@@ -42,7 +42,9 @@ class TestCaseHandlingConfig(unittest.TestCase):
             os.rename(self.ConfigPath, self.ConfigPathBackup)
             
     def tearDown(self):
-        os.rename(self.ConfigPathBackup, self.ConfigPath)
+        # The backup won't exist if there wasn't an original config to back-up.
+        if os.path.exists(self.ConfigPathBackup):
+            os.rename(self.ConfigPathBackup, self.ConfigPath)
 
 class TestCaseWithController(TestCaseHandlingConfig):
     """

@@ -38,6 +38,7 @@ class LocaleTests(unittest.TestCase):
     def testLocaleCurrencyRobustness(self):
         # Test locale.format() thousand separator workaround.
         # Also calculator bug LP: #375308
+        # Depends on language-pack-(ru/fr)-base
         for loc in ['en_US.utf8', 'ru_RU.utf8', 'fr_FR.utf8']:
             self.assertEquals(locale.setlocale(locale.LC_ALL, loc), loc)
             reload(c)
