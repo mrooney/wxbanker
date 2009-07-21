@@ -20,15 +20,16 @@
 
 import localization, locale
 
-def createFromLocale():
+def createFromLocale(currencyName):
     """Create a currency from the current locale."""
     new = {}
     local = LocalizedCurrency()
     base = BaseCurrency()
+    print "class %sCurrency(BaseCurrency):\n    def __init__(self):\n        BaseCurrency.__init__(self)" % currencyName
     for key, val in local.LOCALECONV.items():
         if not base.LOCALECONV.has_key(key) or base.LOCALECONV[key] != val:
             new[key] = val
-            print "self.LOCALECONV['%s'] = %r" % (key, val)
+            print (" "*8) + "self.LOCALECONV['%s'] = %r" % (key, val)
     #print new
 
 class BaseCurrency(object):
@@ -179,6 +180,26 @@ class UkranianCurrency(BaseCurrency):
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
 
+class MexicanCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['currency_symbol'] = '$'
+        self.LOCALECONV['int_curr_symbol'] = 'MXN '
+
+class SwedishCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['mon_decimal_point'] = ','
+        self.LOCALECONV['p_sep_by_space'] = 1
+        self.LOCALECONV['thousands_sep'] = ' '
+        self.LOCALECONV['decimal_point'] = ','
+        self.LOCALECONV['int_curr_symbol'] = 'SEK '
+        self.LOCALECONV['n_cs_precedes'] = 0
+        self.LOCALECONV['mon_thousands_sep'] = ' '
+        self.LOCALECONV['currency_symbol'] = 'kr'
+        self.LOCALECONV['n_sep_by_space'] = 1
+        self.LOCALECONV['p_cs_precedes'] = 0
+
 class LocalizedCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
@@ -189,7 +210,7 @@ class LocalizedCurrency(BaseCurrency):
             self.LOCALECONV.update((k, unicode(v, _locale_encoding)) for k, v in self.LOCALECONV.iteritems() if type(v) is str)
 
 
-CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency, UkranianCurrency]
+CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency, UkranianCurrency, MexicanCurrency, SwedishCurrency]
 
 # workaround for a locale.localeconv bug http://bugs.python.org/issue1995
 # test if float2str raises exceptions, apply a workaround if it does
@@ -212,3 +233,7 @@ def GetCurrencyInt(currency):
 
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
 CurrencyStrings[0] += " [Locale]"
+
+if __name__ == "__main__":
+    import sys
+    createFromLocale(sys.argv[1])
