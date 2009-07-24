@@ -34,3 +34,9 @@ class AccountAlreadyExistsException(Exception):
         return "Account '%s' already exists."%self.account
 
 class InvalidTransactionException(Exception): pass
+
+class InvalidAccountNameException(Exception):
+        def __init__(self, account):
+                self.account = account
+        def __str__(self):
+                return "Account name '%s' is invalid."%self.account

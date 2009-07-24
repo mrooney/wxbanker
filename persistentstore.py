@@ -309,7 +309,9 @@ class PersistentStore:
         self.commitIfAppropriate()
 
     def renameAccount(self, oldName, account):
-        self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (account.Name, oldName))
+        if account.Name == "": #
+		raise Exception("Account name %s is invalid"%account.Name)
+	self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (account.Name, oldName))
         self.commitIfAppropriate()
 
     def setCurrency(self, currencyIndex):
