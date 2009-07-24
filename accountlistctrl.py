@@ -81,7 +81,7 @@ class AccountListCtrl(wx.Panel):
         buttonSizer.Add(configureButton)
 
         # Set up the "Total" sizer.
-        self.totalText = wx.StaticText(self.childPanel, label="$0.00")
+        self.totalText = wx.StaticText(self.childPanel, label=self.Model.float2str(0))
         self.totalTexts.append(self.totalText)
         miniSizer = wx.BoxSizer()
         miniSizer.Add(wx.StaticText(self.childPanel, label=_("Total")+":"))
