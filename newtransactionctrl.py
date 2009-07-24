@@ -18,6 +18,7 @@
 
 import wx, datetime
 import bankcontrols
+import gettext
 from wx.lib.pubsub import Publisher
 
 class RecurringSummaryText(wx.Panel):
@@ -180,13 +181,10 @@ class RecurringPanel(wx.Panel):
         repeatType, every, repeatsOn, end = self.GetSettings()
         summary = "Summary"
         if repeatType == 0:
-            everyText = _("days")
-            if every == 1:
-                summary = _("Daily")
-            else:
-                summary = _("Every %i days") % every
+            everyText = gettext.ngettext("day", "days",every)
+            summary = gettext.ngettext("Daily", "Every %(num)d days", every) % {'num':every} 
         elif repeatType == 1:
-            everyText = _("weeks")
+            everyText = gettext.ngettext("week", "weeks", every)
             self.repeatsOnText.Label = label=_("Repeats on days:")
             self.Sizer.Show(self.bottomSizer)
             if repeatsOn == "1,1,1,1,1,0,0":
@@ -205,17 +203,11 @@ class RecurringPanel(wx.Panel):
                 else:
                     summary = _("Weekly on %s") % ((", ".join(repeatDays[:-1])) + (_(" and %s") % repeatDays[-1]))
         elif repeatType == 2:
-            everyText = _("months")
-            if every == 1:
-                summary = _("Monthly")
-            else:
-                summary = _("Every %i months") % every
+            everyText = gettext.ngettext("month", "months", every)
+            summary = gettext.ngettext("Monthly", "Every %(num)d months", every) % {'num':every} 
         elif repeatType == 3:
-            everyText = _("years")
-            if every == 1:
-                summary = _("Annually")
-            else:
-                summary = _("Every %i years") % every
+            everyText = gettext.ngettext("year", "years", every)
+            summary = gettext.ngettext("Annually", "Every %(num)d years", every) % {'num':every} 
 
         # If the recurring ends at some point, add that information to the summary text.
         if end:
