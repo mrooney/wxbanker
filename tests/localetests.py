@@ -22,15 +22,6 @@ import testbase
 import unittest, locale, currencies as c
 
 class LocaleTests(unittest.TestCase):
-    def testCurrencyDisplay(self):
-        self.assertEquals(locale.setlocale(locale.LC_ALL, 'en_US.utf8'), 'en_US.utf8')
-        self.assertEquals(c.LocalizedCurrency().float2str(1), u'$1.00')
-        self.assertEquals(c.UnitedStatesCurrency().float2str(1), u'$1.00')
-        self.assertEquals(c.EuroCurrency().float2str(1), u'1.00 €')
-        self.assertEquals(c.GreatBritainCurrency().float2str(1), u'£1.00')
-        self.assertEquals(c.JapaneseCurrency().float2str(1), u'￥1')
-        self.assertEquals(c.RussianCurrency().float2str(1), u'1.00 руб')
-
     def testDateParsing(self):
         #INCOMPLETE
         self.assertEquals(locale.setlocale(locale.LC_ALL, 'en_US.utf8'), 'en_US.utf8')
@@ -47,6 +38,11 @@ class LocaleTests(unittest.TestCase):
             # (including the unicode conversion)
             for curr in c.CurrencyList:
                 unicode(curr().float2str(1000))
+
+    def testCommaDecimalSeparater(self):
+        loc = "fr_FR.utf8"
+        self.assertEqual(locale.setlocale(locale.LC_ALL, loc), loc)
+        self.assertEqual(c.CurrencyList[0]().float2str(1), "1,00 €")
 
 if __name__ == "__main__":
     unittest.main()

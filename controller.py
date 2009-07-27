@@ -32,8 +32,10 @@ are getting published when they should be.
 # Ensure that we have a clean, fresh bank by removing a test one
 # if it already exists.
 
->>> import os, datetime
+>>> import os, datetime, locale
 >>> if os.path.exists("test.db"): os.remove("test.db")
+>>> locale.setlocale(locale.LC_ALL, 'en_US.utf8')
+'en_US.utf8'
 >>> controller = Controller("test.db")
 >>> model = controller.Model
 >>> model.Accounts
