@@ -37,15 +37,18 @@ class CurrencyTest(unittest.TestCase):
         self.assertEqual(usd.float2str(1234567890), '$1,234,567,890.00')
         self.assertEqual(usd.float2str(.01), '$0.01')
         self.assertEqual(usd.float2str(.01, 8), '   $0.01')
-        
+
     def testNoNegativeZeroes(self):
         usd = currencies.UnitedStatesCurrency()
         self.assertEqual(usd.float2str(2.1-2.2+.1), u'$0.00')
-        
+
     def testCurrencyLocalizes(self):
         self.assertEqual(locale.setlocale(locale.LC_ALL, 'ru_RU.utf8'), 'ru_RU.utf8')
         self.assertEqual(currencies.LocalizedCurrency().float2str(1), '1.00 руб')
         self.assertTrue(bool(locale.setlocale(locale.LC_ALL, '')))
-        
+
+    def testNonDefaultSeparatorsWork(self):
+        self.assertEqual(currencies.EuroCurrency().float2str(1), "1,00 €")
+
 if __name__ == "__main__":
     unittest.main()
