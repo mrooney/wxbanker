@@ -95,7 +95,7 @@ class PersistentStore:
         if self.cachedModel is None or not useCached:
             debug.debug('Creating model...')
 
-            # Syncronize cached account balances with the actual. If this needs to be used a bug exists, file it!
+            # Synchronize cached account balances with the actual. If this needs to be used a bug exists, file it!
             if "--sync-balances" in sys.argv:
                 self.syncBalances()
 

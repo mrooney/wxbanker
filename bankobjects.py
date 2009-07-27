@@ -186,10 +186,16 @@ class AccountList(list):
                 return i
         return -1
 
-    def Create(self, accountName):
-        # First, ensure an account by that name doesn't already exist.
+    def ThrowExceptionOnInvalidName(self, accountName):
+        # First make sure we were given a name!
+        if not accountName:
+            raise bankexceptions.BlankAccountNameException
+        # Now ensure an account by that name doesn't already exist.
         if self.AccountIndex(accountName) >= 0:
             raise bankexceptions.AccountAlreadyExistsException(accountName)
+
+    def Create(self, accountName):
+        self.ThrowExceptionOnInvalidName(accountName)
 
         currency = 0
         if len(self):
@@ -228,7 +234,7 @@ class Account(object):
     def __init__(self, store, aID, name, currency=0, balance=0.0):
         self.Store = store
         self.ID = aID
-        self.Name = name
+        self._Name = name
         self._Transactions = None
         self._preTransactions = []
         self.Currency = currency
@@ -305,24 +311,10 @@ class Account(object):
         return self._Name
 
     def SetName(self, name):
-        # First make sure there IS a name.
-        if not name:
-            raise bankexceptions.BlankAccountNameException
-
-        if not hasattr(self, "_Name"):
-            # We don't have a name yet, so we don't have a parent. There's not much we can do.
-            self._Name = name
-        else:
-
-            # Now make sure an account with the new name doesn't already exist.
-            index = self.Parent.AccountIndex(name)
-            if index != -1:
-                raise bankexceptions.AccountAlreadyExistsException(name)
-
-            # Okay, it seems like everything is fine.
-            oldName = self._Name
-            self._Name = name
-            Publisher.sendMessage("account.renamed.%s"%oldName, (oldName, self))
+        self.Parent.ThrowExceptionOnInvalidName(name)
+        oldName = self._Name
+        self._Name = name
+        Publisher.sendMessage("account.renamed.%s"%oldName, (oldName, self))
 
     def Remove(self):
         self.Parent.Remove(self.Name)

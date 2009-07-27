@@ -379,6 +379,8 @@ class AccountListCtrl(wx.Panel):
             self.Model.CreateAccount(accountName)
         except bankexceptions.AccountAlreadyExistsException:
             wx.TipWindow(self, _("Sorry, an account by that name already exists."))#, maxLength=200)
+        except bankexceptions.BlankAccountNameException:
+            wx.TipWindow(self, _("Accout names cannot be blank."))
 
     def onAccountAdded(self, message):
         """
@@ -437,7 +439,7 @@ class AccountListCtrl(wx.Panel):
 
         # Re-enable the add button.
         self.addButton.Enabled = True
-        
+
     def showModal(self, message, title, style):
         return wx.MessageDialog(self, message, title, style=style).ShowModal()
 
@@ -471,8 +473,9 @@ class AccountListCtrl(wx.Panel):
         try:
             account.Name = newName
         except bankexceptions.AccountAlreadyExistsException:
-            #wx.MessageDialog(self, 'An account by that name already exists', 'Error :[', wx.OK | wx.ICON_ERROR).ShowModal()
             wx.TipWindow(self, _("Sorry, an account by that name already exists."))#, maxLength=200)
+        except bankexceptions.BlankAccountNameException:
+            wx.TipWindow(self, _("Accout names cannot be blank."))
 
     def onAccountRenamed(self, message):
         """
