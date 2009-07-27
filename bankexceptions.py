@@ -33,4 +33,8 @@ class AccountAlreadyExistsException(Exception):
     def __str__(self):
         return "Account '%s' already exists."%self.account
 
+class BlankAccountNameException(Exception):
+    def __str__(self):
+        return "Account names cannot be blank."
+
 class InvalidTransactionException(Exception): pass

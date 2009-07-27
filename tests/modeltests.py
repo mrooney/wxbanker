@@ -19,7 +19,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import testbase, os
-import controller, unittest
+import controller, unittest, bankexceptions
 from wx.lib.pubsub import Publisher
 
 class ModelTests(testbase.TestCaseWithController):
@@ -180,6 +180,17 @@ class ModelTests(testbase.TestCaseWithController):
         self.assertEqual(len(b.Transactions), 0)
         self.assertEqual(model.GetTransactions(), [])
         self.assertEqual(model.Balance, 0)
+
+    def testEmptyAccountNameInvalidForNewAccount(self):
+        self.assertRaises(bankexceptions.BlankAccountNameException, lambda: self.Controller.Model.CreateAccount(""), )
+
+    def testEmptyAccountNameInvalidForRename(self):
+        a = self.Controller.Model.CreateAccount("Test")
+
+        def blankName():
+            a.Name = ""
+
+        self.assertRaises(bankexceptions.BlankAccountNameException, blankName)
 
 if __name__ == "__main__":
     unittest.main()

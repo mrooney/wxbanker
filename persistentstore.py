@@ -52,16 +52,16 @@ class PersistentStore:
         self.BatchDepth = 0
         self.cachedModel = None
         existed = True
-        
+
         # See if the path already exists to decide what to do.
         if not os.path.exists(self.Path):
             existed = False
-            
+
         # Initialize the connection and optimize it.
         connection = sqlite.connect(self.Path)
         connection.execute("PRAGMA synchronous=OFF;")
         self.dbconn = connection
-        
+
         # If the db doesn't exist, initialize it.
         if not existed:
             debug.debug('Initializing', self.Path)
@@ -87,10 +87,10 @@ class PersistentStore:
             (self.onBatchEvent, "batch"),
             (self.onExit, "exiting"),
         )
-        
+
         for callback, topic in self.Subscriptions:
             Publisher.subscribe(callback, topic)
-            
+
     def GetModel(self, useCached=True):
         if self.cachedModel is None or not useCached:
             debug.debug('Creating model...')

@@ -228,7 +228,7 @@ class Account(object):
     def __init__(self, store, aID, name, currency=0, balance=0.0):
         self.Store = store
         self.ID = aID
-        self._Name = name
+        self.Name = name
         self._Transactions = None
         self._preTransactions = []
         self.Currency = currency
@@ -305,13 +305,24 @@ class Account(object):
         return self._Name
 
     def SetName(self, name):
-        index = self.Parent.AccountIndex(name)
-        if index != -1:
-            raise bankexceptions.AccountAlreadyExistsException(name)
+        # First make sure there IS a name.
+        if not name:
+            raise bankexceptions.BlankAccountNameException
 
-        oldName = self._Name
-        self._Name = name
-        Publisher.sendMessage("account.renamed.%s"%oldName, (oldName, self))
+        if not hasattr(self, "_Name"):
+            # We don't have a name yet, so we don't have a parent. There's not much we can do.
+            self._Name = name
+        else:
+
+            # Now make sure an account with the new name doesn't already exist.
+            index = self.Parent.AccountIndex(name)
+            if index != -1:
+                raise bankexceptions.AccountAlreadyExistsException(name)
+
+            # Okay, it seems like everything is fine.
+            oldName = self._Name
+            self._Name = name
+            Publisher.sendMessage("account.renamed.%s"%oldName, (oldName, self))
 
     def Remove(self):
         self.Parent.Remove(self.Name)
