@@ -55,65 +55,28 @@ class BaseCurrency(object):
     def GetCurrencyNick(self):
         return self.LOCALECONV["int_curr_symbol"].strip()
 
-    def float2str(self, val, just=0, symbol=True, grouping=True, international=False):
-        """
-        Formats val according to the currency settings in the current locale.
-        Taken from Python 2.5.2 source, Lib/locale.py.
-        """
+    def float2str(self, val, just=0):
+        """Formats float values as currency strings according to the currency settings in self.LOCALECONV"""
         # Don't show negative zeroes!
         if abs(val) < .001:
             val = 0
 
-        conv = self.LOCALECONV
-
-        # check for illegal values
-        digits = conv[international and 'int_frac_digits' or 'frac_digits']
-        if digits == 127:
-            raise ValueError("Currency formatting is not possible using "
-                             "the 'C' locale.")
-
-        # Temporarily override the localeconv dictionary so the format() acts as the desired locale.
-        locale._override_localeconv = conv
+        # Temporarily override the localeconv dictionary so the locale module acts as the desired locale.
+        # Wrap in a try/finally to be extra safe as it needs to be restored no matter what.
+        locale._override_localeconv = self.LOCALECONV
         try:
-            s = locale.format('%%.%if' % digits, abs(val), grouping, monetary=True)
+            s = locale.currency(val, grouping=True)
         finally:
             locale._override_localeconv = None
-        ## locale.localeconv bug http://bugs.python.org/issue1995 workaround.
+
+        # locale.localeconv bug http://bugs.python.org/issue1995 workaround.
         if _locale_encoding is not None:
             s = unicode(s, _locale_encoding)
-        # '<' and '>' are markers if the sign must be inserted between symbol and value
-        s = '<' + s + '>'
 
-        if symbol:
-            smb = conv[international and 'int_curr_symbol' or 'currency_symbol']
-            precedes = conv[val<0 and 'n_cs_precedes' or 'p_cs_precedes']
-            separated = conv[val<0 and 'n_sep_by_space' or 'p_sep_by_space']
+        # Justify as appropriate.
+        s = s.rjust(just)
 
-            if precedes:
-                s = smb + (separated and ' ' or '') + s
-            else:
-                s = s + (separated and ' ' or '') + smb
-
-        sign_pos = conv[val<0 and 'n_sign_posn' or 'p_sign_posn']
-        sign = conv[val<0 and 'negative_sign' or 'positive_sign']
-
-        if sign_pos == 0:
-            s = '(' + s + ')'
-        elif sign_pos == 1:
-            s = sign + s
-        elif sign_pos == 2:
-            s = s + sign
-        elif sign_pos == 3:
-            s = s.replace('<', sign)
-        elif sign_pos == 4:
-            s = s.replace('>', sign)
-        else:
-            # the default if nothing specified;
-            # this should be the most fitting sign position
-            s = sign + s
-
-        s = s.replace('<', '').replace('>', '').rjust(just)
-
+        # Always return unicode!
         if type(s) != unicode:
             s = s.decode("utf-8")
         return s
