@@ -101,7 +101,7 @@ datetime.date(2007, 1, 6)
 >>> len(messages)
 11
 >>> model.float2str(model.Balance)
-'$90.27'
+u'$90.27'
 
 #testRenameAccount
 >>> a.Name = "My Renamed Account"
@@ -125,7 +125,7 @@ InvalidAccountException: Invalid account 'My Account' specified.
 >>> t1.Amount == -101
 True
 >>> model.float2str(model.Balance)
-'-$111.00'
+u'-$111.00'
 >>> t1.Description = "Updated description"
 >>> len(messages)
 15
@@ -146,9 +146,9 @@ True
 
 >>> t = a2.AddTransaction(-5000.01)
 >>> a2.float2str(a2.Balance)
-'-$5,000.01'
+u'-$5,000.01'
 >>> model.float2str(model.Balance)
-'-$5,111.01'
+u'-$5,111.01'
 
 #testTransfer
 >>> amount = 1.02

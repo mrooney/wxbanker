@@ -30,7 +30,6 @@ def createFromLocale(currencyName):
         if not base.LOCALECONV.has_key(key) or base.LOCALECONV[key] != val:
             new[key] = val
             print (" "*8) + "self.LOCALECONV['%s'] = %r" % (key, val)
-    #print new
 
 class BaseCurrency(object):
     def __init__(self):
@@ -73,8 +72,13 @@ class BaseCurrency(object):
             raise ValueError("Currency formatting is not possible using "
                              "the 'C' locale.")
 
-        s = locale.format('%%.%if' % digits, abs(val), grouping, monetary=True)
-        # locale.localeconv bug http://bugs.python.org/issue1995 workaround
+        # Temporarily override the localeconv dictionary so the format() acts as the desired locale.
+        locale._override_localeconv = conv
+        try:
+            s = locale.format('%%.%if' % digits, abs(val), grouping, monetary=True)
+        finally:
+            locale._override_localeconv = None
+        ## locale.localeconv bug http://bugs.python.org/issue1995 workaround.
         if _locale_encoding is not None:
             s = unicode(s, _locale_encoding)
         # '<' and '>' are markers if the sign must be inserted between symbol and value
@@ -108,7 +112,11 @@ class BaseCurrency(object):
             # this should be the most fitting sign position
             s = sign + s
 
-        return s.replace('<', '').replace('>', '').rjust(just)
+        s = s.replace('<', '').replace('>', '').rjust(just)
+
+        if type(s) != unicode:
+            s = s.decode("utf-8")
+        return s
 
     def __eq__(self, other):
         return self.LOCALECONV == other.LOCALECONV
@@ -158,7 +166,7 @@ class RussianCurrency(BaseCurrency):
         BaseCurrency.__init__(self)
         self.LOCALECONV['p_sep_by_space'] = 1
         self.LOCALECONV['thousands_sep'] = ' ' #u'\xa0'
-        self.LOCALECONV['decimal_point'] = ','
+        self.LOCALECONV['decimal_point'] = '.'
         self.LOCALECONV['int_curr_symbol'] = 'RUB '
         self.LOCALECONV['n_cs_precedes'] = 0
         self.LOCALECONV['mon_thousands_sep'] = ' ' #u'\xa0'
@@ -232,7 +240,7 @@ def GetCurrencyInt(currency):
     return -1
 
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
-CurrencyStrings[0] += " [Locale]"
+CurrencyStrings[0] += " [%s]" % _("detected")
 
 if __name__ == "__main__":
     import sys

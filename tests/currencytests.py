@@ -44,14 +44,14 @@ class CurrencyTest(unittest.TestCase):
 
     def testCurrencyLocalizes(self):
         self.assertEqual(locale.setlocale(locale.LC_ALL, 'ru_RU.utf8'), 'ru_RU.utf8')
-        self.assertEqual(currencies.LocalizedCurrency().float2str(1), '1.00 руб')
+        self.assertEqual(currencies.LocalizedCurrency().float2str(1), u'1.00 руб')
         self.assertTrue(bool(locale.setlocale(locale.LC_ALL, '')))
 
     def testCurrencyDisplay(self):
         self.assertEquals(locale.setlocale(locale.LC_ALL, 'en_US.utf8'), 'en_US.utf8')
         self.assertEquals(currencies.LocalizedCurrency().float2str(1), u'$1.00')
         self.assertEquals(currencies.UnitedStatesCurrency().float2str(1), u'$1.00')
-        self.assertEquals(currencies.EuroCurrency().float2str(1), u'1.00 €')
+        self.assertEquals(currencies.EuroCurrency().float2str(1), u'1,00 €')
         self.assertEquals(currencies.GreatBritainCurrency().float2str(1), u'£1.00')
         self.assertEquals(currencies.JapaneseCurrency().float2str(1), u'￥1')
         self.assertEquals(currencies.RussianCurrency().float2str(1), u'1.00 руб')
