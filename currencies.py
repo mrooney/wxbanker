@@ -72,15 +72,16 @@ class BaseCurrency(object):
             locale._override_localeconv = None
 
         # locale.localeconv bug http://bugs.python.org/issue1995 workaround.
-        if _locale_encoding is not None:
-            s = unicode(s, _locale_encoding)
+        #if _locale_encoding is not None:
+        if not isinstance(s, unicode):
+            s = unicode(s, locale.getlocale()[1])
 
         # Justify as appropriate.
         s = s.rjust(just)
 
         # Always return unicode!
-        if type(s) != unicode:
-            s = s.decode("utf-8")
+        #if type(s) != unicode:
+        #    s = s.decode("utf-8")
         return s
 
     def __eq__(self, other):
@@ -187,9 +188,7 @@ CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBrit
 
 # workaround for a locale.localeconv bug http://bugs.python.org/issue1995
 # test if float2str raises exceptions, apply a workaround if it does
-# NOTE: this happens once at import time, a runtime locale change will require
-#       a module reload for this workaround to take effect.
-# TODO: can float2str just be updated from python 3.0?
+# NOTE: this happens once at import time, a runtime locale change will require a module reload for this workaround to take effect.
 try:
     _locale_encoding = None
     for curr in CurrencyList:
