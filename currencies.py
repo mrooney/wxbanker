@@ -29,7 +29,9 @@ def createFromLocale(currencyName):
     for key, val in local.LOCALECONV.items():
         if not base.LOCALECONV.has_key(key) or base.LOCALECONV[key] != val:
             new[key] = val
-            print (" "*8) + "self.LOCALECONV['%s'] = %r" % (key, val)
+            if isinstance(val, basestring) and not isinstance(val, unicode):
+                val = "u'%s'" % val.decode("utf-8")
+            print (" "*8) + "self.LOCALECONV['%s'] = %s" % (key, val)
 
 class BaseCurrency(object):
     def __init__(self):
@@ -89,8 +91,8 @@ class BaseCurrency(object):
 class UnitedStatesCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
-        self.LOCALECONV['currency_symbol'] = '$'
-        self.LOCALECONV['int_curr_symbol'] = 'USD '
+        self.LOCALECONV['currency_symbol'] = u'$'
+        self.LOCALECONV['int_curr_symbol'] = u'USD '
 
 class EuroCurrency(BaseCurrency):
     def __init__(self):
@@ -128,12 +130,12 @@ class RussianCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
         self.LOCALECONV['p_sep_by_space'] = 1
-        self.LOCALECONV['thousands_sep'] = ' ' #u'\xa0'
-        self.LOCALECONV['decimal_point'] = '.'
-        self.LOCALECONV['int_curr_symbol'] = 'RUB '
+        self.LOCALECONV['thousands_sep'] = u' '
+        self.LOCALECONV['decimal_point'] = u','
+        self.LOCALECONV['int_curr_symbol'] = u'RUB '
         self.LOCALECONV['n_cs_precedes'] = 0
-        self.LOCALECONV['mon_thousands_sep'] = ' ' #u'\xa0'
-        self.LOCALECONV['currency_symbol'] = u'руб' #'\xd1\x80\xd1\x83\xd0\xb1'
+        self.LOCALECONV['mon_thousands_sep'] = u' '
+        self.LOCALECONV['currency_symbol'] = u'руб'
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
 
@@ -160,14 +162,14 @@ class MexicanCurrency(BaseCurrency):
 class SwedishCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
-        self.LOCALECONV['mon_decimal_point'] = ','
+        self.LOCALECONV['mon_decimal_point'] = u','
         self.LOCALECONV['p_sep_by_space'] = 1
-        self.LOCALECONV['thousands_sep'] = ' '
-        self.LOCALECONV['decimal_point'] = ','
-        self.LOCALECONV['int_curr_symbol'] = 'SEK '
+        self.LOCALECONV['thousands_sep'] = u' '
+        self.LOCALECONV['decimal_point'] = u','
+        self.LOCALECONV['int_curr_symbol'] = u'SEK '
         self.LOCALECONV['n_cs_precedes'] = 0
-        self.LOCALECONV['mon_thousands_sep'] = ' '
-        self.LOCALECONV['currency_symbol'] = 'kr'
+        self.LOCALECONV['mon_thousands_sep'] = u' '
+        self.LOCALECONV['currency_symbol'] = u'kr'
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
 
