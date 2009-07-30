@@ -21,7 +21,7 @@
 import localization, locale
 
 def createFromLocale(currencyName):
-    """Create a currency from the current locale."""
+    """Create a currency class from the current locale."""
     new = {}
     local = LocalizedCurrency()
     base = BaseCurrency()
@@ -34,6 +34,10 @@ def createFromLocale(currencyName):
             print (" "*8) + "self.LOCALECONV['%s'] = %s" % (key, val)
 
 class BaseCurrency(object):
+    """
+    This object represents the base of a currency, seeded with Western values.
+    Subclasses need only change dictionary keys which are different.
+    """
     def __init__(self):
         self.LOCALECONV = {
             'decimal_point': '.',
@@ -157,8 +161,8 @@ class UkranianCurrency(BaseCurrency):
 class MexicanCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
-        self.LOCALECONV['currency_symbol'] = '$'
-        self.LOCALECONV['int_curr_symbol'] = 'MXN '
+        self.LOCALECONV['currency_symbol'] = u'$'
+        self.LOCALECONV['int_curr_symbol'] = u'MXN '
 
 class SwedishCurrency(BaseCurrency):
     def __init__(self):
@@ -179,30 +183,13 @@ class LocalizedCurrency(BaseCurrency):
         BaseCurrency.__init__(self)
         self.LOCALECONV = locale.localeconv()
 
-        # workaround for the locale.localeconv() bug
-        if _locale_encoding is not None:
-            self.LOCALECONV.update((k, unicode(v, _locale_encoding)) for k, v in self.LOCALECONV.iteritems() if type(v) is str)
-
-
-CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency, UkranianCurrency, MexicanCurrency, SwedishCurrency]
-
-# workaround for a locale.localeconv bug http://bugs.python.org/issue1995
-# test if float2str raises exceptions, apply a workaround if it does
-# NOTE: this happens once at import time, a runtime locale change will require a module reload for this workaround to take effect.
-try:
-    _locale_encoding = None
-    for curr in CurrencyList:
-        unicode(curr().float2str(1000))
-except UnicodeDecodeError:
-    # save the current locale's encoding for use in float2str
-    _locale_encoding = locale.getlocale()[1]
-
 def GetCurrencyInt(currency):
     for i, curr in enumerate(CurrencyList):
         if isinstance(currency, curr):
             return i
     return -1
 
+CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency, UkranianCurrency, MexicanCurrency, SwedishCurrency]
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
 CurrencyStrings[0] += " [%s]" % _("detected")
 
