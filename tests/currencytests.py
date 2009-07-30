@@ -61,7 +61,7 @@ class CurrencyTest(unittest.TestCase):
         self.assertEqual(currencies.EuroCurrency().float2str(testAmount), u'1 234,50 €')
         self.assertEqual(currencies.GreatBritainCurrency().float2str(testAmount), u'£1,234.50')
         self.assertEqual(currencies.JapaneseCurrency().float2str(testAmount), u'￥1,234')
-        self.assertEqual(currencies.RussianCurrency().float2str(testAmount), u'1 234.50 руб')
+        self.assertEqual(currencies.RussianCurrency().float2str(testAmount), u'1 234.50 руб')
         self.assertEqual(currencies.UkranianCurrency().float2str(testAmount), u'1 234,50 гр')
         self.assertEqual(currencies.MexicanCurrency().float2str(testAmount), u'$1,234.50')
         self.assertEqual(currencies.SwedishCurrency().float2str(testAmount), u'1 234,50 kr')
