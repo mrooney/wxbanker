@@ -24,18 +24,6 @@ from xml.etree import ElementTree
 class ConversionException(Exception): pass
 
 class CurrencyConverter(object):
-    """
-    >>> import currencies
-    >>> c = CurrencyConverter()
-    >>> USD = currencies.UnitedStatesCurrency()
-    >>> EUR = currencies.EuroCurrency()
-    >>> c.Convert(5.23, EUR, EUR) == 5.23
-    True
-    >>> c.Convert(1, EUR, USD) == 1.2795
-    True
-    >>> c.Convert(1, USD, EUR) == 1/1.2795
-    True
-    """
     def __init__(self):
         self.Exchanges = {"EUR": 1.0}
         self.OriginalPath = os.path.join(os.path.dirname(__file__), "exchanges.xml")
@@ -51,23 +39,24 @@ class CurrencyConverter(object):
 
     def Convert(self, amount, original, destination):
         """
-        Convert an amount from one currency to another. In order to this we
+        Convert an amount from one currency to another. In order to do this we
         first convert the original to euros, and then convert that to the
         destination currency, since all rates are based on euros.
         """
         if original == destination:
             return amount
 
-        fromStr = original.CurrencyNick
-        toStr = destination.CurrencyNick
+        #fromStr = original.CurrencyNick
+        #toStr = destination.CurrencyNick
+        fromStr, toStr = original, destination
 
         fromRate = self.Exchanges.get(fromStr)
         toRate = self.Exchanges.get(toStr)
 
-        if fromRate is None:
-            raise ConversionException(_('No exchange rate for currency "%s"') % fromRate)
-        if toRate is None:
-            raise ConversionException(_('No exchange rate for currency "%s"') % toRate)
+        # Make sure we have an exchange rate for each currency.
+        for rate in (fromRate, toRate):
+            if rate is None:
+                raise ConversionException(_('No exchange rate for currency "%s"') % rate)
 
         middle = amount * (1.0 / fromRate)
         end = middle * toRate

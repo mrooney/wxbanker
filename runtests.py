@@ -24,10 +24,8 @@ def main():
     from testhelpers import displayhook
     import sys; sys.displayhook = displayhook
 
-    import bankobjects, controller, currconvert
-    mods = [bankobjects, controller, currconvert]
-
-    #TODO: remove *.pyc first
+    import bankobjects, controller
+    mods = [bankobjects, controller]
 
     results = {}
     for mod in mods:
