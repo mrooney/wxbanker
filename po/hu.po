@@ -1,0 +1,564 @@
+# Hungarian translation for wxbanker
+# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# This file is distributed under the same license as the wxbanker package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wxbanker\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2009-04-12 20:08-0700\n"
+"PO-Revision-Date: 2009-06-20 08:34+0000\n"
+"Last-Translator: Laszlo Solova <Unknown>\n"
+"Language-Team: Hungarian <hu@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2009-07-31 03:30+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#: csvimportframe.py:10
+msgid "CSV import"
+msgstr "CSV import"
+
+#: csvimportframe.py:42
+msgid "Target account"
+msgstr "Célszámla"
+
+#: csvimportframe.py:57 csvimportframe.py:59
+msgid "Import"
+msgstr "Import"
+
+#: csvimportframe.py:69
+msgid "CSV columns mapping"
+msgstr "CSV oszlop-egyeztetés"
+
+#: csvimportframe.py:78 bankcontrols.py:37 summarytab.py:165
+#: transactionolv.py:62 searchctrl.py:40
+msgid "Date"
+msgstr "Dátum"
+
+#: csvimportframe.py:81
+msgid "Date format"
+msgstr "Dátumformátum"
+
+#: csvimportframe.py:86 newtransactionctrl.py:33 transactionolv.py:64
+#: searchctrl.py:40
+msgid "Amount"
+msgstr "Összeg"
+
+#: csvimportframe.py:88
+msgid "Decimal separator"
+msgstr "Tizedesjel"
+
+#: csvimportframe.py:92 newtransactionctrl.py:32 transactionolv.py:63
+#: searchctrl.py:40
+msgid "Description"
+msgstr "Leírás"
+
+#: csvimportframe.py:99
+msgid "CSV file settings"
+msgstr "CSV fájl beállításai"
+
+#: csvimportframe.py:108
+msgid "Skip first line"
+msgstr "Első sor kihagyása"
+
+#: csvimportframe.py:111
+msgid "Encoding"
+msgstr "Karakterkódolás"
+
+#: csvimportframe.py:115
+msgid "Column delimiter"
+msgstr "Oszlop elválasztó"
+
+#: csvimportframe.py:126
+msgid "File to import"
+msgstr "Importálandó fájl"
+
+#: csvimportframe.py:131 csvimportframe.py:133
+msgid "Preview"
+msgstr "Előnézet"
+
+#: csvimportframe.py:146
+msgid "CSV profiles"
+msgstr "CSV profilok"
+
+#: csvimportframe.py:151
+msgid "Python simplejson library is needed for csv profile loading/saving."
+msgstr ""
+"A Python simplejson könyvtár szükséges a csv profilok "
+"betöltéséhez/mentéséhez."
+
+#: csvimportframe.py:161
+msgid "Load"
+msgstr "Betöltés"
+
+#: csvimportframe.py:166
+msgid "Save"
+msgstr "Mentés"
+
+#: csvimportframe.py:171
+msgid "Delete"
+msgstr "Törlés"
+
+#: csvimportframe.py:225
+#, python-format
+msgid "The file encoding does not seem to be '%s'."
+msgstr "A fájl karakterkódolása valószínűleg '%s'."
+
+#: csvimportframe.py:232
+msgid "An error ocurred during the csv file import."
+msgstr "Hiba történt a csv importálás során."
+
+#: csvimportframe.py:233
+msgid "CSV import error"
+msgstr "CVS import hiba"
+
+#: csvimportframe.py:283
+#, python-format
+msgid "Profile with the name '%s' exists already. Overwrite it ?"
+msgstr "A '%s' profil már létezik. Felülírjuk?"
+
+#: csvimportframe.py:284
+msgid "Overwrite profile ?"
+msgstr "Felülírjuk a profilt?"
+
+#: csvimportframe.py:298
+msgid "Select file and click \"Preview\""
+msgstr "Válassz fájlt és kattints az \"Előnézet\"-re"
+
+#: accountlistctrl.py:42
+msgid "Accounts"
+msgstr "Számlák"
+
+#: accountlistctrl.py:58
+msgid "Add a new account"
+msgstr "Új számla"
+
+#: accountlistctrl.py:62
+msgid "Remove the selected account"
+msgstr "A kijelölt számla törlése"
+
+#: accountlistctrl.py:67
+msgid "Rename the selected account"
+msgstr "A kijelölt számla átnevezése"
+
+#: accountlistctrl.py:72
+msgid "Configure the selected account"
+msgstr "A kijelölt számla beállítása"
+
+#: accountlistctrl.py:87 transactionolv.py:65
+msgid "Total"
+msgstr "Teljes összeg"
+
+#: accountlistctrl.py:92
+msgid "Hide zero-balance accounts"
+msgstr "A zéró-összegű számlák elrejtése"
+
+#: accountlistctrl.py:93
+msgid ""
+"When enabled, accounts with a balance of $0.00 will be hidden from the list"
+msgstr ""
+"Ha ez be van állítva, akkor a 0 egyenlegű számlák nem jelennek meg a "
+"listában."
+
+#: accountlistctrl.py:381 accountlistctrl.py:472
+msgid "Sorry, an account by that name already exists."
+msgstr "Bocsi, az adott névvel már létezik számla."
+
+#: accountlistctrl.py:444
+#, python-format
+msgid ""
+"This will permanently remove the account '%s' and all its transactions. "
+"Continue?"
+msgstr ""
+"Ezzel véglegesen letöröljük a '%s' számlát és az összes tranzakcióját. "
+"Folytassuk?"
+
+#: accountlistctrl.py:445
+msgid "Warning"
+msgstr "Figyelmeztetés"
+
+#: templater.py:27
+msgid "Hide Calculator"
+msgstr "Számológép elrejtése"
+
+#: templater.py:28
+msgid "Show Calculator"
+msgstr "Számológép megjelenítése"
+
+#: templater.py:29
+msgid "Transact"
+msgstr ""
+
+#: currconvert.py:68 currconvert.py:70
+#, python-format
+msgid "No exchange rate for currency \"%s\""
+msgstr "Nincs váltószám megadva a \"%s\" valutához."
+
+#: newtransactionctrl.py:37
+msgid "Enter this transaction"
+msgstr ""
+
+#: newtransactionctrl.py:40
+msgid "Transfer"
+msgstr ""
+
+#: newtransactionctrl.py:43
+msgid "Recurring"
+msgstr ""
+
+#: newtransactionctrl.py:86
+msgid ""
+"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
+"to fix this."
+msgstr ""
+
+#: newtransactionctrl.py:127
+msgid "No amount entered in the 'Amount' field."
+msgstr "Nem adtál meg összeget az 'Összeg' mezőben."
+
+#: newtransactionctrl.py:129
+#, python-format
+msgid "'%s' is not a valid amount."
+msgstr "A '%s' összeg nem valós."
+
+#: newtransactionctrl.py:132
+msgid "Please enter a number such as 12.34 or -20."
+msgstr "Kérlek, számot írj. Például: 12.34 vagy -20."
+
+#: newtransactionctrl.py:133
+msgid "Invalid Transaction Amount"
+msgstr "Érvénytelen tranzakciós összeg"
+
+#: newtransactionctrl.py:149
+msgid "Which account will the money come from?"
+msgstr "Melyik számláról érkezzen az összeg?"
+
+#: newtransactionctrl.py:149
+msgid "Other accounts"
+msgstr "További számlák"
+
+#: newtransactionctrl.py:161
+msgid "Please select an account and then try again."
+msgstr "Kérlek, válassz egy számlát és próbáld újra."
+
+#: newtransactionctrl.py:162
+msgid "No account selected"
+msgstr "Nem választottál számlát."
+
+#: newtransactionctrl.py:177
+msgid "transfer"
+msgstr "átutalás"
+
+#: newtransactionctrl.py:177
+msgid "transaction"
+msgstr "tranzakció"
+
+#: newtransactionctrl.py:179
+#, python-format
+msgid ""
+"A search is currently active. Would you like to clear the current search and "
+"make this %s in \"%s\"?"
+msgstr ""
+
+#: newtransactionctrl.py:180
+msgid "Clear search?"
+msgstr "Töröljük a keresést?"
+
+#: newtransactionctrl.py:198
+msgid ""
+"If this box is checked when adding a transaction, you will be prompted for "
+"the account to use as the source of the transfer."
+msgstr ""
+
+#: newtransactionctrl.py:199
+msgid ""
+"For example, checking this box and entering a transaction of $50 into this "
+"account will also subtract $50 from the account that you choose as the "
+"source."
+msgstr ""
+
+#: summarytab.py:46
+msgid "Account"
+msgstr "Számla"
+
+#: summarytab.py:49
+msgid "Sample Points"
+msgstr "Mintavételi pontok"
+
+#: summarytab.py:52
+msgid "Fit Curve Degree"
+msgstr "A görbeillesztés foka"
+
+#: summarytab.py:99
+msgid "All accounts"
+msgstr "Minde számla"
+
+#: summarytab.py:159 summarytab.py:165
+msgid "Balance"
+msgstr "Egyenleg"
+
+#: summarytab.py:163
+msgid "Trend"
+msgstr "Trend"
+
+#: summarytab.py:165
+msgid "Total Balance Over Time"
+msgstr "Teljes egyenleg az adott időben"
+
+#: transactionolv.py:50
+msgid "No transactions entered."
+msgstr ""
+
+#: transactionolv.py:184
+#, python-format
+msgid "Send %s to calculator"
+msgstr ""
+
+#: transactionolv.py:185
+#, python-format
+msgid "Add %s to calculator"
+msgstr "Adjunk a számításhoz a %s-t."
+
+#: transactionolv.py:186
+#, python-format
+msgid "Subtract %s from calculator"
+msgstr "Vonjunk ki a számításból %s-t."
+
+#: transactionolv.py:198
+msgid "Remove this transaction"
+msgstr ""
+
+#: transactionolv.py:199
+msgid "Move this transaction to account"
+msgstr ""
+
+#: transactionolv.py:201
+#, python-format
+msgid "Remove these %i transactions"
+msgstr ""
+
+#: transactionolv.py:202
+#, python-format
+msgid "Move these %i transactions to account"
+msgstr ""
+
+#: bankobjects.py:261
+#, python-format
+msgid "Transfer to %s"
+msgstr ""
+
+#: bankobjects.py:262
+#, python-format
+msgid "Transfer from %s"
+msgstr ""
+
+#: searchctrl.py:32
+msgid "Search transactions"
+msgstr ""
+
+#: searchctrl.py:34
+msgid "Current Account"
+msgstr "Aktuális számla"
+
+#: searchctrl.py:34
+msgid "All Accounts"
+msgstr "Minden számla"
+
+#: searchctrl.py:38
+msgid "More options"
+msgstr "Több lehetőség"
+
+#: searchctrl.py:38
+msgid "Less options"
+msgstr "Kevesebb lehetőség"
+
+#: searchctrl.py:43
+msgid "Case Sensitive"
+msgstr "Kisbetű-nagybetű számít"
+
+#: searchctrl.py:44
+msgid "Whether or not to match based on capitalization"
+msgstr ""
+
+#: searchctrl.py:50
+msgid "In: "
+msgstr ""
+
+#: searchctrl.py:56
+msgid "Match: "
+msgstr ""
+
+#: searchctrl.py:102
+msgid "Show advanced search options"
+msgstr "Részletes keresési beállítások megjelenítése"
+
+#: searchctrl.py:104
+msgid "Hide advanced search options"
+msgstr "Részletes keresési beállítások elrejtése"
+
+#: calculator.py:124
+msgid "Show"
+msgstr "Megjelenít"
+
+#: wxbanker.py:37
+msgid ""
+"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
+"fix this."
+msgstr ""
+
+#: wxbanker.py:53
+msgid "Transactions"
+msgstr "Tranzakciók"
+
+#: wxbanker.py:57
+msgid "Summary"
+msgstr "Összesen"
+
+#: wxbanker.py:105
+msgid "It looks like this is your first time using wxBanker!"
+msgstr ""
+
+#: wxbanker.py:106
+msgid ""
+"To get started, add an account using the account control in the top left "
+"corner."
+msgstr ""
+
+#: wxbanker.py:107
+msgid ""
+"The buttons in the account control allow you to add, remove, and rename an "
+"account, respectively."
+msgstr ""
+
+#: wxbanker.py:108
+msgid ""
+"Once you have created an account you can add transactions to it (such as "
+"your initial balance) using the controls below the grid on the bottom right."
+msgstr ""
+
+#: wxbanker.py:109
+msgid "Have fun!"
+msgstr ""
+
+#: wxbanker.py:111
+msgid "Welcome!"
+msgstr "Üdv!"
+
+#: wxbanker.py:119
+msgid "Save changes?"
+msgstr "Mentsük a változtatásokat?"
+
+#: wxbanker.py:120
+msgid ""
+"You have made changes since the last save. Would you like to save before "
+"exiting?"
+msgstr ""
+
+#: wxbanker.py:121
+msgid ""
+"Note that enabling auto-save from the File menu will eliminate the need for "
+"manual saving."
+msgstr ""
+
+#: menubar.py:46
+msgid "Auto-save"
+msgstr "Automatikus mentés"
+
+#: menubar.py:46
+msgid "Automatically save changes"
+msgstr "Változtatások automatikus mentése"
+
+#: menubar.py:52
+msgid "&Currency"
+msgstr "&Pénznem"
+
+#: menubar.py:52
+msgid "Select currency to display"
+msgstr ""
+
+#: menubar.py:61
+msgid "Request a Currency"
+msgstr "Pénznem kérése"
+
+#: menubar.py:71
+msgid "CSV Import"
+msgstr "CSV Import"
+
+#: menubar.py:71
+msgid "Import transactions from a CSV file"
+msgstr ""
+
+#: menubar.py:79
+msgid "View &FAQs"
+msgstr ""
+
+#: menubar.py:79
+msgid "View Frequently Asked Questions online"
+msgstr "A Gyakran Ismételt Kérdések megtekintése interneten"
+
+#: menubar.py:84
+msgid "Ask a &Question"
+msgstr "Kér&dezek"
+
+#: menubar.py:84
+msgid "Ask a question online"
+msgstr "Interneten kérdezek"
+
+#: menubar.py:89
+msgid "&Report a Bug"
+msgstr "&Hiba bejelentése"
+
+#: menubar.py:89
+msgid "Report a bug to the developer online"
+msgstr "Hiba bejelentése interneten"
+
+#: menubar.py:94
+msgid "Request a Fea&ture"
+msgstr "Új szolgáltatás kérése"
+
+#: menubar.py:94
+msgid "Request a new feature to be implemented"
+msgstr "Új szolgáltatás megvalósításának kérése"
+
+#: menubar.py:99
+msgid "Tran&slate wxBanker"
+msgstr "A vxBanker le&fordítása"
+
+#: menubar.py:99
+msgid "Translate wxBanker to another language"
+msgstr "A vxBanker lefordítása más nyelvre"
+
+#: menubar.py:106
+msgid "&About"
+msgstr "Név&jegy"
+
+#: menubar.py:106
+msgid "More information about wxBanker"
+msgstr "További információk a vxBanker-ről"
+
+#: menubar.py:109
+msgid "&File"
+msgstr "&Fájl"
+
+#: menubar.py:110
+msgid "&Settings"
+msgstr "&Beállítások"
+
+#: menubar.py:111
+msgid "&Tools"
+msgstr "&Eszközök"
+
+#: menubar.py:112
+msgid "&Help"
+msgstr "&Súgó"
+
+#: menubar.py:180
+msgid "Copyright"
+msgstr "Copyright"
+
+#: menubar.py:181
+msgid "A lightweight personal finance management application."
+msgstr "Pehelykönnyű személyi pénzügyi menedzser alkalmazás."
