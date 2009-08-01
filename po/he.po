@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-04-12 20:08-0700\n"
-"PO-Revision-Date: 2008-12-20 10:19+0000\n"
-"Last-Translator: Yaron <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2009-08-01 07:03+0000\n"
+"Last-Translator: Ori Folger <calanya+launchpad@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-07-31 03:30+0000\n"
+"X-Launchpad-Export-Date: 2009-08-01 09:11+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: csvimportframe.py:78 bankcontrols.py:37 summarytab.py:165
@@ -359,7 +359,7 @@ msgstr ""
 
 #: csvimportframe.py:57 csvimportframe.py:59
 msgid "Import"
-msgstr ""
+msgstr "ייבוא"
 
 #: csvimportframe.py:69
 msgid "CSV columns mapping"
@@ -367,11 +367,11 @@ msgstr ""
 
 #: csvimportframe.py:81
 msgid "Date format"
-msgstr ""
+msgstr "תבנית תאריך"
 
 #: csvimportframe.py:88
 msgid "Decimal separator"
-msgstr ""
+msgstr "מפריד עשרוני"
 
 #: csvimportframe.py:99
 msgid "CSV file settings"
@@ -383,7 +383,7 @@ msgstr ""
 
 #: csvimportframe.py:111
 msgid "Encoding"
-msgstr ""
+msgstr "קידוד"
 
 #: csvimportframe.py:115
 msgid "Column delimiter"
@@ -395,7 +395,7 @@ msgstr ""
 
 #: csvimportframe.py:131 csvimportframe.py:133
 msgid "Preview"
-msgstr ""
+msgstr "תצוגה מקדימה"
 
 #: csvimportframe.py:146
 msgid "CSV profiles"
@@ -407,15 +407,15 @@ msgstr ""
 
 #: csvimportframe.py:161
 msgid "Load"
-msgstr ""
+msgstr "טעינה"
 
 #: csvimportframe.py:166
 msgid "Save"
-msgstr ""
+msgstr "שמירה"
 
 #: csvimportframe.py:171
 msgid "Delete"
-msgstr ""
+msgstr "מחיקה"
 
 #: csvimportframe.py:225
 #, python-format
@@ -450,15 +450,15 @@ msgstr ""
 
 #: newtransactionctrl.py:43
 msgid "Recurring"
-msgstr ""
+msgstr "חוזר"
 
 #: summarytab.py:46
 msgid "Account"
-msgstr ""
+msgstr "חשבון"
 
 #: summarytab.py:99
 msgid "All accounts"
-msgstr ""
+msgstr "כל החשבונות"
 
 #: transactionolv.py:50
 msgid "No transactions entered."
@@ -511,7 +511,7 @@ msgstr ""
 
 #: wxbanker.py:119
 msgid "Save changes?"
-msgstr ""
+msgstr "לשמור את השינויים ?"
 
 #: wxbanker.py:120
 msgid ""
@@ -563,8 +563,8 @@ msgstr ""
 
 #: menubar.py:109
 msgid "&File"
-msgstr ""
+msgstr "&קובץ"
 
 #: menubar.py:111
 msgid "&Tools"
-msgstr ""
+msgstr "&כלים"
