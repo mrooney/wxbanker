@@ -42,6 +42,16 @@ class BankModel(object):
             transactions.extend(account.Transactions)
 
         return transactions
+    
+    def GetDateRange(self):
+        """Get the date of the first and last transaction."""
+        transactions = self.GetTransactions()
+        
+        # If there are no transactions, let's go with today.
+        if not transactions:
+            return datetime.date.today(), datetime.date.today()
+        else:
+            return transactions[0].Date, transactions[-1].Date
 
     def GetXTotals(self, numPoints, account=None, daterange=None):
         """

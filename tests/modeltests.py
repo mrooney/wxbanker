@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import testbase, os
+import testbase, os, datetime
 import controller, unittest, bankexceptions
 from wx.lib.pubsub import Publisher
 
@@ -191,6 +191,20 @@ class ModelTests(testbase.TestCaseWithController):
             a.Name = ""
 
         self.assertRaises(bankexceptions.BlankAccountNameException, blankName)
-
+        
+    def testGetDateRangeWhenEmpty(self):
+        self.assertEqual(self.Controller.Model.GetDateRange(), (datetime.date.today(), datetime.date.today()))
+        
+    def testGetDateRangeWithTransactions(self):
+        yesterday = datetime.date.today() - datetime.timedelta(days=1)
+        tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+        
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        a.AddTransaction(1, date=yesterday)
+        a.AddTransaction(1, date=tomorrow)
+        
+        self.assertEqual(model.GetDateRange(), (yesterday, tomorrow))
+        
 if __name__ == "__main__":
     unittest.main()
