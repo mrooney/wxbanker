@@ -17,20 +17,12 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 from bankexceptions import NoNumpyException
-import localization, bankcontrols
-import wx
+import localization, bankcontrols, helpers
+import wx, datetime
 try:
     import plot as pyplot
 except ImportError:
     raise NoNumpyException()
-
-import datetime
-
-
-def pydate2wxdate(date):
-    tt = date.timetuple()
-    dmy = (tt[2], tt[1]-1, tt[0])
-    return wx.DateTimeFromDMY(*dmy)
 
 
 class SummaryPanel(wx.Panel):
@@ -88,6 +80,9 @@ class SummaryPanel(wx.Panel):
         ##granCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinGran)
         degCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinFitDeg)
         self.accountList.Bind(wx.EVT_COMBOBOX, self.onAccountSelect)
+    
+    def getDateRange(self):
+        return [helpers.wxdate2pydate(date) for date in (self.startDate.Value, self.endDate.Value)]
 
     def onAccountSelect(self, event):
         index = event.Int
@@ -108,6 +103,8 @@ class SummaryPanel(wx.Panel):
         self.generateData(useCache=True)
 
     def update(self):
+        daterange = self.bankController.Model.GetDateRange()
+        
         self.updateAccountList()
         self.generateData()
 
@@ -133,16 +130,16 @@ class SummaryPanel(wx.Panel):
             totals, startDate, delta = self.cachedData
         else:
             totals, startDate, delta = self.getPoints(self.plotSettings['Granularity'])
-            self.cachedData = totals, startDate, delta
-
             endDate = startDate + (datetime.timedelta(days=delta) * len(totals))
-            self.startDate.Value = pydate2wxdate(startDate)
-            self.endDate.Value = pydate2wxdate(endDate)
+            self.startDate.Value = helpers.pydate2wxdate(startDate)
+            self.endDate.Value = helpers.pydate2wxdate(endDate)
+            
+            self.cachedData = totals, startDate, delta
 
         self.plotPanel.plotBalance(totals, startDate, delta, "Days", fitdegree=self.plotSettings['FitDegree'])
 
     def getPoints(self, numPoints):
-        return self.bankController.Model.GetXTotals(numPoints, self.plotSettings['Account'])
+        return self.bankController.Model.GetXTotals(numPoints, self.plotSettings['Account'], daterange=self.getDateRange())
 
 class AccountPlotCanvas(pyplot.PlotCanvas):
     def __init__(self, bankController, *args, **kwargs):

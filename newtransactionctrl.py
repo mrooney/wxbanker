@@ -17,7 +17,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import wx, datetime
-import bankcontrols
+import bankcontrols, helpers
 import localization, gettext
 from wx.lib.pubsub import Publisher
 
@@ -335,7 +335,7 @@ class NewTransactionCtrl(wx.Panel):
 
     def getValues(self):
         # Grab the raw values we will need to parse.
-        date = self.dateCtrl.Value
+        date = helpers.wxdate2pydate(self.dateCtrl.Value)
         desc = self.descCtrl.Value
         amount = self.amountCtrl.Value
 
@@ -353,9 +353,6 @@ class NewTransactionCtrl(wx.Panel):
                                 _("Invalid Transaction Amount"), wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
             return
-
-        # Parse the date. This is already validated so we are pretty safe.
-        date = datetime.date(date.Year, date.Month+1, date.Day)
 
         return amount, desc, date
 
