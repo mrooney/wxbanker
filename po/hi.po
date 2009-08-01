@@ -1,0 +1,574 @@
+# Hindi translation for wxbanker
+# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+# This file is distributed under the same license as the wxbanker package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wxbanker\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2009-04-12 20:08-0700\n"
+"PO-Revision-Date: 2008-12-18 14:32+0000\n"
+"Last-Translator: ankur_the_king <ankurkachru@gmail.com>\n"
+"Language-Team: Hindi <hi@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2009-08-01 09:11+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#: csvimportframe.py:78 bankcontrols.py:37 summarytab.py:165
+#: transactionolv.py:62 searchctrl.py:40
+msgid "Date"
+msgstr "तारीख़"
+
+#: csvimportframe.py:86 newtransactionctrl.py:33 transactionolv.py:64
+#: searchctrl.py:40
+msgid "Amount"
+msgstr "राशि"
+
+#: csvimportframe.py:92 newtransactionctrl.py:32 transactionolv.py:63
+#: searchctrl.py:40
+msgid "Description"
+msgstr "विवरण"
+
+#: accountlistctrl.py:42
+msgid "Accounts"
+msgstr "खातॆ"
+
+#: accountlistctrl.py:58
+msgid "Add a new account"
+msgstr "नया खाता खॊले॔"
+
+#: accountlistctrl.py:62
+msgid "Remove the selected account"
+msgstr "चुनावित खाता मिटाँए"
+
+#: accountlistctrl.py:67
+msgid "Rename the selected account"
+msgstr "चयनित खाते का नाम बदलें"
+
+#: accountlistctrl.py:72
+msgid "Configure the selected account"
+msgstr "चयनित खाते मे फेर-बदल करें"
+
+#: accountlistctrl.py:87 transactionolv.py:65
+msgid "Total"
+msgstr "कुल"
+
+#: accountlistctrl.py:92
+msgid "Hide zero-balance accounts"
+msgstr "शूण्य-बकाया राशी वाले खाते छिपाँए"
+
+#: accountlistctrl.py:93
+msgid ""
+"When enabled, accounts with a balance of $0.00 will be hidden from the list"
+msgstr "सक्षम होने पर, $ 0,00 के बकाया राशी वाले खाते सूची से छिप जायेंगे"
+
+#: accountlistctrl.py:381 accountlistctrl.py:472
+msgid "Sorry, an account by that name already exists."
+msgstr "माफ कीजिये, इस नाम से एक खाता पहले से मौज़ूद है"
+
+#: accountlistctrl.py:444
+#, python-format
+msgid ""
+"This will permanently remove the account '%s' and all its transactions. "
+"Continue?"
+msgstr ""
+"यह स्थायी रूप से खाता '%s' और उसके सभी लेनदेन को मिटा देगा. जारी रखें?"
+
+#: accountlistctrl.py:445
+msgid "Warning"
+msgstr "चेतावनी"
+
+#: templater.py:27
+msgid "Hide Calculator"
+msgstr "कैलक्यूलेटर छुपाएँ"
+
+#: templater.py:28
+msgid "Show Calculator"
+msgstr "कैलक्यूलेटर दिखाएँ"
+
+#: templater.py:29
+msgid "Transact"
+msgstr "लेन देन करें"
+
+#: newtransactionctrl.py:37
+msgid "Enter this transaction"
+msgstr "इस लेनदेन कॊ सम्मिलित कीजिए"
+
+#: newtransactionctrl.py:40
+msgid "Transfer"
+msgstr "हस्तांतरित करें"
+
+#: newtransactionctrl.py:86
+msgid ""
+"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
+"to fix this."
+msgstr ""
+"चेतावनी: DateCtrl का ENTER बाध्य करने में अक्षम. इसे ठीक करने के लिए "
+"WxPython >= 2.8.8.1 तक नवीनीकरण करें."
+
+#: newtransactionctrl.py:127
+msgid "No amount entered in the 'Amount' field."
+msgstr "कोई राशि 'राशि' फ़ील्ड में प्रवेश नही की गई है"
+
+#: newtransactionctrl.py:129
+#, python-format
+msgid "'%s' is not a valid amount."
+msgstr "'%s' वैध राशि मूल्य नही है"
+
+#: newtransactionctrl.py:132
+msgid "Please enter a number such as 12.34 or -20."
+msgstr "कृपया गणा॔क जैसे 12.34 या -20 डाले॔"
+
+#: newtransactionctrl.py:133
+msgid "Invalid Transaction Amount"
+msgstr "अवैध राशि मूल्य"
+
+#: newtransactionctrl.py:149
+msgid "Which account will the money come from?"
+msgstr "पैसा कौनसे खाते से लिया जायेगा?"
+
+#: newtransactionctrl.py:149
+msgid "Other accounts"
+msgstr "अन्य खाते"
+
+#: newtransactionctrl.py:161
+msgid "Please select an account and then try again."
+msgstr "कृपया एक खाता चुने॔ और फिरसे कोशिश करे॔"
+
+#: newtransactionctrl.py:162
+msgid "No account selected"
+msgstr "कोई खाता चयनित नही॔ है"
+
+#: newtransactionctrl.py:177
+msgid "transfer"
+msgstr "हस्तांतरण"
+
+#: newtransactionctrl.py:177
+msgid "transaction"
+msgstr "लेनदेन"
+
+#: newtransactionctrl.py:179
+#, python-format
+msgid ""
+"A search is currently active. Would you like to clear the current search and "
+"make this %s in \"%s\"?"
+msgstr ""
+"एक खोज वर्तमान में सक्रिय है.क्या आप मौजूदा खोज स्पष्ट करना चाहेंगे और इस %s "
+"को \"%s\" मे बदलेंगे?"
+
+#: newtransactionctrl.py:180
+msgid "Clear search?"
+msgstr "खोज परिणाम साफ़ करें?"
+
+#: newtransactionctrl.py:198
+msgid ""
+"If this box is checked when adding a transaction, you will be prompted for "
+"the account to use as the source of the transfer."
+msgstr ""
+"अगर इस बॉक्स को चयनित किया जाता है, तो आपको इस हस्तांतरण के स्रोत के रूप में "
+"उपयोग करने के लिए एक खाते के लिए पूछा जायेगा"
+
+#: newtransactionctrl.py:199
+msgid ""
+"For example, checking this box and entering a transaction of $50 into this "
+"account will also subtract $50 from the account that you choose as the "
+"source."
+msgstr ""
+"उदाहरण के लिए, इस बक्से पर सही का निशान है और 50 डॉलर के एक सौदे का प्रवेश "
+"इस खाते में करते है तो स्रोत के रूप में चुने गये खाते से $ 50 घट जायेंगे"
+
+#: summarytab.py:49
+msgid "Sample Points"
+msgstr "उदाहरण बिंदु"
+
+#: summarytab.py:52
+msgid "Fit Curve Degree"
+msgstr "योग्य वक्र डिग्री"
+
+#: summarytab.py:159 summarytab.py:165
+msgid "Balance"
+msgstr "बकाया राशी"
+
+#: summarytab.py:163
+msgid "Trend"
+msgstr "प्रवृत्ति"
+
+#: summarytab.py:165
+msgid "Total Balance Over Time"
+msgstr "समयानुसार कुल बकाया राशी"
+
+#: transactionolv.py:198
+msgid "Remove this transaction"
+msgstr "इस लेनदेन को मिटाँए"
+
+#: bankobjects.py:261
+#, python-format
+msgid "Transfer to %s"
+msgstr "%s को हस्ता॔तरित करे॔"
+
+#: bankobjects.py:262
+#, python-format
+msgid "Transfer from %s"
+msgstr "%s से हस्ता॔तरित करे॔"
+
+#: searchctrl.py:32
+msgid "Search transactions"
+msgstr "लेनदेन खोजिये"
+
+#: searchctrl.py:34
+msgid "Current Account"
+msgstr "मौजूदा खाता"
+
+#: searchctrl.py:34
+msgid "All Accounts"
+msgstr "सभी खाते"
+
+#: searchctrl.py:43
+msgid "Case Sensitive"
+msgstr "केस सेंसिटिव"
+
+#: searchctrl.py:44
+msgid "Whether or not to match based on capitalization"
+msgstr "चाहें या नहीं चाहे बड़े अक्षरों के प्रयोग के आधार पर मेल करने के लिए"
+
+#: searchctrl.py:50
+msgid "In: "
+msgstr "इनमे॔: "
+
+#: searchctrl.py:56
+msgid "Match: "
+msgstr "मेल: "
+
+#: calculator.py:124
+msgid "Show"
+msgstr "दिखाएं"
+
+#: wxbanker.py:37
+msgid ""
+"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
+"fix this."
+msgstr ""
+"चेतावनी: नम्पी मौड्यूल उपलब्ध नही है, इसलिए सारांश टैब निशक्रीय किया जाता "
+"है| सुधार के लिए नम्पी इंस्टॉल करें"
+
+#: wxbanker.py:53
+msgid "Transactions"
+msgstr "लेनदेन"
+
+#: wxbanker.py:57
+msgid "Summary"
+msgstr "सारांश"
+
+#: wxbanker.py:105
+msgid "It looks like this is your first time using wxBanker!"
+msgstr "wxBanker के पहले इस्तेमाल में आपका स्वागत है!"
+
+#: wxbanker.py:106
+msgid ""
+"To get started, add an account using the account control in the top left "
+"corner."
+msgstr "शुरु करने के लिए, उपर बाँए हाथ मे॑ खाता नियंत्रण से नया खाता खोलिये"
+
+#: wxbanker.py:107
+msgid ""
+"The buttons in the account control allow you to add, remove, and rename an "
+"account, respectively."
+msgstr ""
+"खाता नियंत्रण के बटन आपको अनुमति देते हैं ,क्रमशः, नया खाता जोड़ने, मिटाने "
+"एवम्  खाते का नाम बदलने की"
+
+#: wxbanker.py:108
+msgid ""
+"Once you have created an account you can add transactions to it (such as "
+"your initial balance) using the controls below the grid on the bottom right."
+msgstr ""
+"एक बार आपने एक खाता बना लिया फिर आप उसमे लेनदेन जोड़ सकते हैं (जैसे "
+"प्रारंभिक शेष राशि) ,आप इसे करने के लिए निचली-दाईं तरफ के ग्रिड के नीचे के "
+"नियंत्रणों का उपयोग कर सकते है."
+
+#: wxbanker.py:109
+msgid "Have fun!"
+msgstr "आनंद लीजिये!"
+
+#: wxbanker.py:111
+msgid "Welcome!"
+msgstr "सुस्वागतम्!"
+
+#: menubar.py:52
+msgid "&Currency"
+msgstr "&मुद्रा"
+
+#: menubar.py:52
+msgid "Select currency to display"
+msgstr "प्रदर्शित किए जाने के लिए मुद्रा चुनें"
+
+#: menubar.py:79
+msgid "View &FAQs"
+msgstr "&FAQs देखिये"
+
+#: menubar.py:79
+msgid "View Frequently Asked Questions online"
+msgstr "ऑनलाइन FAQs देखिये"
+
+#: menubar.py:84
+msgid "Ask a &Question"
+msgstr "अपने सवाल पूछिये"
+
+#: menubar.py:84
+msgid "Ask a question online"
+msgstr "ऑनलाइन सवाल पूछिए"
+
+#: menubar.py:89
+msgid "&Report a Bug"
+msgstr "बग के बारे मे सूचित करें"
+
+#: menubar.py:89
+msgid "Report a bug to the developer online"
+msgstr "बग के बारे मे निर्माता को ऑनलाइन सूचित करें"
+
+#: menubar.py:106
+msgid "&About"
+msgstr "के बारे में (&A)"
+
+#: menubar.py:106
+msgid "More information about wxBanker"
+msgstr "wxBanker कि और जानकारी"
+
+#: menubar.py:110
+msgid "&Settings"
+msgstr "विन्यास (&S)"
+
+#: menubar.py:112
+msgid "&Help"
+msgstr "सहायता (&H)"
+
+#: menubar.py:180
+msgid "Copyright"
+msgstr "सर्वाधिकार सुरक्षित"
+
+#: menubar.py:181
+msgid "A lightweight personal finance management application."
+msgstr "एक हल्का व्यक्तिगत वित्त प्रबंधन अनुप्रयोग"
+
+#: csvimportframe.py:10
+msgid "CSV import"
+msgstr ""
+
+#: csvimportframe.py:42
+msgid "Target account"
+msgstr ""
+
+#: csvimportframe.py:57 csvimportframe.py:59
+msgid "Import"
+msgstr ""
+
+#: csvimportframe.py:69
+msgid "CSV columns mapping"
+msgstr ""
+
+#: csvimportframe.py:81
+msgid "Date format"
+msgstr ""
+
+#: csvimportframe.py:88
+msgid "Decimal separator"
+msgstr ""
+
+#: csvimportframe.py:99
+msgid "CSV file settings"
+msgstr ""
+
+#: csvimportframe.py:108
+msgid "Skip first line"
+msgstr ""
+
+#: csvimportframe.py:111
+msgid "Encoding"
+msgstr ""
+
+#: csvimportframe.py:115
+msgid "Column delimiter"
+msgstr ""
+
+#: csvimportframe.py:126
+msgid "File to import"
+msgstr ""
+
+#: csvimportframe.py:131 csvimportframe.py:133
+msgid "Preview"
+msgstr ""
+
+#: csvimportframe.py:146
+msgid "CSV profiles"
+msgstr ""
+
+#: csvimportframe.py:151
+msgid "Python simplejson library is needed for csv profile loading/saving."
+msgstr ""
+
+#: csvimportframe.py:161
+msgid "Load"
+msgstr ""
+
+#: csvimportframe.py:166
+msgid "Save"
+msgstr ""
+
+#: csvimportframe.py:171
+msgid "Delete"
+msgstr ""
+
+#: csvimportframe.py:225
+#, python-format
+msgid "The file encoding does not seem to be '%s'."
+msgstr ""
+
+#: csvimportframe.py:232
+msgid "An error ocurred during the csv file import."
+msgstr ""
+
+#: csvimportframe.py:233
+msgid "CSV import error"
+msgstr ""
+
+#: csvimportframe.py:283
+#, python-format
+msgid "Profile with the name '%s' exists already. Overwrite it ?"
+msgstr ""
+
+#: csvimportframe.py:284
+msgid "Overwrite profile ?"
+msgstr ""
+
+#: csvimportframe.py:298
+msgid "Select file and click \"Preview\""
+msgstr ""
+
+#: currconvert.py:68 currconvert.py:70
+#, python-format
+msgid "No exchange rate for currency \"%s\""
+msgstr ""
+
+#: newtransactionctrl.py:43
+msgid "Recurring"
+msgstr ""
+
+#: summarytab.py:46
+msgid "Account"
+msgstr ""
+
+#: summarytab.py:99
+msgid "All accounts"
+msgstr ""
+
+#: transactionolv.py:50
+msgid "No transactions entered."
+msgstr ""
+
+#: transactionolv.py:184
+#, python-format
+msgid "Send %s to calculator"
+msgstr ""
+
+#: transactionolv.py:185
+#, python-format
+msgid "Add %s to calculator"
+msgstr ""
+
+#: transactionolv.py:186
+#, python-format
+msgid "Subtract %s from calculator"
+msgstr ""
+
+#: transactionolv.py:199
+msgid "Move this transaction to account"
+msgstr ""
+
+#: transactionolv.py:201
+#, python-format
+msgid "Remove these %i transactions"
+msgstr ""
+
+#: transactionolv.py:202
+#, python-format
+msgid "Move these %i transactions to account"
+msgstr ""
+
+#: searchctrl.py:38
+msgid "More options"
+msgstr ""
+
+#: searchctrl.py:38
+msgid "Less options"
+msgstr ""
+
+#: searchctrl.py:102
+msgid "Show advanced search options"
+msgstr ""
+
+#: searchctrl.py:104
+msgid "Hide advanced search options"
+msgstr ""
+
+#: wxbanker.py:119
+msgid "Save changes?"
+msgstr ""
+
+#: wxbanker.py:120
+msgid ""
+"You have made changes since the last save. Would you like to save before "
+"exiting?"
+msgstr ""
+
+#: wxbanker.py:121
+msgid ""
+"Note that enabling auto-save from the File menu will eliminate the need for "
+"manual saving."
+msgstr ""
+
+#: menubar.py:46
+msgid "Auto-save"
+msgstr ""
+
+#: menubar.py:46
+msgid "Automatically save changes"
+msgstr ""
+
+#: menubar.py:61
+msgid "Request a Currency"
+msgstr ""
+
+#: menubar.py:71
+msgid "CSV Import"
+msgstr ""
+
+#: menubar.py:71
+msgid "Import transactions from a CSV file"
+msgstr ""
+
+#: menubar.py:94
+msgid "Request a Fea&ture"
+msgstr ""
+
+#: menubar.py:94
+msgid "Request a new feature to be implemented"
+msgstr ""
+
+#: menubar.py:99
+msgid "Tran&slate wxBanker"
+msgstr ""
+
+#: menubar.py:99
+msgid "Translate wxBanker to another language"
+msgstr ""
+
+#: menubar.py:109
+msgid "&File"
+msgstr ""
+
+#: menubar.py:111
+msgid "&Tools"
+msgstr ""
