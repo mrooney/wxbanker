@@ -47,31 +47,37 @@ class SummaryPanel(wx.Panel):
         # create the controls at the bottom
         controlSizer = wx.BoxSizer()
         self.accountList = wx.ComboBox(self, style=wx.CB_READONLY)
-        granCtrl = wx.SpinCtrl(self, min=10, max=1000, initial=self.plotSettings['Granularity'])
+        ##granCtrl = wx.SpinCtrl(self, min=10, max=1000, initial=self.plotSettings['Granularity'])
         degCtrl = wx.SpinCtrl(self, min=1, max=20, initial=self.plotSettings['FitDegree'])
         # the date range controls
         self.startDate = bankcontrols.DateCtrlFactory(self)
         self.endDate = bankcontrols.DateCtrlFactory(self)
 
         controlSizer.Add(wx.StaticText(self, label=_("Account")), 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.AddSpacer(5)
         controlSizer.Add(self.accountList, 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(10)
         controlSizer.Add(wx.StaticText(self, label=_("From")), 0, wx.ALIGN_CENTER_VERTICAL)
-        controlSizer.Add(self.startDate)
-        controlSizer.Add(wx.StaticText(self, label=_("to")), 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.RIGHT, 5)
-        controlSizer.Add(self.endDate)
+        controlSizer.AddSpacer(5)
+        controlSizer.Add(self.startDate, 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.AddSpacer(5)
+        controlSizer.Add(wx.StaticText(self, label=_("to")), 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.AddSpacer(5)
+        controlSizer.Add(self.endDate, 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(10)
-        controlSizer.Add(wx.StaticText(self, label=_("Sample Points")), 0, wx.ALIGN_CENTER_VERTICAL)
-        controlSizer.Add(granCtrl)
-        controlSizer.AddSpacer(10)
+        ##controlSizer.Add(wx.StaticText(self, label=_("Sample Points")), 0, wx.ALIGN_CENTER_VERTICAL)
+        ##controlSizer.Add(granCtrl)
+        ##controlSizer.AddSpacer(10)
         controlSizer.Add(wx.StaticText(self, label=_("Fit Curve Degree")), 0, wx.ALIGN_CENTER_VERTICAL)
-        controlSizer.Add(degCtrl)
+        controlSizer.AddSpacer(5)
+        controlSizer.Add(degCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
+        degCtrl.SetMinSize = (20, -1)
 
         # put it all together
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
         self.Sizer.Add(self.plotPanel, 1, wx.EXPAND)
         self.plotPanel.SetShowScrollbars(False)
-        self.Sizer.Add(controlSizer, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 3)
+        self.Sizer.Add(controlSizer, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 2)
 
         # fill in the accounts
         self.updateAccountList(layout=False)
@@ -79,7 +85,7 @@ class SummaryPanel(wx.Panel):
         self.Layout()
 
         # bind to the spin buttons
-        granCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinGran)
+        ##granCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinGran)
         degCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinFitDeg)
         self.accountList.Bind(wx.EVT_COMBOBOX, self.onAccountSelect)
 
