@@ -1,6 +1,7 @@
 0.6
+ * summary graph date span is customizable
  * transfer options are now selected "in-line"
- * new shipped currencies: UAH
  * can enter new transaction in any locale format
  * up/down arrows in datectrl change date (LP #356750)
  * changing search options refreshes search (LP #362581)
+ * new shipped currencies: UAH, SEK, MXN

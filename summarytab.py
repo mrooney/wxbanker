@@ -32,6 +32,7 @@ class SummaryPanel(wx.Panel):
 
         self.plotSettings = {'FitDegree': 2, 'Granularity': 100, 'Account': None}
         self.cachedData = None
+        self.dateRange = None
 
         # create the plot panel
         self.plotPanel = AccountPlotCanvas(bankController, self)
@@ -80,6 +81,10 @@ class SummaryPanel(wx.Panel):
         ##granCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinGran)
         degCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinFitDeg)
         self.accountList.Bind(wx.EVT_COMBOBOX, self.onAccountSelect)
+        self.Bind(wx.EVT_DATE_CHANGED, self.onDateRangeChanged)
+        
+    def onDateRangeChanged(self, event):
+        self.generateData()
     
     def getDateRange(self):
         return [helpers.wxdate2pydate(date) for date in (self.startDate.Value, self.endDate.Value)]
@@ -103,7 +108,9 @@ class SummaryPanel(wx.Panel):
         self.generateData(useCache=True)
 
     def update(self):
-        daterange = self.bankController.Model.GetDateRange()
+        self.dateRange = self.bankController.Model.GetDateRange()
+        self.startDate.Value = helpers.pydate2wxdate(self.dateRange[0])
+        self.endDate.Value = helpers.pydate2wxdate(self.dateRange[1])
         
         self.updateAccountList()
         self.generateData()
@@ -131,9 +138,6 @@ class SummaryPanel(wx.Panel):
         else:
             totals, startDate, delta = self.getPoints(self.plotSettings['Granularity'])
             endDate = startDate + (datetime.timedelta(days=delta) * len(totals))
-            self.startDate.Value = helpers.pydate2wxdate(startDate)
-            self.endDate.Value = helpers.pydate2wxdate(endDate)
-            
             self.cachedData = totals, startDate, delta
 
         self.plotPanel.plotBalance(totals, startDate, delta, "Days", fitdegree=self.plotSettings['FitDegree'])
