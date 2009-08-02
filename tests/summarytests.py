@@ -73,7 +73,7 @@ class SummaryTests(testbase.TestCaseWithController):
     def testGetPointsWithRange(self):
         daterange = (today+one, today+one*2)
         points, start, dpp = self.get([(today, 3), (today+one, 5), (today+one*2, 7), (today+one*3, 11)], 2, None, daterange)
-        self.assertEqual(points, [5.0, 12.0])
+        self.assertEqual(points, [8.0, 15.0])
         self.assertEqual(start, today+one)
         self.assertEqual(dpp, 0.5)
 
@@ -90,6 +90,10 @@ class SummaryTests(testbase.TestCaseWithController):
         self.assertEqual(len(amounts), 1)
         self.assertEqual(start, today)
         self.assertAlmostEqual(delta, 0)
+        
+    def testTransactionsBeforeRangeAreCounted(self):
+        amounts, start, delta = self.get([(today-one, 3), (today, 2), (today+one, 1)], 3, None, (today, today+one))
+        self.assertEqual(amounts, [5.0, 5.0, 6.0])
         
 if __name__ == "__main__":
     unittest.main()

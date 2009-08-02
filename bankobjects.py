@@ -71,6 +71,8 @@ class BankModel(object):
         # If there aren't any transactions, return 0 for every point and start at today.
         if transactions == []:
             return [0] * 10, datetime.date.today(), smallDelta
+        
+        startingBalance = 0.0
 
         # Crop transactions around the date range, if supplied.
         if daterange:
@@ -81,12 +83,16 @@ class BankModel(object):
                 end = transactions[-1].Date
 
             starti, endi = 0, len(transactions)
+            total = 0.0
             for i, t in enumerate(transactions):
                 if not starti and t.Date >= start:
                     starti = i
+                    startingBalance = total
                 if t.Date > end:
                     endi = i
                     break
+                total += t.Amount
+                
             transactions = transactions[starti:endi]
 
         # Figure out the actual start and end dates we end up with.
@@ -102,7 +108,7 @@ class BankModel(object):
         dppDelta = datetime.timedelta(daysPerPoint)
 
         # Generate all the points.
-        points = [0.0]
+        points = [startingBalance]
         tindex = 0
         for i in range(numPoints):
             while tindex < len(transactions) and transactions[tindex].Date <= startDate + (dppDelta * (i+1)):
