@@ -86,9 +86,10 @@ class SummaryTests(testbase.TestCaseWithController):
         self.assertAlmostEqual(result[2], 0)
 
     def testOutOfBoundsDateRangeIsRespected(self):
-        amounts, start, delta = self.get([(today, 1)], 3, None, (today-one, today+one))
-        self.assertEqual(amounts, [0.0, 1.0, 1.0])
-        self.assertEqual(start, today-one)
+        amounts, start, delta = self.get([(today, 1)], 4, None, (today-one*2, today+one))
+        self.assertEqual(amounts, [0.0, 0.0, 1.0, 1.0])
+        self.assertEqual(start, today-one*2)
+        self.assertEqual(delta, .75)
         
     def testTransactionsBeforeRangeAreCounted(self):
         amounts, start, delta = self.get([(today-one, 3), (today, 2), (today+one, 1)], 3, None, (today, today+one))

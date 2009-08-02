@@ -75,28 +75,21 @@ class BankModel(object):
             return [0] * 10, datetime.date.today(), smallDelta
         
         startingBalance = 0.0
-
         # Crop transactions around the date range, if supplied.
         if daterange:
-            start, end = daterange
-            #if start < transactions[0].Date:
-            #    start = transactions[0].Date
-            #if end > transactions[-1].Date:
-            #    end = transactions[-1].Date
-
-            starti, endi = 0, len(transactions)
+            startDate, endDate = daterange
+            starti, endi = None, len(transactions)
             total = 0.0
             for i, t in enumerate(transactions):
-                if not starti and t.Date >= start:
+                if starti is None and t.Date >= startDate:
                     starti = i
                     startingBalance = total
-                if t.Date > end:
+                if t.Date > endDate:
                     endi = i
                     break
                 total += t.Amount
                 
             transactions = transactions[starti:endi]
-            startDate, endDate = start, end
         else:
             # Figure out the actual start and end dates we end up with.
             startDate, endDate = transactions[0].Date, transactions[-1].Date
@@ -112,7 +105,7 @@ class BankModel(object):
         distance = (endDate - startDate).days
         daysPerPoint = 1.0 * distance / numPoints
         dppDelta = datetime.timedelta(daysPerPoint)
-
+        
         # Generate all the points.
         points = [startingBalance]
         tindex = 0
