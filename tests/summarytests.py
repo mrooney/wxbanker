@@ -85,15 +85,19 @@ class SummaryTests(testbase.TestCaseWithController):
         self.assertNotEqual(result[2], 0)
         self.assertAlmostEqual(result[2], 0)
 
-    def testOutOfBoundsDateRangeIsClamped(self):
-        amounts, start, delta = self.get([(today, 1)], 1, None, (today-one, today+one))
-        self.assertEqual(len(amounts), 1)
-        self.assertEqual(start, today)
-        self.assertAlmostEqual(delta, 0)
+    def testOutOfBoundsDateRangeIsRespected(self):
+        amounts, start, delta = self.get([(today, 1)], 3, None, (today-one, today+one))
+        self.assertEqual(amounts, [0.0, 1.0, 1.0])
+        self.assertEqual(start, today-one)
         
     def testTransactionsBeforeRangeAreCounted(self):
         amounts, start, delta = self.get([(today-one, 3), (today, 2), (today+one, 1)], 3, None, (today, today+one))
         self.assertEqual(amounts, [5.0, 5.0, 6.0])
+        
+    def testDateRangeEndingBeforeTodayWorks(self):
+        amounts, start, delta = self.get([(today-one*2, 3), (today-one, 2), (today, 1)], 2, None, (today-one*2, today-one))
+        # Make sure 'today' isn't counted as it isn't in our date range.
+        self.assertEqual(amounts, [3.0, 5.0])
         
 if __name__ == "__main__":
     unittest.main()

@@ -51,6 +51,8 @@ class BankModel(object):
         if not transactions:
             return datetime.date.today(), datetime.date.today()
         else:
+            # Sorting transactions is very important, otherwise the first and last dates are arbitrary!
+            transactions.sort()
             return transactions[0].Date, transactions[-1].Date
 
     def GetXTotals(self, numPoints, account=None, daterange=None):
@@ -63,7 +65,7 @@ class BankModel(object):
             transactions = self.GetTransactions()
         else:
             transactions = account.Transactions[:]
-        transactions = list(sorted(transactions))
+        transactions.sort()
 
         # Don't ever return 0 as the dpp, you can't graph without SOME x delta.
         smallDelta = 1.0/2**32
@@ -77,10 +79,10 @@ class BankModel(object):
         # Crop transactions around the date range, if supplied.
         if daterange:
             start, end = daterange
-            if start < transactions[0].Date:
-                start = transactions[0].Date
-            if end > transactions[-1].Date:
-                end = transactions[-1].Date
+            #if start < transactions[0].Date:
+            #    start = transactions[0].Date
+            #if end > transactions[-1].Date:
+            #    end = transactions[-1].Date
 
             starti, endi = 0, len(transactions)
             total = 0.0
@@ -94,12 +96,16 @@ class BankModel(object):
                 total += t.Amount
                 
             transactions = transactions[starti:endi]
-
-        # Figure out the actual start and end dates we end up with.
-        startDate, endDate = transactions[0].Date, transactions[-1].Date
-        today = datetime.date.today()
+            startDate, endDate = start, end
+        else:
+            # Figure out the actual start and end dates we end up with.
+            startDate, endDate = transactions[0].Date, transactions[-1].Date
+        
         # If the last transaction was before today, we still want to graph until today.
-        if today > endDate:
+        today = datetime.date.today()
+        if daterange:
+            endDate = daterange[1]
+        elif today > endDate:
             endDate = today
 
         # Figure out the fraction of a day that exists between each point.
