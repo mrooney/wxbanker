@@ -85,9 +85,11 @@ class SummaryTests(testbase.TestCaseWithController):
         self.assertNotEqual(result[2], 0)
         self.assertAlmostEqual(result[2], 0)
 
-    def testRaisesExceptionOnInvalidDateRange(self):
-        self.assertRaises(bankobjects.InvalidDateRangeException, lambda: self.get([(today, 1)], 1, None, (today-one, today)))
-        self.assertRaises(bankobjects.InvalidDateRangeException, lambda: self.get([(today, 1)], 10, None, (today, today+one)))
-
+    def testOutOfBoundsDateRangeIsClamped(self):
+        amounts, start, delta = self.get([(today, 1)], 1, None, (today-one, today+one))
+        self.assertEqual(len(amounts), 1)
+        self.assertEqual(start, today)
+        self.assertAlmostEqual(delta, 0)
+        
 if __name__ == "__main__":
     unittest.main()

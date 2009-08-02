@@ -75,10 +75,12 @@ class BankModel(object):
         # Crop transactions around the date range, if supplied.
         if daterange:
             start, end = daterange
-            if start < transactions[0].Date or end > transactions[-1].Date:
-                raise InvalidDateRangeException("Dates must be within the first and last transaction dates.")
+            if start < transactions[0].Date:
+                start = transactions[0].Date
+            if end > transactions[-1].Date:
+                end = transactions[-1].Date
 
-            starti, endi = 0, -1
+            starti, endi = 0, len(transactions)
             for i, t in enumerate(transactions):
                 if not starti and t.Date >= start:
                     starti = i
