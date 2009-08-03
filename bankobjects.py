@@ -35,6 +35,16 @@ class BankModel(object):
 
     def GetBalance(self):
         return self.Accounts.Balance
+    
+    def GetRecurringTransactions(self):
+        allRecurrings = []
+        for account in self.Accounts:
+            recurrings = account.GetRecurringTransactions()
+            if recurrings:
+                allRecurrings.extend(recurrings)
+                
+        return allRecurrings
+            
 
     def GetTransactions(self):
         transactions = []
@@ -253,6 +263,7 @@ class Account(object):
         self.ID = aID
         self._Name = name
         self._Transactions = None
+        self._RecurringTransactions = None
         self._preTransactions = []
         self.Currency = currency
         self._Balance = balance
@@ -302,6 +313,12 @@ class Account(object):
     def SetBalance(self, newBalance):
         self._Balance = newBalance
         Publisher.sendMessage("account.balance changed.%s" % self.Name, self)
+        
+    def GetRecurringTransactions(self):
+        return self._RecurringTransactions
+        
+    def SetRecurringTransactions(self, recurrings):
+        self._RecurringTransactions = recurrings
 
     def GetTransactions(self):
         if self._Transactions is None:
@@ -341,6 +358,9 @@ class Account(object):
         for t in transactions:
             self.AddTransaction(transaction=t)
         Publisher.sendMessage("batch.end")
+        
+    def AddRecurringTransaction(self, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source=None):
+        pass
 
     def AddTransaction(self, amount=None, description="", date=None, source=None, transaction=None):
         """
@@ -454,6 +474,7 @@ class Account(object):
 
     Name = property(GetName, SetName)
     Transactions = property(GetTransactions)
+    RecurringTransactions = property(GetRecurringTransactions)
     Balance = property(GetBalance, SetBalance)
     Currency = property(GetCurrency, SetCurrency)
 
@@ -623,7 +644,7 @@ class Transaction(object):
     LinkedTransaction = property(GetLinkedTransaction, SetLinkedTransaction)
 
 class RecurringTransaction(Transaction):
-    def __init__(self, tID, parent, amount, description, date, source, repeatType, repeatEvery, repeatOn, endDate):
+    def __init__(self, tID, parent, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source=None):
         Transaction.__init__(self, tID, parent, amount, description, date)
         self.RepeatType = repeatType
         self.RepeatEvery = repeatEvery

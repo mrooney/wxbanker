@@ -51,6 +51,8 @@ class PersistentStore:
         self.Dirty = False
         self.BatchDepth = 0
         self.cachedModel = None
+        # Upgrades can't enable syncing if needed from older versions.
+        self.needsSync = False
         existed = True
 
         # See if the path already exists to decide what to do.
@@ -76,6 +78,11 @@ class PersistentStore:
             self.upgradeDb(self.Meta['VERSION'], backup=existed)
             self.Meta = self.getMeta()
             debug.debug(self.Meta)
+            
+        # If the upgrade process requires a sync, do so now.
+        if self.needsSync:
+            self.syncBalances()
+            self.needsSync = False
 
         self.AutoSave = autoSave
         self.commitIfAppropriate()
@@ -230,7 +237,8 @@ class PersistentStore:
         elif fromVer == 2:
             # Add `total` column to the accounts table.
             cursor.execute('ALTER TABLE accounts ADD balance FLOAT not null DEFAULT 0.0')
-            self.syncBalances()
+            # The total column will need to be synced.
+            self.needsSync = True
             # Update the meta version number.
             metaVer = 3
         elif fromVer == 3:
@@ -272,7 +280,16 @@ class PersistentStore:
         return bankobjects.Account(self, ID, name, currency, balance)
 
     def getAccounts(self):
-        return [self.result2account(result) for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()]
+        # Fetch all the accounts.
+        accounts = [self.result2account(result) for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()]
+        # Add any recurring transactions that exist for each.
+        recurrings = self.getRecurringTransactions()
+        for r in recurrings:
+            pass
+        return accounts
+    
+    def getRecurringTransactions(self):
+        return self.dbconn.cursor().execute('SELECT * FROM recurring_transactions').fetchall()
 
     def clearAccountTransactions(self, account):
         self.dbconn.cursor().execute('DELETE FROM transactions WHERE accountId=?', (account.ID,))

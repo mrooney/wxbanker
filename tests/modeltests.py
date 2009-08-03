@@ -216,5 +216,17 @@ class ModelTests(testbase.TestCaseWithController):
         
         self.assertEqual(model.GetDateRange(), (yesterday, today))
         
+    def testRecurringTransactionsAreEmpty(self):
+        self.assertEqual(self.Controller.Model.GetRecurringTransactions(), [])
+        
+    def testCanCreateRecurringTransaction(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        rType, rEvery, rOn, rEnd = 0,0,0,0
+        a.AddRecurringTransaction(1, "test", today, rType, rEvery, rOn, rEnd)
+        
+        rts = model.GetRecurringTransactions()
+        self.assertEqual(len(rts), 1)
+        
 if __name__ == "__main__":
     unittest.main()
