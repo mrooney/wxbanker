@@ -139,7 +139,11 @@ class PersistentStore:
         self.commitIfAppropriate()
         
     def MakeRecurringTransaction(self, recurring):
-        pass
+        cursor = self.dbconn.cursor()
+        cursor.execute('INSERT INTO recurring_transactions VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?)', self.recurringtransaction2result(recurring)[1:])
+        self.commitIfAppropriate()
+        recurring.ID = cursor.lastrowid
+        return recurring
 
     def MakeTransaction(self, account, transaction):
         cursor = self.dbconn.cursor()
@@ -269,6 +273,16 @@ class PersistentStore:
             accountTotal = sum([t.Amount for t in self.getTransactionsFrom(account)])
             # Set the correct total.
             self.dbconn.cursor().execute('UPDATE accounts SET balance=? WHERE name=?', (accountTotal, account.Name))
+            
+    def recurringtransaction2result(self, recurringObj):
+        """
+        This method converts the Bank's generic implementation of
+        a recurring transaction into this model's specific one.
+        """
+        dateStr = "%s/%s/%s"%(recurringObj.Date.year, str(recurringObj.Date.month).zfill(2), str(recurringObj.Date.day).zfill(2))
+        result = [recurringObj.ID, recurringObj.Parent.ID, recurringObj.Amount, recurringObj.Description, dateStr]
+        result += [recurringObj.RepeatType, recurringObj.RepeatEvery, recurringObj.RepeatOn, recurringObj.EndDate]
+        return result
 
     def transaction2result(self, transObj):
         """
