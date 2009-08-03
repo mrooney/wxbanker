@@ -137,6 +137,9 @@ class PersistentStore:
         self.clearAccountTransactions(account)
         self.dbconn.cursor().execute('DELETE FROM accounts WHERE id=?',(account.ID,))
         self.commitIfAppropriate()
+        
+    def MakeRecurringTransaction(self, recurring):
+        pass
 
     def MakeTransaction(self, account, transaction):
         cursor = self.dbconn.cursor()

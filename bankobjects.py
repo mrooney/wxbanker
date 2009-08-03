@@ -44,7 +44,6 @@ class BankModel(object):
                 allRecurrings.extend(recurrings)
                 
         return allRecurrings
-            
 
     def GetTransactions(self):
         transactions = []
@@ -263,7 +262,7 @@ class Account(object):
         self.ID = aID
         self._Name = name
         self._Transactions = None
-        self._RecurringTransactions = None
+        self._RecurringTransactions = []
         self._preTransactions = []
         self.Currency = currency
         self._Balance = balance
@@ -360,7 +359,14 @@ class Account(object):
         Publisher.sendMessage("batch.end")
         
     def AddRecurringTransaction(self, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source=None):
-        pass
+        # Create the recurring transaction object.
+        recurring = RecurringTransaction(None, self, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source)
+        # Store it.
+        self.Store.MakeRecurringTransaction(recurring)
+        # Add it to our internal list.
+        self.RecurringTransactions.append(recurring)
+        
+        return recurring
 
     def AddTransaction(self, amount=None, description="", date=None, source=None, transaction=None):
         """
