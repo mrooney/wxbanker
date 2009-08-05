@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-08-01 11:37-0700\n"
-"PO-Revision-Date: 2009-05-26 15:54+0000\n"
+"PO-Revision-Date: 2009-08-04 11:42+0000\n"
 "Last-Translator: André Rantzow <andre.rantzow@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-08-04 03:31+0000\n"
+"X-Launchpad-Export-Date: 2009-08-05 03:31+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
@@ -528,181 +528,183 @@ msgstr "Begär en ny funktion som ska implementeras"
 
 #: newtransactionctrl.py:47
 msgid "from"
-msgstr ""
+msgstr "från"
 
 #: newtransactionctrl.py:47 summarytab.py:61
 msgid "to"
-msgstr ""
+msgstr "till"
 
 #: newtransactionctrl.py:55
 msgid "account:"
-msgstr ""
+msgstr "konto:"
 
 #: newtransactionctrl.py:91 newtransactionctrl.py:185
 #: newtransactionctrl.py:195
 #, python-format
 msgid "Daily"
 msgid_plural "Every %(num)d days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Dagligen"
+msgstr[1] "Var %(num)d dag"
 
 #: newtransactionctrl.py:91
 msgid "Weekly"
-msgstr ""
+msgstr "Veckovis"
 
 #: newtransactionctrl.py:91 newtransactionctrl.py:207
 #, python-format
 msgid "Monthly"
 msgid_plural "Every %(num)d months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Månadsvis"
+msgstr[1] "Var %(num)d månad"
 
 #: newtransactionctrl.py:91
 msgid "Yearly"
-msgstr ""
+msgstr "Årligen"
 
 #: newtransactionctrl.py:100
 msgid "Never"
-msgstr ""
+msgstr "Aldrig"
 
 #: newtransactionctrl.py:110
 msgid "Mon"
-msgstr ""
+msgstr "Mån"
 
 #: newtransactionctrl.py:110
 msgid "Tue"
-msgstr ""
+msgstr "Tis"
 
 #: newtransactionctrl.py:110
 msgid "Wed"
-msgstr ""
+msgstr "Ons"
 
 #: newtransactionctrl.py:110
 msgid "Thu"
-msgstr ""
+msgstr "Tor"
 
 #: newtransactionctrl.py:110
 msgid "Fri"
-msgstr ""
+msgstr "Fre"
 
 #: newtransactionctrl.py:110
 msgid "Sat"
-msgstr ""
+msgstr "Lör"
 
 #: newtransactionctrl.py:110
 msgid "Sun"
-msgstr ""
+msgstr "Sön"
 
 #: newtransactionctrl.py:131
 msgid "Repeats:"
-msgstr ""
+msgstr "Återkommer:"
 
 #: newtransactionctrl.py:134
 msgid "Every"
-msgstr ""
+msgstr "Var"
 
 #: newtransactionctrl.py:140
 msgid "Ends:"
-msgstr ""
+msgstr "Slutar:"
 
 #: newtransactionctrl.py:184
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "dag"
+msgstr[1] "dagar"
 
 #: newtransactionctrl.py:187
 msgid "week"
 msgid_plural "weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "vecka"
+msgstr[1] "veckor"
 
 #: newtransactionctrl.py:188
 msgid "Repeats on days:"
-msgstr ""
+msgstr "Återkommer på dagarna:"
 
 #: newtransactionctrl.py:191
 msgid "Weekly on weekdays"
-msgstr ""
+msgstr "Veckovis på vardagar"
 
 #: newtransactionctrl.py:193
 msgid "Weekly on weekends"
-msgstr ""
+msgstr "Veckovis på helger"
 
 #: newtransactionctrl.py:197
 msgid "Mondays"
-msgstr ""
+msgstr "Måndagar"
 
 #: newtransactionctrl.py:197
 msgid "Tuesdays"
-msgstr ""
+msgstr "Tisdagar"
 
 #: newtransactionctrl.py:197
 msgid "Wednesdays"
-msgstr ""
+msgstr "Onsdagar"
 
 #: newtransactionctrl.py:197
 msgid "Thursdays"
-msgstr ""
+msgstr "Torsdagar"
 
 #: newtransactionctrl.py:197
 msgid "Fridays"
-msgstr ""
+msgstr "Fredagar"
 
 #: newtransactionctrl.py:197
 msgid "Saturdays"
-msgstr ""
+msgstr "Lördagar"
 
 #: newtransactionctrl.py:197
 msgid "Sundays"
-msgstr ""
+msgstr "Söndagar"
 
 #: newtransactionctrl.py:202 newtransactionctrl.py:204
 #, python-format
 msgid "Weekly on %s"
-msgstr ""
+msgstr "Veckovis på %s"
 
 #: newtransactionctrl.py:204
 #, python-format
 msgid " and %s"
-msgstr ""
+msgstr " och %s"
 
 #: newtransactionctrl.py:206
 msgid "month"
 msgid_plural "months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "månad"
+msgstr[1] "månader"
 
 #: newtransactionctrl.py:209
 msgid "year"
 msgid_plural "years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "år"
+msgstr[1] "år"
 
 #: newtransactionctrl.py:210
 #, python-format
 msgid "Annually"
 msgid_plural "Every %(num)d years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Årligen"
+msgstr[1] "Vart %(num)d år"
 
 #: newtransactionctrl.py:214
 #, python-format
 msgid "until %s"
-msgstr ""
+msgstr "till och med %s"
 
 #: newtransactionctrl.py:228
 msgid "Starts:"
-msgstr ""
+msgstr "Börjar:"
 
 #: newtransactionctrl.py:398
 msgid ""
 "This transaction is marked as a transfer. Please select the transfer account."
 msgstr ""
+"Den här transaktionen är markerad som en överföring. Var vänlig välj "
+"överföringskontot."
 
 #: summarytab.py:59
 msgid "From"
-msgstr ""
+msgstr "Från"
 
 #: currconvert.py:59
 #, python-format
@@ -717,11 +719,11 @@ msgstr ""
 
 #: accountconfigdialog.py:37
 msgid "Username"
-msgstr ""
+msgstr "Användarnamn"
 
 #: accountconfigdialog.py:39
 msgid "Password"
-msgstr ""
+msgstr "Lösenord"
 
 #: csvimportframe.py:87
 msgid "CSV columns mapping"
@@ -752,11 +754,11 @@ msgstr "Profilen med namnet '%s' existerar redan. Skriv över?"
 
 #: currencies.py:194
 msgid "detected"
-msgstr ""
+msgstr "upptäckt"
 
 #: accountlistctrl.py:383 accountlistctrl.py:478
 msgid "Accout names cannot be blank."
-msgstr ""
+msgstr "Kontonamn kan inte vara tomma."
 
 #: wxbanker.py:130
 msgid ""
