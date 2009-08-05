@@ -78,8 +78,8 @@ class TransferPanel(wx.Panel):
         else:
             choices = self.nullChoice
 
-        # Update the choices.
-        self.accountSelection.SetItems(choices)
+        # Update the choices, and make sure to sort them!
+        self.accountSelection.SetItems(sorted(choices))
 
 
 class RecurringPanel(wx.Panel):
