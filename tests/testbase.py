@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, sys
+import os, sys, datetime
 
 # Make sure path contains both the test dir and its parent (wxbanker root dir).
 testdir = os.path.dirname(__file__)
@@ -26,6 +26,12 @@ rootdir = os.path.dirname(testdir)
 # We must insert since if wxbanker is installed on the system this would otherwise pull in that package first.
 sys.path.insert(0, testdir)
 sys.path.insert(0, rootdir)
+
+# Set up some convenience dates.
+today = datetime.date.today()
+yesterday = today - datetime.timedelta(days=1)
+tomorrow = today + datetime.timedelta(days=1)
+one = datetime.timedelta(1)
 
 # Import wxbanker here so wx gets initialized first, so wxversion calls work properly.
 import wxbanker, controller, unittest

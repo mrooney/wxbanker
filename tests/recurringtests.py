@@ -22,13 +22,20 @@ import testbase
 import unittest
 
 import bankobjects
+from testbase import today
 
-class RecurringTest(unittest.TestCase):
-    def setUp(self):
-        pass
-    
+class RecurringTest(testbase.TestCaseWithController):
+    def testRecurringTransactionsAreEmpty(self):
+        self.assertEqual(self.Controller.Model.GetRecurringTransactions(), [])
+        
     def testCanCreateRecurringTransaction(self):
-        pass #INCOMPLETE
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        rType, rEvery, rOn, rEnd = 0,0,0,0
+        a.AddRecurringTransaction(1, "test", today, rType, rEvery, rOn, rEnd)
+        
+        rts = model.GetRecurringTransactions()
+        self.assertEqual(len(rts), 1)
 
 if __name__ == "__main__":
     unittest.main()

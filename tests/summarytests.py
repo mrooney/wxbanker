@@ -20,11 +20,7 @@
 
 import testbase, bankobjects
 import unittest, datetime
-
-# Set up some constants / shortcuts
-today = datetime.date.today()
-one = datetime.timedelta(1)
-
+from testbase import today, yesterday, one
 
 class SummaryTests(testbase.TestCaseWithController):
     def get(self, transactionsData, *args):
