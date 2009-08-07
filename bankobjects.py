@@ -660,6 +660,19 @@ class RecurringTransaction(Transaction):
         self.RepeatEvery = repeatEvery
         self.RepeatOn = repeatOn
         self.EndDate = endDate
+        
+    def __eq__(self, other):
+        if other is None:
+            return False
+
+        assert isinstance(other, RecurringTransaction), other
+        return (
+            Transaction.__eq__(self, other) and
+            self.RepeatType == other.RepeatType and
+            self.RepeatEvery == other.RepeatEvery and
+            self.RepeatOn == other.RepeatOn and
+            self.EndDate == other.EndDate
+            )
 
 if __name__ == "__main__":
     import doctest

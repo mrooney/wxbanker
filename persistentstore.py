@@ -295,14 +295,22 @@ class PersistentStore:
     def result2account(self, result):
         ID, name, currency, balance = result
         return bankobjects.Account(self, ID, name, currency, balance)
+    
+    def result2recurringtransaction(self, result, parentAccount):
+        rId, accountId, amount, description, date, repeatType, repeatEvery, repeatOn, endDate = result
+        return bankobjects.RecurringTransaction(rId, parentAccount, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, None)
 
     def getAccounts(self):
         # Fetch all the accounts.
         accounts = [self.result2account(result) for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()]
         # Add any recurring transactions that exist for each.
         recurrings = self.getRecurringTransactions()
-        for r in recurrings:
-            pass
+        for recurring in recurrings:
+            parentId = recurring[1]
+            for account in accounts:
+                if account.ID == parentId:
+                    rObj = self.result2recurringtransaction(recurring, account)
+                    account.RecurringTransactions.append(rObj)
         return accounts
     
     def getRecurringTransactions(self):

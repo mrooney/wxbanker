@@ -39,6 +39,28 @@ class ModelEqualityTest(testbase.TestCaseWithController):
         a.AddRecurringTransaction(0, "", None, 0, 0, 0, 0)
         
         self.assertNotEqual(model1, model2)
+        return model1, model2, a, b
+    
+    def assertChangingAttributeTogglesEquality(self, obj, attr, val, model1, model2):
+        self.assertEqual(model1, model2)
+        oldVal = getattr(obj, attr)
+        setattr(obj, attr, val)
+        self.assertNotEqual(model1, model2)
+        setattr(obj, attr, oldVal)
+        self.assertEqual(model1, model2)
+    
+    def testDifferentRecurringTransactionsArentEqual(self):
+        model1, model2, a, b = self.testAccountWithRecurringTransactionsIsNotEqualToAccountWithout()
+        self.assertNotEqual(model1, model2)
+
+        rt = b.AddRecurringTransaction(0, "", None, 0, 0, 0, 0)
+        self.assertEqual(model1, model2)
+        
+        self.assertChangingAttributeTogglesEquality(rt, "Amount", 5, model1, model2)
+        self.assertChangingAttributeTogglesEquality(rt, "RepeatType", 5, model1, model2)
+        self.assertChangingAttributeTogglesEquality(rt, "RepeatEvery", "2", model1, model2)
+        self.assertChangingAttributeTogglesEquality(rt, "RepeatOn", "1,3", model1, model2)
+        self.assertChangingAttributeTogglesEquality(rt, "EndDate", testbase.yesterday, model1, model2)
 
 if __name__ == "__main__":
     unittest.main()
