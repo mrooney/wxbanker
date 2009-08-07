@@ -652,6 +652,9 @@ class Transaction(object):
 class RecurringTransaction(Transaction):
     def __init__(self, tID, parent, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source=None):
         Transaction.__init__(self, tID, parent, amount, description, date)
+        if not repeatEvery:
+            repeatEvery = ""
+            
         self.RepeatType = repeatType
         self.RepeatEvery = repeatEvery
         self.RepeatOn = repeatOn

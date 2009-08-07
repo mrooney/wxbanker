@@ -22,6 +22,8 @@ import testbase, os
 import controller, unittest
 from wx.lib.pubsub import Publisher
 
+from testbase import today
+
 class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
     """
     These are tests which require an actual database on disk.
@@ -150,5 +152,14 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         model2 = model1.Store.GetModel(useCached=False)
         self.assertTrue(model1 == model2)
         
+    def testRecurringTransactionIsStored(self):
+        model1 = self.Controller.Model
+        a = model1.CreateAccount("A")
+        rType, rEvery, rOn, rEnd = 1, 2, "1,5", None
+        a.AddRecurringTransaction(1, "test", today, rType, rEvery, rOn, rEnd)
+        
+        model2 = model1.Store.GetModel(useCached=False)
+        self.assertEqual(model1, model2)
+    
 if __name__ == "__main__":
     unittest.main()

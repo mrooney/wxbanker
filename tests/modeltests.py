@@ -214,5 +214,9 @@ class ModelTests(testbase.TestCaseWithController):
         
         self.assertEqual(model.GetDateRange(), (yesterday, today))
         
+    def testDifferingRecurringTransactionsAreEqual(self):
+        # make sure a model with rts is not equal to one without
+        self.fail()
+        
 if __name__ == "__main__":
     unittest.main()
