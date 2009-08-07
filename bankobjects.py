@@ -475,7 +475,8 @@ class Account(object):
             self.Name == other.Name and
             self.Balance == other.Balance and
             self.Currency == other.Currency and
-            self.Transactions == other.Transactions
+            self.Transactions == other.Transactions and
+            self.RecurringTransactions == other.RecurringTransactions
         )
 
     Name = property(GetName, SetName)

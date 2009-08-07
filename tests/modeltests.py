@@ -74,11 +74,6 @@ class ModelTests(testbase.TestCaseWithController):
         account2 = model.CreateAccount("Another!")
         self.assertEqual(account2.Currency, currencies.EuroCurrency())
 
-    def testBlankModelsAreEqual(self):
-        model1 = self.Controller.Model
-        model2 = self.Controller.LoadPath(":memory:")
-        self.assertEqual(model1, model2)
-
     def testLoadingTransactionsPreservesReferences(self):
         a = self.Model.CreateAccount("A")
         t = a.AddTransaction(1, "First")
@@ -213,10 +208,6 @@ class ModelTests(testbase.TestCaseWithController):
         a.AddTransaction(1, date=yesterday)
         
         self.assertEqual(model.GetDateRange(), (yesterday, today))
-        
-    def testDifferingRecurringTransactionsAreEqual(self):
-        # make sure a model with rts is not equal to one without
-        self.fail()
         
 if __name__ == "__main__":
     unittest.main()
