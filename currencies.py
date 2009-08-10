@@ -69,23 +69,21 @@ class BaseCurrency(object):
 
         # Temporarily override the localeconv dictionary so the locale module acts as the desired locale.
         # Wrap in a try/finally to be extra safe as it needs to be restored no matter what.
-        locale._override_localeconv = self.LOCALECONV
+        ##locale._override_localeconv = self.LOCALECONV # Use this when python2.5 support is dropped.
+        localeConvBackup = locale.localeconv
+        locale.localeconv = lambda: self.LOCALECONV
         try:
             s = locale.currency(val, grouping=True)
         finally:
-            locale._override_localeconv = None
+            ##locale._override_localeconv = None
+            locale.localeconv = localeConvBackup
 
-        # locale.localeconv bug http://bugs.python.org/issue1995 workaround.
-        #if _locale_encoding is not None:
         if not isinstance(s, unicode):
             s = unicode(s, locale.getlocale()[1])
 
         # Justify as appropriate.
         s = s.rjust(just)
 
-        # Always return unicode!
-        #if type(s) != unicode:
-        #    s = s.decode("utf-8")
         return s
 
     def __eq__(self, other):
