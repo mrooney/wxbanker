@@ -28,6 +28,20 @@ class RecurringTest(testbase.TestCaseWithController):
     def testRecurringTransactionsAreEmpty(self):
         self.assertEqual(self.Controller.Model.GetRecurringTransactions(), [])
         
+    def testWeeklyRecurringWithoutRepeatsOnRaises(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        self.assertRaises(bankobjects.RecurringWeeklyException, lambda: a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_WEEKLY))
+        
+    def testRecurringDefaults(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        self.assertEqual(rt.RepeatType, bankobjects.RECURRING_DAILY)
+        self.assertEqual(rt.RepeatEvery, 1)
+        self.assertEqual(rt.RepeatOn, None)
+        self.assertEqual(rt.EndDate, None)
+        
     def testCanCreateRecurringTransaction(self):
         model = self.Controller.Model
         a = model.CreateAccount("A")
@@ -36,6 +50,11 @@ class RecurringTest(testbase.TestCaseWithController):
         
         rts = model.GetRecurringTransactions()
         self.assertEqual(len(rts), 1)
+        
+    def testRecurringDateDailySimple(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY, 1, None, None)
 
 if __name__ == "__main__":
     unittest.main()

@@ -22,9 +22,13 @@ from wx.lib.pubsub import Publisher
 import datetime, re
 import bankexceptions, currencies, localization, debug
 
+RECURRING_DAILY = 0
+RECURRING_WEEKLY = 1
+RECURRING_MONTLY = 2
+RECURRING_YEARLY = 3
 
 class InvalidDateRangeException(Exception): pass
-
+class RecurringWeeklyException(Exception): pass
 
 class BankModel(object):
     def __init__(self, store, accountList):
@@ -358,7 +362,7 @@ class Account(object):
             self.AddTransaction(transaction=t)
         Publisher.sendMessage("batch.end")
         
-    def AddRecurringTransaction(self, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source=None):
+    def AddRecurringTransaction(self, amount, description, date, repeatType, repeatEvery=1, repeatOn=None, endDate=None, source=None):
         # Create the recurring transaction object.
         recurring = RecurringTransaction(None, self, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source)
         # Store it.
@@ -651,11 +655,11 @@ class Transaction(object):
     LinkedTransaction = property(GetLinkedTransaction, SetLinkedTransaction)
 
 class RecurringTransaction(Transaction):
-    def __init__(self, tID, parent, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source=None):
+    def __init__(self, tID, parent, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source):
         Transaction.__init__(self, tID, parent, amount, description, date)
-        if not repeatEvery:
-            repeatEvery = ""
-            
+        if repeatType == RECURRING_WEEKLY and repeatOn is None:
+            raise RecurringWeeklyException("Recurring weekly transactions must specify repeatsOn tuple")
+        
         self.RepeatType = repeatType
         self.RepeatEvery = repeatEvery
         self.RepeatOn = repeatOn
