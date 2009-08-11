@@ -669,10 +669,11 @@ class RecurringTransaction(Transaction):
     def GetUntransactedDates(self):
         dates = []
         today = datetime.date.today()
+        current = start = self.LastTransacted or self.Date
+        end = self.EndDate or today
         
         if self.RepeatType == RECURRING_DAILY:
-            current = start = self.LastTransacted or self.Date
-            while current <= today:
+            while current <= end:
                 dates.append(current)
                 current += datetime.timedelta(days=self.RepeatEvery)
             

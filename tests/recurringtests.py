@@ -66,6 +66,13 @@ class RecurringTest(testbase.TestCaseWithController):
         dates = rt.GetUntransactedDates()
         self.assertEqual(dates, [start, start+one*3, start+one*6])
         
+    def testRecurringDateDailyWithEnd(self):
+        model, account = self.createAccount()
+        start = today - one*4
+        rt = account.AddRecurringTransaction(1, "test", start, bankobjects.RECURRING_DAILY, endDate=today-one*2)
+        dates = rt.GetUntransactedDates()
+        self.assertEqual(dates, [start, start+one, start+one*2])
+        
 
 if __name__ == "__main__":
     unittest.main()
