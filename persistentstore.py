@@ -301,6 +301,8 @@ class PersistentStore:
     
     def result2recurringtransaction(self, result, parentAccount):
         rId, accountId, amount, description, date, repeatType, repeatEvery, repeatOn, endDate = result
+        if repeatOn:
+            repeatOn = [int(x) for x in repeatOn.split(",")]
         return bankobjects.RecurringTransaction(rId, parentAccount, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, None)
 
     def getAccounts(self):

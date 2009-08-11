@@ -660,7 +660,7 @@ class RecurringTransaction(Transaction):
         # If the transaction recurs weekly and repeatsOn isn't specified, assume just today.
         if repeatType == RECURRING_WEEKLY and repeatOn is None:
             todaydaynumber = datetime.date.today().weekday()
-            repeatOn = [i==todaydaynumber for i in range(7)]
+            repeatOn = [int(i==todaydaynumber) for i in range(7)]
         
         self.RepeatType = repeatType
         self.RepeatEvery = repeatEvery
