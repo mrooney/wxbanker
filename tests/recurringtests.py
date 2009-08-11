@@ -22,39 +22,50 @@ import testbase
 import unittest
 
 import bankobjects
-from testbase import today
+from testbase import today, one
 
 class RecurringTest(testbase.TestCaseWithController):
+    def createAccount(self):
+        model = self.Controller.Model
+        return model, model.CreateAccount("A")
+        
     def testRecurringTransactionsAreEmpty(self):
         self.assertEqual(self.Controller.Model.GetRecurringTransactions(), [])
         
     def testWeeklyRecurringWithoutRepeatsOnRaises(self):
-        model = self.Controller.Model
-        a = model.CreateAccount("A")
-        self.assertRaises(bankobjects.RecurringWeeklyException, lambda: a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_WEEKLY))
+        model, account = self.createAccount()
+        self.assertRaises(bankobjects.RecurringWeeklyException, lambda: account.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_WEEKLY))
         
     def testRecurringDefaults(self):
-        model = self.Controller.Model
-        a = model.CreateAccount("A")
-        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        model, account = self.createAccount()
+        rt = account.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
         self.assertEqual(rt.RepeatType, bankobjects.RECURRING_DAILY)
         self.assertEqual(rt.RepeatEvery, 1)
         self.assertEqual(rt.RepeatOn, None)
         self.assertEqual(rt.EndDate, None)
+        self.assertEqual(rt.LastTransacted, None)
         
     def testCanCreateRecurringTransaction(self):
-        model = self.Controller.Model
-        a = model.CreateAccount("A")
-        rType, rEvery, rOn, rEnd = 0,0,0,0
-        a.AddRecurringTransaction(1, "test", today, rType, rEvery, rOn, rEnd)
+        model, account = self.createAccount()
+        account.AddRecurringTransaction(1, "test", today, repeatType=bankobjects.RECURRING_DAILY)
         
         rts = model.GetRecurringTransactions()
         self.assertEqual(len(rts), 1)
         
     def testRecurringDateDailySimple(self):
-        model = self.Controller.Model
-        a = model.CreateAccount("A")
-        a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY, 1, None, None)
+        model, account = self.createAccount()
+        rt = account.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        
+        dates = rt.GetUntransactedDates()
+        self.assertEqual(dates, [today])
+        
+    def testRecurringDateDailyWithEvery(self):
+        model, account = self.createAccount()
+        start = today - one*7
+        rt = account.AddRecurringTransaction(1, "test", start, bankobjects.RECURRING_DAILY, repeatEvery=3)
+        dates = rt.GetUntransactedDates()
+        self.assertEqual(dates, [start, start+one*3, start+one*6])
+        
 
 if __name__ == "__main__":
     unittest.main()
