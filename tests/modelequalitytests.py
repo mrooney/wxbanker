@@ -36,7 +36,7 @@ class ModelEqualityTest(testbase.TestCaseWithController):
         b = model2.CreateAccount("A")
         self.assertEqual(model1, model2)
         
-        a.AddRecurringTransaction(0, "", None, 0, 0, 0, 0)
+        a.AddRecurringTransaction(0, "", None, 0)
         
         self.assertNotEqual(model1, model2)
         return model1, model2, a, b
@@ -53,13 +53,13 @@ class ModelEqualityTest(testbase.TestCaseWithController):
         model1, model2, a, b = self.testAccountWithRecurringTransactionsIsNotEqualToAccountWithout()
         self.assertNotEqual(model1, model2)
 
-        rt = b.AddRecurringTransaction(0, "", None, 0, 0, 0, 0)
+        rt = b.AddRecurringTransaction(0, "", None, 0)
         self.assertEqual(model1, model2)
         
         self.assertChangingAttributeTogglesEquality(rt, "Amount", 5, model1, model2)
         self.assertChangingAttributeTogglesEquality(rt, "RepeatType", 5, model1, model2)
         self.assertChangingAttributeTogglesEquality(rt, "RepeatEvery", "2", model1, model2)
-        self.assertChangingAttributeTogglesEquality(rt, "RepeatOn", "1,3", model1, model2)
+        self.assertChangingAttributeTogglesEquality(rt, "RepeatOn", [1,3], model1, model2)
         self.assertChangingAttributeTogglesEquality(rt, "EndDate", testbase.yesterday, model1, model2)
 
 if __name__ == "__main__":

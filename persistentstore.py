@@ -280,8 +280,11 @@ class PersistentStore:
         a recurring transaction into this model's specific one.
         """
         dateStr = "%s/%s/%s"%(recurringObj.Date.year, str(recurringObj.Date.month).zfill(2), str(recurringObj.Date.day).zfill(2))
+        repeatOn = recurringObj.RepeatOn
+        if repeatOn:
+            repeatOn = ",".join((str(i) for i in repeatOn))
         result = [recurringObj.ID, recurringObj.Parent.ID, recurringObj.Amount, recurringObj.Description, dateStr]
-        result += [recurringObj.RepeatType, recurringObj.RepeatEvery, recurringObj.RepeatOn, recurringObj.EndDate]
+        result += [recurringObj.RepeatType, recurringObj.RepeatEvery, repeatOn, recurringObj.EndDate]
         return result
 
     def transaction2result(self, transObj):

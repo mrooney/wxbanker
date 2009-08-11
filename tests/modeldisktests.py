@@ -155,8 +155,7 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
     def testRecurringTransactionIsStored(self):
         model1 = self.Controller.Model
         a = model1.CreateAccount("A")
-        rType, rEvery, rOn, rEnd = 1, 2, "1,5", None
-        a.AddRecurringTransaction(1, "test", today, rType, rEvery, rOn, rEnd)
+        a.AddRecurringTransaction(1, "test", today, repeatType=0)
         
         model2 = model1.Store.GetModel(useCached=False)
         self.assertEqual(model1, model2)

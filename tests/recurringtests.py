@@ -32,10 +32,6 @@ class RecurringTest(testbase.TestCaseWithController):
     def testRecurringTransactionsAreEmpty(self):
         self.assertEqual(self.Controller.Model.GetRecurringTransactions(), [])
         
-    def testWeeklyRecurringWithoutRepeatsOnRaises(self):
-        model, account = self.createAccount()
-        self.assertRaises(bankobjects.RecurringWeeklyException, lambda: account.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_WEEKLY))
-        
     def testRecurringDefaults(self):
         model, account = self.createAccount()
         rt = account.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
@@ -44,6 +40,12 @@ class RecurringTest(testbase.TestCaseWithController):
         self.assertEqual(rt.RepeatOn, None)
         self.assertEqual(rt.EndDate, None)
         self.assertEqual(rt.LastTransacted, None)
+        
+    def testRecurringWeeklyDefault(self):
+        model, account = self.createAccount()
+        rt = account.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_WEEKLY)
+        self.assertEqual(rt.RepeatType, bankobjects.RECURRING_WEEKLY)
+        self.assertEqual(rt.RepeatOn, [i==today.weekday() for i in range(7)])
         
     def testCanCreateRecurringTransaction(self):
         model, account = self.createAccount()
@@ -63,6 +65,7 @@ class RecurringTest(testbase.TestCaseWithController):
         model, account = self.createAccount()
         start = today - one*7
         rt = account.AddRecurringTransaction(1, "test", start, bankobjects.RECURRING_DAILY, repeatEvery=3)
+        
         dates = rt.GetUntransactedDates()
         self.assertEqual(dates, [start, start+one*3, start+one*6])
         
@@ -70,8 +73,17 @@ class RecurringTest(testbase.TestCaseWithController):
         model, account = self.createAccount()
         start = today - one*4
         rt = account.AddRecurringTransaction(1, "test", start, bankobjects.RECURRING_DAILY, endDate=today-one*2)
+        
         dates = rt.GetUntransactedDates()
         self.assertEqual(dates, [start, start+one, start+one*2])
+        
+    def testRecurringDateWeeklySimple(self):
+        model, account = self.createAccount()
+        start = today - one*14
+        rt = account.AddRecurringTransaction(1, "test", start, bankobjects.RECURRING_WEEKLY)
+        
+        dates = rt.GetUntransactedDates()
+        self.assertEqual(dates, [start, start+one*7, start+one*14])
         
 
 if __name__ == "__main__":

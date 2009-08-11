@@ -657,8 +657,10 @@ class Transaction(object):
 class RecurringTransaction(Transaction):
     def __init__(self, tID, parent, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source):
         Transaction.__init__(self, tID, parent, amount, description, date)
+        # If the transaction recurs weekly and repeatsOn isn't specified, assume just today.
         if repeatType == RECURRING_WEEKLY and repeatOn is None:
-            raise RecurringWeeklyException("Recurring weekly transactions must specify repeatsOn tuple")
+            todaydaynumber = datetime.date.today().weekday()
+            repeatOn = [i==todaydaynumber for i in range(7)]
         
         self.RepeatType = repeatType
         self.RepeatEvery = repeatEvery
@@ -676,6 +678,11 @@ class RecurringTransaction(Transaction):
             while current <= end:
                 dates.append(current)
                 current += datetime.timedelta(days=self.RepeatEvery)
+        elif self.RepeatType == RECURRING_WEEKLY:
+            while current <= end:
+                if self.RepeatOn[current.weekday()]:
+                    dates.append(current)
+                current += datetime.timedelta(days=1)
             
         return dates
         
