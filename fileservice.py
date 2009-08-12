@@ -19,26 +19,28 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.%
 
 import os, sys
+try:
+    import xdg
+    from xdg import BaseDirectory
+except ImportError:
+    xdg = None
 
-def __getFilePath(filename):
-    # Figure out where the bank database file is, and load it.
-    #Note: look at wx.StandardPaths.Get().GetUserDataDir() in the future
-    path = os.path.join(os.path.dirname(__file__), filename)
-    if not '--use-local' in sys.argv and 'HOME' in os.environ:
-        # We seem to be on a Unix environment.
-        preferredPath = os.path.join(os.environ['HOME'], '.wxbanker', filename)
-        if os.path.exists(preferredPath) or not os.path.exists(path):
-            path = preferredPath
-            # Ensure that the directory exists.
-            dirName = os.path.dirname(path)
-            if not os.path.exists(dirName):
-                os.mkdir(dirName)
+
+def __getFilePath(filename, xdgListName):
+    if xdg and "--use-local" not in sys.argv:
+        base = getattr(BaseDirectory, xdgListName)[0]
+        pathdir = os.path.join(base, "wxbanker")
+        path = os.path.join(pathdir, filename)
+        # Create the directory if it doesn't exist
+        if not os.path.exists(pathdir):
+            os.mkdir(pathdir)
+    else:
+        path = os.path.join(os.path.dirname(__file__), filename)
     return path
-    
 
 def getDataFilePath(filename):
-    return __getFilePath(filename)
+    return __getFilePath(filename, xdgListName="xdg_data_dirs")
     
 def getConfigFilePath(filename):
-    return __getFilePath(filename)
+    return __getFilePath(filename, xdgListName="xdg_config_dirs")
 
