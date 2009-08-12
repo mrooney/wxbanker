@@ -21,6 +21,7 @@
 from wx.lib.pubsub import Publisher
 import datetime, re
 from dateutil import rrule
+import functools
 import bankexceptions, currencies, localization, debug
 
 RECURRING_DAILY = 0
@@ -678,12 +679,15 @@ class RecurringTransaction(Transaction):
         rruleDays = [rrule.MO, rrule.TU, rrule.WE, rrule.TH, rrule.FR, rrule.SA, rrule.SU]
         rruleTypes = [rrule.DAILY, rrule.WEEKLY, rrule.MONTHLY, rrule.YEARLY]
         
-        byweekday = None
-        if self.RepeatOn:
-            byweekday = [rruleDays[i] for i, x in enumerate(self.RepeatOn) if x]
+        func = functools.partial(rrule.rrule, rruleTypes[self.RepeatType], dtstart=start, interval=self.RepeatEvery, until=end, wkst=rrule.MO)
+        if self.RepeatType == RECURRING_WEEKLY:
+            result = func(byweekday=[rruleDays[i] for i, x in enumerate(self.RepeatOn) if x])
+        elif self.RepeatType == RECURRING_MONTLY:
+            result = func(bymonthday=(start.day, -1), bysetpos=1)
+        else:
+            result = func()
             
-        datetimes = list(rrule.rrule(rruleTypes[self.RepeatType], dtstart=start, interval=self.RepeatEvery, until=end, byweekday=byweekday))
-        return [dt.date() for dt in datetimes]
+        return [dt.date() for dt in list(result)]
         
     def __eq__(self, other):
         if other is None:

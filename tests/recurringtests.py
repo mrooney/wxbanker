@@ -101,6 +101,15 @@ class RecurringTest(testbase.TestCaseWithController):
         dates = rt.GetUntransactedDates()
         self.assertEqual(dates, [start, datetime.date(2009, 2, 1), datetime.date(2009, 3, 1)])
         
+    def testRecurringDateMonthlyShortMonths(self):
+        # Months should clamp their dates if the day number is too high.
+        model, account = self.createAccount()
+        start = datetime.date(2009, 1, 31)
+        rt = account.AddRecurringTransaction(1, "test", start, bankobjects.RECURRING_MONTLY, endDate=datetime.date(2009, 5, 1))
+        
+        dates = rt.GetUntransactedDates()
+        self.assertEqual(dates, [start, datetime.date(2009, 2, 28), datetime.date(2009, 3, 31), datetime.date(2009, 4, 30)])
+        
     def testRecurringDateMonthlyQuarterly(self):
         model, account = self.createAccount()
         start = datetime.date(2009, 1, 1)
