@@ -217,13 +217,15 @@ True
 """
 
 from persistentstore import PersistentStore
-import wx
-import fileservice as fs
+import wx, os
 from wx.lib.pubsub import Publisher
-import debug
+import debug, fileservice
 
 
 class Controller(object):
+    CONFIG_NAME = "wxBanker.cfg"
+    DB_NAME = "bank.db"
+    
     def __init__(self, path=None, autoSave=True):
         self._AutoSave = autoSave
         self.Models = []
@@ -233,16 +235,37 @@ class Controller(object):
 
         Publisher.subscribe(self.onAutoSaveToggled, "user.autosave_toggled")
         Publisher.subscribe(self.onSaveRequest, "user.saved")
+        
+    def Migrate(self, fromPath, toPath):
+        """Migrate a file from fromPath (if it exists) to toPath."""
+        if os.path.exists(fromPath):
+            import shutil
+            try:
+                shutil.move(fromPath, toPath)
+            except IOError:
+                debug.debug("Unable to move %s to %s, attempting a copy instead..." % (fromPath, toPath))
+                shutil.copyfile(fromPath, toPath)
 
     def InitConfig(self):
-        # Initialize our configuration object.
+        """Initialize our configuration object."""
         # It is only necessary to initialize any default values we
         # have which differ from the default values of the types,
         # so initializing an Int to 0 or a Bool to False is not needed.
         self.wxApp = wx.App(False)
         self.wxApp.SetAppName("wxBanker")
         self.wxApp.Controller = self
-        config = wx.Config(localFilename=fs.getConfigFilePath('wxBanker.cfg'))
+        configPath = fileservice.getConfigFilePath(self.CONFIG_NAME)
+
+        # If we support XDG and the config file doesn't exist, it might be time to migrate.
+        if fileservice.xdg and not os.path.exists(configPath):
+            # If we can find the files at the old locations, we should migrate them.
+            oldConfigPath = os.path.expanduser("~/.wxBanker")
+            oldBankPath = os.path.expanduser("~/.wxbanker/bank.db")
+            self.Migrate(oldConfigPath, fileservice.getConfigFilePath(self.CONFIG_NAME))
+            self.Migrate(oldBankPath, fileservice.getDataFilePath(self.DB_NAME))
+            
+        # Okay, now our files are in happy locations, let's go!
+        config = wx.Config(localFilename=configPath)
         wx.Config.Set(config)
         if not config.HasEntry("SIZE_X"):
             config.WriteInt("SIZE_X", 800)
@@ -282,7 +305,7 @@ class Controller(object):
 
     def LoadPath(self, path, use=False):
         if path is None:
-            path = fs.getDataFilePath('bank.db')
+            path = fileservice.getDataFilePath(self.DB_NAME)
 
         store = PersistentStore(path)
         store.AutoSave = self.AutoSave

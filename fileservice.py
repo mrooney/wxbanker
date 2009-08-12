@@ -27,15 +27,21 @@ except ImportError:
 
 
 def __getFilePath(filename, xdgListName):
-    if xdg and "--use-local" not in sys.argv:
-        base = getattr(BaseDirectory, xdgListName)[0]
-        pathdir = os.path.join(base, "wxbanker")
-        path = os.path.join(pathdir, filename)
+    # Store files in the source directory unless we can do better.
+    path = os.path.join(os.path.dirname(__file__), filename)
+    if not "--use-local" in sys.argv:
+        if xdg:
+            base = getattr(BaseDirectory, xdgListName)[0]
+            pathdir = os.path.join(base, "wxbanker")
+        elif "HOME" in os.environ:
+            # We don't have XDG but we are on Unix, perhaps OSX.
+            pathdir = os.path.join(os.environ["HOME"], ".wxbanker")
+        
         # Create the directory if it doesn't exist
         if not os.path.exists(pathdir):
             os.mkdir(pathdir)
-    else:
-        path = os.path.join(os.path.dirname(__file__), filename)
+        path = os.path.join(pathdir, filename)
+        
     return path
 
 def getDataFilePath(filename):

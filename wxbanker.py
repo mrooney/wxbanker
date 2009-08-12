@@ -140,7 +140,8 @@ class BankerFrame(wx.Frame):
 
 
 def init(path=None, welcome=True):
-    import wx, os, sys
+    import wx, os, sys, fileservice
+    
     from controller import Controller
 
     bankController = Controller(path)

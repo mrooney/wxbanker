@@ -5,9 +5,9 @@ and transactions, is in the right place. If you are upgrading from
 version 0.4 or later, this is handled automatically for you. If not,
 move it manually by either:
 
-*) On Linux/OSX, move bank.db to ~/.wxbanker/bank.db, creating the
-   .wxbanker folder if necessary. This is the recommended approach
-   and will save you from needing to move it again in future releases.
+*) On Linux/OSX, move bank.db to ~/.local/share/wxbanker/bank.db, creating
+   any folders as necessary. This is the recommended approach and will
+   save you from needing to move it again in future releases.
    
  OR
 
