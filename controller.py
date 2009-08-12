@@ -217,7 +217,8 @@ True
 """
 
 from persistentstore import PersistentStore
-import wx, os, sys
+import wx
+import fileservice as fs
 from wx.lib.pubsub import Publisher
 import debug
 
@@ -226,9 +227,9 @@ class Controller(object):
     def __init__(self, path=None, autoSave=True):
         self._AutoSave = autoSave
         self.Models = []
-
-        self.LoadPath(path, use=True)
+        
         self.InitConfig()
+        self.LoadPath(path, use=True)
 
         Publisher.subscribe(self.onAutoSaveToggled, "user.autosave_toggled")
         Publisher.subscribe(self.onSaveRequest, "user.saved")
@@ -239,9 +240,9 @@ class Controller(object):
         # have which differ from the default values of the types,
         # so initializing an Int to 0 or a Bool to False is not needed.
         self.wxApp = wx.App(False)
+        self.wxApp.SetAppName("wxBanker")
         self.wxApp.Controller = self
-
-        config = wx.Config("wxBanker")
+        config = wx.Config(localFilename=fs.getConfigFilePath('wxBanker.cfg'))
         wx.Config.Set(config)
         if not config.HasEntry("SIZE_X"):
             config.WriteInt("SIZE_X", 800)
@@ -281,18 +282,7 @@ class Controller(object):
 
     def LoadPath(self, path, use=False):
         if path is None:
-            # Figure out where the bank database file is, and load it.
-            #Note: look at wx.StandardPaths.Get().GetUserDataDir() in the future
-            path = os.path.join(os.path.dirname(__file__), 'bank.db')
-            if not '--use-local' in sys.argv and 'HOME' in os.environ:
-                # We seem to be on a Unix environment.
-                preferredPath = os.path.join(os.environ['HOME'], '.wxbanker', 'bank.db')
-                if os.path.exists(preferredPath) or not os.path.exists(path):
-                    path = preferredPath
-                    # Ensure that the directory exists.
-                    dirName = os.path.dirname(path)
-                    if not os.path.exists(dirName):
-                        os.mkdir(dirName)
+            path = fs.getDataFilePath('bank.db')
 
         store = PersistentStore(path)
         store.AutoSave = self.AutoSave

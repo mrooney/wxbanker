@@ -22,6 +22,7 @@ from datetime import date, datetime
 from bankobjects import Transaction
 from wx.lib.pubsub import Publisher
 import codecs, csv, os, re
+import fileservice as fs
 try:
     import simplejson as json
 except:
@@ -82,21 +83,7 @@ class TransactionContainer(object):
 class CsvImporterProfileManager:
 
     def __init__(self):
-        configFile = 'csvImportProfiles.json'
-
-        # copied from wxbanker.py
-        defaultPath = os.path.join(os.path.dirname(__file__), configFile)
-        if 'HOME' in os.environ:
-            # We seem to be on a Unix environment.
-            preferredPath = os.path.join(os.environ['HOME'], '.config', 'wxBanker', configFile)
-            if os.path.exists(preferredPath) or not os.path.exists(defaultPath):
-                defaultPath = preferredPath
-                # Ensure that the directory exists.
-                dirName = os.path.dirname(defaultPath)
-                if not os.path.exists(dirName):
-                    os.mkdir(dirName)
-
-        self.configFile = defaultPath
+        self.configFile = fs.getConfigFilePath('csvImportProfiles.json')
         self.loadProfiles()
 
     def getProfile(self, key):
