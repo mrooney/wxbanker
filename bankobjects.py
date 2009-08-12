@@ -20,6 +20,7 @@
 
 from wx.lib.pubsub import Publisher
 import datetime, re
+from dateutil import rrule
 import bankexceptions, currencies, localization, debug
 
 RECURRING_DAILY = 0
@@ -669,22 +670,20 @@ class RecurringTransaction(Transaction):
         self.LastTransacted = None
         
     def GetUntransactedDates(self):
-        dates = []
         today = datetime.date.today()
-        current = start = self.LastTransacted or self.Date
+        start = self.LastTransacted or self.Date
         end = self.EndDate or today
         
-        if self.RepeatType == RECURRING_DAILY:
-            while current <= end:
-                dates.append(current)
-                current += datetime.timedelta(days=self.RepeatEvery)
-        elif self.RepeatType == RECURRING_WEEKLY:
-            while current <= end:
-                if self.RepeatOn[current.weekday()]:
-                    dates.append(current)
-                current += datetime.timedelta(days=1)
+        # Create some mapping lists.
+        rruleDays = [rrule.MO, rrule.TU, rrule.WE, rrule.TH, rrule.FR, rrule.SA, rrule.SU]
+        rruleTypes = [rrule.DAILY, rrule.WEEKLY, rrule.MONTHLY, rrule.YEARLY]
+        
+        byweekday = None
+        if self.RepeatOn:
+            byweekday = [rruleDays[i] for i, x in enumerate(self.RepeatOn) if x]
             
-        return dates
+        datetimes = list(rrule.rrule(rruleTypes[self.RepeatType], dtstart=start, interval=self.RepeatEvery, until=end, byweekday=byweekday))
+        return [dt.date() for dt in datetimes]
         
     def __eq__(self, other):
         if other is None:

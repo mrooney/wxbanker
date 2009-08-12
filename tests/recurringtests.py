@@ -19,7 +19,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import testbase
-import unittest
+import unittest, datetime
 
 import bankobjects
 from testbase import today, one
@@ -85,6 +85,29 @@ class RecurringTest(testbase.TestCaseWithController):
         dates = rt.GetUntransactedDates()
         self.assertEqual(dates, [start, start+one*7, start+one*14])
         
+    def testRecurringDateWeeklyEveryOtherWeekendDay(self):
+        model, account = self.createAccount()
+        start = datetime.date(2009, 1, 1)
+        rt = account.AddRecurringTransaction(1, "test", start, bankobjects.RECURRING_WEEKLY, repeatEvery=2, repeatOn=[0,0,0,0,0,1,1], endDate=datetime.date(2009, 1, 31))
+        
+        dates = rt.GetUntransactedDates()
+        self.assertEqual(dates, [datetime.date(2009, 1, 3), datetime.date(2009, 1, 4), datetime.date(2009, 1, 17), datetime.date(2009, 1, 18), datetime.date(2009, 1, 31)])
+        
+    def testRecurringDateMonthly(self):
+        model, account = self.createAccount()
+        start = datetime.date(2009, 1, 1)
+        rt = account.AddRecurringTransaction(1, "test", start, bankobjects.RECURRING_MONTLY, endDate=datetime.date(2009, 3, 15))
+        
+        dates = rt.GetUntransactedDates()
+        self.assertEqual(dates, [start, datetime.date(2009, 2, 1), datetime.date(2009, 3, 1)])
+        
+    def testRecurringDateMonthlyQuarterly(self):
+        model, account = self.createAccount()
+        start = datetime.date(2009, 1, 1)
+        rt = account.AddRecurringTransaction(1, "test", start, bankobjects.RECURRING_MONTLY, repeatEvery=3, endDate=datetime.date(2009, 12, 31))
+        
+        dates = rt.GetUntransactedDates()
+        self.assertEqual(dates, [start, datetime.date(2009, 4, 1), datetime.date(2009, 7, 1), datetime.date(2009, 10, 1)])
 
 if __name__ == "__main__":
     unittest.main()
