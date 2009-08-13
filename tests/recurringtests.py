@@ -118,5 +118,23 @@ class RecurringTest(testbase.TestCaseWithController):
         dates = rt.GetUntransactedDates()
         self.assertEqual(dates, [start, datetime.date(2009, 4, 1), datetime.date(2009, 7, 1), datetime.date(2009, 10, 1)])
 
+    def testRecurringDateYearly(self):
+        model, account = self.createAccount()
+        start = datetime.date(2005, 1, 6)
+        rt = account.AddRecurringTransaction(1, "birthday!", start, bankobjects.RECURRING_YEARLY, repeatEvery=2, endDate=datetime.date(2009, 12, 31))
+
+        dates = rt.GetUntransactedDates()
+        self.assertEqual(dates, [start, datetime.date(2007, 1, 6), datetime.date(2009, 1, 6)])
+
+
+    def testRecurringDateYearlyLeapYear(self):
+        # If a transaction is entered on a leap day, it should only occur on future leap days.
+        model, account = self.createAccount()
+        start = datetime.date(2004, 2, 29)
+        rt = account.AddRecurringTransaction(1, "leap day wee", start, bankobjects.RECURRING_YEARLY, endDate=datetime.date(2009, 12, 31))
+
+        dates = rt.GetUntransactedDates()
+        self.assertEqual(dates, [start, datetime.date(2008, 2, 29)])
+
 if __name__ == "__main__":
     unittest.main()
