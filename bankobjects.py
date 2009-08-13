@@ -477,6 +477,9 @@ class Account(object):
         return cmp(self.Name, other.Name)
 
     def __eq__(self, other):
+        if other is None:
+            return False
+        
         return (
             self.Name == other.Name and
             self.Balance == other.Balance and
@@ -668,6 +671,7 @@ class RecurringTransaction(Transaction):
         self.RepeatEvery = repeatEvery
         self.RepeatOn = repeatOn
         self.EndDate = endDate
+        self.Source = source
         self.LastTransacted = None
         
     def GetUntransactedDates(self):
@@ -699,7 +703,9 @@ class RecurringTransaction(Transaction):
             self.RepeatType == other.RepeatType and
             self.RepeatEvery == other.RepeatEvery and
             self.RepeatOn == other.RepeatOn and
-            self.EndDate == other.EndDate
+            self.EndDate == other.EndDate and
+            self.Source == other.Source and
+            self.LastTransacted == other.LastTransacted
             )
 
 if __name__ == "__main__":

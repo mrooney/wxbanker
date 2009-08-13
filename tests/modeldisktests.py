@@ -18,8 +18,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import testbase, os
-import controller, unittest
+import testbase, controller, bankobjects
+import os, unittest
 from wx.lib.pubsub import Publisher
 
 from testbase import today
@@ -163,6 +163,30 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         repeatOn = model2.GetRecurringTransactions()[0].RepeatOn
         self.assertEqual(len(repeatOn), 7)
         self.assertEqual(sum(repeatOn), 1)
+        
+    def testRecurringLastUpdatesIsStored(self):
+        model1 = self.Controller.Model
+        a = model1.CreateAccount("A")
+        
+        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        
+        self.assertEqual(rt.LastTransacted, None)
+        rt.PerformTransactions()
+        self.assertEqual(rt.LastTransacted, today)
+        
+        model2 = model1.Store.GetModel(useCached=False)
+        self.assertEqual(model1, model2)
+        
+    def testRecurringSourceIsStored(self):
+        model1 = self.Controller.Model
+        a = model1.CreateAccount("A")
+        b = model1.CreateAccount("B")
+        
+        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY, source=b)
+        self.assertEqual(rt.Source, b)
+        
+        model2 = model1.Store.GetModel(useCached=False)
+        self.assertEqual(model1, model2)
     
 if __name__ == "__main__":
     unittest.main()

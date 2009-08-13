@@ -61,6 +61,8 @@ class ModelEqualityTest(testbase.TestCaseWithController):
         self.assertChangingAttributeTogglesEquality(rt, "RepeatEvery", "2", model1, model2)
         self.assertChangingAttributeTogglesEquality(rt, "RepeatOn", [1,3], model1, model2)
         self.assertChangingAttributeTogglesEquality(rt, "EndDate", testbase.yesterday, model1, model2)
+        self.assertChangingAttributeTogglesEquality(rt, "Source", a, model1, model2)
+        self.assertChangingAttributeTogglesEquality(rt, "LastTransacted", testbase.yesterday, model1, model2)
 
 if __name__ == "__main__":
     unittest.main()

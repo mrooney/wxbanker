@@ -135,6 +135,32 @@ class RecurringTest(testbase.TestCaseWithController):
 
         dates = rt.GetUntransactedDates()
         self.assertEqual(dates, [start, datetime.date(2008, 2, 29)])
+        
+    def testUpdatesLastTransacted(self):
+        model, account = self.createAccount()
+        rt = account.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        
+        self.assertEqual(rt.LastTransacted, None)
+        self.assertEqual(len(rt.GetUntransactedDates()), 1)
+        
+        rt.PerformTransactions()
+        
+        self.assertEqual(rt.LastTransacted, today)
+        self.assertEqual(len(t.GetUntransactedDates()), 0)
+        
+    def testCanPerformTransactions(self):
+        model, account = self.createAccount()
+        rt = account.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        
+        self.assertEqual(account.Transactions, [])
+        
+        transactions = rt.PerformTransactions()
+        
+        self.assertEqual(len(transactions), 1)
+        t = transactions[0]
+        self.assertEqual(t.Amount, 1)
+        self.assertEqual(t.Description, "test")
+        self.assertEqual(t.Date, today)
 
 if __name__ == "__main__":
     unittest.main()
