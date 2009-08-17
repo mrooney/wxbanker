@@ -32,6 +32,17 @@ RECURRING_YEARLY = 3
 class InvalidDateRangeException(Exception): pass
 class RecurringWeeklyException(Exception): pass
 
+class ORMObject(object):
+    def __init__(self):
+        self.IsFrozen = False
+        self.PersistableAttributes = []
+        
+    def __setattr__(self, attrname, val):
+        object.__setattr__(self, attrname, val)
+        if not self.IsFrozen and attrname in self.PersistableAttributes:
+            classname = self.__class__.__name__
+            Publisher.sendMessage("%s.updated.%s" % (classname, attrname), self)
+
 class BankModel(object):
     def __init__(self, store, accountList):
         self.Store = store
