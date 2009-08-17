@@ -660,19 +660,21 @@ class Transaction(object):
     LinkedTransaction = property(GetLinkedTransaction, SetLinkedTransaction)
 
 class RecurringTransaction(Transaction):
-    def __init__(self, tID, parent, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source):
+    def __init__(self, tID, parent, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source=None, lastTransacted=None):
         Transaction.__init__(self, tID, parent, amount, description, date)
         # If the transaction recurs weekly and repeatsOn isn't specified, assume just today.
         if repeatType == RECURRING_WEEKLY and repeatOn is None:
             todaydaynumber = datetime.date.today().weekday()
             repeatOn = [int(i==todaydaynumber) for i in range(7)]
         
+        self.IsFrozen = True
         self.RepeatType = repeatType
         self.RepeatEvery = repeatEvery
         self.RepeatOn = repeatOn
         self.EndDate = endDate
         self.Source = source
-        self.LastTransacted = None
+        self.LastTransacted = lastTransacted
+        self.IsFrozen = False
         
     def PerformTransactions(self):
         for date in self.GetUntransactedDates():
@@ -702,6 +704,32 @@ class RecurringTransaction(Transaction):
             result = func()
             
         return [dt.date() for dt in list(result)]
+    
+    def SetLastTransacted(self, date):
+        if date is None:
+            self._LastTransacted = None
+        else:
+            self._LastTransacted = self._MassageDate(date)
+        
+    def GetLastTransacted(self):
+        return self._LastTransacted
+    
+    def SetEndDate(self, date):
+        if date is None:
+            self._EndDate = None
+        else:
+            self._EndDate = self._MassageDate(date)
+        
+    def GetEndDate(self):
+        return self._EndDate
+    
+    def __setattr__(self, attr, val):
+        #if attr == "EndDate":
+        #    self.Set
+        object.__setattr__(self, attr, val)
+        if not self.IsFrozen:
+            if attr in ("RepeatType", "RepeatEvery", "RepeatOn", "EndDate", "Source", "LastTransacted"):
+                Publisher.sendMessage("recurringtransaction.updated", self)
         
     def __eq__(self, other):
         if other is None:
@@ -717,7 +745,10 @@ class RecurringTransaction(Transaction):
             self.Source == other.Source and
             self.LastTransacted == other.LastTransacted
             )
-
+    
+    LastTransacted = property(GetLastTransacted, SetLastTransacted)
+    EndDate = property(GetEndDate, SetEndDate)
+    
 if __name__ == "__main__":
     import doctest
     doctest.testmod(verbose=True)

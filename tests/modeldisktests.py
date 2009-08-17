@@ -164,7 +164,62 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         self.assertEqual(len(repeatOn), 7)
         self.assertEqual(sum(repeatOn), 1)
         
-    def testRecurringLastUpdatesIsStored(self):
+    def testRecurringRepeatTypeIsStoredOnUpdate(self):
+        model1 = self.Controller.Model
+        a = model1.CreateAccount("A")
+        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        self.assertEqual(rt.RepeatType, 0)
+        rt.RepeatType = 1
+
+        model2 = model1.Store.GetModel(useCached=False)
+        self.assertEqual(model2.GetRecurringTransactions()[0].RepeatType, 1)
+        self.assertEqual(model1, model2)
+        
+    def testRecurringRepeatEveryIsStoredOnUpdate(self):
+        model1 = self.Controller.Model
+        a = model1.CreateAccount("A")
+        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        self.assertEqual(rt.RepeatEvery, 1)
+        rt.RepeatEvery = 2
+
+        model2 = model1.Store.GetModel(useCached=False)
+        self.assertEqual(model2.GetRecurringTransactions()[0].RepeatEvery, 2)
+        self.assertEqual(model1, model2)
+        
+    def testRecurringRepeatOnIsStoredOnUpdate(self):
+        model1 = self.Controller.Model
+        a = model1.CreateAccount("A")
+        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        self.assertEqual(rt.RepeatOn, None)
+        rt.RepeatOn = [5,6]
+
+        model2 = model1.Store.GetModel(useCached=False)
+        self.assertEqual(model2.GetRecurringTransactions()[0].RepeatOn, [5,6])
+        self.assertEqual(model1, model2)
+        
+    def testRecurringEndDateIsStoredOnUpdate(self):
+        model1 = self.Controller.Model
+        a = model1.CreateAccount("A")
+        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        self.assertEqual(rt.EndDate, None)
+        rt.EndDate = today
+
+        model2 = model1.Store.GetModel(useCached=False)
+        self.assertEqual(model2.GetRecurringTransactions()[0].EndDate, today)
+        self.assertEqual(model1, model2)
+        
+    def testRecurringAmountIsStoredOnUpdate(self):
+        model1 = self.Controller.Model
+        a = model1.CreateAccount("A")
+        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        self.assertEqual(rt.Amount, 1)
+        rt.Amount = 2
+
+        model2 = model1.Store.GetModel(useCached=False)
+        self.assertEqual(model2.GetRecurringTransactions()[0].Amount, 2)
+        self.assertEqual(model1, model2)
+        
+    def testRecurringLastUpdatesIsStoredOnUpdate(self):
         model1 = self.Controller.Model
         a = model1.CreateAccount("A")
         
@@ -177,15 +232,18 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         model2 = model1.Store.GetModel(useCached=False)
         self.assertEqual(model1, model2)
         
-    def testRecurringSourceIsStored(self):
+    def testRecurringSourceIsStoredOnUpdate(self):
         model1 = self.Controller.Model
         a = model1.CreateAccount("A")
         b = model1.CreateAccount("B")
         
-        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY, source=b)
+        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        self.assertEqual(rt.Source, None)
+        rt.Source = b
         self.assertEqual(rt.Source, b)
         
         model2 = model1.Store.GetModel(useCached=False)
+        self.assertEqual(model2.GetRecurringTransactions()[0].Source, b)
         self.assertEqual(model1, model2)
     
 if __name__ == "__main__":

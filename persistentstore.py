@@ -45,7 +45,7 @@ class PersistentStore:
     """
     def __init__(self, path, autoSave=True):
         self.Subscriptions = []
-        self.Version = 5
+        self.Version = 6
         self.Path = path
         self.AutoSave = False
         self.Dirty = False
@@ -89,6 +89,7 @@ class PersistentStore:
 
         self.Subscriptions = (
             (self.onTransactionUpdated, "transaction.updated"),
+            (self.onRecurringTransactionUpdated, "recurringtransaction.updated"),
             (self.onAccountRenamed, "account.renamed"),
             (self.onAccountBalanceChanged, "account.balance changed"),
             (self.onBatchEvent, "batch"),
@@ -140,7 +141,7 @@ class PersistentStore:
         
     def MakeRecurringTransaction(self, recurring):
         cursor = self.dbconn.cursor()
-        cursor.execute('INSERT INTO recurring_transactions VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?)', self.recurringtransaction2result(recurring)[1:])
+        cursor.execute('INSERT INTO recurring_transactions VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', self.recurringtransaction2result(recurring)[1:])
         self.commitIfAppropriate()
         recurring.ID = cursor.lastrowid
         return recurring
@@ -258,6 +259,10 @@ class PersistentStore:
             recurringExtra = "repeatType INTEGER, repeatEvery INTEGER, repeatsOn VARCHAR(255), endDate CHAR(10)"
             cursor.execute('CREATE TABLE recurring_transactions (%s, %s)' % (transactionBase, recurringExtra))
             metaVer = 5
+        elif fromVer == 5:
+            cursor.execute('ALTER TABLE recurring_transactions ADD sourceId INTEGER')
+            cursor.execute('ALTER TABLE recurring_transactions ADD lastTransacted CHAR(10)')
+            metaVer = 6
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
 
@@ -283,8 +288,9 @@ class PersistentStore:
         repeatOn = recurringObj.RepeatOn
         if repeatOn:
             repeatOn = ",".join((str(i) for i in repeatOn))
+        sourceId = recurringObj.Source and recurringObj.Source.ID
         result = [recurringObj.ID, recurringObj.Parent.ID, recurringObj.Amount, recurringObj.Description, dateStr]
-        result += [recurringObj.RepeatType, recurringObj.RepeatEvery, repeatOn, recurringObj.EndDate]
+        result += [recurringObj.RepeatType, recurringObj.RepeatEvery, repeatOn, recurringObj.EndDate, sourceId, recurringObj.LastTransacted]
         return result
 
     def transaction2result(self, transObj):
@@ -299,11 +305,18 @@ class PersistentStore:
         ID, name, currency, balance = result
         return bankobjects.Account(self, ID, name, currency, balance)
     
-    def result2recurringtransaction(self, result, parentAccount):
-        rId, accountId, amount, description, date, repeatType, repeatEvery, repeatOn, endDate = result
+    def result2recurringtransaction(self, result, parentAccount, allAccounts):
+        rId, accountId, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, sourceId, lastTransacted = result
+        
         if repeatOn:
             repeatOn = [int(x) for x in repeatOn.split(",")]
-        return bankobjects.RecurringTransaction(rId, parentAccount, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, None)
+
+        if sourceId:
+            sourceAccount = [a for a in allAccounts if a.ID == sourceId][0]
+        else:
+            sourceAccount = None
+
+        return bankobjects.RecurringTransaction(rId, parentAccount, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, sourceAccount, lastTransacted)
 
     def getAccounts(self):
         # Fetch all the accounts.
@@ -314,7 +327,7 @@ class PersistentStore:
             parentId = recurring[1]
             for account in accounts:
                 if account.ID == parentId:
-                    rObj = self.result2recurringtransaction(recurring, account)
+                    rObj = self.result2recurringtransaction(recurring, account, accounts)
                     account.RecurringTransactions.append(rObj)
         return accounts
     
@@ -354,6 +367,13 @@ class PersistentStore:
         result.append( result.pop(0) ) # Move the uid to the back as it is last in the args below.
         self.dbconn.cursor().execute('UPDATE transactions SET amount=?, description=?, date=?, linkId=? WHERE id=?', result)
         self.commitIfAppropriate()
+        
+    def updateRecurringTransaction(self, rTransObj):
+        result = self.recurringtransaction2result(rTransObj)
+        result.append( result.pop(0) ) # Move the uid to the back as it is last in the args below.
+        result = result[-7:]
+        self.dbconn.cursor().execute('UPDATE recurring_transactions SET repeatType=?, repeatEvery=?, repeatsOn=?, endDate=?, sourceId=?, lastTransacted=? WHERE id=?', result)
+        self.commitIfAppropriate()
 
     def renameAccount(self, oldName, account):
         self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (account.Name, oldName))
@@ -374,6 +394,11 @@ class PersistentStore:
         transaction, previousValue = message.data
         debug.debug("Persisting transaction change: %s" % transaction)
         self.updateTransaction(transaction)
+        
+    def onRecurringTransactionUpdated(self, message):
+        rtrans = message.data
+        debug.debug("Persisting recurring transaction change: %s" % rtrans)
+        self.updateRecurringTransaction(rtrans)
 
     def onAccountRenamed(self, message):
         oldName, account = message.data
