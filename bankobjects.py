@@ -33,15 +33,16 @@ class InvalidDateRangeException(Exception): pass
 class RecurringWeeklyException(Exception): pass
 
 class ORMObject(object):
+    ORM_TABLE = None
+    ORM_ATTRIBUTES = []
     def __init__(self):
         self.IsFrozen = False
-        self.PersistableAttributes = []
         
     def __setattr__(self, attrname, val):
         object.__setattr__(self, attrname, val)
-        if not self.IsFrozen and attrname in self.PersistableAttributes:
+        if not self.IsFrozen and attrname in self.ORM_ATTRIBUTES:
             classname = self.__class__.__name__
-            Publisher.sendMessage("%s.updated.%s" % (classname, attrname), self)
+            Publisher.sendMessage("ormobject.updated.%s.%s" % (classname, attrname), self)
 
 class BankModel(object):
     def __init__(self, store, accountList):
@@ -670,9 +671,14 @@ class Transaction(object):
     Amount = property(GetAmount, SetAmount)
     LinkedTransaction = property(GetLinkedTransaction, SetLinkedTransaction)
 
-class RecurringTransaction(Transaction):
+class RecurringTransaction(Transaction, ORMObject):
+    ORM_TABLE = "recurring_transactions"
+    ORM_ATTRIBUTES = ["RepeatType", "RepeatEvery", "RepeatOn", "EndDate", "Source", "LastTransacted"]
+    
     def __init__(self, tID, parent, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source=None, lastTransacted=None):
         Transaction.__init__(self, tID, parent, amount, description, date)
+        ORMObject.__init__(self)
+        
         # If the transaction recurs weekly and repeatsOn isn't specified, assume just today.
         if repeatType == RECURRING_WEEKLY and repeatOn is None:
             todaydaynumber = datetime.date.today().weekday()
@@ -733,14 +739,6 @@ class RecurringTransaction(Transaction):
         
     def GetEndDate(self):
         return self._EndDate
-    
-    def __setattr__(self, attr, val):
-        #if attr == "EndDate":
-        #    self.Set
-        object.__setattr__(self, attr, val)
-        if not self.IsFrozen:
-            if attr in ("RepeatType", "RepeatEvery", "RepeatOn", "EndDate", "Source", "LastTransacted"):
-                Publisher.sendMessage("recurringtransaction.updated", self)
         
     def __eq__(self, other):
         if other is None:

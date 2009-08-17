@@ -89,7 +89,7 @@ class PersistentStore:
 
         self.Subscriptions = (
             (self.onTransactionUpdated, "transaction.updated"),
-            (self.onRecurringTransactionUpdated, "recurringtransaction.updated"),
+            (self.onORMObjectUpdated, "ormobject.updated"),
             (self.onAccountRenamed, "account.renamed"),
             (self.onAccountBalanceChanged, "account.balance changed"),
             (self.onBatchEvent, "batch"),
@@ -367,13 +367,6 @@ class PersistentStore:
         result.append( result.pop(0) ) # Move the uid to the back as it is last in the args below.
         self.dbconn.cursor().execute('UPDATE transactions SET amount=?, description=?, date=?, linkId=? WHERE id=?', result)
         self.commitIfAppropriate()
-        
-    def updateRecurringTransaction(self, rTransObj):
-        result = self.recurringtransaction2result(rTransObj)
-        result.append( result.pop(0) ) # Move the uid to the back as it is last in the args below.
-        result = result[-7:]
-        self.dbconn.cursor().execute('UPDATE recurring_transactions SET repeatType=?, repeatEvery=?, repeatsOn=?, endDate=?, sourceId=?, lastTransacted=? WHERE id=?', result)
-        self.commitIfAppropriate()
 
     def renameAccount(self, oldName, account):
         self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (account.Name, oldName))
@@ -394,11 +387,6 @@ class PersistentStore:
         transaction, previousValue = message.data
         debug.debug("Persisting transaction change: %s" % transaction)
         self.updateTransaction(transaction)
-        
-    def onRecurringTransactionUpdated(self, message):
-        rtrans = message.data
-        debug.debug("Persisting recurring transaction change: %s" % rtrans)
-        self.updateRecurringTransaction(rtrans)
 
     def onAccountRenamed(self, message):
         oldName, account = message.data
@@ -412,6 +400,34 @@ class PersistentStore:
     def onExit(self, message):
         if self.Dirty:
             Publisher.sendMessage("warning.dirty exit", message.data)
+            
+    def getORMValue(self, ormobj, attrname):
+        value = getattr(ormobj, attrname)
+        if isinstance(value, bankobjects.Account):
+            value = value.ID
+        elif attrname == "RepeatOn" and value is not None:
+            value = ",".join([str(x) for x in value])
+            
+        return value
+            
+    def onORMObjectUpdated(self, message):
+        topic, data = message.topic, message.data
+        classname, attrname = topic[-2:]
+        ormobj = data
+        
+        table = ormobj.ORM_TABLE
+        
+        # Figure out the name of the column
+        colname = attrname[0].lower() + attrname[1:]
+        colname = {"repeatOn": "repeatsOn", "source": "sourceId"}.get(colname, colname)
+        
+        query = "UPDATE %s SET %s=? WHERE id=?" % (table, colname)
+        objId = ormobj.ID
+        value = self.getORMValue(ormobj, attrname)
+        
+        self.dbconn.cursor().execute(query, (value, objId))
+        self.commitIfAppropriate()
+        debug.debug("Persisting %s.%s update" % (classname, attrname))
 
     def __del__(self):
         self.commitIfAppropriate()

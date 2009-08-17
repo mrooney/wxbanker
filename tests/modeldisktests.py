@@ -230,6 +230,7 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         self.assertEqual(rt.LastTransacted, today)
         
         model2 = model1.Store.GetModel(useCached=False)
+        self.assertEqual(model2.GetRecurringTransactions()[0].LastTransacted, today)
         self.assertEqual(model1, model2)
         
     def testRecurringSourceIsStoredOnUpdate(self):
