@@ -674,9 +674,19 @@ class RecurringTransaction(Transaction):
         self.Source = source
         self.LastTransacted = None
         
+    def PerformTransactions(self):
+        for date in self.GetUntransactedDates():
+            self.Parent.AddTransaction(self.Amount, self.Description, self.Date, self.Source)
+        
+        self.LastTransacted = datetime.date.today()
+        
     def GetUntransactedDates(self):
         today = datetime.date.today()
-        start = self.LastTransacted or self.Date
+        if self.LastTransacted:
+            # Start on the day after the last transaction
+            start = self.LastTransacted + datetime.timedelta(days=1)
+        else:
+            start = self.Date
         end = self.EndDate or today
         
         # Create some mapping lists.
