@@ -525,14 +525,18 @@ class TransactionList(list):
         return True
 
 
-class Transaction(object):
+class Transaction(ORMObject):
     """
     An object which represents a transaction.
 
     Changes to this object get sent out via pubsub,
     typically causing the model to make the change.
     """
+    ORM_TABLE = "transactions"
+    ORM_ATTRIBUTES = ["Date", "Description", "Amount"]
+    
     def __init__(self, tID, parent, amount, description, date):
+        ORMObject.__init__(self)
         self.IsFrozen = True
 
         self.ID = tID
@@ -549,9 +553,6 @@ class Transaction(object):
 
     def SetDate(self, date):
         self._Date = self._MassageDate(date)
-
-        if not self.IsFrozen:
-            Publisher.sendMessage("transaction.updated.date", (self, None))
 
     def _MassageDate(self, date):
         """
@@ -604,9 +605,6 @@ class Transaction(object):
     def SetDescription(self, description):
         """Update the description, ensuring it is a string."""
         self._Description = unicode(description)
-
-        if not self.IsFrozen:
-            Publisher.sendMessage("transaction.updated.description", (self, None))
 
     def GetAmount(self):
         return self._Amount

@@ -22,7 +22,7 @@ import testbase, controller, bankobjects
 import os, unittest
 from wx.lib.pubsub import Publisher
 
-from testbase import today
+from testbase import today, tomorrow
 
 class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
     """
@@ -142,7 +142,11 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
 
         t1.Description = "new"
         t1.Amount = -1.50
+        t1.Date = tomorrow
+        
         model2 = model1.Store.GetModel(useCached=False)
+        t2 = model2.GetTransactions()[0]
+        self.assertEqual(t2.Description, "new")
         self.assertEqual(model1, model2)
         
     def testLinkedTransferIsStored(self):

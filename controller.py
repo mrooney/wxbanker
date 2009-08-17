@@ -121,19 +121,19 @@ InvalidAccountException: Invalid account 'My Account' specified.
 #testTransactionUpdating
 >>> t1.Amount = -101
 >>> len(messages)
-14
+15
 >>> t1.Amount == -101
 True
 >>> model.float2str(model.Balance)
 u'-$111.00'
 >>> t1.Description = "Updated description"
 >>> len(messages)
-15
+16
 >>> t1.Description
 u'Updated description'
 >>> t1.Date = datetime.date(1986, 1, 6)
 >>> len(messages)
-16
+17
 >>> t1.Date == datetime.date(1986, 1, 6)
 True
 

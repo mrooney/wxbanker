@@ -88,7 +88,7 @@ class PersistentStore:
         self.commitIfAppropriate()
 
         self.Subscriptions = (
-            (self.onTransactionUpdated, "transaction.updated"),
+            #(self.onTransactionUpdated, "transaction.updated"),
             (self.onORMObjectUpdated, "ormobject.updated"),
             (self.onAccountRenamed, "account.renamed"),
             (self.onAccountBalanceChanged, "account.balance changed"),
