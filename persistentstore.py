@@ -88,7 +88,6 @@ class PersistentStore:
         self.commitIfAppropriate()
 
         self.Subscriptions = (
-            #(self.onTransactionUpdated, "transaction.updated"),
             (self.onORMObjectUpdated, "ormobject.updated"),
             (self.onAccountRenamed, "account.renamed"),
             (self.onAccountBalanceChanged, "account.balance changed"),
@@ -362,12 +361,6 @@ class PersistentStore:
         transaction = self.result2transaction(result, linkedTransaction=linked)
         return transaction
 
-    def updateTransaction(self, transObj):
-        result = self.transaction2result(transObj)
-        result.append( result.pop(0) ) # Move the uid to the back as it is last in the args below.
-        self.dbconn.cursor().execute('UPDATE transactions SET amount=?, description=?, date=?, linkId=? WHERE id=?', result)
-        self.commitIfAppropriate()
-
     def renameAccount(self, oldName, account):
         self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (account.Name, oldName))
         self.commitIfAppropriate()
@@ -382,11 +375,6 @@ class PersistentStore:
             print account[1]
             for trans in cursor.execute("SELECT * FROM transactions WHERE accountId=?", (account[0],)).fetchall():
                 print '  -',trans
-
-    def onTransactionUpdated(self, message):
-        transaction, previousValue = message.data
-        debug.debug("Persisting transaction change: %s" % transaction)
-        self.updateTransaction(transaction)
 
     def onAccountRenamed(self, message):
         oldName, account = message.data
@@ -403,7 +391,7 @@ class PersistentStore:
             
     def getORMValue(self, ormobj, attrname):
         value = getattr(ormobj, attrname)
-        if isinstance(value, bankobjects.Account):
+        if isinstance(value, (bankobjects.Account, bankobjects.Transaction)):
             value = value.ID
         elif attrname == "RepeatOn" and value is not None:
             value = ",".join([str(x) for x in value])
@@ -419,7 +407,7 @@ class PersistentStore:
         
         # Figure out the name of the column
         colname = attrname[0].lower() + attrname[1:]
-        colname = {"repeatOn": "repeatsOn", "source": "sourceId"}.get(colname, colname)
+        colname = {"repeatOn": "repeatsOn", "source": "sourceId", "linkedTransaction": "linkId"}.get(colname, colname)
         
         query = "UPDATE %s SET %s=? WHERE id=?" % (table, colname)
         objId = ormobj.ID
