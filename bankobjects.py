@@ -671,7 +671,7 @@ class Transaction(ORMObject):
 
 class RecurringTransaction(Transaction, ORMObject):
     ORM_TABLE = "recurring_transactions"
-    ORM_ATTRIBUTES = ["RepeatType", "RepeatEvery", "RepeatOn", "EndDate", "Source", "LastTransacted"]
+    ORM_ATTRIBUTES = ["Amount", "Description", "Date", "RepeatType", "RepeatEvery", "RepeatOn", "EndDate", "Source", "LastTransacted"]
     
     def __init__(self, tID, parent, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source=None, lastTransacted=None):
         Transaction.__init__(self, tID, parent, amount, description, date)

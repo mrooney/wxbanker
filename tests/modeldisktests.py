@@ -212,15 +212,23 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         self.assertEqual(model2.GetRecurringTransactions()[0].EndDate, today)
         self.assertEqual(model1, model2)
         
-    def testRecurringAmountIsStoredOnUpdate(self):
+    def testRecurringInheritedPropsAreStoredOnUpdate(self):
         model1 = self.Controller.Model
         a = model1.CreateAccount("A")
         rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
         self.assertEqual(rt.Amount, 1)
+        self.assertEqual(rt.Date, today)
+        self.assertEqual(rt.Description, "test")
+        
         rt.Amount = 2
+        rt.Date = tomorrow
+        rt.Description = "new"
 
         model2 = model1.Store.GetModel(useCached=False)
-        self.assertEqual(model2.GetRecurringTransactions()[0].Amount, 2)
+        t = model2.GetRecurringTransactions()[0]
+        self.assertEqual(t.Amount, 2)
+        self.assertEqual(t.Date, tomorrow)
+        self.assertEqual(t.Description, "new")
         self.assertEqual(model1, model2)
         
     def testRecurringLastUpdatesIsStoredOnUpdate(self):
