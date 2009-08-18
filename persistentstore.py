@@ -89,7 +89,6 @@ class PersistentStore:
 
         self.Subscriptions = (
             (self.onORMObjectUpdated, "ormobject.updated"),
-            (self.onAccountRenamed, "account.renamed"),
             (self.onAccountBalanceChanged, "account.balance changed"),
             (self.onBatchEvent, "batch"),
             (self.onExit, "exiting"),
@@ -406,6 +405,7 @@ class PersistentStore:
         table = ormobj.ORM_TABLE
         
         # Figure out the name of the column
+        ##attrname = attrname.strip("_")
         colname = attrname[0].lower() + attrname[1:]
         colname = {"repeatOn": "repeatsOn", "source": "sourceId", "linkedTransaction": "linkId"}.get(colname, colname)
         

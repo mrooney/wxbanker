@@ -35,6 +35,7 @@ class RecurringWeeklyException(Exception): pass
 class ORMObject(object):
     ORM_TABLE = None
     ORM_ATTRIBUTES = []
+    
     def __init__(self):
         self.IsFrozen = False
         
@@ -43,6 +44,7 @@ class ORMObject(object):
         if not self.IsFrozen and attrname in self.ORM_ATTRIBUTES:
             classname = self.__class__.__name__
             Publisher.sendMessage("ormobject.updated.%s.%s" % (classname, attrname), self)
+            
 
 class BankModel(object):
     def __init__(self, store, accountList):
@@ -274,8 +276,12 @@ class AccountList(list):
     Balance = property(GetBalance)
 
 
-class Account(object):
+class Account(ORMObject):
+    ORM_TABLE = "accounts"
+    ORM_ATTRIBUTES = ["Name"]
+    
     def __init__(self, store, aID, name, currency=0, balance=0.0):
+        ORMObject.__init__(self)
         self.Store = store
         self.ID = aID
         self._Name = name
@@ -363,9 +369,7 @@ class Account(object):
 
     def SetName(self, name):
         self.Parent.ThrowExceptionOnInvalidName(name)
-        oldName = self._Name
         self._Name = name
-        Publisher.sendMessage("account.renamed.%s"%oldName, (oldName, self))
 
     def Remove(self):
         self.Parent.Remove(self.Name)

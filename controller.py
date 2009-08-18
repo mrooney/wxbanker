@@ -98,17 +98,11 @@ True
 u'ATM Withdrawal'
 >>> t2.Date
 datetime.date(2007, 1, 6)
->>> len(messages)
-11
 >>> model.float2str(model.Balance)
 u'$90.27'
 
 #testRenameAccount
 >>> a.Name = "My Renamed Account"
->>> len(messages)
-12
->>> messages[0] == (('account', 'renamed', 'My Account'), ('My Account', a))
-True
 >>> len(model.Accounts)
 1
 >>> model.Accounts[0].Name

@@ -114,7 +114,7 @@ class AccountListCtrl(wx.Panel):
         Publisher().subscribe(self.onAccountBalanceChanged, "account.balance changed")
         Publisher().subscribe(self.onAccountRemoved, "account.removed")
         Publisher().subscribe(self.onAccountAdded, "account.created")
-        Publisher().subscribe(self.onAccountRenamed, "account.renamed")
+        Publisher().subscribe(self.onAccountRenamed, "ormobject.updated.Account.Name")
         Publisher().subscribe(self.onCurrencyChanged, "currency_changed")
 
         # Populate ourselves initially unless explicitly told not to.
@@ -483,7 +483,7 @@ class AccountListCtrl(wx.Panel):
 
         TODO: don't assume it was the current account that was renamed.
         """
-        oldName, account = message.data
+        account = message.data
         # Hide the edit control.
         self.onHideEditCtrl(restore=False) #ASSUMPTION!
         # Just renaming won't put it in the right alpha position, so remove it

@@ -209,5 +209,21 @@ class ModelTests(testbase.TestCaseWithController):
         
         self.assertEqual(model.GetDateRange(), (yesterday, today))
         
+    def testAccountRename(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        self.assertEqual(a.Name, "A")
+        a.Name = "B"
+        self.assertEqual(a.Name, "B")
+        
+    def testTransactionDescriptionChange(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        t = a.AddTransaction(1, "test")
+        self.assertEqual(t.Description, "test")
+        t.Description = "new"
+        self.assertEqual(t.Description, "new")
+        
+        
 if __name__ == "__main__":
     unittest.main()

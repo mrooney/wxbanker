@@ -27,6 +27,15 @@ class ModelEqualityTest(testbase.TestCaseWithController):
         model2 = self.Controller.LoadPath(":memory:")
         self.assertEqual(model1, model2)
         
+    def testAccountsWithDifferentNamesArentEqual(self):
+        model1 = self.Controller.Model
+        model2 = self.Controller.LoadPath(":memory:")
+        
+        model1.CreateAccount("A")
+        self.assertNotEqual(model1, model2)
+        model2.CreateAccount("B")
+        self.assertNotEqual(model1, model2)
+        
     def testAccountWithRecurringTransactionsIsNotEqualToAccountWithout(self):
         # make sure a model with rts is not equal to one without
         model1 = self.Controller.Model

@@ -120,6 +120,7 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         a = model1.CreateAccount("A")
         a.Name = "B"
         model2 = model1.Store.GetModel(useCached=False)
+        self.assertEqual(model2.Accounts[0].Name, "B")
         self.assertEqual(model1, model2)
 
     def testBalanceIsStored(self):
