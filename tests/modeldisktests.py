@@ -174,10 +174,11 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         a = model1.CreateAccount("A")
         rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
         self.assertEqual(rt.RepeatType, 0)
-        rt.RepeatType = 1
+        rt.RepeatType = 2
 
         model2 = model1.Store.GetModel(useCached=False)
-        self.assertEqual(model2.GetRecurringTransactions()[0].RepeatType, 1)
+        rt2 = model2.GetRecurringTransactions()[0]
+        self.assertEqual(rt2.RepeatType, 2)
         self.assertEqual(model1, model2)
         
     def testRecurringRepeatEveryIsStoredOnUpdate(self):
