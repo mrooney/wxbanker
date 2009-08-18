@@ -111,11 +111,11 @@ class AccountListCtrl(wx.Panel):
         self.Bind(wx.EVT_HYPERLINK, self.onAccountClick)
 
         # Subscribe to messages we are concerned about.
-        Publisher().subscribe(self.onAccountBalanceChanged, "account.balance changed")
-        Publisher().subscribe(self.onAccountRemoved, "account.removed")
-        Publisher().subscribe(self.onAccountAdded, "account.created")
-        Publisher().subscribe(self.onAccountRenamed, "ormobject.updated.Account.Name")
-        Publisher().subscribe(self.onCurrencyChanged, "currency_changed")
+        Publisher.subscribe(self.onAccountBalanceChanged, "ormobject.updated.Account.Balance")
+        Publisher.subscribe(self.onAccountRenamed, "ormobject.updated.Account.Name")
+        Publisher.subscribe(self.onAccountRemoved, "account.removed")
+        Publisher.subscribe(self.onAccountAdded, "account.created")
+        Publisher.subscribe(self.onCurrencyChanged, "currency_changed")
 
         # Populate ourselves initially unless explicitly told not to.
         if autoPopulate:

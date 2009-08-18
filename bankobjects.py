@@ -278,10 +278,11 @@ class AccountList(list):
 
 class Account(ORMObject):
     ORM_TABLE = "accounts"
-    ORM_ATTRIBUTES = ["Name"]
+    ORM_ATTRIBUTES = ["Name", "Balance"]
     
     def __init__(self, store, aID, name, currency=0, balance=0.0):
         ORMObject.__init__(self)
+        self.IsFrozen = True
         self.Store = store
         self.ID = aID
         self._Name = name
@@ -289,7 +290,8 @@ class Account(ORMObject):
         self._RecurringTransactions = []
         self._preTransactions = []
         self.Currency = currency
-        self._Balance = balance
+        self.Balance = balance
+        self.IsFrozen = False
 
         Publisher.subscribe(self.onTransactionAmountChanged, "transaction.updated.amount")
 
@@ -329,13 +331,6 @@ class Account(ORMObject):
 
     def GetCurrency(self):
         return self._Currency
-
-    def GetBalance(self):
-        return self._Balance
-
-    def SetBalance(self, newBalance):
-        self._Balance = newBalance
-        Publisher.sendMessage("account.balance changed.%s" % self.Name, self)
         
     def GetRecurringTransactions(self):
         return self._RecurringTransactions
@@ -507,7 +502,6 @@ class Account(ORMObject):
     Name = property(GetName, SetName)
     Transactions = property(GetTransactions)
     RecurringTransactions = property(GetRecurringTransactions)
-    Balance = property(GetBalance, SetBalance)
     Currency = property(GetCurrency, SetCurrency)
 
 

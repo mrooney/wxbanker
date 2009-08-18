@@ -50,23 +50,13 @@ Traceback (most recent call last):
   ...
 InvalidAccountException: Invalid account 'My Account' specified.
 
->>> len(messages)
-2
-
 # Now test valid account and transaction manipulation.
 
 >>> a1 = model.CreateAccount("My Account")
->>> len(messages)
-3
->>> messages[0][1].Name
-'My Account'
-
 >>> model.CreateAccount("My Account")
 Traceback (most recent call last):
   ...
 AccountAlreadyExistsException: Account 'My Account' already exists.
->>> len(messages)
-3
 >>> len(model.Accounts) == 1
 True
 >>> a = model.Accounts[0]
@@ -81,12 +71,6 @@ True
 >>> t1 = a.AddTransaction(100.27, "Initial Balance")
 >>> len(a.Transactions)
 1
->>> len(messages)
-7
->>> messages[2] == (('transaction', 'created'), (a, t1))
-True
->>> messages[1] == (('account', 'balance changed', 'My Account'), a)
-True
 >>> a.Balance
 100.27
 >>> model.Balance
@@ -114,20 +98,14 @@ InvalidAccountException: Invalid account 'My Account' specified.
 
 #testTransactionUpdating
 >>> t1.Amount = -101
->>> len(messages)
-15
 >>> t1.Amount == -101
 True
 >>> model.float2str(model.Balance)
 u'-$111.00'
 >>> t1.Description = "Updated description"
->>> len(messages)
-16
 >>> t1.Description
 u'Updated description'
 >>> t1.Date = datetime.date(1986, 1, 6)
->>> len(messages)
-17
 >>> t1.Date == datetime.date(1986, 1, 6)
 True
 
