@@ -2513,7 +2513,7 @@ class FastObjectListView(AbstractVirtualObjectListView):
                 idx = self.GetIndexOf(x)
                 if idx != -1:
                     self.RefreshItem(idx)
-        else:
+        elif self.GetItemCount():
             self.RefreshItems(0, self.GetItemCount() - 1)
 
     #----------------------------------------------------------------------------
