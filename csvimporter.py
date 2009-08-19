@@ -22,23 +22,39 @@ from datetime import date, datetime
 from bankobjects import Transaction
 from wx.lib.pubsub import Publisher
 import codecs, csv, os, re
-import fileservice as fs
+import fileservice, debug
+
 try:
     import simplejson as json
 except:
     json = None
+    
+shippedProfiles = {
+    "mint": {
+        "amountColumn": 4,
+        "dateColumn": 1,
+        "dateFormat": "%m/%d/%Y",
+        "decimalSeparator": ".",
+        "delimiter": ",",
+        "descriptionColumns": "2",
+        "encoding": "utf-8",
+        "skipFirstLine": True
+    }
+}
+
 
 class CsvImporter:
     """
-    Parses a csv file and extracts the data for import into the wxBanker
-    data structures
+    Parses a csv file and extracts the data for import into the wxBanker data structures.
     """
-    def __init__(self):
-        pass
+    
+    def getTransactionsFromFile(self, filename, settings):
+        contents = open(filename, 'rb')
+        return self.getTransactionsFromCSV(contents, settings)
 
-    def getTransactionsFromFile(self, fileName, settings):
+    def getTransactionsFromCSV(self, csvdata, settings):
         csvReader = csv.reader(
-            UTF8Recoder(open(fileName, 'rb'), settings['encoding']),
+            UTF8Recoder(csvdata, settings['encoding']),
             delimiter=settings['delimiter'])
 
         transactions = []
@@ -53,6 +69,10 @@ class CsvImporter:
             row = [unicode(s, "utf-8") for s in row]
 
             amount = self.parseAmount(row[settings['amountColumn'] - 1], settings['decimalSeparator'])
+            # Properly parse amounts from mint.
+            if settings == shippedProfiles['mint'] and row[4] == "debit":
+                amount *=-1
+                
             desc = re.sub('\d+', lambda x: row[int(x.group(0)) - 1], settings['descriptionColumns'])
             tdate = datetime.strptime(row[settings['dateColumn'] -1],
                 settings['dateFormat']).strftime('%Y-%m-%d')
@@ -81,9 +101,8 @@ class TransactionContainer(object):
         Publisher.sendMessage("transactions.removed", (self, transactions))
 
 class CsvImporterProfileManager:
-
     def __init__(self):
-        self.configFile = fs.getConfigFilePath('csvImportProfiles.json')
+        self.configFile = fileservice.getConfigFilePath('csvImportProfiles.json')
         self.loadProfiles()
 
     def getProfile(self, key):
@@ -97,15 +116,14 @@ class CsvImporterProfileManager:
         del self.profiles[key]
 
     def loadProfiles(self):
-        self.profiles = {}
+        self.profiles = shippedProfiles
         try:
-            file = open(self.configFile, 'r')
-            try:
-                self.profiles = json.load(file)
-            finally:
-                file.close()
+            contents = open(self.configFile, 'r')
+            storedProfiles = json.load(contents)
         except Exception, e:
-            print "Failed to read CSV profiles file:", e
+            debug.debug("Unable to read CSV profiles file:", e)
+        else:
+            self.profiles.update(storedProfiles)
 
     def saveProfiles(self):
         file = open(self.configFile, 'w')

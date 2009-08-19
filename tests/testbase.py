@@ -21,7 +21,8 @@
 import os, sys, datetime
 
 # Make sure path contains both the test dir and its parent (wxbanker root dir).
-testdir = os.path.dirname(__file__)
+here = os.path.dirname(__file__)
+testdir = here
 rootdir = os.path.dirname(testdir)
 # We must insert since if wxbanker is installed on the system this would otherwise pull in that package first.
 sys.path.insert(0, testdir)
@@ -36,6 +37,13 @@ one = datetime.timedelta(1)
 # Import wxbanker here so wx gets initialized first, so wxversion calls work properly.
 import wxbanker, controller, unittest
 from wx.lib.pubsub import Publisher
+
+def filehere(*paths):
+    return os.path.join(here, *paths)
+
+def fixturefile(name):
+    return filehere("fixtures", name)
+
 
 class TestCaseHandlingConfig(unittest.TestCase):
     """

@@ -18,6 +18,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import urllib3, re, getpass
+from csvimporter import CsvImporterProfileManager, CsvImporter
 urllib3.enablecookies()
 
 class MintLoginException(Exception): pass
@@ -57,6 +58,27 @@ class MintDotCom:
 
     def GetAccountTransactionsCSV(self, accountid):
         return urllib3.read("https://wwws.mint.com/transactionDownload.event?accountId=%s&comparableType=8&offset=0" % accountid)
+    
+    def ImportAccounts(self, model):
+        """For each account in Mint, create one in wxBanker with all known transactions."""
+        mintSettings = CsvImporterProfileManager.getProfile("mint")
+        importer = CsvImporter()
+        for accountName, mintId in self.ListAccounts():
+            # Create an account, grab the transactions, and add them.
+            account = model.CreateAccount(accountName)
+            csv = self.GetAccountTransactionsCSV(mintId)
+            container = importer.getTransactionsFromCSV(csv)
+            transactions = container.Transactions
+            account.AddTransactions()
+            
+            # Now we have to add an initial transaction for the initial balance.
+            firstTransaction = sorted(transactions)[0]
+            balance = self.GetAccountBalance(mintId)
+            initialBalance = balance - account.Balance
+            initialDate = firstTransaction.Date
+            account.AddTransaction(initialBalance, "Initial Balance", initialDate)
+            
+            print "Imported account %s with %i transactions" % (accountName, len(transactions))
 
 
 def main():

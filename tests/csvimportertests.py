@@ -19,8 +19,8 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import testbase
-import unittest
-from csvimporter import CsvImporter
+import unittest, datetime
+from csvimporter import CsvImporter, CsvImporterProfileManager
 
 class CsvImporterTest(unittest.TestCase):
     def setUp(self):
@@ -31,6 +31,18 @@ class CsvImporterTest(unittest.TestCase):
         decimalSeparator = ','
         self.assertEquals(self.importer.parseAmount('-1 000,00', decimalSeparator), -1000.0)
         self.assertEquals(self.importer.parseAmount('$ -1 000,00 ', decimalSeparator), -1000.0)
+        
+    def testCanImportMintData(self):
+        path = testbase.fixturefile("mint.csv")
+        profile = CsvImporterProfileManager().getProfile("mint")
+        container = CsvImporter().getTransactionsFromFile(path, profile)
+        transactions = container.Transactions
+        
+        transactions.sort()
+        self.assertEqual(len(transactions), 3)
+        self.assertAlmostEqual(sum(t.Amount for t in transactions), 29.46)
+        self.assertEqual(transactions[-1].Date, datetime.date(2009, 7, 21))
+        self.assertEqual(transactions[-1].Description, "Teavana San Mateo")
 
 if __name__ == "__main__":
     unittest.main()
