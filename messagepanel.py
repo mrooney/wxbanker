@@ -45,7 +45,7 @@ class MessagePanel(wx.Panel):
         self.ExpandPanel()
         
     def ExpandPanel(self):
-        self.CurrentHeight += 6
+        self.CurrentHeight += 5
         if self.CurrentHeight >= self.BestHeight:
             self.CurrentHeight = self.BestHeight
         else:

@@ -166,9 +166,9 @@ class RecurringPanel(wx.Panel):
         if self.endsNeverRadio.GetValue():
             end = None
         else:
-            end = self.endDateCtrl.GetValue()
+            end = helpers.wxdate2pydate(self.endDateCtrl.GetValue())
 
-        repeatsOn = ""
+        repeatsOn = None
         if repeatType == 1: # Weekly
             repeatsOn = ",".join(str(int(check.Value)) for check in self.repeatsOnChecksWeekly)
 
@@ -400,8 +400,9 @@ class NewTransactionCtrl(wx.Panel):
 
         # Now let's see if this is a recurring transaction
         if self.recursCheck.GetValue():
-            # Just do some debugging for now.
-            print self.recurringPanel.GetSettings()
+            settings = self.recurringPanel.GetSettings()
+            args = [amount, desc, date] + list(settings) + [sourceAccount]
+            print "AddRecurringTransaction(%s)" % ", ".join([repr(x) for x in args])
         else:
             destAccount.AddTransaction(amount, desc, date, sourceAccount)
             self.onSuccess()
