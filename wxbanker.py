@@ -46,6 +46,38 @@ except NoNumpyException:
     print _("Warning: Numpy module not available, disabling Summary tab. Install numpy to fix this.")
 
 
+class BankerPanel(wx.Panel):
+    def __init__(self, parent, bankController):
+        wx.Panel.__init__(self, parent)
+        self.bankController = bankController
+
+        self.Sizer = wx.BoxSizer(wx.VERTICAL)
+        self.notebook = notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
+
+        self.managePanel = managetab.ManagePanel(notebook, bankController)
+        notebook.AddPage(self.managePanel, _("Transactions"))
+
+        if summarytab:
+            self.summaryPanel = summarytab.SummaryPanel(notebook, bankController)
+            notebook.AddPage(self.summaryPanel, _("Summary"))
+            
+        self.Sizer.Add(self.notebook, 1, wx.EXPAND)
+
+        self.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.onTabSwitching)
+        
+        wx.CallLater(1000, self.CheckRecurringTransactions)
+        
+    def CheckRecurringTransactions(self):
+        recurring = self.bankController.Model.GetRecurringTransactions()
+        print "%i recurring transactions" % len(recurring)
+
+    def onTabSwitching(self, event):
+        tabIndex = event.Selection
+        # If we are switching to the summary (graph) tab, update it!
+        if tabIndex == 1:
+            self.summaryPanel.update()
+        
+        
 class BankerFrame(wx.Frame):
     def __init__(self, bankController, welcome):
         # Load our window settings.
@@ -56,17 +88,8 @@ class BankerFrame(wx.Frame):
         wx.Frame.__init__(self, None, title="wxBanker", size=size, pos=pos)
         self.SetIcon(wx.ArtProvider.GetIcon('wxART_coins'))
 
-        self.notebook = notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
-
-        self.managePanel = managetab.ManagePanel(notebook, bankController)
-        notebook.AddPage(self.managePanel, _("Transactions"))
-
-        if summarytab:
-            self.summaryPanel = summarytab.SummaryPanel(notebook, bankController)
-            notebook.AddPage(self.summaryPanel, _("Summary"))
-
-        self.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.onTabSwitching)
-
+        self.Panel = BankerPanel(self, bankController)
+        
         Publisher.subscribe(self.onWarning, "warning")
         if welcome:
             Publisher.subscribe(self.onFirstRun, "first run")
@@ -104,12 +127,6 @@ class BankerFrame(wx.Frame):
     def OnClose(self, event):
         event.Skip() # This must be first, so handlers can override it.
         Publisher.sendMessage("exiting", event)
-
-    def onTabSwitching(self, event):
-        tabIndex = event.Selection
-        # If we are switching to the summary (graph) tab, update it!
-        if tabIndex == 1:
-            self.summaryPanel.update()
 
     def onFirstRun(self, message):
         welcomeMsg = _("It looks like this is your first time using wxBanker!")
