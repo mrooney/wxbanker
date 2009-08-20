@@ -27,6 +27,9 @@ class GUITests(testbase.TestCaseHandlingConfig):
         testbase.TestCaseHandlingConfig.setUp(self)
         self.App = wxbanker.init(":memory:", welcome=False)
         self.Frame = self.App.TopWindow
+        
+    def tearDown(self):
+        self.App.Destroy()
 
     def testAutoSaveSetAndSaveDisabled(self):
         self.assertTrue( self.Frame.MenuBar.autoSaveMenuItem.IsChecked() )
@@ -38,16 +41,17 @@ class GUITests(testbase.TestCaseHandlingConfig):
     def testCanAddAndRemoveUnicodeAccount(self):
         self.App.Controller.Model.CreateAccount(u"Lópezहिंदी")
         # Make sure the account ctrl has the first (0th) selection.
-        self.assertEqual(0, self.Frame.managePanel.accountCtrl.currentIndex)
+        managePanel = self.Frame.Panel.managePanel
+        self.assertEqual(0, managePanel.accountCtrl.currentIndex)
         # Mock out the account removal dialog in-place to just return "Yes"
-        self.Frame.managePanel.accountCtrl.showModal = lambda *args, **kwargs: wx.ID_YES
+        managePanel.accountCtrl.showModal = lambda *args, **kwargs: wx.ID_YES
         # Now remove the account and make sure there is no selection.
-        self.Frame.managePanel.accountCtrl.onRemoveButton(None)
-        self.assertEqual(None, self.Frame.managePanel.accountCtrl.currentIndex)
+        managePanel.accountCtrl.onRemoveButton(None)
+        self.assertEqual(None, managePanel.accountCtrl.currentIndex)
 
     def testCanAddTransaction(self):
         model = self.App.Controller.Model
-        tctrl = self.Frame.managePanel.transactionPanel.newTransCtrl
+        tctrl = self.Frame.Panel.managePanel.transactionPanel.newTransCtrl
         a = model.CreateAccount("testCanAddTransaction")
 
         self.assertEquals(len(a.Transactions), 0)
@@ -58,6 +62,13 @@ class GUITests(testbase.TestCaseHandlingConfig):
 
         self.assertEquals(len(a.Transactions), 1)
         self.assertEquals(a.Balance, 12.34)
+        
+    def testCanCheckRecurringTransactions(self):
+        self.assertEqual(self.App.Controller, self.Frame.Panel.bankController)
+        model = self.App.Controller.Model
+        a = model.CreateAccount("A")
+        rt = a.AddRecurringTransaction(1, "fun", testbase.today, 0)
+        self.assertEqual(self.Frame.Panel.CheckRecurringTransactions(), 1)
 
 if __name__ == "__main__":
     unittest.main()

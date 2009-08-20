@@ -1,3 +1,4 @@
 pyunit.xml
 wxbanker.wpr
 bank.db
+tests/test.db

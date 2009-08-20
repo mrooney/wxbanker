@@ -36,7 +36,7 @@ from wx.lib.pubsub import Publisher
 # wxBanker
 from bankexceptions import NoNumpyException
 from menubar import BankMenuBar
-import localization
+import localization, messagepanel
 # Tabs
 import managetab
 try:
@@ -69,7 +69,12 @@ class BankerPanel(wx.Panel):
         
     def CheckRecurringTransactions(self):
         recurring = self.bankController.Model.GetRecurringTransactions()
-        print "%i recurring transactions" % len(recurring)
+        message = "%i recurring transactions" % len(recurring)
+        mpanel = messagepanel.MessagePanel(self, message)
+        self.Sizer.Insert(0, mpanel, 0, wx.EXPAND)
+        self.Layout()
+        
+        return len(recurring)
 
     def onTabSwitching(self, event):
         tabIndex = event.Selection
