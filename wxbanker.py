@@ -64,17 +64,39 @@ class BankerPanel(wx.Panel):
         self.Sizer.Add(self.notebook, 1, wx.EXPAND)
 
         self.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.onTabSwitching)
+        Publisher.subscribe(self.onRecurringTransactionAdded, "recurringtransaction.created")
         
         wx.CallLater(1000, self.CheckRecurringTransactions)
         
+    def AddMessagePanel(self, panel):
+        self.Sizer.Insert(0, panel, 0, wx.EXPAND)
+        self.Layout()
+
     def CheckRecurringTransactions(self):
         recurring = self.bankController.Model.GetRecurringTransactions()
         message = "%i recurring transactions" % len(recurring)
         mpanel = messagepanel.MessagePanel(self, message)
-        self.Sizer.Insert(0, mpanel, 0, wx.EXPAND)
-        self.Layout()
+        self.AddMessagePanel(mpanel)
         
         return len(recurring)
+    
+    def onRecurringTransactionAdded(self, message):
+        account, recurring = message.data
+        
+        dates = recurring.GetUntransactedDates()
+        
+        # If there are no transactions due, just inform the user it was added.
+        if not dates:
+            message = _("Recurring transaction successfully added.")
+            futureDates = recurring.GetUntransactedDates(future=True)
+            if futureDates:
+                message += _("The first transaction will occur on %(date)s") % {"date": futureDates[0]}
+            mpanel = messagepanel.MessagePanel(self, message)
+        else:
+            message = _("%(num)i recurring transactions are due to occur")  % {"num": len(dates)}
+            mpanel = messagepanel.MessagePanel(self, message)
+            
+        self.AddMessagePanel(mpanel)
 
     def onTabSwitching(self, event):
         tabIndex = event.Selection

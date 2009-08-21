@@ -697,14 +697,18 @@ class RecurringTransaction(Transaction, ORMObject):
         
         self.LastTransacted = datetime.date.today()
         
-    def GetUntransactedDates(self):
+    def GetUntransactedDates(self, future=False):
         today = datetime.date.today()
         if self.LastTransacted:
             # Start on the day after the last transaction
             start = self.LastTransacted + datetime.timedelta(days=1)
         else:
             start = self.Date
-        end = self.EndDate or today
+            
+        if future:
+            end = today + datetime.timedelta(days=1000)
+        else:
+            end = self.EndDate or today
         
         # Create some mapping lists.
         rruleDays = [rrule.MO, rrule.TU, rrule.WE, rrule.TH, rrule.FR, rrule.SA, rrule.SU]
