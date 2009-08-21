@@ -16,131 +16,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n % 100 >= "
 "3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5;\n"
-"X-Launchpad-Export-Date: 2009-08-20 09:21+0000\n"
+"X-Launchpad-Export-Date: 2009-08-21 09:51+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
 msgid "Show"
 msgstr "أظهر"
-
-#: menubar.py:71
-msgid "CSV Import"
-msgstr "إستيراد CSV"
-
-#: newtransactionctrl.py:51 newtransactionctrl.py:239
-msgid "Transfer"
-msgstr "حوّل"
-
-#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
-#: transactionolv.py:61
-msgid "Description"
-msgstr "الوصف"
-
-#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
-#: transactionolv.py:62
-msgid "Amount"
-msgstr "المبلغ"
-
-#: newtransactionctrl.py:352
-msgid "Please enter a number such as 12.34 or -20."
-msgstr "الرّجاء إدخال عدد مثل 12.34 أو -20"
-
-#: newtransactionctrl.py:367
-msgid "Please select an account and then try again."
-msgstr "الرّجاء إختيار حساب و إعادة المحاولة"
-
-#: newtransactionctrl.py:383
-msgid "transfer"
-msgstr "حوِّل"
-
-#: summarytab.py:56
-msgid "Account"
-msgstr "الحساب"
-
-#: summarytab.py:113
-msgid "All accounts"
-msgstr "كل الحسابات"
-
-#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
-#: transactionolv.py:60
-msgid "Date"
-msgstr "التاريخ"
-
-#: templater.py:27
-msgid "Hide Calculator"
-msgstr "أخف الحاسبة"
-
-#: templater.py:28
-msgid "Show Calculator"
-msgstr "أظهر الحاسبة"
-
-#: searchctrl.py:34
-msgid "Current Account"
-msgstr "الحساب الحالي"
-
-#: searchctrl.py:34
-msgid "All Accounts"
-msgstr "كل الحسابات"
-
-#: csvimportframe.py:28
-msgid "CSV import"
-msgstr "إستيراد CSV"
-
-#: csvimportframe.py:75 csvimportframe.py:77
-msgid "Import"
-msgstr "إستيراد"
-
-#: csvimportframe.py:106
-msgid "Decimal separator"
-msgstr "فاصلة الكسر العشري"
-
-#: csvimportframe.py:184
-msgid "Save"
-msgstr "إحفظ"
-
-#: csvimportframe.py:189
-msgid "Delete"
-msgstr "احذف"
-
-#: csvimportframe.py:251
-msgid "CSV import error"
-msgstr "خطأ في إستيراد CSV"
-
-#: transactionolv.py:63 accountlistctrl.py:87
-msgid "Total"
-msgstr "الناتج"
-
-#: accountlistctrl.py:42
-msgid "Accounts"
-msgstr "الحسابات"
-
-#: accountlistctrl.py:58
-msgid "Add a new account"
-msgstr "أضف حسابا جديدا"
-
-#: accountlistctrl.py:62
-msgid "Remove the selected account"
-msgstr "إحذف الحساب المختار"
-
-#: accountlistctrl.py:67
-msgid "Rename the selected account"
-msgstr "أعد تسمية الحساب المختار"
-
-#: accountlistctrl.py:381 accountlistctrl.py:476
-msgid "Sorry, an account by that name already exists."
-msgstr "عفوًا يوجد حساب يحمل نفس الإسم"
-
-#: accountlistctrl.py:450
-msgid "Warning"
-msgstr "إنذار"
-
-#: wxbanker.py:66
-msgid "Summary"
-msgstr "موجز"
-
-#: wxbanker.py:129
-msgid "Save changes?"
-msgstr "حفظ التّغييرات؟"
 
 #: bankobjects.py:343
 #, python-format
@@ -171,6 +52,10 @@ msgstr ""
 #: menubar.py:61
 msgid "Request a Currency"
 msgstr ""
+
+#: menubar.py:71
+msgid "CSV Import"
+msgstr "إستيراد CSV"
 
 #: menubar.py:71
 msgid "Import transactions from a CSV file"
@@ -255,6 +140,10 @@ msgstr ""
 #: newtransactionctrl.py:47 summarytab.py:61
 msgid "to"
 msgstr ""
+
+#: newtransactionctrl.py:51 newtransactionctrl.py:239
+msgid "Transfer"
+msgstr "حوّل"
 
 #: newtransactionctrl.py:55
 msgid "account:"
@@ -417,6 +306,16 @@ msgstr ""
 msgid "Starts:"
 msgstr ""
 
+#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
+#: transactionolv.py:61
+msgid "Description"
+msgstr "الوصف"
+
+#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
+#: transactionolv.py:62
+msgid "Amount"
+msgstr "المبلغ"
+
 #: newtransactionctrl.py:236
 msgid "Enter this transaction"
 msgstr ""
@@ -440,13 +339,25 @@ msgstr ""
 msgid "'%s' is not a valid amount."
 msgstr ""
 
+#: newtransactionctrl.py:352
+msgid "Please enter a number such as 12.34 or -20."
+msgstr "الرّجاء إدخال عدد مثل 12.34 أو -20"
+
 #: newtransactionctrl.py:353
 msgid "Invalid Transaction Amount"
 msgstr ""
 
+#: newtransactionctrl.py:367
+msgid "Please select an account and then try again."
+msgstr "الرّجاء إختيار حساب و إعادة المحاولة"
+
 #: newtransactionctrl.py:368 newtransactionctrl.py:399
 msgid "No account selected"
 msgstr ""
+
+#: newtransactionctrl.py:383
+msgid "transfer"
+msgstr "حوِّل"
 
 #: newtransactionctrl.py:383
 msgid "transaction"
@@ -481,6 +392,10 @@ msgid ""
 "source."
 msgstr ""
 
+#: summarytab.py:56
+msgid "Account"
+msgstr "الحساب"
+
 #: summarytab.py:59
 msgid "From"
 msgstr ""
@@ -493,6 +408,10 @@ msgstr ""
 msgid "Fit Curve Degree"
 msgstr ""
 
+#: summarytab.py:113
+msgid "All accounts"
+msgstr "كل الحسابات"
+
 #: summarytab.py:177 summarytab.py:183
 msgid "Balance"
 msgstr ""
@@ -504,6 +423,11 @@ msgstr ""
 #: summarytab.py:183
 msgid "Total Balance Over Time"
 msgstr ""
+
+#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
+#: transactionolv.py:60
+msgid "Date"
+msgstr "التاريخ"
 
 #: currconvert.py:59
 #, python-format
@@ -524,6 +448,14 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+#: templater.py:27
+msgid "Hide Calculator"
+msgstr "أخف الحاسبة"
+
+#: templater.py:28
+msgid "Show Calculator"
+msgstr "أظهر الحاسبة"
+
 #: templater.py:29
 msgid "Transact"
 msgstr ""
@@ -531,6 +463,14 @@ msgstr ""
 #: searchctrl.py:32
 msgid "Search transactions"
 msgstr ""
+
+#: searchctrl.py:34
+msgid "Current Account"
+msgstr "الحساب الحالي"
+
+#: searchctrl.py:34
+msgid "All Accounts"
+msgstr "كل الحسابات"
 
 #: searchctrl.py:38
 msgid "More options"
@@ -564,9 +504,17 @@ msgstr ""
 msgid "Hide advanced search options"
 msgstr ""
 
+#: csvimportframe.py:28
+msgid "CSV import"
+msgstr "إستيراد CSV"
+
 #: csvimportframe.py:60
 msgid "Target account"
 msgstr ""
+
+#: csvimportframe.py:75 csvimportframe.py:77
+msgid "Import"
+msgstr "إستيراد"
 
 #: csvimportframe.py:87
 msgid "CSV columns mapping"
@@ -575,6 +523,10 @@ msgstr ""
 #: csvimportframe.py:99
 msgid "Date format"
 msgstr ""
+
+#: csvimportframe.py:106
+msgid "Decimal separator"
+msgstr "فاصلة الكسر العشري"
 
 #: csvimportframe.py:117
 msgid "CSV file settings"
@@ -612,6 +564,14 @@ msgstr ""
 msgid "Load"
 msgstr ""
 
+#: csvimportframe.py:184
+msgid "Save"
+msgstr "إحفظ"
+
+#: csvimportframe.py:189
+msgid "Delete"
+msgstr "احذف"
+
 #: csvimportframe.py:243
 #, python-format
 msgid "The file encoding does not seem to be '%s'."
@@ -620,6 +580,10 @@ msgstr ""
 #: csvimportframe.py:250
 msgid "An error ocurred during the csv file import."
 msgstr ""
+
+#: csvimportframe.py:251
+msgid "CSV import error"
+msgstr "خطأ في إستيراد CSV"
 
 #: csvimportframe.py:301
 #, python-format
@@ -641,6 +605,10 @@ msgstr ""
 #: transactionolv.py:48
 msgid "No transactions entered."
 msgstr ""
+
+#: transactionolv.py:63 accountlistctrl.py:87
+msgid "Total"
+msgstr "الناتج"
 
 #: transactionolv.py:179
 #, python-format
@@ -675,6 +643,22 @@ msgstr ""
 msgid "Move these %i transactions to account"
 msgstr ""
 
+#: accountlistctrl.py:42
+msgid "Accounts"
+msgstr "الحسابات"
+
+#: accountlistctrl.py:58
+msgid "Add a new account"
+msgstr "أضف حسابا جديدا"
+
+#: accountlistctrl.py:62
+msgid "Remove the selected account"
+msgstr "إحذف الحساب المختار"
+
+#: accountlistctrl.py:67
+msgid "Rename the selected account"
+msgstr "أعد تسمية الحساب المختار"
+
 #: accountlistctrl.py:72
 msgid "Configure the selected account"
 msgstr ""
@@ -688,6 +672,10 @@ msgid ""
 "When enabled, accounts with a balance of $0.00 will be hidden from the list"
 msgstr ""
 
+#: accountlistctrl.py:381 accountlistctrl.py:476
+msgid "Sorry, an account by that name already exists."
+msgstr "عفوًا يوجد حساب يحمل نفس الإسم"
+
 #: accountlistctrl.py:383 accountlistctrl.py:478
 msgid "Accout names cannot be blank."
 msgstr ""
@@ -699,6 +687,10 @@ msgid ""
 "Continue?"
 msgstr ""
 
+#: accountlistctrl.py:450
+msgid "Warning"
+msgstr "إنذار"
+
 #: wxbanker.py:46
 msgid ""
 "Warning: Numpy module not available, disabling Summary tab. Install numpy to "
@@ -708,6 +700,10 @@ msgstr ""
 #: wxbanker.py:62
 msgid "Transactions"
 msgstr ""
+
+#: wxbanker.py:66
+msgid "Summary"
+msgstr "موجز"
 
 #: wxbanker.py:115
 msgid "It looks like this is your first time using wxBanker!"
@@ -739,6 +735,10 @@ msgstr ""
 msgid "Welcome!"
 msgstr ""
 
+#: wxbanker.py:129
+msgid "Save changes?"
+msgstr "حفظ التّغييرات؟"
+
 #: wxbanker.py:130
 msgid ""
 "You have made changes since the last save. Would you like to save before "
@@ -750,3 +750,9 @@ msgid ""
 "Note that enabling auto-save from the File menu will eliminate the need for "
 "manual saving."
 msgstr ""
+
+#~ msgid "Which account will the money come from?"
+#~ msgstr "من أيّ حساب سيأتي المال؟"
+
+#~ msgid "Other accounts"
+#~ msgstr "حسابات أخرى"

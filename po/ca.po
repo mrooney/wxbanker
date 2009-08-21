@@ -15,115 +15,12 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-08-20 09:21+0000\n"
+"X-Launchpad-Export-Date: 2009-08-21 09:51+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
 msgid "Show"
 msgstr "Mostra"
-
-#: menubar.py:52
-msgid "&Currency"
-msgstr "&Moneda"
-
-#: menubar.py:52
-msgid "Select currency to display"
-msgstr "Seleccioneu la moneda a mostrar"
-
-#: menubar.py:84
-msgid "Ask a &Question"
-msgstr "Feu una &pregunta"
-
-#: menubar.py:89
-msgid "&Report a Bug"
-msgstr "&informeu dßun error"
-
-#: menubar.py:106
-msgid "&About"
-msgstr "&Quant a"
-
-#: menubar.py:110
-msgid "&Settings"
-msgstr "&Paràmetres"
-
-#: menubar.py:112
-msgid "&Help"
-msgstr "A&juda"
-
-#: menubar.py:180
-msgid "Copyright"
-msgstr "Copyright"
-
-#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
-#: transactionolv.py:61
-msgid "Description"
-msgstr "Descripció"
-
-#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
-#: transactionolv.py:62
-msgid "Amount"
-msgstr "Quantitat"
-
-#: newtransactionctrl.py:386
-msgid "Clear search?"
-msgstr "Voleu netejar la cerca?"
-
-#: summarytab.py:64
-msgid "Sample Points"
-msgstr "Punts de mostratge"
-
-#: summarytab.py:177 summarytab.py:183
-msgid "Balance"
-msgstr "Saldo"
-
-#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
-#: transactionolv.py:60
-msgid "Date"
-msgstr "Data"
-
-#: templater.py:27
-msgid "Hide Calculator"
-msgstr "Oculta la calculadora"
-
-#: templater.py:28
-msgid "Show Calculator"
-msgstr "Mostra la calculadora"
-
-#: searchctrl.py:34
-msgid "Current Account"
-msgstr "Compte actual"
-
-#: searchctrl.py:34
-msgid "All Accounts"
-msgstr "Tots els comptes"
-
-#: searchctrl.py:43
-msgid "Case Sensitive"
-msgstr "distingeix entre majúscules i minúscules"
-
-#: transactionolv.py:63 accountlistctrl.py:87
-msgid "Total"
-msgstr "Total"
-
-#: accountlistctrl.py:42
-msgid "Accounts"
-msgstr "Comptes"
-
-#: accountlistctrl.py:450
-msgid "Warning"
-msgstr "Avís"
-
-#: wxbanker.py:66
-msgid "Summary"
-msgstr "Resum"
-
-#: wxbanker.py:119
-msgid "Have fun!"
-msgstr "Passeu-vos-ho bé!"
-
-#: wxbanker.py:121
-msgid "Welcome!"
-msgstr "Us donem la benvinguda"
 
 #: bankobjects.py:343
 #, python-format
@@ -142,6 +39,14 @@ msgstr ""
 #: menubar.py:46
 msgid "Automatically save changes"
 msgstr ""
+
+#: menubar.py:52
+msgid "&Currency"
+msgstr "&Moneda"
+
+#: menubar.py:52
+msgid "Select currency to display"
+msgstr "Seleccioneu la moneda a mostrar"
 
 #: menubar.py:61
 msgid "Request a Currency"
@@ -164,8 +69,16 @@ msgid "View Frequently Asked Questions online"
 msgstr ""
 
 #: menubar.py:84
+msgid "Ask a &Question"
+msgstr "Feu una &pregunta"
+
+#: menubar.py:84
 msgid "Ask a question online"
 msgstr ""
+
+#: menubar.py:89
+msgid "&Report a Bug"
+msgstr "&informeu dßun error"
 
 #: menubar.py:89
 msgid "Report a bug to the developer online"
@@ -188,6 +101,10 @@ msgid "Translate wxBanker to another language"
 msgstr ""
 
 #: menubar.py:106
+msgid "&About"
+msgstr "&Quant a"
+
+#: menubar.py:106
 msgid "More information about wxBanker"
 msgstr ""
 
@@ -195,9 +112,21 @@ msgstr ""
 msgid "&File"
 msgstr ""
 
+#: menubar.py:110
+msgid "&Settings"
+msgstr "&Paràmetres"
+
 #: menubar.py:111
 msgid "&Tools"
 msgstr ""
+
+#: menubar.py:112
+msgid "&Help"
+msgstr "A&juda"
+
+#: menubar.py:180
+msgid "Copyright"
+msgstr "Copyright"
 
 #: menubar.py:181
 msgid "A lightweight personal finance management application."
@@ -376,6 +305,16 @@ msgstr ""
 msgid "Starts:"
 msgstr ""
 
+#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
+#: transactionolv.py:61
+msgid "Description"
+msgstr "Descripció"
+
+#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
+#: transactionolv.py:62
+msgid "Amount"
+msgstr "Quantitat"
+
 #: newtransactionctrl.py:236
 msgid "Enter this transaction"
 msgstr ""
@@ -430,6 +369,10 @@ msgid ""
 "make this %s in \"%s\"?"
 msgstr ""
 
+#: newtransactionctrl.py:386
+msgid "Clear search?"
+msgstr "Voleu netejar la cerca?"
+
 #: newtransactionctrl.py:398
 msgid ""
 "This transaction is marked as a transfer. Please select the transfer account."
@@ -456,6 +399,10 @@ msgstr ""
 msgid "From"
 msgstr ""
 
+#: summarytab.py:64
+msgid "Sample Points"
+msgstr "Punts de mostratge"
+
 #: summarytab.py:67
 msgid "Fit Curve Degree"
 msgstr ""
@@ -464,6 +411,10 @@ msgstr ""
 msgid "All accounts"
 msgstr ""
 
+#: summarytab.py:177 summarytab.py:183
+msgid "Balance"
+msgstr "Saldo"
+
 #: summarytab.py:181
 msgid "Trend"
 msgstr ""
@@ -471,6 +422,11 @@ msgstr ""
 #: summarytab.py:183
 msgid "Total Balance Over Time"
 msgstr ""
+
+#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
+#: transactionolv.py:60
+msgid "Date"
+msgstr "Data"
 
 #: currconvert.py:59
 #, python-format
@@ -491,6 +447,14 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+#: templater.py:27
+msgid "Hide Calculator"
+msgstr "Oculta la calculadora"
+
+#: templater.py:28
+msgid "Show Calculator"
+msgstr "Mostra la calculadora"
+
 #: templater.py:29
 msgid "Transact"
 msgstr ""
@@ -499,6 +463,14 @@ msgstr ""
 msgid "Search transactions"
 msgstr ""
 
+#: searchctrl.py:34
+msgid "Current Account"
+msgstr "Compte actual"
+
+#: searchctrl.py:34
+msgid "All Accounts"
+msgstr "Tots els comptes"
+
 #: searchctrl.py:38
 msgid "More options"
 msgstr ""
@@ -506,6 +478,10 @@ msgstr ""
 #: searchctrl.py:38
 msgid "Less options"
 msgstr ""
+
+#: searchctrl.py:43
+msgid "Case Sensitive"
+msgstr "distingeix entre majúscules i minúscules"
 
 #: searchctrl.py:44
 msgid "Whether or not to match based on capitalization"
@@ -629,6 +605,10 @@ msgstr ""
 msgid "No transactions entered."
 msgstr ""
 
+#: transactionolv.py:63 accountlistctrl.py:87
+msgid "Total"
+msgstr "Total"
+
 #: transactionolv.py:179
 #, python-format
 msgid "Send %s to calculator"
@@ -661,6 +641,10 @@ msgstr ""
 #, python-format
 msgid "Move these %i transactions to account"
 msgstr ""
+
+#: accountlistctrl.py:42
+msgid "Accounts"
+msgstr "Comptes"
 
 #: accountlistctrl.py:58
 msgid "Add a new account"
@@ -702,6 +686,10 @@ msgid ""
 "Continue?"
 msgstr ""
 
+#: accountlistctrl.py:450
+msgid "Warning"
+msgstr "Avís"
+
 #: wxbanker.py:46
 msgid ""
 "Warning: Numpy module not available, disabling Summary tab. Install numpy to "
@@ -711,6 +699,10 @@ msgstr ""
 #: wxbanker.py:62
 msgid "Transactions"
 msgstr ""
+
+#: wxbanker.py:66
+msgid "Summary"
+msgstr "Resum"
 
 #: wxbanker.py:115
 msgid "It looks like this is your first time using wxBanker!"
@@ -734,6 +726,14 @@ msgid ""
 "your initial balance) using the controls below the grid on the bottom right."
 msgstr ""
 
+#: wxbanker.py:119
+msgid "Have fun!"
+msgstr "Passeu-vos-ho bé!"
+
+#: wxbanker.py:121
+msgid "Welcome!"
+msgstr "Us donem la benvinguda"
+
 #: wxbanker.py:129
 msgid "Save changes?"
 msgstr ""
@@ -749,3 +749,6 @@ msgid ""
 "Note that enabling auto-save from the File menu will eliminate the need for "
 "manual saving."
 msgstr ""
+
+#~ msgid "Other accounts"
+#~ msgstr "Altres comptes"

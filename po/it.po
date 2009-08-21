@@ -15,76 +15,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-08-20 09:21+0000\n"
+"X-Launchpad-Export-Date: 2009-08-21 09:51+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-
-#: menubar.py:52
-msgid "&Currency"
-msgstr "&Valuta"
-
-#: menubar.py:106
-msgid "More information about wxBanker"
-msgstr "Maggiori informazioni su wxBanker"
-
-#: menubar.py:110
-msgid "&Settings"
-msgstr "&Impostazioni"
-
-#: menubar.py:112
-msgid "&Help"
-msgstr "&Aiuto"
-
-#: menubar.py:180
-msgid "Copyright"
-msgstr "Copyright"
-
-#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
-#: transactionolv.py:61
-msgid "Description"
-msgstr "Descrizione"
-
-#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
-#: transactionolv.py:62
-msgid "Amount"
-msgstr "Importo"
-
-#: newtransactionctrl.py:349
-#, python-format
-msgid "'%s' is not a valid amount."
-msgstr "«%s» è un importo non valido."
-
-#: summarytab.py:177 summarytab.py:183
-msgid "Balance"
-msgstr "Saldo"
-
-#: summarytab.py:181
-msgid "Trend"
-msgstr "Andamento"
-
-#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
-#: transactionolv.py:60
-msgid "Date"
-msgstr "Data"
-
-#: searchctrl.py:32
-msgid "Search transactions"
-msgstr "Ricerca movimenti"
-
-#: transactionolv.py:63 accountlistctrl.py:87
-msgid "Total"
-msgstr "Totale"
-
-#: transactionolv.py:193
-msgid "Remove this transaction"
-msgstr "Rimuovi questo movimento"
-
-#: wxbanker.py:62
-msgid "Transactions"
-msgstr "Movimenti"
-
-#: wxbanker.py:66
-msgid "Summary"
-msgstr "Sommario"
 
 #: calculator.py:124
 msgid "Show"
@@ -107,6 +39,10 @@ msgstr ""
 #: menubar.py:46
 msgid "Automatically save changes"
 msgstr ""
+
+#: menubar.py:52
+msgid "&Currency"
+msgstr "&Valuta"
 
 #: menubar.py:52
 msgid "Select currency to display"
@@ -168,13 +104,29 @@ msgstr ""
 msgid "&About"
 msgstr ""
 
+#: menubar.py:106
+msgid "More information about wxBanker"
+msgstr "Maggiori informazioni su wxBanker"
+
 #: menubar.py:109
 msgid "&File"
 msgstr ""
 
+#: menubar.py:110
+msgid "&Settings"
+msgstr "&Impostazioni"
+
 #: menubar.py:111
 msgid "&Tools"
 msgstr ""
+
+#: menubar.py:112
+msgid "&Help"
+msgstr "&Aiuto"
+
+#: menubar.py:180
+msgid "Copyright"
+msgstr "Copyright"
 
 #: menubar.py:181
 msgid "A lightweight personal finance management application."
@@ -353,6 +305,16 @@ msgstr ""
 msgid "Starts:"
 msgstr ""
 
+#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
+#: transactionolv.py:61
+msgid "Description"
+msgstr "Descrizione"
+
+#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
+#: transactionolv.py:62
+msgid "Amount"
+msgstr "Importo"
+
 #: newtransactionctrl.py:236
 msgid "Enter this transaction"
 msgstr ""
@@ -370,6 +332,11 @@ msgstr ""
 #: newtransactionctrl.py:347
 msgid "No amount entered in the 'Amount' field."
 msgstr ""
+
+#: newtransactionctrl.py:349
+#, python-format
+msgid "'%s' is not a valid amount."
+msgstr "«%s» è un importo non valido."
 
 #: newtransactionctrl.py:352
 msgid "Please enter a number such as 12.34 or -20."
@@ -444,9 +411,22 @@ msgstr ""
 msgid "All accounts"
 msgstr ""
 
+#: summarytab.py:177 summarytab.py:183
+msgid "Balance"
+msgstr "Saldo"
+
+#: summarytab.py:181
+msgid "Trend"
+msgstr "Andamento"
+
 #: summarytab.py:183
 msgid "Total Balance Over Time"
 msgstr ""
+
+#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
+#: transactionolv.py:60
+msgid "Date"
+msgstr "Data"
 
 #: currconvert.py:59
 #, python-format
@@ -478,6 +458,10 @@ msgstr ""
 #: templater.py:29
 msgid "Transact"
 msgstr ""
+
+#: searchctrl.py:32
+msgid "Search transactions"
+msgstr "Ricerca movimenti"
 
 #: searchctrl.py:34
 msgid "Current Account"
@@ -621,6 +605,10 @@ msgstr ""
 msgid "No transactions entered."
 msgstr ""
 
+#: transactionolv.py:63 accountlistctrl.py:87
+msgid "Total"
+msgstr "Totale"
+
 #: transactionolv.py:179
 #, python-format
 msgid "Send %s to calculator"
@@ -635,6 +623,10 @@ msgstr ""
 #, python-format
 msgid "Subtract %s from calculator"
 msgstr ""
+
+#: transactionolv.py:193
+msgid "Remove this transaction"
+msgstr "Rimuovi questo movimento"
 
 #: transactionolv.py:194
 msgid "Move this transaction to account"
@@ -703,6 +695,14 @@ msgid ""
 "Warning: Numpy module not available, disabling Summary tab. Install numpy to "
 "fix this."
 msgstr ""
+
+#: wxbanker.py:62
+msgid "Transactions"
+msgstr "Movimenti"
+
+#: wxbanker.py:66
+msgid "Summary"
+msgstr "Sommario"
 
 #: wxbanker.py:115
 msgid "It looks like this is your first time using wxBanker!"

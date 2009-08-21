@@ -16,79 +16,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2009-08-20 09:21+0000\n"
+"X-Launchpad-Export-Date: 2009-08-21 09:51+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
 msgid "Show"
 msgstr "Prikaži"
-
-#: menubar.py:106
-msgid "&About"
-msgstr "O progr&amu"
-
-#: menubar.py:110
-msgid "&Settings"
-msgstr "&Postavke"
-
-#: menubar.py:112
-msgid "&Help"
-msgstr "&Pomoć"
-
-#: menubar.py:180
-msgid "Copyright"
-msgstr "Autorska prava"
-
-#: newtransactionctrl.py:51 newtransactionctrl.py:239
-msgid "Transfer"
-msgstr "Transfer"
-
-#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
-#: transactionolv.py:61
-msgid "Description"
-msgstr "Opis"
-
-#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
-#: transactionolv.py:62
-msgid "Amount"
-msgstr "Iznos"
-
-#: summarytab.py:177 summarytab.py:183
-msgid "Balance"
-msgstr "Balans"
-
-#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
-#: transactionolv.py:60
-msgid "Date"
-msgstr "Datum"
-
-#: templater.py:28
-msgid "Show Calculator"
-msgstr "Prikaži digitron"
-
-#: searchctrl.py:43
-msgid "Case Sensitive"
-msgstr "Razlikuj velika i mala slova"
-
-#: transactionolv.py:63 accountlistctrl.py:87
-msgid "Total"
-msgstr "Ukupno"
-
-#: accountlistctrl.py:42
-msgid "Accounts"
-msgstr "Računi"
-
-#: accountlistctrl.py:450
-msgid "Warning"
-msgstr "Upozorenje"
-
-#: wxbanker.py:62
-msgid "Transactions"
-msgstr "Transakcije"
-
-#: wxbanker.py:66
-msgid "Summary"
-msgstr "Rezime"
 
 #: bankobjects.py:343
 #, python-format
@@ -169,6 +102,10 @@ msgid "Translate wxBanker to another language"
 msgstr ""
 
 #: menubar.py:106
+msgid "&About"
+msgstr "O progr&amu"
+
+#: menubar.py:106
 msgid "More information about wxBanker"
 msgstr ""
 
@@ -176,9 +113,21 @@ msgstr ""
 msgid "&File"
 msgstr ""
 
+#: menubar.py:110
+msgid "&Settings"
+msgstr "&Postavke"
+
 #: menubar.py:111
 msgid "&Tools"
 msgstr ""
+
+#: menubar.py:112
+msgid "&Help"
+msgstr "&Pomoć"
+
+#: menubar.py:180
+msgid "Copyright"
+msgstr "Autorska prava"
 
 #: menubar.py:181
 msgid "A lightweight personal finance management application."
@@ -191,6 +140,10 @@ msgstr ""
 #: newtransactionctrl.py:47 summarytab.py:61
 msgid "to"
 msgstr ""
+
+#: newtransactionctrl.py:51 newtransactionctrl.py:239
+msgid "Transfer"
+msgstr "Transfer"
 
 #: newtransactionctrl.py:55
 msgid "account:"
@@ -353,6 +306,16 @@ msgstr ""
 msgid "Starts:"
 msgstr ""
 
+#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
+#: transactionolv.py:61
+msgid "Description"
+msgstr "Opis"
+
+#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
+#: transactionolv.py:62
+msgid "Amount"
+msgstr "Iznos"
+
 #: newtransactionctrl.py:236
 msgid "Enter this transaction"
 msgstr ""
@@ -449,6 +412,10 @@ msgstr ""
 msgid "All accounts"
 msgstr ""
 
+#: summarytab.py:177 summarytab.py:183
+msgid "Balance"
+msgstr "Balans"
+
 #: summarytab.py:181
 msgid "Trend"
 msgstr ""
@@ -456,6 +423,11 @@ msgstr ""
 #: summarytab.py:183
 msgid "Total Balance Over Time"
 msgstr ""
+
+#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
+#: transactionolv.py:60
+msgid "Date"
+msgstr "Datum"
 
 #: currconvert.py:59
 #, python-format
@@ -480,6 +452,10 @@ msgstr ""
 msgid "Hide Calculator"
 msgstr ""
 
+#: templater.py:28
+msgid "Show Calculator"
+msgstr "Prikaži digitron"
+
 #: templater.py:29
 msgid "Transact"
 msgstr ""
@@ -503,6 +479,10 @@ msgstr ""
 #: searchctrl.py:38
 msgid "Less options"
 msgstr ""
+
+#: searchctrl.py:43
+msgid "Case Sensitive"
+msgstr "Razlikuj velika i mala slova"
 
 #: searchctrl.py:44
 msgid "Whether or not to match based on capitalization"
@@ -626,6 +606,10 @@ msgstr ""
 msgid "No transactions entered."
 msgstr ""
 
+#: transactionolv.py:63 accountlistctrl.py:87
+msgid "Total"
+msgstr "Ukupno"
+
 #: transactionolv.py:179
 #, python-format
 msgid "Send %s to calculator"
@@ -658,6 +642,10 @@ msgstr ""
 #, python-format
 msgid "Move these %i transactions to account"
 msgstr ""
+
+#: accountlistctrl.py:42
+msgid "Accounts"
+msgstr "Računi"
 
 #: accountlistctrl.py:58
 msgid "Add a new account"
@@ -699,11 +687,23 @@ msgid ""
 "Continue?"
 msgstr ""
 
+#: accountlistctrl.py:450
+msgid "Warning"
+msgstr "Upozorenje"
+
 #: wxbanker.py:46
 msgid ""
 "Warning: Numpy module not available, disabling Summary tab. Install numpy to "
 "fix this."
 msgstr ""
+
+#: wxbanker.py:62
+msgid "Transactions"
+msgstr "Transakcije"
+
+#: wxbanker.py:66
+msgid "Summary"
+msgstr "Rezime"
 
 #: wxbanker.py:115
 msgid "It looks like this is your first time using wxBanker!"

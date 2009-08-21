@@ -15,8 +15,48 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-08-20 09:21+0000\n"
+"X-Launchpad-Export-Date: 2009-08-21 09:51+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+
+#: menubar.py:84
+msgid "Ask a &Question"
+msgstr "Ställ en &fråga"
+
+#: newtransactionctrl.py:347
+msgid "No amount entered in the 'Amount' field."
+msgstr "Inget belopp ifyllt i \"Belopp\"-fältet."
+
+#: newtransactionctrl.py:353
+msgid "Invalid Transaction Amount"
+msgstr "Ogiltigt transaktionsbelopp"
+
+#: newtransactionctrl.py:367
+msgid "Please select an account and then try again."
+msgstr "Vänligen välj ett konto och försök igen."
+
+#: csvimportframe.py:60
+msgid "Target account"
+msgstr "Målkonto"
+
+#: csvimportframe.py:126
+msgid "Skip first line"
+msgstr "Hoppa över första raden"
+
+#: csvimportframe.py:164
+msgid "CSV profiles"
+msgstr "CSV-profiler"
+
+#: csvimportframe.py:250
+msgid "An error ocurred during the csv file import."
+msgstr "Ett fel uppstod under importeringen av CSV-filen."
+
+#: wxbanker.py:46
+msgid ""
+"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
+"fix this."
+msgstr ""
+"Varning: Numpy-modulen är inte tillgänglig, avaktiverar summeringsfliken. "
+"Installera numpy för att åtgärda detta."
 
 #: calculator.py:124
 msgid "Show"
@@ -33,6 +73,10 @@ msgid "Transfer from %s"
 msgstr "Överför från %s"
 
 #: menubar.py:46
+msgid "Auto-save"
+msgstr "Automatisk sparning"
+
+#: menubar.py:46
 msgid "Automatically save changes"
 msgstr "Spara ändringar automatiskt"
 
@@ -44,9 +88,17 @@ msgstr "&Valuta"
 msgid "Select currency to display"
 msgstr "Välj valuta som ska visas"
 
+#: menubar.py:61
+msgid "Request a Currency"
+msgstr "Begär en ny valuta"
+
 #: menubar.py:71
 msgid "CSV Import"
 msgstr "CSV-importering"
+
+#: menubar.py:71
+msgid "Import transactions from a CSV file"
+msgstr "Importera transaktioner från en CSV-fil"
 
 #: menubar.py:79
 msgid "View &FAQs"
@@ -55,10 +107,6 @@ msgstr "Visa &FAQ"
 #: menubar.py:79
 msgid "View Frequently Asked Questions online"
 msgstr "Visa Vanliga frågor online"
-
-#: menubar.py:84
-msgid "Ask a &Question"
-msgstr "Ställ en &fråga"
 
 #: menubar.py:84
 msgid "Ask a question online"
@@ -71,6 +119,14 @@ msgstr "&Rapportera en bugg"
 #: menubar.py:89
 msgid "Report a bug to the developer online"
 msgstr "Rapportera en bugg till utvecklaren online"
+
+#: menubar.py:94
+msgid "Request a Fea&ture"
+msgstr "Begär en egenskap"
+
+#: menubar.py:94
+msgid "Request a new feature to be implemented"
+msgstr "Begär en ny funktion som ska implementeras"
 
 #: menubar.py:99
 msgid "Tran&slate wxBanker"
@@ -112,420 +168,6 @@ msgstr "Copyright"
 msgid "A lightweight personal finance management application."
 msgstr "Ett lättviktigt program för hantering av personliga finanser."
 
-#: newtransactionctrl.py:51 newtransactionctrl.py:239
-msgid "Transfer"
-msgstr "Överföring"
-
-#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
-#: transactionolv.py:61
-msgid "Description"
-msgstr "Beskrivning"
-
-#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
-#: transactionolv.py:62
-msgid "Amount"
-msgstr "Belopp"
-
-#: newtransactionctrl.py:236
-msgid "Enter this transaction"
-msgstr "Fyll i transaktionen"
-
-#: newtransactionctrl.py:242
-msgid "Recurring"
-msgstr "Återkommande"
-
-#: newtransactionctrl.py:291
-msgid ""
-"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
-"to fix this."
-msgstr ""
-"Varning: Oförmögen att binda till DateCtrl's ENTER. Uppgradera till wxPython "
-">= 2.8.8.1 för att ordna detta."
-
-#: newtransactionctrl.py:347
-msgid "No amount entered in the 'Amount' field."
-msgstr "Inget belopp ifyllt i \"Belopp\"-fältet."
-
-#: newtransactionctrl.py:349
-#, python-format
-msgid "'%s' is not a valid amount."
-msgstr "'%s' är inget giltigt belopp."
-
-#: newtransactionctrl.py:352
-msgid "Please enter a number such as 12.34 or -20."
-msgstr "Vänligen fyll i ett nummer som t.ex. 12.34 eller -20."
-
-#: newtransactionctrl.py:353
-msgid "Invalid Transaction Amount"
-msgstr "Ogiltigt transaktionsbelopp"
-
-#: newtransactionctrl.py:367
-msgid "Please select an account and then try again."
-msgstr "Vänligen välj ett konto och försök igen."
-
-#: newtransactionctrl.py:368 newtransactionctrl.py:399
-msgid "No account selected"
-msgstr "Inget konto valt"
-
-#: newtransactionctrl.py:383
-msgid "transfer"
-msgstr "överför"
-
-#: newtransactionctrl.py:383
-msgid "transaction"
-msgstr "transaktion"
-
-#: newtransactionctrl.py:385
-#, python-format
-msgid ""
-"A search is currently active. Would you like to clear the current search and "
-"make this %s in \"%s\"?"
-msgstr ""
-"En sökning är aktiv för tillfället. Vill du rensa den nuvarande sökningen "
-"och skriva %s i \"%s\"?"
-
-#: newtransactionctrl.py:386
-msgid "Clear search?"
-msgstr "Rensa sökning?"
-
-#: newtransactionctrl.py:414
-msgid ""
-"If this box is checked when adding a transaction, you will be prompted for "
-"the account to use as the source of the transfer."
-msgstr ""
-"Om denna ruta är i kryssad när du lägger till en transaktion, kommer du "
-"behöva ange kontot som ska vara ursprungs kontot för överföringen."
-
-#: newtransactionctrl.py:415
-msgid ""
-"For example, checking this box and entering a transaction of $50 into this "
-"account will also subtract $50 from the account that you choose as the "
-"source."
-msgstr ""
-"t.ex. kryssa i rutan och skriv in en transaktion på $50 på det här kontot "
-"kommer också att dra ifrån $50 från kontot som du valde som ursprungs konto."
-
-#: summarytab.py:56
-msgid "Account"
-msgstr "Konto"
-
-#: summarytab.py:64
-msgid "Sample Points"
-msgstr "Sampelspunkter"
-
-#: summarytab.py:67
-msgid "Fit Curve Degree"
-msgstr "Anpassa Bågens Grad"
-
-#: summarytab.py:113
-msgid "All accounts"
-msgstr "Alla konton"
-
-#: summarytab.py:177 summarytab.py:183
-msgid "Balance"
-msgstr "Balans"
-
-#: summarytab.py:181
-msgid "Trend"
-msgstr "Trend"
-
-#: summarytab.py:183
-msgid "Total Balance Over Time"
-msgstr "Total balans över tid"
-
-#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
-#: transactionolv.py:60
-msgid "Date"
-msgstr "Datum"
-
-#: templater.py:27
-msgid "Hide Calculator"
-msgstr "Göm miniräknare"
-
-#: templater.py:28
-msgid "Show Calculator"
-msgstr "Visa miniräknare"
-
-#: templater.py:29
-msgid "Transact"
-msgstr "Transaktion"
-
-#: searchctrl.py:32
-msgid "Search transactions"
-msgstr "Sök transaktioner"
-
-#: searchctrl.py:34
-msgid "Current Account"
-msgstr "Nuvarande konto"
-
-#: searchctrl.py:34
-msgid "All Accounts"
-msgstr "Alla konton"
-
-#: searchctrl.py:38
-msgid "More options"
-msgstr "Fler alternativ"
-
-#: searchctrl.py:38
-msgid "Less options"
-msgstr "Färre alternativ"
-
-#: searchctrl.py:43
-msgid "Case Sensitive"
-msgstr "Skiftlägeskänslig"
-
-#: searchctrl.py:44
-msgid "Whether or not to match based on capitalization"
-msgstr "Huruvida träffar baseras på Versaler/Gemener eller inte"
-
-#: searchctrl.py:49
-msgid "In: "
-msgstr "I: "
-
-#: searchctrl.py:55
-msgid "Match: "
-msgstr "Träff: "
-
-#: searchctrl.py:106
-msgid "Show advanced search options"
-msgstr "Visa avancerade sökalternativ"
-
-#: searchctrl.py:108
-msgid "Hide advanced search options"
-msgstr "Dölj avancerade sökalternativ"
-
-#: csvimportframe.py:28
-msgid "CSV import"
-msgstr "Importera CSV"
-
-#: csvimportframe.py:60
-msgid "Target account"
-msgstr "Målkonto"
-
-#: csvimportframe.py:75 csvimportframe.py:77
-msgid "Import"
-msgstr "Importera"
-
-#: csvimportframe.py:99
-msgid "Date format"
-msgstr "Datumformat"
-
-#: csvimportframe.py:106
-msgid "Decimal separator"
-msgstr "Decimalavgränsare"
-
-#: csvimportframe.py:117
-msgid "CSV file settings"
-msgstr "CSV filinställningar"
-
-#: csvimportframe.py:126
-msgid "Skip first line"
-msgstr "Hoppa över första raden"
-
-#: csvimportframe.py:129
-msgid "Encoding"
-msgstr "Kodning"
-
-#: csvimportframe.py:144
-msgid "File to import"
-msgstr "Fil att importera"
-
-#: csvimportframe.py:149 csvimportframe.py:151
-msgid "Preview"
-msgstr "Förhandsgranskning"
-
-#: csvimportframe.py:164
-msgid "CSV profiles"
-msgstr "CSV-profiler"
-
-#: csvimportframe.py:179
-msgid "Load"
-msgstr "Ladda"
-
-#: csvimportframe.py:184
-msgid "Save"
-msgstr "Spara"
-
-#: csvimportframe.py:189
-msgid "Delete"
-msgstr "Ta bort"
-
-#: csvimportframe.py:250
-msgid "An error ocurred during the csv file import."
-msgstr "Ett fel uppstod under importeringen av CSV-filen."
-
-#: csvimportframe.py:302
-msgid "Overwrite profile ?"
-msgstr "Skriv över profil ?"
-
-#: csvimportframe.py:316
-msgid "Select file and click \"Preview\""
-msgstr "Välj fil och klicka \"Förhandsvisa\""
-
-#: transactionolv.py:48
-msgid "No transactions entered."
-msgstr "Inga transaktioner angivan."
-
-#: transactionolv.py:63 accountlistctrl.py:87
-msgid "Total"
-msgstr "Totalt"
-
-#: transactionolv.py:179
-#, python-format
-msgid "Send %s to calculator"
-msgstr "Skicka %s till miniräknare"
-
-#: transactionolv.py:180
-#, python-format
-msgid "Add %s to calculator"
-msgstr "Addera %s i miniräknare"
-
-#: transactionolv.py:181
-#, python-format
-msgid "Subtract %s from calculator"
-msgstr "Subtrahera %s i miniräknare"
-
-#: transactionolv.py:193
-msgid "Remove this transaction"
-msgstr "Ta bort den här transaktionen"
-
-#: transactionolv.py:194
-msgid "Move this transaction to account"
-msgstr "Flytta denna transaktion till konto"
-
-#: transactionolv.py:196
-#, python-format
-msgid "Remove these %i transactions"
-msgstr "Ta bort följande %i transaktioner"
-
-#: transactionolv.py:197
-#, python-format
-msgid "Move these %i transactions to account"
-msgstr "Flytta dessa %i transaktioner till konto"
-
-#: accountlistctrl.py:42
-msgid "Accounts"
-msgstr "Konton"
-
-#: accountlistctrl.py:58
-msgid "Add a new account"
-msgstr "Lägg till ett nytt konto"
-
-#: accountlistctrl.py:62
-msgid "Remove the selected account"
-msgstr "Ta bort det valda kontot"
-
-#: accountlistctrl.py:67
-msgid "Rename the selected account"
-msgstr "Ändra namn på valt konto"
-
-#: accountlistctrl.py:72
-msgid "Configure the selected account"
-msgstr "Konfigurera valt konto"
-
-#: accountlistctrl.py:92
-msgid "Hide zero-balance accounts"
-msgstr "Göm kontom som har noll i balans."
-
-#: accountlistctrl.py:93
-msgid ""
-"When enabled, accounts with a balance of $0.00 will be hidden from the list"
-msgstr ""
-"När aktiverat kommer konton med en balans på $0.00 döljas från listan"
-
-#: accountlistctrl.py:381 accountlistctrl.py:476
-msgid "Sorry, an account by that name already exists."
-msgstr "Ledsen, ett konto med det namnet existerar redan."
-
-#: accountlistctrl.py:449
-#, python-format
-msgid ""
-"This will permanently remove the account '%s' and all its transactions. "
-"Continue?"
-msgstr ""
-"Det här kommer att permanent ta bort kontot '%s' och alla dess "
-"transaktioner. Fortsätt?"
-
-#: accountlistctrl.py:450
-msgid "Warning"
-msgstr "Varning"
-
-#: wxbanker.py:46
-msgid ""
-"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
-"fix this."
-msgstr ""
-"Varning: Numpy-modulen är inte tillgänglig, avaktiverar summeringsfliken. "
-"Installera numpy för att åtgärda detta."
-
-#: wxbanker.py:62
-msgid "Transactions"
-msgstr "Transaktioner"
-
-#: wxbanker.py:66
-msgid "Summary"
-msgstr "Summering"
-
-#: wxbanker.py:115
-msgid "It looks like this is your first time using wxBanker!"
-msgstr "Det ser ut som om det här är första gången du använder wxBanker!"
-
-#: wxbanker.py:116
-msgid ""
-"To get started, add an account using the account control in the top left "
-"corner."
-msgstr ""
-"För att komma igång, lägg till ett konto via kontrollpanelen i översta "
-"vänstra hörnet."
-
-#: wxbanker.py:117
-msgid ""
-"The buttons in the account control allow you to add, remove, and rename an "
-"account, respectively."
-msgstr ""
-"Respektive knappar i kontrollpanelen låter dig lägga till, ta bort och byta "
-"namn på ditt konto"
-
-#: wxbanker.py:118
-msgid ""
-"Once you have created an account you can add transactions to it (such as "
-"your initial balance) using the controls below the grid on the bottom right."
-msgstr ""
-"När du väl skapat ett konto kan du lägga till transaktioner (t.ex. ett "
-"initialt värde) genom att använda kontrollerna nere till höger."
-
-#: wxbanker.py:119
-msgid "Have fun!"
-msgstr "Ha det så kul!"
-
-#: wxbanker.py:121
-msgid "Welcome!"
-msgstr "Välkommen!"
-
-#: wxbanker.py:129
-msgid "Save changes?"
-msgstr "Spara ändringar?"
-
-#: menubar.py:46
-msgid "Auto-save"
-msgstr "Automatisk sparning"
-
-#: menubar.py:61
-msgid "Request a Currency"
-msgstr "Begär en ny valuta"
-
-#: menubar.py:71
-msgid "Import transactions from a CSV file"
-msgstr "Importera transaktioner från en CSV-fil"
-
-#: menubar.py:94
-msgid "Request a Fea&ture"
-msgstr "Begär en egenskap"
-
-#: menubar.py:94
-msgid "Request a new feature to be implemented"
-msgstr "Begär en ny funktion som ska implementeras"
-
 #: newtransactionctrl.py:47
 msgid "from"
 msgstr "från"
@@ -533,6 +175,10 @@ msgstr "från"
 #: newtransactionctrl.py:47 summarytab.py:61
 msgid "to"
 msgstr "till"
+
+#: newtransactionctrl.py:51 newtransactionctrl.py:239
+msgid "Transfer"
+msgstr "Överföring"
 
 #: newtransactionctrl.py:55
 msgid "account:"
@@ -695,6 +341,66 @@ msgstr "till och med %s"
 msgid "Starts:"
 msgstr "Börjar:"
 
+#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
+#: transactionolv.py:61
+msgid "Description"
+msgstr "Beskrivning"
+
+#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
+#: transactionolv.py:62
+msgid "Amount"
+msgstr "Belopp"
+
+#: newtransactionctrl.py:236
+msgid "Enter this transaction"
+msgstr "Fyll i transaktionen"
+
+#: newtransactionctrl.py:242
+msgid "Recurring"
+msgstr "Återkommande"
+
+#: newtransactionctrl.py:291
+msgid ""
+"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
+"to fix this."
+msgstr ""
+"Varning: Oförmögen att binda till DateCtrl's ENTER. Uppgradera till wxPython "
+">= 2.8.8.1 för att ordna detta."
+
+#: newtransactionctrl.py:349
+#, python-format
+msgid "'%s' is not a valid amount."
+msgstr "'%s' är inget giltigt belopp."
+
+#: newtransactionctrl.py:352
+msgid "Please enter a number such as 12.34 or -20."
+msgstr "Vänligen fyll i ett nummer som t.ex. 12.34 eller -20."
+
+#: newtransactionctrl.py:368 newtransactionctrl.py:399
+msgid "No account selected"
+msgstr "Inget konto valt"
+
+#: newtransactionctrl.py:383
+msgid "transfer"
+msgstr "överför"
+
+#: newtransactionctrl.py:383
+msgid "transaction"
+msgstr "transaktion"
+
+#: newtransactionctrl.py:385
+#, python-format
+msgid ""
+"A search is currently active. Would you like to clear the current search and "
+"make this %s in \"%s\"?"
+msgstr ""
+"En sökning är aktiv för tillfället. Vill du rensa den nuvarande sökningen "
+"och skriva %s i \"%s\"?"
+
+#: newtransactionctrl.py:386
+msgid "Clear search?"
+msgstr "Rensa sökning?"
+
 #: newtransactionctrl.py:398
 msgid ""
 "This transaction is marked as a transfer. Please select the transfer account."
@@ -702,9 +408,59 @@ msgstr ""
 "Den här transaktionen är markerad som en överföring. Var vänlig välj "
 "överföringskontot."
 
+#: newtransactionctrl.py:414
+msgid ""
+"If this box is checked when adding a transaction, you will be prompted for "
+"the account to use as the source of the transfer."
+msgstr ""
+"Om denna ruta är i kryssad när du lägger till en transaktion, kommer du "
+"behöva ange kontot som ska vara ursprungs kontot för överföringen."
+
+#: newtransactionctrl.py:415
+msgid ""
+"For example, checking this box and entering a transaction of $50 into this "
+"account will also subtract $50 from the account that you choose as the "
+"source."
+msgstr ""
+"t.ex. kryssa i rutan och skriv in en transaktion på $50 på det här kontot "
+"kommer också att dra ifrån $50 från kontot som du valde som ursprungs konto."
+
+#: summarytab.py:56
+msgid "Account"
+msgstr "Konto"
+
 #: summarytab.py:59
 msgid "From"
 msgstr "Från"
+
+#: summarytab.py:64
+msgid "Sample Points"
+msgstr "Sampelspunkter"
+
+#: summarytab.py:67
+msgid "Fit Curve Degree"
+msgstr "Anpassa Bågens Grad"
+
+#: summarytab.py:113
+msgid "All accounts"
+msgstr "Alla konton"
+
+#: summarytab.py:177 summarytab.py:183
+msgid "Balance"
+msgstr "Balans"
+
+#: summarytab.py:181
+msgid "Trend"
+msgstr "Trend"
+
+#: summarytab.py:183
+msgid "Total Balance Over Time"
+msgstr "Total balans över tid"
+
+#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
+#: transactionolv.py:60
+msgid "Date"
+msgstr "Datum"
 
 #: currconvert.py:59
 #, python-format
@@ -725,18 +481,118 @@ msgstr "Användarnamn"
 msgid "Password"
 msgstr "Lösenord"
 
+#: templater.py:27
+msgid "Hide Calculator"
+msgstr "Göm miniräknare"
+
+#: templater.py:28
+msgid "Show Calculator"
+msgstr "Visa miniräknare"
+
+#: templater.py:29
+msgid "Transact"
+msgstr "Transaktion"
+
+#: searchctrl.py:32
+msgid "Search transactions"
+msgstr "Sök transaktioner"
+
+#: searchctrl.py:34
+msgid "Current Account"
+msgstr "Nuvarande konto"
+
+#: searchctrl.py:34
+msgid "All Accounts"
+msgstr "Alla konton"
+
+#: searchctrl.py:38
+msgid "More options"
+msgstr "Fler alternativ"
+
+#: searchctrl.py:38
+msgid "Less options"
+msgstr "Färre alternativ"
+
+#: searchctrl.py:43
+msgid "Case Sensitive"
+msgstr "Skiftlägeskänslig"
+
+#: searchctrl.py:44
+msgid "Whether or not to match based on capitalization"
+msgstr "Huruvida träffar baseras på Versaler/Gemener eller inte"
+
+#: searchctrl.py:49
+msgid "In: "
+msgstr "I: "
+
+#: searchctrl.py:55
+msgid "Match: "
+msgstr "Träff: "
+
+#: searchctrl.py:106
+msgid "Show advanced search options"
+msgstr "Visa avancerade sökalternativ"
+
+#: searchctrl.py:108
+msgid "Hide advanced search options"
+msgstr "Dölj avancerade sökalternativ"
+
+#: csvimportframe.py:28
+msgid "CSV import"
+msgstr "Importera CSV"
+
+#: csvimportframe.py:75 csvimportframe.py:77
+msgid "Import"
+msgstr "Importera"
+
 #: csvimportframe.py:87
 msgid "CSV columns mapping"
 msgstr "Kartläggning av CSV-kolumner"
+
+#: csvimportframe.py:99
+msgid "Date format"
+msgstr "Datumformat"
+
+#: csvimportframe.py:106
+msgid "Decimal separator"
+msgstr "Decimalavgränsare"
+
+#: csvimportframe.py:117
+msgid "CSV file settings"
+msgstr "CSV filinställningar"
+
+#: csvimportframe.py:129
+msgid "Encoding"
+msgstr "Kodning"
 
 #: csvimportframe.py:133
 msgid "Column delimiter"
 msgstr "Kolumnavskiljare"
 
+#: csvimportframe.py:144
+msgid "File to import"
+msgstr "Fil att importera"
+
+#: csvimportframe.py:149 csvimportframe.py:151
+msgid "Preview"
+msgstr "Förhandsgranskning"
+
 #: csvimportframe.py:169
 msgid "Python simplejson library is needed for csv profile loading/saving."
 msgstr ""
 "Pythons simplejson-bibliotek behövs för CVS-profilsladdning/sparning."
+
+#: csvimportframe.py:179
+msgid "Load"
+msgstr "Ladda"
+
+#: csvimportframe.py:184
+msgid "Save"
+msgstr "Spara"
+
+#: csvimportframe.py:189
+msgid "Delete"
+msgstr "Ta bort"
 
 #: csvimportframe.py:243
 #, python-format
@@ -752,13 +608,157 @@ msgstr "CSV importeringsfel"
 msgid "Profile with the name '%s' exists already. Overwrite it ?"
 msgstr "Profilen med namnet '%s' existerar redan. Skriv över?"
 
+#: csvimportframe.py:302
+msgid "Overwrite profile ?"
+msgstr "Skriv över profil ?"
+
+#: csvimportframe.py:316
+msgid "Select file and click \"Preview\""
+msgstr "Välj fil och klicka \"Förhandsvisa\""
+
 #: currencies.py:194
 msgid "detected"
 msgstr "upptäckt"
 
+#: transactionolv.py:48
+msgid "No transactions entered."
+msgstr "Inga transaktioner angivan."
+
+#: transactionolv.py:63 accountlistctrl.py:87
+msgid "Total"
+msgstr "Totalt"
+
+#: transactionolv.py:179
+#, python-format
+msgid "Send %s to calculator"
+msgstr "Skicka %s till miniräknare"
+
+#: transactionolv.py:180
+#, python-format
+msgid "Add %s to calculator"
+msgstr "Addera %s i miniräknare"
+
+#: transactionolv.py:181
+#, python-format
+msgid "Subtract %s from calculator"
+msgstr "Subtrahera %s i miniräknare"
+
+#: transactionolv.py:193
+msgid "Remove this transaction"
+msgstr "Ta bort den här transaktionen"
+
+#: transactionolv.py:194
+msgid "Move this transaction to account"
+msgstr "Flytta denna transaktion till konto"
+
+#: transactionolv.py:196
+#, python-format
+msgid "Remove these %i transactions"
+msgstr "Ta bort följande %i transaktioner"
+
+#: transactionolv.py:197
+#, python-format
+msgid "Move these %i transactions to account"
+msgstr "Flytta dessa %i transaktioner till konto"
+
+#: accountlistctrl.py:42
+msgid "Accounts"
+msgstr "Konton"
+
+#: accountlistctrl.py:58
+msgid "Add a new account"
+msgstr "Lägg till ett nytt konto"
+
+#: accountlistctrl.py:62
+msgid "Remove the selected account"
+msgstr "Ta bort det valda kontot"
+
+#: accountlistctrl.py:67
+msgid "Rename the selected account"
+msgstr "Ändra namn på valt konto"
+
+#: accountlistctrl.py:72
+msgid "Configure the selected account"
+msgstr "Konfigurera valt konto"
+
+#: accountlistctrl.py:92
+msgid "Hide zero-balance accounts"
+msgstr "Göm kontom som har noll i balans."
+
+#: accountlistctrl.py:93
+msgid ""
+"When enabled, accounts with a balance of $0.00 will be hidden from the list"
+msgstr ""
+"När aktiverat kommer konton med en balans på $0.00 döljas från listan"
+
+#: accountlistctrl.py:381 accountlistctrl.py:476
+msgid "Sorry, an account by that name already exists."
+msgstr "Ledsen, ett konto med det namnet existerar redan."
+
 #: accountlistctrl.py:383 accountlistctrl.py:478
 msgid "Accout names cannot be blank."
 msgstr "Kontonamn kan inte vara tomma."
+
+#: accountlistctrl.py:449
+#, python-format
+msgid ""
+"This will permanently remove the account '%s' and all its transactions. "
+"Continue?"
+msgstr ""
+"Det här kommer att permanent ta bort kontot '%s' och alla dess "
+"transaktioner. Fortsätt?"
+
+#: accountlistctrl.py:450
+msgid "Warning"
+msgstr "Varning"
+
+#: wxbanker.py:62
+msgid "Transactions"
+msgstr "Transaktioner"
+
+#: wxbanker.py:66
+msgid "Summary"
+msgstr "Summering"
+
+#: wxbanker.py:115
+msgid "It looks like this is your first time using wxBanker!"
+msgstr "Det ser ut som om det här är första gången du använder wxBanker!"
+
+#: wxbanker.py:116
+msgid ""
+"To get started, add an account using the account control in the top left "
+"corner."
+msgstr ""
+"För att komma igång, lägg till ett konto via kontrollpanelen i översta "
+"vänstra hörnet."
+
+#: wxbanker.py:117
+msgid ""
+"The buttons in the account control allow you to add, remove, and rename an "
+"account, respectively."
+msgstr ""
+"Respektive knappar i kontrollpanelen låter dig lägga till, ta bort och byta "
+"namn på ditt konto"
+
+#: wxbanker.py:118
+msgid ""
+"Once you have created an account you can add transactions to it (such as "
+"your initial balance) using the controls below the grid on the bottom right."
+msgstr ""
+"När du väl skapat ett konto kan du lägga till transaktioner (t.ex. ett "
+"initialt värde) genom att använda kontrollerna nere till höger."
+
+#: wxbanker.py:119
+msgid "Have fun!"
+msgstr "Ha det så kul!"
+
+#: wxbanker.py:121
+msgid "Welcome!"
+msgstr "Välkommen!"
+
+#: wxbanker.py:129
+msgid "Save changes?"
+msgstr "Spara ändringar?"
 
 #: wxbanker.py:130
 msgid ""
@@ -775,3 +775,9 @@ msgid ""
 msgstr ""
 "Notera att aktiveringen av automatisk sparning från Arkiv-meyn kommer att "
 "eliminera behovet av manuell sparning."
+
+#~ msgid "Which account will the money come from?"
+#~ msgstr "Vilket konto kommer pengarna komma från?"
+
+#~ msgid "Other accounts"
+#~ msgstr "Andra konton"

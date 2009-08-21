@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-08-20 09:21+0000\n"
+"X-Launchpad-Export-Date: 2009-08-21 09:51+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
@@ -32,6 +32,14 @@ msgstr "Überweisen an %s"
 msgid "Transfer from %s"
 msgstr "Überweisen von %s"
 
+#: menubar.py:46
+msgid "Auto-save"
+msgstr "Auto-Speichern"
+
+#: menubar.py:46
+msgid "Automatically save changes"
+msgstr "Automatisch Änderungen speichern"
+
 #: menubar.py:52
 msgid "&Currency"
 msgstr "&Währung"
@@ -39,6 +47,18 @@ msgstr "&Währung"
 #: menubar.py:52
 msgid "Select currency to display"
 msgstr "Angezeigt Währung auswählen"
+
+#: menubar.py:61
+msgid "Request a Currency"
+msgstr "Eine Währung anfordern"
+
+#: menubar.py:71
+msgid "CSV Import"
+msgstr "CSV Import"
+
+#: menubar.py:71
+msgid "Import transactions from a CSV file"
+msgstr "Transaktionen aus einer CSV-Datei importieren"
 
 #: menubar.py:79
 msgid "View &FAQs"
@@ -64,256 +84,6 @@ msgstr "Fehler melden"
 msgid "Report a bug to the developer online"
 msgstr "Melden Sie einen Fehler online an die Entwickler"
 
-#: menubar.py:106
-msgid "&About"
-msgstr "Ü&ber"
-
-#: menubar.py:106
-msgid "More information about wxBanker"
-msgstr "Mehr Informationen über wxBanker."
-
-#: menubar.py:110
-msgid "&Settings"
-msgstr "Ein&stellungen"
-
-#: menubar.py:112
-msgid "&Help"
-msgstr "&Hilfe"
-
-#: menubar.py:180
-msgid "Copyright"
-msgstr "Urheberrecht"
-
-#: menubar.py:181
-msgid "A lightweight personal finance management application."
-msgstr "Ein schlankes Programm für das private Finanzmanagement"
-
-#: newtransactionctrl.py:51 newtransactionctrl.py:239
-msgid "Transfer"
-msgstr "Überweisen"
-
-#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
-#: transactionolv.py:61
-msgid "Description"
-msgstr "Beschreibung"
-
-#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
-#: transactionolv.py:62
-msgid "Amount"
-msgstr "Betrag"
-
-#: newtransactionctrl.py:291
-msgid ""
-"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
-"to fix this."
-msgstr ""
-"Achtung: Eingabe konnte nicht mit DateCtrl verbunden werde! Updaten Sie "
-"wxPython auf Version >= 2.8.8.1."
-
-#: newtransactionctrl.py:347
-msgid "No amount entered in the 'Amount' field."
-msgstr "Sie haben keinen Betrag im \"Betrag\"-Feld angegeben."
-
-#: newtransactionctrl.py:349
-#, python-format
-msgid "'%s' is not a valid amount."
-msgstr "'%s' ist kein gültiger Betrag."
-
-#: newtransactionctrl.py:352
-msgid "Please enter a number such as 12.34 or -20."
-msgstr "Bitte tragen Sie eine Zahl wie 12.34 oder -20 ein."
-
-#: newtransactionctrl.py:353
-msgid "Invalid Transaction Amount"
-msgstr "Ungültiger Überweisungsbetrag"
-
-#: newtransactionctrl.py:367
-msgid "Please select an account and then try again."
-msgstr "Bitte wählen Sie ein Konto aus und versuchen es noch einmal."
-
-#: newtransactionctrl.py:368 newtransactionctrl.py:399
-msgid "No account selected"
-msgstr "Kein Benutzerkonto ausgewählt"
-
-#: newtransactionctrl.py:383
-msgid "transfer"
-msgstr "überweisen"
-
-#: newtransactionctrl.py:383
-msgid "transaction"
-msgstr "Transaktion"
-
-#: newtransactionctrl.py:386
-msgid "Clear search?"
-msgstr "Suche löschen?"
-
-#: summarytab.py:64
-msgid "Sample Points"
-msgstr "Messpunkte"
-
-#: summarytab.py:177 summarytab.py:183
-msgid "Balance"
-msgstr "Kontostand"
-
-#: summarytab.py:181
-msgid "Trend"
-msgstr "Trend"
-
-#: summarytab.py:183
-msgid "Total Balance Over Time"
-msgstr "Gesamtbetrag"
-
-#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
-#: transactionolv.py:60
-msgid "Date"
-msgstr "Datum"
-
-#: templater.py:27
-msgid "Hide Calculator"
-msgstr "Taschenrechner ausblenden"
-
-#: templater.py:28
-msgid "Show Calculator"
-msgstr "Taschenrechner anzeigen"
-
-#: templater.py:29
-msgid "Transact"
-msgstr "Überweisen"
-
-#: searchctrl.py:32
-msgid "Search transactions"
-msgstr "Transaktionen durchsuchen"
-
-#: searchctrl.py:34
-msgid "Current Account"
-msgstr "ausgewähltes Konto"
-
-#: searchctrl.py:34
-msgid "All Accounts"
-msgstr "Alle Konten"
-
-#: searchctrl.py:43
-msgid "Case Sensitive"
-msgstr "Groß-/Kleinschreibung beachten"
-
-#: searchctrl.py:49
-msgid "In: "
-msgstr "In: "
-
-#: searchctrl.py:55
-msgid "Match: "
-msgstr "Treffer: "
-
-#: transactionolv.py:63 accountlistctrl.py:87
-msgid "Total"
-msgstr "Gesamt"
-
-#: transactionolv.py:193
-msgid "Remove this transaction"
-msgstr "Diese Transaktion entfernen"
-
-#: accountlistctrl.py:42
-msgid "Accounts"
-msgstr "Konten"
-
-#: accountlistctrl.py:58
-msgid "Add a new account"
-msgstr "Ein neues Konto hinzufügen"
-
-#: accountlistctrl.py:62
-msgid "Remove the selected account"
-msgstr "Entferne ausgewähltes Konto"
-
-#: accountlistctrl.py:67
-msgid "Rename the selected account"
-msgstr "Das ausgewählte Konto umbenennen"
-
-#: accountlistctrl.py:72
-msgid "Configure the selected account"
-msgstr "Das ausgewählte Konto konfigurieren"
-
-#: accountlistctrl.py:92
-msgid "Hide zero-balance accounts"
-msgstr "\"Leere\" Konten ausblenden"
-
-#: accountlistctrl.py:93
-msgid ""
-"When enabled, accounts with a balance of $0.00 will be hidden from the list"
-msgstr "Kontoumsätze mit $0.00 werden in der Liste ausgeblendet"
-
-#: accountlistctrl.py:381 accountlistctrl.py:476
-msgid "Sorry, an account by that name already exists."
-msgstr "Leider exsistiert schon ein Konto mit diesem Namen."
-
-#: accountlistctrl.py:449
-#, python-format
-msgid ""
-"This will permanently remove the account '%s' and all its transactions. "
-"Continue?"
-msgstr ""
-"Alle Überweisungen des Kontos '%s' werden unwiederbringlich gelöscht. "
-"Fortfahren?"
-
-#: accountlistctrl.py:450
-msgid "Warning"
-msgstr "Achtung"
-
-#: wxbanker.py:46
-msgid ""
-"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
-"fix this."
-msgstr ""
-"Achtung: Das Modul numpy wurde nicht gefunden, deshalb kann die "
-"Zusammenfassung nicht angezeigt werden. Installieren Sie numpy um dieses "
-"Problem zu beheben."
-
-#: wxbanker.py:62
-msgid "Transactions"
-msgstr "Kontobewegungen"
-
-#: wxbanker.py:66
-msgid "Summary"
-msgstr "Zusammenfassung"
-
-#: wxbanker.py:115
-msgid "It looks like this is your first time using wxBanker!"
-msgstr "Anscheinend benutzen Sie wxBanker zum ersten Mal!"
-
-#: wxbanker.py:116
-msgid ""
-"To get started, add an account using the account control in the top left "
-"corner."
-msgstr ""
-"Um zu beginnen, legen Sie oben links im Bedienfeld ein neues Konto an."
-
-#: wxbanker.py:119
-msgid "Have fun!"
-msgstr "Viel Spaß!"
-
-#: wxbanker.py:121
-msgid "Welcome!"
-msgstr "Willkommen!"
-
-#: menubar.py:46
-msgid "Auto-save"
-msgstr "Auto-Speichern"
-
-#: menubar.py:46
-msgid "Automatically save changes"
-msgstr "Automatisch Änderungen speichern"
-
-#: menubar.py:61
-msgid "Request a Currency"
-msgstr "Eine Währung anfordern"
-
-#: menubar.py:71
-msgid "CSV Import"
-msgstr "CSV Import"
-
-#: menubar.py:71
-msgid "Import transactions from a CSV file"
-msgstr "Transaktionen aus einer CSV-Datei importieren"
-
 #: menubar.py:94
 msgid "Request a Fea&ture"
 msgstr "Ein Fea&ture anfordern"
@@ -330,13 +100,37 @@ msgstr "wxBanker übersetzen"
 msgid "Translate wxBanker to another language"
 msgstr "wxBanker in eine andere Sprache übersetzen"
 
+#: menubar.py:106
+msgid "&About"
+msgstr "Ü&ber"
+
+#: menubar.py:106
+msgid "More information about wxBanker"
+msgstr "Mehr Informationen über wxBanker."
+
 #: menubar.py:109
 msgid "&File"
 msgstr "&Datei"
 
+#: menubar.py:110
+msgid "&Settings"
+msgstr "Ein&stellungen"
+
 #: menubar.py:111
 msgid "&Tools"
 msgstr "E&xtras"
+
+#: menubar.py:112
+msgid "&Help"
+msgstr "&Hilfe"
+
+#: menubar.py:180
+msgid "Copyright"
+msgstr "Urheberrecht"
+
+#: menubar.py:181
+msgid "A lightweight personal finance management application."
+msgstr "Ein schlankes Programm für das private Finanzmanagement"
 
 #: newtransactionctrl.py:47
 msgid "from"
@@ -345,6 +139,10 @@ msgstr ""
 #: newtransactionctrl.py:47 summarytab.py:61
 msgid "to"
 msgstr ""
+
+#: newtransactionctrl.py:51 newtransactionctrl.py:239
+msgid "Transfer"
+msgstr "Überweisen"
 
 #: newtransactionctrl.py:55
 msgid "account:"
@@ -507,6 +305,16 @@ msgstr ""
 msgid "Starts:"
 msgstr ""
 
+#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
+#: transactionolv.py:61
+msgid "Description"
+msgstr "Beschreibung"
+
+#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
+#: transactionolv.py:62
+msgid "Amount"
+msgstr "Betrag"
+
 #: newtransactionctrl.py:236
 msgid "Enter this transaction"
 msgstr "Diese Transaktion eingeben"
@@ -515,12 +323,57 @@ msgstr "Diese Transaktion eingeben"
 msgid "Recurring"
 msgstr "Wiederkehrend"
 
+#: newtransactionctrl.py:291
+msgid ""
+"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
+"to fix this."
+msgstr ""
+"Achtung: Eingabe konnte nicht mit DateCtrl verbunden werde! Updaten Sie "
+"wxPython auf Version >= 2.8.8.1."
+
+#: newtransactionctrl.py:347
+msgid "No amount entered in the 'Amount' field."
+msgstr "Sie haben keinen Betrag im \"Betrag\"-Feld angegeben."
+
+#: newtransactionctrl.py:349
+#, python-format
+msgid "'%s' is not a valid amount."
+msgstr "'%s' ist kein gültiger Betrag."
+
+#: newtransactionctrl.py:352
+msgid "Please enter a number such as 12.34 or -20."
+msgstr "Bitte tragen Sie eine Zahl wie 12.34 oder -20 ein."
+
+#: newtransactionctrl.py:353
+msgid "Invalid Transaction Amount"
+msgstr "Ungültiger Überweisungsbetrag"
+
+#: newtransactionctrl.py:367
+msgid "Please select an account and then try again."
+msgstr "Bitte wählen Sie ein Konto aus und versuchen es noch einmal."
+
+#: newtransactionctrl.py:368 newtransactionctrl.py:399
+msgid "No account selected"
+msgstr "Kein Benutzerkonto ausgewählt"
+
+#: newtransactionctrl.py:383
+msgid "transfer"
+msgstr "überweisen"
+
+#: newtransactionctrl.py:383
+msgid "transaction"
+msgstr "Transaktion"
+
 #: newtransactionctrl.py:385
 #, python-format
 msgid ""
 "A search is currently active. Would you like to clear the current search and "
 "make this %s in \"%s\"?"
 msgstr ""
+
+#: newtransactionctrl.py:386
+msgid "Clear search?"
+msgstr "Suche löschen?"
 
 #: newtransactionctrl.py:398
 msgid ""
@@ -548,6 +401,10 @@ msgstr "Konto"
 msgid "From"
 msgstr ""
 
+#: summarytab.py:64
+msgid "Sample Points"
+msgstr "Messpunkte"
+
 #: summarytab.py:67
 msgid "Fit Curve Degree"
 msgstr ""
@@ -555,6 +412,23 @@ msgstr ""
 #: summarytab.py:113
 msgid "All accounts"
 msgstr "Alle Konten"
+
+#: summarytab.py:177 summarytab.py:183
+msgid "Balance"
+msgstr "Kontostand"
+
+#: summarytab.py:181
+msgid "Trend"
+msgstr "Trend"
+
+#: summarytab.py:183
+msgid "Total Balance Over Time"
+msgstr "Gesamtbetrag"
+
+#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
+#: transactionolv.py:60
+msgid "Date"
+msgstr "Datum"
 
 #: currconvert.py:59
 #, python-format
@@ -575,6 +449,30 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+#: templater.py:27
+msgid "Hide Calculator"
+msgstr "Taschenrechner ausblenden"
+
+#: templater.py:28
+msgid "Show Calculator"
+msgstr "Taschenrechner anzeigen"
+
+#: templater.py:29
+msgid "Transact"
+msgstr "Überweisen"
+
+#: searchctrl.py:32
+msgid "Search transactions"
+msgstr "Transaktionen durchsuchen"
+
+#: searchctrl.py:34
+msgid "Current Account"
+msgstr "ausgewähltes Konto"
+
+#: searchctrl.py:34
+msgid "All Accounts"
+msgstr "Alle Konten"
+
 #: searchctrl.py:38
 msgid "More options"
 msgstr "Mehr Optionen"
@@ -583,9 +481,21 @@ msgstr "Mehr Optionen"
 msgid "Less options"
 msgstr "Weniger Optionen"
 
+#: searchctrl.py:43
+msgid "Case Sensitive"
+msgstr "Groß-/Kleinschreibung beachten"
+
 #: searchctrl.py:44
 msgid "Whether or not to match based on capitalization"
 msgstr ""
+
+#: searchctrl.py:49
+msgid "In: "
+msgstr "In: "
+
+#: searchctrl.py:55
+msgid "Match: "
+msgstr "Treffer: "
 
 #: searchctrl.py:106
 msgid "Show advanced search options"
@@ -700,6 +610,10 @@ msgstr ""
 msgid "No transactions entered."
 msgstr "Keine Transaktionen eingegeben."
 
+#: transactionolv.py:63 accountlistctrl.py:87
+msgid "Total"
+msgstr "Gesamt"
+
 #: transactionolv.py:179
 #, python-format
 msgid "Send %s to calculator"
@@ -715,6 +629,10 @@ msgstr "Füge %s zum Taschenrechner hinzu"
 msgid "Subtract %s from calculator"
 msgstr ""
 
+#: transactionolv.py:193
+msgid "Remove this transaction"
+msgstr "Diese Transaktion entfernen"
+
 #: transactionolv.py:194
 msgid "Move this transaction to account"
 msgstr "Verschieben dieser Transaktion zu Konto"
@@ -729,9 +647,83 @@ msgstr "Diese %i Transaktionen löschen"
 msgid "Move these %i transactions to account"
 msgstr "Diese %i Transaktionen verschieben zu Konto"
 
+#: accountlistctrl.py:42
+msgid "Accounts"
+msgstr "Konten"
+
+#: accountlistctrl.py:58
+msgid "Add a new account"
+msgstr "Ein neues Konto hinzufügen"
+
+#: accountlistctrl.py:62
+msgid "Remove the selected account"
+msgstr "Entferne ausgewähltes Konto"
+
+#: accountlistctrl.py:67
+msgid "Rename the selected account"
+msgstr "Das ausgewählte Konto umbenennen"
+
+#: accountlistctrl.py:72
+msgid "Configure the selected account"
+msgstr "Das ausgewählte Konto konfigurieren"
+
+#: accountlistctrl.py:92
+msgid "Hide zero-balance accounts"
+msgstr "\"Leere\" Konten ausblenden"
+
+#: accountlistctrl.py:93
+msgid ""
+"When enabled, accounts with a balance of $0.00 will be hidden from the list"
+msgstr "Kontoumsätze mit $0.00 werden in der Liste ausgeblendet"
+
+#: accountlistctrl.py:381 accountlistctrl.py:476
+msgid "Sorry, an account by that name already exists."
+msgstr "Leider exsistiert schon ein Konto mit diesem Namen."
+
 #: accountlistctrl.py:383 accountlistctrl.py:478
 msgid "Accout names cannot be blank."
 msgstr ""
+
+#: accountlistctrl.py:449
+#, python-format
+msgid ""
+"This will permanently remove the account '%s' and all its transactions. "
+"Continue?"
+msgstr ""
+"Alle Überweisungen des Kontos '%s' werden unwiederbringlich gelöscht. "
+"Fortfahren?"
+
+#: accountlistctrl.py:450
+msgid "Warning"
+msgstr "Achtung"
+
+#: wxbanker.py:46
+msgid ""
+"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
+"fix this."
+msgstr ""
+"Achtung: Das Modul numpy wurde nicht gefunden, deshalb kann die "
+"Zusammenfassung nicht angezeigt werden. Installieren Sie numpy um dieses "
+"Problem zu beheben."
+
+#: wxbanker.py:62
+msgid "Transactions"
+msgstr "Kontobewegungen"
+
+#: wxbanker.py:66
+msgid "Summary"
+msgstr "Zusammenfassung"
+
+#: wxbanker.py:115
+msgid "It looks like this is your first time using wxBanker!"
+msgstr "Anscheinend benutzen Sie wxBanker zum ersten Mal!"
+
+#: wxbanker.py:116
+msgid ""
+"To get started, add an account using the account control in the top left "
+"corner."
+msgstr ""
+"Um zu beginnen, legen Sie oben links im Bedienfeld ein neues Konto an."
 
 #: wxbanker.py:117
 msgid ""
@@ -750,6 +742,14 @@ msgstr ""
 "z.B. Ihren anfänglichen Kontostand), indem Sie die Kontrollfelder unten "
 "rechts benutzen."
 
+#: wxbanker.py:119
+msgid "Have fun!"
+msgstr "Viel Spaß!"
+
+#: wxbanker.py:121
+msgid "Welcome!"
+msgstr "Willkommen!"
+
 #: wxbanker.py:129
 msgid "Save changes?"
 msgstr "Änderungen speichern?"
@@ -765,3 +765,9 @@ msgid ""
 "Note that enabling auto-save from the File menu will eliminate the need for "
 "manual saving."
 msgstr ""
+
+#~ msgid "Other accounts"
+#~ msgstr "Andere Konten"
+
+#~ msgid "Which account will the money come from?"
+#~ msgstr "Von welchem Konto wollen Sie überweisen?"

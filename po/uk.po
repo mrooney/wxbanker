@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2009-08-20 09:21+0000\n"
+"X-Launchpad-Export-Date: 2009-08-21 09:51+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
@@ -32,331 +32,6 @@ msgstr "Перемістити на %s"
 #, python-format
 msgid "Transfer from %s"
 msgstr "Перемістити їз %s"
-
-#: newtransactionctrl.py:51 newtransactionctrl.py:239
-msgid "Transfer"
-msgstr "Трансфер"
-
-#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
-#: transactionolv.py:61
-msgid "Description"
-msgstr "Опис"
-
-#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
-#: transactionolv.py:62
-msgid "Amount"
-msgstr "Сума"
-
-#: newtransactionctrl.py:236
-msgid "Enter this transaction"
-msgstr "Введіть цю транзакцію"
-
-#: newtransactionctrl.py:291
-msgid ""
-"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
-"to fix this."
-msgstr ""
-"Попередження: Неможливо отримати DateCtrl's ENTER. Оновіться до wxPython >= "
-"2.8.8.1 для виправлення цього."
-
-#: newtransactionctrl.py:347
-msgid "No amount entered in the 'Amount' field."
-msgstr "Не введено суму в полі ’Сума’."
-
-#: newtransactionctrl.py:349
-#, python-format
-msgid "'%s' is not a valid amount."
-msgstr "'%s' - невірна сума."
-
-#: newtransactionctrl.py:352
-msgid "Please enter a number such as 12.34 or -20."
-msgstr "Будьласка введіть цифру типу 12.34 або -20."
-
-#: newtransactionctrl.py:353
-msgid "Invalid Transaction Amount"
-msgstr "Невірна Сума Транзакції"
-
-#: newtransactionctrl.py:367
-msgid "Please select an account and then try again."
-msgstr "Будьласка виберіть рахунок та спробуйте ще раз."
-
-#: newtransactionctrl.py:368 newtransactionctrl.py:399
-msgid "No account selected"
-msgstr "Рахунок не вибрано"
-
-#: newtransactionctrl.py:383
-msgid "transfer"
-msgstr "трансфер"
-
-#: newtransactionctrl.py:383
-msgid "transaction"
-msgstr "транзакція"
-
-#: newtransactionctrl.py:386
-msgid "Clear search?"
-msgstr "Очистити пошук?"
-
-#: summarytab.py:56
-msgid "Account"
-msgstr "Рахунок"
-
-#: summarytab.py:113
-msgid "All accounts"
-msgstr "Усі рахунки"
-
-#: summarytab.py:177 summarytab.py:183
-msgid "Balance"
-msgstr "Баланс"
-
-#: summarytab.py:181
-msgid "Trend"
-msgstr "Тенденція"
-
-#: summarytab.py:183
-msgid "Total Balance Over Time"
-msgstr "Загальний Баланс за Період"
-
-#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
-#: transactionolv.py:60
-msgid "Date"
-msgstr "Дата"
-
-#: currconvert.py:59
-#, python-format
-msgid "No exchange rate for currency \"%s\""
-msgstr "Немає обмінного курсу для валюти \"%s\""
-
-#: templater.py:27
-msgid "Hide Calculator"
-msgstr "Приховати Калькулятор"
-
-#: templater.py:28
-msgid "Show Calculator"
-msgstr "Показати Калькулятор"
-
-#: templater.py:29
-msgid "Transact"
-msgstr "Провести"
-
-#: searchctrl.py:32
-msgid "Search transactions"
-msgstr "Шукати транзакції"
-
-#: searchctrl.py:34
-msgid "Current Account"
-msgstr "Поточний Рахунок"
-
-#: searchctrl.py:34
-msgid "All Accounts"
-msgstr "Усі Рахунки"
-
-#: searchctrl.py:38
-msgid "More options"
-msgstr "Більше опцій"
-
-#: searchctrl.py:38
-msgid "Less options"
-msgstr "Меньше параметрів"
-
-#: searchctrl.py:43
-msgid "Case Sensitive"
-msgstr "З урахуванням регістру"
-
-#: searchctrl.py:49
-msgid "In: "
-msgstr "В: "
-
-#: searchctrl.py:55
-msgid "Match: "
-msgstr "Відповідає: "
-
-#: searchctrl.py:106
-msgid "Show advanced search options"
-msgstr "Показати розширені параметри пошуку"
-
-#: searchctrl.py:108
-msgid "Hide advanced search options"
-msgstr "Приховати розширені параметри пошуку"
-
-#: csvimportframe.py:28
-msgid "CSV import"
-msgstr "Імпорт CSV"
-
-#: csvimportframe.py:60
-msgid "Target account"
-msgstr "Цільовий рахунок"
-
-#: csvimportframe.py:75 csvimportframe.py:77
-msgid "Import"
-msgstr "Імпорт"
-
-#: csvimportframe.py:87
-msgid "CSV columns mapping"
-msgstr "Призначення колонок CSV"
-
-#: csvimportframe.py:99
-msgid "Date format"
-msgstr "Формат дати"
-
-#: csvimportframe.py:106
-msgid "Decimal separator"
-msgstr "Десятковий розділювач"
-
-#: csvimportframe.py:117
-msgid "CSV file settings"
-msgstr "Налаштування файла CSV"
-
-#: csvimportframe.py:126
-msgid "Skip first line"
-msgstr "Пропустити перший рядок"
-
-#: csvimportframe.py:129
-msgid "Encoding"
-msgstr "Кодування"
-
-#: csvimportframe.py:133
-msgid "Column delimiter"
-msgstr "Розділювач колонки"
-
-#: csvimportframe.py:144
-msgid "File to import"
-msgstr "Файл для імпорту"
-
-#: csvimportframe.py:149 csvimportframe.py:151
-msgid "Preview"
-msgstr "Перегляд"
-
-#: csvimportframe.py:164
-msgid "CSV profiles"
-msgstr "Профілі CSV"
-
-#: csvimportframe.py:179
-msgid "Load"
-msgstr "Завантажити"
-
-#: csvimportframe.py:184
-msgid "Save"
-msgstr "Зберегти"
-
-#: csvimportframe.py:189
-msgid "Delete"
-msgstr "Знищити"
-
-#: csvimportframe.py:243
-#, python-format
-msgid "The file encoding does not seem to be '%s'."
-msgstr "Кодування файлу не відповідає '%s'."
-
-#: csvimportframe.py:250
-msgid "An error ocurred during the csv file import."
-msgstr "Виникла помилка під час імпорту файлу CSV."
-
-#: csvimportframe.py:251
-msgid "CSV import error"
-msgstr "Помилка імпорту CSV"
-
-#: csvimportframe.py:301
-#, python-format
-msgid "Profile with the name '%s' exists already. Overwrite it ?"
-msgstr "Профіль з назвою '%s' вже існує. Перезаписати його ?"
-
-#: csvimportframe.py:302
-msgid "Overwrite profile ?"
-msgstr "Перезаписати профіль ?"
-
-#: csvimportframe.py:316
-msgid "Select file and click \"Preview\""
-msgstr "Виберіть файл та натисніть \"Перегляд\""
-
-#: transactionolv.py:48
-msgid "No transactions entered."
-msgstr "Не введено транзакцію"
-
-#: transactionolv.py:63 accountlistctrl.py:87
-msgid "Total"
-msgstr "Всього"
-
-#: transactionolv.py:179
-#, python-format
-msgid "Send %s to calculator"
-msgstr "Надіслати %s в калькулятор"
-
-#: transactionolv.py:180
-#, python-format
-msgid "Add %s to calculator"
-msgstr "Додати %s в калькулятор"
-
-#: transactionolv.py:181
-#, python-format
-msgid "Subtract %s from calculator"
-msgstr "Відняти %s з калькулятора"
-
-#: transactionolv.py:193
-msgid "Remove this transaction"
-msgstr "Видалити цю транзакцію"
-
-#: transactionolv.py:194
-msgid "Move this transaction to account"
-msgstr "Перемістити цю транзакцію на рахунок"
-
-#: transactionolv.py:196
-#, python-format
-msgid "Remove these %i transactions"
-msgstr "Видалити ці %i транзакції"
-
-#: transactionolv.py:197
-#, python-format
-msgid "Move these %i transactions to account"
-msgstr "Перемістити ці %i транзакції на рахунок"
-
-#: accountlistctrl.py:42
-msgid "Accounts"
-msgstr "Рахунки"
-
-#: accountlistctrl.py:58
-msgid "Add a new account"
-msgstr "Додати новий рахунок"
-
-#: accountlistctrl.py:62
-msgid "Remove the selected account"
-msgstr "Видалити вибраний рахунок"
-
-#: accountlistctrl.py:67
-msgid "Rename the selected account"
-msgstr "Перейменувати вибраний рахунок"
-
-#: accountlistctrl.py:72
-msgid "Configure the selected account"
-msgstr "Налаштувати вибраний рахунок"
-
-#: accountlistctrl.py:92
-msgid "Hide zero-balance accounts"
-msgstr "Приховати рахунки з нульовим балансом"
-
-#: accountlistctrl.py:93
-msgid ""
-"When enabled, accounts with a balance of $0.00 will be hidden from the list"
-msgstr "Якщо увімкнено, рахунки з балансом $0.00 будуть приховані"
-
-#: accountlistctrl.py:381 accountlistctrl.py:476
-msgid "Sorry, an account by that name already exists."
-msgstr "Вибачте, рахунок з такою назвою вже існує."
-
-#: accountlistctrl.py:450
-msgid "Warning"
-msgstr "Попередження"
-
-#: wxbanker.py:46
-msgid ""
-"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
-"fix this."
-msgstr ""
-"Попередження: Модуль Numpy не доступний, що унеможливлює Вкладку Підсумків. "
-"Встановіть numpy щоб виправити це."
-
-#: wxbanker.py:62
-msgid "Transactions"
-msgstr "Транзакції"
 
 #: menubar.py:46
 msgid "Auto-save"
@@ -465,6 +140,10 @@ msgstr ""
 #: newtransactionctrl.py:47 summarytab.py:61
 msgid "to"
 msgstr ""
+
+#: newtransactionctrl.py:51 newtransactionctrl.py:239
+msgid "Transfer"
+msgstr "Трансфер"
 
 #: newtransactionctrl.py:55
 msgid "account:"
@@ -627,9 +306,64 @@ msgstr ""
 msgid "Starts:"
 msgstr ""
 
+#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
+#: transactionolv.py:61
+msgid "Description"
+msgstr "Опис"
+
+#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
+#: transactionolv.py:62
+msgid "Amount"
+msgstr "Сума"
+
+#: newtransactionctrl.py:236
+msgid "Enter this transaction"
+msgstr "Введіть цю транзакцію"
+
 #: newtransactionctrl.py:242
 msgid "Recurring"
 msgstr ""
+
+#: newtransactionctrl.py:291
+msgid ""
+"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
+"to fix this."
+msgstr ""
+"Попередження: Неможливо отримати DateCtrl's ENTER. Оновіться до wxPython >= "
+"2.8.8.1 для виправлення цього."
+
+#: newtransactionctrl.py:347
+msgid "No amount entered in the 'Amount' field."
+msgstr "Не введено суму в полі ’Сума’."
+
+#: newtransactionctrl.py:349
+#, python-format
+msgid "'%s' is not a valid amount."
+msgstr "'%s' - невірна сума."
+
+#: newtransactionctrl.py:352
+msgid "Please enter a number such as 12.34 or -20."
+msgstr "Будьласка введіть цифру типу 12.34 або -20."
+
+#: newtransactionctrl.py:353
+msgid "Invalid Transaction Amount"
+msgstr "Невірна Сума Транзакції"
+
+#: newtransactionctrl.py:367
+msgid "Please select an account and then try again."
+msgstr "Будьласка виберіть рахунок та спробуйте ще раз."
+
+#: newtransactionctrl.py:368 newtransactionctrl.py:399
+msgid "No account selected"
+msgstr "Рахунок не вибрано"
+
+#: newtransactionctrl.py:383
+msgid "transfer"
+msgstr "трансфер"
+
+#: newtransactionctrl.py:383
+msgid "transaction"
+msgstr "транзакція"
 
 #: newtransactionctrl.py:385
 #, python-format
@@ -637,6 +371,10 @@ msgid ""
 "A search is currently active. Would you like to clear the current search and "
 "make this %s in \"%s\"?"
 msgstr ""
+
+#: newtransactionctrl.py:386
+msgid "Clear search?"
+msgstr "Очистити пошук?"
 
 #: newtransactionctrl.py:398
 msgid ""
@@ -656,6 +394,10 @@ msgid ""
 "source."
 msgstr ""
 
+#: summarytab.py:56
+msgid "Account"
+msgstr "Рахунок"
+
 #: summarytab.py:59
 msgid "From"
 msgstr ""
@@ -667,6 +409,32 @@ msgstr ""
 #: summarytab.py:67
 msgid "Fit Curve Degree"
 msgstr ""
+
+#: summarytab.py:113
+msgid "All accounts"
+msgstr "Усі рахунки"
+
+#: summarytab.py:177 summarytab.py:183
+msgid "Balance"
+msgstr "Баланс"
+
+#: summarytab.py:181
+msgid "Trend"
+msgstr "Тенденція"
+
+#: summarytab.py:183
+msgid "Total Balance Over Time"
+msgstr "Загальний Баланс за Період"
+
+#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
+#: transactionolv.py:60
+msgid "Date"
+msgstr "Дата"
+
+#: currconvert.py:59
+#, python-format
+msgid "No exchange rate for currency \"%s\""
+msgstr "Немає обмінного курсу для валюти \"%s\""
 
 #: accountconfigdialog.py:29
 msgid ""
@@ -682,17 +450,233 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+#: templater.py:27
+msgid "Hide Calculator"
+msgstr "Приховати Калькулятор"
+
+#: templater.py:28
+msgid "Show Calculator"
+msgstr "Показати Калькулятор"
+
+#: templater.py:29
+msgid "Transact"
+msgstr "Провести"
+
+#: searchctrl.py:32
+msgid "Search transactions"
+msgstr "Шукати транзакції"
+
+#: searchctrl.py:34
+msgid "Current Account"
+msgstr "Поточний Рахунок"
+
+#: searchctrl.py:34
+msgid "All Accounts"
+msgstr "Усі Рахунки"
+
+#: searchctrl.py:38
+msgid "More options"
+msgstr "Більше опцій"
+
+#: searchctrl.py:38
+msgid "Less options"
+msgstr "Меньше параметрів"
+
+#: searchctrl.py:43
+msgid "Case Sensitive"
+msgstr "З урахуванням регістру"
+
 #: searchctrl.py:44
 msgid "Whether or not to match based on capitalization"
 msgstr ""
+
+#: searchctrl.py:49
+msgid "In: "
+msgstr "В: "
+
+#: searchctrl.py:55
+msgid "Match: "
+msgstr "Відповідає: "
+
+#: searchctrl.py:106
+msgid "Show advanced search options"
+msgstr "Показати розширені параметри пошуку"
+
+#: searchctrl.py:108
+msgid "Hide advanced search options"
+msgstr "Приховати розширені параметри пошуку"
+
+#: csvimportframe.py:28
+msgid "CSV import"
+msgstr "Імпорт CSV"
+
+#: csvimportframe.py:60
+msgid "Target account"
+msgstr "Цільовий рахунок"
+
+#: csvimportframe.py:75 csvimportframe.py:77
+msgid "Import"
+msgstr "Імпорт"
+
+#: csvimportframe.py:87
+msgid "CSV columns mapping"
+msgstr "Призначення колонок CSV"
+
+#: csvimportframe.py:99
+msgid "Date format"
+msgstr "Формат дати"
+
+#: csvimportframe.py:106
+msgid "Decimal separator"
+msgstr "Десятковий розділювач"
+
+#: csvimportframe.py:117
+msgid "CSV file settings"
+msgstr "Налаштування файла CSV"
+
+#: csvimportframe.py:126
+msgid "Skip first line"
+msgstr "Пропустити перший рядок"
+
+#: csvimportframe.py:129
+msgid "Encoding"
+msgstr "Кодування"
+
+#: csvimportframe.py:133
+msgid "Column delimiter"
+msgstr "Розділювач колонки"
+
+#: csvimportframe.py:144
+msgid "File to import"
+msgstr "Файл для імпорту"
+
+#: csvimportframe.py:149 csvimportframe.py:151
+msgid "Preview"
+msgstr "Перегляд"
+
+#: csvimportframe.py:164
+msgid "CSV profiles"
+msgstr "Профілі CSV"
 
 #: csvimportframe.py:169
 msgid "Python simplejson library is needed for csv profile loading/saving."
 msgstr ""
 
+#: csvimportframe.py:179
+msgid "Load"
+msgstr "Завантажити"
+
+#: csvimportframe.py:184
+msgid "Save"
+msgstr "Зберегти"
+
+#: csvimportframe.py:189
+msgid "Delete"
+msgstr "Знищити"
+
+#: csvimportframe.py:243
+#, python-format
+msgid "The file encoding does not seem to be '%s'."
+msgstr "Кодування файлу не відповідає '%s'."
+
+#: csvimportframe.py:250
+msgid "An error ocurred during the csv file import."
+msgstr "Виникла помилка під час імпорту файлу CSV."
+
+#: csvimportframe.py:251
+msgid "CSV import error"
+msgstr "Помилка імпорту CSV"
+
+#: csvimportframe.py:301
+#, python-format
+msgid "Profile with the name '%s' exists already. Overwrite it ?"
+msgstr "Профіль з назвою '%s' вже існує. Перезаписати його ?"
+
+#: csvimportframe.py:302
+msgid "Overwrite profile ?"
+msgstr "Перезаписати профіль ?"
+
+#: csvimportframe.py:316
+msgid "Select file and click \"Preview\""
+msgstr "Виберіть файл та натисніть \"Перегляд\""
+
 #: currencies.py:194
 msgid "detected"
 msgstr ""
+
+#: transactionolv.py:48
+msgid "No transactions entered."
+msgstr "Не введено транзакцію"
+
+#: transactionolv.py:63 accountlistctrl.py:87
+msgid "Total"
+msgstr "Всього"
+
+#: transactionolv.py:179
+#, python-format
+msgid "Send %s to calculator"
+msgstr "Надіслати %s в калькулятор"
+
+#: transactionolv.py:180
+#, python-format
+msgid "Add %s to calculator"
+msgstr "Додати %s в калькулятор"
+
+#: transactionolv.py:181
+#, python-format
+msgid "Subtract %s from calculator"
+msgstr "Відняти %s з калькулятора"
+
+#: transactionolv.py:193
+msgid "Remove this transaction"
+msgstr "Видалити цю транзакцію"
+
+#: transactionolv.py:194
+msgid "Move this transaction to account"
+msgstr "Перемістити цю транзакцію на рахунок"
+
+#: transactionolv.py:196
+#, python-format
+msgid "Remove these %i transactions"
+msgstr "Видалити ці %i транзакції"
+
+#: transactionolv.py:197
+#, python-format
+msgid "Move these %i transactions to account"
+msgstr "Перемістити ці %i транзакції на рахунок"
+
+#: accountlistctrl.py:42
+msgid "Accounts"
+msgstr "Рахунки"
+
+#: accountlistctrl.py:58
+msgid "Add a new account"
+msgstr "Додати новий рахунок"
+
+#: accountlistctrl.py:62
+msgid "Remove the selected account"
+msgstr "Видалити вибраний рахунок"
+
+#: accountlistctrl.py:67
+msgid "Rename the selected account"
+msgstr "Перейменувати вибраний рахунок"
+
+#: accountlistctrl.py:72
+msgid "Configure the selected account"
+msgstr "Налаштувати вибраний рахунок"
+
+#: accountlistctrl.py:92
+msgid "Hide zero-balance accounts"
+msgstr "Приховати рахунки з нульовим балансом"
+
+#: accountlistctrl.py:93
+msgid ""
+"When enabled, accounts with a balance of $0.00 will be hidden from the list"
+msgstr "Якщо увімкнено, рахунки з балансом $0.00 будуть приховані"
+
+#: accountlistctrl.py:381 accountlistctrl.py:476
+msgid "Sorry, an account by that name already exists."
+msgstr "Вибачте, рахунок з такою назвою вже існує."
 
 #: accountlistctrl.py:383 accountlistctrl.py:478
 msgid "Accout names cannot be blank."
@@ -704,6 +688,22 @@ msgid ""
 "This will permanently remove the account '%s' and all its transactions. "
 "Continue?"
 msgstr ""
+
+#: accountlistctrl.py:450
+msgid "Warning"
+msgstr "Попередження"
+
+#: wxbanker.py:46
+msgid ""
+"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
+"fix this."
+msgstr ""
+"Попередження: Модуль Numpy не доступний, що унеможливлює Вкладку Підсумків. "
+"Встановіть numpy щоб виправити це."
+
+#: wxbanker.py:62
+msgid "Transactions"
+msgstr "Транзакції"
 
 #: wxbanker.py:66
 msgid "Summary"
@@ -754,3 +754,9 @@ msgid ""
 "Note that enabling auto-save from the File menu will eliminate the need for "
 "manual saving."
 msgstr ""
+
+#~ msgid "Which account will the money come from?"
+#~ msgstr "З якого рахунку надійдуть кошти?"
+
+#~ msgid "Other accounts"
+#~ msgstr "Інші рахунки"

@@ -15,8 +15,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2009-08-20 09:21+0000\n"
+"X-Launchpad-Export-Date: 2009-08-21 09:51+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
+
+#: menubar.py:79
+msgid "View &FAQs"
+msgstr "Zobrazit ča&sto kladené otázky"
+
+#: menubar.py:84
+msgid "Ask a &Question"
+msgstr "Položit &otázku"
+
+#: menubar.py:89
+msgid "&Report a Bug"
+msgstr "O&známit chybu"
 
 #: calculator.py:124
 msgid "Show"
@@ -32,269 +44,6 @@ msgstr "Převod na %s"
 msgid "Transfer from %s"
 msgstr "Převod z %s"
 
-#: menubar.py:52
-msgid "&Currency"
-msgstr "&Měna"
-
-#: menubar.py:52
-msgid "Select currency to display"
-msgstr "Zvolit měnu pro zobrazení"
-
-#: menubar.py:79
-msgid "View &FAQs"
-msgstr "Zobrazit ča&sto kladené otázky"
-
-#: menubar.py:79
-msgid "View Frequently Asked Questions online"
-msgstr "Zobrazit ča_sto kladené otázky online"
-
-#: menubar.py:84
-msgid "Ask a &Question"
-msgstr "Položit &otázku"
-
-#: menubar.py:84
-msgid "Ask a question online"
-msgstr "Položit otázku online"
-
-#: menubar.py:89
-msgid "&Report a Bug"
-msgstr "O&známit chybu"
-
-#: menubar.py:89
-msgid "Report a bug to the developer online"
-msgstr "Oznámit vývojářům chybu online"
-
-#: menubar.py:106
-msgid "&About"
-msgstr "&O aplikaci"
-
-#: menubar.py:106
-msgid "More information about wxBanker"
-msgstr "Další informace o aplikaci wxBanker"
-
-#: menubar.py:110
-msgid "&Settings"
-msgstr "&Nastavení"
-
-#: menubar.py:112
-msgid "&Help"
-msgstr "Ná&pověda"
-
-#: menubar.py:180
-msgid "Copyright"
-msgstr "Autorská práva"
-
-#: menubar.py:181
-msgid "A lightweight personal finance management application."
-msgstr "Nenáročná osobní finanční aplikace."
-
-#: newtransactionctrl.py:51 newtransactionctrl.py:239
-msgid "Transfer"
-msgstr "Převod"
-
-#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
-#: transactionolv.py:61
-msgid "Description"
-msgstr "Popis"
-
-#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
-#: transactionolv.py:62
-msgid "Amount"
-msgstr "Částka"
-
-#: newtransactionctrl.py:236
-msgid "Enter this transaction"
-msgstr "Zadat tuto transakci"
-
-#: newtransactionctrl.py:291
-msgid ""
-"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
-"to fix this."
-msgstr ""
-"Upozornění: Nelze odchytit ENTER klávesu komponenty DateCtrl. Pro funkčnost "
-"upgradujte wxPython na verzi >= 2.8.8.1."
-
-#: newtransactionctrl.py:347
-msgid "No amount entered in the 'Amount' field."
-msgstr "Pole 'Částka' neobsahuje žádnou hodnotu."
-
-#: newtransactionctrl.py:349
-#, python-format
-msgid "'%s' is not a valid amount."
-msgstr "'%s' není platná částka."
-
-#: newtransactionctrl.py:352
-msgid "Please enter a number such as 12.34 or -20."
-msgstr "Zadejte číselnou hodnotu, např. 12,34 nebo -20."
-
-#: newtransactionctrl.py:353
-msgid "Invalid Transaction Amount"
-msgstr "Neplatná částka transakce."
-
-#: newtransactionctrl.py:367
-msgid "Please select an account and then try again."
-msgstr "Vyberte účet a proveďe akci znova."
-
-#: newtransactionctrl.py:368 newtransactionctrl.py:399
-msgid "No account selected"
-msgstr "Není vybrán žádný účet"
-
-#: newtransactionctrl.py:383
-msgid "transfer"
-msgstr "převod"
-
-#: newtransactionctrl.py:383
-msgid "transaction"
-msgstr "transakce"
-
-#: newtransactionctrl.py:386
-msgid "Clear search?"
-msgstr "Vymazat hledání ?"
-
-#: summarytab.py:64
-msgid "Sample Points"
-msgstr "Vzorkovací body"
-
-#: summarytab.py:177 summarytab.py:183
-msgid "Balance"
-msgstr "Zůstatek"
-
-#: summarytab.py:181
-msgid "Trend"
-msgstr "Trend"
-
-#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
-#: transactionolv.py:60
-msgid "Date"
-msgstr "Datum"
-
-#: templater.py:27
-msgid "Hide Calculator"
-msgstr "Skrýt kalkulačku"
-
-#: templater.py:28
-msgid "Show Calculator"
-msgstr "Zobrazit kalkulačku"
-
-#: searchctrl.py:32
-msgid "Search transactions"
-msgstr "Vyhledat v transakcích"
-
-#: searchctrl.py:34
-msgid "Current Account"
-msgstr "Aktuální účet"
-
-#: searchctrl.py:34
-msgid "All Accounts"
-msgstr "Všechny účty"
-
-#: searchctrl.py:43
-msgid "Case Sensitive"
-msgstr "Rozlišovat velikost písmen"
-
-#: searchctrl.py:44
-msgid "Whether or not to match based on capitalization"
-msgstr "Zda vyhledávat s rozlišováním velikosti písmen"
-
-#: searchctrl.py:49
-msgid "In: "
-msgstr "V: "
-
-#: searchctrl.py:55
-msgid "Match: "
-msgstr "Hledat v: "
-
-#: transactionolv.py:63 accountlistctrl.py:87
-msgid "Total"
-msgstr "Celkem"
-
-#: transactionolv.py:193
-msgid "Remove this transaction"
-msgstr "Odstranit transakci"
-
-#: accountlistctrl.py:42
-msgid "Accounts"
-msgstr "Účty"
-
-#: accountlistctrl.py:58
-msgid "Add a new account"
-msgstr "Přidat nový účet"
-
-#: accountlistctrl.py:62
-msgid "Remove the selected account"
-msgstr "Odstranit vybraný účet"
-
-#: accountlistctrl.py:67
-msgid "Rename the selected account"
-msgstr "Přejmenovat vybraný účet"
-
-#: accountlistctrl.py:72
-msgid "Configure the selected account"
-msgstr "Konfigurovat vybraný účet"
-
-#: accountlistctrl.py:92
-msgid "Hide zero-balance accounts"
-msgstr "Skrýt účty s nulovým zůstatkem"
-
-#: accountlistctrl.py:93
-msgid ""
-"When enabled, accounts with a balance of $0.00 will be hidden from the list"
-msgstr "Zda skrýt účty, které mají nulový finančním zůstatkem"
-
-#: accountlistctrl.py:381 accountlistctrl.py:476
-msgid "Sorry, an account by that name already exists."
-msgstr "Účet s tímto názvem již existuje."
-
-#: accountlistctrl.py:449
-#, python-format
-msgid ""
-"This will permanently remove the account '%s' and all its transactions. "
-"Continue?"
-msgstr "Účet '%s' bude natrvalo smazán. Pokračovat ?"
-
-#: accountlistctrl.py:450
-msgid "Warning"
-msgstr "Varování"
-
-#: wxbanker.py:46
-msgid ""
-"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
-"fix this."
-msgstr ""
-"Upozornění: Modul Numpy není k dispozici, z tohoto důvodu nebude zobrazena "
-"záložka Souhrn. Pro její zobrazení nainstaluje modul Numpy."
-
-#: wxbanker.py:62
-msgid "Transactions"
-msgstr "Transakce"
-
-#: wxbanker.py:66
-msgid "Summary"
-msgstr "Souhrn"
-
-#: wxbanker.py:115
-msgid "It looks like this is your first time using wxBanker!"
-msgstr "Zdá se, že spouštíte aplikaci wxBanker poprvé !"
-
-#: wxbanker.py:116
-msgid ""
-"To get started, add an account using the account control in the top left "
-"corner."
-msgstr ""
-"Začněte tím, že přidáte nový účet pomocí tlačítka v levém horním rohu."
-
-#: wxbanker.py:117
-msgid ""
-"The buttons in the account control allow you to add, remove, and rename an "
-"account, respectively."
-msgstr ""
-"Pomocí tlačítek v panelu účtů můžete vytvářet, odstraňovat a přejmenovávat "
-"účty."
-
-#: wxbanker.py:121
-msgid "Welcome!"
-msgstr "Vítejte !"
-
 #: menubar.py:46
 msgid "Auto-save"
 msgstr ""
@@ -302,6 +51,14 @@ msgstr ""
 #: menubar.py:46
 msgid "Automatically save changes"
 msgstr ""
+
+#: menubar.py:52
+msgid "&Currency"
+msgstr "&Měna"
+
+#: menubar.py:52
+msgid "Select currency to display"
+msgstr "Zvolit měnu pro zobrazení"
 
 #: menubar.py:61
 msgid "Request a Currency"
@@ -314,6 +71,18 @@ msgstr ""
 #: menubar.py:71
 msgid "Import transactions from a CSV file"
 msgstr ""
+
+#: menubar.py:79
+msgid "View Frequently Asked Questions online"
+msgstr "Zobrazit ča_sto kladené otázky online"
+
+#: menubar.py:84
+msgid "Ask a question online"
+msgstr "Položit otázku online"
+
+#: menubar.py:89
+msgid "Report a bug to the developer online"
+msgstr "Oznámit vývojářům chybu online"
 
 #: menubar.py:94
 msgid "Request a Fea&ture"
@@ -331,13 +100,37 @@ msgstr ""
 msgid "Translate wxBanker to another language"
 msgstr ""
 
+#: menubar.py:106
+msgid "&About"
+msgstr "&O aplikaci"
+
+#: menubar.py:106
+msgid "More information about wxBanker"
+msgstr "Další informace o aplikaci wxBanker"
+
 #: menubar.py:109
 msgid "&File"
 msgstr ""
 
+#: menubar.py:110
+msgid "&Settings"
+msgstr "&Nastavení"
+
 #: menubar.py:111
 msgid "&Tools"
 msgstr ""
+
+#: menubar.py:112
+msgid "&Help"
+msgstr "Ná&pověda"
+
+#: menubar.py:180
+msgid "Copyright"
+msgstr "Autorská práva"
+
+#: menubar.py:181
+msgid "A lightweight personal finance management application."
+msgstr "Nenáročná osobní finanční aplikace."
 
 #: newtransactionctrl.py:47
 msgid "from"
@@ -346,6 +139,10 @@ msgstr ""
 #: newtransactionctrl.py:47 summarytab.py:61
 msgid "to"
 msgstr ""
+
+#: newtransactionctrl.py:51 newtransactionctrl.py:239
+msgid "Transfer"
+msgstr "Převod"
 
 #: newtransactionctrl.py:55
 msgid "account:"
@@ -508,9 +305,64 @@ msgstr ""
 msgid "Starts:"
 msgstr ""
 
+#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
+#: transactionolv.py:61
+msgid "Description"
+msgstr "Popis"
+
+#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
+#: transactionolv.py:62
+msgid "Amount"
+msgstr "Částka"
+
+#: newtransactionctrl.py:236
+msgid "Enter this transaction"
+msgstr "Zadat tuto transakci"
+
 #: newtransactionctrl.py:242
 msgid "Recurring"
 msgstr ""
+
+#: newtransactionctrl.py:291
+msgid ""
+"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
+"to fix this."
+msgstr ""
+"Upozornění: Nelze odchytit ENTER klávesu komponenty DateCtrl. Pro funkčnost "
+"upgradujte wxPython na verzi >= 2.8.8.1."
+
+#: newtransactionctrl.py:347
+msgid "No amount entered in the 'Amount' field."
+msgstr "Pole 'Částka' neobsahuje žádnou hodnotu."
+
+#: newtransactionctrl.py:349
+#, python-format
+msgid "'%s' is not a valid amount."
+msgstr "'%s' není platná částka."
+
+#: newtransactionctrl.py:352
+msgid "Please enter a number such as 12.34 or -20."
+msgstr "Zadejte číselnou hodnotu, např. 12,34 nebo -20."
+
+#: newtransactionctrl.py:353
+msgid "Invalid Transaction Amount"
+msgstr "Neplatná částka transakce."
+
+#: newtransactionctrl.py:367
+msgid "Please select an account and then try again."
+msgstr "Vyberte účet a proveďe akci znova."
+
+#: newtransactionctrl.py:368 newtransactionctrl.py:399
+msgid "No account selected"
+msgstr "Není vybrán žádný účet"
+
+#: newtransactionctrl.py:383
+msgid "transfer"
+msgstr "převod"
+
+#: newtransactionctrl.py:383
+msgid "transaction"
+msgstr "transakce"
 
 #: newtransactionctrl.py:385
 #, python-format
@@ -518,6 +370,10 @@ msgid ""
 "A search is currently active. Would you like to clear the current search and "
 "make this %s in \"%s\"?"
 msgstr ""
+
+#: newtransactionctrl.py:386
+msgid "Clear search?"
+msgstr "Vymazat hledání ?"
 
 #: newtransactionctrl.py:398
 msgid ""
@@ -545,6 +401,10 @@ msgstr ""
 msgid "From"
 msgstr ""
 
+#: summarytab.py:64
+msgid "Sample Points"
+msgstr "Vzorkovací body"
+
 #: summarytab.py:67
 msgid "Fit Curve Degree"
 msgstr ""
@@ -553,9 +413,22 @@ msgstr ""
 msgid "All accounts"
 msgstr ""
 
+#: summarytab.py:177 summarytab.py:183
+msgid "Balance"
+msgstr "Zůstatek"
+
+#: summarytab.py:181
+msgid "Trend"
+msgstr "Trend"
+
 #: summarytab.py:183
 msgid "Total Balance Over Time"
 msgstr ""
+
+#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
+#: transactionolv.py:60
+msgid "Date"
+msgstr "Datum"
 
 #: currconvert.py:59
 #, python-format
@@ -576,9 +449,29 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+#: templater.py:27
+msgid "Hide Calculator"
+msgstr "Skrýt kalkulačku"
+
+#: templater.py:28
+msgid "Show Calculator"
+msgstr "Zobrazit kalkulačku"
+
 #: templater.py:29
 msgid "Transact"
 msgstr ""
+
+#: searchctrl.py:32
+msgid "Search transactions"
+msgstr "Vyhledat v transakcích"
+
+#: searchctrl.py:34
+msgid "Current Account"
+msgstr "Aktuální účet"
+
+#: searchctrl.py:34
+msgid "All Accounts"
+msgstr "Všechny účty"
 
 #: searchctrl.py:38
 msgid "More options"
@@ -587,6 +480,22 @@ msgstr ""
 #: searchctrl.py:38
 msgid "Less options"
 msgstr ""
+
+#: searchctrl.py:43
+msgid "Case Sensitive"
+msgstr "Rozlišovat velikost písmen"
+
+#: searchctrl.py:44
+msgid "Whether or not to match based on capitalization"
+msgstr "Zda vyhledávat s rozlišováním velikosti písmen"
+
+#: searchctrl.py:49
+msgid "In: "
+msgstr "V: "
+
+#: searchctrl.py:55
+msgid "Match: "
+msgstr "Hledat v: "
 
 #: searchctrl.py:106
 msgid "Show advanced search options"
@@ -698,6 +607,10 @@ msgstr ""
 msgid "No transactions entered."
 msgstr ""
 
+#: transactionolv.py:63 accountlistctrl.py:87
+msgid "Total"
+msgstr "Celkem"
+
 #: transactionolv.py:179
 #, python-format
 msgid "Send %s to calculator"
@@ -713,6 +626,10 @@ msgstr ""
 msgid "Subtract %s from calculator"
 msgstr ""
 
+#: transactionolv.py:193
+msgid "Remove this transaction"
+msgstr "Odstranit transakci"
+
 #: transactionolv.py:194
 msgid "Move this transaction to account"
 msgstr ""
@@ -727,9 +644,88 @@ msgstr ""
 msgid "Move these %i transactions to account"
 msgstr ""
 
+#: accountlistctrl.py:42
+msgid "Accounts"
+msgstr "Účty"
+
+#: accountlistctrl.py:58
+msgid "Add a new account"
+msgstr "Přidat nový účet"
+
+#: accountlistctrl.py:62
+msgid "Remove the selected account"
+msgstr "Odstranit vybraný účet"
+
+#: accountlistctrl.py:67
+msgid "Rename the selected account"
+msgstr "Přejmenovat vybraný účet"
+
+#: accountlistctrl.py:72
+msgid "Configure the selected account"
+msgstr "Konfigurovat vybraný účet"
+
+#: accountlistctrl.py:92
+msgid "Hide zero-balance accounts"
+msgstr "Skrýt účty s nulovým zůstatkem"
+
+#: accountlistctrl.py:93
+msgid ""
+"When enabled, accounts with a balance of $0.00 will be hidden from the list"
+msgstr "Zda skrýt účty, které mají nulový finančním zůstatkem"
+
+#: accountlistctrl.py:381 accountlistctrl.py:476
+msgid "Sorry, an account by that name already exists."
+msgstr "Účet s tímto názvem již existuje."
+
 #: accountlistctrl.py:383 accountlistctrl.py:478
 msgid "Accout names cannot be blank."
 msgstr ""
+
+#: accountlistctrl.py:449
+#, python-format
+msgid ""
+"This will permanently remove the account '%s' and all its transactions. "
+"Continue?"
+msgstr "Účet '%s' bude natrvalo smazán. Pokračovat ?"
+
+#: accountlistctrl.py:450
+msgid "Warning"
+msgstr "Varování"
+
+#: wxbanker.py:46
+msgid ""
+"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
+"fix this."
+msgstr ""
+"Upozornění: Modul Numpy není k dispozici, z tohoto důvodu nebude zobrazena "
+"záložka Souhrn. Pro její zobrazení nainstaluje modul Numpy."
+
+#: wxbanker.py:62
+msgid "Transactions"
+msgstr "Transakce"
+
+#: wxbanker.py:66
+msgid "Summary"
+msgstr "Souhrn"
+
+#: wxbanker.py:115
+msgid "It looks like this is your first time using wxBanker!"
+msgstr "Zdá se, že spouštíte aplikaci wxBanker poprvé !"
+
+#: wxbanker.py:116
+msgid ""
+"To get started, add an account using the account control in the top left "
+"corner."
+msgstr ""
+"Začněte tím, že přidáte nový účet pomocí tlačítka v levém horním rohu."
+
+#: wxbanker.py:117
+msgid ""
+"The buttons in the account control allow you to add, remove, and rename an "
+"account, respectively."
+msgstr ""
+"Pomocí tlačítek v panelu účtů můžete vytvářet, odstraňovat a přejmenovávat "
+"účty."
 
 #: wxbanker.py:118
 msgid ""
@@ -740,6 +736,10 @@ msgstr ""
 #: wxbanker.py:119
 msgid "Have fun!"
 msgstr ""
+
+#: wxbanker.py:121
+msgid "Welcome!"
+msgstr "Vítejte !"
 
 #: wxbanker.py:129
 msgid "Save changes?"
@@ -756,3 +756,9 @@ msgid ""
 "Note that enabling auto-save from the File menu will eliminate the need for "
 "manual saving."
 msgstr ""
+
+#~ msgid "Which account will the money come from?"
+#~ msgstr "Ze kterého účtu půjdou peníze ?"
+
+#~ msgid "Other accounts"
+#~ msgstr "Další účty"

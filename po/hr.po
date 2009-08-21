@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2009-08-20 09:21+0000\n"
+"X-Launchpad-Export-Date: 2009-08-21 09:51+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
@@ -33,6 +33,14 @@ msgstr "Prenesi na %s"
 msgid "Transfer from %s"
 msgstr "Prenesi sa %s"
 
+#: menubar.py:46
+msgid "Auto-save"
+msgstr ""
+
+#: menubar.py:46
+msgid "Automatically save changes"
+msgstr ""
+
 #: menubar.py:52
 msgid "&Currency"
 msgstr "&Valuta"
@@ -40,6 +48,18 @@ msgstr "&Valuta"
 #: menubar.py:52
 msgid "Select currency to display"
 msgstr "Odaberite valutu za prikaz"
+
+#: menubar.py:61
+msgid "Request a Currency"
+msgstr ""
+
+#: menubar.py:71
+msgid "CSV Import"
+msgstr ""
+
+#: menubar.py:71
+msgid "Import transactions from a CSV file"
+msgstr ""
 
 #: menubar.py:79
 msgid "View &FAQs"
@@ -65,309 +85,6 @@ msgstr "Prijavite po&grešku"
 msgid "Report a bug to the developer online"
 msgstr "Prijavite pogrešku online razvijatelju programa"
 
-#: menubar.py:106
-msgid "&About"
-msgstr "O &programu"
-
-#: menubar.py:106
-msgid "More information about wxBanker"
-msgstr "Više informacija o wxBanker programu"
-
-#: menubar.py:110
-msgid "&Settings"
-msgstr "&Postavke"
-
-#: menubar.py:112
-msgid "&Help"
-msgstr "&Pomoć"
-
-#: menubar.py:180
-msgid "Copyright"
-msgstr "Autorska prava"
-
-#: menubar.py:181
-msgid "A lightweight personal finance management application."
-msgstr "Program lake kategorije za upravljanje osobnim financijama."
-
-#: newtransactionctrl.py:51 newtransactionctrl.py:239
-msgid "Transfer"
-msgstr "Prijenos"
-
-#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
-#: transactionolv.py:61
-msgid "Description"
-msgstr "Opis"
-
-#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
-#: transactionolv.py:62
-msgid "Amount"
-msgstr "Iznos"
-
-#: newtransactionctrl.py:236
-msgid "Enter this transaction"
-msgstr "Unesi ovu transakciju"
-
-#: newtransactionctrl.py:291
-msgid ""
-"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
-"to fix this."
-msgstr ""
-"Upozorenje: Nemoguće vezati uz DateCtrl ENTER. Nadogradite na wxPython >= "
-"2.8.8.1 kako biste to ispravili."
-
-#: newtransactionctrl.py:347
-msgid "No amount entered in the 'Amount' field."
-msgstr "Nije unešen iznos u polje 'Iznos'"
-
-#: newtransactionctrl.py:349
-#, python-format
-msgid "'%s' is not a valid amount."
-msgstr "'%s' nije ispravan iznos."
-
-#: newtransactionctrl.py:352
-msgid "Please enter a number such as 12.34 or -20."
-msgstr "Molim unesite broj kao 12.34 ili -20."
-
-#: newtransactionctrl.py:353
-msgid "Invalid Transaction Amount"
-msgstr "Neispravan iznos transakcije"
-
-#: newtransactionctrl.py:367
-msgid "Please select an account and then try again."
-msgstr "Molim odaberite račun, pa pokušajte ponovo."
-
-#: newtransactionctrl.py:368 newtransactionctrl.py:399
-msgid "No account selected"
-msgstr "Nije odabran niti jedan račun."
-
-#: newtransactionctrl.py:383
-msgid "transfer"
-msgstr "prijenos"
-
-#: newtransactionctrl.py:383
-msgid "transaction"
-msgstr "transakcije"
-
-#: newtransactionctrl.py:385
-#, python-format
-msgid ""
-"A search is currently active. Would you like to clear the current search and "
-"make this %s in \"%s\"?"
-msgstr ""
-"Pretraga je trenutno aktivna. Želite li poništiti trenutnu pretragu, te "
-"promijeniti %s u \"%s\"?"
-
-#: newtransactionctrl.py:386
-msgid "Clear search?"
-msgstr "Poništiti pretragu?"
-
-#: newtransactionctrl.py:414
-msgid ""
-"If this box is checked when adding a transaction, you will be prompted for "
-"the account to use as the source of the transfer."
-msgstr ""
-"Ako je ova kućica označena pri dodavanju transakcije, biti ćete upitani za "
-"račun koji se koristi kao izvor transfera."
-
-#: newtransactionctrl.py:415
-msgid ""
-"For example, checking this box and entering a transaction of $50 into this "
-"account will also subtract $50 from the account that you choose as the "
-"source."
-msgstr ""
-"Na primjer, označivanje ove kućice i unos transakcije od 50 kn će također "
-"oduzeti 50 kn sa računa koji odaberete kao izvor."
-
-#: summarytab.py:64
-msgid "Sample Points"
-msgstr "Točaka uzorkovanja"
-
-#: summarytab.py:67
-msgid "Fit Curve Degree"
-msgstr "Stupanj interpolacijske krivulje"
-
-#: summarytab.py:177 summarytab.py:183
-msgid "Balance"
-msgstr "Stanje"
-
-#: summarytab.py:181
-msgid "Trend"
-msgstr "Trend"
-
-#: summarytab.py:183
-msgid "Total Balance Over Time"
-msgstr "Ukupno stanje kroz vrijeme"
-
-#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
-#: transactionolv.py:60
-msgid "Date"
-msgstr "Datum"
-
-#: templater.py:27
-msgid "Hide Calculator"
-msgstr "Sakrij kalkulator"
-
-#: templater.py:28
-msgid "Show Calculator"
-msgstr "Prikaži kalkulator"
-
-#: templater.py:29
-msgid "Transact"
-msgstr "Prenesi"
-
-#: searchctrl.py:32
-msgid "Search transactions"
-msgstr "Pretraži transakcije"
-
-#: searchctrl.py:34
-msgid "Current Account"
-msgstr "Trenutni račun"
-
-#: searchctrl.py:34
-msgid "All Accounts"
-msgstr "Svi računi"
-
-#: searchctrl.py:43
-msgid "Case Sensitive"
-msgstr "Razlikuj velika i mala slova"
-
-#: searchctrl.py:44
-msgid "Whether or not to match based on capitalization"
-msgstr "Vrši li se poklapanje prema veličini slova"
-
-#: searchctrl.py:49
-msgid "In: "
-msgstr "U: "
-
-#: searchctrl.py:55
-msgid "Match: "
-msgstr "Poklapanje: "
-
-#: transactionolv.py:63 accountlistctrl.py:87
-msgid "Total"
-msgstr "Ukupno"
-
-#: transactionolv.py:193
-msgid "Remove this transaction"
-msgstr "Ukloni ovu transakciju"
-
-#: accountlistctrl.py:42
-msgid "Accounts"
-msgstr "Računi"
-
-#: accountlistctrl.py:58
-msgid "Add a new account"
-msgstr "Dodaj novi račun"
-
-#: accountlistctrl.py:62
-msgid "Remove the selected account"
-msgstr "Ukloni označeni račun"
-
-#: accountlistctrl.py:67
-msgid "Rename the selected account"
-msgstr "Preimenuj označeni račun"
-
-#: accountlistctrl.py:72
-msgid "Configure the selected account"
-msgstr "Podesite označeni račun"
-
-#: accountlistctrl.py:92
-msgid "Hide zero-balance accounts"
-msgstr "Sakrij račune sa stanjem nula"
-
-#: accountlistctrl.py:93
-msgid ""
-"When enabled, accounts with a balance of $0.00 will be hidden from the list"
-msgstr "Omogućeno sakriva račune sa stanjem 0.00 kn sa popisa"
-
-#: accountlistctrl.py:381 accountlistctrl.py:476
-msgid "Sorry, an account by that name already exists."
-msgstr "Nažalost, račun pod tim imenom već postoji."
-
-#: accountlistctrl.py:449
-#, python-format
-msgid ""
-"This will permanently remove the account '%s' and all its transactions. "
-"Continue?"
-msgstr ""
-"Ovime se trajno uklanja račun '%s' i sve njegove transakcije. Nastaviti?"
-
-#: accountlistctrl.py:450
-msgid "Warning"
-msgstr "Upozorenje"
-
-#: wxbanker.py:46
-msgid ""
-"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
-"fix this."
-msgstr ""
-"Upozorenje: modul Numpy nije dostupan, što onemogućava karticu sažetak. "
-"Instalirate numpy kako biste to ispravili."
-
-#: wxbanker.py:62
-msgid "Transactions"
-msgstr "Transakcije"
-
-#: wxbanker.py:66
-msgid "Summary"
-msgstr "Sažetak"
-
-#: wxbanker.py:115
-msgid "It looks like this is your first time using wxBanker!"
-msgstr "Izgleda da prvi puta koristite wxBanker!"
-
-#: wxbanker.py:116
-msgid ""
-"To get started, add an account using the account control in the top left "
-"corner."
-msgstr ""
-"Kako biste započeli, dodajte račun koristeći kontrolu račun u gornjem "
-"lijevom kutu."
-
-#: wxbanker.py:117
-msgid ""
-"The buttons in the account control allow you to add, remove, and rename an "
-"account, respectively."
-msgstr ""
-"Gumbi u kontroli račun omogućavaju vam dodavanje, uklanjanje i preimenovanje "
-"računa."
-
-#: wxbanker.py:118
-msgid ""
-"Once you have created an account you can add transactions to it (such as "
-"your initial balance) using the controls below the grid on the bottom right."
-msgstr ""
-"Kada ste stvorili račun, možete mu dodati transakcije (na primjer početno "
-"stanje) koristeći kontrole ispod mreže desno dolje."
-
-#: wxbanker.py:119
-msgid "Have fun!"
-msgstr "Dobru zabavu!"
-
-#: wxbanker.py:121
-msgid "Welcome!"
-msgstr "Dobrodošli!"
-
-#: menubar.py:46
-msgid "Auto-save"
-msgstr ""
-
-#: menubar.py:46
-msgid "Automatically save changes"
-msgstr ""
-
-#: menubar.py:61
-msgid "Request a Currency"
-msgstr ""
-
-#: menubar.py:71
-msgid "CSV Import"
-msgstr ""
-
-#: menubar.py:71
-msgid "Import transactions from a CSV file"
-msgstr ""
-
 #: menubar.py:94
 msgid "Request a Fea&ture"
 msgstr ""
@@ -384,13 +101,37 @@ msgstr ""
 msgid "Translate wxBanker to another language"
 msgstr ""
 
+#: menubar.py:106
+msgid "&About"
+msgstr "O &programu"
+
+#: menubar.py:106
+msgid "More information about wxBanker"
+msgstr "Više informacija o wxBanker programu"
+
 #: menubar.py:109
 msgid "&File"
 msgstr ""
 
+#: menubar.py:110
+msgid "&Settings"
+msgstr "&Postavke"
+
 #: menubar.py:111
 msgid "&Tools"
 msgstr ""
+
+#: menubar.py:112
+msgid "&Help"
+msgstr "&Pomoć"
+
+#: menubar.py:180
+msgid "Copyright"
+msgstr "Autorska prava"
+
+#: menubar.py:181
+msgid "A lightweight personal finance management application."
+msgstr "Program lake kategorije za upravljanje osobnim financijama."
 
 #: newtransactionctrl.py:47
 msgid "from"
@@ -399,6 +140,10 @@ msgstr ""
 #: newtransactionctrl.py:47 summarytab.py:61
 msgid "to"
 msgstr ""
+
+#: newtransactionctrl.py:51 newtransactionctrl.py:239
+msgid "Transfer"
+msgstr "Prijenos"
 
 #: newtransactionctrl.py:55
 msgid "account:"
@@ -561,14 +306,99 @@ msgstr ""
 msgid "Starts:"
 msgstr ""
 
+#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
+#: transactionolv.py:61
+msgid "Description"
+msgstr "Opis"
+
+#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
+#: transactionolv.py:62
+msgid "Amount"
+msgstr "Iznos"
+
+#: newtransactionctrl.py:236
+msgid "Enter this transaction"
+msgstr "Unesi ovu transakciju"
+
 #: newtransactionctrl.py:242
 msgid "Recurring"
 msgstr ""
+
+#: newtransactionctrl.py:291
+msgid ""
+"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
+"to fix this."
+msgstr ""
+"Upozorenje: Nemoguće vezati uz DateCtrl ENTER. Nadogradite na wxPython >= "
+"2.8.8.1 kako biste to ispravili."
+
+#: newtransactionctrl.py:347
+msgid "No amount entered in the 'Amount' field."
+msgstr "Nije unešen iznos u polje 'Iznos'"
+
+#: newtransactionctrl.py:349
+#, python-format
+msgid "'%s' is not a valid amount."
+msgstr "'%s' nije ispravan iznos."
+
+#: newtransactionctrl.py:352
+msgid "Please enter a number such as 12.34 or -20."
+msgstr "Molim unesite broj kao 12.34 ili -20."
+
+#: newtransactionctrl.py:353
+msgid "Invalid Transaction Amount"
+msgstr "Neispravan iznos transakcije"
+
+#: newtransactionctrl.py:367
+msgid "Please select an account and then try again."
+msgstr "Molim odaberite račun, pa pokušajte ponovo."
+
+#: newtransactionctrl.py:368 newtransactionctrl.py:399
+msgid "No account selected"
+msgstr "Nije odabran niti jedan račun."
+
+#: newtransactionctrl.py:383
+msgid "transfer"
+msgstr "prijenos"
+
+#: newtransactionctrl.py:383
+msgid "transaction"
+msgstr "transakcije"
+
+#: newtransactionctrl.py:385
+#, python-format
+msgid ""
+"A search is currently active. Would you like to clear the current search and "
+"make this %s in \"%s\"?"
+msgstr ""
+"Pretraga je trenutno aktivna. Želite li poništiti trenutnu pretragu, te "
+"promijeniti %s u \"%s\"?"
+
+#: newtransactionctrl.py:386
+msgid "Clear search?"
+msgstr "Poništiti pretragu?"
 
 #: newtransactionctrl.py:398
 msgid ""
 "This transaction is marked as a transfer. Please select the transfer account."
 msgstr ""
+
+#: newtransactionctrl.py:414
+msgid ""
+"If this box is checked when adding a transaction, you will be prompted for "
+"the account to use as the source of the transfer."
+msgstr ""
+"Ako je ova kućica označena pri dodavanju transakcije, biti ćete upitani za "
+"račun koji se koristi kao izvor transfera."
+
+#: newtransactionctrl.py:415
+msgid ""
+"For example, checking this box and entering a transaction of $50 into this "
+"account will also subtract $50 from the account that you choose as the "
+"source."
+msgstr ""
+"Na primjer, označivanje ove kućice i unos transakcije od 50 kn će također "
+"oduzeti 50 kn sa računa koji odaberete kao izvor."
 
 #: summarytab.py:56
 msgid "Account"
@@ -578,9 +408,34 @@ msgstr ""
 msgid "From"
 msgstr ""
 
+#: summarytab.py:64
+msgid "Sample Points"
+msgstr "Točaka uzorkovanja"
+
+#: summarytab.py:67
+msgid "Fit Curve Degree"
+msgstr "Stupanj interpolacijske krivulje"
+
 #: summarytab.py:113
 msgid "All accounts"
 msgstr ""
+
+#: summarytab.py:177 summarytab.py:183
+msgid "Balance"
+msgstr "Stanje"
+
+#: summarytab.py:181
+msgid "Trend"
+msgstr "Trend"
+
+#: summarytab.py:183
+msgid "Total Balance Over Time"
+msgstr "Ukupno stanje kroz vrijeme"
+
+#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
+#: transactionolv.py:60
+msgid "Date"
+msgstr "Datum"
 
 #: currconvert.py:59
 #, python-format
@@ -601,6 +456,30 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+#: templater.py:27
+msgid "Hide Calculator"
+msgstr "Sakrij kalkulator"
+
+#: templater.py:28
+msgid "Show Calculator"
+msgstr "Prikaži kalkulator"
+
+#: templater.py:29
+msgid "Transact"
+msgstr "Prenesi"
+
+#: searchctrl.py:32
+msgid "Search transactions"
+msgstr "Pretraži transakcije"
+
+#: searchctrl.py:34
+msgid "Current Account"
+msgstr "Trenutni račun"
+
+#: searchctrl.py:34
+msgid "All Accounts"
+msgstr "Svi računi"
+
 #: searchctrl.py:38
 msgid "More options"
 msgstr ""
@@ -608,6 +487,22 @@ msgstr ""
 #: searchctrl.py:38
 msgid "Less options"
 msgstr ""
+
+#: searchctrl.py:43
+msgid "Case Sensitive"
+msgstr "Razlikuj velika i mala slova"
+
+#: searchctrl.py:44
+msgid "Whether or not to match based on capitalization"
+msgstr "Vrši li se poklapanje prema veličini slova"
+
+#: searchctrl.py:49
+msgid "In: "
+msgstr "U: "
+
+#: searchctrl.py:55
+msgid "Match: "
+msgstr "Poklapanje: "
 
 #: searchctrl.py:106
 msgid "Show advanced search options"
@@ -719,6 +614,10 @@ msgstr ""
 msgid "No transactions entered."
 msgstr ""
 
+#: transactionolv.py:63 accountlistctrl.py:87
+msgid "Total"
+msgstr "Ukupno"
+
 #: transactionolv.py:179
 #, python-format
 msgid "Send %s to calculator"
@@ -734,6 +633,10 @@ msgstr ""
 msgid "Subtract %s from calculator"
 msgstr ""
 
+#: transactionolv.py:193
+msgid "Remove this transaction"
+msgstr "Ukloni ovu transakciju"
+
 #: transactionolv.py:194
 msgid "Move this transaction to account"
 msgstr ""
@@ -748,9 +651,106 @@ msgstr ""
 msgid "Move these %i transactions to account"
 msgstr ""
 
+#: accountlistctrl.py:42
+msgid "Accounts"
+msgstr "Računi"
+
+#: accountlistctrl.py:58
+msgid "Add a new account"
+msgstr "Dodaj novi račun"
+
+#: accountlistctrl.py:62
+msgid "Remove the selected account"
+msgstr "Ukloni označeni račun"
+
+#: accountlistctrl.py:67
+msgid "Rename the selected account"
+msgstr "Preimenuj označeni račun"
+
+#: accountlistctrl.py:72
+msgid "Configure the selected account"
+msgstr "Podesite označeni račun"
+
+#: accountlistctrl.py:92
+msgid "Hide zero-balance accounts"
+msgstr "Sakrij račune sa stanjem nula"
+
+#: accountlistctrl.py:93
+msgid ""
+"When enabled, accounts with a balance of $0.00 will be hidden from the list"
+msgstr "Omogućeno sakriva račune sa stanjem 0.00 kn sa popisa"
+
+#: accountlistctrl.py:381 accountlistctrl.py:476
+msgid "Sorry, an account by that name already exists."
+msgstr "Nažalost, račun pod tim imenom već postoji."
+
 #: accountlistctrl.py:383 accountlistctrl.py:478
 msgid "Accout names cannot be blank."
 msgstr ""
+
+#: accountlistctrl.py:449
+#, python-format
+msgid ""
+"This will permanently remove the account '%s' and all its transactions. "
+"Continue?"
+msgstr ""
+"Ovime se trajno uklanja račun '%s' i sve njegove transakcije. Nastaviti?"
+
+#: accountlistctrl.py:450
+msgid "Warning"
+msgstr "Upozorenje"
+
+#: wxbanker.py:46
+msgid ""
+"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
+"fix this."
+msgstr ""
+"Upozorenje: modul Numpy nije dostupan, što onemogućava karticu sažetak. "
+"Instalirate numpy kako biste to ispravili."
+
+#: wxbanker.py:62
+msgid "Transactions"
+msgstr "Transakcije"
+
+#: wxbanker.py:66
+msgid "Summary"
+msgstr "Sažetak"
+
+#: wxbanker.py:115
+msgid "It looks like this is your first time using wxBanker!"
+msgstr "Izgleda da prvi puta koristite wxBanker!"
+
+#: wxbanker.py:116
+msgid ""
+"To get started, add an account using the account control in the top left "
+"corner."
+msgstr ""
+"Kako biste započeli, dodajte račun koristeći kontrolu račun u gornjem "
+"lijevom kutu."
+
+#: wxbanker.py:117
+msgid ""
+"The buttons in the account control allow you to add, remove, and rename an "
+"account, respectively."
+msgstr ""
+"Gumbi u kontroli račun omogućavaju vam dodavanje, uklanjanje i preimenovanje "
+"računa."
+
+#: wxbanker.py:118
+msgid ""
+"Once you have created an account you can add transactions to it (such as "
+"your initial balance) using the controls below the grid on the bottom right."
+msgstr ""
+"Kada ste stvorili račun, možete mu dodati transakcije (na primjer početno "
+"stanje) koristeći kontrole ispod mreže desno dolje."
+
+#: wxbanker.py:119
+msgid "Have fun!"
+msgstr "Dobru zabavu!"
+
+#: wxbanker.py:121
+msgid "Welcome!"
+msgstr "Dobrodošli!"
 
 #: wxbanker.py:129
 msgid "Save changes?"
@@ -767,3 +767,9 @@ msgid ""
 "Note that enabling auto-save from the File menu will eliminate the need for "
 "manual saving."
 msgstr ""
+
+#~ msgid "Which account will the money come from?"
+#~ msgstr "Sa kojeg računa dolaze novci?"
+
+#~ msgid "Other accounts"
+#~ msgstr "Drugi računi"

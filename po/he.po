@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-08-20 09:21+0000\n"
+"X-Launchpad-Export-Date: 2009-08-21 09:51+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
@@ -32,6 +32,14 @@ msgstr "העבר אל %s"
 msgid "Transfer from %s"
 msgstr "העבר מ%s"
 
+#: menubar.py:46
+msgid "Auto-save"
+msgstr ""
+
+#: menubar.py:46
+msgid "Automatically save changes"
+msgstr ""
+
 #: menubar.py:52
 msgid "&Currency"
 msgstr "&מטבע"
@@ -39,6 +47,18 @@ msgstr "&מטבע"
 #: menubar.py:52
 msgid "Select currency to display"
 msgstr "בחר סוג מטבע להצגה"
+
+#: menubar.py:61
+msgid "Request a Currency"
+msgstr ""
+
+#: menubar.py:71
+msgid "CSV Import"
+msgstr ""
+
+#: menubar.py:71
+msgid "Import transactions from a CSV file"
+msgstr ""
 
 #: menubar.py:79
 msgid "View &FAQs"
@@ -64,304 +84,6 @@ msgstr "דווח על &תקלה"
 msgid "Report a bug to the developer online"
 msgstr "דווח על תקלה למפתחים באתר האינטרנט"
 
-#: menubar.py:106
-msgid "&About"
-msgstr "&אודות"
-
-#: menubar.py:106
-msgid "More information about wxBanker"
-msgstr "מידע נוסף אודות wxBanker"
-
-#: menubar.py:110
-msgid "&Settings"
-msgstr "ה&גדרות"
-
-#: menubar.py:112
-msgid "&Help"
-msgstr "ע&זרה"
-
-#: menubar.py:180
-msgid "Copyright"
-msgstr "זכויות יוצרים"
-
-#: menubar.py:181
-msgid "A lightweight personal finance management application."
-msgstr "יישום קל משקל לניהול הכלכלה האישית."
-
-#: newtransactionctrl.py:51 newtransactionctrl.py:239
-msgid "Transfer"
-msgstr "העברה"
-
-#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
-#: transactionolv.py:61
-msgid "Description"
-msgstr "תיאור"
-
-#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
-#: transactionolv.py:62
-msgid "Amount"
-msgstr "סכום"
-
-#: newtransactionctrl.py:236
-msgid "Enter this transaction"
-msgstr "כניסה לעסקה זו"
-
-#: newtransactionctrl.py:291
-msgid ""
-"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
-"to fix this."
-msgstr ""
-"אזהרה: לא ניתן לאגד את ה־ENTER של DateCtrl. שדרג ל־wxPython => 2.8.8.1 כדי "
-"לתקן זאת."
-
-#: newtransactionctrl.py:347
-msgid "No amount entered in the 'Amount' field."
-msgstr "לא הוזן סכום בשדה 'סכום'."
-
-#: newtransactionctrl.py:349
-#, python-format
-msgid "'%s' is not a valid amount."
-msgstr "'%s' אינו סכום תקני."
-
-#: newtransactionctrl.py:352
-msgid "Please enter a number such as 12.34 or -20."
-msgstr "אנא הזן מספר כגון 12.34 או -20."
-
-#: newtransactionctrl.py:353
-msgid "Invalid Transaction Amount"
-msgstr "סכום ההעברה אינו תקני"
-
-#: newtransactionctrl.py:367
-msgid "Please select an account and then try again."
-msgstr "אנא בחר חשבון ואז נסה שוב."
-
-#: newtransactionctrl.py:368 newtransactionctrl.py:399
-msgid "No account selected"
-msgstr "לא נבחרו חשבונות"
-
-#: newtransactionctrl.py:383
-msgid "transfer"
-msgstr "העברה"
-
-#: newtransactionctrl.py:383
-msgid "transaction"
-msgstr "עסקה"
-
-#: newtransactionctrl.py:385
-#, python-format
-msgid ""
-"A search is currently active. Would you like to clear the current search and "
-"make this %s in \"%s\"?"
-msgstr ""
-"החיפוש פעיל כעת. האם ברצונך לרוקן את החיפוש הנוכחי ולהפוך אותו ל־%s תחת "
-"\"%s\"?"
-
-#: newtransactionctrl.py:386
-msgid "Clear search?"
-msgstr "לרוקן את החיפוש?"
-
-#: newtransactionctrl.py:414
-msgid ""
-"If this box is checked when adding a transaction, you will be prompted for "
-"the account to use as the source of the transfer."
-msgstr ""
-"אם תיבה זו מסומנת בעת הוספת עסקה, אתה תשאל באיזה חשבון להשתמש כמקור ההעברה."
-
-#: newtransactionctrl.py:415
-msgid ""
-"For example, checking this box and entering a transaction of $50 into this "
-"account will also subtract $50 from the account that you choose as the "
-"source."
-msgstr ""
-"לדוגמה, סימון תיבה זו והזנת עסקה בסך 50$ לחשבון זה תחסיר 50$ מהחשבון שנבחר "
-"כמקור."
-
-#: summarytab.py:64
-msgid "Sample Points"
-msgstr "נקודות לדוגמה"
-
-#: summarytab.py:67
-msgid "Fit Curve Degree"
-msgstr "התאם מעלת עקומה"
-
-#: summarytab.py:177 summarytab.py:183
-msgid "Balance"
-msgstr "מאזן"
-
-#: summarytab.py:181
-msgid "Trend"
-msgstr "מגמה"
-
-#: summarytab.py:183
-msgid "Total Balance Over Time"
-msgstr "המאזן הכללי במשך הזמן"
-
-#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
-#: transactionolv.py:60
-msgid "Date"
-msgstr "תאריך"
-
-#: templater.py:27
-msgid "Hide Calculator"
-msgstr "הסתר את המחשבון"
-
-#: templater.py:28
-msgid "Show Calculator"
-msgstr "הצג את המחשבון"
-
-#: templater.py:29
-msgid "Transact"
-msgstr "ניהול"
-
-#: searchctrl.py:32
-msgid "Search transactions"
-msgstr "חפש עסקאות"
-
-#: searchctrl.py:34
-msgid "Current Account"
-msgstr "חשבון נוכחי"
-
-#: searchctrl.py:34
-msgid "All Accounts"
-msgstr "כל החשבונות"
-
-#: searchctrl.py:43
-msgid "Case Sensitive"
-msgstr "תלוי רישיות"
-
-#: searchctrl.py:44
-msgid "Whether or not to match based on capitalization"
-msgstr "האם לבצע התאמה בהתבסס על רישיות"
-
-#: searchctrl.py:49
-msgid "In: "
-msgstr "תחת: "
-
-#: searchctrl.py:55
-msgid "Match: "
-msgstr "תואם: "
-
-#: transactionolv.py:63 accountlistctrl.py:87
-msgid "Total"
-msgstr "סך־הכל"
-
-#: transactionolv.py:193
-msgid "Remove this transaction"
-msgstr "הסר עסקה זו"
-
-#: accountlistctrl.py:42
-msgid "Accounts"
-msgstr "חשבונות"
-
-#: accountlistctrl.py:58
-msgid "Add a new account"
-msgstr "הוסף חשבון חדש"
-
-#: accountlistctrl.py:62
-msgid "Remove the selected account"
-msgstr "הסר את החשבון הנבחר"
-
-#: accountlistctrl.py:67
-msgid "Rename the selected account"
-msgstr "שנה את שם החשבון הנבחר"
-
-#: accountlistctrl.py:72
-msgid "Configure the selected account"
-msgstr "הגדר את החשבון הנבחר"
-
-#: accountlistctrl.py:92
-msgid "Hide zero-balance accounts"
-msgstr "הסתר חשבונות במאזן אפס"
-
-#: accountlistctrl.py:93
-msgid ""
-"When enabled, accounts with a balance of $0.00 will be hidden from the list"
-msgstr "במידה שהופעל, חשבונות שהמאזן שלהם הינו $0.00 יוסתרו מהרשימה"
-
-#: accountlistctrl.py:381 accountlistctrl.py:476
-msgid "Sorry, an account by that name already exists."
-msgstr "אנו מתנצלים, חשבון בשם זה כבר קיים."
-
-#: accountlistctrl.py:449
-#, python-format
-msgid ""
-"This will permanently remove the account '%s' and all its transactions. "
-"Continue?"
-msgstr "פעולה זו תסיר לצמיתות את החשבון '%s' על כל עסקאותיות. להמשיך?"
-
-#: accountlistctrl.py:450
-msgid "Warning"
-msgstr "אזהרה"
-
-#: wxbanker.py:46
-msgid ""
-"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
-"fix this."
-msgstr ""
-"אזהרה: לא נמצא מודול Numpy, לשונית התקציר תבוטל. התקן את Numpy כדי לתקן זאת."
-
-#: wxbanker.py:62
-msgid "Transactions"
-msgstr "עסקאות"
-
-#: wxbanker.py:66
-msgid "Summary"
-msgstr "תקציר"
-
-#: wxbanker.py:115
-msgid "It looks like this is your first time using wxBanker!"
-msgstr "נראה כי זאת הפעם הראשונה בה אתה משתמש ב־wxBanker!"
-
-#: wxbanker.py:116
-msgid ""
-"To get started, add an account using the account control in the top left "
-"corner."
-msgstr "בתור התחלה, הוסף חשבון באמצעות בקרת החשבונות בפינה הימנית העליונה."
-
-#: wxbanker.py:117
-msgid ""
-"The buttons in the account control allow you to add, remove, and rename an "
-"account, respectively."
-msgstr ""
-"הלחצנים שבבקרת חשבונות מאפשרים לך להוסיף, להסיר ולשנות את שמות החשבונות, "
-"עבור כל חשבון בנפרד."
-
-#: wxbanker.py:118
-msgid ""
-"Once you have created an account you can add transactions to it (such as "
-"your initial balance) using the controls below the grid on the bottom right."
-msgstr ""
-"לאחר שיצרת חשבון תוכל להוסיף לו עסקאות (כגון מאזן התחלתי) באמצעות הפקדים "
-"שמתחת לטבלה שמצד שמאל למטה."
-
-#: wxbanker.py:119
-msgid "Have fun!"
-msgstr "תהנה!"
-
-#: wxbanker.py:121
-msgid "Welcome!"
-msgstr "ברוכים הבאים!"
-
-#: menubar.py:46
-msgid "Auto-save"
-msgstr ""
-
-#: menubar.py:46
-msgid "Automatically save changes"
-msgstr ""
-
-#: menubar.py:61
-msgid "Request a Currency"
-msgstr ""
-
-#: menubar.py:71
-msgid "CSV Import"
-msgstr ""
-
-#: menubar.py:71
-msgid "Import transactions from a CSV file"
-msgstr ""
-
 #: menubar.py:94
 msgid "Request a Fea&ture"
 msgstr ""
@@ -378,13 +100,37 @@ msgstr ""
 msgid "Translate wxBanker to another language"
 msgstr ""
 
+#: menubar.py:106
+msgid "&About"
+msgstr "&אודות"
+
+#: menubar.py:106
+msgid "More information about wxBanker"
+msgstr "מידע נוסף אודות wxBanker"
+
 #: menubar.py:109
 msgid "&File"
 msgstr "&קובץ"
 
+#: menubar.py:110
+msgid "&Settings"
+msgstr "ה&גדרות"
+
 #: menubar.py:111
 msgid "&Tools"
 msgstr "&כלים"
+
+#: menubar.py:112
+msgid "&Help"
+msgstr "ע&זרה"
+
+#: menubar.py:180
+msgid "Copyright"
+msgstr "זכויות יוצרים"
+
+#: menubar.py:181
+msgid "A lightweight personal finance management application."
+msgstr "יישום קל משקל לניהול הכלכלה האישית."
 
 #: newtransactionctrl.py:47
 msgid "from"
@@ -393,6 +139,10 @@ msgstr ""
 #: newtransactionctrl.py:47 summarytab.py:61
 msgid "to"
 msgstr ""
+
+#: newtransactionctrl.py:51 newtransactionctrl.py:239
+msgid "Transfer"
+msgstr "העברה"
 
 #: newtransactionctrl.py:55
 msgid "account:"
@@ -555,14 +305,98 @@ msgstr ""
 msgid "Starts:"
 msgstr ""
 
+#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
+#: transactionolv.py:61
+msgid "Description"
+msgstr "תיאור"
+
+#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
+#: transactionolv.py:62
+msgid "Amount"
+msgstr "סכום"
+
+#: newtransactionctrl.py:236
+msgid "Enter this transaction"
+msgstr "כניסה לעסקה זו"
+
 #: newtransactionctrl.py:242
 msgid "Recurring"
 msgstr "חוזר"
+
+#: newtransactionctrl.py:291
+msgid ""
+"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
+"to fix this."
+msgstr ""
+"אזהרה: לא ניתן לאגד את ה־ENTER של DateCtrl. שדרג ל־wxPython => 2.8.8.1 כדי "
+"לתקן זאת."
+
+#: newtransactionctrl.py:347
+msgid "No amount entered in the 'Amount' field."
+msgstr "לא הוזן סכום בשדה 'סכום'."
+
+#: newtransactionctrl.py:349
+#, python-format
+msgid "'%s' is not a valid amount."
+msgstr "'%s' אינו סכום תקני."
+
+#: newtransactionctrl.py:352
+msgid "Please enter a number such as 12.34 or -20."
+msgstr "אנא הזן מספר כגון 12.34 או -20."
+
+#: newtransactionctrl.py:353
+msgid "Invalid Transaction Amount"
+msgstr "סכום ההעברה אינו תקני"
+
+#: newtransactionctrl.py:367
+msgid "Please select an account and then try again."
+msgstr "אנא בחר חשבון ואז נסה שוב."
+
+#: newtransactionctrl.py:368 newtransactionctrl.py:399
+msgid "No account selected"
+msgstr "לא נבחרו חשבונות"
+
+#: newtransactionctrl.py:383
+msgid "transfer"
+msgstr "העברה"
+
+#: newtransactionctrl.py:383
+msgid "transaction"
+msgstr "עסקה"
+
+#: newtransactionctrl.py:385
+#, python-format
+msgid ""
+"A search is currently active. Would you like to clear the current search and "
+"make this %s in \"%s\"?"
+msgstr ""
+"החיפוש פעיל כעת. האם ברצונך לרוקן את החיפוש הנוכחי ולהפוך אותו ל־%s תחת "
+"\"%s\"?"
+
+#: newtransactionctrl.py:386
+msgid "Clear search?"
+msgstr "לרוקן את החיפוש?"
 
 #: newtransactionctrl.py:398
 msgid ""
 "This transaction is marked as a transfer. Please select the transfer account."
 msgstr ""
+
+#: newtransactionctrl.py:414
+msgid ""
+"If this box is checked when adding a transaction, you will be prompted for "
+"the account to use as the source of the transfer."
+msgstr ""
+"אם תיבה זו מסומנת בעת הוספת עסקה, אתה תשאל באיזה חשבון להשתמש כמקור ההעברה."
+
+#: newtransactionctrl.py:415
+msgid ""
+"For example, checking this box and entering a transaction of $50 into this "
+"account will also subtract $50 from the account that you choose as the "
+"source."
+msgstr ""
+"לדוגמה, סימון תיבה זו והזנת עסקה בסך 50$ לחשבון זה תחסיר 50$ מהחשבון שנבחר "
+"כמקור."
 
 #: summarytab.py:56
 msgid "Account"
@@ -572,9 +406,34 @@ msgstr "חשבון"
 msgid "From"
 msgstr ""
 
+#: summarytab.py:64
+msgid "Sample Points"
+msgstr "נקודות לדוגמה"
+
+#: summarytab.py:67
+msgid "Fit Curve Degree"
+msgstr "התאם מעלת עקומה"
+
 #: summarytab.py:113
 msgid "All accounts"
 msgstr "כל החשבונות"
+
+#: summarytab.py:177 summarytab.py:183
+msgid "Balance"
+msgstr "מאזן"
+
+#: summarytab.py:181
+msgid "Trend"
+msgstr "מגמה"
+
+#: summarytab.py:183
+msgid "Total Balance Over Time"
+msgstr "המאזן הכללי במשך הזמן"
+
+#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
+#: transactionolv.py:60
+msgid "Date"
+msgstr "תאריך"
 
 #: currconvert.py:59
 #, python-format
@@ -595,6 +454,30 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+#: templater.py:27
+msgid "Hide Calculator"
+msgstr "הסתר את המחשבון"
+
+#: templater.py:28
+msgid "Show Calculator"
+msgstr "הצג את המחשבון"
+
+#: templater.py:29
+msgid "Transact"
+msgstr "ניהול"
+
+#: searchctrl.py:32
+msgid "Search transactions"
+msgstr "חפש עסקאות"
+
+#: searchctrl.py:34
+msgid "Current Account"
+msgstr "חשבון נוכחי"
+
+#: searchctrl.py:34
+msgid "All Accounts"
+msgstr "כל החשבונות"
+
 #: searchctrl.py:38
 msgid "More options"
 msgstr ""
@@ -602,6 +485,22 @@ msgstr ""
 #: searchctrl.py:38
 msgid "Less options"
 msgstr ""
+
+#: searchctrl.py:43
+msgid "Case Sensitive"
+msgstr "תלוי רישיות"
+
+#: searchctrl.py:44
+msgid "Whether or not to match based on capitalization"
+msgstr "האם לבצע התאמה בהתבסס על רישיות"
+
+#: searchctrl.py:49
+msgid "In: "
+msgstr "תחת: "
+
+#: searchctrl.py:55
+msgid "Match: "
+msgstr "תואם: "
 
 #: searchctrl.py:106
 msgid "Show advanced search options"
@@ -713,6 +612,10 @@ msgstr ""
 msgid "No transactions entered."
 msgstr ""
 
+#: transactionolv.py:63 accountlistctrl.py:87
+msgid "Total"
+msgstr "סך־הכל"
+
 #: transactionolv.py:179
 #, python-format
 msgid "Send %s to calculator"
@@ -728,6 +631,10 @@ msgstr ""
 msgid "Subtract %s from calculator"
 msgstr ""
 
+#: transactionolv.py:193
+msgid "Remove this transaction"
+msgstr "הסר עסקה זו"
+
 #: transactionolv.py:194
 msgid "Move this transaction to account"
 msgstr ""
@@ -742,9 +649,102 @@ msgstr ""
 msgid "Move these %i transactions to account"
 msgstr ""
 
+#: accountlistctrl.py:42
+msgid "Accounts"
+msgstr "חשבונות"
+
+#: accountlistctrl.py:58
+msgid "Add a new account"
+msgstr "הוסף חשבון חדש"
+
+#: accountlistctrl.py:62
+msgid "Remove the selected account"
+msgstr "הסר את החשבון הנבחר"
+
+#: accountlistctrl.py:67
+msgid "Rename the selected account"
+msgstr "שנה את שם החשבון הנבחר"
+
+#: accountlistctrl.py:72
+msgid "Configure the selected account"
+msgstr "הגדר את החשבון הנבחר"
+
+#: accountlistctrl.py:92
+msgid "Hide zero-balance accounts"
+msgstr "הסתר חשבונות במאזן אפס"
+
+#: accountlistctrl.py:93
+msgid ""
+"When enabled, accounts with a balance of $0.00 will be hidden from the list"
+msgstr "במידה שהופעל, חשבונות שהמאזן שלהם הינו $0.00 יוסתרו מהרשימה"
+
+#: accountlistctrl.py:381 accountlistctrl.py:476
+msgid "Sorry, an account by that name already exists."
+msgstr "אנו מתנצלים, חשבון בשם זה כבר קיים."
+
 #: accountlistctrl.py:383 accountlistctrl.py:478
 msgid "Accout names cannot be blank."
 msgstr ""
+
+#: accountlistctrl.py:449
+#, python-format
+msgid ""
+"This will permanently remove the account '%s' and all its transactions. "
+"Continue?"
+msgstr "פעולה זו תסיר לצמיתות את החשבון '%s' על כל עסקאותיות. להמשיך?"
+
+#: accountlistctrl.py:450
+msgid "Warning"
+msgstr "אזהרה"
+
+#: wxbanker.py:46
+msgid ""
+"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
+"fix this."
+msgstr ""
+"אזהרה: לא נמצא מודול Numpy, לשונית התקציר תבוטל. התקן את Numpy כדי לתקן זאת."
+
+#: wxbanker.py:62
+msgid "Transactions"
+msgstr "עסקאות"
+
+#: wxbanker.py:66
+msgid "Summary"
+msgstr "תקציר"
+
+#: wxbanker.py:115
+msgid "It looks like this is your first time using wxBanker!"
+msgstr "נראה כי זאת הפעם הראשונה בה אתה משתמש ב־wxBanker!"
+
+#: wxbanker.py:116
+msgid ""
+"To get started, add an account using the account control in the top left "
+"corner."
+msgstr "בתור התחלה, הוסף חשבון באמצעות בקרת החשבונות בפינה הימנית העליונה."
+
+#: wxbanker.py:117
+msgid ""
+"The buttons in the account control allow you to add, remove, and rename an "
+"account, respectively."
+msgstr ""
+"הלחצנים שבבקרת חשבונות מאפשרים לך להוסיף, להסיר ולשנות את שמות החשבונות, "
+"עבור כל חשבון בנפרד."
+
+#: wxbanker.py:118
+msgid ""
+"Once you have created an account you can add transactions to it (such as "
+"your initial balance) using the controls below the grid on the bottom right."
+msgstr ""
+"לאחר שיצרת חשבון תוכל להוסיף לו עסקאות (כגון מאזן התחלתי) באמצעות הפקדים "
+"שמתחת לטבלה שמצד שמאל למטה."
+
+#: wxbanker.py:119
+msgid "Have fun!"
+msgstr "תהנה!"
+
+#: wxbanker.py:121
+msgid "Welcome!"
+msgstr "ברוכים הבאים!"
 
 #: wxbanker.py:129
 msgid "Save changes?"
@@ -761,3 +761,9 @@ msgid ""
 "Note that enabling auto-save from the File menu will eliminate the need for "
 "manual saving."
 msgstr ""
+
+#~ msgid "Which account will the money come from?"
+#~ msgstr "מאיזה חשבון יגיע הכסף?"
+
+#~ msgid "Other accounts"
+#~ msgstr "חשבונות אחרים"

@@ -15,169 +15,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2009-08-20 09:21+0000\n"
+"X-Launchpad-Export-Date: 2009-08-21 09:51+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-
-#: menubar.py:52
-msgid "&Currency"
-msgstr "واحد پول&"
-
-#: menubar.py:52
-msgid "Select currency to display"
-msgstr "واحد پول را برای نمایش بگزینید."
-
-#: menubar.py:84
-msgid "Ask a &Question"
-msgstr "پرسشی بپرسید"
-
-#: menubar.py:84
-msgid "Ask a question online"
-msgstr "پرسسی را برخط بپرسید"
-
-#: menubar.py:89
-msgid "&Report a Bug"
-msgstr "خطایی را گزارش دهید&"
-
-#: menubar.py:89
-msgid "Report a bug to the developer online"
-msgstr "خطایی را برخط به برنامه‌سازگزارش دهید"
-
-#: menubar.py:106
-msgid "&About"
-msgstr "درباره&"
-
-#: menubar.py:106
-msgid "More information about wxBanker"
-msgstr "اطلاعات بیشتر درباره wxBanker"
-
-#: menubar.py:110
-msgid "&Settings"
-msgstr "تنظیمات&"
-
-#: menubar.py:112
-msgid "&Help"
-msgstr "کمک&"
-
-#: menubar.py:180
-msgid "Copyright"
-msgstr "کپی‌رایت"
-
-#: menubar.py:181
-msgid "A lightweight personal finance management application."
-msgstr "برنامه مدیریت مالی شخصی سبک"
-
-#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
-#: transactionolv.py:61
-msgid "Description"
-msgstr "توصیف"
-
-#: newtransactionctrl.py:368 newtransactionctrl.py:399
-msgid "No account selected"
-msgstr "هیچ حسابی انتخاب نشده"
-
-#: newtransactionctrl.py:383
-msgid "transaction"
-msgstr "تراکنش"
-
-#: summarytab.py:177 summarytab.py:183
-msgid "Balance"
-msgstr "تراز"
-
-#: summarytab.py:181
-msgid "Trend"
-msgstr "روند"
-
-#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
-#: transactionolv.py:60
-msgid "Date"
-msgstr "تاریخ"
-
-#: templater.py:27
-msgid "Hide Calculator"
-msgstr "ماشین‌حساب را نشان نده"
-
-#: templater.py:28
-msgid "Show Calculator"
-msgstr "ماشین‌حساب را نشان بده"
-
-#: searchctrl.py:32
-msgid "Search transactions"
-msgstr "جستجوی تراکنش"
-
-#: searchctrl.py:34
-msgid "All Accounts"
-msgstr "همه حساب‌ها"
-
-#: searchctrl.py:43
-msgid "Case Sensitive"
-msgstr "حساس به بزرگ‌وکوچک"
-
-#: transactionolv.py:63 accountlistctrl.py:87
-msgid "Total"
-msgstr "جمع"
-
-#: transactionolv.py:193
-msgid "Remove this transaction"
-msgstr "این تراکنش را حذف کن"
-
-#: accountlistctrl.py:42
-msgid "Accounts"
-msgstr "حساب‌ها"
-
-#: accountlistctrl.py:58
-msgid "Add a new account"
-msgstr "افزودن یک حساب جدید"
-
-#: accountlistctrl.py:62
-msgid "Remove the selected account"
-msgstr "حذف حساب انتخاب شده"
-
-#: accountlistctrl.py:67
-msgid "Rename the selected account"
-msgstr "تغییرنام حساب انتخاب شده"
-
-#: accountlistctrl.py:72
-msgid "Configure the selected account"
-msgstr "پیکربندی حساب انتخاب شده"
-
-#: accountlistctrl.py:450
-msgid "Warning"
-msgstr "اخطار"
-
-#: wxbanker.py:62
-msgid "Transactions"
-msgstr "تراکنش"
-
-#: wxbanker.py:66
-msgid "Summary"
-msgstr "خلاصه"
-
-#: wxbanker.py:115
-msgid "It looks like this is your first time using wxBanker!"
-msgstr "به نظر می‌آید که نخستین باری است که این نرم‌افزار را بکار می‌گیرید."
-
-#: wxbanker.py:116
-msgid ""
-"To get started, add an account using the account control in the top left "
-"corner."
-msgstr ""
-"برای شروع،با استفاده از کنترل حساب در گوشه سمت چپ بالا یک حساب اضافه کنید."
-
-#: wxbanker.py:117
-msgid ""
-"The buttons in the account control allow you to add, remove, and rename an "
-"account, respectively."
-msgstr ""
-"دکمه‌های  روی کنترل حساب به شما اجازه می‌دهد که به‌ترتیب  یک حساب را  اضافه "
-"کنید،حذف کنید یا تغییر نام دهید."
-
-#: wxbanker.py:119
-msgid "Have fun!"
-msgstr "خوش بگذره"
-
-#: wxbanker.py:121
-msgid "Welcome!"
-msgstr "خوش آمدید"
 
 #: calculator.py:124
 msgid "Show"
@@ -201,6 +40,14 @@ msgstr ""
 msgid "Automatically save changes"
 msgstr ""
 
+#: menubar.py:52
+msgid "&Currency"
+msgstr "واحد پول&"
+
+#: menubar.py:52
+msgid "Select currency to display"
+msgstr "واحد پول را برای نمایش بگزینید."
+
 #: menubar.py:61
 msgid "Request a Currency"
 msgstr ""
@@ -221,6 +68,22 @@ msgstr ""
 msgid "View Frequently Asked Questions online"
 msgstr ""
 
+#: menubar.py:84
+msgid "Ask a &Question"
+msgstr "پرسشی بپرسید"
+
+#: menubar.py:84
+msgid "Ask a question online"
+msgstr "پرسسی را برخط بپرسید"
+
+#: menubar.py:89
+msgid "&Report a Bug"
+msgstr "خطایی را گزارش دهید&"
+
+#: menubar.py:89
+msgid "Report a bug to the developer online"
+msgstr "خطایی را برخط به برنامه‌سازگزارش دهید"
+
 #: menubar.py:94
 msgid "Request a Fea&ture"
 msgstr ""
@@ -237,13 +100,37 @@ msgstr ""
 msgid "Translate wxBanker to another language"
 msgstr ""
 
+#: menubar.py:106
+msgid "&About"
+msgstr "درباره&"
+
+#: menubar.py:106
+msgid "More information about wxBanker"
+msgstr "اطلاعات بیشتر درباره wxBanker"
+
 #: menubar.py:109
 msgid "&File"
 msgstr ""
 
+#: menubar.py:110
+msgid "&Settings"
+msgstr "تنظیمات&"
+
 #: menubar.py:111
 msgid "&Tools"
 msgstr ""
+
+#: menubar.py:112
+msgid "&Help"
+msgstr "کمک&"
+
+#: menubar.py:180
+msgid "Copyright"
+msgstr "کپی‌رایت"
+
+#: menubar.py:181
+msgid "A lightweight personal finance management application."
+msgstr "برنامه مدیریت مالی شخصی سبک"
 
 #: newtransactionctrl.py:47
 msgid "from"
@@ -418,6 +305,11 @@ msgstr ""
 msgid "Starts:"
 msgstr ""
 
+#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
+#: transactionolv.py:61
+msgid "Description"
+msgstr "توصیف"
+
 #: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
 #: transactionolv.py:62
 msgid "Amount"
@@ -458,9 +350,17 @@ msgstr ""
 msgid "Please select an account and then try again."
 msgstr ""
 
+#: newtransactionctrl.py:368 newtransactionctrl.py:399
+msgid "No account selected"
+msgstr "هیچ حسابی انتخاب نشده"
+
 #: newtransactionctrl.py:383
 msgid "transfer"
 msgstr ""
+
+#: newtransactionctrl.py:383
+msgid "transaction"
+msgstr "تراکنش"
 
 #: newtransactionctrl.py:385
 #, python-format
@@ -511,9 +411,22 @@ msgstr ""
 msgid "All accounts"
 msgstr ""
 
+#: summarytab.py:177 summarytab.py:183
+msgid "Balance"
+msgstr "تراز"
+
+#: summarytab.py:181
+msgid "Trend"
+msgstr "روند"
+
 #: summarytab.py:183
 msgid "Total Balance Over Time"
 msgstr ""
+
+#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
+#: transactionolv.py:60
+msgid "Date"
+msgstr "تاریخ"
 
 #: currconvert.py:59
 #, python-format
@@ -534,13 +447,29 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
+#: templater.py:27
+msgid "Hide Calculator"
+msgstr "ماشین‌حساب را نشان نده"
+
+#: templater.py:28
+msgid "Show Calculator"
+msgstr "ماشین‌حساب را نشان بده"
+
 #: templater.py:29
 msgid "Transact"
 msgstr ""
 
+#: searchctrl.py:32
+msgid "Search transactions"
+msgstr "جستجوی تراکنش"
+
 #: searchctrl.py:34
 msgid "Current Account"
 msgstr ""
+
+#: searchctrl.py:34
+msgid "All Accounts"
+msgstr "همه حساب‌ها"
 
 #: searchctrl.py:38
 msgid "More options"
@@ -549,6 +478,10 @@ msgstr ""
 #: searchctrl.py:38
 msgid "Less options"
 msgstr ""
+
+#: searchctrl.py:43
+msgid "Case Sensitive"
+msgstr "حساس به بزرگ‌وکوچک"
 
 #: searchctrl.py:44
 msgid "Whether or not to match based on capitalization"
@@ -672,6 +605,10 @@ msgstr ""
 msgid "No transactions entered."
 msgstr ""
 
+#: transactionolv.py:63 accountlistctrl.py:87
+msgid "Total"
+msgstr "جمع"
+
 #: transactionolv.py:179
 #, python-format
 msgid "Send %s to calculator"
@@ -687,6 +624,10 @@ msgstr ""
 msgid "Subtract %s from calculator"
 msgstr ""
 
+#: transactionolv.py:193
+msgid "Remove this transaction"
+msgstr "این تراکنش را حذف کن"
+
 #: transactionolv.py:194
 msgid "Move this transaction to account"
 msgstr ""
@@ -700,6 +641,26 @@ msgstr ""
 #, python-format
 msgid "Move these %i transactions to account"
 msgstr ""
+
+#: accountlistctrl.py:42
+msgid "Accounts"
+msgstr "حساب‌ها"
+
+#: accountlistctrl.py:58
+msgid "Add a new account"
+msgstr "افزودن یک حساب جدید"
+
+#: accountlistctrl.py:62
+msgid "Remove the selected account"
+msgstr "حذف حساب انتخاب شده"
+
+#: accountlistctrl.py:67
+msgid "Rename the selected account"
+msgstr "تغییرنام حساب انتخاب شده"
+
+#: accountlistctrl.py:72
+msgid "Configure the selected account"
+msgstr "پیکربندی حساب انتخاب شده"
 
 #: accountlistctrl.py:92
 msgid "Hide zero-balance accounts"
@@ -725,17 +686,56 @@ msgid ""
 "Continue?"
 msgstr ""
 
+#: accountlistctrl.py:450
+msgid "Warning"
+msgstr "اخطار"
+
 #: wxbanker.py:46
 msgid ""
 "Warning: Numpy module not available, disabling Summary tab. Install numpy to "
 "fix this."
 msgstr ""
 
+#: wxbanker.py:62
+msgid "Transactions"
+msgstr "تراکنش"
+
+#: wxbanker.py:66
+msgid "Summary"
+msgstr "خلاصه"
+
+#: wxbanker.py:115
+msgid "It looks like this is your first time using wxBanker!"
+msgstr "به نظر می‌آید که نخستین باری است که این نرم‌افزار را بکار می‌گیرید."
+
+#: wxbanker.py:116
+msgid ""
+"To get started, add an account using the account control in the top left "
+"corner."
+msgstr ""
+"برای شروع،با استفاده از کنترل حساب در گوشه سمت چپ بالا یک حساب اضافه کنید."
+
+#: wxbanker.py:117
+msgid ""
+"The buttons in the account control allow you to add, remove, and rename an "
+"account, respectively."
+msgstr ""
+"دکمه‌های  روی کنترل حساب به شما اجازه می‌دهد که به‌ترتیب  یک حساب را  اضافه "
+"کنید،حذف کنید یا تغییر نام دهید."
+
 #: wxbanker.py:118
 msgid ""
 "Once you have created an account you can add transactions to it (such as "
 "your initial balance) using the controls below the grid on the bottom right."
 msgstr ""
+
+#: wxbanker.py:119
+msgid "Have fun!"
+msgstr "خوش بگذره"
+
+#: wxbanker.py:121
+msgid "Welcome!"
+msgstr "خوش آمدید"
 
 #: wxbanker.py:129
 msgid "Save changes?"
@@ -752,3 +752,6 @@ msgid ""
 "Note that enabling auto-save from the File menu will eliminate the need for "
 "manual saving."
 msgstr ""
+
+#~ msgid "Other accounts"
+#~ msgstr "دیگر حساب‌ها"
