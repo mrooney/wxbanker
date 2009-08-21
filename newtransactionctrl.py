@@ -170,7 +170,7 @@ class RecurringPanel(wx.Panel):
 
         repeatsOn = None
         if repeatType == 1: # Weekly
-            repeatsOn = ",".join(str(int(check.Value)) for check in self.repeatsOnChecksWeekly)
+            repeatsOn = [int(check.Value) for check in self.repeatsOnChecksWeekly]
 
         return (repeatType, repeatEvery, repeatsOn, end)
 
@@ -187,15 +187,15 @@ class RecurringPanel(wx.Panel):
             everyText = gettext.ngettext("week", "weeks", every)
             self.repeatsOnText.Label = label=_("Repeats on days:")
             self.Sizer.Show(self.bottomSizer)
-            if repeatsOn == "1,1,1,1,1,0,0":
+            if repeatsOn == [1,1,1,1,1,0,0]:
                 summary = _("Weekly on weekdays")
-            elif repeatsOn == "0,0,0,0,0,1,1":
+            elif repeatsOn == [0,0,0,0,0,1,1]:
                 summary = _("Weekly on weekends")
-            elif repeatsOn == "1,1,1,1,1,1,1":
+            elif repeatsOn == [1,1,1,1,1,1,1]:
                 summary = _("Daily")
             else:
                 pluralDayNames = (_("Mondays"), _("Tuesdays"), _("Wednesdays"), _("Thursdays"), _("Fridays"), _("Saturdays"), _("Sundays"))
-                repeatDays = tuple(day for i, day in enumerate(pluralDayNames) if repeatsOn.replace(",","")[i] == "1")
+                repeatDays = tuple(day for i, day in enumerate(pluralDayNames) if repeatsOn[i])
                 if len(repeatDays) == 0:
                     summary = "Never"
                 elif len(repeatDays) == 1:
@@ -240,7 +240,6 @@ class NewTransactionCtrl(wx.Panel):
 
         # The recurs check.
         self.recursCheck = recursCheck = wx.CheckBox(self, label=_("Recurring"))
-        self.recursCheck.SetBackgroundColour(wx.RED)
 
         checkSizer = wx.BoxSizer(wx.VERTICAL)
         checkSizer.Add(self.transferCheck)
@@ -402,7 +401,9 @@ class NewTransactionCtrl(wx.Panel):
         if self.recursCheck.GetValue():
             settings = self.recurringPanel.GetSettings()
             args = [amount, desc, date] + list(settings) + [sourceAccount]
-            print "AddRecurringTransaction(%s)" % ", ".join([repr(x) for x in args])
+            #print "AddRecurringTransaction(%s)" % ", ".join([repr(x) for x in args])
+            destAccount.AddRecurringTransaction(*args)
+            self.onSuccess()
         else:
             destAccount.AddTransaction(amount, desc, date, sourceAccount)
             self.onSuccess()

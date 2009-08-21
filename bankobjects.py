@@ -383,6 +383,8 @@ class Account(ORMObject):
         # Add it to our internal list.
         self.RecurringTransactions.append(recurring)
         
+        Publisher.sendMessage("recurringtransaction.created", (self, recurring))
+        
         return recurring
 
     def AddTransaction(self, amount=None, description="", date=None, source=None, transaction=None):
