@@ -88,6 +88,7 @@ class BankerPanel(wx.Panel):
             return
         
         # Generate an appropriate message.
+        lines = []
         if len(untransacted) == 1:
             recurring, dates = untransacted[0]
             message = _('The recurring transaction "%(description)s" has %(num)i transactions ready for %(amount)s on %(datelist)s.')
@@ -97,9 +98,17 @@ class BankerPanel(wx.Panel):
         else:
             message = _('%(num)i recurring transactions have a total of %(totalnum)i transactions ready.')
             message = message % {'num': len(untransacted), 'totalnum': totalTransactions}
+            for recurring, dates in untransacted:
+                lines.append(str(recurring))
+            
             
         # Create the message panel.
         mpanel = messagepanel.MessagePanel(self, message)
+        
+        # If there are lines to display, add the button and callback
+        if lines:
+            mpanel.AddLines(lines)
+            mpanel.PushButton(_("Preview"), mpanel.ToggleLines)
             
         # Create the callback to perform the transactions.
         def performer(event=None):

@@ -24,11 +24,15 @@ class MessagePanel(wx.Panel):
         self.Freeze()
         self.BackgroundColour = wx.BLACK
         self.Panel = panel = wx.Panel(self)
+        self.LinesPanel = wx.Panel(self)
+        self.LinesPanel.Sizer = wx.BoxSizer(wx.VERTICAL)
         panel.BackgroundColour = (0, 200, 100)
         
-        self.Sizer = wx.BoxSizer()
+        self.Sizer = wx.BoxSizer(wx.VERTICAL)
         self.Sizer.Add(panel, 1, wx.EXPAND|wx.ALL, 1)
-        
+        self.Sizer.Add(self.LinesPanel, 0, wx.EXPAND)
+        self.LinesPanel.Hide()
+    
         self.Panel.Sizer = psizer = wx.BoxSizer()
         self.MessageText = wx.StaticText(panel, label=message)
         psizer.Add(self.MessageText, 0, wx.ALIGN_CENTER|wx.LEFT, 3)
@@ -40,9 +44,9 @@ class MessagePanel(wx.Panel):
         # Add the "Dismiss" button to get rid of the message.
         self.PushButton(_("Dismiss"), self.OnDismiss)
         
-        self.BestWidth, self.BestHeight = self.BestSize
+        self.BestWidth, self.BestHeight = self.Panel.BestSize
         self.CurrentHeight = 0
-        self.SetInitialSize((self.BestWidth, self.CurrentHeight))
+        self.Panel.SetInitialSize((self.BestWidth, self.CurrentHeight))
         
         # We are done moving stuff around, so thaw.
         self.Thaw()
@@ -58,7 +62,7 @@ class MessagePanel(wx.Panel):
             availableSize -= button.Size[0]
             
         # Figure out the correct height.
-        height = self.GetTextExtent("TEST")[1]
+        height = self.GetTextExtent(self.MessageText.Label[:5])[1]
         
         self.MessageText.SetInitialSize((availableSize, height))
         
@@ -69,7 +73,16 @@ class MessagePanel(wx.Panel):
         else:
             wx.CallLater(50, self.ExpandPanel)
             
-        self.SetInitialSize((self.BestWidth, self.CurrentHeight))
+        self.Panel.SetInitialSize((self.BestWidth, self.CurrentHeight))
+        self.Parent.Layout()
+    
+    def AddLines(self, lines):
+        sizer = self.LinesPanel.Sizer
+        for line in lines:
+            sizer.Add(wx.StaticText(self.LinesPanel, label=line), 0, wx.LEFT, 10)
+    
+    def ToggleLines(self, lines):
+        self.LinesPanel.Show(not self.LinesPanel.IsShown())
         self.Parent.Layout()
         
     def PushButton(self, label, callback):
