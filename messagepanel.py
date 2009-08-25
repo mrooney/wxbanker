@@ -29,32 +29,34 @@ class MessagePanel(wx.Panel):
         self.Sizer = wx.BoxSizer()
         self.Sizer.Add(panel, 1, wx.EXPAND|wx.ALL, 1)
         
-        #closeButton = wx.Button(panel, label=_("Dismiss"))
-        
         self.Panel.Sizer = psizer = wx.BoxSizer()
-        self.MessageText = wx.StaticText(panel, label=message)
+        self.MessageText = wx.StaticText(panel, label=message, style=wx.TE_DONTWRAP)
         psizer.Add(self.MessageText, 0, wx.ALIGN_CENTER)
         psizer.AddStretchSpacer(1)
-        self.PushButton(_("Dismiss"), self.OnDismiss)
-        #psizer.Add(closeButton, 0, wx.ALIGN_CENTER)
         
-        self.Thaw()
-        #closeButton.Bind(wx.EVT_BUTTON, self.OnDismiss)
-        self.SizeMessage()
+        # Note at what position the buttons start, we'll use this in SizeMessage.
+        self.BUTTON_START = len(psizer.Children)
+        
+        # Add the "Dismiss" button to get rid of the message.
+        self.PushButton(_("Dismiss"), self.OnDismiss)
         
         self.BestWidth, self.BestHeight = self.BestSize
         self.CurrentHeight = 0
         self.SetInitialSize((self.BestWidth, self.CurrentHeight))
+        
+        # We are done moving stuff around, so thaw.
+        self.Thaw()
+        
         self.ExpandPanel()
         
     def SizeMessage(self):
+        """Make sure the message text gets clipped appropriately."""
         availableSize = self.Parent.Size[0]
         buttons = list(self.Panel.Sizer.Children)[2:]
         for button in buttons:
             availableSize -= button.Size[0]
             
-        self.MessageText.SetInitialSize((availableSize, -1))
-        #print availableSize, buttonWidth
+        self.MessageText.SetInitialSize((availableSize, button.Size[1]))
         
     def ExpandPanel(self):
         self.CurrentHeight += 5
@@ -71,7 +73,7 @@ class MessagePanel(wx.Panel):
         button = wx.Button(self.Panel, label=label)
         button.Bind(wx.EVT_BUTTON, callback)
         
-        self.Panel.Sizer.Insert(2, button, 0, wx.ALIGN_CENTER)
+        self.Panel.Sizer.Insert(self.BUTTON_START, button, 0, wx.ALIGN_CENTER)
         self.SizeMessage()
         self.Layout()
         
