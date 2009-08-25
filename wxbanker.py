@@ -74,7 +74,7 @@ class BankerPanel(wx.Panel):
 
     def CheckRecurringTransactions(self):
         recurring = self.bankController.Model.GetRecurringTransactions()
-        message = "%i recurring transactions" % len(recurring)
+        message = _("%(num)i recurring transactions are due to occur")  % {"num": len(dates)}
         mpanel = messagepanel.MessagePanel(self, message)
         self.AddMessagePanel(mpanel)
         
@@ -82,21 +82,19 @@ class BankerPanel(wx.Panel):
     
     def onRecurringTransactionAdded(self, message):
         account, recurring = message.data
-        
         dates = recurring.GetUntransactedDates()
         
-        # If there are no transactions due, just inform the user it was added.
-        if not dates:
+        # If there are transactions due, inform the user via the normal route.
+        if dates:
+            self.CheckRecurringTransactions()
+        # Otherwise, just inform the user it was added, and the first date.
+        else:
             message = _("Recurring transaction successfully added.")
             futureDates = recurring.GetUntransactedDates(future=True)
             if futureDates:
                 message += _("The first transaction will occur on %(date)s") % {"date": futureDates[0]}
             mpanel = messagepanel.MessagePanel(self, message)
-        else:
-            message = _("%(num)i recurring transactions are due to occur")  % {"num": len(dates)}
-            mpanel = messagepanel.MessagePanel(self, message)
-            
-        self.AddMessagePanel(mpanel)
+            self.AddMessagePanel(mpanel)
 
     def onTabSwitching(self, event):
         tabIndex = event.Selection
