@@ -30,8 +30,8 @@ class MessagePanel(wx.Panel):
         self.Sizer.Add(panel, 1, wx.EXPAND|wx.ALL, 1)
         
         self.Panel.Sizer = psizer = wx.BoxSizer()
-        self.MessageText = wx.StaticText(panel, label=message, style=wx.TE_DONTWRAP)
-        psizer.Add(self.MessageText, 0, wx.ALIGN_CENTER)
+        self.MessageText = wx.StaticText(panel, label=message)
+        psizer.Add(self.MessageText, 0, wx.ALIGN_CENTER|wx.LEFT, 3)
         psizer.AddStretchSpacer(1)
         
         # Note at what position the buttons start, we'll use this in SizeMessage.
@@ -51,12 +51,16 @@ class MessagePanel(wx.Panel):
         
     def SizeMessage(self):
         """Make sure the message text gets clipped appropriately."""
+        # Figure out how wide it should be.
         availableSize = self.Parent.Size[0]
         buttons = list(self.Panel.Sizer.Children)[2:]
         for button in buttons:
             availableSize -= button.Size[0]
             
-        self.MessageText.SetInitialSize((availableSize, button.Size[1]))
+        # Figure out the correct height.
+        height = self.GetTextExtent("TEST")[1]
+        
+        self.MessageText.SetInitialSize((availableSize, height))
         
     def ExpandPanel(self):
         self.CurrentHeight += 5
