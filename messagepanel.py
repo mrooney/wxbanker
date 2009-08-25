@@ -29,20 +29,32 @@ class MessagePanel(wx.Panel):
         self.Sizer = wx.BoxSizer()
         self.Sizer.Add(panel, 1, wx.EXPAND|wx.ALL, 1)
         
-        closeButton = wx.Button(panel, label=_("Dismiss"))
+        #closeButton = wx.Button(panel, label=_("Dismiss"))
         
         self.Panel.Sizer = psizer = wx.BoxSizer()
-        psizer.Add(wx.StaticText(panel, label=message), 0, wx.ALIGN_CENTER)
+        self.MessageText = wx.StaticText(panel, label=message)
+        psizer.Add(self.MessageText, 0, wx.ALIGN_CENTER)
         psizer.AddStretchSpacer(1)
-        psizer.Add(closeButton, 0, wx.ALIGN_CENTER)
+        self.PushButton(_("Dismiss"), self.OnDismiss)
+        #psizer.Add(closeButton, 0, wx.ALIGN_CENTER)
         
         self.Thaw()
-        closeButton.Bind(wx.EVT_BUTTON, self.OnDismiss)
+        #closeButton.Bind(wx.EVT_BUTTON, self.OnDismiss)
+        self.SizeMessage()
         
         self.BestWidth, self.BestHeight = self.BestSize
         self.CurrentHeight = 0
         self.SetInitialSize((self.BestWidth, self.CurrentHeight))
         self.ExpandPanel()
+        
+    def SizeMessage(self):
+        availableSize = self.Parent.Size[0]
+        buttons = list(self.Panel.Sizer.Children)[2:]
+        for button in buttons:
+            availableSize -= button.Size[0]
+            
+        self.MessageText.SetInitialSize((availableSize, -1))
+        #print availableSize, buttonWidth
         
     def ExpandPanel(self):
         self.CurrentHeight += 5
@@ -54,9 +66,21 @@ class MessagePanel(wx.Panel):
         self.SetInitialSize((self.BestWidth, self.CurrentHeight))
         self.Parent.Layout()
         
-    def OnDismiss(self, event):
+    def PushButton(self, label, callback):
+        """Create and prepend a button with label `label` which will call `callback` on a click."""
+        button = wx.Button(self.Panel, label=label)
+        button.Bind(wx.EVT_BUTTON, callback)
+        
+        self.Panel.Sizer.Insert(2, button, 0, wx.ALIGN_CENTER)
+        self.SizeMessage()
+        self.Layout()
+        
+    def Dismiss(self):
         # We can't Layout after a Destroy, so Hide, Layout, then Destroy.
         self.Hide()
         self.Parent.Layout()
         self.Destroy()
+
+    def OnDismiss(self, event):
+        self.Dismiss()
         
