@@ -73,12 +73,47 @@ class BankerPanel(wx.Panel):
         self.Layout()
 
     def CheckRecurringTransactions(self):
-        recurring = self.bankController.Model.GetRecurringTransactions()
-        message = _("%(num)i recurring transactions are due to occur")  % {"num": len(dates)}
+        recurrings = self.bankController.Model.GetRecurringTransactions()
+        # Figure out how many due recurring transactions there are.
+        untransacted = []
+        totalTransactions = 0
+        for recurring in recurrings:
+            dates = recurring.GetUntransactedDates()
+            if dates:
+                untransacted.append((recurring, dates))
+                totalTransactions += len(dates)
+                
+        # If there aren't any untransacted transactions, we are done.
+        if not untransacted:
+            return
+        
+        # Generate an appropriate message.
+        if len(untransacted) == 1:
+            recurring, dates = untransacted[0]
+            message = _('The recurring transaction "%(description)s" has %(num)i transactions ready for %(amount)s on %(datelist)s.')
+            amount = recurring.Parent.float2str(recurring.Amount)
+            datelist = ", ".join([str(d) for d in dates])
+            message = message % {'description': recurring.Description, 'amount': amount, 'num': len(dates), 'datelist': datelist}
+        else:
+            message = _('%(num)i recurring transactions have a total of %(totalnum)i transactions ready.')
+            message = message % {'num': len(untransacted), 'totalnum': totalTransactions}
+            
+        # Create the message panel.
         mpanel = messagepanel.MessagePanel(self, message)
+            
+        # Create the callback to perform the transactions.
+        def performer(event=None):
+            for recurring, dates in untransacted:
+                recurring.PerformTransactions()
+            mpanel.Dismiss()
+        
+        # Add a button which will enter the transactions on a click.
+        mpanel.PushButton(_("Perform"), performer)
+        
+        # Show the message.
         self.AddMessagePanel(mpanel)
         
-        return len(recurring)
+        return len(recurrings)
     
     def onRecurringTransactionAdded(self, message):
         account, recurring = message.data
