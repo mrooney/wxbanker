@@ -22,7 +22,7 @@ import testbase
 import unittest, datetime
 
 import bankobjects
-from testbase import today, one
+from testbase import today, yesterday, one
 
 class RecurringTest(testbase.TestCaseWithController):
     def createAccount(self):
@@ -126,7 +126,6 @@ class RecurringTest(testbase.TestCaseWithController):
         dates = rt.GetUntransactedDates()
         self.assertEqual(dates, [start, datetime.date(2007, 1, 6), datetime.date(2009, 1, 6)])
 
-
     def testRecurringDateYearlyLeapYear(self):
         # If a transaction is entered on a leap day, it should only occur on future leap days.
         model, account = self.createAccount()
@@ -146,15 +145,21 @@ class RecurringTest(testbase.TestCaseWithController):
         
     def testCanPerformTransactions(self):
         model, account = self.createAccount()
-        rt = account.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        rt = account.AddRecurringTransaction(1, "test", yesterday, bankobjects.RECURRING_DAILY)
         
         self.assertEqual(account.Transactions, [])
         
         rt.PerformTransactions()
         
         transactions = model.GetTransactions()
-        self.assertEqual(len(transactions), 1)
+        self.assertEqual(len(transactions), 2)
+        
         t = transactions[0]
+        self.assertEqual(t.Amount, 1)
+        self.assertEqual(t.Description, "test")
+        self.assertEqual(t.Date, yesterday)
+        
+        t = transactions[1]
         self.assertEqual(t.Amount, 1)
         self.assertEqual(t.Description, "test")
         self.assertEqual(t.Date, today)

@@ -693,7 +693,7 @@ class RecurringTransaction(Transaction, ORMObject):
         
     def PerformTransactions(self):
         for date in self.GetUntransactedDates():
-            self.Parent.AddTransaction(self.Amount, self.Description, self.Date, self.Source)
+            self.Parent.AddTransaction(self.Amount, self.Description, date, self.Source)
         
         self.LastTransacted = datetime.date.today()
         
