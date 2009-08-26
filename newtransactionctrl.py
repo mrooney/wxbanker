@@ -295,12 +295,12 @@ class NewTransactionCtrl(wx.Panel):
 
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
 
-    def onRecurringCheck(self, event):
+    def onRecurringCheck(self, event=None):
         recurring = self.recursCheck.IsChecked()
         self.toggleVisibilityOf(self.recurringPanel, recurring)
         self.startText.Show(recurring)
 
-    def onTransferCheck(self, event):
+    def onTransferCheck(self, event=None):
         self.toggleVisibilityOf(self.transferPanel, self.transferCheck.IsChecked())
 
     def toggleVisibilityOf(self, control, visibility):
@@ -401,7 +401,6 @@ class NewTransactionCtrl(wx.Panel):
         if self.recursCheck.GetValue():
             settings = self.recurringPanel.GetSettings()
             args = [amount, desc, date] + list(settings) + [sourceAccount]
-            #print "AddRecurringTransaction(%s)" % ", ".join([repr(x) for x in args])
             destAccount.AddRecurringTransaction(*args)
             self.onSuccess()
         else:
@@ -418,3 +417,7 @@ class NewTransactionCtrl(wx.Panel):
         # Reset the controls.
         self.descCtrl.Value = ''
         self.amountCtrl.Value = ''
+        self.transferCheck.Value = False
+        self.recursCheck.Value = False
+        self.onTransferCheck()
+        self.onRecurringCheck()
