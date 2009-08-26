@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #    https://launchpad.net/wxbanker
 #    mintapi.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
 #
@@ -17,8 +18,9 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import urllib3, re, getpass
+import urllib3, re, getpass, datetime
 from csvimporter import CsvImporterProfileManager, CsvImporter
+import bankexceptions
 urllib3.enablecookies()
 
 class MintLoginException(Exception): pass
@@ -45,7 +47,7 @@ class MintDotCom:
         for account in re.findall(accountsRegex, self._cachedSummary):
             aid = account[0]
             name = "%s %s" % (account[1], account[2])
-            mintAccounts.append((name, aid))
+            mintAccounts.append((name.decode("utf-8"), aid))
 
         mintAccounts.sort()
         return mintAccounts
@@ -54,31 +56,39 @@ class MintDotCom:
         accountPage = urllib3.read("https://wwws.mint.com/transaction.event?accountId=%s" % accountid)
         balRegex = """<th>Balance</th><td class="money[^>]+>([^<]+)</td>"""
         balance = re.findall(balRegex, accountPage)[0]
-        return balance
+        balance = balance.replace("–", "-") # Mint uses a weird negative sign!
+        for char in ",$":
+            balance = balance.replace(char, "")
+        return float(balance)
 
     def GetAccountTransactionsCSV(self, accountid):
         return urllib3.read("https://wwws.mint.com/transactionDownload.event?accountId=%s&comparableType=8&offset=0" % accountid)
     
     def ImportAccounts(self, model):
         """For each account in Mint, create one in wxBanker with all known transactions."""
-        mintSettings = CsvImporterProfileManager.getProfile("mint")
+        mintSettings = CsvImporterProfileManager().getProfile("mint")
         importer = CsvImporter()
         for accountName, mintId in self.ListAccounts():
             # Create an account, grab the transactions, and add them.
-            account = model.CreateAccount(accountName)
+            try:
+                account = model.CreateAccount(accountName)
+            except bankexceptions.AccountAlreadyExistsException:
+                account = model.CreateAccount("%s (%s)" % (accountName, mintId))
             csv = self.GetAccountTransactionsCSV(mintId)
-            container = importer.getTransactionsFromCSV(csv)
+            container = importer.getTransactionsFromCSV(csv, mintSettings)
             transactions = container.Transactions
-            account.AddTransactions()
+            account.AddTransactions(transactions)
             
             # Now we have to add an initial transaction for the initial balance.
-            firstTransaction = sorted(transactions)[0]
+            if transactions:
+                firstTransaction = sorted(transactions)[0]
+                initialDate = firstTransaction.Date
+            else:
+                initialDate = datetime.date.today()
+
             balance = self.GetAccountBalance(mintId)
             initialBalance = balance - account.Balance
-            initialDate = firstTransaction.Date
             account.AddTransaction(initialBalance, "Initial Balance", initialDate)
-            
-            print "Imported account %s with %i transactions" % (accountName, len(transactions))
 
 
 def main():

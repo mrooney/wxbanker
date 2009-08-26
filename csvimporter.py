@@ -23,6 +23,7 @@ from bankobjects import Transaction
 from wx.lib.pubsub import Publisher
 import codecs, csv, os, re
 import fileservice, debug
+from cStringIO import StringIO
 
 try:
     import simplejson as json
@@ -49,10 +50,11 @@ class CsvImporter:
     """
     
     def getTransactionsFromFile(self, filename, settings):
-        contents = open(filename, 'rb')
+        contents = open(filename, 'rb').read()
         return self.getTransactionsFromCSV(contents, settings)
 
     def getTransactionsFromCSV(self, csvdata, settings):
+        csvdata = StringIO(csvdata)
         csvReader = csv.reader(
             UTF8Recoder(csvdata, settings['encoding']),
             delimiter=settings['delimiter'])
