@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-08-01 11:37-0700\n"
-"PO-Revision-Date: 2009-04-15 18:01+0000\n"
+"PO-Revision-Date: 2009-08-27 18:52+0000\n"
 "Last-Translator: DiegoJ <diegojromerolopez@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-08-27 09:39+0000\n"
+"X-Launchpad-Export-Date: 2009-08-28 09:43+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
@@ -134,11 +134,11 @@ msgstr "Una aplicación ligera para gestionar sus finanzas personales."
 
 #: newtransactionctrl.py:47
 msgid "from"
-msgstr ""
+msgstr "de"
 
 #: newtransactionctrl.py:47 summarytab.py:61
 msgid "to"
-msgstr ""
+msgstr "hacia"
 
 #: newtransactionctrl.py:51 newtransactionctrl.py:239
 msgid "Transfer"
@@ -146,164 +146,164 @@ msgstr "Transferir"
 
 #: newtransactionctrl.py:55
 msgid "account:"
-msgstr ""
+msgstr "cuenta:"
 
 #: newtransactionctrl.py:91 newtransactionctrl.py:185
 #: newtransactionctrl.py:195
 #, python-format
 msgid "Daily"
 msgid_plural "Every %(num)d days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Diariamente"
+msgstr[1] "Cada %(num)d days"
 
 #: newtransactionctrl.py:91
 msgid "Weekly"
-msgstr ""
+msgstr "Semanalmente"
 
 #: newtransactionctrl.py:91 newtransactionctrl.py:207
 #, python-format
 msgid "Monthly"
 msgid_plural "Every %(num)d months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Mensualmente"
+msgstr[1] "Cada %(num)d meses"
 
 #: newtransactionctrl.py:91
 msgid "Yearly"
-msgstr ""
+msgstr "Anualmente"
 
 #: newtransactionctrl.py:100
 msgid "Never"
-msgstr ""
+msgstr "Nunca"
 
 #: newtransactionctrl.py:110
 msgid "Mon"
-msgstr ""
+msgstr "Lun"
 
 #: newtransactionctrl.py:110
 msgid "Tue"
-msgstr ""
+msgstr "Mar"
 
 #: newtransactionctrl.py:110
 msgid "Wed"
-msgstr ""
+msgstr "Mié"
 
 #: newtransactionctrl.py:110
 msgid "Thu"
-msgstr ""
+msgstr "Jue"
 
 #: newtransactionctrl.py:110
 msgid "Fri"
-msgstr ""
+msgstr "Vie"
 
 #: newtransactionctrl.py:110
 msgid "Sat"
-msgstr ""
+msgstr "Sáb"
 
 #: newtransactionctrl.py:110
 msgid "Sun"
-msgstr ""
+msgstr "Dom"
 
 #: newtransactionctrl.py:131
 msgid "Repeats:"
-msgstr ""
+msgstr "Repeticiones:"
 
 #: newtransactionctrl.py:134
 msgid "Every"
-msgstr ""
+msgstr "Cada"
 
 #: newtransactionctrl.py:140
 msgid "Ends:"
-msgstr ""
+msgstr "Termina:"
 
 #: newtransactionctrl.py:184
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "día"
+msgstr[1] "días"
 
 #: newtransactionctrl.py:187
 msgid "week"
 msgid_plural "weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "semana"
+msgstr[1] "semanas"
 
 #: newtransactionctrl.py:188
 msgid "Repeats on days:"
-msgstr ""
+msgstr "Se repite en días:"
 
 #: newtransactionctrl.py:191
 msgid "Weekly on weekdays"
-msgstr ""
+msgstr "Semanalmente en días laborables:"
 
 #: newtransactionctrl.py:193
 msgid "Weekly on weekends"
-msgstr ""
+msgstr "Semanalmente en fines de semana"
 
 #: newtransactionctrl.py:197
 msgid "Mondays"
-msgstr ""
+msgstr "Lunes"
 
 #: newtransactionctrl.py:197
 msgid "Tuesdays"
-msgstr ""
+msgstr "Martes"
 
 #: newtransactionctrl.py:197
 msgid "Wednesdays"
-msgstr ""
+msgstr "Miércoles"
 
 #: newtransactionctrl.py:197
 msgid "Thursdays"
-msgstr ""
+msgstr "Jueves"
 
 #: newtransactionctrl.py:197
 msgid "Fridays"
-msgstr ""
+msgstr "Viernes"
 
 #: newtransactionctrl.py:197
 msgid "Saturdays"
-msgstr ""
+msgstr "Sábados"
 
 #: newtransactionctrl.py:197
 msgid "Sundays"
-msgstr ""
+msgstr "Domingos"
 
 #: newtransactionctrl.py:202 newtransactionctrl.py:204
 #, python-format
 msgid "Weekly on %s"
-msgstr ""
+msgstr "Semanalmente en %s"
 
 #: newtransactionctrl.py:204
 #, python-format
 msgid " and %s"
-msgstr ""
+msgstr " y %s"
 
 #: newtransactionctrl.py:206
 msgid "month"
 msgid_plural "months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "mes"
+msgstr[1] "meses"
 
 #: newtransactionctrl.py:209
 msgid "year"
 msgid_plural "years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "año"
+msgstr[1] "años"
 
 #: newtransactionctrl.py:210
 #, python-format
 msgid "Annually"
 msgid_plural "Every %(num)d years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Anualmente"
+msgstr[1] "Cada %(num)d años"
 
 #: newtransactionctrl.py:214
 #, python-format
 msgid "until %s"
-msgstr ""
+msgstr "hasta %s"
 
 #: newtransactionctrl.py:228
 msgid "Starts:"
-msgstr ""
+msgstr "Comienza:"
 
 #: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
 #: transactionolv.py:61
@@ -381,6 +381,8 @@ msgstr "¿Limpiar búsqueda?"
 msgid ""
 "This transaction is marked as a transfer. Please select the transfer account."
 msgstr ""
+"Esta transacción está marcada como una transferencia. Por favor, seleccione "
+"la cuenta a transferir."
 
 #: newtransactionctrl.py:414
 msgid ""
@@ -405,7 +407,7 @@ msgstr "Cuenta"
 
 #: summarytab.py:59
 msgid "From"
-msgstr ""
+msgstr "De"
 
 #: summarytab.py:64
 msgid "Sample Points"
@@ -446,14 +448,16 @@ msgid ""
 "wxBanker can synchronize account balances online if you have an account with "
 "mint.com"
 msgstr ""
+"wxBanker puede sincronizar balances de cuentas en línea si tiene una cuenta "
+"con mint.com"
 
 #: accountconfigdialog.py:37
 msgid "Username"
-msgstr ""
+msgstr "Nombre de usuario"
 
 #: accountconfigdialog.py:39
 msgid "Password"
-msgstr ""
+msgstr "Contraseña"
 
 #: templater.py:27
 msgid "Hide Calculator"
@@ -609,7 +613,7 @@ msgstr "Seleccione un archivo y puse \"Previsualizar\""
 
 #: currencies.py:194
 msgid "detected"
-msgstr ""
+msgstr "detectado"
 
 #: transactionolv.py:48
 msgid "No transactions entered."
@@ -688,7 +692,7 @@ msgstr "Lo siento, pero ya existe una cuenta con ese nombre."
 
 #: accountlistctrl.py:383 accountlistctrl.py:478
 msgid "Accout names cannot be blank."
-msgstr ""
+msgstr "Los nombres de cuentas no pueden ser vacíos."
 
 #: accountlistctrl.py:449
 #, python-format
