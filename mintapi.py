@@ -83,13 +83,23 @@ class MintDotCom:
             if transactions:
                 firstTransaction = sorted(transactions)[0]
                 initialDate = firstTransaction.Date
-            else:
-                initialDate = datetime.date.today()
 
-            balance = self.GetAccountBalance(mintId)
-            initialBalance = balance - account.Balance
-            account.AddTransaction(initialBalance, "Initial Balance", initialDate)
-
+                balance = self.GetAccountBalance(mintId)
+                initialBalance = balance - account.Balance
+                account.AddTransaction(initialBalance, "Initial Balance", initialDate)
+            
+            print "Imported account %s with %i transactions" % (accountName, len(transactions))
+            
+            
+def doImport():
+    import controller
+    bankController = controller.Controller()
+    
+    username = raw_input("Mint email: ")
+    passwd = getpass.getpass("Password: ")
+    
+    mint = MintDotCom(username, passwd)
+    mint.ImportAccounts(bankController.Model)
 
 def main():
     import pprint
@@ -107,4 +117,8 @@ def main():
         
     
 if __name__ == "__main__":
-    main()
+    import sys
+    if "--import" in sys.argv:
+        doImport()
+    else:
+        main()
