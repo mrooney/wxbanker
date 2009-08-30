@@ -27,6 +27,7 @@ class GUITests(testbase.TestCaseHandlingConfig):
         testbase.TestCaseHandlingConfig.setUp(self)
         self.App = wxbanker.init(":memory:", welcome=False)
         self.Frame = self.App.TopWindow
+        self.Model = self.Frame.Panel.bankController.Model
         
     def tearDown(self):
         self.App.Destroy()
@@ -64,9 +65,8 @@ class GUITests(testbase.TestCaseHandlingConfig):
         self.assertEquals(a.Balance, 12.34)
         
     def testCanCheckRecurringTransactions(self):
-        self.assertEqual(self.App.Controller, self.Frame.Panel.bankController)
-        model = self.App.Controller.Model
-        a = model.CreateAccount("A")
+        self.assertEqual(self.Frame.Panel.CheckRecurringTransactions(), 0)
+        a = self.Model.CreateAccount("A")
         rt = a.AddRecurringTransaction(1, "fun", testbase.today, 0)
         self.assertEqual(self.Frame.Panel.CheckRecurringTransactions(), 1)
 

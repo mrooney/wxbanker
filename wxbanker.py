@@ -85,7 +85,7 @@ class BankerPanel(wx.Panel):
                 
         # If there aren't any untransacted transactions, we are done.
         if not untransacted:
-            return
+            return 0
         
         # Generate an appropriate message.
         lines = []
