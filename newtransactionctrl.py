@@ -247,6 +247,11 @@ class NewTransactionCtrl(wx.Panel):
 
         self.recurringPanel = RecurringPanel(self)
         self.transferPanel = TransferPanel(self)
+        
+        # Checkboxes seem to have an overly large horizontal margin that looks bad.
+        for check in (self.transferCheck, self.recursCheck):
+            x, y = check.BestSize
+            check.SetMinSize((x, y-4))
 
         # Set up the layout.
         hSizer = wx.BoxSizer()
