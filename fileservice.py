@@ -39,7 +39,7 @@ def __getFilePath(filename, xdgListName):
         
         # Create the directory if it doesn't exist
         if not os.path.exists(pathdir):
-            os.mkdir(pathdir)
+            os.mkdirs(pathdir) # mkdirs = mkdir -p, since ~/.config might not exist.
         path = os.path.join(pathdir, filename)
         
     return path
