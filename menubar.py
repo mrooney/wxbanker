@@ -43,6 +43,8 @@ class BankMenuBar(wx.MenuBar):
         # File menu.
         fileMenu = wx.Menu()
         self.saveMenuItem = fileMenu.Append(wx.ID_SAVE)
+        importCsvMenu = fileMenu.Append(self.ID_IMPORT_CSV, _("Import from CSV"), _("Import transactions from a CSV file"))
+        fileMenu.AppendSeparator()
         self.autoSaveMenuItem = fileMenu.AppendCheckItem(self.ID_AUTOSAVE, _("Auto-save"), _("Automatically save changes"))
 
         # Settings menu.
@@ -64,13 +66,6 @@ class BankMenuBar(wx.MenuBar):
         currencyMenu.SetSubMenu(currencies)
 
         settingsMenu.AppendItem(currencyMenu)
-
-        # Tools menu.
-        toolsMenu = wx.Menu()
-
-        importCsvMenu = wx.MenuItem(toolsMenu, self.ID_IMPORT_CSV, _("CSV Import"), _("Import transactions from a CSV file"))
-        importCsvMenu.Bitmap = wx.ArtProvider.GetBitmap("wxART_table_lightning")
-        toolsMenu.AppendItem(importCsvMenu)
 
         # Help menu.
         helpMenu = wx.Menu()
@@ -108,7 +103,6 @@ class BankMenuBar(wx.MenuBar):
         # Add everything to the main menu.
         self.Append(fileMenu, _("&File"))
         self.Append(settingsMenu, _("&Settings"))
-        self.Append(toolsMenu, _("&Tools"))
         self.Append(helpMenu, _("&Help"))
 
         self.Bind(wx.EVT_MENU, self.onClickAbout)
