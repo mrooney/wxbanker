@@ -30,7 +30,13 @@ class GUITests(testbase.TestCaseHandlingConfig):
         self.Model = self.Frame.Panel.bankController.Model
         
     def tearDown(self):
-        self.App.Destroy()
+        #self.App.Controller.Close()
+        #self.Frame.Destroy()
+        #self.App.Destroy()
+        #del self.Model
+        #del self.Frame
+        #del self.App
+        pass
 
     def testAutoSaveSetAndSaveDisabled(self):
         self.assertTrue( self.Frame.MenuBar.autoSaveMenuItem.IsChecked() )
@@ -69,6 +75,46 @@ class GUITests(testbase.TestCaseHandlingConfig):
         a = self.Model.CreateAccount("A")
         rt = a.AddRecurringTransaction(1, "fun", testbase.today, 0)
         self.assertEqual(self.Frame.Panel.CheckRecurringTransactions(), 1)
+        
+    def testOLVTotals(self):
+        """Test the OLV total column works as expected."""
+        olv = self.Frame.Panel.managePanel.transactionPanel.transactionCtrl
+        
+        def totals():
+            totals = []
+            for i in range(len(olv.GetObjects())):
+                totals.append(olv.GetValueAt(olv.GetObjectAt(i), 3))
+            return totals
+        
+        self.assertEqual(len(olv.GetObjects()), 0)
+        
+        a = self.Model.CreateAccount("B")
+        
+        # Super basic test, one transaction.
+        t1 = a.AddTransaction(1)
+        self.assertEqual(totals(), [1])
+        
+        # Now add one at the end
+        t3 = a.AddTransaction(.5, date=testbase.tomorrow)
+        self.assertEqual(totals(), [1, 1.5])
+        
+        # Add one first.
+        t2 = a.AddTransaction(2, date=testbase.yesterday)
+        self.assertEqual(totals(), [2, 3, 3.5])
+        
+        # Remove one not at the end.
+        a.RemoveTransaction(t2)
+        self.assertEqual(t1, olv.GetObjectAt(0))
+        self.assertEqual(totals(), [1, 1.5])
+        
+        # Now change an existing amount.
+        t1.Amount = 1.75
+        self.assertEqual(totals(), [1.75, 2.25])
+        
+        # Now change an existing date which should cause a re-order.
+        t3.Date = testbase.yesterday
+        self.assertEqual(totals(), [1.5, 2.25])
+        
 
 if __name__ == "__main__":
     unittest.main()

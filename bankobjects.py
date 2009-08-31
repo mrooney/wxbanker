@@ -356,7 +356,6 @@ class Account(ORMObject):
                             self._Transactions[i] = oldT
                             break
 
-
         return self._Transactions
 
     def GetName(self):
@@ -475,13 +474,11 @@ class Account(ORMObject):
 
     def onTransactionAmountChanged(self, message):
         transaction, difference = message.data
-        if self._Transactions is not None:
-            if transaction in self.Transactions:
-                #assert transaction.Parent is self, (self.Name, transaction.Parent, transaction.Description, transaction.Amount)
-                debug.debug("Updating balance by %s because I am %s: %s" % (difference, self.Name, transaction))
-                self.Balance += difference
-            else:
-                debug.debug("Ignoring transaction because I am %s: %s" % (self.Name, transaction))
+        if transaction.Parent == self:
+            debug.debug("Updating balance by %s because I am %s: %s" % (difference, self.Name, transaction))
+            self.Balance += difference
+        else:
+            debug.debug("Ignoring transaction because I am %s: %s" % (self.Name, transaction))
 
     def float2str(self, *args, **kwargs):
         return self.Currency.float2str(*args, **kwargs)
@@ -615,6 +612,7 @@ class Transaction(ORMObject):
             difference = amount - self._Amount
 
         self._Amount = float(amount)
+        print self._Amount
 
         if not self.IsFrozen:
             debug.debug("Setting transaction amount: ", self)

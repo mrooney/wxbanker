@@ -40,8 +40,6 @@ are getting published when they should be.
 >>> model = controller.Model
 >>> model.Accounts
 []
->>> model.Balance == 0
-True
 
 # Now test that the appropriate exceptions are thrown.
 
@@ -72,8 +70,6 @@ True
 >>> len(a.Transactions)
 1
 >>> a.Balance
-100.27
->>> model.Balance
 100.27
 >>> t2 = a.AddTransaction(-10, "ATM Withdrawal", datetime.date(2007, 1, 6))
 >>> t2.Amount
@@ -115,12 +111,6 @@ True
 2
 >>> [x.Name for x in sorted(model.Accounts)]
 ['Another Account', 'My Renamed Account']
-
->>> t = a2.AddTransaction(-5000.01)
->>> a2.float2str(a2.Balance)
-u'-$5,000.01'
->>> model.float2str(model.Balance)
-u'-$5,111.01'
 
 #testTransfer
 >>> amount = 1.02
@@ -183,9 +173,6 @@ True
 
 #>>> model.Search(u'\xef\xbf\xa5') == [t1]
 #True
-"""
-"""
-#*ensure no commits on a store init if not upgrading
 """
 
 from persistentstore import PersistentStore

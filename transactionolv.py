@@ -77,6 +77,8 @@ class TransactionOLV(GroupListView):
             (self.onTransactionAdded, "transaction.created"),
             (self.onTransactionsRemoved, "transactions.removed"),
             (self.onCurrencyChanged, "currency_changed"),
+            (self.updateTotals, "ormobject.updated.Transaction.Amount"),
+            (self.updateTotals, "ormobject.updated.Transaction.Date"),
         )
 
         for callback, topic in self.Subscriptions:
@@ -89,10 +91,8 @@ class TransactionOLV(GroupListView):
         search and have a subset of transactions.
         """
         # Remove any previously cached totals, to fix search totals.
-        for obj in objs:
-            obj._Total = None
-
         GroupListView.SetObjects(self, objs, *args, **kwargs)
+        self.updateTotals()
 
         # Force a re-size here, in the case that the vscrollbar-needed state
         # changed by this set account, to size correctly.
@@ -108,26 +108,22 @@ class TransactionOLV(GroupListView):
         self.Thaw()
 
     def getTotal(self, transObj):
-        """
-        A somewhat hackish implementation, but an improvement!
-        """
-        i = self.GetIndexOf(transObj)
-        if i == 0:
-            total = transObj.Amount
-        else:
-            previousObj = self.GetObjectAt(i-1)
-
-            try:
-                previousTotal = previousObj._Total
-                if previousTotal is None:
-                    raise AttributeError
-            except AttributeError:
-                previousTotal = self.getTotal(previousObj)
-
-            total = previousTotal + transObj.Amount
-
-        transObj._Total = total
-        return total
+        if not hasattr(transObj, "_Total"):
+            self.updateTotals()
+        
+        return transObj._Total
+    
+    def updateTotals(self, message=None):
+        first = self.GetObjectAt(0)
+        if first is None:
+            return
+        
+        first._Total = first.Amount
+        
+        b = first
+        for i in range(1, len(self.GetObjects())):
+            a, b = b, self.GetObjectAt(i)
+            b._Total = a._Total + b.Amount
 
     def renderFloat(self, floatVal):
         return self.CurrentAccount.float2str(floatVal)
@@ -252,11 +248,13 @@ class TransactionOLV(GroupListView):
         if account is self.CurrentAccount:
             # Remove the item from the list.
             self.RemoveObjects(transactions)
-
+            self.updateTotals()
+            
     def onTransactionAdded(self, message):
         account, transaction = message.data
         if account is self.CurrentAccount:
             self.AddObject(transaction)
+            self.updateTotals()
             #TODO: Perhaps get the actual position and scroll to that, it may not be last.
             self.ensureVisible(-1)
 

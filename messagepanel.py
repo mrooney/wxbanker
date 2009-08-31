@@ -26,11 +26,11 @@ class MessagePanel(wx.Panel):
         self.Panel = panel = wx.Panel(self)
         self.LinesPanel = wx.Panel(self)
         self.LinesPanel.Sizer = wx.BoxSizer(wx.VERTICAL)
-        panel.BackgroundColour = (0, 200, 100)
+        self.Panel.BackgroundColour = self.LinesPanel.BackgroundColour = (0, 200, 100)
         
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
-        self.Sizer.Add(panel, 1, wx.EXPAND|wx.ALL, 1)
-        self.Sizer.Add(self.LinesPanel, 0, wx.EXPAND)
+        self.Sizer.Add(panel, 1, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, 1)
+        self.Sizer.Add(self.LinesPanel, 0, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.BOTTOM, 1)
         self.LinesPanel.Hide()
     
         self.Panel.Sizer = psizer = wx.BoxSizer()
@@ -56,7 +56,7 @@ class MessagePanel(wx.Panel):
     def SizeMessage(self):
         """Make sure the message text gets clipped appropriately."""
         # Figure out how wide it should be.
-        availableSize = self.Parent.Size[0]
+        availableSize = self.Parent.Size[0] - 5 # Allow a bit of pading.
         buttons = list(self.Panel.Sizer.Children)[2:]
         for button in buttons:
             availableSize -= button.Size[0]

@@ -224,6 +224,43 @@ class ModelTests(testbase.TestCaseWithController):
         t.Description = "new"
         self.assertEqual(t.Description, "new")
         
+    def testBalanceIsUpdatedOnTransactionAdded(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        self.assertEqual(a.Balance, 0)
+        a.AddTransaction(1)
+        self.assertEqual(a.Balance, 1)
+        
+    def testBalanceIsUpdatedOnTransactionRemoved(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        self.assertEqual(a.Balance, 0)
+        t = a.AddTransaction(1)
+        self.assertEqual(a.Balance, 1)
+        a.RemoveTransaction(t)
+        self.assertEqual(a.Balance, 0)
+        
+    def testBalanceIsUpdatedOnTransactionAmountModified(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        self.assertEqual(a.Balance, 0)
+        t = a.AddTransaction(1)
+        self.assertEqual(a.Balance, 1)
+        t.Amount = 2
+        self.assertEqual(a.Balance, 2)
+        
+    def testModelBalance(self):
+        model = self.Controller.Model
+        self.assertEqual(model.Balance, 0)
+        
+        a = model.CreateAccount("A")
+        a.AddTransaction(1)
+        self.assertEqual(model.Balance, 1)
+        
+        b = model.CreateAccount("B")
+        b.AddTransaction(2)
+        self.assertEqual(model.Balance, 3)
+        
         
 if __name__ == "__main__":
     unittest.main()
