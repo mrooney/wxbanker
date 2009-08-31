@@ -35,7 +35,7 @@ tomorrow = today + datetime.timedelta(days=1)
 one = datetime.timedelta(1)
 
 # Import wxbanker here so wx gets initialized first, so wxversion calls work properly.
-import wxbanker, controller, unittest
+import wxbanker, controller, unittest, fileservice
 from wx.lib.pubsub import Publisher
 
 def filehere(*paths):
@@ -50,7 +50,7 @@ class TestCaseHandlingConfig(unittest.TestCase):
     Handle not stomping over the config file.
     """
     def setUp(self):
-        self.ConfigPath = os.path.expanduser("~/.wxBanker")
+        self.ConfigPath = fileservice.getConfigFilePath(controller.Controller.CONFIG_NAME)
         self.ConfigPathBackup = self.ConfigPath + ".backup"
         if os.path.exists(self.ConfigPath):
             os.rename(self.ConfigPath, self.ConfigPathBackup)
