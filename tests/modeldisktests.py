@@ -260,6 +260,17 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         model2 = model1.Store.GetModel(useCached=False)
         self.assertEqual(model2.GetRecurringTransactions()[0].Source, b)
         self.assertEqual(model1, model2)
+        
+    def testTransactionParentIsRestored(self):
+        model1 = self.Controller.Model
+        a = model1.CreateAccount("A")
+        t = a.AddTransaction(1)
+        self.assertEqual(t.Parent, a)
+        
+        model2 = model1.Store.GetModel(useCached=False)
+        t2 = model2.GetTransactions()[0]
+        self.assertEqual(t2.Parent, a)
+
     
 if __name__ == "__main__":
     unittest.main()

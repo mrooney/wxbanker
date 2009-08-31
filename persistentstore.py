@@ -336,28 +336,28 @@ class PersistentStore:
         self.dbconn.cursor().execute('DELETE FROM transactions WHERE accountId=?', (account.ID,))
         self.commitIfAppropriate()
 
-    def result2transaction(self, result, linkedTransaction=None):
+    def result2transaction(self, result, parentObj, linkedTransaction=None):
         tid, pid, amount, description, date, linkId = result
-        t = bankobjects.Transaction(tid, pid, amount, description, date)
+        t = bankobjects.Transaction(tid, parentObj, amount, description, date)
 
         # Handle linked transactions.
         if linkedTransaction:
             t.LinkedTransaction = linkedTransaction
         elif linkId:
-            t.LinkedTransaction = self.getTransactionById(linkId, linked=t)
+            t.LinkedTransaction = self.getTransactionById(linkId, parentObj, linked=t)
 
         return t
 
     def getTransactionsFrom(self, account):
         transactions = bankobjects.TransactionList()
         for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (account.ID,)).fetchall():
-            t = self.result2transaction(result)
+            t = self.result2transaction(result, account)
             transactions.append(t)
         return transactions
 
-    def getTransactionById(self, id, linked=None):
-        result = self.dbconn.cursor().execute('SELECT * FROM transactions WHERE id=? LIMIT 1', (id,)).fetchone()
-        transaction = self.result2transaction(result, linkedTransaction=linked)
+    def getTransactionById(self, tId, parentObj, linked=None):
+        result = self.dbconn.cursor().execute('SELECT * FROM transactions WHERE id=? LIMIT 1', (tId,)).fetchone()
+        transaction = self.result2transaction(result, parentObj, linkedTransaction=linked)
         return transaction
 
     def renameAccount(self, oldName, account):

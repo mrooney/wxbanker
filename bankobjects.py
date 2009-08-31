@@ -612,7 +612,6 @@ class Transaction(ORMObject):
             difference = amount - self._Amount
 
         self._Amount = float(amount)
-        print self._Amount
 
         if not self.IsFrozen:
             debug.debug("Setting transaction amount: ", self)
