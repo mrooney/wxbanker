@@ -78,7 +78,8 @@ class TransactionOLV(GroupListView):
             (self.onTransactionsRemoved, "transactions.removed"),
             (self.onCurrencyChanged, "currency_changed"),
             (self.updateTotals, "ormobject.updated.Transaction.Amount"),
-            (self.updateTotals, "ormobject.updated.Transaction.Date"),
+            # Date changing needs to be a CallAfter so the sorting event in the OLV can occur first.
+            (lambda m: wx.CallAfter(self.updateTotals), "ormobject.updated.Transaction.Date"),
         )
 
         for callback, topic in self.Subscriptions:
