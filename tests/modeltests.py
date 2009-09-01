@@ -261,6 +261,19 @@ class ModelTests(testbase.TestCaseWithController):
         b.AddTransaction(2)
         self.assertEqual(model.Balance, 3)
         
+    def testRemovingTransactionsReturnsSources(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        b = model.CreateAccount("B")
+
+        t = a.AddTransaction(1)
+        result = a.RemoveTransaction(t)
+        self.assertEqual(result, [None])
+        
+        ta, tb = a.AddTransaction(1, source=b)
+        result = a.RemoveTransaction(ta)
+        self.assertEqual(result, [b], result[0].Name)
+        
     def testCanMoveTransfer(self):
         model = self.Controller.Model
         a = model.CreateAccount("A")
@@ -282,6 +295,7 @@ class ModelTests(testbase.TestCaseWithController):
         btrans = b.Transactions[0]
         ctrans = c.Transactions[0]
         self.assertEqual(btrans.LinkedTransaction, ctrans)
+        self.assertEqual(ctrans.LinkedTransaction, btrans)
         self.assertEqual(btrans.Description, "Transfer to C")
         self.assertEqual(ctrans.Description, "Transfer from B")
         

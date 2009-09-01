@@ -368,10 +368,14 @@ class Account(ORMObject):
     def Remove(self):
         self.Parent.Remove(self.Name)
 
-    def AddTransactions(self, transactions):
+    def AddTransactions(self, transactions, sources=None):
         Publisher.sendMessage("batch.start")
-        for t in transactions:
-            self.AddTransaction(transaction=t)
+        # If we don't have any sources, we want None for each transaction.
+        if sources is None:
+            sources = [None for i in range(len(transactions))]
+            
+        for t, source in zip(transactions, sources):
+            self.AddTransaction(transaction=t, source=source)
         Publisher.sendMessage("batch.end")
         
     def AddRecurringTransaction(self, amount, description, date, repeatType, repeatEvery=1, repeatOn=None, endDate=None, source=None):
@@ -392,6 +396,7 @@ class Account(ORMObject):
         transaction in the source account first.
         """
         Publisher.sendMessage("batch.start")
+        
         if transaction:
             # It is "partial" because its ID and parent aren't necessarily correct.
             partialTrans = transaction
@@ -401,13 +406,14 @@ class Account(ORMObject):
             if source:
                 if description:
                     description = " (%s)" % description
-                otherTrans = source.AddTransaction(-amount, _("Transfer to %s"%self.Name) + description, date)
-                description = _("Transfer from %s"%source.Name) + description
-
+                description = _("Transfer from %s")%source.Name + description
             partialTrans = Transaction(None, self, amount, description, date)
         else:
             raise Exception("AddTransaction: Must provide either transaction arguments or a transaction object.")
-
+        
+        if source:
+            otherTrans = source.AddTransaction(-1 * partialTrans.Amount, _("Transfer to %s")%self.Name, partialTrans.Date)
+            
         transaction = self.Store.MakeTransaction(self, partialTrans)
 
         # If it was a transfer, link them together
@@ -434,10 +440,13 @@ class Account(ORMObject):
             return transaction
 
     def RemoveTransaction(self, transaction):
-        self.RemoveTransactions([transaction])
+        return self.RemoveTransactions([transaction])
 
     def RemoveTransactions(self, transactions):
         Publisher.sendMessage("batch.start")
+        # Return the sources, if any, of the removed transactions, in case we are moving for example.
+        sources = []
+        
         # Accumulate the difference and update the balance just once. Cuts 33% time of removals.
         difference = 0
         # Send the message for all transactions at once, cuts _97%_ of time! OLV is slow here I guess.
@@ -449,9 +458,12 @@ class Account(ORMObject):
             # If this transaction was a transfer, delete the other transaction as well.
             if transaction.LinkedTransaction:
                 link = transaction.LinkedTransaction
+                sources.append(link.Parent)
                 # Kill the other transaction's link to this one, otherwise this is quite recursive.
                 link.LinkedTransaction = None
                 link.Remove()
+            else:
+                sources.append(None)
 
             # Now remove this transaction.
             self.Store.RemoveTransaction(transaction)
@@ -462,14 +474,15 @@ class Account(ORMObject):
         # Update the balance.
         self.Balance -= difference
         Publisher.sendMessage("batch.end")
+        return sources
 
     def MoveTransaction(self, transaction, destAccount):
         self.MoveTransactions([transaction], destAccount)
 
     def MoveTransactions(self, transactions, destAccount):
         Publisher.sendMessage("batch.start")
-        self.RemoveTransactions(transactions)
-        destAccount.AddTransactions(transactions)
+        sources = self.RemoveTransactions(transactions)
+        destAccount.AddTransactions(transactions, sources)
         Publisher.sendMessage("batch.end")
 
     def onTransactionAmountChanged(self, message):
