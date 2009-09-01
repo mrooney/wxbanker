@@ -261,6 +261,30 @@ class ModelTests(testbase.TestCaseWithController):
         b.AddTransaction(2)
         self.assertEqual(model.Balance, 3)
         
+    def testCanMoveTransfer(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        b = model.CreateAccount("B")
+        
+        atrans, btrans = a.AddTransaction(1, source=b)
+        self.assertEqual(len(model.GetTransactions()), 2)
+        self.assertEqual(model.Balance, 0)
+        self.assertEqual(atrans.Description, "Transfer from B")
+        self.assertEqual(btrans.Description, "Transfer to A")
+        
+        c = model.CreateAccount("C")
+        a.MoveTransaction(atrans, c)
+        
+        self.assertEqual(a.Transactions, [])
+        self.assertEqual(len(b.Transactions), 1)
+        self.assertEqual(len(c.Transactions), 1)
+        
+        btrans = b.Transactions[0]
+        ctrans = c.Transactions[0]
+        self.assertEqual(btrans.LinkedTransaction, ctrans)
+        self.assertEqual(btrans.Description, "Transfer to C")
+        self.assertEqual(ctrans.Description, "Transfer from B")
+        
         
 if __name__ == "__main__":
     unittest.main()
