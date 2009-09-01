@@ -155,6 +155,22 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         model1 = self.Controller.Model
 
         model2 = model1.Store.GetModel(useCached=False)
+        
+        a2, b2 = model2.Accounts
+        self.assertEqual(a2.Name, "A")
+        self.assertEqual(b2.Name, "B")
+        bt = b2.Transactions[0]
+        self.assertEqual(bt.Parent, b)
+        self.assertEqual(bt.Parent, b2)
+        link = bt.LinkedTransaction
+        self.assertEqual(link.Parent, a)
+        self.assertEqual(link.Parent, a2)
+        self.assertTrue(bt in b2.Transactions)
+        self.assertTrue(b2.Transactions[0] is bt)
+        self.assertTrue(link in a2.Transactions)
+        # This one is particularly important.
+        self.assertTrue(a2.Transactions[0] is link)
+            
         self.assertTrue(model1 == model2)
         
     def testRecurringTransactionIsStored(self):
