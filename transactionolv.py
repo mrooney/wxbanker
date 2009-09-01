@@ -21,7 +21,6 @@
 A refactor of TransactionGrid, using ObjectListView.
 
 TODO (for feature parity):
-- done? totals automatically updates for transaction changes above them
 - disable sorting on Total column
 - flickerless repositioning when changing date
 - flickerless RefreshObjects
@@ -67,7 +66,7 @@ class TransactionOLV(GroupListView):
         # By default, sort by the date column, ascending.
         self.SORT_COL = self.COL_DATE
         self.SortBy(self.SORT_COL)
-
+        
         self.Bind(wx.EVT_RIGHT_DOWN, self.onRightDown)
 
         self.Subscriptions = (
@@ -78,8 +77,7 @@ class TransactionOLV(GroupListView):
             (self.onTransactionsRemoved, "transactions.removed"),
             (self.onCurrencyChanged, "currency_changed"),
             (self.updateTotals, "ormobject.updated.Transaction.Amount"),
-            # Date changing needs to be a CallAfter so the sorting event in the OLV can occur first.
-            (lambda m: wx.CallAfter(self.updateTotals), "ormobject.updated.Transaction.Date"),
+            (self.onTransactionDateUpdated, "ormobject.updated.Transaction.Date"),
         )
 
         for callback, topic in self.Subscriptions:
@@ -98,6 +96,12 @@ class TransactionOLV(GroupListView):
         # Force a re-size here, in the case that the vscrollbar-needed state
         # changed by this set account, to size correctly.
         wx.CallLater(50, self._ResizeSpaceFillingColumns)
+        
+    def onTransactionDateUpdated(self, message):
+        transaction = message.data
+        self.RefreshObject(transaction)
+        self.SortBy(self.SORT_COL)
+        self.updateTotals()
 
     def getDateOf(self, transaction):
         return str(transaction.Date)

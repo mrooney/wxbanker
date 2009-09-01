@@ -113,7 +113,7 @@ class GUITests(testbase.TestCaseHandlingConfig):
         
         # Now change an existing date which should cause a re-order.
         t3.Date = testbase.yesterday
-        self.assertEqual(totals(), [1.5, 2.25])
+        self.assertEqual(totals(), [0.5, 2.25])
         
 
 if __name__ == "__main__":
