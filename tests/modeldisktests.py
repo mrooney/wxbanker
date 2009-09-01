@@ -168,10 +168,6 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         self.assertTrue(bt in b2.Transactions)
         self.assertTrue(b2.Transactions[0] is bt)
         self.assertTrue(link in a2.Transactions)
-        # This one is particularly important.
-        self.assertTrue(a2.Transactions[0] is link)
-            
-        self.assertTrue(model1 == model2)
         
     def testRecurringTransactionIsStored(self):
         model1 = self.Controller.Model
@@ -286,6 +282,33 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         model2 = model1.Store.GetModel(useCached=False)
         t2 = model2.GetTransactions()[0]
         self.assertEqual(t2.Parent, a)
+        
+    def testLinkedTransferObjectIsInParent(self):
+        a, b, atrans, btrans = self.createLinkedTransfers()
+        # First make sure the state of these is as expected before we load fresh.
+        link = atrans.LinkedTransaction
+        self.assertTrue(link is btrans)
+        
+        self.assertEqual(a._Transactions, None)
+        self.assertEqual(b._Transactions, None)
+        
+        bts = b.Transactions
+        self.assertEqual(len(bts), 1)
+        self.assertTrue(btrans is bts[0])
+        self.assertTrue(bts[0] is link)
+        
+        # Now load from disk and see how we are doing.
+        model2 = self.Model.Store.GetModel(useCached=False)
+        a, b = model2.Accounts
+        self.assertEqual((a.Name, b.Name), ("A", "B"))
+        
+        self.assertEqual(a._Transactions, None)
+        self.assertEqual(b._Transactions, None)
+        
+        link = a.Transactions[0].LinkedTransaction
+        self.assertTrue(link in b.Transactions)
+        # Here is the real trick. These instances should be the same or it isn't QUITE the real link.
+        self.assertTrue(link is b.Transactions[0])
 
     
 if __name__ == "__main__":

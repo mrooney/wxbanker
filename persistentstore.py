@@ -344,8 +344,12 @@ class PersistentStore:
         if linkedTransaction:
             t.LinkedTransaction = linkedTransaction
         elif linkId:
-            transaction = self.getTransactionById(linkId, parentObj, linked=t)
-            t.LinkedTransaction = transaction
+            link, linkAccount = self.getTransactionAndParentById(linkId, parentObj, linked=t)
+            # If the link parent hasn't loaded its transactions yet, put this in its pre list so this
+            # object is used if and when they are loaded.
+            if linkAccount._Transactions is None:
+                linkAccount._preTransactions.append(link)
+            t.LinkedTransaction = link
 
         return t
 
@@ -356,7 +360,7 @@ class PersistentStore:
             transactions.append(t)
         return transactions
 
-    def getTransactionById(self, tId, parentObj, linked=None):
+    def getTransactionAndParentById(self, tId, parentObj, linked=None):
         result = self.dbconn.cursor().execute('SELECT * FROM transactions WHERE id=? LIMIT 1', (tId,)).fetchone()
         
         # Before we can create the LinkedTransaction, we need to find its parent.
@@ -369,7 +373,7 @@ class PersistentStore:
             raise Exception("Unable to find parent of LinkedTransaction")
         
         transaction = self.result2transaction(result, linkedParent, linkedTransaction=linked)
-        return transaction
+        return transaction, linkedParent
 
     def renameAccount(self, oldName, account):
         self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (account.Name, oldName))
