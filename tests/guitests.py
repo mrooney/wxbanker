@@ -30,13 +30,8 @@ class GUITests(testbase.TestCaseHandlingConfig):
         self.Model = self.Frame.Panel.bankController.Model
         
     def tearDown(self):
-        #self.App.Controller.Close()
-        #self.Frame.Destroy()
-        #self.App.Destroy()
-        #del self.Model
-        #del self.Frame
-        #del self.App
-        pass
+        for account in self.Model.Accounts[:]:
+            self.Model.RemoveAccount(account.Name)
 
     def testAutoSaveSetAndSaveDisabled(self):
         self.assertTrue( self.Frame.MenuBar.autoSaveMenuItem.IsChecked() )
@@ -46,7 +41,7 @@ class GUITests(testbase.TestCaseHandlingConfig):
         self.assertTrue( hasattr(self.App, "Controller") )
 
     def testCanAddAndRemoveUnicodeAccount(self):
-        self.App.Controller.Model.CreateAccount(u"Lópezहिंदी")
+        self.Model.CreateAccount(u"Lópezहिंदी")
         # Make sure the account ctrl has the first (0th) selection.
         managePanel = self.Frame.Panel.managePanel
         self.assertEqual(0, managePanel.accountCtrl.currentIndex)
@@ -57,9 +52,8 @@ class GUITests(testbase.TestCaseHandlingConfig):
         self.assertEqual(None, managePanel.accountCtrl.currentIndex)
 
     def testCanAddTransaction(self):
-        model = self.App.Controller.Model
-        tctrl = self.Frame.Panel.managePanel.transactionPanel.newTransCtrl
-        a = model.CreateAccount("testCanAddTransaction")
+        tctrl = wx.FindWindowByName("NewTransactionCtrl")
+        a = self.Model.CreateAccount("testCanAddTransaction")
 
         self.assertEquals(len(a.Transactions), 0)
         self.assertEquals(a.Balance, 0)
@@ -69,6 +63,35 @@ class GUITests(testbase.TestCaseHandlingConfig):
 
         self.assertEquals(len(a.Transactions), 1)
         self.assertEquals(a.Balance, 12.34)
+        
+    def testCanAddRecurringTransaction(self):
+        model = self.Model
+        tctrl = wx.FindWindowByName("NewTransactionCtrl")
+        a = model.CreateAccount("testCanAddRecurringTransaction")
+
+        self.assertEquals(len(a.Transactions), 0)
+        self.assertEquals(a.Balance, 0)
+
+        tctrl.amountCtrl.Value = "12.34"
+        tctrl.recursCheck.Value = True
+        
+        # Test the default of this field, and that it doesn't end.
+        summaryText = wx.FindWindowByName("RecurringSummaryText")
+        self.assertTrue(summaryText.Label.startswith("Weekly on "))
+        self.assertFalse("until" in summaryText.Label)
+        
+        # Now set an end date and make sure that gets displayed.
+        rb = wx.FindWindowByName("EndsSometimeRadio")
+        rb.Value = True
+        # Setting the value programmatically doesn't trigger an event, so do so.
+        rb.Parent.Update()
+        self.assertTrue("until" in summaryText.Label)
+        
+        tctrl.onNewTransaction()
+
+        self.assertEquals(len(a.Transactions), 0)
+        self.assertEquals(a.Balance, 0)
+        self.assertEquals(len(a.RecurringTransactions), 1)
         
     def testCanCheckRecurringTransactions(self):
         self.assertEqual(self.Frame.Panel.CheckRecurringTransactions(), 0)

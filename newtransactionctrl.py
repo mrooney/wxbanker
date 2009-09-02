@@ -31,7 +31,7 @@ class RecurringSummaryText(wx.Panel):
         self.Sizer = wx.BoxSizer()
         self.Sizer.Add(self.contentPanel, 1, wx.EXPAND|wx.ALL, 1)
 
-        self.summaryText = wx.StaticText(self.contentPanel)
+        self.summaryText = wx.StaticText(self.contentPanel, name="RecurringSummaryText")
         self.contentPanel.Sizer = wx.BoxSizer()
         self.contentPanel.Sizer.Add(self.summaryText, 0, wx.ALIGN_CENTER|wx.ALL, 2)
 
@@ -84,7 +84,7 @@ class TransferPanel(wx.Panel):
 
 class RecurringPanel(wx.Panel):
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent)
+        wx.Panel.__init__(self, parent, name="RecurringPanel")
 
         # The daily option is useful if you have something which happens every 30 days, for example.
         # Some billing cycles work this way, and the date slowly shifts down monthly.
@@ -98,7 +98,7 @@ class RecurringPanel(wx.Panel):
         self.repeatsOnText = wx.StaticText(self)
         self.endDateCtrl = bankcontrols.DateCtrlFactory(self)
         self.endsNeverRadio = wx.RadioButton(self, label=_("Never"), style=wx.RB_GROUP)
-        self.endsSometimeRadio = wx.RadioButton(self, label=("On:"))
+        self.endsSometimeRadio = wx.RadioButton(self, label=("On:"), name="EndsSometimeRadio")
 
         # Make 'Never' the default.
         self.endsNeverRadio.SetValue(True)
@@ -221,7 +221,7 @@ class RecurringPanel(wx.Panel):
 
 class NewTransactionCtrl(wx.Panel):
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent)
+        wx.Panel.__init__(self, parent, name="NewTransactionCtrl")
         self.CurrentAccount = None
 
         self.dateCtrl = dateCtrl = bankcontrols.DateCtrlFactory(self)
