@@ -211,7 +211,7 @@ class RecurringPanel(wx.Panel):
 
         # If the recurring ends at some point, add that information to the summary text.
         if end:
-            summary += " " + _("until %s") % end.FormatISODate()
+            summary += " " + _("until %s") % helpers.pydate2wxdate(end).FormatISODate()
 
         self.everyText.Label = everyText
         self.summaryCtrl.SetLabel(summary)
