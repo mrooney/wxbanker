@@ -716,9 +716,13 @@ class RecurringTransaction(Transaction, ORMObject):
             start = self.Date
             
         if future:
-            end = today + datetime.timedelta(days=1000)
+            # Don't return dates past the end date!
+            end = min(self.EndDate, today + datetime.timedelta(days=1000))
+        elif self.EndDate:
+            # If not requesting future dates, stop at today.
+            end = min(self.EndDate, today)
         else:
-            end = self.EndDate or today
+            end = today
         
         # Create some mapping lists.
         rruleDays = [rrule.MO, rrule.TU, rrule.WE, rrule.TH, rrule.FR, rrule.SA, rrule.SU]

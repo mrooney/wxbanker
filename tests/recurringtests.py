@@ -22,7 +22,7 @@ import testbase
 import unittest, datetime
 
 import bankobjects
-from testbase import today, yesterday, one
+from testbase import today, yesterday, tomorrow, one
 
 class RecurringTest(testbase.TestCaseWithController):
     def createAccount(self):
@@ -116,7 +116,7 @@ class RecurringTest(testbase.TestCaseWithController):
         rt = account.AddRecurringTransaction(1, "test", start, bankobjects.RECURRING_MONTLY, repeatEvery=3, endDate=datetime.date(2009, 12, 31))
         
         dates = rt.GetUntransactedDates()
-        self.assertEqual(dates, [start, datetime.date(2009, 4, 1), datetime.date(2009, 7, 1), datetime.date(2009, 10, 1)])
+        self.assertEqual(dates, [start, datetime.date(2009, 4, 1), datetime.date(2009, 7, 1)])
 
     def testRecurringDateYearly(self):
         model, account = self.createAccount()
@@ -186,6 +186,18 @@ class RecurringTest(testbase.TestCaseWithController):
         self.assertEqual(len(account.Transactions), 1)
         rt.PerformTransactions()
         self.assertEqual(len(account.Transactions), 1)
+        
+    def testUntransactedEndsTodayAtLatest(self):
+        model, account = self.createAccount()
+        rt = account.AddRecurringTransaction(1, "test", yesterday, bankobjects.RECURRING_DAILY, endDate=tomorrow)
+        dates = rt.GetUntransactedDates()
+        self.assertEqual(dates, [yesterday, today])
+        
+    def testGettingUntransactedInFuture(self):
+        model, account = self.createAccount()
+        rt = account.AddRecurringTransaction(1, "test", yesterday, bankobjects.RECURRING_DAILY, endDate=tomorrow)
+        dates = rt.GetUntransactedDates(future=True)
+        self.assertEqual(dates, [yesterday, today, tomorrow])
 
 if __name__ == "__main__":
     unittest.main()
