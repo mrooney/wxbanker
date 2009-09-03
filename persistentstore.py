@@ -297,7 +297,7 @@ class PersistentStore:
         a transaction into this model's specific one.
         """
         dateStr = "%s/%s/%s"%(transObj.Date.year, str(transObj.Date.month).zfill(2), str(transObj.Date.day).zfill(2))
-        return [transObj.ID, transObj.Amount, transObj.Description, dateStr, transObj.GetLinkedTransactionID()]
+        return [transObj.ID, transObj.Amount, transObj._Description, dateStr, transObj.GetLinkedTransactionID()]
 
     def result2account(self, result):
         ID, name, currency, balance = result

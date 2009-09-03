@@ -299,6 +299,45 @@ class ModelTests(testbase.TestCaseWithController):
         self.assertEqual(btrans.Description, "Transfer to C")
         self.assertEqual(ctrans.Description, "Transfer from B")
         
+    def testTransferDescriptionWithoutDescription(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        b = model.CreateAccount("B")
+        
+        at, bt = a.AddTransaction(1, source=b)
+        self.assertEqual(at._Description, "")
+        self.assertEqual(bt._Description, "")
+        self.assertEqual(at.Description, "Transfer from B")
+        self.assertEqual(bt.Description, "Transfer to A")
+        
+    def testTransferDescriptionWithDescription(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        b = model.CreateAccount("B")
+        
+        at, bt = a.AddTransaction(1, description="hello world", source=b)
+        self.assertEqual(at._Description, "hello world")
+        self.assertEqual(bt._Description, "hello world")
+        self.assertEqual(at.Description, "Transfer from B (hello world)")
+        self.assertEqual(bt.Description, "Transfer to A (hello world)")
+        
+    def testTransferMoveDescriptionWithDescription(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        b = model.CreateAccount("B")
+        c = model.CreateAccount("C")
+        
+        at, bt = a.AddTransaction(1, description="hello world", source=b)
+        a.MoveTransaction(at, c)
+        
+        bt, ct = b.Transactions[0], c.Transactions[0]
+        
+        self.assertEqual(ct._Description, "hello world")
+        self.assertEqual(bt._Description, "hello world")
+        self.assertEqual(ct.Description, "Transfer from B (hello world)")
+        self.assertEqual(bt.Description, "Transfer to C (hello world)")
         
 if __name__ == "__main__":
     unittest.main()
+
+    

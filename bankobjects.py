@@ -403,16 +403,12 @@ class Account(ORMObject):
             partialTrans.Parent = self
         elif amount is not None:
             # No transaction object was given, we need to make one.
-            if source:
-                if description:
-                    description = " (%s)" % description
-                description = _("Transfer from %s")%source.Name + description
             partialTrans = Transaction(None, self, amount, description, date)
         else:
             raise Exception("AddTransaction: Must provide either transaction arguments or a transaction object.")
         
         if source:
-            otherTrans = source.AddTransaction(-1 * partialTrans.Amount, _("Transfer to %s")%self.Name, partialTrans.Date)
+            otherTrans = source.AddTransaction(-1 * partialTrans.Amount, partialTrans._Description, partialTrans.Date)
             
         transaction = self.Store.MakeTransaction(self, partialTrans)
 
@@ -610,7 +606,20 @@ class Transaction(ORMObject):
         return datetime.date(year, m, d)
 
     def GetDescription(self):
-        return self._Description
+        description = self._Description
+        if self.LinkedTransaction:
+            parentName = self.LinkedTransaction.Parent.Name
+            if self.Amount > 0:
+                transferString = _("Transfer from %s") % parentName
+            else:
+                transferString = _("Transfer to %s") % parentName
+                
+            if description:
+                description = transferString + " (%s)"%description
+            else:
+                description = transferString
+            
+        return description
 
     def SetDescription(self, description):
         """Update the description, ensuring it is a string."""
