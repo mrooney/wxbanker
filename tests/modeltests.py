@@ -337,6 +337,28 @@ class ModelTests(testbase.TestCaseWithController):
         self.assertEqual(ct.Description, "Transfer from B (hello world)")
         self.assertEqual(bt.Description, "Transfer to C (hello world)")
         
+    def testUnicodeTransactionDescription(self):
+        unicodeString = u'￥'
+        unicodeString2 = u'￥2'
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        
+        t = a.AddTransaction(1, description=unicodeString)
+        self.assertEqual(t.Description, unicodeString)
+        
+        t.Description = unicodeString2
+        self.assertEqual(t.Description, unicodeString2)
+        
+    def testUnicodeSearch(self):
+        unicodeString = u'￥'
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        
+        self.assertEqual(model.Search(unicodeString), [])
+        t = a.AddTransaction(1, description=unicodeString)
+        self.assertEqual(model.Search(unicodeString), [t])
+
+        
 if __name__ == "__main__":
     unittest.main()
 

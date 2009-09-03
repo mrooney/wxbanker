@@ -166,13 +166,6 @@ True
 Traceback (most recent call last):
   ...
 InvalidTransactionException: Transaction does not exist in account 'My Renamed Account'
-
->>> t1.Description = u'\xef\xbf\xa5'
->>> t1.Description == u'\xef\xbf\xa5'
-True
-
-#>>> model.Search(u'\xef\xbf\xa5') == [t1]
-#True
 """
 
 from persistentstore import PersistentStore
