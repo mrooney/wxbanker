@@ -2014,9 +2014,9 @@ class ObjectListView(wx.ListCtrl):
         # If the event handler hasn't already configured the editor, do it now.
         if evt.shouldConfigureEditor:
             self.cellEditor.SetFocus()
-            if subItemIndex == 2:
-                # Custom wxBanker hack so editing Amounts doesn't show a long float.
-                evt.cellValue = "%.2f" % evt.cellValue
+            colDef = self.columns[subItemIndex]
+            if colDef.editFormatter:
+                evt.cellValue = colDef.editFormatter(modelObject)
             self.cellEditor.SetValue(evt.cellValue)
             self._ConfigureCellEditor(self.cellEditor, evt.cellBounds, rowIndex, subItemIndex)
 
@@ -3500,7 +3500,7 @@ class ColumnDefn(object):
                  checkStateGetter=None, checkStateSetter=None,
                  isSearchable=True, useBinarySearch=None, headerImage=-1,
                  groupKeyGetter=None, groupKeyConverter=None, useInitialLetterForGroupKey=False,
-                 groupTitleSingleItem=None, groupTitlePluralItems=None):
+                 groupTitleSingleItem=None, groupTitlePluralItems=None, editFormatter=None):
         """
         Create a new ColumnDefn using the given attributes.
 
@@ -3524,6 +3524,7 @@ class ColumnDefn(object):
         self.valueGetter = valueGetter
         self.imageGetter = imageGetter
         self.stringConverter = stringConverter
+        self.editFormatter = editFormatter
         self.valueSetter = valueSetter
         self.isSpaceFilling = isSpaceFilling
         self.cellEditorCreator = cellEditorCreator
