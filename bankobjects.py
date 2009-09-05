@@ -539,7 +539,7 @@ class Transaction(ORMObject):
     typically causing the model to make the change.
     """
     ORM_TABLE = "transactions"
-    ORM_ATTRIBUTES = ["Date", "Description", "Amount", "LinkedTransaction"]
+    ORM_ATTRIBUTES = ["Date", "_Description", "Amount", "LinkedTransaction"]
     
     def __init__(self, tID, parent, amount, description, date):
         ORMObject.__init__(self)

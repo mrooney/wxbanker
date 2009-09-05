@@ -420,8 +420,8 @@ class PersistentStore:
         table = ormobj.ORM_TABLE
         
         # Figure out the name of the column
-        ##attrname = attrname.strip("_")
-        colname = attrname[0].lower() + attrname[1:]
+        colname = attrname.strip("_")
+        colname = colname[0].lower() + colname[1:]
         colname = {"repeatOn": "repeatsOn", "source": "sourceId", "linkedTransaction": "linkId"}.get(colname, colname)
         
         query = "UPDATE %s SET %s=? WHERE id=?" % (table, colname)

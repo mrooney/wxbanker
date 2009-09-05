@@ -309,6 +309,26 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         self.assertTrue(link in b.Transactions)
         # Here is the real trick. These instances should be the same or it isn't QUITE the real link.
         self.assertTrue(link is b.Transactions[0])
+        
+    def testTransferDescriptionSetsCorrectly(self):
+        a, b, atrans, btrans = self.createLinkedTransfers()
+        
+        self.assertEqual(atrans.Description, "Transfer from B (test)")
+        self.assertEqual(atrans._Description, "test")
+        
+        atrans.Description = "cats"
+        
+        self.assertEqual(atrans.Description, "Transfer from B (cats)")
+        self.assertEqual(atrans._Description, "cats")
+        
+        model2 = self.Model.Store.GetModel(useCached=False)
+        a, b = model2.Accounts
+        self.assertEqual((a.Name, b.Name), ("A", "B"))
+
+        atrans2 = a.Transactions[0]
+        self.assertEqual(atrans2.Description, "Transfer from B (cats)")
+        self.assertEqual(atrans2._Description, "cats")
+
 
     
 if __name__ == "__main__":
