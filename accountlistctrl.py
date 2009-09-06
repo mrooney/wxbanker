@@ -380,7 +380,7 @@ class AccountListCtrl(wx.Panel):
         except bankexceptions.AccountAlreadyExistsException:
             wx.TipWindow(self, _("Sorry, an account by that name already exists."))#, maxLength=200)
         except bankexceptions.BlankAccountNameException:
-            wx.TipWindow(self, _("Accout names cannot be blank."))
+            wx.TipWindow(self, _("Account names cannot be blank."))
 
     def onAccountAdded(self, message):
         """
@@ -475,7 +475,7 @@ class AccountListCtrl(wx.Panel):
         except bankexceptions.AccountAlreadyExistsException:
             wx.TipWindow(self, _("Sorry, an account by that name already exists."))#, maxLength=200)
         except bankexceptions.BlankAccountNameException:
-            wx.TipWindow(self, _("Accout names cannot be blank."))
+            wx.TipWindow(self, _("Account names cannot be blank."))
 
     def onAccountRenamed(self, message):
         """

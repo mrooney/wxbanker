@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-09-05 19:03-0700\n"
+"POT-Creation-Date: 2009-09-06 12:20-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -667,7 +667,7 @@ msgid "Sorry, an account by that name already exists."
 msgstr ""
 
 #: accountlistctrl.py:383 accountlistctrl.py:478
-msgid "Accout names cannot be blank."
+msgid "Account names cannot be blank."
 msgstr ""
 
 #: accountlistctrl.py:449

@@ -33,7 +33,7 @@ def gentemplate(name="wxbanker.pot"):
     """Generate a .pot template with the given name."""
     translatableFiles = [f for f in os.listdir(".") if f.endswith(".py")]
     command = "xgettext %s" % " ".join(translatableFiles) + " --output=po/%s"%name
-    print commands.getstatusoutput(command)
+    return commands.getstatusoutput(command)
 
 def export2import(tarOrExtracted):
     """Launchpad does not support importing exported po files without some massage."""
@@ -86,7 +86,11 @@ def export2import(tarOrExtracted):
 
 if __name__ == "__main__":
     import sys
-    if sys.argv[1] == "-lp":
+    if len(sys.argv) > 1 and sys.argv[1] =="-lp":
         export2import(sys.argv[2])
     else:
-        gentemplate()
+        result = gentemplate()
+        if result == (0, ''):
+            print "SUCCESS!"
+        else:
+            print "FAILURE:\n", result
