@@ -22,6 +22,18 @@ from smoothsizer import SmoothStaticBoxSizer
 import localization
 
 
+def fixMinWidth(ctrl, values):
+    # Calculate the width of the button.
+    ctrl.Freeze()
+    minWidth, minHeight = ctrl.MinSize
+    for value in values:
+        ctrl.Label = value
+        cWidth = ctrl.BestSize[0]
+        minWidth = max((minWidth, cWidth))
+    ctrl.MinSize = minWidth, minHeight
+    ctrl.Thaw()
+
+
 def DateCtrlFactory(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY):
     # The date control. We want the Generic control, which is a composite control
     # and allows us to bind to its enter, but on Windows with wxPython < 2.8.8.0,
@@ -101,18 +113,8 @@ class MultiStateButton(wx.Button):
 
     def SetLabelDict(self, ldict):
         self._LabelDict = ldict
-
-        # Calculate the width of the button.
-        self.Freeze()
-        minWidth, minHeight = self.MinSize
-        for modifier in ldict.values():
-            self.Label = self.BaseLabel % modifier
-            cWidth = self.BestSize[0]
-            minWidth = max((minWidth, cWidth))
-        self.MinSize = minWidth, minHeight
-        # Restore the original State (and Label)
+        fixMinWidth(self, [self.BaseLabel % v for v in ldict.values()])
         self.State = self._State
-        self.Thaw()
 
     def GetState(self):
         return self._State

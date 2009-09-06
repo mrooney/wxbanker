@@ -96,6 +96,7 @@ class RecurringPanel(wx.Panel):
         self.everySpin = wx.SpinCtrl(self, min=1, max=130, initial=1)
         self.everySpin.MinSize = (50, -1)
         self.repeatsOnText = wx.StaticText(self)
+        bankcontrols.fixMinWidth(self.everyText, (_(x) for x in ("days", "weeks", "months", "years")))
         self.endDateCtrl = bankcontrols.DateCtrlFactory(self)
         self.endsNeverRadio = wx.RadioButton(self, label=_("Never"), style=wx.RB_GROUP)
         self.endsSometimeRadio = wx.RadioButton(self, label=("On:"), name="EndsSometimeRadio")
