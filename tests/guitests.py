@@ -25,7 +25,9 @@ from wx.lib.pubsub import Publisher
 class GUITests(testbase.TestCaseHandlingConfig):
     def setUp(self):
         testbase.TestCaseHandlingConfig.setUp(self)
-        self.App = wxbanker.init(":memory:", welcome=False)
+        if not hasattr(wx, "appInst"):
+            wx.appInst = wxbanker.init(":memory:", welcome=False)
+        self.App = wx.appInst
         self.Frame = self.App.TopWindow
         self.Model = self.Frame.Panel.bankController.Model
         
