@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-08-01 11:37-0700\n"
+"POT-Creation-Date: 2009-09-05 19:03-0700\n"
 "PO-Revision-Date: 2009-08-04 11:42+0000\n"
 "Last-Translator: Jorgnir <jorgnir@gmail.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -15,22 +15,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-09-05 09:43+0000\n"
+"X-Launchpad-Export-Date: 2009-09-06 09:38+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: menubar.py:84
+#: menubar.py:79
 msgid "Ask a &Question"
 msgstr "Ställ en &fråga"
 
-#: newtransactionctrl.py:347
+#: newtransactionctrl.py:352
 msgid "No amount entered in the 'Amount' field."
 msgstr "Inget belopp ifyllt i \"Belopp\"-fältet."
 
-#: newtransactionctrl.py:353
+#: newtransactionctrl.py:358
 msgid "Invalid Transaction Amount"
 msgstr "Ogiltigt transaktionsbelopp"
 
-#: newtransactionctrl.py:367
+#: newtransactionctrl.py:369
 msgid "Please select an account and then try again."
 msgstr "Vänligen välj ett konto och försök igen."
 
@@ -62,109 +62,105 @@ msgstr ""
 msgid "Show"
 msgstr "Visa"
 
-#: bankobjects.py:343
-#, python-format
-msgid "Transfer to %s"
-msgstr "Överför till %s"
-
-#: bankobjects.py:344
+#: bankobjects.py:613
 #, python-format
 msgid "Transfer from %s"
 msgstr "Överför från %s"
 
-#: menubar.py:46
-msgid "Auto-save"
-msgstr "Automatisk sparning"
+#: bankobjects.py:615
+#, python-format
+msgid "Transfer to %s"
+msgstr "Överför till %s"
 
 #: menubar.py:46
-msgid "Automatically save changes"
-msgstr "Spara ändringar automatiskt"
+msgid "Import from CSV"
+msgstr ""
 
-#: menubar.py:52
-msgid "&Currency"
-msgstr "&Valuta"
-
-#: menubar.py:52
-msgid "Select currency to display"
-msgstr "Välj valuta som ska visas"
-
-#: menubar.py:61
-msgid "Request a Currency"
-msgstr "Begär en ny valuta"
-
-#: menubar.py:71
-msgid "CSV Import"
-msgstr "CSV-importering"
-
-#: menubar.py:71
+#: menubar.py:46
 msgid "Import transactions from a CSV file"
 msgstr "Importera transaktioner från en CSV-fil"
 
-#: menubar.py:79
+#: menubar.py:48
+msgid "Auto-save"
+msgstr "Automatisk sparning"
+
+#: menubar.py:48
+msgid "Automatically save changes"
+msgstr "Spara ändringar automatiskt"
+
+#: menubar.py:54
+msgid "&Currency"
+msgstr "&Valuta"
+
+#: menubar.py:54
+msgid "Select currency to display"
+msgstr "Välj valuta som ska visas"
+
+#: menubar.py:63
+msgid "Request a Currency"
+msgstr "Begär en ny valuta"
+
+#: menubar.py:74
 msgid "View &FAQs"
 msgstr "Visa &FAQ"
 
-#: menubar.py:79
+#: menubar.py:74
 msgid "View Frequently Asked Questions online"
 msgstr "Visa Vanliga frågor online"
 
-#: menubar.py:84
+#: menubar.py:79
 msgid "Ask a question online"
 msgstr "Fråga en fråga online"
 
-#: menubar.py:89
+#: menubar.py:84
 msgid "&Report a Bug"
 msgstr "&Rapportera en bugg"
 
-#: menubar.py:89
+#: menubar.py:84
 msgid "Report a bug to the developer online"
 msgstr "Rapportera en bugg till utvecklaren online"
 
-#: menubar.py:94
+#: menubar.py:89
 msgid "Request a Fea&ture"
 msgstr "Begär en egenskap"
 
-#: menubar.py:94
+#: menubar.py:89
 msgid "Request a new feature to be implemented"
 msgstr "Begär en ny funktion som ska implementeras"
 
-#: menubar.py:99
+#: menubar.py:94
 msgid "Tran&slate wxBanker"
 msgstr "Över&sätt wxBanker"
 
-#: menubar.py:99
+#: menubar.py:94
 msgid "Translate wxBanker to another language"
 msgstr "Översätt wxBanker till ett annat språk"
 
-#: menubar.py:106
+#: menubar.py:101
 msgid "&About"
 msgstr "&Om"
 
-#: menubar.py:106
+#: menubar.py:101
 msgid "More information about wxBanker"
 msgstr "Mer information om wxBanker"
 
-#: menubar.py:109
+#: menubar.py:104
 msgid "&File"
 msgstr "&Arkiv"
 
-#: menubar.py:110
+#: menubar.py:105
 msgid "&Settings"
 msgstr "In&ställningar"
 
-#: menubar.py:111
-msgid "&Tools"
-msgstr "&Verktyg"
-
-#: menubar.py:112
+#: menubar.py:106
 msgid "&Help"
 msgstr "&Hjälp"
 
-#: menubar.py:180
+#: menubar.py:174
 msgid "Copyright"
 msgstr "Copyright"
 
-#: menubar.py:181
+#: menubar.py:175
 msgid "A lightweight personal finance management application."
 msgstr "Ett lättviktigt program för hantering av personliga finanser."
 
@@ -172,11 +168,11 @@ msgstr "Ett lättviktigt program för hantering av personliga finanser."
 msgid "from"
 msgstr "från"
 
-#: newtransactionctrl.py:47 summarytab.py:61
+#: newtransactionctrl.py:47 summarytab.py:57
 msgid "to"
 msgstr "till"
 
-#: newtransactionctrl.py:51 newtransactionctrl.py:239
+#: newtransactionctrl.py:51 newtransactionctrl.py:240
 msgid "Transfer"
 msgstr "Överföring"
 
@@ -184,8 +180,8 @@ msgstr "Överföring"
 msgid "account:"
 msgstr "konto:"
 
-#: newtransactionctrl.py:91 newtransactionctrl.py:185
-#: newtransactionctrl.py:195
+#: newtransactionctrl.py:91 newtransactionctrl.py:186
+#: newtransactionctrl.py:196
 #, python-format
 msgid "Daily"
 msgid_plural "Every %(num)d days"
@@ -196,7 +192,7 @@ msgstr[1] "Var %(num)d dag"
 msgid "Weekly"
 msgstr "Veckovis"
 
-#: newtransactionctrl.py:91 newtransactionctrl.py:207
+#: newtransactionctrl.py:91 newtransactionctrl.py:208
 #, python-format
 msgid "Monthly"
 msgid_plural "Every %(num)d months"
@@ -207,159 +203,159 @@ msgstr[1] "Var %(num)d månad"
 msgid "Yearly"
 msgstr "Årligen"
 
-#: newtransactionctrl.py:100
+#: newtransactionctrl.py:101
 msgid "Never"
 msgstr "Aldrig"
 
-#: newtransactionctrl.py:110
+#: newtransactionctrl.py:111
 msgid "Mon"
 msgstr "Mån"
 
-#: newtransactionctrl.py:110
+#: newtransactionctrl.py:111
 msgid "Tue"
 msgstr "Tis"
 
-#: newtransactionctrl.py:110
+#: newtransactionctrl.py:111
 msgid "Wed"
 msgstr "Ons"
 
-#: newtransactionctrl.py:110
+#: newtransactionctrl.py:111
 msgid "Thu"
 msgstr "Tor"
 
-#: newtransactionctrl.py:110
+#: newtransactionctrl.py:111
 msgid "Fri"
 msgstr "Fre"
 
-#: newtransactionctrl.py:110
+#: newtransactionctrl.py:111
 msgid "Sat"
 msgstr "Lör"
 
-#: newtransactionctrl.py:110
+#: newtransactionctrl.py:111
 msgid "Sun"
 msgstr "Sön"
 
-#: newtransactionctrl.py:131
+#: newtransactionctrl.py:132
 msgid "Repeats:"
 msgstr "Återkommer:"
 
-#: newtransactionctrl.py:134
+#: newtransactionctrl.py:135
 msgid "Every"
 msgstr "Var"
 
-#: newtransactionctrl.py:140
+#: newtransactionctrl.py:141
 msgid "Ends:"
 msgstr "Slutar:"
 
-#: newtransactionctrl.py:184
+#: newtransactionctrl.py:185
 msgid "day"
 msgid_plural "days"
 msgstr[0] "dag"
 msgstr[1] "dagar"
 
-#: newtransactionctrl.py:187
+#: newtransactionctrl.py:188
 msgid "week"
 msgid_plural "weeks"
 msgstr[0] "vecka"
 msgstr[1] "veckor"
 
-#: newtransactionctrl.py:188
+#: newtransactionctrl.py:189
 msgid "Repeats on days:"
 msgstr "Återkommer på dagarna:"
 
-#: newtransactionctrl.py:191
+#: newtransactionctrl.py:192
 msgid "Weekly on weekdays"
 msgstr "Veckovis på vardagar"
 
-#: newtransactionctrl.py:193
+#: newtransactionctrl.py:194
 msgid "Weekly on weekends"
 msgstr "Veckovis på helger"
 
-#: newtransactionctrl.py:197
+#: newtransactionctrl.py:198
 msgid "Mondays"
 msgstr "Måndagar"
 
-#: newtransactionctrl.py:197
+#: newtransactionctrl.py:198
 msgid "Tuesdays"
 msgstr "Tisdagar"
 
-#: newtransactionctrl.py:197
+#: newtransactionctrl.py:198
 msgid "Wednesdays"
 msgstr "Onsdagar"
 
-#: newtransactionctrl.py:197
+#: newtransactionctrl.py:198
 msgid "Thursdays"
 msgstr "Torsdagar"
 
-#: newtransactionctrl.py:197
+#: newtransactionctrl.py:198
 msgid "Fridays"
 msgstr "Fredagar"
 
-#: newtransactionctrl.py:197
+#: newtransactionctrl.py:198
 msgid "Saturdays"
 msgstr "Lördagar"
 
-#: newtransactionctrl.py:197
+#: newtransactionctrl.py:198
 msgid "Sundays"
 msgstr "Söndagar"
 
-#: newtransactionctrl.py:202 newtransactionctrl.py:204
+#: newtransactionctrl.py:203 newtransactionctrl.py:205
 #, python-format
 msgid "Weekly on %s"
 msgstr "Veckovis på %s"
 
-#: newtransactionctrl.py:204
+#: newtransactionctrl.py:205
 #, python-format
 msgid " and %s"
 msgstr " och %s"
 
-#: newtransactionctrl.py:206
+#: newtransactionctrl.py:207
 msgid "month"
 msgid_plural "months"
 msgstr[0] "månad"
 msgstr[1] "månader"
 
-#: newtransactionctrl.py:209
+#: newtransactionctrl.py:210
 msgid "year"
 msgid_plural "years"
 msgstr[0] "år"
 msgstr[1] "år"
 
-#: newtransactionctrl.py:210
+#: newtransactionctrl.py:211
 #, python-format
 msgid "Annually"
 msgid_plural "Every %(num)d years"
 msgstr[0] "Årligen"
 msgstr[1] "Vart %(num)d år"
 
-#: newtransactionctrl.py:214
+#: newtransactionctrl.py:215
 #, python-format
 msgid "until %s"
 msgstr "till och med %s"
 
-#: newtransactionctrl.py:228
+#: newtransactionctrl.py:229
 msgid "Starts:"
 msgstr "Börjar:"
 
-#: newtransactionctrl.py:231 searchctrl.py:40 csvimportframe.py:110
-#: transactionolv.py:61
+#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:110
+#: transactionolv.py:60
 msgid "Description"
 msgstr "Beskrivning"
 
-#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:104
-#: transactionolv.py:62
+#: newtransactionctrl.py:233 searchctrl.py:40 csvimportframe.py:104
+#: transactionolv.py:61
 msgid "Amount"
 msgstr "Belopp"
 
-#: newtransactionctrl.py:236
+#: newtransactionctrl.py:237
 msgid "Enter this transaction"
 msgstr "Fyll i transaktionen"
 
-#: newtransactionctrl.py:242
+#: newtransactionctrl.py:243
 msgid "Recurring"
 msgstr "Återkommande"
 
-#: newtransactionctrl.py:291
+#: newtransactionctrl.py:296
 msgid ""
 "Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
 "to fix this."
@@ -367,35 +363,29 @@ msgstr ""
 "Varning: Oförmögen att binda till DateCtrl's ENTER. Uppgradera till wxPython "
 ">= 2.8.8.1 för att ordna detta."
 
-#: newtransactionctrl.py:349
+#: newtransactionctrl.py:354
 #, python-format
 msgid "'%s' is not a valid amount."
 msgstr "'%s' är inget giltigt belopp."
 
-#: newtransactionctrl.py:352
+#: newtransactionctrl.py:357
 msgid "Please enter a number such as 12.34 or -20."
 msgstr "Vänligen fyll i ett nummer som t.ex. 12.34 eller -20."
 
-#: newtransactionctrl.py:368 newtransactionctrl.py:399
+#: newtransactionctrl.py:370 newtransactionctrl.py:399
 msgid "No account selected"
 msgstr "Inget konto valt"
 
-#: newtransactionctrl.py:383
-msgid "transfer"
-msgstr "överför"
-
-#: newtransactionctrl.py:383
-msgid "transaction"
-msgstr "transaktion"
+#: newtransactionctrl.py:385
+msgid "A search is currently active."
+msgstr ""
 
 #: newtransactionctrl.py:385
 #, python-format
 msgid ""
-"A search is currently active. Would you like to clear the current search and "
-"make this %s in \"%s\"?"
+"Would you like to clear the current search and make this transaction in "
+"\"%s\"?"
 msgstr ""
-"En sökning är aktiv för tillfället. Vill du rensa den nuvarande sökningen "
-"och skriva %s i \"%s\"?"
 
 #: newtransactionctrl.py:386
 msgid "Clear search?"
@@ -408,7 +398,7 @@ msgstr ""
 "Den här transaktionen är markerad som en överföring. Var vänlig välj "
 "överföringskontot."
 
-#: newtransactionctrl.py:414
+#: newtransactionctrl.py:416
 msgid ""
 "If this box is checked when adding a transaction, you will be prompted for "
 "the account to use as the source of the transfer."
@@ -416,7 +406,7 @@ msgstr ""
 "Om denna ruta är i kryssad när du lägger till en transaktion, kommer du "
 "behöva ange kontot som ska vara ursprungs kontot för överföringen."
 
-#: newtransactionctrl.py:415
+#: newtransactionctrl.py:417
 msgid ""
 "For example, checking this box and entering a transaction of $50 into this "
 "account will also subtract $50 from the account that you choose as the "
@@ -425,40 +415,40 @@ msgstr ""
 "t.ex. kryssa i rutan och skriv in en transaktion på $50 på det här kontot "
 "kommer också att dra ifrån $50 från kontot som du valde som ursprungs konto."
 
-#: summarytab.py:56
+#: messagepanel.py:45
+msgid "Dismiss"
+msgstr ""
+
+#: summarytab.py:49
 msgid "Account"
 msgstr "Konto"
 
-#: summarytab.py:59
+#: summarytab.py:53
 msgid "From"
 msgstr "Från"
 
 #: summarytab.py:64
-msgid "Sample Points"
-msgstr "Sampelspunkter"
-
-#: summarytab.py:67
 msgid "Fit Curve Degree"
 msgstr "Anpassa Bågens Grad"
 
-#: summarytab.py:113
+#: summarytab.py:123
 msgid "All accounts"
 msgstr "Alla konton"
 
-#: summarytab.py:177 summarytab.py:183
+#: summarytab.py:184 summarytab.py:190
 msgid "Balance"
 msgstr "Balans"
 
-#: summarytab.py:181
+#: summarytab.py:188
 msgid "Trend"
 msgstr "Trend"
 
-#: summarytab.py:183
+#: summarytab.py:190
 msgid "Total Balance Over Time"
 msgstr "Total balans över tid"
 
-#: summarytab.py:183 bankcontrols.py:37 searchctrl.py:40 csvimportframe.py:96
-#: transactionolv.py:60
+#: summarytab.py:190 bankcontrols.py:49 searchctrl.py:40 csvimportframe.py:96
+#: transactionolv.py:59
 msgid "Date"
 msgstr "Datum"
 
@@ -573,7 +563,7 @@ msgstr "Kolumnavskiljare"
 msgid "File to import"
 msgstr "Fil att importera"
 
-#: csvimportframe.py:149 csvimportframe.py:151
+#: csvimportframe.py:149 csvimportframe.py:151 wxbanker.py:113
 msgid "Preview"
 msgstr "Förhandsgranskning"
 
@@ -616,47 +606,47 @@ msgstr "Skriv över profil ?"
 msgid "Select file and click \"Preview\""
 msgstr "Välj fil och klicka \"Förhandsvisa\""
 
-#: currencies.py:194
+#: currencies.py:192
 msgid "detected"
 msgstr "upptäckt"
 
-#: transactionolv.py:48
+#: transactionolv.py:47
 msgid "No transactions entered."
 msgstr "Inga transaktioner angivan."
 
-#: transactionolv.py:63 accountlistctrl.py:87
+#: transactionolv.py:62 accountlistctrl.py:87
 msgid "Total"
 msgstr "Totalt"
 
-#: transactionolv.py:179
+#: transactionolv.py:186
 #, python-format
 msgid "Send %s to calculator"
 msgstr "Skicka %s till miniräknare"
 
-#: transactionolv.py:180
+#: transactionolv.py:187
 #, python-format
 msgid "Add %s to calculator"
 msgstr "Addera %s i miniräknare"
 
-#: transactionolv.py:181
+#: transactionolv.py:188
 #, python-format
 msgid "Subtract %s from calculator"
 msgstr "Subtrahera %s i miniräknare"
 
-#: transactionolv.py:193
+#: transactionolv.py:200
 msgid "Remove this transaction"
 msgstr "Ta bort den här transaktionen"
 
-#: transactionolv.py:194
+#: transactionolv.py:201
 msgid "Move this transaction to account"
 msgstr "Flytta denna transaktion till konto"
 
-#: transactionolv.py:196
+#: transactionolv.py:203
 #, python-format
 msgid "Remove these %i transactions"
 msgstr "Ta bort följande %i transaktioner"
 
-#: transactionolv.py:197
+#: transactionolv.py:204
 #, python-format
 msgid "Move these %i transactions to account"
 msgstr "Flytta dessa %i transaktioner till konto"
@@ -712,19 +702,50 @@ msgstr ""
 msgid "Warning"
 msgstr "Varning"
 
-#: wxbanker.py:62
+#: wxbanker.py:58
 msgid "Transactions"
 msgstr "Transaktioner"
 
-#: wxbanker.py:66
+#: wxbanker.py:62
 msgid "Summary"
 msgstr "Summering"
 
-#: wxbanker.py:115
+#: wxbanker.py:94
+#, python-format
+msgid ""
+"The recurring transaction \"%(description)s\" has %(num)i transactions ready "
+"for %(amount)s on %(datelist)s."
+msgstr ""
+
+#: wxbanker.py:99
+#, python-format
+msgid ""
+"%(num)i recurring transactions have a total of %(totalnum)i transactions "
+"ready."
+msgstr ""
+
+#: wxbanker.py:103
+msgid "No description"
+msgstr ""
+
+#: wxbanker.py:122
+msgid "Perform"
+msgstr ""
+
+#: wxbanker.py:138
+msgid "Recurring transaction successfully added."
+msgstr ""
+
+#: wxbanker.py:141
+#, python-format
+msgid "The first transaction will occur on %(date)s"
+msgstr ""
+
+#: wxbanker.py:203
 msgid "It looks like this is your first time using wxBanker!"
 msgstr "Det ser ut som om det här är första gången du använder wxBanker!"
 
-#: wxbanker.py:116
+#: wxbanker.py:204
 msgid ""
 "To get started, add an account using the account control in the top left "
 "corner."
@@ -732,7 +753,7 @@ msgstr ""
 "För att komma igång, lägg till ett konto via kontrollpanelen i översta "
 "vänstra hörnet."
 
-#: wxbanker.py:117
+#: wxbanker.py:205
 msgid ""
 "The buttons in the account control allow you to add, remove, and rename an "
 "account, respectively."
@@ -740,7 +761,7 @@ msgstr ""
 "Respektive knappar i kontrollpanelen låter dig lägga till, ta bort och byta "
 "namn på ditt konto"
 
-#: wxbanker.py:118
+#: wxbanker.py:206
 msgid ""
 "Once you have created an account you can add transactions to it (such as "
 "your initial balance) using the controls below the grid on the bottom right."
@@ -748,19 +769,19 @@ msgstr ""
 "När du väl skapat ett konto kan du lägga till transaktioner (t.ex. ett "
 "initialt värde) genom att använda kontrollerna nere till höger."
 
-#: wxbanker.py:119
+#: wxbanker.py:207
 msgid "Have fun!"
 msgstr "Ha det så kul!"
 
-#: wxbanker.py:121
+#: wxbanker.py:209
 msgid "Welcome!"
 msgstr "Välkommen!"
 
-#: wxbanker.py:129
+#: wxbanker.py:217
 msgid "Save changes?"
 msgstr "Spara ändringar?"
 
-#: wxbanker.py:130
+#: wxbanker.py:218
 msgid ""
 "You have made changes since the last save. Would you like to save before "
 "exiting?"
@@ -768,7 +789,7 @@ msgstr ""
 "Du har gjort ändringar sedan du sparade sist. Vill du spara innan du "
 "avslutar?"
 
-#: wxbanker.py:131
+#: wxbanker.py:219
 msgid ""
 "Note that enabling auto-save from the File menu will eliminate the need for "
 "manual saving."
@@ -776,8 +797,31 @@ msgstr ""
 "Notera att aktiveringen av automatisk sparning från Arkiv-meyn kommer att "
 "eliminera behovet av manuell sparning."
 
+#~ msgid "transfer"
+#~ msgstr "överför"
+
+#~ msgid "transaction"
+#~ msgstr "transaktion"
+
 #~ msgid "Which account will the money come from?"
 #~ msgstr "Vilket konto kommer pengarna komma från?"
 
 #~ msgid "Other accounts"
 #~ msgstr "Andra konton"
+
+#, python-format
+#~ msgid ""
+#~ "A search is currently active. Would you like to clear the current search and "
+#~ "make this %s in \"%s\"?"
+#~ msgstr ""
+#~ "En sökning är aktiv för tillfället. Vill du rensa den nuvarande sökningen "
+#~ "och skriva %s i \"%s\"?"
+
+#~ msgid "Sample Points"
+#~ msgstr "Sampelspunkter"
+
+#~ msgid "&Tools"
+#~ msgstr "&Verktyg"
+
+#~ msgid "CSV Import"
+#~ msgstr "CSV-importering"
