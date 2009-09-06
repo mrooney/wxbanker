@@ -660,6 +660,9 @@ class Transaction(ORMObject):
 
     def Remove(self):
         return self.Parent.RemoveTransaction(self)
+    
+    def RenderAmount(self):
+        return self.Parent.float2str(self.Amount)
 
     def __str__(self):
         return "%i/%i/%i: %s -- %.2f" % (self.Date.year, self.Date.month, self.Date.day, self.Description, self.Amount)

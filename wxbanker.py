@@ -92,14 +92,16 @@ class BankerPanel(wx.Panel):
         if len(untransacted) == 1:
             recurring, dates = untransacted[0]
             message = _('The recurring transaction "%(description)s" has %(num)i transactions ready for %(amount)s on %(datelist)s.')
-            amount = recurring.Parent.float2str(recurring.Amount)
+            amount = recurring.RenderAmount()
             datelist = ", ".join([str(d) for d in dates])
             message = message % {'description': recurring.Description, 'amount': amount, 'num': len(dates), 'datelist': datelist}
         else:
             message = _('%(num)i recurring transactions have a total of %(totalnum)i transactions ready.')
             message = message % {'num': len(untransacted), 'totalnum': totalTransactions}
             for recurring, dates in untransacted:
-                lines.append(str(recurring))
+                datelist = ", ".join([str(d) for d in recurring.GetUntransactedDates()])
+                description = recurring.Description or _("No description")
+                lines.append("%s - %s: %s"%(recurring.RenderAmount(), description, datelist))
             
             
         # Create the message panel.
