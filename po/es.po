@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-09-05 19:03-0700\n"
+"POT-Creation-Date: 2009-09-06 12:20-0700\n"
 "PO-Revision-Date: 2009-08-27 18:52+0000\n"
 "Last-Translator: DiegoJ <diegojromerolopez@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-09-06 09:38+0000\n"
+"X-Launchpad-Export-Date: 2009-09-07 09:46+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
@@ -681,8 +681,8 @@ msgid "Sorry, an account by that name already exists."
 msgstr "Lo siento, pero ya existe una cuenta con ese nombre."
 
 #: accountlistctrl.py:383 accountlistctrl.py:478
-msgid "Accout names cannot be blank."
-msgstr "Los nombres de cuentas no pueden ser vacíos."
+msgid "Account names cannot be blank."
+msgstr ""
 
 #: accountlistctrl.py:449
 #, python-format
