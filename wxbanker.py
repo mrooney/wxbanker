@@ -136,9 +136,8 @@ class BankerPanel(wx.Panel):
         # Otherwise, just inform the user it was added, and the first date.
         else:
             message = _("Recurring transaction successfully added.")
-            futureDates = recurring.GetUntransactedDates(future=True)
-            if futureDates:
-                message += _("The first transaction will occur on %(date)s") % {"date": futureDates[0]}
+            firstDate = recurring.GetNext()
+            message += _("The first transaction will occur on %(date)s") % {"date": firstDate[0]}
             mpanel = messagepanel.MessagePanel(self, message)
             self.AddMessagePanel(mpanel)
 

@@ -719,36 +719,58 @@ class RecurringTransaction(Transaction, ORMObject):
         
         self.LastTransacted = datetime.date.today()
         
-    def GetUntransactedDates(self, future=False):
+    def GetRRule(self):
+        """Generate the dateutils.rrule for this recurring transaction."""
+        # Create some mapping lists.
+        rruleDays = [rrule.MO, rrule.TU, rrule.WE, rrule.TH, rrule.FR, rrule.SA, rrule.SU]
+        rruleTypes = [rrule.DAILY, rrule.WEEKLY, rrule.MONTHLY, rrule.YEARLY]
+        
+        func = functools.partial(rrule.rrule, rruleTypes[self.RepeatType], dtstart=self.Date, interval=self.RepeatEvery, wkst=rrule.MO)
+        if self.RepeatType == RECURRING_WEEKLY:
+            result = func(byweekday=[rruleDays[i] for i, x in enumerate(self.RepeatOn) if x])
+        elif self.RepeatType == RECURRING_MONTLY:
+            # "a date on the specified day of the month, unless it is beyond the end of month, in which case it will be the last day of the month"
+            result = func(bymonthday=(self.Date.day, -1), bysetpos=1)
+        else:
+            result = func()
+            
+        return result
+    
+    def DateToDatetime(self, date):
+        """Convert a date to a datetime at the first microsecond of that day."""
+        return datetime.datetime(date.year, date.month, date.day)
+    
+    def GetUntransactedDates(self):
+        """Get all due transaction dates."""
+        result = self.GetRRule()
+        
         today = datetime.date.today()
+        
+        # Stop at the end date or today, whichever is earlier.
+        if self.EndDate:
+            end = min(self.EndDate, today)
+        else:
+            end = today
+        
         if self.LastTransacted:
             # Start on the day after the last transaction
             start = self.LastTransacted + datetime.timedelta(days=1)
         else:
             start = self.Date
             
-        if future:
-            # Don't return dates past the end date!
-            end = min(self.EndDate, today + datetime.timedelta(days=1000))
-        elif self.EndDate:
-            # If not requesting future dates, stop at today.
-            end = min(self.EndDate, today)
-        else:
-            end = today
-        
-        # Create some mapping lists.
-        rruleDays = [rrule.MO, rrule.TU, rrule.WE, rrule.TH, rrule.FR, rrule.SA, rrule.SU]
-        rruleTypes = [rrule.DAILY, rrule.WEEKLY, rrule.MONTHLY, rrule.YEARLY]
-        
-        func = functools.partial(rrule.rrule, rruleTypes[self.RepeatType], dtstart=start, interval=self.RepeatEvery, until=end, wkst=rrule.MO)
-        if self.RepeatType == RECURRING_WEEKLY:
-            result = func(byweekday=[rruleDays[i] for i, x in enumerate(self.RepeatOn) if x])
-        elif self.RepeatType == RECURRING_MONTLY:
-            result = func(bymonthday=(start.day, -1), bysetpos=1)
-        else:
-            result = func()
-            
+        # Convert dates to datetimes.
+        start, end = [self.DateToDatetime(d) for d in (start, end)]
+        # Calculate the result.
+        result = result.between(start, end, inc=True)
+        # Return just the dates, we don't care about datetime.
         return [dt.date() for dt in list(result)]
+    
+    def GetNext(self):
+        """Get the next transaction date that will occur."""
+        result = self.GetRRule()
+        after = self.LastTransacted or (self.Date - datetime.timedelta(days=1))
+        after = self.DateToDatetime(after)
+        return result.after(after, inc=False).date()
     
     def SetLastTransacted(self, date):
         if date is None:

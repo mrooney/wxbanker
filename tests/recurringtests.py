@@ -193,11 +193,31 @@ class RecurringTest(testbase.TestCaseWithController):
         dates = rt.GetUntransactedDates()
         self.assertEqual(dates, [yesterday, today])
         
+    def testStartCooperatesWithLastTransactedMonthly(self):
+        model, account = self.createAccount()
+        rt = account.AddRecurringTransaction(1, "test", datetime.date(2009, 1, 15), bankobjects.RECURRING_MONTLY, endDate=datetime.date(2009, 2, 28))
+        dates = rt.GetUntransactedDates()
+        self.assertEqual(len(dates), 2)
+        # Now let's say we performed it on 2/1, there shouldn't be a transaction for 2/2 because it thinks the start is LastTransacted + 1.
+        rt.LastTransacted = datetime.date(2009, 2, 1)
+        dates = rt.GetUntransactedDates()
+        self.assertEqual(dates, [datetime.date(2009, 2, 15)])
+        
+    def testStartCooperatesWithLastTransactedYearly(self):
+        model, account = self.createAccount()
+        rt = account.AddRecurringTransaction(1, "test", datetime.date(2008, 1, 15), bankobjects.RECURRING_YEARLY, endDate=datetime.date(2009, 2, 28))
+        dates = rt.GetUntransactedDates()
+        self.assertEqual(len(dates), 2)
+        # Now let's say we performed it on 2/1, there shouldn't be a transaction for 1/2 because it thinks the start is LastTransacted + 1.
+        rt.LastTransacted = datetime.date(2009, 1, 1)
+        dates = rt.GetUntransactedDates()
+        self.assertEqual(dates, [datetime.date(2009, 1, 15)])
+
     def testGettingUntransactedInFuture(self):
         model, account = self.createAccount()
-        rt = account.AddRecurringTransaction(1, "test", yesterday, bankobjects.RECURRING_DAILY, endDate=tomorrow)
-        dates = rt.GetUntransactedDates(future=True)
-        self.assertEqual(dates, [yesterday, today, tomorrow])
+        rt = account.AddRecurringTransaction(1, "test", tomorrow, bankobjects.RECURRING_DAILY, endDate=tomorrow)
+        self.assertEqual(rt.GetUntransactedDates(), [])
+        self.assertEqual(rt.GetNext(), tomorrow)
 
 if __name__ == "__main__":
     unittest.main()
