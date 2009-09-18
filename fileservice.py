@@ -36,6 +36,11 @@ def __getFilePath(filename, xdgListName):
         elif "HOME" in os.environ:
             # We don't have XDG but we are on Unix, perhaps OSX.
             pathdir = os.path.join(os.environ["HOME"], ".wxbanker")
+        elif "APPDATA" in os.environ:
+            # Windows!
+            pathdir = os.path.join(os.environ["APPDATA"], "wxbanker")
+        else:
+            raise Exception("Unable to find a home for user data!")
         
         # Create the directory if it doesn't exist
         if not os.path.exists(pathdir):
