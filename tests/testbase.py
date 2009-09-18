@@ -34,6 +34,12 @@ yesterday = today - datetime.timedelta(days=1)
 tomorrow = today + datetime.timedelta(days=1)
 one = datetime.timedelta(1)
 
+# The list of locales tested and assumed to be installed and available.
+if sys.platform == "win32":
+    LOCALES = ['English_United States.1252', 'Russian_Russia.1251', 'French_France.1252']
+else:
+    LOCALES = ['en_US.utf8', 'ru_RU.utf8', 'fr_FR.utf8']
+
 # Import wxbanker here so wx gets initialized first, so wxversion calls work properly.
 import wxbanker, controller, unittest, fileservice
 from wx.lib.pubsub import Publisher

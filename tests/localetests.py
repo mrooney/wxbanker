@@ -20,13 +20,7 @@
 
 
 import testbase, currencies
-import unittest, locale, sys
-
-# The list of locales tested and assumed to be installed and available.
-if sys.platform == "win32":
-    LOCALES = ['English_United States.1252', 'Russian_Russia.1251', 'French_France.1252']
-else:
-    LOCALES = ['en_US.utf8', 'ru_RU.utf8', 'fr_FR.utf8']
+import unittest, locale
 
 def assertLocale(loc):
     result = locale.setlocale(locale.LC_ALL, loc)
@@ -38,13 +32,13 @@ class LocaleTests(unittest.TestCase):
 
     def testDateParsing(self):
         #INCOMPLETE
-        assertLocale(LOCALES[0])
+        assertLocale(testbase.LOCALES[0])
 
     def testLocaleCurrencyRobustness(self):
         # Test locale.format() thousand separator workaround.
         # Also calculator bug LP: #375308
         # Depends on language-pack-(ru/fr)-base
-        for loc in LOCALES:
+        for loc in testbase.LOCALES:
             assertLocale(loc)
 
             # The test is that none of these calls throw an exception including the unicode conversion.
@@ -53,11 +47,11 @@ class LocaleTests(unittest.TestCase):
 
 # Automatically generate some tests for locales.
 localeDisplays = {}
-for loc in LOCALES:
+for loc in testbase.LOCALES:
     assertLocale(loc)
     localeDisplays[loc] = currencies.LocalizedCurrency().float2str(LocaleTests.TEST_AMOUNT)
 
-for loc in LOCALES:
+for loc in testbase.LOCALES:
     assertLocale(loc)
     localecurr = currencies.LocalizedCurrency()
     locales = [
@@ -66,7 +60,7 @@ for loc in LOCALES:
         currencies.EuroCurrency,
         ]
 
-    for i, desiredloc in enumerate(LOCALES):
+    for i, desiredloc in enumerate(testbase.LOCALES):
         desiredcurr = locales[i]()
         def test(self, localecurr=localecurr, desiredcurr=desiredcurr, desiredloc=desiredloc):
             self.assertEqual(localeDisplays[desiredloc], desiredcurr.float2str(LocaleTests.TEST_AMOUNT))

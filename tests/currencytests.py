@@ -45,7 +45,8 @@ class CurrencyTest(unittest.TestCase):
         self.assertEqual(usd.float2str(tinyNegative), u'$0.00')
 
     def testCurrencyLocalizes(self):
-        self.assertEqual(locale.setlocale(locale.LC_ALL, 'ru_RU.utf8'), 'ru_RU.utf8')
+        russianLocale = testbase.LOCALES[1]
+        self.assertEqual(locale.setlocale(locale.LC_ALL, russianLocale), russianLocale)
         self.assertEqual(currencies.LocalizedCurrency().float2str(1), u'1.00 руб')
         self.assertTrue(bool(locale.setlocale(locale.LC_ALL, '')))
 
@@ -54,8 +55,10 @@ class CurrencyTest(unittest.TestCase):
         # testing too much or not enough and need to alter the test.
         self.assertEqual(len(currencies.CurrencyList), 9)
 
+        americanLocale = testbase.LOCALES[0]
+        self.assertEqual(locale.setlocale(locale.LC_ALL, americanLocale), americanLocale)
+        
         testAmount = 1234.5
-        self.assertEqual(locale.setlocale(locale.LC_ALL, 'en_US.utf8'), 'en_US.utf8')
         self.assertEqual(currencies.LocalizedCurrency().float2str(testAmount), u'$1,234.50')
         self.assertEqual(currencies.UnitedStatesCurrency().float2str(testAmount), u'$1,234.50')
         self.assertEqual(currencies.EuroCurrency().float2str(testAmount), u'1 234,50 €')
