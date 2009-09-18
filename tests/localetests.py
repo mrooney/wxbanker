@@ -18,27 +18,33 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import testbase
-import unittest, locale, currencies
+
+import testbase, currencies
+import unittest, locale, sys
+
+# The list of locales tested and assumed to be installed and available.
+if sys.platform == "win32":
+    LOCALES = ['English_United States.1252', 'Russian_Russia.1251', 'French_France.1252']
+else:
+    LOCALES = ['en_US.utf8', 'ru_RU.utf8', 'fr_FR.utf8']
 
 def assertLocale(loc):
-    assert locale.setlocale(locale.LC_ALL, loc) == loc
+    result = locale.setlocale(locale.LC_ALL, loc)
+    assert result == loc, (loc, result)
     reload(currencies)
 
 class LocaleTests(unittest.TestCase):
-    # The list of locales tested and assumed to be installed and available.
-    LOCALES = ['en_US.utf8', 'ru_RU.utf8', 'fr_FR.utf8']
     TEST_AMOUNT = 1234.5
 
     def testDateParsing(self):
         #INCOMPLETE
-        assertLocale('en_US.utf8')
+        assertLocale(LOCALES[0])
 
     def testLocaleCurrencyRobustness(self):
         # Test locale.format() thousand separator workaround.
         # Also calculator bug LP: #375308
         # Depends on language-pack-(ru/fr)-base
-        for loc in self.LOCALES:
+        for loc in LOCALES:
             assertLocale(loc)
 
             # The test is that none of these calls throw an exception including the unicode conversion.
@@ -47,21 +53,21 @@ class LocaleTests(unittest.TestCase):
 
 # Automatically generate some tests for locales.
 localeDisplays = {}
-for loc in LocaleTests.LOCALES:
+for loc in LOCALES:
     assertLocale(loc)
     localeDisplays[loc] = currencies.LocalizedCurrency().float2str(LocaleTests.TEST_AMOUNT)
 
-for loc in LocaleTests.LOCALES:
+for loc in LOCALES:
     assertLocale(loc)
     localecurr = currencies.LocalizedCurrency()
-    locales = {
-        'en_US.utf8':currencies.UnitedStatesCurrency,
-        'ru_RU.utf8':currencies.RussianCurrency,
-        'fr_FR.utf8':currencies.EuroCurrency,
-        }
+    locales = [
+        currencies.UnitedStatesCurrency,
+        currencies.RussianCurrency,
+        currencies.EuroCurrency,
+        ]
 
-    for desiredloc in LocaleTests.LOCALES:
-        desiredcurr = locales[desiredloc]()
+    for i, desiredloc in enumerate(LOCALES):
+        desiredcurr = locales[i]()
         def test(self, localecurr=localecurr, desiredcurr=desiredcurr, desiredloc=desiredloc):
             self.assertEqual(localeDisplays[desiredloc], desiredcurr.float2str(LocaleTests.TEST_AMOUNT))
         testName = ("test%sDisplays%sProperly"%(localecurr.GetCurrencyNick(), desiredcurr.GetCurrencyNick())).replace(" ", "")
