@@ -188,7 +188,7 @@ class Controller(object):
         Publisher.subscribe(self.onAutoSaveToggled, "user.autosave_toggled")
         Publisher.subscribe(self.onSaveRequest, "user.saved")
         
-    def Migrate(self, fromPath, toPath):
+    def MigrateIfFound(self, fromPath, toPath):
         """Migrate a file from fromPath (if it exists) to toPath."""
         if os.path.exists(fromPath):
             import shutil
@@ -197,6 +197,7 @@ class Controller(object):
             except IOError:
                 debug.debug("Unable to move %s to %s, attempting a copy instead..." % (fromPath, toPath))
                 shutil.copyfile(fromPath, toPath)
+            return True
 
     def InitConfig(self):
         """Initialize our configuration object."""
@@ -213,8 +214,8 @@ class Controller(object):
             # If we can find the files at the old locations, we should migrate them.
             oldConfigPath = os.path.expanduser("~/.wxBanker")
             oldBankPath = os.path.expanduser("~/.wxbanker/bank.db")
-            self.Migrate(oldConfigPath, fileservice.getConfigFilePath(self.CONFIG_NAME))
-            self.Migrate(oldBankPath, fileservice.getDataFilePath(self.DB_NAME))
+            self.MigrateIfFound(oldConfigPath, fileservice.getConfigFilePath(self.CONFIG_NAME))
+            self.MigrateIfFound(oldBankPath, fileservice.getDataFilePath(self.DB_NAME))
             
         # Okay, now our files are in happy locations, let's go!
         config = wx.Config(localFilename=configPath)

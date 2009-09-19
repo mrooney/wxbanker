@@ -26,7 +26,7 @@ class MessagePanel(wx.Panel):
         self.Panel = panel = wx.Panel(self)
         self.LinesPanel = wx.Panel(self)
         self.LinesPanel.Sizer = wx.BoxSizer(wx.VERTICAL)
-        self.Panel.BackgroundColour = self.LinesPanel.BackgroundColour = (0, 200, 100)
+        #self.Panel.BackgroundColour = self.LinesPanel.BackgroundColour = (0, 200, 100)
         
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
         self.Sizer.Add(panel, 1, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, 1)
