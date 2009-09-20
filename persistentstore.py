@@ -45,7 +45,7 @@ class PersistentStore:
     """
     def __init__(self, path, autoSave=True):
         self.Subscriptions = []
-        self.Version = 6
+        self.Version = 7
         self.Path = path
         self.AutoSave = False
         self.Dirty = False
@@ -61,8 +61,9 @@ class PersistentStore:
 
         # Initialize the connection and optimize it.
         connection = sqlite.connect(self.Path)
-        connection.execute("PRAGMA synchronous=OFF;")
         self.dbconn = connection
+        # Disable synchronous I/O, which makes everything MUCH faster, at the potential cost of durability.
+        self.dbconn.execute("PRAGMA synchronous=OFF;")
 
         # If the db doesn't exist, initialize it.
         if not existed:
@@ -146,7 +147,7 @@ class PersistentStore:
 
     def MakeTransaction(self, account, transaction):
         cursor = self.dbconn.cursor()
-        cursor.execute('INSERT INTO transactions VALUES (null, ?, ?, ?, ?, ?)', [account.ID] + self.transaction2result(transaction)[1:])
+        cursor.execute('INSERT INTO transactions VALUES (null, ?, ?, ?, ?, ?, ?)', [account.ID] + transaction.toResult()[1:])
         self.commitIfAppropriate()
         transaction.ID = cursor.lastrowid
         return transaction
@@ -261,6 +262,9 @@ class PersistentStore:
             cursor.execute('ALTER TABLE recurring_transactions ADD sourceId INTEGER')
             cursor.execute('ALTER TABLE recurring_transactions ADD lastTransacted CHAR(10)')
             metaVer = 6
+        elif fromVer == 6:
+            cursor.execute('ALTER TABLE transactions ADD recurringParent INTEGER')
+            metaVer = 7
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
 
@@ -290,14 +294,6 @@ class PersistentStore:
         result = [recurringObj.ID, recurringObj.Parent.ID, recurringObj.Amount, recurringObj.Description, dateStr]
         result += [recurringObj.RepeatType, recurringObj.RepeatEvery, repeatOn, recurringObj.EndDate, sourceId, recurringObj.LastTransacted]
         return result
-
-    def transaction2result(self, transObj):
-        """
-        This method converts the Bank's generic implementation of
-        a transaction into this model's specific one.
-        """
-        dateStr = "%s/%s/%s"%(transObj.Date.year, str(transObj.Date.month).zfill(2), str(transObj.Date.day).zfill(2))
-        return [transObj.ID, transObj.Amount, transObj._Description, dateStr, transObj.GetLinkedTransactionID()]
 
     def result2account(self, result):
         ID, name, currency, balance = result
@@ -337,7 +333,7 @@ class PersistentStore:
         self.commitIfAppropriate()
 
     def result2transaction(self, result, parentObj, linkedTransaction=None):
-        tid, pid, amount, description, date, linkId = result
+        tid, pid, amount, description, date, linkId, recurringId = result
         t = bankobjects.Transaction(tid, parentObj, amount, description, date)
 
         # Handle linked transactions.
@@ -403,15 +399,6 @@ class PersistentStore:
         if self.Dirty:
             Publisher.sendMessage("warning.dirty exit", message.data)
             
-    def getORMValue(self, ormobj, attrname):
-        value = getattr(ormobj, attrname)
-        if isinstance(value, (bankobjects.Account, bankobjects.Transaction)):
-            value = value.ID
-        elif attrname == "RepeatOn" and value is not None:
-            value = ",".join([str(x) for x in value])
-            
-        return value
-            
     def onORMObjectUpdated(self, message):
         topic, data = message.topic, message.data
         classname, attrname = topic[-2:]
@@ -426,7 +413,7 @@ class PersistentStore:
         
         query = "UPDATE %s SET %s=? WHERE id=?" % (table, colname)
         objId = ormobj.ID
-        value = self.getORMValue(ormobj, attrname)
+        value = ormobj.getAttrValue(attrname)
         
         self.dbconn.cursor().execute(query, (value, objId))
         self.commitIfAppropriate()

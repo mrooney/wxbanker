@@ -218,6 +218,20 @@ class RecurringTest(testbase.TestCaseWithController):
         rt = account.AddRecurringTransaction(1, "test", tomorrow, bankobjects.RECURRING_DAILY, endDate=tomorrow)
         self.assertEqual(rt.GetUntransactedDates(), [])
         self.assertEqual(rt.GetNext(), tomorrow)
+        
+    def testRecurringTransactionLinkIsNoneOnNormalTransaction(self):
+        model, account = self.createAccount()
+        t = account.AddTransaction(1)
+        self.assertEqual(t.RecurringParent, None)
+        
+    def testRecurringTransactionLinkIsCorrectOnRecurringTransaction(self):
+        model, account = self.createAccount()
+        rt = account.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY, endDate=today)
+        rt.PerformTransactions()
+        
+        ts = account.Transactions
+        self.assertEqual(len(ts), 1)
+        self.assertEqual(ts[0].RecurringParent, rt)
 
 if __name__ == "__main__":
     unittest.main()

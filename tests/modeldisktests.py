@@ -328,6 +328,18 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         atrans2 = a.Transactions[0]
         self.assertEqual(atrans2.Description, "Transfer from B (cats)")
         self.assertEqual(atrans2._Description, "cats")
+        
+    def testTransactionRecurringParentIsStored(self):
+        model1 = self.Controller.Model
+        a = model1.CreateAccount("A")
+        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY, endDate=today)
+        rt.PerformTransactions()
+        
+        model2 = model1.Store.GetModel(useCached=False)
+        t2 = model2.GetTransactions()[0]
+        rt2 = model2.GetRecurringTransactions()[0]
+        self.assertEqual(t2.RecurringParent, rt)
+        self.assertTrue(t2.RecurringParent is rt)
 
 
     

@@ -45,6 +45,21 @@ class ORMObject(object):
             classname = self.__class__.__name__
             Publisher.sendMessage("ormobject.updated.%s.%s" % (classname, attrname), self)
             
+    def getAttrValue(self, attrname):
+        value = getattr(self, attrname)
+        if isinstance(value, (Account, Transaction)):
+            value = value.ID
+        elif attrname == "RepeatOn" and value is not None:
+            value = ",".join([str(x) for x in value])
+        elif attrname == "Date":
+            value = "%s/%s/%s"%(self.Date.year, str(self.Date.month).zfill(2), str(self.Date.day).zfill(2))
+        return value
+            
+    def toResult(self):
+        result = [self.ID]
+        for attr in self.ORM_ATTRIBUTES:
+            result.append(self.getAttrValue(attr))
+        return result
 
 class BankModel(object):
     def __init__(self, store, accountList):
@@ -539,7 +554,7 @@ class Transaction(ORMObject):
     typically causing the model to make the change.
     """
     ORM_TABLE = "transactions"
-    ORM_ATTRIBUTES = ["Date", "_Description", "Amount", "LinkedTransaction"]
+    ORM_ATTRIBUTES = ["Amount", "_Description", "Date", "LinkedTransaction", "RecurringParent"]
     
     def __init__(self, tID, parent, amount, description, date):
         ORMObject.__init__(self)
@@ -551,6 +566,7 @@ class Transaction(ORMObject):
         self.Description = description
         self.Amount = amount
         self.LinkedTransaction = None
+        self.RecurringParent = None
 
         self.IsFrozen = False
 
@@ -715,7 +731,11 @@ class RecurringTransaction(Transaction, ORMObject):
         
     def PerformTransactions(self):
         for date in self.GetUntransactedDates():
-            self.Parent.AddTransaction(self.Amount, self.Description, date, self.Source)
+            result = self.Parent.AddTransaction(self.Amount, self.Description, date, self.Source)
+            if isinstance(result, Transaction):
+                result = (result,)
+            for transaction in result:
+                transaction.RecurringParent = self
         
         self.LastTransacted = datetime.date.today()
         
