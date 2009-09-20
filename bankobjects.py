@@ -72,13 +72,7 @@ class BankModel(object):
         return self.Accounts.Balance
     
     def GetRecurringTransactions(self):
-        allRecurrings = []
-        for account in self.Accounts:
-            recurrings = account.GetRecurringTransactions()
-            if recurrings:
-                allRecurrings.extend(recurrings)
-                
-        return allRecurrings
+        return self.Accounts.GetRecurringTransactions()
 
     def GetTransactions(self):
         transactions = []
@@ -237,6 +231,15 @@ class AccountList(list):
             account.Parent = self
 
         self.Store = store
+        
+    def GetRecurringTransactions(self):
+        allRecurrings = []
+        for account in self:
+            recurrings = account.GetRecurringTransactions()
+            if recurrings:
+                allRecurrings.extend(recurrings)
+                
+        return allRecurrings
 
     def GetBalance(self):
         return sum([account.Balance for account in self])

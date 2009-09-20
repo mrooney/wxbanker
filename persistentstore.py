@@ -332,27 +332,39 @@ class PersistentStore:
         self.dbconn.cursor().execute('DELETE FROM transactions WHERE accountId=?', (account.ID,))
         self.commitIfAppropriate()
 
-    def result2transaction(self, result, parentObj, linkedTransaction=None):
+    def result2transaction(self, result, parentObj, linkedTransaction=None, recurringCache=None):
         tid, pid, amount, description, date, linkId, recurringId = result
         t = bankobjects.Transaction(tid, parentObj, amount, description, date)
 
-        # Handle linked transactions.
+        # Handle a linked transaction being passed in, a special case called from a few lines down.
         if linkedTransaction:
             t.LinkedTransaction = linkedTransaction
-        elif linkId:
-            link, linkAccount = self.getTransactionAndParentById(linkId, parentObj, linked=t)
-            # If the link parent hasn't loaded its transactions yet, put this in its pre list so this
-            # object is used if and when they are loaded.
-            if linkAccount._Transactions is None:
-                linkAccount._preTransactions.append(link)
-            t.LinkedTransaction = link
+        else:
+            # Handle recurring parents.
+            if recurringId:
+                t.RecurringParent = recurringCache[recurringId]
+                
+            if linkId:
+                link, linkAccount = self.getTransactionAndParentById(linkId, parentObj, linked=t)
+                # If the link parent hasn't loaded its transactions yet, put this in its pre list so this
+                # object is used if and when they are loaded.
+                if linkAccount._Transactions is None:
+                    linkAccount._preTransactions.append(link)
+                t.LinkedTransaction = link
+                # Synchronize the RecurringParent attribute.
+                t.LinkedTransaction.RecurringParent = t.RecurringParent
 
         return t
 
     def getTransactionsFrom(self, account):
         transactions = bankobjects.TransactionList()
+        # Generate a map of recurring transaction IDs to the objects for fast look-up.
+        recurringCache = {}
+        for recurring in account.Parent.GetRecurringTransactions():
+            recurringCache[recurring.ID] = recurring
+            
         for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (account.ID,)).fetchall():
-            t = self.result2transaction(result, account)
+            t = self.result2transaction(result, account, recurringCache=recurringCache)
             transactions.append(t)
         return transactions
 

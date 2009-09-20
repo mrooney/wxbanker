@@ -339,7 +339,7 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         t2 = model2.GetTransactions()[0]
         rt2 = model2.GetRecurringTransactions()[0]
         self.assertEqual(t2.RecurringParent, rt)
-        self.assertTrue(t2.RecurringParent is rt)
+        self.assertTrue(t2.RecurringParent is rt2)
 
 
     
