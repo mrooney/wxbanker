@@ -8,45 +8,45 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-09-06 12:20-0700\n"
-"PO-Revision-Date: 2009-08-01 07:03+0000\n"
-"Last-Translator: Ori Folger <calanya+launchpad@gmail.com>\n"
+"PO-Revision-Date: 2009-09-25 14:35+0000\n"
+"Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-09-23 09:42+0000\n"
+"X-Launchpad-Export-Date: 2009-09-30 06:40+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
 msgid "Show"
-msgstr "הצג"
+msgstr "הצגה"
 
 #: bankobjects.py:613
 #, python-format
 msgid "Transfer from %s"
-msgstr "העבר מ%s"
+msgstr "העברה מ־%s"
 
 #: bankobjects.py:615
 #, python-format
 msgid "Transfer to %s"
-msgstr "העבר אל %s"
+msgstr "העברה אל %s"
 
 #: menubar.py:46
 msgid "Import from CSV"
-msgstr ""
+msgstr "ייבוא מקובץ CSV"
 
 #: menubar.py:46
 msgid "Import transactions from a CSV file"
-msgstr ""
+msgstr "ייבוא העברות מקובץ CSV"
 
 #: menubar.py:48
 msgid "Auto-save"
-msgstr ""
+msgstr "שמירה אוטומטית"
 
 #: menubar.py:48
 msgid "Automatically save changes"
-msgstr ""
+msgstr "שמירת השינויים אוטומטית"
 
 #: menubar.py:54
 msgid "&Currency"
@@ -54,51 +54,51 @@ msgstr "&מטבע"
 
 #: menubar.py:54
 msgid "Select currency to display"
-msgstr "בחר סוג מטבע להצגה"
+msgstr "בחירת סוג המטבע להצגה"
 
 #: menubar.py:63
 msgid "Request a Currency"
-msgstr ""
+msgstr "בקשת מטבע"
 
 #: menubar.py:74
 msgid "View &FAQs"
-msgstr "עיין ב&שאלות נפוצות"
+msgstr "עיון ב&שאלות נפוצות"
 
 #: menubar.py:74
 msgid "View Frequently Asked Questions online"
-msgstr "עיין בשאלות נפוצות באתר האינטרנט"
+msgstr "עיון בשאלות נפוצות באתר האינטרנט"
 
 #: menubar.py:79
 msgid "Ask a &Question"
-msgstr "שאל ש&אלה"
+msgstr "לשאול ש&אלה"
 
 #: menubar.py:79
 msgid "Ask a question online"
-msgstr "שאל שאלה באתר האינטרנט"
+msgstr "לשאול שאלה באתר האינטרנט"
 
 #: menubar.py:84
 msgid "&Report a Bug"
-msgstr "דווח על &תקלה"
+msgstr "דיווח על &תקלה"
 
 #: menubar.py:84
 msgid "Report a bug to the developer online"
-msgstr "דווח על תקלה למפתחים באתר האינטרנט"
+msgstr "דיווח על תקלה למפתחים באתר האינטרנט"
 
 #: menubar.py:89
 msgid "Request a Fea&ture"
-msgstr ""
+msgstr "בקשת &תכונה"
 
 #: menubar.py:89
 msgid "Request a new feature to be implemented"
-msgstr ""
+msgstr "בקשה להטמיע תכונה חדשה בתוכנה"
 
 #: menubar.py:94
 msgid "Tran&slate wxBanker"
-msgstr ""
+msgstr "&תרגום wxBanker"
 
 #: menubar.py:94
 msgid "Translate wxBanker to another language"
-msgstr ""
+msgstr "תרגום wxBanker לשפה אחרת"
 
 #: menubar.py:101
 msgid "&About"
