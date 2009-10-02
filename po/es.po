@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-09-06 12:20-0700\n"
-"PO-Revision-Date: 2009-09-10 22:44+0000\n"
-"Last-Translator: Federico Vera <Unknown>\n"
+"PO-Revision-Date: 2009-10-01 09:46+0000\n"
+"Last-Translator: José A. Fuentes Santiago <Unknown>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-09-23 09:42+0000\n"
+"X-Launchpad-Export-Date: 2009-10-02 06:35+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
@@ -354,7 +354,7 @@ msgstr "No hay ninguna cuenta seleccionada"
 
 #: newtransactionctrl.py:385
 msgid "A search is currently active."
-msgstr ""
+msgstr "Hay una búsqueda activa."
 
 #: newtransactionctrl.py:385
 #, python-format
