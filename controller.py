@@ -166,6 +166,11 @@ True
 Traceback (most recent call last):
   ...
 InvalidTransactionException: Transaction does not exist in account 'My Renamed Account'
+
+# cleanUp
+>>> controller.Close()
+>>> Publisher.unsubAll()
+>>> os.remove("test.db")
 """
 
 from persistentstore import PersistentStore
@@ -271,7 +276,7 @@ class Controller(object):
         return model
 
     def Close(self, model=None):
-        if model is None: models = self.Models
+        if model is None: models = self.Models[:]
         else: models = [model]
 
         for model in models:
