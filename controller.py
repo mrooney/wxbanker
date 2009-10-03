@@ -223,7 +223,7 @@ class Controller(object):
             self.MigrateIfFound(oldBankPath, fileservice.getDataFilePath(self.DB_NAME))
             
         # Okay, now our files are in happy locations, let's go!
-        config = wx.Config(localFilename=configPath)
+        config = wx.FileConfig(localFilename=configPath)
         wx.Config.Set(config)
         if not config.HasEntry("SIZE_X"):
             config.WriteInt("SIZE_X", 800)
