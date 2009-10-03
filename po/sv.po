@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-09-06 12:20-0700\n"
-"PO-Revision-Date: 2009-08-04 11:42+0000\n"
-"Last-Translator: Jorgnir <jorgnir@gmail.com>\n"
+"PO-Revision-Date: 2009-10-03 00:01+0000\n"
+"Last-Translator: Carl-Uno Olsson <Unknown>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-09-23 09:42+0000\n"
+"X-Launchpad-Export-Date: 2009-10-03 06:44+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: menubar.py:79
@@ -74,7 +74,7 @@ msgstr "Överför till %s"
 
 #: menubar.py:46
 msgid "Import from CSV"
-msgstr ""
+msgstr "Importera från CSV"
 
 #: menubar.py:46
 msgid "Import transactions from a CSV file"
@@ -378,7 +378,7 @@ msgstr "Inget konto valt"
 
 #: newtransactionctrl.py:385
 msgid "A search is currently active."
-msgstr ""
+msgstr "En sökning är för tillfället aktiv."
 
 #: newtransactionctrl.py:385
 #, python-format
@@ -386,6 +386,7 @@ msgid ""
 "Would you like to clear the current search and make this transaction in "
 "\"%s\"?"
 msgstr ""
+"Vill du rensa nuvarande sökning och utföra denna transaktion i \"%s\"?"
 
 #: newtransactionctrl.py:386
 msgid "Clear search?"
@@ -417,7 +418,7 @@ msgstr ""
 
 #: messagepanel.py:45
 msgid "Dismiss"
-msgstr ""
+msgstr "Avfärda"
 
 #: summarytab.py:49
 msgid "Account"
@@ -462,6 +463,8 @@ msgid ""
 "wxBanker can synchronize account balances online if you have an account with "
 "mint.com"
 msgstr ""
+"wxBanker kan synkronisera kontosaldona online om du har ett konto med "
+"mint.com"
 
 #: accountconfigdialog.py:37
 msgid "Username"
@@ -687,7 +690,7 @@ msgstr "Ledsen, ett konto med det namnet existerar redan."
 
 #: accountlistctrl.py:383 accountlistctrl.py:478
 msgid "Account names cannot be blank."
-msgstr ""
+msgstr "Kontonamn kan inte vara tomma."
 
 #: accountlistctrl.py:449
 #, python-format
@@ -726,15 +729,15 @@ msgstr ""
 
 #: wxbanker.py:103
 msgid "No description"
-msgstr ""
+msgstr "Ingen beskrivning"
 
 #: wxbanker.py:122
 msgid "Perform"
-msgstr ""
+msgstr "Utför"
 
 #: wxbanker.py:138
 msgid "Recurring transaction successfully added."
-msgstr ""
+msgstr "Återkommande transaktion har framgångsrikt lagts till."
 
 #: wxbanker.py:141
 #, python-format
