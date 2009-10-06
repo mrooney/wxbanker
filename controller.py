@@ -166,6 +166,11 @@ True
 Traceback (most recent call last):
   ...
 InvalidTransactionException: Transaction does not exist in account 'My Renamed Account'
+
+# cleanUp
+>>> controller.Close()
+>>> Publisher.unsubAll()
+>>> os.remove("test.db")
 """
 
 from persistentstore import PersistentStore
@@ -218,7 +223,7 @@ class Controller(object):
             self.MigrateIfFound(oldBankPath, fileservice.getDataFilePath(self.DB_NAME))
             
         # Okay, now our files are in happy locations, let's go!
-        config = wx.Config(localFilename=configPath)
+        config = wx.FileConfig(localFilename=configPath)
         wx.Config.Set(config)
         if not config.HasEntry("SIZE_X"):
             config.WriteInt("SIZE_X", 800)
@@ -271,7 +276,7 @@ class Controller(object):
         return model
 
     def Close(self, model=None):
-        if model is None: models = self.Models
+        if model is None: models = self.Models[:]
         else: models = [model]
 
         for model in models:

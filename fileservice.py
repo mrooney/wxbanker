@@ -38,7 +38,11 @@ def __getFilePath(filename, xdgListName):
             pathdir = os.path.join(os.environ["HOME"], ".wxbanker")
         elif "APPDATA" in os.environ:
             # Windows!
-            pathdir = os.path.join(os.environ["APPDATA"], "wxbanker")
+            appdata = os.environ["APPDATA"]
+            if type(appdata) != unicode:
+                import locale
+                appdata = unicode(appdata, locale.getlocale()[1])
+            pathdir = os.path.join(appdata, "wxbanker")
         else:
             raise Exception("Unable to find a home for user data!")
         
