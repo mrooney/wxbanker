@@ -116,7 +116,7 @@ class RecurringTest(testbase.TestCaseWithController):
         rt = account.AddRecurringTransaction(1, "test", start, bankobjects.RECURRING_MONTLY, repeatEvery=3, endDate=datetime.date(2009, 12, 31))
         
         dates = rt.GetUntransactedDates()
-        self.assertEqual(dates, [start, datetime.date(2009, 4, 1), datetime.date(2009, 7, 1)])
+        self.assertEqual(dates, [start, datetime.date(2009, 4, 1), datetime.date(2009, 7, 1), datetime.date(2009, 10, 1)])
 
     def testRecurringDateYearly(self):
         model, account = self.createAccount()
