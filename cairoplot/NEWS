@@ -1,0 +1,19 @@
+
+Version 1.1:
+    - Refactored code into OO form for dot and line code
+    - Refactored code into OO form for pizza plot
+    - Pizza plot renamed to Pie plot
+    - Added support for Bar Plots
+    - Refactored code into OO form for gantt chart
+    - Allow use of other types of cairo surfaces
+    - Added rounded corners and pseudo 3D option to Bar Plots
+    - Added support for Donut Plots
+    - Added support for Function Plots
+    - Added discrete series option to Function Plots
+
+Version 1.2
+    - Added support for Scatter Plots
+    - Added support for error bars on Scatter Plots
+    - Added support for Horizontal and Vertical Bar Plots
+
+

@@ -1,0 +1,134 @@
+
+2009-07-09  Rodrigo Araújo <alf.rodrigo@gmail.com>
+        * CairoPlot.py: Correctiong naming conventions (Series.py ->
+        		 series.py). Added series.py to setup.py.
+
+2009-07-05  Rodrigo Araújo <alf.rodrigo@gmail.com>
+        * CairoPlot.py: Merged Magnun's branch. Series, Group and Data 
+        		 input formats are now available.
+
+2009-03-10  Rodrigo Araújo <alf.rodrigo@gmail.com>
+        * CairoPlot.py: Color themes now work correctly for backgrounds.
+        		 besides allowing the user to change the background
+        		 color using strings, it's also possible to define
+        		 gradients using a string of colors like "red white"
+        		 which would create a red-to-white gradient.
+        		 Furthermore, background=None now implies on
+        		 transparent backgrounds;
+        		Value labels above the bars are now possible through
+        		 the display_values attribute;
+        		The series_labels parameter is now enabled for BarPlot
+        		 charts. Whenever it's present, a legend box is
+        		 plotted on the right upper corner.
+
+2009-03-09  Rodrigo Araújo <alf.rodrigo@gmail.com>
+        * CairoPlot.py: BarPlot, HorizontalBarPlot and VerticalBarPlot revision
+        		 and refactoring;
+        		Color themes are now allowed for backgrounds.
+
+2009-03-08  Rodrigo Araújo <alf.rodrigo@gmail.com>
+        * CairoPlot.py: Code revision and refactoring;
+        		The BarPlot class is now a base class on top of which
+        		 the classes HorizontalBarPlot and VerticalBarPlot are
+        		 built	
+        		Color themes are now available;
+        		PiePlot and DonutPlot data is now ordered;
+        		Horizontal label collision problem was solved for
+        		 BarPlots;
+        		Axis titles are now allowed for ScatterPlot, DotLinePlot
+        		 and FunctionPlot classes.
+        * tests.py: 	Theme tests were added;
+        		BarPlot tests were changed into HorizontalBarPlot 
+        		and VerticalBarPlot tests.
+
+2009-01-30  Rodrigo Araújo <alf.rodrigo@gmail.com>
+        * CairoPlot.py: Class structure was refactored as it was noted that
+        		the new ScatterPlot was able to render DotLine and 
+        		FunctionPlots;
+        		Following the refactoring, the bounds associated with
+        		a FunctionPlot chart (x_bounds) now define a closed
+        		interval, which means the last value is also taken
+        		taken into account;
+        		Error bars support was added to the ScatterPlot;
+        		All h_* and v_* parameters have been changed to x_*
+        		and y_*.
+        * tests.py: 	FunctionPlot tests were changed to fit the new bounds;
+        		All tests were changed to reflect the h_* and v_* to 
+        		x_* and y_* parameter change.
+
+2009-01-27  Rodrigo Araújo <alf.rodrigo@gmail.com>
+        * CairoPlot.py: Bug fixes;
+        		Code refactoring for the Plot and DotLinePlot classes;
+        		Added ScatterPlot class;
+        		Changed the code Josselin added to draw the y axis
+        		title. Moved the code to render_axis and changed
+        		the way the titles are drawn;
+        * tests.py: Added tests for ScatterPlot.
+
+2009-01-07  Rodrigo Araújo <alf.rodrigo@gmail.com>
+        * CairoPlot.py: Bug fixes;
+        		Sebastien Cote was responsible for the addition of
+        		series' colors and legends and also for a bug fix when
+        		drawing h_labels;
+        		Paul Hummer (from Canonical) was responsible for the
+        		'python setup.py install' new installation method;
+        		Josselin Mouette and her crew were responsible for
+        		some code refactoring and the ability to add a title
+        		to the y axis;
+        * tests.py: Updated tests for FunctionPlot.
+
+2008-08-15  Rodrigo Araújo <alf.rodrigo@gmail.com>
+        * CairoPlot.py: Added discrete series option to FunctionPlot
+        * tests.py: Added new tests for FunctionPlot new option
+
+2008-08-14  Rodrigo Araújo <alf.rodrigo@gmail.com>
+        * CairoPlot.py: Added DonutPlot
+                        Added FunctionPlot
+                        Added rounded corners option to Bar Plot
+                        Added pseudo 3D option to Bar Plot
+                        Set the default for the DotLinePlot to plot without
+                        the dots
+        * tests.py: Added new tests for the donut_plot function
+                    Added new tests for the function_plot function
+                    Added new tests for BarPlot new options
+
+2008-07-12  Rodrigo Araújo <alf.rodrigo@gmail.com>
+        * CairoPlot.py: Bug fixes for BarPlot
+        * tests.py: Added new tests for the bar_plot function
+
+2008-07-11  Rodrigo Araújo <alf.rodrigo@gmail.com>
+        * CairoPlot.py: Added BarPlot working draft
+        * tests.py: Added tests regarding the use of bar_plot function
+
+2008-07-07  Rodrigo Araújo <alf.rodrigo@gmail.com>
+        * CairoPlot.py: Changed PizzaPlot Class and pizza_plot function names
+                        to PiePlot and pie_plot respectively;
+                        Refactored Gantt Chart into Object Oriented mode;
+                        Fixed the function DotLinePlot.calc_extents;
+                        Added color_series argument to Plot constructor;
+
+2008-07-04  Rodrigo Araújo <alf.rodrigo@gmail.com>
+        * tests.py: Test suit used to check if the module is working correctly
+        * CairoPlot.py: Refactored Pizza Graphic into Object Oriented mode;
+                        Fixed the function Plot.render_bounding_box which
+                        wasn't drawing the line after defining it.
+
+2008-07-04  João S. O. Bueno <gwidion@gmail.com>
+
+        * NEWS: initial NEWS
+        * CairoPlot.py: Refactored DotLine Graphic into Object Oriented mode
+                        Added support for other kind of Cairo Surfaces 
+                        Added suport for changing some parameters of plot,
+                        through modification of object properties.
+                        Temporarily disabled series legend plotting
+
+2008-07-03  João S. O. Bueno <gwidion@gmail.com>
+
+        * ChangeLog: initial ChangeLog
+        * COPYING: License file added (GNU LGPL 2.1)
+        * TODO: initial TODO
+
+
+2008-06-13   Rodrigo Araújo  <alf.rodrigo@gmail.com>
+
+        * Initial commit

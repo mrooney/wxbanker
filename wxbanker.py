@@ -39,6 +39,7 @@ from menubar import BankMenuBar
 import localization, messagepanel
 # Tabs
 import managetab
+from plots.plotfactory import PlotFactory
 try:
     import summarytab
 except NoNumpyException:
@@ -58,8 +59,11 @@ class BankerPanel(wx.Panel):
         notebook.AddPage(self.managePanel, _("Transactions"))
 
         if summarytab:
-            self.summaryPanel = summarytab.SummaryPanel(notebook, bankController)
+            self.summaryPanel = summarytab.SummaryPanel(notebook, PlotFactory.getFactory('wx'), bankController)
             notebook.AddPage(self.summaryPanel, _("Summary"))
+        
+            self.cairoSummaryPanel = summarytab.SummaryPanel(notebook, PlotFactory.getFactory('cairo'), bankController)
+            notebook.AddPage(self.cairoSummaryPanel, "Cairo Summary")
             
         self.Sizer.Add(self.notebook, 1, wx.EXPAND)
 
@@ -143,9 +147,10 @@ class BankerPanel(wx.Panel):
 
     def onTabSwitching(self, event):
         tabIndex = event.Selection
-        # If we are switching to the summary (graph) tab, update it!
-        if tabIndex == 1:
-            self.summaryPanel.update()
+        page = self.notebook.GetPage(tabIndex)
+        if isinstance(page, summarytab.SummaryPanel):
+            # If we are switching to the summary (graph) tab, update it!
+            page.update()
         
         
 class BankerFrame(wx.Frame):
