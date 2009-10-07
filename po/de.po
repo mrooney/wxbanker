@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-09-06 12:20-0700\n"
-"PO-Revision-Date: 2009-09-21 08:22+0000\n"
-"Last-Translator: Bernd Schlapsi <Unknown>\n"
+"PO-Revision-Date: 2009-10-06 15:10+0000\n"
+"Last-Translator: Sebastian Rahlf <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-09-23 09:42+0000\n"
+"X-Launchpad-Export-Date: 2009-10-07 06:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
@@ -160,8 +160,8 @@ msgstr "Wöchentlich"
 #, python-format
 msgid "Monthly"
 msgid_plural "Every %(num)d months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Jeden Monat"
+msgstr[1] "Alle %(num)d Monate"
 
 #: newtransactionctrl.py:91
 msgid "Yearly"
@@ -205,7 +205,7 @@ msgstr "Wiederholungen:"
 
 #: newtransactionctrl.py:135
 msgid "Every"
-msgstr ""
+msgstr "Alle"
 
 #: newtransactionctrl.py:141
 msgid "Ends:"
@@ -214,8 +214,8 @@ msgstr ""
 #: newtransactionctrl.py:185
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Tag"
+msgstr[1] "Tage"
 
 #: newtransactionctrl.py:188
 msgid "week"
@@ -276,8 +276,8 @@ msgstr ""
 #: newtransactionctrl.py:207
 msgid "month"
 msgid_plural "months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Monat"
+msgstr[1] "Monate"
 
 #: newtransactionctrl.py:210
 msgid "year"
