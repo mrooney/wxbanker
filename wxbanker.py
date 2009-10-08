@@ -34,17 +34,12 @@ else:
 from wx.lib.pubsub import Publisher
 
 # wxBanker
-from bankexceptions import NoNumpyException
 from menubar import BankMenuBar
 import localization, messagepanel
+import debug
 # Tabs
-import managetab
+import managetab, summarytab
 from plots.plotfactory import PlotFactory
-try:
-    import summarytab
-except NoNumpyException:
-    summarytab = None
-    print _("Warning: Numpy module not available, disabling Summary tab. Install numpy to fix this.")
 
 
 class BankerPanel(wx.Panel):
@@ -57,13 +52,12 @@ class BankerPanel(wx.Panel):
 
         self.managePanel = managetab.ManagePanel(notebook, bankController)
         notebook.AddPage(self.managePanel, _("Transactions"))
-
-        if summarytab:
-            self.summaryPanel = summarytab.SummaryPanel(notebook, PlotFactory.getFactory('wx'), bankController)
-            notebook.AddPage(self.summaryPanel, _("Summary"))
         
-            self.cairoSummaryPanel = summarytab.SummaryPanel(notebook, PlotFactory.getFactory('cairo'), bankController)
-            notebook.AddPage(self.cairoSummaryPanel, "Cairo Summary")
+        if debug.on:
+            for factory in PlotFactory.getAvailableFactories():
+                self.AddSummaryTab(factory)
+        else:
+            self.AddSummaryTab()
             
         self.Sizer.Add(self.notebook, 1, wx.EXPAND)
 
@@ -71,6 +65,12 @@ class BankerPanel(wx.Panel):
         Publisher.subscribe(self.onRecurringTransactionAdded, "recurringtransaction.created")
         
         wx.CallLater(1000, self.CheckRecurringTransactions)
+    
+    def AddSummaryTab(self, factoryName=None):
+        plotFactory = PlotFactory.getFactory(factoryName)
+        if plotFactory is not None:
+            summaryPanel = summarytab.SummaryPanel(self.notebook, plotFactory, self.bankController)
+            self.notebook.AddPage(summaryPanel, _("Summary"))
         
     def AddMessagePanel(self, panel):
         self.Sizer.Insert(0, panel, 0, wx.EXPAND)

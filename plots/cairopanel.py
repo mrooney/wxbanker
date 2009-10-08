@@ -1,6 +1,11 @@
 import wx, wx.lib.wxcairo
-from cairoplot import cairoplot, series
 import datetime
+import plotfactory
+
+try:
+    from cairoplot import cairoplot, series
+except ImportError:
+    raise plotfactory.PlotLibraryImportException('cairo', 'pycairo')
 
 class CairoPlotPanelFactory(object):
     def createPanel(self, parent, bankController):

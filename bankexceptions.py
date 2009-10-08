@@ -16,9 +16,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-class NoNumpyException(Exception):
-    pass
-
 class InvalidAccountException(Exception):
     def __init__(self, account):
         self.account = account
