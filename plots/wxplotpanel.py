@@ -1,3 +1,5 @@
+import wx
+import datetime
 import plotfactory
 
 try:
