@@ -1,9 +1,10 @@
-import wx, wx.lib.wxcairo
+import wx
 import datetime
 import plotfactory
 
 try:
     from cairoplot import cairoplot, series
+    import wx.lib.wxcairo
 except ImportError:
     raise plotfactory.PlotLibraryImportException('cairo', 'pycairo')
 
