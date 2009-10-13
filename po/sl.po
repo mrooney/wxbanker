@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-09-06 12:20-0700\n"
-"PO-Revision-Date: 2009-06-03 09:24+0000\n"
-"Last-Translator: Primož Jerše <jerse@inueni.com>\n"
+"PO-Revision-Date: 2009-10-12 22:04+0000\n"
+"Last-Translator: Simon Vidmar <Unknown>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || "
 "n%100==4 ? 3 : 0);\n"
-"X-Launchpad-Export-Date: 2009-09-23 09:42+0000\n"
+"X-Launchpad-Export-Date: 2009-10-13 06:59+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
@@ -35,7 +35,7 @@ msgstr "Prenesi na %s"
 
 #: menubar.py:46
 msgid "Import from CSV"
-msgstr ""
+msgstr "Uvoz iz CSV"
 
 #: menubar.py:46
 msgid "Import transactions from a CSV file"
@@ -43,11 +43,11 @@ msgstr ""
 
 #: menubar.py:48
 msgid "Auto-save"
-msgstr ""
+msgstr "Samodejno shranjevanje"
 
 #: menubar.py:48
 msgid "Automatically save changes"
-msgstr ""
+msgstr "Samodejno shrani nastavitve"
 
 #: menubar.py:54
 msgid "&Currency"
@@ -55,11 +55,11 @@ msgstr "&Obtok"
 
 #: menubar.py:54
 msgid "Select currency to display"
-msgstr ""
+msgstr "Izberite valuto prikaza"
 
 #: menubar.py:63
 msgid "Request a Currency"
-msgstr ""
+msgstr "Zahtevajtev valuto"
 
 #: menubar.py:74
 msgid "View &FAQs"
@@ -87,7 +87,7 @@ msgstr "Sporoči napako razvijalcu na spletu"
 
 #: menubar.py:89
 msgid "Request a Fea&ture"
-msgstr ""
+msgstr "&Zahtevajte funkcionalnost"
 
 #: menubar.py:89
 msgid "Request a new feature to be implemented"
@@ -95,11 +95,11 @@ msgstr ""
 
 #: menubar.py:94
 msgid "Tran&slate wxBanker"
-msgstr ""
+msgstr "&Prevedite wxBanker-ja"
 
 #: menubar.py:94
 msgid "Translate wxBanker to another language"
-msgstr ""
+msgstr "Prevedite wxBanker-ja v drugi jezik"
 
 #: menubar.py:101
 msgid "&About"
@@ -111,7 +111,7 @@ msgstr "Več informacij o programu wxBanker"
 
 #: menubar.py:104
 msgid "&File"
-msgstr ""
+msgstr "&Datoteka"
 
 #: menubar.py:105
 msgid "&Settings"
@@ -131,11 +131,11 @@ msgstr "Preprosta aplikacija za urejanje osebnih financ."
 
 #: newtransactionctrl.py:47
 msgid "from"
-msgstr ""
+msgstr "od"
 
 #: newtransactionctrl.py:47 summarytab.py:57
 msgid "to"
-msgstr ""
+msgstr "v"
 
 #: newtransactionctrl.py:51 newtransactionctrl.py:240
 msgid "Transfer"
@@ -143,19 +143,21 @@ msgstr "Prenos"
 
 #: newtransactionctrl.py:55
 msgid "account:"
-msgstr ""
+msgstr "račun:"
 
 #: newtransactionctrl.py:91 newtransactionctrl.py:186
 #: newtransactionctrl.py:196
 #, python-format
 msgid "Daily"
 msgid_plural "Every %(num)d days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Dnevno"
+msgstr[1] "Vsakih %(num)d dni"
+msgstr[2] "Vsakih %(num)d dni"
+msgstr[3] "Vsakih %(num)d dni"
 
 #: newtransactionctrl.py:91
 msgid "Weekly"
-msgstr ""
+msgstr "Tedensko"
 
 #: newtransactionctrl.py:91 newtransactionctrl.py:208
 #, python-format
@@ -166,31 +168,31 @@ msgstr[1] ""
 
 #: newtransactionctrl.py:91
 msgid "Yearly"
-msgstr ""
+msgstr "Letno"
 
 #: newtransactionctrl.py:101
 msgid "Never"
-msgstr ""
+msgstr "Nikoli"
 
 #: newtransactionctrl.py:111
 msgid "Mon"
-msgstr ""
+msgstr "pon"
 
 #: newtransactionctrl.py:111
 msgid "Tue"
-msgstr ""
+msgstr "tor"
 
 #: newtransactionctrl.py:111
 msgid "Wed"
-msgstr ""
+msgstr "sre"
 
 #: newtransactionctrl.py:111
 msgid "Thu"
-msgstr ""
+msgstr "čet"
 
 #: newtransactionctrl.py:111
 msgid "Fri"
-msgstr ""
+msgstr "pet"
 
 #: newtransactionctrl.py:111
 msgid "Sat"
@@ -198,7 +200,7 @@ msgstr ""
 
 #: newtransactionctrl.py:111
 msgid "Sun"
-msgstr ""
+msgstr "ned"
 
 #: newtransactionctrl.py:132
 msgid "Repeats:"
@@ -206,35 +208,39 @@ msgstr ""
 
 #: newtransactionctrl.py:135
 msgid "Every"
-msgstr ""
+msgstr "Vsakih"
 
 #: newtransactionctrl.py:141
 msgid "Ends:"
-msgstr ""
+msgstr "Konec:"
 
 #: newtransactionctrl.py:185
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "dan"
+msgstr[1] "dni"
+msgstr[2] "dni"
+msgstr[3] "dni"
 
 #: newtransactionctrl.py:188
 msgid "week"
 msgid_plural "weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "teden"
+msgstr[1] "tednov"
+msgstr[2] "tednov"
+msgstr[3] "tednov"
 
 #: newtransactionctrl.py:189
 msgid "Repeats on days:"
-msgstr ""
+msgstr "Ponavlja se na dneve:"
 
 #: newtransactionctrl.py:192
 msgid "Weekly on weekdays"
-msgstr ""
+msgstr "Tedensko ob delavnikih"
 
 #: newtransactionctrl.py:194
 msgid "Weekly on weekends"
-msgstr ""
+msgstr "Tedensko ob vikendih"
 
 #: newtransactionctrl.py:198
 msgid "Mondays"
@@ -267,24 +273,28 @@ msgstr ""
 #: newtransactionctrl.py:203 newtransactionctrl.py:205
 #, python-format
 msgid "Weekly on %s"
-msgstr ""
+msgstr "Tedensko ob %s"
 
 #: newtransactionctrl.py:205
 #, python-format
 msgid " and %s"
-msgstr ""
+msgstr " in %s"
 
 #: newtransactionctrl.py:207
 msgid "month"
 msgid_plural "months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "mesec"
+msgstr[1] "mesecev"
+msgstr[2] "mesecev"
+msgstr[3] "mesecev"
 
 #: newtransactionctrl.py:210
 msgid "year"
 msgid_plural "years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "leto"
+msgstr[1] "let"
+msgstr[2] "let"
+msgstr[3] "let"
 
 #: newtransactionctrl.py:211
 #, python-format
@@ -296,11 +306,11 @@ msgstr[1] ""
 #: newtransactionctrl.py:215
 #, python-format
 msgid "until %s"
-msgstr ""
+msgstr "do %s"
 
 #: newtransactionctrl.py:229
 msgid "Starts:"
-msgstr ""
+msgstr "Začne:"
 
 #: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:110
 #: transactionolv.py:60
@@ -318,7 +328,7 @@ msgstr "Vnesi to transakcijo"
 
 #: newtransactionctrl.py:243
 msgid "Recurring"
-msgstr ""
+msgstr "Ponovi se"
 
 #: newtransactionctrl.py:296
 msgid ""
@@ -355,7 +365,7 @@ msgstr "Izbran ni bil noben račun"
 
 #: newtransactionctrl.py:385
 msgid "A search is currently active."
-msgstr ""
+msgstr "Izvaja se iskanje."
 
 #: newtransactionctrl.py:385
 #, python-format
@@ -392,15 +402,15 @@ msgstr ""
 
 #: messagepanel.py:45
 msgid "Dismiss"
-msgstr ""
+msgstr "Opusti"
 
 #: summarytab.py:49
 msgid "Account"
-msgstr ""
+msgstr "Račun"
 
 #: summarytab.py:53
 msgid "From"
-msgstr ""
+msgstr "Od"
 
 #: summarytab.py:64
 msgid "Fit Curve Degree"
@@ -408,7 +418,7 @@ msgstr "Utežnostni faktor krivulje"
 
 #: summarytab.py:123
 msgid "All accounts"
-msgstr ""
+msgstr "Vsi računi"
 
 #: summarytab.py:184 summarytab.py:190
 msgid "Balance"
@@ -430,7 +440,7 @@ msgstr "Datum"
 #: currconvert.py:59
 #, python-format
 msgid "No exchange rate for currency \"%s\""
-msgstr ""
+msgstr "Za valuto \"%s\" ni menjalnega tečaja"
 
 #: accountconfigdialog.py:29
 msgid ""
@@ -440,11 +450,11 @@ msgstr ""
 
 #: accountconfigdialog.py:37
 msgid "Username"
-msgstr ""
+msgstr "Uporabniško Ime"
 
 #: accountconfigdialog.py:39
 msgid "Password"
-msgstr ""
+msgstr "Geslo"
 
 #: templater.py:27
 msgid "Hide Calculator"
@@ -472,11 +482,11 @@ msgstr "Vsi računi"
 
 #: searchctrl.py:38
 msgid "More options"
-msgstr ""
+msgstr "Več možnosti"
 
 #: searchctrl.py:38
 msgid "Less options"
-msgstr ""
+msgstr "Manj možnosti"
 
 #: searchctrl.py:43
 msgid "Case Sensitive"
@@ -496,11 +506,11 @@ msgstr "Primerjaj "
 
 #: searchctrl.py:106
 msgid "Show advanced search options"
-msgstr ""
+msgstr "Prikaži napredne možnosti iskanja"
 
 #: searchctrl.py:108
 msgid "Hide advanced search options"
-msgstr ""
+msgstr "Skrij napredne možnosti iskanja"
 
 #: csvimportframe.py:28
 msgid "CSV import"
@@ -508,7 +518,7 @@ msgstr "Uvoz iz CSV"
 
 #: csvimportframe.py:60
 msgid "Target account"
-msgstr ""
+msgstr "Ciljni račun"
 
 #: csvimportframe.py:75 csvimportframe.py:77
 msgid "Import"
@@ -516,23 +526,23 @@ msgstr "Uvoz"
 
 #: csvimportframe.py:87
 msgid "CSV columns mapping"
-msgstr ""
+msgstr "Imena CSV stolpcev"
 
 #: csvimportframe.py:99
 msgid "Date format"
-msgstr ""
+msgstr "Oblika zapisa datuma"
 
 #: csvimportframe.py:106
 msgid "Decimal separator"
-msgstr ""
+msgstr "Decimalno ločilo"
 
 #: csvimportframe.py:117
 msgid "CSV file settings"
-msgstr ""
+msgstr "Nastavitve datoteke CSV"
 
 #: csvimportframe.py:126
 msgid "Skip first line"
-msgstr ""
+msgstr "Preskoči prvo vrstico"
 
 #: csvimportframe.py:129
 msgid "Encoding"
@@ -540,11 +550,11 @@ msgstr ""
 
 #: csvimportframe.py:133
 msgid "Column delimiter"
-msgstr ""
+msgstr "Ločilo stolpcev"
 
 #: csvimportframe.py:144
 msgid "File to import"
-msgstr ""
+msgstr "Datoteka za uvoz"
 
 #: csvimportframe.py:149 csvimportframe.py:151 wxbanker.py:113
 msgid "Preview"
@@ -560,7 +570,7 @@ msgstr "Za upravljanje z CSV profili potrebujete python knjižnico simplejson"
 
 #: csvimportframe.py:179
 msgid "Load"
-msgstr ""
+msgstr "Naloži"
 
 #: csvimportframe.py:184
 msgid "Save"
@@ -598,7 +608,7 @@ msgstr "Izberite datoteko in kliknite \"Predogled\""
 
 #: currencies.py:192
 msgid "detected"
-msgstr ""
+msgstr "prepoznan"
 
 #: transactionolv.py:47
 msgid "No transactions entered."
@@ -676,7 +686,7 @@ msgstr "Oprosti, račun s tem imenom že obstaja."
 
 #: accountlistctrl.py:383 accountlistctrl.py:478
 msgid "Account names cannot be blank."
-msgstr ""
+msgstr "Račun mora biti poimenovan"
 
 #: accountlistctrl.py:449
 #, python-format
@@ -722,11 +732,11 @@ msgstr ""
 
 #: wxbanker.py:103
 msgid "No description"
-msgstr ""
+msgstr "Brez opisa"
 
 #: wxbanker.py:122
 msgid "Perform"
-msgstr ""
+msgstr "Izvedi"
 
 #: wxbanker.py:138
 msgid "Recurring transaction successfully added."
@@ -775,7 +785,7 @@ msgstr "Dobrodošli!"
 
 #: wxbanker.py:217
 msgid "Save changes?"
-msgstr ""
+msgstr "Shrani spremembe?"
 
 #: wxbanker.py:218
 msgid ""
