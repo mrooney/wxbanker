@@ -37,13 +37,18 @@ class ORMObject(object):
     ORM_ATTRIBUTES = []
     
     def __init__(self):
+        self.IsFrozen = True
+        # If the object doesn't have an ID, we need to set one for setattr.
+        if not hasattr(self, "ID"):
+            self.ID = None
         self.IsFrozen = False
         
     def __setattr__(self, attrname, val):
         object.__setattr__(self, attrname, val)
-        if not self.IsFrozen and attrname in self.ORM_ATTRIBUTES:
-            classname = self.__class__.__name__
-            Publisher.sendMessage("ormobject.updated.%s.%s" % (classname, attrname), self)
+        if not self.IsFrozen and self.ID is not None:
+            if attrname in self.ORM_ATTRIBUTES:
+                classname = self.__class__.__name__
+                Publisher.sendMessage("ormobject.updated.%s.%s" % (classname, attrname), self)
             
     def getAttrValue(self, attrname):
         value = getattr(self, attrname)
