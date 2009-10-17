@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-09-06 12:20-0700\n"
-"PO-Revision-Date: 2009-10-13 13:18+0000\n"
-"Last-Translator: Arch4ngel <formi@seznam.cz>\n"
+"PO-Revision-Date: 2009-10-16 09:09+0000\n"
+"Last-Translator: Kuvaly <kuvaly@seznam.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2009-10-14 06:51+0000\n"
+"X-Launchpad-Export-Date: 2009-10-17 07:07+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: menubar.py:74
@@ -110,7 +110,7 @@ msgstr "Další informace o aplikaci wxBanker"
 
 #: menubar.py:104
 msgid "&File"
-msgstr ""
+msgstr "&Soubor"
 
 #: menubar.py:105
 msgid "&Settings"
@@ -130,7 +130,7 @@ msgstr "Nenáročná osobní finanční aplikace."
 
 #: newtransactionctrl.py:47
 msgid "from"
-msgstr ""
+msgstr "z"
 
 #: newtransactionctrl.py:47 summarytab.py:57
 msgid "to"
@@ -142,7 +142,7 @@ msgstr "Převod"
 
 #: newtransactionctrl.py:55
 msgid "account:"
-msgstr ""
+msgstr "účet:"
 
 #: newtransactionctrl.py:91 newtransactionctrl.py:186
 #: newtransactionctrl.py:196
@@ -169,7 +169,7 @@ msgstr ""
 
 #: newtransactionctrl.py:101
 msgid "Never"
-msgstr ""
+msgstr "Nikdy"
 
 #: newtransactionctrl.py:111
 msgid "Mon"
@@ -214,14 +214,16 @@ msgstr ""
 #: newtransactionctrl.py:185
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "den"
+msgstr[1] "dny"
+msgstr[2] "dnů"
 
 #: newtransactionctrl.py:188
 msgid "week"
 msgid_plural "weeks"
 msgstr[0] ""
-msgstr[1] ""
+msgstr[1] "týdny"
+msgstr[2] "týdnů"
 
 #: newtransactionctrl.py:189
 msgid "Repeats on days:"
@@ -276,8 +278,9 @@ msgstr ""
 #: newtransactionctrl.py:207
 msgid "month"
 msgid_plural "months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "měsíc"
+msgstr[1] "měsíce"
+msgstr[2] "měsíců"
 
 #: newtransactionctrl.py:210
 msgid "year"
