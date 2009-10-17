@@ -16,6 +16,7 @@ class CairoPlotPanel(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
+        self.Bind(wx.EVT_SIZE, self.OnSize)
         self.data = None
         self.x_labels = None
         
@@ -25,7 +26,10 @@ class CairoPlotPanel(wx.Panel):
         self.data = {
             _("Balance") : [(i, total) for i, total in enumerate(totals)],
         }
-        self.Update()
+        self.Refresh()
+    
+    def OnSize(self, event):
+        self.Refresh()
         
     def OnPaint(self, event):
         
@@ -48,4 +52,4 @@ class CairoPlotPanel(wx.Panel):
             series_colors = ["red"],
             series_legend = True
         )
-                
+
