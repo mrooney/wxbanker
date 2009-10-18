@@ -266,11 +266,25 @@ class RecurringTest(testbase.TestCaseWithController):
         rt.EndDate = today
         self.assertEqual(rt.GetRecurrance(), "Weekly on Mondays, Wednesdays and Saturdays until %s" % today)
         
+        rt.RepeatEvery = 2
+        self.assertEqual(rt.GetRecurrance(), "Every 2 weeks on Mondays, Wednesdays and Saturdays until %s" % today)
+        
     def testRecurringSummaryMonthly(self):
         model, account = self.createAccount()
         
         rt = account.AddRecurringTransaction(1, "test", today, RecurringTransaction.MONTLY)
+        self.assertEqual(rt.GetRecurrance(), "Monthly")
         
+        rt.RepeatEvery = 3
+        self.assertEqual(rt.GetRecurrance(), "Every 3 months")
+        
+        rt.EndDate = today
+        self.assertEqual(rt.GetRecurrance(), "Every 3 months until %s" % today)
+        
+    def testRecurringSummaryMonthly(self):
+        model, account = self.createAccount()
+        
+        rt = account.AddRecurringTransaction(1, "test", today, RecurringTransaction.MONTLY)
         self.assertEqual(rt.GetRecurrance(), "Monthly")
         
 
