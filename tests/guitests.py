@@ -34,6 +34,8 @@ class GUITests(testbase.TestCaseHandlingConfig):
     def tearDown(self):
         for account in self.Model.Accounts[:]:
             self.Model.RemoveAccount(account.Name)
+        # Clear out any state of the NTC.
+        wx.FindWindowByName("NewTransactionCtrl").clear()
 
     def testAutoSaveSetAndSaveDisabled(self):
         self.assertTrue( self.Frame.MenuBar.autoSaveMenuItem.IsChecked() )

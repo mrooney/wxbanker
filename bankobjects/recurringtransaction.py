@@ -18,8 +18,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import datetime, functools
+import datetime, functools, gettext
 from dateutil import rrule
+
+import helpers
 from bankobjects.transaction import Transaction
 from bankobjects.ormobject import ORMObject
 
@@ -34,13 +36,13 @@ class RecurringTransaction(Transaction, ORMObject):
     MONTLY = 2
     YEARLY = 3
     
-    def __init__(self, tID, parent, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source=None, lastTransacted=None):
+    def __init__(self, tID, parent, amount, description, date, repeatType, repeatEvery=1, repeatOn=None, endDate=None, source=None, lastTransacted=None):
         Transaction.__init__(self, tID, parent, amount, description, date)
         ORMObject.__init__(self)
         
-        # If the transaction recurs weekly and repeatsOn isn't specified, assume just today.
+        # If the transaction recurs weekly and repeatsOn isn't specified, use the starting date.
         if repeatType == self.WEEKLY and repeatOn is None:
-            todaydaynumber = datetime.date.today().weekday()
+            todaydaynumber = date.weekday()
             repeatOn = [int(i==todaydaynumber) for i in range(7)]
         
         self.IsFrozen = True
@@ -132,6 +134,47 @@ class RecurringTransaction(Transaction, ORMObject):
         
     def GetEndDate(self):
         return self._EndDate
+    
+    def GetRecurrance(self):
+        """Generate a string for describing the recurrance, such as "Daily until 2009-10-02"."""
+        summary = ""
+        repeatType = self.RepeatType
+        
+        if repeatType == 0:
+            summary = gettext.ngettext("Daily", "Every %(num)d days", self.RepeatEvery) % {'num':self.RepeatEvery} 
+        elif repeatType == 1:
+            if self.RepeatOn == [1,1,1,1,1,0,0]:
+                summary = _("Weekly on weekdays")
+            elif self.RepeatOn == [0,0,0,0,0,1,1]:
+                summary = _("Weekly on weekends")
+            elif self.RepeatOn == [1,1,1,1,1,1,1]:
+                summary = _("Daily")
+            else:
+                pluralDayNames = (_("Mondays"), _("Tuesdays"), _("Wednesdays"), _("Thursdays"), _("Fridays"), _("Saturdays"), _("Sundays"))
+                repeatDays = tuple(day for i, day in enumerate(pluralDayNames) if self.RepeatOn[i])
+                if len(repeatDays) == 0:
+                    summary = "Never"
+                elif len(repeatDays) == 1:
+                    summary = _("Weekly on %s") % repeatDays[0]
+                else:
+                    summary = _("Weekly on %s") % ((", ".join(repeatDays[:-1])) + (_(" and %s") % repeatDays[-1]))
+        elif repeatType == 2:
+            summary = gettext.ngettext("Monthly", "Every %(num)d months", self.RepeatEvery) % {'num':self.RepeatEvery} 
+        elif repeatType == 3:
+            summary = gettext.ngettext("Annually", "Every %(num)d years", self.RepeatEvery) % {'num':self.RepeatEvery} 
+
+        # If the recurring ends at some point, add that information to the summary text.
+        if self.EndDate:
+            summary += " " + _("until %s") % helpers.pydate2wxdate(self.EndDate).FormatISODate()
+            
+        return summary
+    
+    def Update(self, rtype, revery, ron, rend):
+        """Update our values."""
+        self.RepeatType = rtype
+        self.RepeatEvery = revery
+        self.RepeatOn = ron
+        self.EndDate = rend
         
     def __eq__(self, other):
         if other is None:

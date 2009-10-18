@@ -232,6 +232,31 @@ class RecurringTest(testbase.TestCaseWithController):
         ts = account.Transactions
         self.assertEqual(len(ts), 1)
         self.assertEqual(ts[0].RecurringParent, rt)
+        
+    def testRecurringSummaryDaily(self):
+        model, account = self.createAccount()
+        
+        rt = account.AddRecurringTransaction(1, "test", today, RecurringTransaction.DAILY)
+        self.assertEqual(rt.GetRecurrance(), "Daily")
+        
+        rt.EndDate = today
+        self.assertEqual(rt.GetRecurrance(), "Daily until %s" % today)
+        
+    def testRecurringSummaryWeekly(self):
+        model, account = self.createAccount()
+        
+        rt = account.AddRecurringTransaction(1, "test", datetime.date(2009, 1, 6), RecurringTransaction.WEEKLY)
+        self.assertEqual(rt.GetRecurrance(), "Weekly on Tuesdays")
+        
+        #TODO: multiple days, weekdays, weekends
+        
+    def testRecurringSummaryMonthly(self):
+        model, account = self.createAccount()
+        
+        rt = account.AddRecurringTransaction(1, "test", today, RecurringTransaction.MONTLY)
+        
+        self.assertEqual(rt.GetRecurrance(), "Monthly")
+        
 
 if __name__ == "__main__":
     unittest.main()

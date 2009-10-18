@@ -87,14 +87,14 @@ class TransferPanel(wx.Panel):
 class RecurringPanel(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, name="RecurringPanel")
-        ##self.recurringObj = RecurringTransaction(None, None, 0, "", datetime.date.today()) #FIXME
 
         # The daily option is useful if you have something which happens every 30 days, for example.
         # Some billing cycles work this way, and the date slowly shifts down monthly.
         self.repeatsCombo = wx.Choice(self, choices=(_("Daily"), _("Weekly"), _("Monthly"), _("Yearly")))
         # Set the default to weekly.
         self.repeatsCombo.SetSelection(1)
-        ##self.recurringObj.RepeatType = 1
+        # Create the recurring object we will use internally.
+        self.recurringObj = RecurringTransaction(None, None, 0, "", datetime.date.today(), RecurringTransaction.DAILY)
 
         self.everyText = wx.StaticText(self)
         self.everySpin = wx.SpinCtrl(self, min=1, max=130, initial=1)
@@ -184,45 +184,34 @@ class RecurringPanel(wx.Panel):
         self.Sizer.Hide(self.bottomSizer)
 
         repeatType, every, repeatsOn, end = self.GetSettings()
-        summary = "Summary"
         if repeatType == 0:
             everyText = gettext.ngettext("day", "days",every)
-            summary = gettext.ngettext("Daily", "Every %(num)d days", every) % {'num':every} 
         elif repeatType == 1:
             everyText = gettext.ngettext("week", "weeks", every)
             self.repeatsOnText.Label = label=_("Repeats on days:")
             self.Sizer.Show(self.bottomSizer)
-            if repeatsOn == [1,1,1,1,1,0,0]:
-                summary = _("Weekly on weekdays")
-            elif repeatsOn == [0,0,0,0,0,1,1]:
-                summary = _("Weekly on weekends")
-            elif repeatsOn == [1,1,1,1,1,1,1]:
-                summary = _("Daily")
-            else:
-                pluralDayNames = (_("Mondays"), _("Tuesdays"), _("Wednesdays"), _("Thursdays"), _("Fridays"), _("Saturdays"), _("Sundays"))
-                repeatDays = tuple(day for i, day in enumerate(pluralDayNames) if repeatsOn[i])
-                if len(repeatDays) == 0:
-                    summary = "Never"
-                elif len(repeatDays) == 1:
-                    summary = _("Weekly on %s") % repeatDays[0]
-                else:
-                    summary = _("Weekly on %s") % ((", ".join(repeatDays[:-1])) + (_(" and %s") % repeatDays[-1]))
         elif repeatType == 2:
             everyText = gettext.ngettext("month", "months", every)
-            summary = gettext.ngettext("Monthly", "Every %(num)d months", every) % {'num':every} 
         elif repeatType == 3:
             everyText = gettext.ngettext("year", "years", every)
-            summary = gettext.ngettext("Annually", "Every %(num)d years", every) % {'num':every} 
 
-        # If the recurring ends at some point, add that information to the summary text.
-        if end:
-            summary += " " + _("until %s") % helpers.pydate2wxdate(end).FormatISODate()
-
+        self.ToRecurring(self.recurringObj)
+        summary = self.recurringObj.GetRecurrance()
+            
         self.everyText.Label = everyText
         self.summaryCtrl.SetLabel(summary)
 
         self.Thaw()
         self.Parent.Parent.Layout()
+        
+    def FromRecurring(self, recurringObj):
+        """Given a RecurringTransaction, make our settings mirror it."""
+        pass
+    
+    def ToRecurring(self, recurringObj):
+        """Given a RecurringTransaction, make it equivalent to the settings here."""
+        repeatType, repeatEvery, repeatsOn, end = self.GetSettings()
+        recurringObj.Update(repeatType, repeatEvery, repeatsOn, end)
 
 class NewTransactionCtrl(wx.Panel):
     def __init__(self, parent):
@@ -410,10 +399,9 @@ class NewTransactionCtrl(wx.Panel):
             settings = self.recurringPanel.GetSettings()
             args = [amount, desc, date] + list(settings) + [sourceAccount]
             destAccount.AddRecurringTransaction(*args)
-            self.onSuccess()
         else:
             destAccount.AddTransaction(amount, desc, date, sourceAccount)
-            self.onSuccess()
+        self.clear()
 
 
     def onTransferTip(self, event):
@@ -421,7 +409,7 @@ class NewTransactionCtrl(wx.Panel):
                  _("For example, checking this box and entering a transaction of $50 into this account will also subtract $50 from the account that you choose as the source.")
         wx.TipWindow(self, tipStr, maxLength=200)
 
-    def onSuccess(self):
+    def clear(self):
         # Reset the controls.
         self.descCtrl.Value = ''
         self.amountCtrl.Value = ''
