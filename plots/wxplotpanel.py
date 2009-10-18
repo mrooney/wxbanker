@@ -1,6 +1,7 @@
 import wx
 import datetime
 import plotfactory
+from summarytab import SummaryHelper
 
 try:
     import plot as pyplot
@@ -23,7 +24,10 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
 
         self.canvas.Bind(wx.EVT_MOTION, self.onMotion)
 
-    def plotBalance(self, totals, startDate, every, xunits="Days", fitdegree=2):
+    def plotBalance(self, totals, plotSettings, xunits="Days", fitdegree=2):
+       
+        totals, startDate, every = SummaryHelper().getPoints(totals, plotSettings['Granularity'])
+        
         self.startDate = startDate
         timeDelta = datetime.timedelta( every * {'Days':1, 'Weeks':7, 'Months':30, 'Years':365}[xunits] )
         pointDates = []

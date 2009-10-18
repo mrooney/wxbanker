@@ -21,11 +21,13 @@ class ChacoPlotPanel(wx.Panel):
         win = EnWindow(self, component = self.plot)
         self.Sizer.Add(win.control, 1, wx.EXPAND)
         
-    def plotBalance(self, totals, *args, **kwargs):
+    def plotBalance(self, totals, plotSettings):
         # quick hack to show something
         
         days = range(len(totals))
-        pd = ArrayPlotData(days=days, totals=totals)
+        data = [total[1] for total in totals]
+
+        pd = ArrayPlotData(days=days, totals=data)
         
         self.plot.data = pd
         self.plot.plot(("days", "totals"), type="line")

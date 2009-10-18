@@ -20,12 +20,12 @@ class CairoPlotPanel(wx.Panel):
         self.data = None
         self.x_labels = None
         
-    #def plotBalance(self, totals, startDate, every, xunits="Days", fitdegree=2):
-    def plotBalance(self, totals, *args, **kwargs):
+    def plotBalance(self, totals, plotSettings):
         # quick hack to show something
         self.data = {
-            _("Balance") : [(i, total) for i, total in enumerate(totals)],
+            _("Balance") : [(i, total[1]) for i, total in enumerate(totals)],
         }
+        self.x_labels = [str(t[0]) for t in totals]
         self.Refresh()
     
     def OnSize(self, event):
@@ -50,6 +50,7 @@ class CairoPlotPanel(wx.Panel):
             dots = 1,
             grid = True,
             series_colors = ["red"],
-            series_legend = True
+            series_legend = True,
+            x_labels=self.x_labels,
         )
 

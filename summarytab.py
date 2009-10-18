@@ -23,6 +23,7 @@ class SummaryPanel(wx.Panel):
     def __init__(self, parent, plotFactory, bankController):
         wx.Panel.__init__(self, parent)
         self.bankController = bankController
+        self.helper = SummaryHelper()
 
         self.plotSettings = {'FitDegree': 2, 'Granularity': 100, 'Account': None}
         self.cachedData = None
@@ -127,14 +128,39 @@ class SummaryPanel(wx.Panel):
 
     def generateData(self, useCache=False):
         if useCache and self.cachedData is not None:
-            totals, startDate, delta = self.cachedData
+            totals = self.cachedData
         else:
-            totals, startDate, delta = self.getPoints(self.plotSettings['Granularity'])
-            endDate = startDate + (datetime.timedelta(days=delta) * len(totals))
-            self.cachedData = totals, startDate, delta
+            totals = self.bankController.Model.GetXTotals(self.plotSettings['Account'], daterange=self.getDateRange())
+            self.cachedData = totals
+        self.plotPanel.plotBalance(totals, self.plotSettings)
 
-        self.plotPanel.plotBalance(totals, startDate, delta, "Days", fitdegree=self.plotSettings['FitDegree'])
+class SummaryHelper(object):
+    def getPoints(self, totals, numPoints):
+       
+        # Don't ever return 0 as the dpp, you can't graph without SOME x delta.
+        smallDelta = 1.0/2**32
+        
+        # If there aren't any transactions, return 0 for every point and start at today.
+        if totals == []:
+            return [0] * 10, datetime.date.today(), smallDelta
+        
+        startDate = totals[0][0]
+        endDate = totals[-1][0]
 
-    def getPoints(self, numPoints):
-        return self.bankController.Model.GetXTotals(numPoints, self.plotSettings['Account'], daterange=self.getDateRange())
+        # Figure out the fraction of a day that exists between each point.
+        distance = (endDate - startDate).days
+        daysPerPoint = 1.0 * distance / numPoints
+        dppDelta = datetime.timedelta(daysPerPoint)
+        
+        # Generate all the points.
+        tindex = 0
+        points = [totals[0][1]]
 
+        for i in range(numPoints):
+            while tindex < len(totals) and totals[tindex][0] <= startDate + (dppDelta * (i+1)):
+                points[i] = totals[tindex][1]
+                tindex += 1
+            points.append(points[-1])
+
+        return points[:-1], startDate, daysPerPoint or smallDelta
+    
