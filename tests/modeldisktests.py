@@ -18,10 +18,11 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import testbase, controller, bankobjects
 import os, unittest
 from wx.lib.pubsub import Publisher
 
+import testbase, controller, bankobjects
+from bankobjects.recurringtransaction import RecurringTransaction
 from testbase import today, tomorrow
 
 class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
@@ -184,7 +185,7 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
     def testRecurringRepeatTypeIsStoredOnUpdate(self):
         model1 = self.Controller.Model
         a = model1.CreateAccount("A")
-        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        rt = a.AddRecurringTransaction(1, "test", today, RecurringTransaction.DAILY)
         self.assertEqual(rt.RepeatType, 0)
         rt.RepeatType = 2
 
@@ -196,7 +197,7 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
     def testRecurringRepeatEveryIsStoredOnUpdate(self):
         model1 = self.Controller.Model
         a = model1.CreateAccount("A")
-        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        rt = a.AddRecurringTransaction(1, "test", today, RecurringTransaction.DAILY)
         self.assertEqual(rt.RepeatEvery, 1)
         rt.RepeatEvery = 2
 
@@ -207,7 +208,7 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
     def testRecurringRepeatOnIsStoredOnUpdate(self):
         model1 = self.Controller.Model
         a = model1.CreateAccount("A")
-        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        rt = a.AddRecurringTransaction(1, "test", today, RecurringTransaction.DAILY)
         self.assertEqual(rt.RepeatOn, None)
         rt.RepeatOn = [5,6]
 
@@ -218,7 +219,7 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
     def testRecurringEndDateIsStoredOnUpdate(self):
         model1 = self.Controller.Model
         a = model1.CreateAccount("A")
-        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        rt = a.AddRecurringTransaction(1, "test", today, RecurringTransaction.DAILY)
         self.assertEqual(rt.EndDate, None)
         rt.EndDate = today
 
@@ -229,7 +230,7 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
     def testRecurringInheritedPropsAreStoredOnUpdate(self):
         model1 = self.Controller.Model
         a = model1.CreateAccount("A")
-        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        rt = a.AddRecurringTransaction(1, "test", today, RecurringTransaction.DAILY)
         self.assertEqual(rt.Amount, 1)
         self.assertEqual(rt.Date, today)
         self.assertEqual(rt.Description, "test")
@@ -249,7 +250,7 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         model1 = self.Controller.Model
         a = model1.CreateAccount("A")
         
-        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        rt = a.AddRecurringTransaction(1, "test", today, RecurringTransaction.DAILY)
         
         self.assertEqual(rt.LastTransacted, None)
         rt.PerformTransactions()
@@ -264,7 +265,7 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         a = model1.CreateAccount("A")
         b = model1.CreateAccount("B")
         
-        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY)
+        rt = a.AddRecurringTransaction(1, "test", today, RecurringTransaction.DAILY)
         self.assertEqual(rt.Source, None)
         rt.Source = b
         self.assertEqual(rt.Source, b)
@@ -332,7 +333,7 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
     def testTransactionRecurringParentIsStored(self):
         model1 = self.Controller.Model
         a = model1.CreateAccount("A")
-        rt = a.AddRecurringTransaction(1, "test", today, bankobjects.RECURRING_DAILY, endDate=today)
+        rt = a.AddRecurringTransaction(1, "test", today, RecurringTransaction.DAILY, endDate=today)
         rt.PerformTransactions()
         
         model2 = model1.Store.GetModel(useCached=False)

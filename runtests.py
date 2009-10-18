@@ -24,8 +24,9 @@ def main():
     from testhelpers import displayhook
     import sys; sys.displayhook = displayhook
 
-    import bankobjects, controller
-    mods = [bankobjects, controller]
+    import controller
+    from bankobjects import transaction
+    mods = [transaction, controller]
 
     results = {}
     for mod in mods:

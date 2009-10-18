@@ -17,9 +17,11 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import wx, datetime
+from wx.lib.pubsub import Publisher
+
 import bankcontrols, bankobjects, helpers
 import localization, gettext
-from wx.lib.pubsub import Publisher
+from bankobjects.recurringtransaction import RecurringTransaction
 
 class RecurringSummaryText(wx.Panel):
     def __init__(self, parent):
@@ -85,14 +87,14 @@ class TransferPanel(wx.Panel):
 class RecurringPanel(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent, name="RecurringPanel")
-        self.recurringObj = bankobjects.RecurringTransaction(None, None, 0, "", datetime.date.today())
+        ##self.recurringObj = RecurringTransaction(None, None, 0, "", datetime.date.today()) #FIXME
 
         # The daily option is useful if you have something which happens every 30 days, for example.
         # Some billing cycles work this way, and the date slowly shifts down monthly.
         self.repeatsCombo = wx.Choice(self, choices=(_("Daily"), _("Weekly"), _("Monthly"), _("Yearly")))
         # Set the default to weekly.
         self.repeatsCombo.SetSelection(1)
-        self.recurringObj.RepeatType = 1
+        ##self.recurringObj.RepeatType = 1
 
         self.everyText = wx.StaticText(self)
         self.everySpin = wx.SpinCtrl(self, min=1, max=130, initial=1)

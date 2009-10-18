@@ -19,11 +19,12 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 from datetime import date, datetime
-from bankobjects import Transaction
 from wx.lib.pubsub import Publisher
 import codecs, csv, os, re
-import fileservice, debug
 from cStringIO import StringIO
+
+from bankobjects.transaction import Transaction
+import fileservice, debug
 
 try:
     import simplejson as json
