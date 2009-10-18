@@ -20,9 +20,8 @@
 
 from wx.lib.pubsub import Publisher
 import datetime, re
-from dateutil import rrule
-import functools
 import bankexceptions, currencies, localization, debug
+from recurringtransaction import RecurringTransaction
 
 RECURRING_DAILY = 0
 RECURRING_WEEKLY = 1
@@ -714,127 +713,6 @@ class Transaction(ORMObject):
     Description = property(GetDescription, SetDescription)
     Amount = property(GetAmount, SetAmount)
     LinkedTransaction = property(GetLinkedTransaction, SetLinkedTransaction)
-
-class RecurringTransaction(Transaction, ORMObject):
-    ORM_TABLE = "recurring_transactions"
-    ORM_ATTRIBUTES = ["Amount", "Description", "Date", "RepeatType", "RepeatEvery", "RepeatOn", "EndDate", "Source", "LastTransacted"]
-    
-    def __init__(self, tID, parent, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, source=None, lastTransacted=None):
-        Transaction.__init__(self, tID, parent, amount, description, date)
-        ORMObject.__init__(self)
-        
-        # If the transaction recurs weekly and repeatsOn isn't specified, assume just today.
-        if repeatType == RECURRING_WEEKLY and repeatOn is None:
-            todaydaynumber = datetime.date.today().weekday()
-            repeatOn = [int(i==todaydaynumber) for i in range(7)]
-        
-        self.IsFrozen = True
-        self.RepeatType = repeatType
-        self.RepeatEvery = repeatEvery
-        self.RepeatOn = repeatOn
-        self.EndDate = endDate
-        self.Source = source
-        self.LastTransacted = lastTransacted
-        self.IsFrozen = False
-        
-    def PerformTransactions(self):
-        for date in self.GetUntransactedDates():
-            result = self.Parent.AddTransaction(self.Amount, self.Description, date, self.Source)
-            if isinstance(result, Transaction):
-                result = (result,)
-            for transaction in result:
-                transaction.RecurringParent = self
-        
-        self.LastTransacted = datetime.date.today()
-        
-    def GetRRule(self):
-        """Generate the dateutils.rrule for this recurring transaction."""
-        # Create some mapping lists.
-        rruleDays = [rrule.MO, rrule.TU, rrule.WE, rrule.TH, rrule.FR, rrule.SA, rrule.SU]
-        rruleTypes = [rrule.DAILY, rrule.WEEKLY, rrule.MONTHLY, rrule.YEARLY]
-        
-        func = functools.partial(rrule.rrule, rruleTypes[self.RepeatType], dtstart=self.Date, interval=self.RepeatEvery, wkst=rrule.MO)
-        if self.RepeatType == RECURRING_WEEKLY:
-            result = func(byweekday=[rruleDays[i] for i, x in enumerate(self.RepeatOn) if x])
-        elif self.RepeatType == RECURRING_MONTLY:
-            # "a date on the specified day of the month, unless it is beyond the end of month, in which case it will be the last day of the month"
-            result = func(bymonthday=(self.Date.day, -1), bysetpos=1)
-        else:
-            result = func()
-            
-        return result
-    
-    def DateToDatetime(self, date):
-        """Convert a date to a datetime at the first microsecond of that day."""
-        return datetime.datetime(date.year, date.month, date.day)
-    
-    def GetUntransactedDates(self):
-        """Get all due transaction dates."""
-        result = self.GetRRule()
-        
-        today = datetime.date.today()
-        
-        # Stop at the end date or today, whichever is earlier.
-        if self.EndDate:
-            end = min(self.EndDate, today)
-        else:
-            end = today
-        
-        if self.LastTransacted:
-            # Start on the day after the last transaction
-            start = self.LastTransacted + datetime.timedelta(days=1)
-        else:
-            start = self.Date
-            
-        # Convert dates to datetimes.
-        start, end = [self.DateToDatetime(d) for d in (start, end)]
-        # Calculate the result.
-        result = result.between(start, end, inc=True)
-        # Return just the dates, we don't care about datetime.
-        return [dt.date() for dt in list(result)]
-    
-    def GetNext(self):
-        """Get the next transaction date that will occur."""
-        result = self.GetRRule()
-        after = self.LastTransacted or (self.Date - datetime.timedelta(days=1))
-        after = self.DateToDatetime(after)
-        return result.after(after, inc=False).date()
-    
-    def SetLastTransacted(self, date):
-        if date is None:
-            self._LastTransacted = None
-        else:
-            self._LastTransacted = self._MassageDate(date)
-        
-    def GetLastTransacted(self):
-        return self._LastTransacted
-    
-    def SetEndDate(self, date):
-        if date is None:
-            self._EndDate = None
-        else:
-            self._EndDate = self._MassageDate(date)
-        
-    def GetEndDate(self):
-        return self._EndDate
-        
-    def __eq__(self, other):
-        if other is None:
-            return False
-
-        assert isinstance(other, RecurringTransaction), other
-        return (
-            Transaction.__eq__(self, other) and
-            self.RepeatType == other.RepeatType and
-            self.RepeatEvery == other.RepeatEvery and
-            self.RepeatOn == other.RepeatOn and
-            self.EndDate == other.EndDate and
-            self.Source == other.Source and
-            self.LastTransacted == other.LastTransacted
-            )
-    
-    LastTransacted = property(GetLastTransacted, SetLastTransacted)
-    EndDate = property(GetEndDate, SetEndDate)
     
 if __name__ == "__main__":
     import doctest
