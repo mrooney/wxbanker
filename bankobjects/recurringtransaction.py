@@ -151,12 +151,18 @@ class RecurringTransaction(Transaction, ORMObject):
             else:
                 pluralDayNames = (_("Mondays"), _("Tuesdays"), _("Wednesdays"), _("Thursdays"), _("Fridays"), _("Saturdays"), _("Sundays"))
                 repeatDays = tuple(day for i, day in enumerate(pluralDayNames) if self.RepeatOn[i])
+                # Figure out the base for this string.
+                if self.RepeatEvery == 1:
+                    summaryBase = _("Weekly on %s")
+                else:
+                    summaryBase = _("Every %(num)d weeks on %%s") % {'num':self.RepeatEvery}
+                    
                 if len(repeatDays) == 0:
                     summary = "Never"
                 elif len(repeatDays) == 1:
-                    summary = _("Weekly on %s") % repeatDays[0]
+                    summary = summaryBase % repeatDays[0]
                 else:
-                    summary = _("Weekly on %s") % ((", ".join(repeatDays[:-1])) + (_(" and %s") % repeatDays[-1]))
+                    summary = summaryBase % ((", ".join(repeatDays[:-1])) + (_(" and %s") % repeatDays[-1]))
         elif repeatType == 2:
             summary = gettext.ngettext("Monthly", "Every %(num)d months", self.RepeatEvery) % {'num':self.RepeatEvery} 
         elif repeatType == 3:

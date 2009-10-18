@@ -248,6 +248,9 @@ class RecurringTest(testbase.TestCaseWithController):
         rt = account.AddRecurringTransaction(1, "test", datetime.date(2009, 1, 6), RecurringTransaction.WEEKLY)
         self.assertEqual(rt.GetRecurrance(), "Weekly on Tuesdays")
         
+        rt.RepeatOn = [0,0,0,0,0,0,0]
+        self.assertEqual(rt.GetRecurrance(), "Never")
+        
         rt.RepeatOn = [1,1,1,1,1,1,1]
         self.assertEqual(rt.GetRecurrance(), "Daily")
         
@@ -281,11 +284,17 @@ class RecurringTest(testbase.TestCaseWithController):
         rt.EndDate = today
         self.assertEqual(rt.GetRecurrance(), "Every 3 months until %s" % today)
         
-    def testRecurringSummaryMonthly(self):
+    def testRecurringSummaryYearly(self):
         model, account = self.createAccount()
         
-        rt = account.AddRecurringTransaction(1, "test", today, RecurringTransaction.MONTLY)
-        self.assertEqual(rt.GetRecurrance(), "Monthly")
+        rt = account.AddRecurringTransaction(1, "test", today, RecurringTransaction.YEARLY)
+        self.assertEqual(rt.GetRecurrance(), "Annually")
+        
+        rt.EndDate = today
+        self.assertEqual(rt.GetRecurrance(), "Annually until %s" % today)
+        
+        rt.RepeatEvery = 10
+        self.assertEqual(rt.GetRecurrance(), "Every 10 years until %s" % today)
         
 
 if __name__ == "__main__":
