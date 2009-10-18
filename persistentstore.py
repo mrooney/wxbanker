@@ -32,11 +32,17 @@ Table: transactions                                                             
 +-------------------------------------------------------------------------------------------------------+----------------+
 """
 import sys, os, datetime
-import bankobjects, currencies, debug
 from sqlite3 import dbapi2 as sqlite
 import sqlite3
 from wx.lib.pubsub import Publisher
 
+import currencies, debug
+from bankobjects.account import Account
+from bankobjects.accountlist import AccountList
+from bankobjects.bankmodel import BankModel
+from bankobjects.transaction import Transaction
+from bankobjects.transactionlist import TransactionList
+from bankobjects.recurringtransaction import RecurringTransaction
 
 class PersistentStore:
     """
@@ -107,8 +113,8 @@ class PersistentStore:
                 self.syncBalances()
 
             accounts = self.getAccounts()
-            accountList = bankobjects.AccountList(self, accounts)
-            self.cachedModel = bankobjects.BankModel(self, accountList)
+            accountList = AccountList(self, accounts)
+            self.cachedModel = BankModel(self, accountList)
 
         return self.cachedModel
 
@@ -124,7 +130,7 @@ class PersistentStore:
         ID = cursor.lastrowid
         self.commitIfAppropriate()
 
-        account = bankobjects.Account(self, ID, accountName, currency)
+        account = Account(self, ID, accountName, currency)
 
         # Ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.
         self.clearAccountTransactions(account)
@@ -297,7 +303,7 @@ class PersistentStore:
 
     def result2account(self, result):
         ID, name, currency, balance = result
-        return bankobjects.Account(self, ID, name, currency, balance)
+        return Account(self, ID, name, currency, balance)
     
     def result2recurringtransaction(self, result, parentAccount, allAccounts):
         rId, accountId, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, sourceId, lastTransacted = result
@@ -310,7 +316,7 @@ class PersistentStore:
         else:
             sourceAccount = None
 
-        return bankobjects.RecurringTransaction(rId, parentAccount, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, sourceAccount, lastTransacted)
+        return RecurringTransaction(rId, parentAccount, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, sourceAccount, lastTransacted)
 
     def getAccounts(self):
         # Fetch all the accounts.
@@ -334,7 +340,7 @@ class PersistentStore:
 
     def result2transaction(self, result, parentObj, linkedTransaction=None, recurringCache=None):
         tid, pid, amount, description, date, linkId, recurringId = result
-        t = bankobjects.Transaction(tid, parentObj, amount, description, date)
+        t = Transaction(tid, parentObj, amount, description, date)
 
         # Handle a linked transaction being passed in, a special case called from a few lines down.
         if linkedTransaction:
@@ -357,7 +363,7 @@ class PersistentStore:
         return t
 
     def getTransactionsFrom(self, account):
-        transactions = bankobjects.TransactionList()
+        transactions = TransactionList()
         # Generate a map of recurring transaction IDs to the objects for fast look-up.
         recurringCache = {}
         for recurring in account.Parent.GetRecurringTransactions():
