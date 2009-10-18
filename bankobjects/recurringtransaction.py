@@ -88,7 +88,6 @@ class RecurringTransaction(Transaction, ORMObject):
     def GetUntransactedDates(self):
         """Get all due transaction dates."""
         result = self.GetRRule()
-        
         today = datetime.date.today()
         
         # Stop at the end date or today, whichever is earlier.

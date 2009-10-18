@@ -248,7 +248,23 @@ class RecurringTest(testbase.TestCaseWithController):
         rt = account.AddRecurringTransaction(1, "test", datetime.date(2009, 1, 6), RecurringTransaction.WEEKLY)
         self.assertEqual(rt.GetRecurrance(), "Weekly on Tuesdays")
         
-        #TODO: multiple days, weekdays, weekends
+        rt.RepeatOn = [1,1,1,1,1,1,1]
+        self.assertEqual(rt.GetRecurrance(), "Daily")
+        
+        rt.RepeatOn = [1,1,1,1,1,0,0]
+        self.assertEqual(rt.GetRecurrance(), "Weekly on weekdays")
+        
+        rt.RepeatOn = [0,0,0,0,0,1,1]
+        self.assertEqual(rt.GetRecurrance(), "Weekly on weekends")
+        
+        rt.RepeatOn = [1,0,1,0,0,0,0]
+        self.assertEqual(rt.GetRecurrance(), "Weekly on Mondays and Wednesdays")
+        
+        rt.RepeatOn = [1,0,1,0,0,1,0]
+        self.assertEqual(rt.GetRecurrance(), "Weekly on Mondays, Wednesdays and Saturdays")
+        
+        rt.EndDate = today
+        self.assertEqual(rt.GetRecurrance(), "Weekly on Mondays, Wednesdays and Saturdays until %s" % today)
         
     def testRecurringSummaryMonthly(self):
         model, account = self.createAccount()
