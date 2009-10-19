@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-09-06 12:20-0700\n"
-"PO-Revision-Date: 2008-12-18 14:32+0000\n"
+"PO-Revision-Date: 2009-10-18 12:33+0000\n"
 "Last-Translator: ankur_the_king <ankurkachru@gmail.com>\n"
 "Language-Team: Hindi <hi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-09-23 09:42+0000\n"
+"X-Launchpad-Export-Date: 2009-10-19 07:09+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
@@ -130,11 +130,11 @@ msgstr "एक हल्का व्यक्तिगत वित्त प�
 
 #: newtransactionctrl.py:47
 msgid "from"
-msgstr ""
+msgstr "से"
 
 #: newtransactionctrl.py:47 summarytab.py:57
 msgid "to"
-msgstr ""
+msgstr "को"
 
 #: newtransactionctrl.py:51 newtransactionctrl.py:240
 msgid "Transfer"
@@ -154,7 +154,7 @@ msgstr[1] ""
 
 #: newtransactionctrl.py:91
 msgid "Weekly"
-msgstr ""
+msgstr "साप्ताहिक"
 
 #: newtransactionctrl.py:91 newtransactionctrl.py:208
 #, python-format
@@ -165,39 +165,39 @@ msgstr[1] ""
 
 #: newtransactionctrl.py:91
 msgid "Yearly"
-msgstr ""
+msgstr "वार्षिक"
 
 #: newtransactionctrl.py:101
 msgid "Never"
-msgstr ""
+msgstr "कभी नहीं"
 
 #: newtransactionctrl.py:111
 msgid "Mon"
-msgstr ""
+msgstr "सोम"
 
 #: newtransactionctrl.py:111
 msgid "Tue"
-msgstr ""
+msgstr "मंगल"
 
 #: newtransactionctrl.py:111
 msgid "Wed"
-msgstr ""
+msgstr "बुध"
 
 #: newtransactionctrl.py:111
 msgid "Thu"
-msgstr ""
+msgstr "गुरु"
 
 #: newtransactionctrl.py:111
 msgid "Fri"
-msgstr ""
+msgstr "शुक्र"
 
 #: newtransactionctrl.py:111
 msgid "Sat"
-msgstr ""
+msgstr "शनि"
 
 #: newtransactionctrl.py:111
 msgid "Sun"
-msgstr ""
+msgstr "रवि"
 
 #: newtransactionctrl.py:132
 msgid "Repeats:"
@@ -205,7 +205,7 @@ msgstr ""
 
 #: newtransactionctrl.py:135
 msgid "Every"
-msgstr ""
+msgstr "प्रत्येक"
 
 #: newtransactionctrl.py:141
 msgid "Ends:"
@@ -214,14 +214,14 @@ msgstr ""
 #: newtransactionctrl.py:185
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "दिन"
+msgstr[1] "दिनों"
 
 #: newtransactionctrl.py:188
 msgid "week"
 msgid_plural "weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "सप्ताह"
+msgstr[1] "सप्ताह"
 
 #: newtransactionctrl.py:189
 msgid "Repeats on days:"
@@ -237,31 +237,31 @@ msgstr ""
 
 #: newtransactionctrl.py:198
 msgid "Mondays"
-msgstr ""
+msgstr "सोमवार"
 
 #: newtransactionctrl.py:198
 msgid "Tuesdays"
-msgstr ""
+msgstr "मंगलवार"
 
 #: newtransactionctrl.py:198
 msgid "Wednesdays"
-msgstr ""
+msgstr "बुधवार"
 
 #: newtransactionctrl.py:198
 msgid "Thursdays"
-msgstr ""
+msgstr "गुरुवार"
 
 #: newtransactionctrl.py:198
 msgid "Fridays"
-msgstr ""
+msgstr "शुक्रवार"
 
 #: newtransactionctrl.py:198
 msgid "Saturdays"
-msgstr ""
+msgstr "शनिवार"
 
 #: newtransactionctrl.py:198
 msgid "Sundays"
-msgstr ""
+msgstr "रविवार"
 
 #: newtransactionctrl.py:203 newtransactionctrl.py:205
 #, python-format
@@ -271,7 +271,7 @@ msgstr ""
 #: newtransactionctrl.py:205
 #, python-format
 msgid " and %s"
-msgstr ""
+msgstr " और %s"
 
 #: newtransactionctrl.py:207
 msgid "month"
@@ -282,8 +282,8 @@ msgstr[1] ""
 #: newtransactionctrl.py:210
 msgid "year"
 msgid_plural "years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "वर्ष"
+msgstr[1] "वर्ष"
 
 #: newtransactionctrl.py:211
 #, python-format
@@ -391,15 +391,15 @@ msgstr ""
 
 #: messagepanel.py:45
 msgid "Dismiss"
-msgstr ""
+msgstr "खारिज करें"
 
 #: summarytab.py:49
 msgid "Account"
-msgstr ""
+msgstr "खाता"
 
 #: summarytab.py:53
 msgid "From"
-msgstr ""
+msgstr "के द्वारा"
 
 #: summarytab.py:64
 msgid "Fit Curve Degree"
@@ -443,7 +443,7 @@ msgstr ""
 
 #: accountconfigdialog.py:39
 msgid "Password"
-msgstr ""
+msgstr "पासवर्ड"
 
 #: templater.py:27
 msgid "Hide Calculator"
@@ -519,11 +519,11 @@ msgstr ""
 
 #: csvimportframe.py:99
 msgid "Date format"
-msgstr ""
+msgstr "दिनांक रचना"
 
 #: csvimportframe.py:106
 msgid "Decimal separator"
-msgstr ""
+msgstr "दशमलव अलगानेवाला"
 
 #: csvimportframe.py:117
 msgid "CSV file settings"
@@ -535,7 +535,7 @@ msgstr ""
 
 #: csvimportframe.py:129
 msgid "Encoding"
-msgstr ""
+msgstr "एनकोडिंग"
 
 #: csvimportframe.py:133
 msgid "Column delimiter"
@@ -547,7 +547,7 @@ msgstr ""
 
 #: csvimportframe.py:149 csvimportframe.py:151 wxbanker.py:113
 msgid "Preview"
-msgstr ""
+msgstr "पूर्वदृश्य"
 
 #: csvimportframe.py:164
 msgid "CSV profiles"
@@ -559,15 +559,15 @@ msgstr ""
 
 #: csvimportframe.py:179
 msgid "Load"
-msgstr ""
+msgstr "लोड करें"
 
 #: csvimportframe.py:184
 msgid "Save"
-msgstr ""
+msgstr "सहेजें"
 
 #: csvimportframe.py:189
 msgid "Delete"
-msgstr ""
+msgstr "मिटाओ"
 
 #: csvimportframe.py:243
 #, python-format
@@ -721,7 +721,7 @@ msgstr ""
 
 #: wxbanker.py:103
 msgid "No description"
-msgstr ""
+msgstr "कोई विवरण नहीं"
 
 #: wxbanker.py:122
 msgid "Perform"
