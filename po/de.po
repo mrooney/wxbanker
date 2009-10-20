@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-09-06 12:20-0700\n"
-"PO-Revision-Date: 2009-10-18 16:34+0000\n"
+"PO-Revision-Date: 2009-10-19 16:01+0000\n"
 "Last-Translator: Patrick Eigensatz <patrick.eigensatz@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-10-19 07:09+0000\n"
+"X-Launchpad-Export-Date: 2009-10-20 07:08+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
@@ -442,6 +442,8 @@ msgid ""
 "wxBanker can synchronize account balances online if you have an account with "
 "mint.com"
 msgstr ""
+"wxBanker kann ihr Kontostand online synchronisieren wenn sie ein Konto in "
+"mint.com besitzen."
 
 #: accountconfigdialog.py:37
 msgid "Username"
@@ -490,6 +492,8 @@ msgstr "Groß-/Kleinschreibung beachten"
 #: searchctrl.py:44
 msgid "Whether or not to match based on capitalization"
 msgstr ""
+"Keine oder keine passende Errechnung bezogen auf die Errechnung des "
+"Kapitalertrags aus den Zinsen vorhanden."
 
 #: searchctrl.py:49
 msgid "In: "
@@ -521,7 +525,7 @@ msgstr "Importieren"
 
 #: csvimportframe.py:87
 msgid "CSV columns mapping"
-msgstr ""
+msgstr "CSV Wirtschaftsteilkarten"
 
 #: csvimportframe.py:99
 msgid "Date format"
@@ -606,7 +610,7 @@ msgstr "Datei auswählen und auf \"Vorschau\" klicken"
 
 #: currencies.py:192
 msgid "detected"
-msgstr ""
+msgstr "entdeckt"
 
 #: transactionolv.py:47
 msgid "No transactions entered."
@@ -629,7 +633,7 @@ msgstr "Füge %s zum Taschenrechner hinzu"
 #: transactionolv.py:188
 #, python-format
 msgid "Subtract %s from calculator"
-msgstr ""
+msgstr "Subtrahiere %s vom Taschenrechner."
 
 #: transactionolv.py:200
 msgid "Remove this transaction"
@@ -684,7 +688,7 @@ msgstr "Leider exsistiert schon ein Konto mit diesem Namen."
 
 #: accountlistctrl.py:383 accountlistctrl.py:478
 msgid "Account names cannot be blank."
-msgstr ""
+msgstr "Kontoname darf nicht leer sein."
 
 #: accountlistctrl.py:449
 #, python-format
@@ -732,15 +736,15 @@ msgstr ""
 
 #: wxbanker.py:103
 msgid "No description"
-msgstr ""
+msgstr "Keine Beschreibung"
 
 #: wxbanker.py:122
 msgid "Perform"
-msgstr ""
+msgstr "Arbeiten"
 
 #: wxbanker.py:138
 msgid "Recurring transaction successfully added."
-msgstr ""
+msgstr "Wiederkehrende Überweisung erfolgreich hinzugefügt."
 
 #: wxbanker.py:141
 #, python-format
@@ -792,6 +796,8 @@ msgid ""
 "You have made changes since the last save. Would you like to save before "
 "exiting?"
 msgstr ""
+"Sie haben Änderungen vorgenommen seit dem letztem Speichern. Wollen Sie "
+"speichern bevor Sie gehen?"
 
 #: wxbanker.py:219
 msgid ""
