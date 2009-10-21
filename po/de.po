@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-09-06 12:20-0700\n"
-"PO-Revision-Date: 2009-10-19 16:01+0000\n"
+"PO-Revision-Date: 2009-10-20 16:25+0000\n"
 "Last-Translator: Patrick Eigensatz <patrick.eigensatz@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-10-20 07:08+0000\n"
+"X-Launchpad-Export-Date: 2009-10-21 07:26+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
@@ -726,6 +726,8 @@ msgid ""
 "The recurring transaction \"%(description)s\" has %(num)i transactions ready "
 "for %(amount)s on %(datelist)s."
 msgstr ""
+"Die wiederkehrende Überweisung \"%(description)s\" hat  %(num)i "
+"Überweisungen bereit für %(amount)s an %(datelist)s."
 
 #: wxbanker.py:99
 #, python-format
@@ -733,6 +735,8 @@ msgid ""
 "%(num)i recurring transactions have a total of %(totalnum)i transactions "
 "ready."
 msgstr ""
+"%(num)i wiederkehrende Überweisungen haben ein Total von %(totalnum)i "
+"Überweisungen bereit."
 
 #: wxbanker.py:103
 msgid "No description"
@@ -749,7 +753,7 @@ msgstr "Wiederkehrende Überweisung erfolgreich hinzugefügt."
 #: wxbanker.py:141
 #, python-format
 msgid "The first transaction will occur on %(date)s"
-msgstr ""
+msgstr "Die erste Überweisung wird erfolgen am %(date)s"
 
 #: wxbanker.py:203
 msgid "It looks like this is your first time using wxBanker!"
@@ -804,6 +808,8 @@ msgid ""
 "Note that enabling auto-save from the File menu will eliminate the need for "
 "manual saving."
 msgstr ""
+"Anmerkung : Wenn Sie die Auto-Speicherung vom Datei Menu aktivieren, müssen "
+"Sie manuell speichern."
 
 #~ msgid "Other accounts"
 #~ msgstr "Andere Konten"
