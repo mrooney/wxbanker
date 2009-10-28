@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-09-06 12:20-0700\n"
-"PO-Revision-Date: 2009-10-12 22:04+0000\n"
+"PO-Revision-Date: 2009-10-27 08:27+0000\n"
 "Last-Translator: Simon Vidmar <Unknown>\n"
 "Language-Team: Slovenian <sl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || "
 "n%100==4 ? 3 : 0);\n"
-"X-Launchpad-Export-Date: 2009-10-13 06:59+0000\n"
+"X-Launchpad-Export-Date: 2009-10-28 08:27+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
@@ -39,7 +39,7 @@ msgstr "Uvoz iz CSV"
 
 #: menubar.py:46
 msgid "Import transactions from a CSV file"
-msgstr ""
+msgstr "Uvoz transakcij iz datoteke CSV"
 
 #: menubar.py:48
 msgid "Auto-save"
@@ -91,7 +91,7 @@ msgstr "&Zahtevajte funkcionalnost"
 
 #: menubar.py:89
 msgid "Request a new feature to be implemented"
-msgstr ""
+msgstr "Zahtevaj dodatne funkcionalnosti"
 
 #: menubar.py:94
 msgid "Tran&slate wxBanker"
@@ -268,7 +268,7 @@ msgstr ""
 
 #: newtransactionctrl.py:198
 msgid "Sundays"
-msgstr ""
+msgstr "Nedelje"
 
 #: newtransactionctrl.py:203 newtransactionctrl.py:205
 #, python-format
@@ -300,8 +300,10 @@ msgstr[3] "let"
 #, python-format
 msgid "Annually"
 msgid_plural "Every %(num)d years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Letno"
+msgstr[1] "Vsakih %(num)d let"
+msgstr[2] "Vsakih %(num)d let"
+msgstr[3] "Vsakih %(num)d let"
 
 #: newtransactionctrl.py:215
 #, python-format
@@ -546,7 +548,7 @@ msgstr "Preskoči prvo vrstico"
 
 #: csvimportframe.py:129
 msgid "Encoding"
-msgstr ""
+msgstr "Kodiranje"
 
 #: csvimportframe.py:133
 msgid "Column delimiter"
