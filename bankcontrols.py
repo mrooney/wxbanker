@@ -23,6 +23,7 @@ import localization
 
 
 def fixMinWidth(ctrl, values):
+    """Set the minimum width of a control to the max of all possible values."""
     # Calculate the width of the button.
     ctrl.Freeze()
     minWidth, minHeight = ctrl.MinSize
@@ -38,17 +39,17 @@ def DateCtrlFactory(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY):
     # The date control. We want the Generic control, which is a composite control
     # and allows us to bind to its enter, but on Windows with wxPython < 2.8.8.0,
     # it won't be available.
-    doBind = False
+    generic = False
     try:
         DatePickerClass = wx.GenericDatePickerCtrl
-        doBind = True
+        generic = True
     except AttributeError:
         DatePickerClass = wx.DatePickerCtrl
 
     dateCtrl = DatePickerClass(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY)
     dateCtrl.SetToolTipString(_("Date"))
 
-    if doBind:
+    if generic:
         def onDateChar(event):
             key = event.GetKeyCode()
             incr = 0
@@ -66,6 +67,11 @@ def DateCtrlFactory(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY):
             dateCtrl.Children[0].Children[0].Bind(wx.EVT_KEY_DOWN, onDateChar)
         except Exception:
             print "Unable to bind to dateCtrl's text field, that's odd! Please file a bug: https://bugs.launchpad.net/wxbanker/+filebug"
+            
+        # date controls seem to need an extra bit of width to be fully visible.
+        bestSize = dateCtrl.BestSize
+        bestSize[0] += 5
+        dateCtrl.SetMinSize(bestSize)
 
     return dateCtrl
 
