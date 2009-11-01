@@ -39,24 +39,28 @@ class RecurringSummaryText(wx.Panel):
 
     def SetLabel(self, text):
         self.summaryText.Label = text
+        
+class GBRow:
+    def __init__(self, parent, row):
+        self.Row = row
+        self.Column = 0
+        self.ParentCtrl = parent
+        
+    def AddNext(self, ctrl, *args, **kwargs):
+        self.ParentCtrl.Sizer.Add(ctrl, wx.GBPosition(self.Row, self.Column), *args, **kwargs)
+        self.Column += 1
 
-class TransferPanel(wx.Panel):
-    def __init__(self, parent):
-        wx.Panel.__init__(self, parent)
+class TransferRow(GBRow):
+    def __init__(self, parent, row):
+        GBRow.__init__(self, parent, row)
         self.accountDict = {}
-        self.nullChoice = ["----------"]
 
-        self.fromtoBox = wx.Choice(self, choices=[_("from"), _("to")])
-        self.accountSelection = wx.Choice(self, choices=self.nullChoice)
+        self.fromtoBox = wx.Choice(parent, choices=[_("from"), _("to")])
+        self.accountSelection = wx.Choice(parent, choices=[])
 
-        self.Sizer = wx.BoxSizer()
-        self.Sizer.Add(wx.StaticText(self, label=_("Transfer")), flag=wx.ALIGN_CENTER)
-        self.Sizer.AddSpacer(3)
-        self.Sizer.Add(self.fromtoBox, flag=wx.ALIGN_CENTER)
-        self.Sizer.AddSpacer(8)
-        self.Sizer.Add(wx.StaticText(self, label=_("account:")), flag=wx.ALIGN_CENTER)
-        self.Sizer.AddSpacer(3)
-        self.Sizer.Add(self.accountSelection, flag=wx.ALIGN_CENTER)
+        self.AddNext(wx.StaticText(parent, label=_("Transfer")), flag=wx.ALIGN_CENTER)
+        self.AddNext(self.fromtoBox, flag=wx.ALIGN_CENTER)
+        self.AddNext(self.accountSelection, flag=wx.ALIGN_CENTER, span=wx.GBSpan(1,2))
 
     def GetAccounts(self, currentAccount):
         stringSel = self.accountSelection.GetStringSelection()
