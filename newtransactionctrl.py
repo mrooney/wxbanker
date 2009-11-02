@@ -41,12 +41,19 @@ class RecurringSummaryText(wx.Panel):
         self.summaryText.Label = text
         
 class GBRow:
-    def __init__(self, parent, row):
+    def __init__(self, parent, row, *args, **kwargs):
+        #TODO: do something with [kw]args like name, perhaps be a wx.Window?        
+        self.Parent = parent
         self.Row = row
         self.Column = 0
         self.ParentCtrl = parent
         
     def AddNext(self, ctrl, *args, **kwargs):
+        if "flag" in kwargs:
+            kwargs["flag"] = kwargs["flag"] | wx.ALIGN_CENTER_VERTICAL
+        else:
+            kwargs["flag"] = wx.ALIGN_CENTER_VERTICAL
+
         self.ParentCtrl.Sizer.Add(ctrl, wx.GBPosition(self.Row, self.Column), *args, **kwargs)
         self.Column += 1
 
@@ -58,9 +65,9 @@ class TransferRow(GBRow):
         self.fromtoBox = wx.Choice(parent, choices=[_("from"), _("to")])
         self.accountSelection = wx.Choice(parent, choices=[])
 
-        self.AddNext(wx.StaticText(parent, label=_("Transfer")), flag=wx.ALIGN_CENTER)
-        self.AddNext(self.fromtoBox, flag=wx.ALIGN_CENTER)
-        self.AddNext(self.accountSelection, flag=wx.ALIGN_CENTER, span=wx.GBSpan(1,2))
+        self.AddNext(wx.StaticText(parent, label=_("Transfer")))
+        self.AddNext(self.fromtoBox)
+        self.AddNext(self.accountSelection, span=wx.GBSpan(1,2))
 
     def GetAccounts(self, currentAccount):
         stringSel = self.accountSelection.GetStringSelection()
@@ -217,71 +224,63 @@ class RecurringPanel(wx.Panel):
         repeatType, repeatEvery, repeatsOn, end = self.GetSettings()
         recurringObj.Update(repeatType, repeatEvery, repeatsOn, end)
 
-class NewTransactionCtrl(wx.Panel):
-    def __init__(self, parent):
-        wx.Panel.__init__(self, parent, name="NewTransactionCtrl")
+class NewTransactionCtrl(GBRow):
+    def __init__(self, parent, row):
+        GBRow.__init__(self, parent, row, name="NewTransactionCtrl")
         self.CurrentAccount = None
 
-        self.dateCtrl = dateCtrl = bankcontrols.DateCtrlFactory(self)
-        self.startText = wx.StaticText(self, label=_("Starts:"))
+        self.dateCtrl = bankcontrols.DateCtrlFactory(parent)
+        self.startText = wx.StaticText(parent, label=_("Starts:"))
 
         # The Description and Amount controls.
-        self.descCtrl = descCtrl = bankcontrols.HintedTextCtrl(self, size=(140, -1), style=wx.TE_PROCESS_ENTER, hint=_("Description"), icon="wxART_page_edit")
-        self.amountCtrl = amountCtrl = bankcontrols.HintedTextCtrl(self, size=(90, -1), style=wx.TE_PROCESS_ENTER|wx.TE_RIGHT, hint=_("Amount"), icon="wxART_money_dollar")
+        self.descCtrl = bankcontrols.HintedTextCtrl(parent, size=(140, -1), style=wx.TE_PROCESS_ENTER, hint=_("Description"), icon="wxART_page_edit")
+        self.amountCtrl = bankcontrols.HintedTextCtrl(parent, size=(90, -1), style=wx.TE_PROCESS_ENTER|wx.TE_RIGHT, hint=_("Amount"), icon="wxART_money_dollar")
 
         # The add button.
-        self.newButton = newButton = wx.BitmapButton(self, bitmap=wx.ArtProvider.GetBitmap('wxART_money_add'))
-        newButton.SetToolTipString(_("Enter this transaction"))
+        self.newButton = wx.BitmapButton(parent, bitmap=wx.ArtProvider.GetBitmap('wxART_money_add'))
+        self.newButton.SetToolTipString(_("Enter this transaction"))
 
         # The transfer check.
-        self.transferCheck = transferCheck = wx.CheckBox(self, label=_("Transfer"))
+        self.transferCheck = wx.CheckBox(parent, label=_("Transfer"))
 
         # The recurs check.
-        self.recursCheck = recursCheck = wx.CheckBox(self, label=_("Recurring"))
+        self.recursCheck = wx.CheckBox(parent, label=_("Recurring"))
 
         checkSizer = wx.BoxSizer(wx.VERTICAL)
         checkSizer.Add(self.transferCheck)
         checkSizer.Add(self.recursCheck)
 
-        self.recurringPanel = RecurringPanel(self)
-        self.transferPanel = TransferPanel(self)
-        
         # Checkboxes seem to have an overly large horizontal margin that looks bad.
         for check in (self.transferCheck, self.recursCheck):
             x, y = check.BestSize
             check.SetMinSize((x, y-4))
 
         # Set up the layout.
+        dateSizer = wx.BoxSizer()
+        dateSizer.Add(self.startText, flag=wx.ALIGN_CENTER)
+        dateSizer.Add(wx.StaticBitmap(parent, bitmap=wx.ArtProvider.GetBitmap('wxART_date')), 0, wx.ALIGN_CENTER|wx.ALL, 2)
+        dateSizer.Add(self.dateCtrl, flag=wx.ALIGN_CENTER)
+        self.startText.Hide()
+        
         hSizer = wx.BoxSizer()
-        hSizer.Add(self.startText, flag=wx.ALIGN_CENTER)
-        hSizer.Add(wx.StaticBitmap(self, bitmap=wx.ArtProvider.GetBitmap('wxART_date')), 0, wx.ALIGN_CENTER|wx.ALL, 2)
-        hSizer.Add(dateCtrl, 0, wx.ALIGN_CENTER)
+        hSizer.Add(self.amountCtrl, 0, wx.ALIGN_CENTER)
         hSizer.AddSpacer(5)
-        hSizer.Add(descCtrl, 1, wx.ALIGN_CENTER)
-        hSizer.AddSpacer(5)
-        hSizer.Add(amountCtrl, 0, wx.ALIGN_CENTER)
-        hSizer.AddSpacer(5)
-        hSizer.Add(newButton, 0, wx.ALIGN_CENTER)
+        hSizer.Add(self.newButton, 0, wx.ALIGN_CENTER)
         hSizer.AddSpacer(5)
         hSizer.Add(checkSizer, 0, wx.ALIGN_CENTER)
-
-        self.Sizer = wx.BoxSizer(wx.VERTICAL)
-        self.Sizer.Add(self.recurringPanel, 0, wx.EXPAND|wx.TOP, 5)
-        self.Sizer.Add(self.transferPanel, 0, wx.EXPAND|wx.TOP, 5)
-        self.Sizer.Add(hSizer, 0, wx.EXPAND)
-
-        self.startText.Hide()
-        self.Sizer.Hide(self.recurringPanel)
-        self.Sizer.Hide(self.transferPanel)
-
+        
+        self.AddNext(dateSizer)
+        self.AddNext(self.descCtrl, flag=wx.EXPAND)
+        self.AddNext(hSizer)
+        
         # Initialize necessary bindings.
-        self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction) # Gives us enter from description/amount.
+        parent.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction) # Gives us enter from description/amount.
         self.newButton.Bind(wx.EVT_BUTTON, self.onNewTransaction)
         self.recursCheck.Bind(wx.EVT_CHECKBOX, self.onRecurringCheck)
         self.transferCheck.Bind(wx.EVT_CHECKBOX, self.onTransferCheck)
 
         try:
-            amountCtrl.Children[0].Bind(wx.EVT_CHAR, self.onAmountChar)
+            self.amountCtrl.Children[0].Bind(wx.EVT_CHAR, self.onAmountChar)
         except IndexError:
             # On OSX for example, a SearchCtrl is native and has no Children.
             pass
@@ -300,11 +299,12 @@ class NewTransactionCtrl(wx.Panel):
 
     def onRecurringCheck(self, event=None):
         recurring = self.recursCheck.IsChecked()
-        self.toggleVisibilityOf(self.recurringPanel, recurring)
+        #TODO => self.toggleVisibilityOf(self.recurringPanel, recurring)
         self.startText.Show(recurring)
 
     def onTransferCheck(self, event=None):
-        self.toggleVisibilityOf(self.transferPanel, self.transferCheck.IsChecked())
+        #TODO => self.toggleVisibilityOf(self.transferPanel, self.transferCheck.IsChecked())
+        pass
 
     def toggleVisibilityOf(self, control, visibility):
         self.Parent.Freeze()
@@ -320,7 +320,7 @@ class NewTransactionCtrl(wx.Panel):
     def onAccountChanged(self, message):
         account = message.data
         self.CurrentAccount = account
-        self.transferPanel.Update(account)
+        #TODO: call this properly: self.transferPanel.Update(account)
 
     def onAmountChar(self, event):
         wx.CallAfter(self.updateAddIcon)
@@ -350,7 +350,7 @@ class NewTransactionCtrl(wx.Panel):
             else:
                 baseStr = _("'%s' is not a valid amount.") % amount
 
-            dlg = wx.MessageDialog(self,
+            dlg = wx.MessageDialog(self.Parent,
                                 baseStr + " " + _("Please enter a number such as 12.34 or -20."),
                                 _("Invalid Transaction Amount"), wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
@@ -362,7 +362,7 @@ class NewTransactionCtrl(wx.Panel):
         # First, ensure an account is selected.
         destAccount = self.CurrentAccount
         if destAccount is None:
-            dlg = wx.MessageDialog(self,
+            dlg = wx.MessageDialog(self.Parent,
                                 _("Please select an account and then try again."),
                                 _("No account selected"), wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
@@ -378,9 +378,9 @@ class NewTransactionCtrl(wx.Panel):
         isTransfer = self.transferCheck.Value
 
         # If a search is active, we have to ask the user what they want to do.
-        if self.Parent.searchActive:
+        if self.Parent.Parent.searchActive:
             msg = _("A search is currently active.") + " " + _('Would you like to clear the current search and make this transaction in "%s"?') % (destAccount.Name)
-            dlg = wx.MessageDialog(self, msg, _("Clear search?"), style=wx.YES_NO|wx.ICON_WARNING)
+            dlg = wx.MessageDialog(self.Parent, msg, _("Clear search?"), style=wx.YES_NO|wx.ICON_WARNING)
             result = dlg.ShowModal()
             if result == wx.ID_YES:
                 Publisher().sendMessage("SEARCH.CANCELLED")
@@ -391,7 +391,7 @@ class NewTransactionCtrl(wx.Panel):
         if isTransfer:
             result = self.transferPanel.GetAccounts(destAccount)
             if result is None:
-                dlg = wx.MessageDialog(self,
+                dlg = wx.MessageDialog(self.Parent,
                                        _("This transaction is marked as a transfer. Please select the transfer account."),
                                        _("No account selected"), wx.OK | wx.ICON_ERROR)
                 dlg.ShowModal()

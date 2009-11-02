@@ -18,7 +18,7 @@
 
 import wx, wx.grid as gridlib
 import datetime
-import searchctrl, accountlistctrl, newtransactionctrl
+import searchctrl, accountlistctrl, transactionctrl
 from transactionolv import TransactionOLV as TransactionCtrl
 from calculator import CollapsableWidget, SimpleCalculator
 from wx.lib.pubsub import Publisher
@@ -43,7 +43,6 @@ class ManagePanel(wx.Panel):
         leftPanel.Sizer.Add(accountCtrl, 0, wx.EXPAND)
         leftPanel.Sizer.AddStretchSpacer(1)
         leftPanel.Sizer.Add(calcWidget, 0, wx.EXPAND)
-        #leftPanel.Sizer.Add(wx.StaticText(leftPanel, label=_("Transact")+":"), 0, wx.ALIGN_RIGHT|wx.TOP, 5)
 
         # Force the calculator widget (and parent) to take on the desired size.
         for widget in [calcWidget.widget, leftPanel]:
@@ -94,7 +93,7 @@ class TransactionPanel(wx.Panel):
 
         self.searchCtrl = searchCtrl = searchctrl.SearchCtrl(self, bankController)
         self.transactionCtrl = transactionCtrl = TransactionCtrl(subpanel, bankController)
-        self.newTransCtrl = newTransCtrl = newtransactionctrl.NewTransactionCtrl(self)
+        self.newTransCtrl = newTransCtrl = transactionctrl.TransactionCtrl(self)
 
         subpanel.Sizer = wx.BoxSizer()
         subpanel.Sizer.Add(transactionCtrl, 1, wx.EXPAND)

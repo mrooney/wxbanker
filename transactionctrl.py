@@ -17,7 +17,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import wx
-from newtransactionctrl import TransferRow
+from newtransactionctrl import TransferRow, NewTransactionCtrl
         
 class TransactionCtrl(wx.Panel):
     def __init__(self, parent):
@@ -25,8 +25,10 @@ class TransactionCtrl(wx.Panel):
         
         self.Sizer = wx.GridBagSizer(1, 1)
         self.Sizer.SetEmptyCellSize((0,0))
+        self.Sizer.AddGrowableCol(1, 1)
         
         TransferRow(self, 0)
+        NewTransactionCtrl(self, 1)
         
     def ShowRow(self, row, show=True):
         for child in self.Sizer.GetChildren():
