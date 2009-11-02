@@ -275,19 +275,11 @@ class NewTransactionRow(bankcontrols.GBRow):
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
 
     def onRecurringCheck(self, event=None):
-        recurring = self.recursCheck.IsChecked()
-        #TODO => self.toggleVisibilityOf(self.recurringPanel, recurring)
-        self.startText.Show(recurring)
+        Publisher.sendMessage("newtransaction.recurringtoggled", self.recursCheck.IsChecked())
+        ##self.startText.Show(recurring) #TODO: perhaps remove startText?
 
     def onTransferCheck(self, event=None):
-        #TODO => self.toggleVisibilityOf(self.transferPanel, self.transferCheck.IsChecked())
-        pass
-
-    def toggleVisibilityOf(self, control, visibility):
-        self.Parent.Freeze()
-        self.Sizer.Show(control, visibility)
-        self.Parent.Layout()
-        self.Parent.Thaw()
+        Publisher.sendMessage("newtransaction.transfertoggled", self.transferCheck.IsChecked())
 
     def onDateEnter(self, event):
         # Force a focus-out/tab to work around LP #311934
@@ -365,7 +357,7 @@ class NewTransactionRow(bankcontrols.GBRow):
 
         sourceAccount = None
         if isTransfer:
-            result = self.transferPanel.GetAccounts(destAccount)
+            result = self.Parent.transferRow.GetAccounts(destAccount)
             if result is None:
                 dlg = wx.MessageDialog(self.Parent,
                                        _("This transaction is marked as a transfer. Please select the transfer account."),

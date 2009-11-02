@@ -17,10 +17,16 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import wx
+from wx.lib.pubsub import Publisher
+
 from newtransactionctrl import TransferRow, NewTransactionRow
 from recurringsummaryrow import RecurringSummaryRow
         
 class TransactionCtrl(wx.Panel):
+    TRANSFER_ROW = 0
+    SUMMARY_ROW = 1
+    TRANSACTION_ROW = 2
+    
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
         
@@ -28,15 +34,24 @@ class TransactionCtrl(wx.Panel):
         self.Sizer.SetEmptyCellSize((0,0))
         self.Sizer.AddGrowableCol(1, 1)
         
-        self.transferRow = TransferRow(self, 0)
-        self.recurringSummaryRow = RecurringSummaryRow(self, 1)
-        self.transactionRow = NewTransactionRow(self, 2)
+        self.transferRow = TransferRow(self, self.TRANSFER_ROW)
+        self.recurringSummaryRow = RecurringSummaryRow(self, self.SUMMARY_ROW)
+        self.transactionRow = NewTransactionRow(self, self.TRANSACTION_ROW)
+        
+        self.ShowRow(0, False)
+        self.ShowRow(1, False)
+        
+        Publisher.subscribe(self.onTransferToggled, "newtransaction.transfertoggled")
+        
+    def onTransferToggled(self, message):
+        transfer = message.data
+        self.ShowRow(self.TRANSFER_ROW, transfer)
         
     def ShowRow(self, row, show=True):
         for child in self.Sizer.GetChildren():
             if child.Pos[0] == row:
                 child.Show(show)
-        self.Layout()
+        self.Parent.Layout()
         
         
 if __name__ == "__main__":
