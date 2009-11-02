@@ -193,5 +193,8 @@ class GBRow(wx.Window):
         else:
             kwargs["flag"] = wx.ALIGN_CENTER_VERTICAL
 
+        # Add the item.
         self.Parent.Sizer.Add(ctrl, wx.GBPosition(self.Row, self.Column), *args, **kwargs)
-        self.Column += 1
+        
+        # Increment the column count by the number of columns the item spans.
+        self.Column += self.Parent.Sizer.GetItemSpan(ctrl)[1]

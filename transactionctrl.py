@@ -19,13 +19,14 @@
 import wx
 from wx.lib.pubsub import Publisher
 
-from newtransactionctrl import TransferRow, NewTransactionRow
+from newtransactionctrl import TransferRow, NewTransactionRow, RecurringRow
 from recurringsummaryrow import RecurringSummaryRow
         
 class TransactionCtrl(wx.Panel):
-    TRANSFER_ROW = 0
+    RECURRING_ROW = 0
     SUMMARY_ROW = 1
-    TRANSACTION_ROW = 2
+    TRANSFER_ROW = 2
+    TRANSACTION_ROW = 3
     
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
@@ -37,9 +38,11 @@ class TransactionCtrl(wx.Panel):
         self.transferRow = TransferRow(self, self.TRANSFER_ROW)
         self.recurringSummaryRow = RecurringSummaryRow(self, self.SUMMARY_ROW)
         self.transactionRow = NewTransactionRow(self, self.TRANSACTION_ROW)
+        self.recurringRow = RecurringRow(self, self.RECURRING_ROW)
         
-        self.ShowRow(0, False)
-        self.ShowRow(1, False)
+        # Hide everything up to the actual transaction row initially.
+        for i in range(self.TRANSACTION_ROW):
+            self.ShowRow(i, False)
         
         Publisher.subscribe(self.onTransferToggled, "newtransaction.transfertoggled")
         Publisher.subscribe(self.onRecurringToggled, "newtransaction.recurringtoggled")
@@ -50,7 +53,7 @@ class TransactionCtrl(wx.Panel):
         
     def onRecurringToggled(self, message):
         recurring = message.data
-        for row in (self.SUMMARY_ROW,):
+        for row in (self.SUMMARY_ROW, self.RECURRING_ROW):
             self.ShowRow(row, recurring)
         
     def ShowRow(self, row, show=True):

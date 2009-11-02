@@ -72,26 +72,26 @@ class TransferRow(bankcontrols.GBRow):
             self.accountSelection.SetSelection(0)
 
 
-class RecurringPanel(wx.Panel):
-    def __init__(self, parent):
-        wx.Panel.__init__(self, parent, name="RecurringPanel")
+class RecurringRow(bankcontrols.GBRow):
+    def __init__(self, parent, row):
+        bankcontrols.GBRow.__init__(self, parent, row, name="RecurringPanel")
 
         # The daily option is useful if you have something which happens every 30 days, for example.
         # Some billing cycles work this way, and the date slowly shifts down monthly.
-        self.repeatsCombo = wx.Choice(self, choices=(_("Daily"), _("Weekly"), _("Monthly"), _("Yearly")))
+        self.repeatsCombo = wx.Choice(parent, choices=(_("Daily"), _("Weekly"), _("Monthly"), _("Yearly")))
         # Set the default to weekly.
         self.repeatsCombo.SetSelection(1)
         # Create the recurring object we will use internally.
         self.recurringObj = RecurringTransaction(None, None, 0, "", datetime.date.today(), RecurringTransaction.DAILY)
 
-        self.everyText = wx.StaticText(self)
-        self.everySpin = wx.SpinCtrl(self, min=1, max=130, initial=1)
+        self.everyText = wx.StaticText(parent)
+        self.everySpin = wx.SpinCtrl(parent, min=1, max=130, initial=1)
         self.everySpin.MinSize = (50, -1)
-        self.repeatsOnText = wx.StaticText(self)
+        ##self.repeatsOnText = wx.StaticText(parent) #TODO: put it new row
         bankcontrols.fixMinWidth(self.everyText, (_(x) for x in ("days", "weeks", "months", "years")))
-        self.endDateCtrl = bankcontrols.DateCtrlFactory(self)
-        self.endsNeverRadio = wx.RadioButton(self, label=_("Never"), style=wx.RB_GROUP)
-        self.endsSometimeRadio = wx.RadioButton(self, label=("On:"), name="EndsSometimeRadio")
+        self.endDateCtrl = bankcontrols.DateCtrlFactory(parent)
+        self.endsNeverRadio = wx.RadioButton(parent, label=_("Never"), style=wx.RB_GROUP)
+        self.endsSometimeRadio = wx.RadioButton(parent, label=("On:"), name="EndsSometimeRadio")
 
         # Make 'Never' the default.
         self.endsNeverRadio.SetValue(True)
@@ -102,49 +102,40 @@ class RecurringPanel(wx.Panel):
         today = datetime.date.today().weekday()
         days = (_("Mon"), _("Tue"), _("Wed"), _("Thu"), _("Fri"), _("Sat"), _("Sun"))
         for i, label in enumerate(days):
-            cb = wx.CheckBox(self, label=label)
+            cb = wx.CheckBox(parent, label=label)
             cb.SetValue(i==today)
             self.repeatsOnChecksWeekly.append(cb)
             self.repeatsOnSizerWeekly.Add(cb, 0, wx.ALIGN_CENTER|wx.LEFT, 5)
+            cb.Hide() ##TODO: these need to be in a new row
 
         # The vertical sizer for when the recurring transaction stops ocurring.
         endsSizer = wx.BoxSizer(wx.VERTICAL)
-        endsDateSizer = wx.BoxSizer()
         endsSizer.Add(self.endsNeverRadio)
+        endsDateSizer = wx.BoxSizer()
         endsDateSizer.Add(self.endsSometimeRadio)
         endsDateSizer.Add(self.endDateCtrl)
         endsSizer.Add(endsDateSizer)
 
-        # The control which will summarize the recurring transaction
-        ##self.summaryCtrl = RecurringSummaryText(self)
-
-        self.topSizer = wx.BoxSizer()
-        self.bottomSizer = wx.BoxSizer()
-
-        self.topSizer.Add(wx.StaticText(self, label=_("Repeats:")), flag=wx.ALIGN_CENTER)
-        self.topSizer.Add(self.repeatsCombo, flag=wx.ALIGN_CENTER)
-        self.topSizer.AddSpacer(15)
-        self.topSizer.Add(wx.StaticText(self, label=_("Every")), flag=wx.ALIGN_CENTER)
-        self.topSizer.AddSpacer(3)
-        self.topSizer.Add(self.everySpin, flag=wx.ALIGN_CENTER)
-        self.topSizer.AddSpacer(3)
-        self.topSizer.Add(self.everyText, flag=wx.ALIGN_CENTER)
-        self.topSizer.AddSpacer(15)
-        self.topSizer.Add(wx.StaticText(self, label=_("Ends:")), flag=wx.ALIGN_CENTER)
-        self.topSizer.AddSpacer(3)
-        self.topSizer.Add(endsSizer)
-
-        #self.bottomSizer.AddSpacer(10)
-        self.bottomSizer.Add(self.repeatsOnText, flag=wx.ALIGN_CENTER)
-        self.bottomSizer.Add(self.repeatsOnSizerWeekly, flag=wx.ALIGN_CENTER)
-
-        self.Sizer = wx.BoxSizer(wx.VERTICAL)
-        self.Sizer.Add(self.topSizer)
-        self.Sizer.AddSpacer(3)
-        self.Sizer.Add(self.bottomSizer)
-        ##self.Sizer.AddSpacer(3)
-        ##self.Sizer.Add(self.summaryCtrl, 0, wx.ALIGN_CENTER)
-
+        # Create the sizer for the "Every" column
+        everySizer = wx.BoxSizer()
+        everySizer.Add(wx.StaticText(parent, label=_("Every")), flag=wx.ALIGN_CENTER)
+        everySizer.AddSpacer(3)
+        everySizer.Add(self.everySpin, flag=wx.ALIGN_CENTER)
+        everySizer.AddSpacer(3)
+        everySizer.Add(self.everyText, flag=wx.ALIGN_CENTER)
+        
+        # Create the sizer for the "Ends" column
+        endsHSizer = wx.BoxSizer()
+        endsHSizer.Add(wx.StaticText(parent, label=_("Ends:")), flag=wx.ALIGN_CENTER)
+        endsHSizer.AddSpacer(3)
+        endsHSizer.Add(endsSizer)
+        
+        # Add all the columns
+        self.AddNext(wx.StaticText(parent, label=_("Repeats:")))
+        self.AddNext(self.repeatsCombo)
+        self.AddNext(everySizer)
+        self.AddNext(endsHSizer)
+        
         self.Update()
         #self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update)
         self.everySpin.Bind(wx.EVT_SPINCTRL, self.Update)
@@ -169,15 +160,15 @@ class RecurringPanel(wx.Panel):
 
     def Update(self, event=None):
         self.Freeze()
-        self.Sizer.Hide(self.bottomSizer)
+        ##self.Sizer.Hide(self.bottomSizer)
 
         repeatType, every, repeatsOn, end = self.GetSettings()
         if repeatType == 0:
             everyText = gettext.ngettext("day", "days",every)
         elif repeatType == 1:
             everyText = gettext.ngettext("week", "weeks", every)
-            self.repeatsOnText.Label = label=_("Repeats on days:")
-            self.Sizer.Show(self.bottomSizer)
+            ##self.repeatsOnText.Label = label =_("Repeats on days:")
+            ##self.Sizer.Show(self.bottomSizer)
         elif repeatType == 2:
             everyText = gettext.ngettext("month", "months", every)
         elif repeatType == 3:
@@ -187,7 +178,7 @@ class RecurringPanel(wx.Panel):
         summary = self.recurringObj.GetRecurrance()
             
         self.everyText.Label = everyText
-        self.summaryCtrl.SetLabel(summary)
+        ##self.summaryCtrl.SetLabel(summary)
 
         self.Thaw()
         self.Parent.Parent.Layout()
@@ -247,7 +238,8 @@ class NewTransactionRow(bankcontrols.GBRow):
         hSizer.Add(checkSizer, 0, wx.ALIGN_CENTER)
         
         self.AddNext(dateSizer)
-        self.AddNext(self.descCtrl, flag=wx.EXPAND)
+        self.AddNext(self.descCtrl, flag=wx.EXPAND|wx.ALIGN_CENTER_VERTICAL, span=wx.GBSpan(1,2))
+        self.descCtrl.SetMaxSize((-1, self.descCtrl.BestSize[1]))
         self.AddNext(hSizer)
         
         # Initialize necessary bindings.
