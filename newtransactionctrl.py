@@ -23,42 +23,9 @@ import bankcontrols, bankobjects, helpers
 import localization, gettext
 from bankobjects.recurringtransaction import RecurringTransaction
 
-class RecurringSummaryText(wx.Panel):
-    def __init__(self, parent):
-        wx.Panel.__init__(self, parent)
-        self.SetBackgroundColour(wx.BLACK)
-
-        self.contentPanel = wx.Panel(self)
-        self.contentPanel.SetBackgroundColour(wx.Color(224,238,238))
-        self.Sizer = wx.BoxSizer()
-        self.Sizer.Add(self.contentPanel, 1, wx.EXPAND|wx.ALL, 1)
-
-        self.summaryText = wx.StaticText(self.contentPanel, name="RecurringSummaryText")
-        self.contentPanel.Sizer = wx.BoxSizer()
-        self.contentPanel.Sizer.Add(self.summaryText, 0, wx.ALIGN_CENTER|wx.ALL, 2)
-
-    def SetLabel(self, text):
-        self.summaryText.Label = text
-        
-class GBRow(wx.Window):
-    def __init__(self, parent, row, *args, **kwargs):
-        wx.Window.__init__(self, parent, *args, **kwargs)
-        self.Hide()
-        self.Row = row
-        self.Column = 0
-        
-    def AddNext(self, ctrl, *args, **kwargs):
-        if "flag" in kwargs:
-            kwargs["flag"] = kwargs["flag"] | wx.ALIGN_CENTER_VERTICAL
-        else:
-            kwargs["flag"] = wx.ALIGN_CENTER_VERTICAL
-
-        self.Parent.Sizer.Add(ctrl, wx.GBPosition(self.Row, self.Column), *args, **kwargs)
-        self.Column += 1
-
-class TransferRow(GBRow):
+class TransferRow(bankcontrols.GBRow):
     def __init__(self, parent, row):
-        GBRow.__init__(self, parent, row)
+        bankcontrols.GBRow.__init__(self, parent, row)
         self.accountDict = {}
         self.nullChoice = ["----------"]
 
@@ -230,9 +197,9 @@ class RecurringPanel(wx.Panel):
         repeatType, repeatEvery, repeatsOn, end = self.GetSettings()
         recurringObj.Update(repeatType, repeatEvery, repeatsOn, end)
 
-class NewTransactionRow(GBRow):
+class NewTransactionRow(bankcontrols.GBRow):
     def __init__(self, parent, row):
-        GBRow.__init__(self, parent, row, name="NewTransactionCtrl")
+        bankcontrols.GBRow.__init__(self, parent, row, name="NewTransactionCtrl")
         self.CurrentAccount = None
 
         self.dateCtrl = bankcontrols.DateCtrlFactory(parent)
