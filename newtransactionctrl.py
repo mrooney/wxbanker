@@ -65,7 +65,11 @@ class TransferRow(bankcontrols.GBRow):
             choices = self.nullChoice
 
         # Update the choices, and make sure to sort them!
-        self.accountSelection.SetItems(sorted(choices))
+        choices.sort()
+        self.accountSelection.SetItems(choices)
+        # If there are choices, select the first one by default.
+        if choices:
+            self.accountSelection.SetSelection(0)
 
 
 class RecurringPanel(wx.Panel):
@@ -112,7 +116,7 @@ class RecurringPanel(wx.Panel):
         endsSizer.Add(endsDateSizer)
 
         # The control which will summarize the recurring transaction
-        self.summaryCtrl = RecurringSummaryText(self)
+        ##self.summaryCtrl = RecurringSummaryText(self)
 
         self.topSizer = wx.BoxSizer()
         self.bottomSizer = wx.BoxSizer()
@@ -138,8 +142,8 @@ class RecurringPanel(wx.Panel):
         self.Sizer.Add(self.topSizer)
         self.Sizer.AddSpacer(3)
         self.Sizer.Add(self.bottomSizer)
-        self.Sizer.AddSpacer(3)
-        self.Sizer.Add(self.summaryCtrl, 0, wx.ALIGN_CENTER)
+        ##self.Sizer.AddSpacer(3)
+        ##self.Sizer.Add(self.summaryCtrl, 0, wx.ALIGN_CENTER)
 
         self.Update()
         #self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update)

@@ -18,6 +18,7 @@
 
 import wx
 from newtransactionctrl import TransferRow, NewTransactionRow
+from recurringsummaryrow import RecurringSummaryRow
         
 class TransactionCtrl(wx.Panel):
     def __init__(self, parent):
@@ -28,7 +29,8 @@ class TransactionCtrl(wx.Panel):
         self.Sizer.AddGrowableCol(1, 1)
         
         self.transferRow = TransferRow(self, 0)
-        self.transactionRow = NewTransactionRow(self, 1)
+        self.recurringSummaryRow = RecurringSummaryRow(self, 1)
+        self.transactionRow = NewTransactionRow(self, 2)
         
     def ShowRow(self, row, show=True):
         for child in self.Sizer.GetChildren():
