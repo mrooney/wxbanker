@@ -42,16 +42,24 @@ class TransactionCtrl(wx.Panel):
         self.ShowRow(1, False)
         
         Publisher.subscribe(self.onTransferToggled, "newtransaction.transfertoggled")
+        Publisher.subscribe(self.onRecurringToggled, "newtransaction.recurringtoggled")
         
     def onTransferToggled(self, message):
         transfer = message.data
         self.ShowRow(self.TRANSFER_ROW, transfer)
         
+    def onRecurringToggled(self, message):
+        recurring = message.data
+        for row in (self.SUMMARY_ROW,):
+            self.ShowRow(row, recurring)
+        
     def ShowRow(self, row, show=True):
+        self.Freeze()
         for child in self.Sizer.GetChildren():
             if child.Pos[0] == row:
                 child.Show(show)
         self.Parent.Layout()
+        self.Thaw()
         
         
 if __name__ == "__main__":
