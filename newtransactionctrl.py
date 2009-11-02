@@ -61,6 +61,7 @@ class TransferRow(GBRow):
     def __init__(self, parent, row):
         GBRow.__init__(self, parent, row)
         self.accountDict = {}
+        self.nullChoice = ["----------"]
 
         self.fromtoBox = wx.Choice(parent, choices=[_("from"), _("to")])
         self.accountSelection = wx.Choice(parent, choices=[])
@@ -68,6 +69,8 @@ class TransferRow(GBRow):
         self.AddNext(wx.StaticText(parent, label=_("Transfer")))
         self.AddNext(self.fromtoBox)
         self.AddNext(self.accountSelection, span=wx.GBSpan(1,2))
+        
+        Publisher.subscribe(self.onAccountChanged, "view.account changed")
 
     def GetAccounts(self, currentAccount):
         stringSel = self.accountSelection.GetStringSelection()
@@ -81,6 +84,10 @@ class TransferRow(GBRow):
             source, destination = currentAccount, otherAccount
 
         return source, destination
+    
+    def onAccountChanged(self, message):
+        account = message.data
+        self.Update(account)
 
     def Update(self, selectedAccount):
         if selectedAccount:
@@ -224,7 +231,7 @@ class RecurringPanel(wx.Panel):
         repeatType, repeatEvery, repeatsOn, end = self.GetSettings()
         recurringObj.Update(repeatType, repeatEvery, repeatsOn, end)
 
-class NewTransactionCtrl(GBRow):
+class NewTransactionRow(GBRow):
     def __init__(self, parent, row):
         GBRow.__init__(self, parent, row, name="NewTransactionCtrl")
         self.CurrentAccount = None
@@ -320,7 +327,6 @@ class NewTransactionCtrl(GBRow):
     def onAccountChanged(self, message):
         account = message.data
         self.CurrentAccount = account
-        #TODO: call this properly: self.transferPanel.Update(account)
 
     def onAmountChar(self, event):
         wx.CallAfter(self.updateAddIcon)
