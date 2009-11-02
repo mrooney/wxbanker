@@ -40,13 +40,12 @@ class RecurringSummaryText(wx.Panel):
     def SetLabel(self, text):
         self.summaryText.Label = text
         
-class GBRow:
+class GBRow(wx.Window):
     def __init__(self, parent, row, *args, **kwargs):
-        #TODO: do something with [kw]args like name, perhaps be a wx.Window?        
-        self.Parent = parent
+        wx.Window.__init__(self, parent, *args, **kwargs)
+        self.Hide()
         self.Row = row
         self.Column = 0
-        self.ParentCtrl = parent
         
     def AddNext(self, ctrl, *args, **kwargs):
         if "flag" in kwargs:
@@ -54,7 +53,7 @@ class GBRow:
         else:
             kwargs["flag"] = wx.ALIGN_CENTER_VERTICAL
 
-        self.ParentCtrl.Sizer.Add(ctrl, wx.GBPosition(self.Row, self.Column), *args, **kwargs)
+        self.Parent.Sizer.Add(ctrl, wx.GBPosition(self.Row, self.Column), *args, **kwargs)
         self.Column += 1
 
 class TransferRow(GBRow):
