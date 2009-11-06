@@ -31,7 +31,7 @@ class TransactionCtrl(wx.Panel):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
         
-        self.Sizer = wx.GridBagSizer(1, 1)
+        self.Sizer = wx.GridBagSizer(3, 3)
         self.Sizer.SetEmptyCellSize((0,0))
         self.Sizer.AddGrowableCol(1, 1)
         

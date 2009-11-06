@@ -31,10 +31,14 @@ class TransferRow(bankcontrols.GBRow):
 
         self.fromtoBox = wx.Choice(parent, choices=[_("from"), _("to")])
         self.accountSelection = wx.Choice(parent, choices=[])
+        
+        hSizer = wx.BoxSizer()
+        hSizer.Add(wx.StaticText(parent, label=_("Transfer")), flag=wx.ALIGN_CENTER_VERTICAL)
+        hSizer.AddSpacer(3)
+        hSizer.Add(self.fromtoBox, flag=wx.ALIGN_CENTER_VERTICAL)
 
-        self.AddNext(wx.StaticText(parent, label=_("Transfer")))
-        self.AddNext(self.fromtoBox)
-        self.AddNext(self.accountSelection, span=wx.GBSpan(1,2))
+        self.AddNext(hSizer)
+        self.AddNext(self.accountSelection, span=(1,2))
         
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
 
@@ -238,8 +242,8 @@ class NewTransactionRow(bankcontrols.GBRow):
         hSizer.Add(checkSizer, 0, wx.ALIGN_CENTER)
         
         self.AddNext(dateSizer)
-        self.AddNext(self.descCtrl, flag=wx.EXPAND|wx.ALIGN_CENTER_VERTICAL, span=wx.GBSpan(1,2))
-        self.descCtrl.SetMaxSize((-1, self.descCtrl.BestSize[1]))
+        #self.descCtrl.SetMaxSize((-1, self.descCtrl.BestSize[1]))
+        self.AddNext(self.descCtrl, flag=wx.EXPAND, span=(1,2))
         self.AddNext(hSizer)
         
         # Initialize necessary bindings.
