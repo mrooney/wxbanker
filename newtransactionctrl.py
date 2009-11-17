@@ -241,9 +241,11 @@ class NewTransactionRow(bankcontrols.GBRow):
         hSizer.AddSpacer(5)
         hSizer.Add(checkSizer, 0, wx.ALIGN_CENTER)
         
+        descSizer = wx.BoxSizer()
+        descSizer.Add(self.descCtrl, 1, flag=wx.ALIGN_CENTER)
+        
         self.AddNext(dateSizer)
-        #self.descCtrl.SetMaxSize((-1, self.descCtrl.BestSize[1]))
-        self.AddNext(self.descCtrl, flag=wx.EXPAND, span=(1,2))
+        self.AddNext(descSizer, flag=wx.EXPAND)
         self.AddNext(hSizer)
         
         # Initialize necessary bindings.
