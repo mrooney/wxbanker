@@ -21,7 +21,6 @@ from wx.lib.pubsub import Publisher
 
 import bankcontrols, bankobjects, helpers
 import localization, gettext
-from bankobjects.recurringtransaction import RecurringTransaction
 
 class TransferRow(bankcontrols.GBRow):
     def __init__(self, parent, row):
@@ -38,7 +37,7 @@ class TransferRow(bankcontrols.GBRow):
         hSizer.Add(self.fromtoBox, flag=wx.ALIGN_CENTER_VERTICAL)
 
         self.AddNext(hSizer)
-        self.AddNext(self.accountSelection, span=(1,2))
+        self.AddNext(self.accountSelection)
         
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
 
@@ -85,13 +84,10 @@ class RecurringRow(bankcontrols.GBRow):
         self.repeatsCombo = wx.Choice(parent, choices=(_("Daily"), _("Weekly"), _("Monthly"), _("Yearly")))
         # Set the default to weekly.
         self.repeatsCombo.SetSelection(1)
-        # Create the recurring object we will use internally.
-        self.recurringObj = RecurringTransaction(None, None, 0, "", datetime.date.today(), RecurringTransaction.DAILY)
 
         self.everyText = wx.StaticText(parent)
         self.everySpin = wx.SpinCtrl(parent, min=1, max=130, initial=1)
         self.everySpin.MinSize = (50, -1)
-        ##self.repeatsOnText = wx.StaticText(parent) #TODO: put it new row
         bankcontrols.fixMinWidth(self.everyText, (_(x) for x in ("days", "weeks", "months", "years")))
         self.endDateCtrl = bankcontrols.DateCtrlFactory(parent)
         self.endsNeverRadio = wx.RadioButton(parent, label=_("Never"), style=wx.RB_GROUP)
@@ -100,17 +96,6 @@ class RecurringRow(bankcontrols.GBRow):
         # Make 'Never' the default.
         self.endsNeverRadio.SetValue(True)
         self.endDateCtrl.Value += wx.DateSpan(days=-1, years=1)
-
-        self.repeatsOnChecksWeekly = []
-        self.repeatsOnSizerWeekly = wx.BoxSizer()
-        today = datetime.date.today().weekday()
-        days = (_("Mon"), _("Tue"), _("Wed"), _("Thu"), _("Fri"), _("Sat"), _("Sun"))
-        for i, label in enumerate(days):
-            cb = wx.CheckBox(parent, label=label)
-            cb.SetValue(i==today)
-            self.repeatsOnChecksWeekly.append(cb)
-            self.repeatsOnSizerWeekly.Add(cb, 0, wx.ALIGN_CENTER|wx.LEFT, 5)
-            cb.Hide() ##TODO: these need to be in a new row
 
         # The vertical sizer for when the recurring transaction stops ocurring.
         endsSizer = wx.BoxSizer(wx.VERTICAL)
@@ -122,7 +107,9 @@ class RecurringRow(bankcontrols.GBRow):
 
         # Create the sizer for the "Every" column
         everySizer = wx.BoxSizer()
-        everySizer.Add(wx.StaticText(parent, label=_("Every")), flag=wx.ALIGN_CENTER)
+        everySizer.Add(self.repeatsCombo)
+        everySizer.AddSpacer(10)
+        everySizer.Add(wx.StaticText(parent, label=_("every")), flag=wx.ALIGN_CENTER)
         everySizer.AddSpacer(3)
         everySizer.Add(self.everySpin, flag=wx.ALIGN_CENTER)
         everySizer.AddSpacer(3)
@@ -136,16 +123,17 @@ class RecurringRow(bankcontrols.GBRow):
         
         # Add all the columns
         self.AddNext(wx.StaticText(parent, label=_("Repeats:")))
-        self.AddNext(self.repeatsCombo)
         self.AddNext(everySizer)
         self.AddNext(endsHSizer)
         
-        self.Update()
         #self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update)
         self.everySpin.Bind(wx.EVT_SPINCTRL, self.Update)
         self.Bind(wx.EVT_CHOICE, self.Update)
         self.Bind(wx.EVT_CHECKBOX, self.Update)
         self.Bind(wx.EVT_RADIOBUTTON, self.Update)
+        
+        # Queue an update, we can't do it instantly because Update needs some bootstrapping.
+        wx.CallLater(50, self.Update)
 
     def GetSettings(self):
         repeatType = self.repeatsCombo.GetSelection()
@@ -156,30 +144,25 @@ class RecurringRow(bankcontrols.GBRow):
         else:
             end = helpers.wxdate2pydate(self.endDateCtrl.GetValue())
 
-        repeatsOn = None
-        if repeatType == 1: # Weekly
-            repeatsOn = [int(check.Value) for check in self.repeatsOnChecksWeekly]
-
-        return (repeatType, repeatEvery, repeatsOn, end)
+        return repeatType, repeatEvery, end
 
     def Update(self, event=None):
         self.Freeze()
         ##self.Sizer.Hide(self.bottomSizer)
 
-        repeatType, every, repeatsOn, end = self.GetSettings()
+        repeatType, every, end = self.GetSettings()
         if repeatType == 0:
             everyText = gettext.ngettext("day", "days",every)
         elif repeatType == 1:
             everyText = gettext.ngettext("week", "weeks", every)
-            ##self.repeatsOnText.Label = label =_("Repeats on days:")
             ##self.Sizer.Show(self.bottomSizer)
         elif repeatType == 2:
             everyText = gettext.ngettext("month", "months", every)
         elif repeatType == 3:
             everyText = gettext.ngettext("year", "years", every)
 
-        self.ToRecurring(self.recurringObj)
-        summary = self.recurringObj.GetRecurrance()
+        self.ToRecurring(self.Parent.recurringObj)
+        summary = self.Parent.recurringObj.GetRecurrance()
             
         self.everyText.Label = everyText
         ##self.summaryCtrl.SetLabel(summary)
@@ -193,8 +176,31 @@ class RecurringRow(bankcontrols.GBRow):
     
     def ToRecurring(self, recurringObj):
         """Given a RecurringTransaction, make it equivalent to the settings here."""
-        repeatType, repeatEvery, repeatsOn, end = self.GetSettings()
+        repeatType, repeatEvery, repeatsOn, end = self.Parent.GetSettings()
         recurringObj.Update(repeatType, repeatEvery, repeatsOn, end)
+        
+
+class WeeklyRecurringRow(bankcontrols.GBRow):
+    def __init__(self, parent, row):
+        bankcontrols.GBRow.__init__(self, parent, row)
+        
+        self.repeatsOnChecksWeekly = []
+        self.repeatsOnSizerWeekly = wx.BoxSizer()
+        today = datetime.date.today().weekday()
+        days = (_("Mon"), _("Tue"), _("Wed"), _("Thu"), _("Fri"), _("Sat"), _("Sun"))
+        for i, label in enumerate(days):
+            cb = wx.CheckBox(parent, label=label)
+            cb.SetValue(i==today)
+            self.repeatsOnChecksWeekly.append(cb)
+            self.repeatsOnSizerWeekly.Add(cb, 0, wx.ALIGN_CENTER|wx.LEFT, 5)
+            
+        self.AddNext(wx.StaticText(parent, label=_("Repeats on days:")))
+        self.AddNext(self.repeatsOnSizerWeekly, span=(1,2))
+        
+    def GetSettings(self):
+        repeatsOn = [int(check.Value) for check in self.repeatsOnChecksWeekly]
+        return repeatsOn
+
 
 class NewTransactionRow(bankcontrols.GBRow):
     def __init__(self, parent, row):
@@ -366,7 +372,7 @@ class NewTransactionRow(bankcontrols.GBRow):
 
         # Now let's see if this is a recurring transaction
         if self.recursCheck.GetValue():
-            settings = self.recurringPanel.GetSettings()
+            settings = self.Parent.GetSettings()
             args = [amount, desc, date] + list(settings) + [sourceAccount]
             destAccount.AddRecurringTransaction(*args)
         else:

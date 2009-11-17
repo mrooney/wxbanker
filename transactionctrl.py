@@ -16,20 +16,24 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import wx
+import wx, datetime
 from wx.lib.pubsub import Publisher
 
-from newtransactionctrl import TransferRow, NewTransactionRow, RecurringRow
+from newtransactionctrl import TransferRow, NewTransactionRow, RecurringRow, WeeklyRecurringRow
 from recurringsummaryrow import RecurringSummaryRow
+from bankobjects.recurringtransaction import RecurringTransaction
         
 class TransactionCtrl(wx.Panel):
     RECURRING_ROW = 0
     SUMMARY_ROW = 1
-    TRANSFER_ROW = 2
-    TRANSACTION_ROW = 3
+    WEEKLY_ROW = 2
+    TRANSFER_ROW = 3
+    TRANSACTION_ROW = 4
     
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
+        # Create the recurring object we will use internally.
+        self.recurringObj = RecurringTransaction(None, None, 0, "", datetime.date.today(), RecurringTransaction.DAILY)
         
         self.Sizer = wx.GridBagSizer(3, 3)
         self.Sizer.SetEmptyCellSize((0,0))
@@ -37,6 +41,7 @@ class TransactionCtrl(wx.Panel):
         
         self.transferRow = TransferRow(self, self.TRANSFER_ROW)
         self.recurringSummaryRow = RecurringSummaryRow(self, self.SUMMARY_ROW)
+        self.weeklyRecurringRow = WeeklyRecurringRow(self, self.WEEKLY_ROW)
         self.transactionRow = NewTransactionRow(self, self.TRANSACTION_ROW)
         self.recurringRow = RecurringRow(self, self.RECURRING_ROW)
         
@@ -53,7 +58,7 @@ class TransactionCtrl(wx.Panel):
         
     def onRecurringToggled(self, message):
         recurring = message.data
-        for row in (self.SUMMARY_ROW, self.RECURRING_ROW):
+        for row in (self.SUMMARY_ROW, self.RECURRING_ROW, self.WEEKLY_ROW):
             self.ShowRow(row, recurring)
         
     def ShowRow(self, row, show=True):
@@ -63,6 +68,14 @@ class TransactionCtrl(wx.Panel):
                 child.Show(show)
         self.Parent.Layout()
         self.Thaw()
+        
+    def GetSettings(self):
+        repeatType, repeatEvery, end = self.recurringRow.GetSettings()
+        repeatsOn = None
+        if repeatType == RecurringTransaction.WEEKLY:
+            repeatsOn = self.weeklyRecurringRow.GetSettings()
+            
+        return repeatType, repeatEvery, repeatsOn, end
         
         
 if __name__ == "__main__":
