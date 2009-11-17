@@ -105,35 +105,30 @@ class RecurringRow(bankcontrols.GBRow):
         endsDateSizer.Add(self.endDateCtrl)
         endsSizer.Add(endsDateSizer)
 
-        # Create the sizer for the "Every" column
+        # Create the sizer for the "Every" column and "End".
+        # This all is best as one item which spans the last two cols, otherwise the
+        # description column will be forced to be too wide in a small width window.
         everySizer = wx.BoxSizer()
-        everySizer.Add(self.repeatsCombo)
+        everySizer.Add(self.repeatsCombo, flag=wx.ALIGN_CENTER)
         everySizer.AddSpacer(10)
         everySizer.Add(wx.StaticText(parent, label=_("every")), flag=wx.ALIGN_CENTER)
         everySizer.AddSpacer(3)
         everySizer.Add(self.everySpin, flag=wx.ALIGN_CENTER)
         everySizer.AddSpacer(3)
         everySizer.Add(self.everyText, flag=wx.ALIGN_CENTER)
-        
-        # Create the sizer for the "Ends" column
-        endsHSizer = wx.BoxSizer()
-        endsHSizer.Add(wx.StaticText(parent, label=_("Ends:")), flag=wx.ALIGN_CENTER)
-        endsHSizer.AddSpacer(3)
-        endsHSizer.Add(endsSizer)
+        everySizer.Add(wx.StaticText(parent, label=_("Ends:")), flag=wx.ALIGN_CENTER)
+        everySizer.AddSpacer(3)
+        everySizer.Add(endsSizer)
         
         # Add all the columns
         self.AddNext(wx.StaticText(parent, label=_("Repeats:")))
-        self.AddNext(everySizer)
-        self.AddNext(endsHSizer)
+        self.AddNext(everySizer, span=(1,2))
         
         #self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update)
         self.everySpin.Bind(wx.EVT_SPINCTRL, self.Update)
-        self.Bind(wx.EVT_CHOICE, self.Update)
-        self.Bind(wx.EVT_CHECKBOX, self.Update)
-        self.Bind(wx.EVT_RADIOBUTTON, self.Update)
-        
-        # Queue an update, we can't do it instantly because Update needs some bootstrapping.
-        wx.CallLater(50, self.Update)
+        parent.Bind(wx.EVT_CHOICE, self.Update)
+        parent.Bind(wx.EVT_CHECKBOX, self.Update)
+        parent.Bind(wx.EVT_RADIOBUTTON, self.Update)
 
     def GetSettings(self):
         repeatType = self.repeatsCombo.GetSelection()
@@ -148,24 +143,23 @@ class RecurringRow(bankcontrols.GBRow):
 
     def Update(self, event=None):
         self.Freeze()
-        ##self.Sizer.Hide(self.bottomSizer)
+        self.Parent.ShowWeekly(False)
 
         repeatType, every, end = self.GetSettings()
         if repeatType == 0:
             everyText = gettext.ngettext("day", "days",every)
         elif repeatType == 1:
             everyText = gettext.ngettext("week", "weeks", every)
-            ##self.Sizer.Show(self.bottomSizer)
+            self.Parent.ShowWeekly(True)
         elif repeatType == 2:
             everyText = gettext.ngettext("month", "months", every)
         elif repeatType == 3:
             everyText = gettext.ngettext("year", "years", every)
 
         self.ToRecurring(self.Parent.recurringObj)
-        summary = self.Parent.recurringObj.GetRecurrance()
-            
         self.everyText.Label = everyText
-        ##self.summaryCtrl.SetLabel(summary)
+        
+        self.Parent.UpdateSummary()
 
         self.Thaw()
         self.Parent.Parent.Layout()
@@ -237,7 +231,7 @@ class NewTransactionRow(bankcontrols.GBRow):
         dateSizer = wx.BoxSizer()
         dateSizer.Add(self.startText, flag=wx.ALIGN_CENTER)
         dateSizer.Add(wx.StaticBitmap(parent, bitmap=wx.ArtProvider.GetBitmap('wxART_date')), 0, wx.ALIGN_CENTER|wx.ALL, 2)
-        dateSizer.Add(self.dateCtrl, flag=wx.ALIGN_CENTER)
+        dateSizer.Add(self.dateCtrl, flag=wx.ALIGN_CENTER|wx.EXPAND)
         self.startText.Hide()
         
         hSizer = wx.BoxSizer()

@@ -43,4 +43,7 @@ class RecurringSummaryRow(bankcontrols.GBRow):
         self.summaryText = RecurringSummaryText(parent)
 
         self.AddNext(wx.StaticText(parent, label=_("Summary:")))
-        self.AddNext(self.summaryText)
+        self.AddNext(self.summaryText, span=(1,3))
+        
+    def UpdateSummary(self, recurringObj):
+        self.summaryText.SetLabel(recurringObj.GetRecurrance())

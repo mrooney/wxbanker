@@ -39,11 +39,14 @@ class TransactionCtrl(wx.Panel):
         self.Sizer.SetEmptyCellSize((0,0))
         self.Sizer.AddGrowableCol(1, 1)
         
-        self.transferRow = TransferRow(self, self.TRANSFER_ROW)
+        self.recurringRow = RecurringRow(self, self.RECURRING_ROW)
         self.recurringSummaryRow = RecurringSummaryRow(self, self.SUMMARY_ROW)
         self.weeklyRecurringRow = WeeklyRecurringRow(self, self.WEEKLY_ROW)
+        self.transferRow = TransferRow(self, self.TRANSFER_ROW)
         self.transactionRow = NewTransactionRow(self, self.TRANSACTION_ROW)
-        self.recurringRow = RecurringRow(self, self.RECURRING_ROW)
+        
+        # RecurringRow needs an update once both it and the other controls exist.
+        self.recurringRow.Update()
         
         # Hide everything up to the actual transaction row initially.
         for i in range(self.TRANSACTION_ROW):
@@ -68,6 +71,12 @@ class TransactionCtrl(wx.Panel):
                 child.Show(show)
         self.Parent.Layout()
         self.Thaw()
+        
+    def ShowWeekly(self, show=True):
+        self.ShowRow(self.WEEKLY_ROW, show)
+        
+    def UpdateSummary(self):
+        self.recurringSummaryRow.UpdateSummary(self.recurringObj)
         
     def GetSettings(self):
         repeatType, repeatEvery, end = self.recurringRow.GetSettings()
