@@ -88,7 +88,7 @@ class GUITests(testbase.TestCaseHandlingConfig):
         rb = wx.FindWindowByName("EndsSometimeRadio")
         rb.Value = True
         # Setting the value programmatically doesn't trigger an event, so do so.
-        rb.Parent.Update()
+        wx.FindWindowByName("RecurringPanel").Update()
         self.assertTrue("until" in summaryText.Label)
         
         tctrl.onNewTransaction()

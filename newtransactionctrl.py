@@ -21,42 +21,25 @@ from wx.lib.pubsub import Publisher
 
 import bankcontrols, bankobjects, helpers
 import localization, gettext
-from bankobjects.recurringtransaction import RecurringTransaction
 
-class RecurringSummaryText(wx.Panel):
-    def __init__(self, parent):
-        wx.Panel.__init__(self, parent)
-        self.SetBackgroundColour(wx.BLACK)
-
-        self.contentPanel = wx.Panel(self)
-        self.contentPanel.SetBackgroundColour(wx.Color(224,238,238))
-        self.Sizer = wx.BoxSizer()
-        self.Sizer.Add(self.contentPanel, 1, wx.EXPAND|wx.ALL, 1)
-
-        self.summaryText = wx.StaticText(self.contentPanel, name="RecurringSummaryText")
-        self.contentPanel.Sizer = wx.BoxSizer()
-        self.contentPanel.Sizer.Add(self.summaryText, 0, wx.ALIGN_CENTER|wx.ALL, 2)
-
-    def SetLabel(self, text):
-        self.summaryText.Label = text
-
-class TransferPanel(wx.Panel):
-    def __init__(self, parent):
-        wx.Panel.__init__(self, parent)
+class TransferRow(bankcontrols.GBRow):
+    def __init__(self, parent, row):
+        bankcontrols.GBRow.__init__(self, parent, row)
         self.accountDict = {}
         self.nullChoice = ["----------"]
 
-        self.fromtoBox = wx.Choice(self, choices=[_("from"), _("to")])
-        self.accountSelection = wx.Choice(self, choices=self.nullChoice)
+        self.fromtoBox = wx.Choice(parent, choices=[_("from"), _("to")])
+        self.accountSelection = wx.Choice(parent, choices=[])
+        
+        hSizer = wx.BoxSizer()
+        hSizer.Add(wx.StaticText(parent, label=_("Transfer")), flag=wx.ALIGN_CENTER_VERTICAL)
+        hSizer.AddSpacer(3)
+        hSizer.Add(self.fromtoBox, flag=wx.ALIGN_CENTER_VERTICAL)
 
-        self.Sizer = wx.BoxSizer()
-        self.Sizer.Add(wx.StaticText(self, label=_("Transfer")), flag=wx.ALIGN_CENTER)
-        self.Sizer.AddSpacer(3)
-        self.Sizer.Add(self.fromtoBox, flag=wx.ALIGN_CENTER)
-        self.Sizer.AddSpacer(8)
-        self.Sizer.Add(wx.StaticText(self, label=_("account:")), flag=wx.ALIGN_CENTER)
-        self.Sizer.AddSpacer(3)
-        self.Sizer.Add(self.accountSelection, flag=wx.ALIGN_CENTER)
+        self.AddNext(hSizer)
+        self.AddNext(self.accountSelection)
+        
+        Publisher.subscribe(self.onAccountChanged, "view.account changed")
 
     def GetAccounts(self, currentAccount):
         stringSel = self.accountSelection.GetStringSelection()
@@ -70,6 +53,10 @@ class TransferPanel(wx.Panel):
             source, destination = currentAccount, otherAccount
 
         return source, destination
+    
+    def onAccountChanged(self, message):
+        account = message.data
+        self.Update(account)
 
     def Update(self, selectedAccount):
         if selectedAccount:
@@ -81,88 +68,67 @@ class TransferPanel(wx.Panel):
             choices = self.nullChoice
 
         # Update the choices, and make sure to sort them!
-        self.accountSelection.SetItems(sorted(choices))
+        choices.sort()
+        self.accountSelection.SetItems(choices)
+        # If there are choices, select the first one by default.
+        if choices:
+            self.accountSelection.SetSelection(0)
 
 
-class RecurringPanel(wx.Panel):
-    def __init__(self, parent):
-        wx.Panel.__init__(self, parent, name="RecurringPanel")
+class RecurringRow(bankcontrols.GBRow):
+    def __init__(self, parent, row):
+        bankcontrols.GBRow.__init__(self, parent, row, name="RecurringPanel")
 
         # The daily option is useful if you have something which happens every 30 days, for example.
         # Some billing cycles work this way, and the date slowly shifts down monthly.
-        self.repeatsCombo = wx.Choice(self, choices=(_("Daily"), _("Weekly"), _("Monthly"), _("Yearly")))
+        self.repeatsCombo = wx.Choice(parent, choices=(_("Daily"), _("Weekly"), _("Monthly"), _("Yearly")))
         # Set the default to weekly.
         self.repeatsCombo.SetSelection(1)
-        # Create the recurring object we will use internally.
-        self.recurringObj = RecurringTransaction(None, None, 0, "", datetime.date.today(), RecurringTransaction.DAILY)
 
-        self.everyText = wx.StaticText(self)
-        self.everySpin = wx.SpinCtrl(self, min=1, max=130, initial=1)
+        self.everyText = wx.StaticText(parent)
+        self.everySpin = wx.SpinCtrl(parent, min=1, max=130, initial=1)
         self.everySpin.MinSize = (50, -1)
-        self.repeatsOnText = wx.StaticText(self)
         bankcontrols.fixMinWidth(self.everyText, (_(x) for x in ("days", "weeks", "months", "years")))
-        self.endDateCtrl = bankcontrols.DateCtrlFactory(self)
-        self.endsNeverRadio = wx.RadioButton(self, label=_("Never"), style=wx.RB_GROUP)
-        self.endsSometimeRadio = wx.RadioButton(self, label=("On:"), name="EndsSometimeRadio")
+        self.endDateCtrl = bankcontrols.DateCtrlFactory(parent)
+        self.endsNeverRadio = wx.RadioButton(parent, label=_("Never"), style=wx.RB_GROUP)
+        self.endsSometimeRadio = wx.RadioButton(parent, label=("On:"), name="EndsSometimeRadio")
 
         # Make 'Never' the default.
         self.endsNeverRadio.SetValue(True)
         self.endDateCtrl.Value += wx.DateSpan(days=-1, years=1)
 
-        self.repeatsOnChecksWeekly = []
-        self.repeatsOnSizerWeekly = wx.BoxSizer()
-        today = datetime.date.today().weekday()
-        days = (_("Mon"), _("Tue"), _("Wed"), _("Thu"), _("Fri"), _("Sat"), _("Sun"))
-        for i, label in enumerate(days):
-            cb = wx.CheckBox(self, label=label)
-            cb.SetValue(i==today)
-            self.repeatsOnChecksWeekly.append(cb)
-            self.repeatsOnSizerWeekly.Add(cb, 0, wx.ALIGN_CENTER|wx.LEFT, 5)
-
         # The vertical sizer for when the recurring transaction stops ocurring.
         endsSizer = wx.BoxSizer(wx.VERTICAL)
-        endsDateSizer = wx.BoxSizer()
         endsSizer.Add(self.endsNeverRadio)
+        endsDateSizer = wx.BoxSizer()
         endsDateSizer.Add(self.endsSometimeRadio)
         endsDateSizer.Add(self.endDateCtrl)
         endsSizer.Add(endsDateSizer)
 
-        # The control which will summarize the recurring transaction
-        self.summaryCtrl = RecurringSummaryText(self)
-
-        self.topSizer = wx.BoxSizer()
-        self.bottomSizer = wx.BoxSizer()
-
-        self.topSizer.Add(wx.StaticText(self, label=_("Repeats:")), flag=wx.ALIGN_CENTER)
-        self.topSizer.Add(self.repeatsCombo, flag=wx.ALIGN_CENTER)
-        self.topSizer.AddSpacer(15)
-        self.topSizer.Add(wx.StaticText(self, label=_("Every")), flag=wx.ALIGN_CENTER)
-        self.topSizer.AddSpacer(3)
-        self.topSizer.Add(self.everySpin, flag=wx.ALIGN_CENTER)
-        self.topSizer.AddSpacer(3)
-        self.topSizer.Add(self.everyText, flag=wx.ALIGN_CENTER)
-        self.topSizer.AddSpacer(15)
-        self.topSizer.Add(wx.StaticText(self, label=_("Ends:")), flag=wx.ALIGN_CENTER)
-        self.topSizer.AddSpacer(3)
-        self.topSizer.Add(endsSizer)
-
-        #self.bottomSizer.AddSpacer(10)
-        self.bottomSizer.Add(self.repeatsOnText, flag=wx.ALIGN_CENTER)
-        self.bottomSizer.Add(self.repeatsOnSizerWeekly, flag=wx.ALIGN_CENTER)
-
-        self.Sizer = wx.BoxSizer(wx.VERTICAL)
-        self.Sizer.Add(self.topSizer)
-        self.Sizer.AddSpacer(3)
-        self.Sizer.Add(self.bottomSizer)
-        self.Sizer.AddSpacer(3)
-        self.Sizer.Add(self.summaryCtrl, 0, wx.ALIGN_CENTER)
-
-        self.Update()
+        # Create the sizer for the "Every" column and "End".
+        # This all is best as one item which spans the last two cols, otherwise the
+        # description column will be forced to be too wide in a small width window.
+        everySizer = wx.BoxSizer()
+        everySizer.Add(self.repeatsCombo, flag=wx.ALIGN_CENTER)
+        everySizer.AddSpacer(10)
+        everySizer.Add(wx.StaticText(parent, label=_("every")), flag=wx.ALIGN_CENTER)
+        everySizer.AddSpacer(3)
+        everySizer.Add(self.everySpin, flag=wx.ALIGN_CENTER)
+        everySizer.AddSpacer(3)
+        everySizer.Add(self.everyText, flag=wx.ALIGN_CENTER)
+        everySizer.Add(wx.StaticText(parent, label=_("Ends:")), flag=wx.ALIGN_CENTER)
+        everySizer.AddSpacer(3)
+        everySizer.Add(endsSizer)
+        
+        # Add all the columns
+        self.AddNext(wx.StaticText(parent, label=_("Repeats:")))
+        self.AddNext(everySizer, span=(1,2))
+        
         #self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update)
         self.everySpin.Bind(wx.EVT_SPINCTRL, self.Update)
-        self.Bind(wx.EVT_CHOICE, self.Update)
-        self.Bind(wx.EVT_CHECKBOX, self.Update)
-        self.Bind(wx.EVT_RADIOBUTTON, self.Update)
+        parent.Bind(wx.EVT_CHOICE, self.Update)
+        parent.Bind(wx.EVT_CHECKBOX, self.Update)
+        parent.Bind(wx.EVT_RADIOBUTTON, self.Update)
 
     def GetSettings(self):
         repeatType = self.repeatsCombo.GetSelection()
@@ -173,33 +139,27 @@ class RecurringPanel(wx.Panel):
         else:
             end = helpers.wxdate2pydate(self.endDateCtrl.GetValue())
 
-        repeatsOn = None
-        if repeatType == 1: # Weekly
-            repeatsOn = [int(check.Value) for check in self.repeatsOnChecksWeekly]
-
-        return (repeatType, repeatEvery, repeatsOn, end)
+        return repeatType, repeatEvery, end
 
     def Update(self, event=None):
         self.Freeze()
-        self.Sizer.Hide(self.bottomSizer)
+        self.Parent.ShowWeekly(False)
 
-        repeatType, every, repeatsOn, end = self.GetSettings()
+        repeatType, every, end = self.GetSettings()
         if repeatType == 0:
             everyText = gettext.ngettext("day", "days",every)
         elif repeatType == 1:
             everyText = gettext.ngettext("week", "weeks", every)
-            self.repeatsOnText.Label = label=_("Repeats on days:")
-            self.Sizer.Show(self.bottomSizer)
+            self.Parent.ShowWeekly(True)
         elif repeatType == 2:
             everyText = gettext.ngettext("month", "months", every)
         elif repeatType == 3:
             everyText = gettext.ngettext("year", "years", every)
 
-        self.ToRecurring(self.recurringObj)
-        summary = self.recurringObj.GetRecurrance()
-            
+        self.ToRecurring(self.Parent.recurringObj)
         self.everyText.Label = everyText
-        self.summaryCtrl.SetLabel(summary)
+        
+        self.Parent.UpdateSummary()
 
         self.Thaw()
         self.Parent.Parent.Layout()
@@ -210,74 +170,92 @@ class RecurringPanel(wx.Panel):
     
     def ToRecurring(self, recurringObj):
         """Given a RecurringTransaction, make it equivalent to the settings here."""
-        repeatType, repeatEvery, repeatsOn, end = self.GetSettings()
+        repeatType, repeatEvery, repeatsOn, end = self.Parent.GetSettings()
         recurringObj.Update(repeatType, repeatEvery, repeatsOn, end)
+        
 
-class NewTransactionCtrl(wx.Panel):
-    def __init__(self, parent):
-        wx.Panel.__init__(self, parent, name="NewTransactionCtrl")
+class WeeklyRecurringRow(bankcontrols.GBRow):
+    def __init__(self, parent, row):
+        bankcontrols.GBRow.__init__(self, parent, row)
+        
+        self.repeatsOnChecksWeekly = []
+        self.repeatsOnSizerWeekly = wx.BoxSizer()
+        today = datetime.date.today().weekday()
+        days = (_("Mon"), _("Tue"), _("Wed"), _("Thu"), _("Fri"), _("Sat"), _("Sun"))
+        for i, label in enumerate(days):
+            cb = wx.CheckBox(parent, label=label)
+            cb.SetValue(i==today)
+            self.repeatsOnChecksWeekly.append(cb)
+            self.repeatsOnSizerWeekly.Add(cb, 0, wx.ALIGN_CENTER|wx.LEFT, 5)
+            
+        self.AddNext(wx.StaticText(parent, label=_("Repeats on days:")))
+        self.AddNext(self.repeatsOnSizerWeekly, span=(1,2))
+        
+    def GetSettings(self):
+        repeatsOn = [int(check.Value) for check in self.repeatsOnChecksWeekly]
+        return repeatsOn
+
+
+class NewTransactionRow(bankcontrols.GBRow):
+    def __init__(self, parent, row):
+        bankcontrols.GBRow.__init__(self, parent, row, name="NewTransactionCtrl")
         self.CurrentAccount = None
 
-        self.dateCtrl = dateCtrl = bankcontrols.DateCtrlFactory(self)
-        self.startText = wx.StaticText(self, label=_("Starts:"))
+        self.dateCtrl = bankcontrols.DateCtrlFactory(parent)
+        self.startText = wx.StaticText(parent, label=_("Starts:"))
 
         # The Description and Amount controls.
-        self.descCtrl = descCtrl = bankcontrols.HintedTextCtrl(self, size=(140, -1), style=wx.TE_PROCESS_ENTER, hint=_("Description"), icon="wxART_page_edit")
-        self.amountCtrl = amountCtrl = bankcontrols.HintedTextCtrl(self, size=(90, -1), style=wx.TE_PROCESS_ENTER|wx.TE_RIGHT, hint=_("Amount"), icon="wxART_money_dollar")
+        self.descCtrl = bankcontrols.HintedTextCtrl(parent, size=(140, -1), style=wx.TE_PROCESS_ENTER, hint=_("Description"), icon="wxART_page_edit")
+        self.amountCtrl = bankcontrols.HintedTextCtrl(parent, size=(90, -1), style=wx.TE_PROCESS_ENTER|wx.TE_RIGHT, hint=_("Amount"), icon="wxART_money_dollar")
 
         # The add button.
-        self.newButton = newButton = wx.BitmapButton(self, bitmap=wx.ArtProvider.GetBitmap('wxART_money_add'))
-        newButton.SetToolTipString(_("Enter this transaction"))
+        self.newButton = wx.BitmapButton(parent, bitmap=wx.ArtProvider.GetBitmap('wxART_money_add'))
+        self.newButton.SetToolTipString(_("Enter this transaction"))
 
         # The transfer check.
-        self.transferCheck = transferCheck = wx.CheckBox(self, label=_("Transfer"))
+        self.transferCheck = wx.CheckBox(parent, label=_("Transfer"))
 
         # The recurs check.
-        self.recursCheck = recursCheck = wx.CheckBox(self, label=_("Recurring"))
+        self.recursCheck = wx.CheckBox(parent, label=_("Recurring"))
 
         checkSizer = wx.BoxSizer(wx.VERTICAL)
         checkSizer.Add(self.transferCheck)
         checkSizer.Add(self.recursCheck)
 
-        self.recurringPanel = RecurringPanel(self)
-        self.transferPanel = TransferPanel(self)
-        
         # Checkboxes seem to have an overly large horizontal margin that looks bad.
         for check in (self.transferCheck, self.recursCheck):
             x, y = check.BestSize
             check.SetMinSize((x, y-4))
 
         # Set up the layout.
+        dateSizer = wx.BoxSizer()
+        dateSizer.Add(self.startText, flag=wx.ALIGN_CENTER)
+        dateSizer.Add(wx.StaticBitmap(parent, bitmap=wx.ArtProvider.GetBitmap('wxART_date')), 0, wx.ALIGN_CENTER|wx.ALL, 2)
+        dateSizer.Add(self.dateCtrl, flag=wx.ALIGN_CENTER|wx.EXPAND)
+        self.startText.Hide()
+        
         hSizer = wx.BoxSizer()
-        hSizer.Add(self.startText, flag=wx.ALIGN_CENTER)
-        hSizer.Add(wx.StaticBitmap(self, bitmap=wx.ArtProvider.GetBitmap('wxART_date')), 0, wx.ALIGN_CENTER|wx.ALL, 2)
-        hSizer.Add(dateCtrl, 0, wx.ALIGN_CENTER)
+        hSizer.Add(self.amountCtrl, 0, wx.ALIGN_CENTER)
         hSizer.AddSpacer(5)
-        hSizer.Add(descCtrl, 1, wx.ALIGN_CENTER)
-        hSizer.AddSpacer(5)
-        hSizer.Add(amountCtrl, 0, wx.ALIGN_CENTER)
-        hSizer.AddSpacer(5)
-        hSizer.Add(newButton, 0, wx.ALIGN_CENTER)
+        hSizer.Add(self.newButton, 0, wx.ALIGN_CENTER)
         hSizer.AddSpacer(5)
         hSizer.Add(checkSizer, 0, wx.ALIGN_CENTER)
-
-        self.Sizer = wx.BoxSizer(wx.VERTICAL)
-        self.Sizer.Add(self.recurringPanel, 0, wx.EXPAND|wx.TOP, 5)
-        self.Sizer.Add(self.transferPanel, 0, wx.EXPAND|wx.TOP, 5)
-        self.Sizer.Add(hSizer, 0, wx.EXPAND)
-
-        self.startText.Hide()
-        self.Sizer.Hide(self.recurringPanel)
-        self.Sizer.Hide(self.transferPanel)
-
+        
+        descSizer = wx.BoxSizer()
+        descSizer.Add(self.descCtrl, 1, flag=wx.ALIGN_CENTER)
+        
+        self.AddNext(dateSizer)
+        self.AddNext(descSizer, flag=wx.EXPAND)
+        self.AddNext(hSizer)
+        
         # Initialize necessary bindings.
-        self.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction) # Gives us enter from description/amount.
+        parent.Bind(wx.EVT_TEXT_ENTER, self.onNewTransaction) # Gives us enter from description/amount.
         self.newButton.Bind(wx.EVT_BUTTON, self.onNewTransaction)
         self.recursCheck.Bind(wx.EVT_CHECKBOX, self.onRecurringCheck)
         self.transferCheck.Bind(wx.EVT_CHECKBOX, self.onTransferCheck)
 
         try:
-            amountCtrl.Children[0].Bind(wx.EVT_CHAR, self.onAmountChar)
+            self.amountCtrl.Children[0].Bind(wx.EVT_CHAR, self.onAmountChar)
         except IndexError:
             # On OSX for example, a SearchCtrl is native and has no Children.
             pass
@@ -295,18 +273,11 @@ class NewTransactionCtrl(wx.Panel):
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
 
     def onRecurringCheck(self, event=None):
-        recurring = self.recursCheck.IsChecked()
-        self.toggleVisibilityOf(self.recurringPanel, recurring)
-        self.startText.Show(recurring)
+        Publisher.sendMessage("newtransaction.recurringtoggled", self.recursCheck.IsChecked())
+        ##self.startText.Show(recurring) #TODO: perhaps remove startText?
 
     def onTransferCheck(self, event=None):
-        self.toggleVisibilityOf(self.transferPanel, self.transferCheck.IsChecked())
-
-    def toggleVisibilityOf(self, control, visibility):
-        self.Parent.Freeze()
-        self.Sizer.Show(control, visibility)
-        self.Parent.Layout()
-        self.Parent.Thaw()
+        Publisher.sendMessage("newtransaction.transfertoggled", self.transferCheck.IsChecked())
 
     def onDateEnter(self, event):
         # Force a focus-out/tab to work around LP #311934
@@ -316,7 +287,6 @@ class NewTransactionCtrl(wx.Panel):
     def onAccountChanged(self, message):
         account = message.data
         self.CurrentAccount = account
-        self.transferPanel.Update(account)
 
     def onAmountChar(self, event):
         wx.CallAfter(self.updateAddIcon)
@@ -346,7 +316,7 @@ class NewTransactionCtrl(wx.Panel):
             else:
                 baseStr = _("'%s' is not a valid amount.") % amount
 
-            dlg = wx.MessageDialog(self,
+            dlg = wx.MessageDialog(self.Parent,
                                 baseStr + " " + _("Please enter a number such as 12.34 or -20."),
                                 _("Invalid Transaction Amount"), wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
@@ -358,7 +328,7 @@ class NewTransactionCtrl(wx.Panel):
         # First, ensure an account is selected.
         destAccount = self.CurrentAccount
         if destAccount is None:
-            dlg = wx.MessageDialog(self,
+            dlg = wx.MessageDialog(self.Parent,
                                 _("Please select an account and then try again."),
                                 _("No account selected"), wx.OK | wx.ICON_ERROR)
             dlg.ShowModal()
@@ -374,9 +344,9 @@ class NewTransactionCtrl(wx.Panel):
         isTransfer = self.transferCheck.Value
 
         # If a search is active, we have to ask the user what they want to do.
-        if self.Parent.searchActive:
+        if self.Parent.Parent.searchActive:
             msg = _("A search is currently active.") + " " + _('Would you like to clear the current search and make this transaction in "%s"?') % (destAccount.Name)
-            dlg = wx.MessageDialog(self, msg, _("Clear search?"), style=wx.YES_NO|wx.ICON_WARNING)
+            dlg = wx.MessageDialog(self.Parent, msg, _("Clear search?"), style=wx.YES_NO|wx.ICON_WARNING)
             result = dlg.ShowModal()
             if result == wx.ID_YES:
                 Publisher().sendMessage("SEARCH.CANCELLED")
@@ -385,9 +355,9 @@ class NewTransactionCtrl(wx.Panel):
 
         sourceAccount = None
         if isTransfer:
-            result = self.transferPanel.GetAccounts(destAccount)
+            result = self.Parent.transferRow.GetAccounts(destAccount)
             if result is None:
-                dlg = wx.MessageDialog(self,
+                dlg = wx.MessageDialog(self.Parent,
                                        _("This transaction is marked as a transfer. Please select the transfer account."),
                                        _("No account selected"), wx.OK | wx.ICON_ERROR)
                 dlg.ShowModal()
@@ -396,7 +366,7 @@ class NewTransactionCtrl(wx.Panel):
 
         # Now let's see if this is a recurring transaction
         if self.recursCheck.GetValue():
-            settings = self.recurringPanel.GetSettings()
+            settings = self.Parent.GetSettings()
             args = [amount, desc, date] + list(settings) + [sourceAccount]
             destAccount.AddRecurringTransaction(*args)
         else:

@@ -23,6 +23,7 @@ import localization
 
 
 def fixMinWidth(ctrl, values):
+    """Set the minimum width of a control to the max of all possible values."""
     # Calculate the width of the button.
     ctrl.Freeze()
     minWidth, minHeight = ctrl.MinSize
@@ -35,20 +36,25 @@ def fixMinWidth(ctrl, values):
 
 
 def DateCtrlFactory(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY):
+    """
+    A function to return a DateCtrl given a parent and style.
+    This factory prefers creating a generic (non-native) control as it is more flexible
+    but will return a native if necessary.
+    """
     # The date control. We want the Generic control, which is a composite control
     # and allows us to bind to its enter, but on Windows with wxPython < 2.8.8.0,
     # it won't be available.
-    doBind = False
+    generic = False
     try:
         DatePickerClass = wx.GenericDatePickerCtrl
-        doBind = True
+        generic = True
     except AttributeError:
         DatePickerClass = wx.DatePickerCtrl
 
     dateCtrl = DatePickerClass(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY)
     dateCtrl.SetToolTipString(_("Date"))
 
-    if doBind:
+    if generic:
         def onDateChar(event):
             key = event.GetKeyCode()
             incr = 0
@@ -66,11 +72,17 @@ def DateCtrlFactory(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY):
             dateCtrl.Children[0].Children[0].Bind(wx.EVT_KEY_DOWN, onDateChar)
         except Exception:
             print "Unable to bind to dateCtrl's text field, that's odd! Please file a bug: https://bugs.launchpad.net/wxbanker/+filebug"
+            
+        # date controls seem to need an extra bit of width to be fully visible.
+        bestSize = dateCtrl.BestSize
+        bestSize[0] += 5
+        dateCtrl.SetMinSize(bestSize)
 
     return dateCtrl
 
 
 class HyperlinkText(wx.HyperlinkCtrl):
+    """A hyper link control with no special visited color, which can accept a click callback function."""
     def __init__(self, parent, id=-1, label='', url='', style=wx.NO_BORDER | wx.HL_ALIGN_CENTRE, onClick=None, *args, **kwargs):
         # By default, disable the right-click "Copy URL" menu.
         wx.HyperlinkCtrl.__init__(self, parent, id, label, url, style=style, *args, **kwargs)
@@ -84,6 +96,7 @@ class HyperlinkText(wx.HyperlinkCtrl):
 
 
 class CompactableComboBox(wx.ComboBox):
+    """A combobox which can be Compact'd to only take up as much space as necessary."""
     def Compact(self):
         # Calculates and sets the minimum width of the ComboBox.
         # Width is based on the width of the longest string.
@@ -161,3 +174,27 @@ class HintedTextCtrl(wx.SearchCtrl):
                 self.Navigate()
         else:
             event.Skip()
+            
+            
+class GBRow(wx.Window):
+    """
+    A convenience class for representing a row in a GridBagSizer,
+    allowing it to be hidden.
+    """
+    def __init__(self, parent, row, *args, **kwargs):
+        wx.Window.__init__(self, parent, *args, **kwargs)
+        self.Hide()
+        self.Row = row
+        self.Column = 0
+        
+    def AddNext(self, ctrl, *args, **kwargs):
+        if "flag" in kwargs:
+            kwargs["flag"] = kwargs["flag"] | wx.ALIGN_CENTER_VERTICAL
+        else:
+            kwargs["flag"] = wx.ALIGN_CENTER_VERTICAL
+
+        # Add the item.
+        self.Parent.Sizer.Add(ctrl, wx.GBPosition(self.Row, self.Column), *args, **kwargs)
+        
+        # Increment the column count by the number of columns the item spans.
+        self.Column += self.Parent.Sizer.GetItemSpan(ctrl)[1]
