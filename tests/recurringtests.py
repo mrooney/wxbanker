@@ -296,6 +296,16 @@ class RecurringTest(testbase.TestCaseWithController):
         rt.RepeatEvery = 10
         self.assertEqual(rt.GetRecurrance(), "Every 10 years until %s" % today)
         
+    def testGetDueString(self):
+        model, account = self.createAccount()
+        rt = account.AddRecurringTransaction(1, "Example Description", yesterday, RecurringTransaction.DAILY)
+        self.assertEqual(rt.GetDueString(), "Example Description, $1.00: %s, %s" % (yesterday, today))
+        
+    def testGetDescriptionString(self):
+        model, account = self.createAccount()
+        rt = account.AddRecurringTransaction(1, "Example Description", yesterday, RecurringTransaction.DAILY)
+        self.assertEqual(rt.GetDescriptionString(), "Example Description, $1.00: Daily")
+        
 
 if __name__ == "__main__":
     unittest.main()

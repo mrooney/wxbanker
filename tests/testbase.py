@@ -18,7 +18,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, sys, datetime
+import os, sys, datetime, locale
+import currencies
 
 # Make sure path contains both the test dir and its parent (wxbanker root dir).
 here = os.path.dirname(__file__)
@@ -50,6 +51,9 @@ def filehere(*paths):
 def fixturefile(name):
     return filehere("fixtures", name)
 
+def resetLocale():
+    assert bool(locale.setlocale(locale.LC_ALL, ""))
+    reload(currencies)
 
 class TestCaseHandlingConfig(unittest.TestCase):
     """

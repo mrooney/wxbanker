@@ -18,6 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
+import localization
 import datetime, functools, gettext
 from dateutil import rrule
 
@@ -180,6 +181,16 @@ class RecurringTransaction(Transaction, ORMObject):
         self.RepeatEvery = revery
         self.RepeatOn = ron
         self.EndDate = rend
+        
+    def GetStringBase(self):
+        return "%s, %s: "  % (self.Description or _("No description"), self.RenderAmount())
+    
+    def GetDueString(self):
+        datelist = ", ".join([str(d) for d in self.GetUntransactedDates()])
+        return self.GetStringBase() + datelist
+    
+    def GetDescriptionString(self):
+        return self.GetStringBase() + self.GetRecurrance()
         
     def __eq__(self, other):
         if other is None:

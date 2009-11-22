@@ -22,13 +22,16 @@
 import testbase, currencies
 import unittest, locale
 
-def assertLocale(loc):
+def assertLocale(loc=None):
     result = locale.setlocale(locale.LC_ALL, loc)
     assert result == loc, (loc, result)
     reload(currencies)
 
 class LocaleTests(unittest.TestCase):
     TEST_AMOUNT = 1234.5
+    
+    def tearDown(self):
+        testbase.resetLocale()
 
     def testDateParsing(self):
         #INCOMPLETE
@@ -66,6 +69,8 @@ for loc in testbase.LOCALES:
             self.assertEqual(localeDisplays[desiredloc], desiredcurr.float2str(LocaleTests.TEST_AMOUNT))
         testName = ("test%sDisplays%sProperly"%(localecurr.GetCurrencyNick(), desiredcurr.GetCurrencyNick())).replace(" ", "")
         setattr(LocaleTests, testName, test)
+
+testbase.resetLocale()
 
 if __name__ == "__main__":
     unittest.main()

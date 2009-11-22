@@ -23,6 +23,9 @@ import unittest
 import currencies, locale
 
 class CurrencyTest(unittest.TestCase):
+    def tearDown(self):
+        testbase.resetLocale()
+        
     def testUSD(self):
         usd = currencies.UnitedStatesCurrency()
         self.assertEqual(usd.float2str(1), '$1.00')
@@ -48,7 +51,6 @@ class CurrencyTest(unittest.TestCase):
         russianLocale = testbase.LOCALES[1]
         self.assertEqual(locale.setlocale(locale.LC_ALL, russianLocale), russianLocale)
         self.assertEqual(currencies.LocalizedCurrency().float2str(1), u'1.00 руб')
-        self.assertTrue(bool(locale.setlocale(locale.LC_ALL, '')))
 
     def testCurrencyDisplay(self):
         # First make sure we know how many currencies there are. If this is wrong, we are

@@ -55,6 +55,7 @@ class RecurringConfigPanel(wx.Panel):
         self.Account = account
         wx.Panel.__init__(self, parent)
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
+        self.Sizer.AddSpacer(5)
         
         rts = self.Account.GetRecurringTransactions()
         if not rts:
@@ -63,7 +64,7 @@ class RecurringConfigPanel(wx.Panel):
             self.setupRecurringTransactions(rts)
             
     def setupNoRecurringTransactions(self):
-        self.Sizer.Add(wx.StaticText(self, label=_("This account currently has no recurring transactions")), flag=wx.ALIGN_CENTER)
+        self.Sizer.Add(wx.StaticText(self, label=_("This account currently has no recurring transactions.")), flag=wx.ALIGN_CENTER)
         
     def setupRecurringTransactions(self, rts):
         #TODO: implement
