@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-09-06 12:20-0700\n"
-"PO-Revision-Date: 2009-10-20 11:46+0000\n"
+"PO-Revision-Date: 2009-11-21 09:29+0000\n"
 "Last-Translator: Ddorda <d.dorda@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-10-21 07:26+0000\n"
+"X-Launchpad-Export-Date: 2009-11-22 04:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
@@ -271,7 +271,7 @@ msgstr ""
 #: newtransactionctrl.py:205
 #, python-format
 msgid " and %s"
-msgstr ""
+msgstr " ו־%s"
 
 #: newtransactionctrl.py:207
 msgid "month"
@@ -354,7 +354,7 @@ msgstr "לא נבחרו חשבונות"
 
 #: newtransactionctrl.py:385
 msgid "A search is currently active."
-msgstr ""
+msgstr "החיפוש פעיל כרגע"
 
 #: newtransactionctrl.py:385
 #, python-format
@@ -390,7 +390,7 @@ msgstr ""
 
 #: messagepanel.py:45
 msgid "Dismiss"
-msgstr ""
+msgstr "סגור"
 
 #: summarytab.py:49
 msgid "Account"
@@ -550,7 +550,7 @@ msgstr "תצוגה מקדימה"
 
 #: csvimportframe.py:164
 msgid "CSV profiles"
-msgstr ""
+msgstr "פרופילי CSV"
 
 #: csvimportframe.py:169
 msgid "Python simplejson library is needed for csv profile loading/saving."
@@ -579,16 +579,16 @@ msgstr ""
 
 #: csvimportframe.py:251
 msgid "CSV import error"
-msgstr ""
+msgstr "שגיאת ייבוא csv"
 
 #: csvimportframe.py:301
 #, python-format
 msgid "Profile with the name '%s' exists already. Overwrite it ?"
-msgstr ""
+msgstr "פרופיל עם השם '%s' כבר קיים. לשכתב אותו ?"
 
 #: csvimportframe.py:302
 msgid "Overwrite profile ?"
-msgstr ""
+msgstr "לשכתב פרופיל ?"
 
 #: csvimportframe.py:316
 msgid "Select file and click \"Preview\""
@@ -596,7 +596,7 @@ msgstr ""
 
 #: currencies.py:192
 msgid "detected"
-msgstr ""
+msgstr "זוהה"
 
 #: transactionolv.py:47
 msgid "No transactions entered."
@@ -609,12 +609,12 @@ msgstr "סך־הכל"
 #: transactionolv.py:186
 #, python-format
 msgid "Send %s to calculator"
-msgstr ""
+msgstr "שלח את %s למחשבון"
 
 #: transactionolv.py:187
 #, python-format
 msgid "Add %s to calculator"
-msgstr ""
+msgstr "הוסף את %s למחשבון"
 
 #: transactionolv.py:188
 #, python-format
@@ -674,7 +674,7 @@ msgstr "אנו מתנצלים, חשבון בשם זה כבר קיים."
 
 #: accountlistctrl.py:383 accountlistctrl.py:478
 msgid "Account names cannot be blank."
-msgstr ""
+msgstr "שמות חשבונות לא יכולים להיות ריקים."
 
 #: accountlistctrl.py:449
 #, python-format
