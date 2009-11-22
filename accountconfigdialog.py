@@ -22,9 +22,10 @@ try:
 except ImportError:
     gnomekeyring = None
 
-class AccountConfigDialog(wx.Dialog):
-    def __init__(self, parent, account):
-        wx.Dialog.__init__(self, parent, title=account.Name)
+
+class MintConfigPanel(wx.Config):
+    def  __init__(self, parent):
+        wx.Panel.__init__(self, parent)
         self.SetBackgroundColour(wx.RED)
         self.headerText = wx.StaticText(self, -1, _("wxBanker can synchronize account balances online if you have an account with mint.com"))
 
@@ -47,6 +48,34 @@ class AccountConfigDialog(wx.Dialog):
         self.Sizer.AddStretchSpacer(1)
         self.Sizer.Add(self.closeButton)
         self.saveAuthCheck.Enable(bool(gnomekeyring))
+        
+
+class RecurringConfigPanel(wx.Panel):
+    def __init__(self, parent, account):
+        self.Account = account
+        wx.Panel.__init__(self, parent)
+        self.Sizer = wx.BoxSizer(wx.VERTICAL)
+        
+        rts = self.Account.GetRecurringTransactions()
+        if not rts:
+            self.setupNoRecurringTransactions()
+        else:
+            self.setupRecurringTransactions(rts)
+            
+    def setupNoRecurringTransactions(self):
+        self.Sizer.Add(wx.StaticText(self, label=_("This account currently has no recurring transactions")), flag=wx.ALIGN_CENTER)
+        
+    def setupRecurringTransactions(self, rts):
+        #TODO: implement
+        pass
+
+class AccountConfigDialog(wx.Dialog):
+    def __init__(self, parent, account):
+        wx.Dialog.__init__(self, parent, title=account.Name)
+        self.Sizer = wx.BoxSizer()
+        #TODO: use wxAui with tabs, add "Recurring Transactions"
+        self.recurringPanel = RecurringConfigPanel(self, account)
+        self.Sizer.Add(self.recurringPanel, 1, wx.EXPAND)
 
     def createMintConfigPanel(self):
         panel = wx.Panel(self)

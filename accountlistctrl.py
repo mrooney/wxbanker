@@ -71,7 +71,7 @@ class AccountListCtrl(wx.Panel):
         self.configureButton = configureButton = wx.BitmapButton(self.childPanel, bitmap=BMP)
         configureButton.SetToolTipString(_("Configure the selected account"))
         configureButton.Enabled = False
-        configureButton.Hide()
+        #configureButton.Hide()
 
         # Layout the buttons.
         buttonSizer = wx.BoxSizer()
