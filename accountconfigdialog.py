@@ -17,6 +17,8 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import wx
+from transactionctrl import TransactionCtrl
+
 try:
     import gnomekeyring
 except ImportError:
@@ -57,18 +59,28 @@ class RecurringConfigPanel(wx.Panel):
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
         self.Sizer.AddSpacer(5)
         
-        rts = self.Account.GetRecurringTransactions()
-        if not rts:
+        self.transactionCtrl = TransactionCtrl(self)
+        self.transactionCtrl.Hide()
+        
+        self.transactions = self.Account.GetRecurringTransactions()
+        
+        if not self.transactions:
             self.setupNoRecurringTransactions()
         else:
-            self.setupRecurringTransactions(rts)
+            self.setupRecurringTransactions()
+        
+        self.Sizer.Add(self.transactionCtrl)
             
     def setupNoRecurringTransactions(self):
         self.Sizer.Add(wx.StaticText(self, label=_("This account currently has no recurring transactions.")), flag=wx.ALIGN_CENTER)
         
-    def setupRecurringTransactions(self, rts):
-        #TODO: implement
-        pass
+    def setupRecurringTransactions(self):
+        strings = [rt.GetDescriptionString() for rt in self.transactions]
+        choice = wx.Choice(self, choices=strings)
+        
+        self.Sizer.Add(choice, flag=wx.EXPAND)
+        self.transactionCtrl.FromRecurring(self.transactions[0])
+        self.transactionCtrl.Show()
 
 class AccountConfigDialog(wx.Dialog):
     def __init__(self, parent, account):

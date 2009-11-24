@@ -85,6 +85,9 @@ class TransactionCtrl(wx.Panel):
             repeatsOn = self.weeklyRecurringRow.GetSettings()
             
         return repeatType, repeatEvery, repeatsOn, end
+    
+    def FromRecurring(self, rt):
+        pass
         
         
 if __name__ == "__main__":

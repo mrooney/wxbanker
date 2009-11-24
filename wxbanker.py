@@ -101,7 +101,6 @@ class BankerPanel(wx.Panel):
             for recurring, dates in untransacted:
                 lines.append(recurring.GetDueString())
             
-            
         # Create the message panel.
         mpanel = messagepanel.MessagePanel(self, message)
         
