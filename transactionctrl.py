@@ -30,7 +30,7 @@ class TransactionCtrl(wx.Panel):
     TRANSFER_ROW = 3
     TRANSACTION_ROW = 4
     
-    def __init__(self, parent):
+    def __init__(self, parent, editing=False):
         wx.Panel.__init__(self, parent)
         # Create the recurring object we will use internally.
         self.recurringObj = RecurringTransaction(None, None, 0, "", datetime.date.today(), RecurringTransaction.DAILY)
@@ -43,14 +43,15 @@ class TransactionCtrl(wx.Panel):
         self.recurringSummaryRow = RecurringSummaryRow(self, self.SUMMARY_ROW)
         self.weeklyRecurringRow = WeeklyRecurringRow(self, self.WEEKLY_ROW)
         self.transferRow = TransferRow(self, self.TRANSFER_ROW)
-        self.transactionRow = NewTransactionRow(self, self.TRANSACTION_ROW)
+        self.transactionRow = NewTransactionRow(self, self.TRANSACTION_ROW, editing)
         
         # RecurringRow needs an update once both it and the other controls exist.
         self.recurringRow.Update()
         
         # Hide everything up to the actual transaction row initially.
-        for i in range(self.TRANSACTION_ROW):
-            self.ShowRow(i, False)
+        if not editing:
+            for i in range(self.TRANSACTION_ROW):
+                self.ShowRow(i, False)
         
         Publisher.subscribe(self.onTransferToggled, "newtransaction.transfertoggled")
         Publisher.subscribe(self.onRecurringToggled, "newtransaction.recurringtoggled")
@@ -87,7 +88,7 @@ class TransactionCtrl(wx.Panel):
         return repeatType, repeatEvery, repeatsOn, end
     
     def FromRecurring(self, rt):
-        pass
+        print rt
         
         
 if __name__ == "__main__":

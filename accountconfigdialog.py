@@ -59,8 +59,10 @@ class RecurringConfigPanel(wx.Panel):
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
         self.Sizer.AddSpacer(5)
         
-        self.transactionCtrl = TransactionCtrl(self)
-        self.transactionCtrl.Hide()
+        self.staticBox = wx.StaticBox(self, label=_("Transaction details"))
+        self.staticBoxSizer = wx.StaticBoxSizer(self.staticBox, wx.VERTICAL)
+        
+        self.transactionCtrl = TransactionCtrl(self, editing=True)
         
         self.transactions = self.Account.GetRecurringTransactions()
         
@@ -69,9 +71,13 @@ class RecurringConfigPanel(wx.Panel):
         else:
             self.setupRecurringTransactions()
         
-        self.Sizer.Add(self.transactionCtrl)
+        self.staticBoxSizer.Add(self.transactionCtrl)
+        self.Sizer.AddSpacer(10)
+        self.Sizer.Add(self.staticBoxSizer, 0, wx.EXPAND|wx.LEFT|wx.RIGHT, 5)
             
     def setupNoRecurringTransactions(self):
+        self.staticBox.Hide()
+        self.transactionCtrl.Hide()
         self.Sizer.Add(wx.StaticText(self, label=_("This account currently has no recurring transactions.")), flag=wx.ALIGN_CENTER)
         
     def setupRecurringTransactions(self):
@@ -80,19 +86,16 @@ class RecurringConfigPanel(wx.Panel):
         
         self.Sizer.Add(choice, flag=wx.EXPAND)
         self.transactionCtrl.FromRecurring(self.transactions[0])
-        self.transactionCtrl.Show()
 
 class AccountConfigDialog(wx.Dialog):
     def __init__(self, parent, account):
-        wx.Dialog.__init__(self, parent, title=account.Name)
+        wx.Dialog.__init__(self, parent, title=account.Name, size=(600, 400))
         self.Sizer = wx.BoxSizer()
-        #TODO: use wxAui with tabs, add "Recurring Transactions"
+        self.notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
+        self.Sizer.Add(self.notebook, 1, wx.EXPAND)
+        
         self.recurringPanel = RecurringConfigPanel(self, account)
-        self.Sizer.Add(self.recurringPanel, 1, wx.EXPAND)
-
+        self.notebook.AddPage(self.recurringPanel, _("Recurring Transactions"))
+        
     def createMintConfigPanel(self):
         panel = wx.Panel(self)
-
-
-
-

@@ -197,7 +197,7 @@ class WeeklyRecurringRow(bankcontrols.GBRow):
 
 
 class NewTransactionRow(bankcontrols.GBRow):
-    def __init__(self, parent, row):
+    def __init__(self, parent, row, editing=False):
         bankcontrols.GBRow.__init__(self, parent, row, name="NewTransactionCtrl")
         self.CurrentAccount = None
 
@@ -212,15 +212,19 @@ class NewTransactionRow(bankcontrols.GBRow):
         self.newButton = wx.BitmapButton(parent, bitmap=wx.ArtProvider.GetBitmap('wxART_money_add'))
         self.newButton.SetToolTipString(_("Enter this transaction"))
 
+        checkSizer = wx.BoxSizer(wx.VERTICAL)
+        
         # The transfer check.
         self.transferCheck = wx.CheckBox(parent, label=_("Transfer"))
-
+        checkSizer.Add(self.transferCheck)
+        
         # The recurs check.
         self.recursCheck = wx.CheckBox(parent, label=_("Recurring"))
-
-        checkSizer = wx.BoxSizer(wx.VERTICAL)
-        checkSizer.Add(self.transferCheck)
         checkSizer.Add(self.recursCheck)
+    
+        # If we are editing, it is inherently a recurring transaction.
+        if editing:
+            self.recursCheck.Hide()
 
         # Checkboxes seem to have an overly large horizontal margin that looks bad.
         for check in (self.transferCheck, self.recursCheck):
