@@ -53,8 +53,9 @@ class TransactionCtrl(wx.Panel):
             for i in range(self.TRANSACTION_ROW):
                 self.ShowRow(i, False)
         
-        Publisher.subscribe(self.onTransferToggled, "newtransaction.transfertoggled")
-        Publisher.subscribe(self.onRecurringToggled, "newtransaction.recurringtoggled")
+        ctrlId = id(self.transactionRow)
+        Publisher.subscribe(self.onTransferToggled, "newtransaction.%i.transfertoggled"%ctrlId)
+        Publisher.subscribe(self.onRecurringToggled, "newtransaction.%i.recurringtoggled"%ctrlId)
         
     def onTransferToggled(self, message):
         transfer = message.data
@@ -88,7 +89,7 @@ class TransactionCtrl(wx.Panel):
         return repeatType, repeatEvery, repeatsOn, end
     
     def FromRecurring(self, rt):
-        print rt
+        self.transactionRow.FromRecurring(rt)
         
         
 if __name__ == "__main__":

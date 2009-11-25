@@ -277,11 +277,11 @@ class NewTransactionRow(bankcontrols.GBRow):
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
 
     def onRecurringCheck(self, event=None):
-        Publisher.sendMessage("newtransaction.recurringtoggled", self.recursCheck.IsChecked())
+        Publisher.sendMessage("newtransaction.%i.recurringtoggled"%id(self), self.recursCheck.IsChecked())
         ##self.startText.Show(recurring) #TODO: perhaps remove startText?
 
     def onTransferCheck(self, event=None):
-        Publisher.sendMessage("newtransaction.transfertoggled", self.transferCheck.IsChecked())
+        Publisher.sendMessage("newtransaction.%i.transfertoggled"%id(self), self.transferCheck.IsChecked())
 
     def onDateEnter(self, event):
         # Force a focus-out/tab to work around LP #311934
@@ -376,7 +376,13 @@ class NewTransactionRow(bankcontrols.GBRow):
         else:
             destAccount.AddTransaction(amount, desc, date, sourceAccount)
         self.clear()
-
+        
+    def FromRecurring(self, rt):
+        self.descCtrl.Value = rt.Description
+        self.amountCtrl.Value = "%.2f" % rt.Amount
+        self.dateCtrl.Value = helpers.pydate2wxdate(rt.Date)
+        self.transferCheck.Value = bool(rt.Source)
+        #TODO: this set value won't show the row if appropriate, so do that
 
     def onTransferTip(self, event):
         tipStr = _("If this box is checked when adding a transaction, you will be prompted for the account to use as the source of the transfer.")+"\n\n"+\
