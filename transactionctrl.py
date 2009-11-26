@@ -94,6 +94,7 @@ class TransactionCtrl(wx.Panel):
         self.ShowRow(self.TRANSFER_ROW, bool(rt.Source))
         self.ShowRow(self.WEEKLY_ROW, rt.IsWeekly())
 
+        self.recurringRow.FromRecurring(rt)
         self.recurringSummaryRow.UpdateSummary(rt)
         self.weeklyRecurringRow.FromRecurring(rt)
         self.transferRow.FromRecurring(rt)

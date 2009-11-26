@@ -162,7 +162,7 @@ class RecurringRow(bankcontrols.GBRow):
         elif repeatType == 3:
             everyText = gettext.ngettext("year", "years", every)
 
-        self.ToRecurring(self.Parent.recurringObj)
+        self.ToRecurring()
         self.everyText.Label = everyText
         
         self.Parent.UpdateSummary()
@@ -170,14 +170,20 @@ class RecurringRow(bankcontrols.GBRow):
         self.Thaw()
         self.Parent.Parent.Layout()
         
-    def FromRecurring(self, recurringObj):
+    def FromRecurring(self, rt):
         """Given a RecurringTransaction, make our settings mirror it."""
-        pass
+        self.repeatsCombo.SetSelection(rt.RepeatType)
+        self.everySpin.SetValue(rt.RepeatEvery)
+        
+        end = rt.EndDate
+        self.endsSometimeRadio.SetValue(bool(end))
+        if end:
+            self.endDateCtrl.SetValue(helpers.pydate2wxdate(end))
     
-    def ToRecurring(self, recurringObj):
+    def ToRecurring(self):
         """Given a RecurringTransaction, make it equivalent to the settings here."""
         repeatType, repeatEvery, repeatsOn, end = self.Parent.GetSettings()
-        recurringObj.Update(repeatType, repeatEvery, repeatsOn, end)
+        self.Parent.recurringObj.Update(repeatType, repeatEvery, repeatsOn, end)
         
 
 class WeeklyRecurringRow(bankcontrols.GBRow):
