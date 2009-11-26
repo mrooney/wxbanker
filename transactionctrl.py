@@ -90,6 +90,9 @@ class TransactionCtrl(wx.Panel):
     
     def FromRecurring(self, rt):
         self.ShowRow(self.TRANSFER_ROW, bool(rt.Source))
+        self.ShowRow(self.WEEKLY_ROW, rt.IsWeekly())
+        
+        self.weeklyRecurringRow.FromRecurring(rt)
         self.transferRow.FromRecurring(rt)
         self.transactionRow.FromRecurring(rt)
         

@@ -55,6 +55,9 @@ class RecurringTransaction(Transaction, ORMObject):
         self.LastTransacted = lastTransacted
         self.IsFrozen = False
         
+    def IsWeekly(self):
+        return self.RepeatType == self.WEEKLY
+        
     def PerformTransactions(self):
         for date in self.GetUntransactedDates():
             result = self.Parent.AddTransaction(self.Amount, self.Description, date, self.Source)

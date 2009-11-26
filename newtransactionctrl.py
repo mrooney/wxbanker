@@ -200,6 +200,14 @@ class WeeklyRecurringRow(bankcontrols.GBRow):
     def GetSettings(self):
         repeatsOn = [int(check.Value) for check in self.repeatsOnChecksWeekly]
         return repeatsOn
+    
+    def SetCheck(self, i, value):
+        self.repeatsOnChecksWeekly[i].Value = value
+    
+    def FromRecurring(self, rt):
+        if rt.IsWeekly():
+            for i, value in enumerate(rt.RepeatOn):
+                self.SetCheck(i, value)
 
 
 class NewTransactionRow(bankcontrols.GBRow):
