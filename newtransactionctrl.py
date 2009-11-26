@@ -73,6 +73,12 @@ class TransferRow(bankcontrols.GBRow):
         # If there are choices, select the first one by default.
         if choices:
             self.accountSelection.SetSelection(0)
+            
+    def FromRecurring(self, rt):
+        self.fromtoBox.Disable()
+        self.Update(rt.Parent)
+        if rt.Source:
+            self.accountSelection.SetStringSelection(rt.Source.Name)
 
 
 class RecurringRow(bankcontrols.GBRow):
