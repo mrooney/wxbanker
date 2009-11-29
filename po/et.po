@@ -1,4 +1,4 @@
-# Bosnian translation for wxbanker
+# Estonian translation for wxbanker
 # Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the wxbanker package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
@@ -8,20 +8,19 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2009-09-06 12:20-0700\n"
-"PO-Revision-Date: 2009-02-05 23:02+0000\n"
-"Last-Translator: kenan3008 <Unknown>\n"
-"Language-Team: Bosnian <bs@li.org>\n"
+"PO-Revision-Date: 2009-11-07 23:07+0000\n"
+"Last-Translator: eazy <Unknown>\n"
+"Language-Team: Estonian <et@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2009-09-23 09:42+0000\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Launchpad-Export-Date: 2009-11-09 04:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: calculator.py:124
 msgid "Show"
-msgstr "Prikaži"
+msgstr ""
 
 #: bankobjects.py:613
 #, python-format
@@ -91,7 +90,7 @@ msgstr ""
 
 #: menubar.py:89
 msgid "Request a new feature to be implemented"
-msgstr ""
+msgstr "Uue lisavõimaluse tellimine"
 
 #: menubar.py:94
 msgid "Tran&slate wxBanker"
@@ -103,7 +102,7 @@ msgstr ""
 
 #: menubar.py:101
 msgid "&About"
-msgstr "O progr&amu"
+msgstr ""
 
 #: menubar.py:101
 msgid "More information about wxBanker"
@@ -115,15 +114,15 @@ msgstr ""
 
 #: menubar.py:105
 msgid "&Settings"
-msgstr "&Postavke"
+msgstr ""
 
 #: menubar.py:106
 msgid "&Help"
-msgstr "&Pomoć"
+msgstr ""
 
 #: menubar.py:174
 msgid "Copyright"
-msgstr "Autorska prava"
+msgstr ""
 
 #: menubar.py:175
 msgid "A lightweight personal finance management application."
@@ -135,11 +134,11 @@ msgstr ""
 
 #: newtransactionctrl.py:47 summarytab.py:57
 msgid "to"
-msgstr ""
+msgstr "kuni"
 
 #: newtransactionctrl.py:51 newtransactionctrl.py:240
 msgid "Transfer"
-msgstr "Transfer"
+msgstr ""
 
 #: newtransactionctrl.py:55
 msgid "account:"
@@ -198,7 +197,7 @@ msgstr ""
 
 #: newtransactionctrl.py:111
 msgid "Sun"
-msgstr ""
+msgstr "P"
 
 #: newtransactionctrl.py:132
 msgid "Repeats:"
@@ -210,7 +209,7 @@ msgstr ""
 
 #: newtransactionctrl.py:141
 msgid "Ends:"
-msgstr ""
+msgstr "Lõppeb"
 
 #: newtransactionctrl.py:185
 msgid "day"
@@ -221,8 +220,7 @@ msgstr[1] ""
 #: newtransactionctrl.py:188
 msgid "week"
 msgid_plural "weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "nädal"
 
 #: newtransactionctrl.py:189
 msgid "Repeats on days:"
@@ -305,12 +303,12 @@ msgstr ""
 #: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:110
 #: transactionolv.py:60
 msgid "Description"
-msgstr "Opis"
+msgstr "Kirjeldus"
 
 #: newtransactionctrl.py:233 searchctrl.py:40 csvimportframe.py:104
 #: transactionolv.py:61
 msgid "Amount"
-msgstr "Iznos"
+msgstr ""
 
 #: newtransactionctrl.py:237
 msgid "Enter this transaction"
@@ -406,7 +404,7 @@ msgstr ""
 
 #: summarytab.py:184 summarytab.py:190
 msgid "Balance"
-msgstr "Balans"
+msgstr ""
 
 #: summarytab.py:188
 msgid "Trend"
@@ -419,7 +417,7 @@ msgstr ""
 #: summarytab.py:190 bankcontrols.py:49 searchctrl.py:40 csvimportframe.py:96
 #: transactionolv.py:59
 msgid "Date"
-msgstr "Datum"
+msgstr ""
 
 #: currconvert.py:59
 #, python-format
@@ -446,7 +444,7 @@ msgstr ""
 
 #: templater.py:28
 msgid "Show Calculator"
-msgstr "Prikaži digitron"
+msgstr ""
 
 #: templater.py:29
 msgid "Transact"
@@ -474,7 +472,7 @@ msgstr ""
 
 #: searchctrl.py:43
 msgid "Case Sensitive"
-msgstr "Razlikuj velika i mala slova"
+msgstr ""
 
 #: searchctrl.py:44
 msgid "Whether or not to match based on capitalization"
@@ -600,7 +598,7 @@ msgstr ""
 
 #: transactionolv.py:62 accountlistctrl.py:87
 msgid "Total"
-msgstr "Ukupno"
+msgstr ""
 
 #: transactionolv.py:186
 #, python-format
@@ -637,7 +635,7 @@ msgstr ""
 
 #: accountlistctrl.py:42
 msgid "Accounts"
-msgstr "Računi"
+msgstr ""
 
 #: accountlistctrl.py:58
 msgid "Add a new account"
@@ -681,7 +679,7 @@ msgstr ""
 
 #: accountlistctrl.py:450
 msgid "Warning"
-msgstr "Upozorenje"
+msgstr ""
 
 #: wxbanker.py:46
 msgid ""
@@ -691,11 +689,11 @@ msgstr ""
 
 #: wxbanker.py:58
 msgid "Transactions"
-msgstr "Transakcije"
+msgstr ""
 
 #: wxbanker.py:62
 msgid "Summary"
-msgstr "Rezime"
+msgstr ""
 
 #: wxbanker.py:94
 #, python-format
