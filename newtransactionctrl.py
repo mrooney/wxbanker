@@ -132,7 +132,7 @@ class RecurringRow(bankcontrols.GBRow):
         
         #self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update)
         self.everySpin.Bind(wx.EVT_SPINCTRL, self.Update)
-        parent.Bind(wx.EVT_CHOICE, self.Update)
+        self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update)
         parent.Bind(wx.EVT_CHECKBOX, self.Update)
         parent.Bind(wx.EVT_RADIOBUTTON, self.Update)
 
