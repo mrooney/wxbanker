@@ -25,12 +25,12 @@ from bankobjects.recurringtransaction import RecurringTransaction
         
 class TransactionCtrl(wx.Panel):
     RECURRING_ROW = 0
-    SUMMARY_ROW = 1
-    WEEKLY_ROW = 2
+    WEEKLY_ROW = 1
+    SUMMARY_ROW = 2
     TRANSFER_ROW = 3
     TRANSACTION_ROW = 4
     
-    def __init__(self, parent, editing=False):
+    def __init__(self, parent, editing=None):
         wx.Panel.__init__(self, parent)
         # Create the recurring object we will use internally.
         self.recurringObj = RecurringTransaction(None, None, 0, "", datetime.date.today(), RecurringTransaction.DAILY)
@@ -43,7 +43,7 @@ class TransactionCtrl(wx.Panel):
         self.recurringSummaryRow = RecurringSummaryRow(self, self.SUMMARY_ROW)
         self.weeklyRecurringRow = WeeklyRecurringRow(self, self.WEEKLY_ROW)
         self.transferRow = TransferRow(self, self.TRANSFER_ROW)
-        self.transactionRow = NewTransactionRow(self, self.TRANSACTION_ROW, editing)
+        self.transactionRow = NewTransactionRow(self, self.TRANSACTION_ROW, editing=editing)
         
         # RecurringRow needs an update once both it and the other controls exist.
         self.recurringRow.Update()
@@ -89,8 +89,6 @@ class TransactionCtrl(wx.Panel):
         return repeatType, repeatEvery, repeatsOn, end
     
     def FromRecurring(self, rt):
-        self.recurringObj = rt
-        
         self.ShowRow(self.TRANSFER_ROW, bool(rt.Source))
         self.ShowRow(self.WEEKLY_ROW, rt.IsWeekly())
 
@@ -99,6 +97,10 @@ class TransactionCtrl(wx.Panel):
         self.weeklyRecurringRow.FromRecurring(rt)
         self.transferRow.FromRecurring(rt)
         self.transactionRow.FromRecurring(rt)
+        
+    def ToRecurring(self):
+        """Save any settings to the internal transaction object that aren't automatically saved."""
+        self.transactionRow.ToRecurring()
         
         
 if __name__ == "__main__":

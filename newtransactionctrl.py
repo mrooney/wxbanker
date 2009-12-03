@@ -179,6 +179,8 @@ class RecurringRow(bankcontrols.GBRow):
         self.endsSometimeRadio.SetValue(bool(end))
         if end:
             self.endDateCtrl.SetValue(helpers.pydate2wxdate(end))
+            
+        self.Update()
     
     def ToRecurring(self):
         """Given a RecurringTransaction, make it equivalent to the settings here."""
@@ -217,9 +219,9 @@ class WeeklyRecurringRow(bankcontrols.GBRow):
 
 
 class NewTransactionRow(bankcontrols.GBRow):
-    def __init__(self, parent, row, editing=False):
+    def __init__(self, parent, row, editing=None):
         bankcontrols.GBRow.__init__(self, parent, row, name="NewTransactionCtrl")
-        self.CurrentAccount = None
+        self.CurrentAccount = editing
 
         self.dateCtrl = bankcontrols.DateCtrlFactory(parent)
         self.startText = wx.StaticText(parent, label=_("Starts:"))
@@ -403,6 +405,13 @@ class NewTransactionRow(bankcontrols.GBRow):
         self.dateCtrl.Value = helpers.pydate2wxdate(rt.Date)
         self.transferCheck.Value = bool(rt.Source)
         #TODO: this set value won't show the row if appropriate, so do that
+        
+    def ToRecurring(self):
+        result = self.getValues()
+        if result:
+            amount, desc, date = result
+            rt = self.Parent.recurringObj
+            rt.Amount, rt.Description, rt.Date = amount, desc, date
 
     def onTransferTip(self, event):
         tipStr = _("If this box is checked when adding a transaction, you will be prompted for the account to use as the source of the transfer.")+"\n\n"+\

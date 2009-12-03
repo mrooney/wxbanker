@@ -62,30 +62,59 @@ class RecurringConfigPanel(wx.Panel):
         self.staticBox = wx.StaticBox(self, label=_("Transaction details"))
         self.staticBoxSizer = wx.StaticBoxSizer(self.staticBox, wx.VERTICAL)
         
-        self.transactionCtrl = TransactionCtrl(self, editing=True)
+        self.transactionCtrl = TransactionCtrl(self, editing=account)
+        self.staticBoxSizer.Add(self.transactionCtrl)
         
         self.transactions = self.Account.GetRecurringTransactions()
+        
+        self.buttonSizer = wx.BoxSizer()
+        self.Sizer.AddSpacer(5)
+        self.Sizer.AddSpacer(10)
+        self.Sizer.Add(self.staticBoxSizer, 0, wx.EXPAND|wx.LEFT|wx.RIGHT, 5)
+        self.Sizer.AddStretchSpacer(1)
+        self.Sizer.Add(self.buttonSizer, flag=wx.ALIGN_RIGHT)
+        self.Sizer.AddSpacer(5)
         
         if not self.transactions:
             self.setupNoRecurringTransactions()
         else:
             self.setupRecurringTransactions()
+            
+        self.buttonSizer.AddSpacer(5)
         
-        self.staticBoxSizer.Add(self.transactionCtrl)
-        self.Sizer.AddSpacer(10)
-        self.Sizer.Add(self.staticBoxSizer, 0, wx.EXPAND|wx.LEFT|wx.RIGHT, 5)
+        self.Bind(wx.EVT_BUTTON, self.onButton)
+        
+    def onButton(self, event):
+        """If the save button was clicked save, and close the dialog in any case (Close/Cancel/Save)."""
+        assert event.Id in (wx.ID_CLOSE, wx.ID_SAVE)
+        
+        if event.Id == wx.ID_SAVE:
+            self.transactionCtrl.ToRecurring()
+            originalTransaction = self.transactions[self.transactionChoice.Selection]
+            modifiedTransaction = self.transactionCtrl.recurringObj
+            originalTransaction.UpdateFrom(modifiedTransaction)
+        
+        self.GrandParent.Destroy()
             
     def setupNoRecurringTransactions(self):
         self.staticBox.Hide()
         self.transactionCtrl.Hide()
-        self.Sizer.Add(wx.StaticText(self, label=_("This account currently has no recurring transactions.")), flag=wx.ALIGN_CENTER)
+        self.Sizer.Insert(1, wx.StaticText(self, label=_("This account currently has no recurring transactions.")), flag=wx.ALIGN_CENTER)
+        
+        closeButton = wx.Button(self, label=_("Close"), id=wx.ID_CLOSE)
+        self.buttonSizer.Add(closeButton)
         
     def setupRecurringTransactions(self):
         strings = [rt.GetDescriptionString() for rt in self.transactions]
-        choice = wx.Choice(self, choices=strings)
+        self.transactionChoice = wx.Choice(self, choices=strings)
         
-        self.Sizer.Add(choice, flag=wx.EXPAND)
+        self.Sizer.Insert(1, self.transactionChoice, flag=wx.EXPAND)
         self.transactionCtrl.FromRecurring(self.transactions[0])
+        
+        saveButton = wx.Button(self, label=_("Save"), id=wx.ID_SAVE)
+        closeButton = wx.Button(self, label=_("Cancel"), id=wx.ID_CLOSE)
+        self.buttonSizer.Add(saveButton)
+        self.buttonSizer.Add(closeButton)
 
 class AccountConfigDialog(wx.Dialog):
     def __init__(self, parent, account):
@@ -94,7 +123,7 @@ class AccountConfigDialog(wx.Dialog):
         self.notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
         self.Sizer.Add(self.notebook, 1, wx.EXPAND)
         
-        self.recurringPanel = RecurringConfigPanel(self, account)
+        self.recurringPanel = RecurringConfigPanel(self.notebook, account)
         self.notebook.AddPage(self.recurringPanel, _("Recurring Transactions"))
         
     def createMintConfigPanel(self):
