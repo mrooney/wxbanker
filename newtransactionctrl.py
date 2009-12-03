@@ -413,7 +413,6 @@ class NewTransactionRow(bankcontrols.GBRow):
         self.amountCtrl.Value = "%.2f" % rt.Amount
         self.dateCtrl.Value = helpers.pydate2wxdate(rt.Date)
         self.transferCheck.Value = bool(rt.Source)
-        #TODO: this set value won't show the row if appropriate, so do that
         
     def ToRecurring(self, rt):
         result = self.getValues()
