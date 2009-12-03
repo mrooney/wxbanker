@@ -185,6 +185,11 @@ class RecurringTransaction(Transaction, ORMObject):
         self.RepeatOn = ron
         self.EndDate = rend
         
+    def UpdateFrom(self, rt):
+        """Given a recurring transaction, mirror it in this one."""
+        for attr in self.ORM_ATTRIBUTES[:-1]:
+            setattr(self, attr, getattr(rt, attr))
+        
     def GetStringBase(self):
         return "%s, %s: "  % (self.Description or _("No description"), self.RenderAmount())
     

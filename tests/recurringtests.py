@@ -306,6 +306,29 @@ class RecurringTest(testbase.TestCaseWithController):
         rt = account.AddRecurringTransaction(1, "Example Description", yesterday, RecurringTransaction.DAILY)
         self.assertEqual(rt.GetDescriptionString(), "Example Description, $1.00: Daily")
         
+    def testUpdateFrom(self):
+        model, account = self.createAccount()
+        account2 = model.CreateAccount("Giggles")
+        rt = account.AddRecurringTransaction(1, "Example Description", yesterday, RecurringTransaction.DAILY)
+        rt2 = account.AddRecurringTransaction(2, "Other Description", today, RecurringTransaction.WEEKLY, repeatEvery=2, repeatOn=(1,1,0,0,0,0,0), endDate=tomorrow, source=account2)
+
+        rt.LastTransacted = yesterday
+        rt2.LastTransacted = today
+        
+        rt.UpdateFrom(rt2)
+
+        # Make sure everything is updated.
+        self.assertEqual(rt.Amount, 2)
+        self.assertEqual(rt.Description, "Other Description")
+        self.assertEqual(rt.Date, today)
+        self.assertEqual(rt.RepeatType, RecurringTransaction.WEEKLY)
+        self.assertEqual(rt.RepeatEvery, 2)
+        self.assertEqual(rt.RepeatOn, (1,1,0,0,0,0,0))
+        self.assertEqual(rt.EndDate, tomorrow)
+        self.assertEqual(rt.Source, account2)
+        # Except LastTransacted should NOT be updated, that should stay the same as it was.
+        self.assertEqual(rt.LastTransacted, yesterday)
+        
 
 if __name__ == "__main__":
     unittest.main()
