@@ -32,6 +32,7 @@ class TransactionCtrl(wx.Panel):
     
     def __init__(self, parent, editing=None):
         wx.Panel.__init__(self, parent)
+        #TODO: handle changing the rt via the drop down when more than one exist
         # Create the recurring object we will use internally.
         self.recurringObj = RecurringTransaction(None, None, 0, "", datetime.date.today(), RecurringTransaction.DAILY)
         
