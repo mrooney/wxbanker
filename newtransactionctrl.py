@@ -40,13 +40,17 @@ class TransferRow(bankcontrols.GBRow):
         self.AddNext(self.accountSelection)
         
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
-
-    def GetAccounts(self, currentAccount):
+        
+    def GetSelectedAccount(self):
         stringSel = self.accountSelection.GetStringSelection()
         if stringSel == "":
             return None
 
-        otherAccount = self.accountDict[stringSel]
+        return self.accountDict[stringSel]
+
+    def GetAccounts(self, currentAccount):
+        otherAccount = self.GetSelectedAccount()
+        
         if self.fromtoBox.Selection == 0:
             source, destination = otherAccount, currentAccount
         else:
@@ -79,6 +83,12 @@ class TransferRow(bankcontrols.GBRow):
         self.Update(rt.Parent)
         if rt.Source:
             self.accountSelection.SetStringSelection(rt.Source.Name)
+            
+    def ToRecurring(self, rt):
+        if self.Parent.IsTransfer():
+            rt.Source = self.GetSelectedAccount()
+        else:
+            rt.Source = None
 
 
 class RecurringRow(bankcontrols.GBRow):
@@ -130,9 +140,8 @@ class RecurringRow(bankcontrols.GBRow):
         self.AddNext(wx.StaticText(parent, label=_("Repeats:")))
         self.AddNext(everySizer, span=(1,2))
         
-        #self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update)
         self.everySpin.Bind(wx.EVT_SPINCTRL, self.Update)
-        self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update)
+        self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update) # Don't generically bind to the parent, the transfer is a choice too.
         parent.Bind(wx.EVT_CHECKBOX, self.Update)
         parent.Bind(wx.EVT_RADIOBUTTON, self.Update)
 
@@ -406,11 +415,10 @@ class NewTransactionRow(bankcontrols.GBRow):
         self.transferCheck.Value = bool(rt.Source)
         #TODO: this set value won't show the row if appropriate, so do that
         
-    def ToRecurring(self):
+    def ToRecurring(self, rt):
         result = self.getValues()
         if result:
             amount, desc, date = result
-            rt = self.Parent.recurringObj
             rt.Amount, rt.Description, rt.Date = amount, desc, date
 
     def onTransferTip(self, event):

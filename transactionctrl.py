@@ -80,6 +80,9 @@ class TransactionCtrl(wx.Panel):
     def UpdateSummary(self):
         self.recurringSummaryRow.UpdateSummary(self.recurringObj)
         
+    def IsTransfer(self):
+        return self.transactionRow.transferCheck.Value
+        
     def GetSettings(self):
         repeatType, repeatEvery, end = self.recurringRow.GetSettings()
         repeatsOn = None
@@ -100,7 +103,8 @@ class TransactionCtrl(wx.Panel):
         
     def ToRecurring(self):
         """Save any settings to the internal transaction object that aren't automatically saved."""
-        self.transactionRow.ToRecurring()
+        self.transferRow.ToRecurring(self.recurringObj)
+        self.transactionRow.ToRecurring(self.recurringObj)
         
         
 if __name__ == "__main__":
