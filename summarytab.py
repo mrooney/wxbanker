@@ -69,7 +69,6 @@ class SummaryPanel(wx.Panel):
         # put it all together
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
         self.Sizer.Add(self.plotPanel, 1, wx.EXPAND)
-        self.plotPanel.SetShowScrollbars(False)
         self.Sizer.Add(controlSizer, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 2)
 
         # fill in the accounts
