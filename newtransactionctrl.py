@@ -111,7 +111,7 @@ class RecurringRow(bankcontrols.GBRow):
 
         # Make 'Never' the default.
         self.endsNeverRadio.SetValue(True)
-        self.endDateCtrl.Value += wx.DateSpan(days=-1, years=1)
+        self.ResetEndDate()
 
         # The vertical sizer for when the recurring transaction stops ocurring.
         endsSizer = wx.BoxSizer(wx.VERTICAL)
@@ -144,6 +144,9 @@ class RecurringRow(bankcontrols.GBRow):
         self.repeatsCombo.Bind(wx.EVT_CHOICE, self.Update) # Don't generically bind to the parent, the transfer is a choice too.
         parent.Bind(wx.EVT_CHECKBOX, self.Update)
         parent.Bind(wx.EVT_RADIOBUTTON, self.Update)
+        
+    def ResetEndDate(self):
+        self.endDateCtrl.Value = wx.DateTime.Today() + wx.DateSpan(days=-1, years=1)
 
     def GetSettings(self):
         repeatType = self.repeatsCombo.GetSelection()
@@ -153,6 +156,7 @@ class RecurringRow(bankcontrols.GBRow):
             end = None
         else:
             end = helpers.wxdate2pydate(self.endDateCtrl.GetValue())
+        
 
         return repeatType, repeatEvery, end
 
@@ -185,9 +189,12 @@ class RecurringRow(bankcontrols.GBRow):
         self.everySpin.SetValue(rt.RepeatEvery)
         
         end = rt.EndDate
-        self.endsSometimeRadio.SetValue(bool(end))
         if end:
+            self.endsSometimeRadio.SetValue(True)
             self.endDateCtrl.SetValue(helpers.pydate2wxdate(end))
+        else:
+            self.ResetEndDate()
+            self.endsNeverRadio.SetValue(True)
             
         self.Update()
     

@@ -115,6 +115,13 @@ class RecurringConfigPanel(wx.Panel):
         closeButton = wx.Button(self, label=_("Cancel"), id=wx.ID_CLOSE)
         self.buttonSizer.Add(saveButton)
         self.buttonSizer.Add(closeButton)
+        
+        self.transactionChoice.Bind(wx.EVT_CHOICE, self.onTransactionChoice)
+        
+    def onTransactionChoice(self, event):
+        tnum = event.Selection
+        transaction = self.transactions[tnum]
+        self.transactionCtrl.FromRecurring(transaction)
 
 class AccountConfigDialog(wx.Dialog):
     def __init__(self, parent, account):
