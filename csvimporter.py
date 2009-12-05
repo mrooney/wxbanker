@@ -41,7 +41,17 @@ shippedProfiles = {
         "descriptionColumns": "2",
         "encoding": "utf-8",
         "skipFirstLine": True
-    }
+    },
+    "Sparkasse": {
+        "amountColumn": 9,
+        "dateColumn": 2,
+        "dateFormat": "%d.%m.%y",
+        "decimalSeparator": ",",
+        "delimiter": ";",
+        "descriptionColumns": "6, 5 , 4",
+        "encoding": "utf-8",
+        "skipFirstLine": True
+     }
 }
 
 

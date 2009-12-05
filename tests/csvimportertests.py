@@ -25,6 +25,12 @@ from csvimporter import CsvImporter, CsvImporterProfileManager
 class CsvImporterTest(unittest.TestCase):
     def setUp(self):
         self.importer = CsvImporter()
+        
+    def getTransactions(self, csvtype):
+        path = testbase.fixturefile("%s.csv"%csvtype)
+        profile = CsvImporterProfileManager().getProfile(csvtype)
+        container = CsvImporter().getTransactionsFromFile(path, profile)
+        return container.Transactions
 
     def testParseAmountWithSpaceAsThousandsSep(self):
         # Regression test for LP: #370571
@@ -33,16 +39,22 @@ class CsvImporterTest(unittest.TestCase):
         self.assertEquals(self.importer.parseAmount('$ -1 000,00 ', decimalSeparator), -1000.0)
         
     def testCanImportMintData(self):
-        path = testbase.fixturefile("mint.csv")
-        profile = CsvImporterProfileManager().getProfile("mint")
-        container = CsvImporter().getTransactionsFromFile(path, profile)
-        transactions = container.Transactions
-        
+        transactions = self.getTransactions("mint")
         transactions.sort()
         self.assertEqual(len(transactions), 3)
         self.assertAlmostEqual(sum(t.Amount for t in transactions), 29.46)
         self.assertEqual(transactions[-1].Date, datetime.date(2009, 7, 21))
         self.assertEqual(transactions[-1].Description, "Teavana San Mateo")
+        
+    def testCanImportSparkasseData(self):
+        transactions = self.getTransactions("Sparkasse")
+        self.assertEqual(len(transactions), 5)
+        
+        tran = transactions[1]
+        self.assertEqual(tran.Date, datetime.date(2009, 7, 17))
+        self.assertEqual(tran.Description, "PHONE CORP, ### , LASTSCHRIFT")
+        self.assertEqual(tran.Amount, -31.24)
+        
 
 if __name__ == "__main__":
     unittest.main()
