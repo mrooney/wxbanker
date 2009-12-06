@@ -63,7 +63,7 @@ def getSharedFilePath(filename):
     paths = [
         "/usr/share/wxbanker",
         "/usr/local/share/wxbanker",
-        "foo",
+        os.path.join(os.path.dirname(__file__), "data"),
     ]
     
     for path in paths:

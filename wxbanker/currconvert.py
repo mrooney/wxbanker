@@ -18,8 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-from wxbanker import localization
+from wxbanker import localization, fileservice
 from xml.etree import ElementTree
 
 class ConversionException(Exception): pass
@@ -27,7 +26,7 @@ class ConversionException(Exception): pass
 class CurrencyConverter(object):
     def __init__(self):
         self.Exchanges = {"EUR": 1.0}
-        self.OriginalPath = os.path.join(os.path.dirname(__file__), "exchanges.xml")
+        self.OriginalPath = fileservice.getSharedFilePath("exchanges.xml")
         self._loadExchanges()
 
     def _loadExchanges(self):
