@@ -36,6 +36,7 @@ def gentemplate(name="wxbanker.pot"):
 
 def compiletranslations():
     poFiles = [f for f in os.listdir("po/") if f.endswith(".po")]
+    failed = []
     for poFile in poFiles:
         locale = poFile[:-3]
         path = "locale/%s/LC_MESSAGES/wxbanker.mo" % locale
@@ -44,8 +45,9 @@ def compiletranslations():
         try:
             subprocess.check_call(("msgfmt", "-cv", "po/%s"%poFile, "-o", path), stdout=subprocess.PIPE)
         except:
-            print "FAILED: ", poFile
+            failed.append(poFile)
     subprocess.check_call(("bzr", "add", "locale/"))
+    print "Failed to compile: %s" % failed or None
         
 if __name__ == "__main__":
     import sys
