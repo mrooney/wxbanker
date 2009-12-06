@@ -33,7 +33,7 @@ setup(
     description = "Lightweight personal finance manager",
     author = "Michael Rooney",
     author_email = "mrooney@ubuntu.com",
-    url = "http://wxbanker.org",
+    url = "https://launchpad.net/wxbanker",
     download_url='https://launchpad.net/wxbanker/+download',
     packages = ["wxbanker", "wxbanker.art", "wxbanker.bankobjects",
         "wxbanker.ObjectListView"],
