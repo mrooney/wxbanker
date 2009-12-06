@@ -224,19 +224,19 @@ class BankerFrame(wx.Frame):
 
 
 def init(path=None, welcome=True):
-    import wx, os, sys, fileservice
-    
-    from controller import Controller
+    import wx, os, sys
+    from wxbanker import fileservice
+    from wxbanker.controller import Controller
 
     bankController = Controller(path)
 
     if '--cli' in sys.argv:
-        import clibanker
+        from wxbanker import clibanker
         clibanker.main(bankController)
     else:
         # Push our custom art provider.
         import wx.lib.art.img2pyartprov as img2pyartprov
-        from art import silk
+        from wxbanker.art import silk
         wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(silk))
 
         # Initialize the wxBanker frame!

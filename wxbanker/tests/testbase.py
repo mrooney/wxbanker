@@ -19,7 +19,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import os, sys, datetime, locale, unittest
-from wxbanker import currencies
+from wxbanker import main, currencies
 
 # Make sure path contains both the test dir and its parent (wxbanker root dir).
 here = os.path.dirname(__file__)
