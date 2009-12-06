@@ -18,7 +18,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-from wxbanker import localization, locale
+import locale
+from wxbanker import localization
 
 def createFromLocale(currencyName):
     """Create a currency class from the current locale."""

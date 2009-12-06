@@ -20,8 +20,8 @@
 
 
 from wxbanker.tests import testbase
-from wxbanker import currencies, locale
-import unittest
+from wxbanker import currencies
+import unittest, locale
 
 def assertLocale(loc=None):
     result = locale.setlocale(locale.LC_ALL, loc)

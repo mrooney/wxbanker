@@ -19,8 +19,8 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 from wxbanker.tests import testbase
-import unittest
-from wxbanker import currencies, locale
+import unittest, locale
+from wxbanker import currencies
 
 class CurrencyTest(unittest.TestCase):
     def tearDown(self):
