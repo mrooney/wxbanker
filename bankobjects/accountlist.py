@@ -19,7 +19,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 from wx.lib.pubsub import Publisher
-import bankexceptions
+from wxbanker import bankexceptions
 
 class AccountList(list):
     def __init__(self, store, accounts):

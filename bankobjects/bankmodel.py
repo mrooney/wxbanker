@@ -21,7 +21,7 @@
 from wx.lib.pubsub import Publisher
 import re, datetime
 
-import currencies
+from wxbanker import currencies
 
 class BankModel(object):
     def __init__(self, store, accountList):

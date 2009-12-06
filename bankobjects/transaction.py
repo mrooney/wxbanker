@@ -21,8 +21,8 @@
 from wx.lib.pubsub import Publisher
 import datetime
 
-from ormobject import ORMObject
-import debug
+from wxbanker.bankobjects.ormobject import ORMObject
+from wxbanker import debug
 
 class Transaction(ORMObject):
     """

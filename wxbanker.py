@@ -34,13 +34,13 @@ else:
 from wx.lib.pubsub import Publisher
 
 # wxBanker
-from bankexceptions import NoNumpyException
-from menubar import BankMenuBar
-import localization, messagepanel
+from wxbanker.bankexceptions import NoNumpyException
+from wxbanker.menubar import BankMenuBar
+from wxbanker import localization, messagepanel
 # Tabs
-import managetab
+from wxbanker import managetab
 try:
-    import summarytab
+    from wxbanker import summarytab
 except NoNumpyException:
     summarytab = None
     print _("Warning: Numpy module not available, disabling Summary tab. Install numpy to fix this.")

@@ -18,13 +18,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import localization
+from wxbanker import localization
 import datetime, functools, gettext
 from dateutil import rrule
 
-import helpers
-from bankobjects.transaction import Transaction
-from bankobjects.ormobject import ORMObject
+from wxbanker import helpers
+from wxbanker.bankobjects.transaction import Transaction
+from wxbanker.bankobjects.ormobject import ORMObject
 
 class InvalidDateRangeException(Exception): pass
 class RecurringWeeklyException(Exception): pass

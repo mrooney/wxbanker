@@ -20,10 +20,10 @@
 
 from wx.lib.pubsub import Publisher
 
-from bankobjects.ormobject import ORMObject
-from bankobjects.transaction import Transaction
-from bankobjects.recurringtransaction import RecurringTransaction
-import currencies, bankexceptions, debug
+from wxbanker.bankobjects.ormobject import ORMObject
+from wxbanker.bankobjects.transaction import Transaction
+from wxbanker.bankobjects.recurringtransaction import RecurringTransaction
+from wxbanker import currencies, bankexceptions, debug
 
 
 class Account(ORMObject):
