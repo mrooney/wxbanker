@@ -35,7 +35,6 @@ setup(
     author_email = "mrooney@ubuntu.com",
     url = "http://wxbanker.org",
     download_url='https://launchpad.net/wxbanker/+download',
-    package_dir = {'wxbanker': ''},
     packages = ["wxbanker", "wxbanker.art", "wxbanker.ObjectListView"],
     package_data = {'wxbanker': ['*.txt']},
     requires = ["wx (>=2.8)"],

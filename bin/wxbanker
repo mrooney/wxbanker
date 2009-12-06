@@ -1,3 +1,3 @@
 #!/usr/bin/env python
-from wxbanker import wxbanker
-wxbanker.main()
+from wxbanker.main import main
+main()
