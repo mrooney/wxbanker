@@ -19,7 +19,7 @@
 
 from distutils.core import setup
 import os, glob
-import version
+from wxbanker import version
 
 #Create an array with all the locale filenames
 I18NFILES = []
@@ -50,5 +50,4 @@ setup(
         ('share/pixmaps', ['images/48/wxbanker.png']),
         ('share/wxbanker', ['wxbanker/data/*']),
     ] + I18NFILES
-
 )

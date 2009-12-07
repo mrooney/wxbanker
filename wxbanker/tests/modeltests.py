@@ -20,7 +20,7 @@
 
 from wxbanker.tests import testbase
 import os, datetime, unittest
-from wxbanker import controller, bankexceptions
+from wxbanker import controller, bankexceptions, currencies
 from wx.lib.pubsub import Publisher
 
 from wxbanker.tests.testbase import today, yesterday, tomorrow
@@ -63,7 +63,6 @@ class ModelTests(testbase.TestCaseWithController):
     def testNewAccountIsSameCurrencyAsOthers(self):
         # This test is only valid so long as only one currency is allowed.
         # Otherwise it needs to test a new account gets the right default currency, probably Localized
-        import currencies
         model = self.Controller.Model
 
         account = model.CreateAccount("Hello")

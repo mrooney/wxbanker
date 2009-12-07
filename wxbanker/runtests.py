@@ -18,22 +18,21 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import doctest, wxbanker
+import doctest, pprint
+from wxbanker import controller
+from wxbanker.testhelpers import displayhook
+from wxbanker.bankobjects import transaction
+from wxbanker.tests import alltests
 
 def main():
-    from wxbanker.testhelpers import displayhook
     import sys; sys.displayhook = displayhook
-
-    from wxbanker import controller
-    from wxbanker.bankobjects import transaction
     mods = [transaction, controller]
 
     results = {}
     for mod in mods:
         result = doctest.testmod(mod)
         results[mod.__name__] = result
-
-    import pprint
+        
     print "(Failures, Total):"
     pprint.pprint(results)
     failures = sum([v[0] for v in results.values()])
@@ -45,9 +44,7 @@ def main():
     else:
         print "TESTS PASSED."
 
-    from wxbanker.tests import alltests
     alltests.main()
-
 
 
 if __name__ == "__main__":

@@ -92,7 +92,7 @@ class MintDotCom:
             
             
 def doImport():
-    import controller
+    from wxbanker import controller
     bankController = controller.Controller()
     
     username = raw_input("Mint email: ")

@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-from wxbanker.tests import testbase
+from wxbanker.tests import testbase, xmlrunner
 import unittest, doctest, os, sys
 
 # Find the modules to test.
@@ -29,7 +29,6 @@ modules = [m.replace(".py", "") for m in files]
 
 def main():
     if "--xml" in sys.argv:
-        import xmlrunner
         runner = xmlrunner.XMLTestRunner(filename="pyunit.xml")
     else:
         runner = unittest.TextTestRunner()
