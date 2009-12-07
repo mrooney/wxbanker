@@ -36,7 +36,7 @@ setup(
     url = "https://launchpad.net/wxbanker",
     download_url='https://launchpad.net/wxbanker/+download',
     packages = ["wxbanker", "wxbanker.art", "wxbanker.bankobjects",
-        "wxbanker.ObjectListView"],
+        "wxbanker.tests", "wxbanker.ObjectListView"],
     license='GNU GPL',
     platforms='linux',
     scripts = ['bin/wxbanker'],
@@ -48,6 +48,7 @@ setup(
         ('share/icons/hicolor/48x48/apps', ['images/48/wxbanker.png']),
         ('share/icons/hicolor/256x256/apps', ['images/256/wxbanker.png']),
         ('share/pixmaps', ['images/48/wxbanker.png']),
-        ('share/wxbanker', ['wxbanker/data/*']),
+        ('share/wxbanker', glob.glob("wxbanker/data/*.*")),
+        ('share/wxbanker/fixtures', glob.glob("wxbanker/data/fixtures/*.*")),
     ] + I18NFILES
 )

@@ -46,11 +46,8 @@ import wxbanker
 from wxbanker import controller, fileservice
 from wx.lib.pubsub import Publisher
 
-def filehere(*paths):
-    return os.path.join(here, *paths)
-
 def fixturefile(name):
-    return filehere("fixtures", name)
+    return fileservice.getSharedFilePath("fixtures", name)
 
 def resetLocale():
     assert bool(locale.setlocale(locale.LC_ALL, ""))

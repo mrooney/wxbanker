@@ -59,7 +59,7 @@ def getDataFilePath(filename):
 def getConfigFilePath(filename):
     return __getFilePath(filename, xdgListName="xdg_config_dirs")
 
-def getSharedFilePath(filename):
+def getSharedFilePath(*pathargs):
     paths = [
         "/usr/share/wxbanker",
         "/usr/local/share/wxbanker",
@@ -67,9 +67,9 @@ def getSharedFilePath(filename):
     ]
     
     for path in paths:
-        potentialLocation = os.path.join(path, filename)
+        potentialLocation = os.path.join(path, *pathargs)
         if os.path.exists(potentialLocation):
             return potentialLocation
         
-    raise Exception("Unable to find shared data file '%s'. Looked in %s" % (filename, paths))
+    raise Exception("Unable to find shared data file '%s'. Looked in %s" % (pathargs, paths))
 
