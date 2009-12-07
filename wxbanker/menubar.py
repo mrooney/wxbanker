@@ -22,7 +22,7 @@ import wx, webbrowser, os
 from wx.lib.wordwrap import wordwrap
 from wx.lib.pubsub import Publisher
 
-from wxbanker import version, localization, debug
+from wxbanker import version, localization, debug, fileservice
 from wxbanker.currencies import CurrencyStrings
 from wxbanker.csvimportframe import CsvImportFrame
 
@@ -191,8 +191,7 @@ class BankMenuBar(wx.MenuBar):
         ]
         info.Translators = [unicode(s, 'iso-8859-15') for s in translators]
 
-        licenseDir = os.path.dirname(__file__)
-        info.License = open(os.path.join(licenseDir, 'COPYING.txt')).read()
+        info.License = open(fileservice.getSharedFilePath("COPYING.txt")).read()
 
         wx.AboutBox(info)
 

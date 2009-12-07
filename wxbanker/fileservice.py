@@ -64,6 +64,8 @@ def getSharedFilePath(*pathargs):
         "/usr/share/wxbanker",
         "/usr/local/share/wxbanker",
         os.path.join(os.path.dirname(__file__), "data"),
+        # The COPYRIGHT.txt is one directory up in source.
+        os.path.join(os.path.dirname(os.path.dirname(__file__))),
     ]
     
     for path in paths:
