@@ -19,14 +19,24 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 from wxbanker.tests import testbase
+from wxbanker.controller import Controller
 import unittest
 
 class DBUpgradeTest(unittest.TestCase):
-    def setUp(self):
-        pass
-
-    def testUpgradeFromV1IsFunctional(self):
-        pass #INCOMPLETE
+    def doBaseTest(self, ver):
+        c = Controller(path=testbase.fixturefile("bank-%s.db"%ver))
+        model = c.Model
+        accounts = model.Accounts
+        self.assertEqual([a.Name for a in accounts], ["My Checking", "Another"])
+        self.assertEqual(accounts[0].Balance, 15)
+        self.assertEqual(accounts[1].Balance, -123.45)
+        return c
+        
+    def testUpgradeFrom04(self):
+        c = self.doBaseTest("0.4")
+        
+    def testUpgradeFrom05(self):
+        c = self.doBaseTest("0.5")
 
 if __name__ == "__main__":
     unittest.main()
