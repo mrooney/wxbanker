@@ -440,3 +440,5 @@ class NewTransactionRow(bankcontrols.GBRow):
         self.recursCheck.Value = False
         self.onTransferCheck()
         self.onRecurringCheck()
+        # Give focus to the description ctrl so the user can enter another transaction.
+        self.descCtrl.SetFocus()
