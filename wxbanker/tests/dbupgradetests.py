@@ -20,15 +20,18 @@
 
 from wxbanker.tests import testbase
 from wxbanker.controller import Controller
-import unittest, shutil, os
+import unittest, shutil, os, tempfile
 
 class DBUpgradeTest(unittest.TestCase):
+    def setUp(self):
+        self.tmpFile = None
+        
     def doBaseTest(self, ver):
         origpath = testbase.fixturefile("bank-%s.db"%ver)
-        dbpath = os.path.join(os.path.split(origpath)[0], "temp.db")
-        shutil.copyfile(origpath, dbpath)
+        self.tmpFile = tempfile.mkstemp()[1]
+        shutil.copyfile(origpath, self.tmpFile)
         
-        c = Controller(path=dbpath)
+        c = Controller(path=self.tmpFile)
         model = c.Model
         accounts = model.Accounts
         self.assertEqual([a.Name for a in accounts], ["My Checking", "Another"])
@@ -47,13 +50,16 @@ class DBUpgradeTest(unittest.TestCase):
     def testUpgradeFrom04(self):
         c = self.doBaseTest("0.4")
         
+    def testUpgradeFrom04Broken(self):
+        # A 0.4 -> 0.6 upgrade left dbs in a broken state, let's handle it.
+        c = self.doBaseTest("0.4-broken")
+        
     def testUpgradeFrom05(self):
         c = self.doBaseTest("0.5")
         
     def tearDown(self):
-        tmpPath = os.path.join(testbase.fixturefile('.'), "temp.db")
-        if os.path.exists(tmpPath):
-            os.remove(tmpPath)
+        if self.tmpFile:
+            os.remove(self.tmpFile)
 
 def main():
     unittest.main()
