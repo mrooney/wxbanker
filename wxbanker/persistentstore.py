@@ -85,6 +85,16 @@ class PersistentStore:
             self.upgradeDb(self.Meta['VERSION'], backup=existed)
             self.Meta = self.getMeta()
             debug.debug(self.Meta)
+         
+        # We have to subscribe before syncing otherwise it won't get synced if there aren't other changes.
+        self.Subscriptions = (
+            (self.onORMObjectUpdated, "ormobject.updated"),
+            (self.onAccountBalanceChanged, "account.balance changed"),
+            (self.onBatchEvent, "batch"),
+            (self.onExit, "exiting"),
+        )
+        for callback, topic in self.Subscriptions:
+            Publisher.subscribe(callback, topic)
             
         # If the upgrade process requires a sync, do so now.
         if self.needsSync:
@@ -93,16 +103,6 @@ class PersistentStore:
 
         self.AutoSave = autoSave
         self.commitIfAppropriate()
-
-        self.Subscriptions = (
-            (self.onORMObjectUpdated, "ormobject.updated"),
-            (self.onAccountBalanceChanged, "account.balance changed"),
-            (self.onBatchEvent, "batch"),
-            (self.onExit, "exiting"),
-        )
-
-        for callback, topic in self.Subscriptions:
-            Publisher.subscribe(callback, topic)
 
     def GetModel(self, useCached=True):
         if self.cachedModel is None or not useCached:

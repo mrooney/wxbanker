@@ -20,11 +20,14 @@
 
 from wxbanker.tests import testbase
 from wxbanker.controller import Controller
-import unittest, commands
+import unittest, shutil, os
 
 class DBUpgradeTest(unittest.TestCase):
     def doBaseTest(self, ver):
-        dbpath = testbase.fixturefile("bank-%s.db"%ver)
+        origpath = testbase.fixturefile("bank-%s.db"%ver)
+        dbpath = os.path.join(os.path.split(origpath)[0], "temp.db")
+        shutil.copyfile(origpath, dbpath)
+        
         c = Controller(path=dbpath)
         model = c.Model
         accounts = model.Accounts
@@ -47,8 +50,9 @@ class DBUpgradeTest(unittest.TestCase):
         c = self.doBaseTest("0.5")
         
     def tearDown(self):
-        commands.getoutput("bzr revert %s" % testbase.fixturefile("."))
-        
+        tmpPath = os.path.join(testbase.fixturefile('.'), "temp.db")
+        if os.path.exists(tmpPath):
+            os.remove(tmpPath)
 
 def main():
     unittest.main()

@@ -19,7 +19,7 @@
 import sys
 
 def debug(*args):
-    if 1 or "--debug" in sys.argv:
+    if "--debug" in sys.argv:
         for a in args:
             print a,
         print ""
