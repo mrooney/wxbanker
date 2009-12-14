@@ -51,7 +51,7 @@ class PersistentStore:
     """
     def __init__(self, path, autoSave=True):
         self.Subscriptions = []
-        self.Version = 7
+        self.Version = 8
         self.Path = path
         self.AutoSave = False
         self.Dirty = False
@@ -260,6 +260,9 @@ class PersistentStore:
             cursor.execute('ALTER TABLE recurring_transactions ADD lastTransacted CHAR(10)')
         elif fromVer == 6:
             cursor.execute('ALTER TABLE transactions ADD recurringParent INTEGER')
+        elif fromVer == 7:
+            # Force a re-sync for the 0.6.1 release after fixing LP: #496341
+            self.needsSync = True
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
 
