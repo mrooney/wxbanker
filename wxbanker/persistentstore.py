@@ -239,7 +239,6 @@ class PersistentStore:
 
         debug.debug('Upgrading db from %i' % fromVer)
         cursor = self.dbconn.cursor()
-        metaVer = None
 
         if fromVer == 1:
             # Add `currency` column to the accounts table with default value 0.
@@ -253,31 +252,24 @@ class PersistentStore:
             # The total column will need to be synced.
             self.needsSync = True
             # Update the meta version number.
-            metaVer = 3
         elif fromVer == 3:
             # Add `linkId` column to transactions for transfers.
             cursor.execute('ALTER TABLE transactions ADD linkId INTEGER')
-            metaVer = 4
         elif fromVer == 4:
             # Add recurring transactions table.
             transactionBase = "id INTEGER PRIMARY KEY, accountId INTEGER, amount FLOAT, description VARCHAR(255), date CHAR(10)"
             recurringExtra = "repeatType INTEGER, repeatEvery INTEGER, repeatsOn VARCHAR(255), endDate CHAR(10)"
             cursor.execute('CREATE TABLE recurring_transactions (%s, %s)' % (transactionBase, recurringExtra))
-            metaVer = 5
         elif fromVer == 5:
             cursor.execute('ALTER TABLE recurring_transactions ADD sourceId INTEGER')
             cursor.execute('ALTER TABLE recurring_transactions ADD lastTransacted CHAR(10)')
-            metaVer = 6
         elif fromVer == 6:
             cursor.execute('ALTER TABLE transactions ADD recurringParent INTEGER')
-            metaVer = 7
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
 
-        # Update the meta version if appropriate.
-        if metaVer:
-            cursor.execute('UPDATE meta SET value=? WHERE name=?', (metaVer, "VERSION"))
-
+        metaVer = fromVer + 1
+        cursor.execute('UPDATE meta SET value=? WHERE name=?', (metaVer, "VERSION"))
         self.commitIfAppropriate()
 
     def syncBalances(self):
