@@ -1,4 +1,15 @@
-wxbanker (0.5) all; urgency=low
+wxbanker 0.6
+
+  * recurring transactions
+  * summary graph date span is customizable
+  * uses XDG directories by default if available
+  * transfer options are now selected "in-line"
+  * can enter new transaction in any locale format
+  * up/down arrows in datectrl change date (LP #356750)
+  * changing search options refreshes search (LP #362581)
+  * new shipped currencies: UAH, SEK, MXN
+
+wxbanker 0.5
 
   * refactor of infrastructure which greatly speeds up all operations, especially loading accounts and transactions
   * new, slicker transaction list control allowing for sorting and fixing many bugs in the previous grid
@@ -11,5 +22,3 @@ wxbanker (0.5) all; urgency=low
   * new account button blinks when there are no accounts
   * improved locale support, and more translations
   * much improved testing framework
-
- -- Michael Rooney <mrooney@ubuntu.com>  Fri, 03 Apr 2009 13:49:05 -0700

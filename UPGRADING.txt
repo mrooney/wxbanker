@@ -16,12 +16,6 @@ move it manually by either:
    update any shortcuts you may have created to reflect the new
    location. It is safe to delete the old directory if you like.
 
- OR
-
-*) Select all of the files from the new release folder, and copy them
-   into your old release folder, overwriting any existing files. Now
-   run wxbanker.py as usual.
-
 
 Thanks for using wxBanker. If you have any problems, questions, or
 comments, check out wxbanker.org or email me at mrooney@ubuntu.com!

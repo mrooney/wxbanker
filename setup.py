@@ -19,7 +19,7 @@
 
 from distutils.core import setup
 import os, glob
-import version
+from wxbanker import version
 
 #Create an array with all the locale filenames
 I18NFILES = []
@@ -33,12 +33,10 @@ setup(
     description = "Lightweight personal finance manager",
     author = "Michael Rooney",
     author_email = "mrooney@ubuntu.com",
-    url = "http://wxbanker.org",
+    url = "https://launchpad.net/wxbanker",
     download_url='https://launchpad.net/wxbanker/+download',
-    package_dir = {'wxbanker': ''},
-    packages = ["wxbanker", "wxbanker.art", "wxbanker.ObjectListView"],
-    package_data = {'wxbanker': ['*.txt']},
-    requires = ["wx (>=2.8)"],
+    packages = ["wxbanker", "wxbanker.art", "wxbanker.bankobjects",
+        "wxbanker.tests", "wxbanker.ObjectListView"],
     license='GNU GPL',
     platforms='linux',
     scripts = ['bin/wxbanker'],
@@ -50,6 +48,8 @@ setup(
         ('share/icons/hicolor/48x48/apps', ['images/48/wxbanker.png']),
         ('share/icons/hicolor/256x256/apps', ['images/256/wxbanker.png']),
         ('share/pixmaps', ['images/48/wxbanker.png']),
+        ('share/wxbanker', glob.glob("*.txt")),
+        ('share/wxbanker', glob.glob("wxbanker/data/*.*")),
+        ('share/wxbanker/fixtures', glob.glob("wxbanker/data/fixtures/*.*")),
     ] + I18NFILES
-
 )
