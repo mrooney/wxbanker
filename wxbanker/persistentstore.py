@@ -107,11 +107,6 @@ class PersistentStore:
     def GetModel(self, useCached=True):
         if self.cachedModel is None or not useCached:
             debug.debug('Creating model...')
-
-            # Synchronize cached account balances with the actual. If this needs to be used a bug exists, file it!
-            if "--sync-balances" in sys.argv:
-                self.syncBalances()
-
             accounts = self.getAccounts()
             accountList = AccountList(self, accounts)
             self.cachedModel = BankModel(self, accountList)
@@ -274,10 +269,11 @@ class PersistentStore:
 
     def syncBalances(self):
         debug.debug("Syncing balances...")
-        for account in self.getAccounts():
-            accountTotal = sum([t.Amount for t in self.getTransactionsFrom(account)])
-            # Set the correct total.
-            self.dbconn.cursor().execute('UPDATE accounts SET balance=? WHERE name=?', (accountTotal, account.Name))
+        # Load the model, necessary to sync the balances.
+        model = self.GetModel()
+        for account in model.Accounts:
+            account.Balance = sum([t.Amount for t in account.Transactions])
+        self.commitIfAppropriate()
             
     def recurringtransaction2result(self, recurringObj):
         """
@@ -427,7 +423,7 @@ class PersistentStore:
         
         self.dbconn.cursor().execute(query, (value, objId))
         self.commitIfAppropriate()
-        debug.debug("Persisting %s.%s update" % (classname, attrname))
+        debug.debug("Persisting %s.%s update (%s)" % (classname, attrname, value))
 
     def __del__(self):
         self.commitIfAppropriate()

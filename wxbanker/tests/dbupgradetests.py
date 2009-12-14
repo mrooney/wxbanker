@@ -20,16 +20,24 @@
 
 from wxbanker.tests import testbase
 from wxbanker.controller import Controller
-import unittest
+import unittest, commands
 
 class DBUpgradeTest(unittest.TestCase):
     def doBaseTest(self, ver):
-        c = Controller(path=testbase.fixturefile("bank-%s.db"%ver))
+        dbpath = testbase.fixturefile("bank-%s.db"%ver)
+        c = Controller(path=dbpath)
         model = c.Model
         accounts = model.Accounts
         self.assertEqual([a.Name for a in accounts], ["My Checking", "Another"])
-        self.assertEqual(accounts[0].Balance, 15)
+        self.assertEqual(accounts[0].Balance, 25)
         self.assertEqual(accounts[1].Balance, -123.45)
+        
+        model2 = model.Store.GetModel(useCached=False)
+        accounts = model2.Accounts
+        self.assertEqual([a.Name for a in accounts], ["My Checking", "Another"])
+        self.assertEqual(accounts[0].Balance, 25)
+        self.assertEqual(accounts[1].Balance, -123.45)
+        
         return c
         
     def testUpgradeFrom04(self):
@@ -37,6 +45,13 @@ class DBUpgradeTest(unittest.TestCase):
         
     def testUpgradeFrom05(self):
         c = self.doBaseTest("0.5")
+        
+    def tearDown(self):
+        commands.getoutput("bzr revert %s" % testbase.fixturefile("."))
+        
+
+def main():
+    unittest.main()
 
 if __name__ == "__main__":
-    unittest.main()
+    main()

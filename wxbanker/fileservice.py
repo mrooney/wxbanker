@@ -61,11 +61,11 @@ def getConfigFilePath(filename):
 
 def getSharedFilePath(*pathargs):
     paths = [
-        "/usr/share/wxbanker",
-        "/usr/local/share/wxbanker",
-        os.path.join(os.path.dirname(__file__), "data"),
         # The COPYRIGHT.txt is one directory up in source.
         os.path.join(os.path.dirname(os.path.dirname(__file__))),
+        os.path.join(os.path.dirname(__file__), "data"),
+        "/usr/local/share/wxbanker",
+        "/usr/share/wxbanker",
     ]
     
     for path in paths:
