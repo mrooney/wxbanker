@@ -218,6 +218,19 @@ class ThaiCurrency(BaseCurrency):
         self.LOCALECONV['mon_grouping'] = [3, 0]
         self.LOCALECONV['grouping'] = [3, 0]
 
+class VietnameseCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['mon_decimal_point'] = u','
+        self.LOCALECONV['int_frac_digits'] = 0
+        self.LOCALECONV['frac_digits'] = 0
+        self.LOCALECONV['thousands_sep'] = u'.'
+        self.LOCALECONV['decimal_point'] = u','
+        self.LOCALECONV['int_curr_symbol'] = u'VND '
+        self.LOCALECONV['mon_thousands_sep'] = u'.'
+        self.LOCALECONV['currency_symbol'] = u'₫'
+        self.LOCALECONV['p_cs_precedes'] = 0
+
 class LocalizedCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
@@ -229,7 +242,7 @@ def GetCurrencyInt(currency):
             return i
     return -1
 
-CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency, UkranianCurrency, MexicanCurrency, SwedishCurrency, SaudiCurrency, NorwegianCurrency, ThaiCurrency]
+CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency, UkranianCurrency, MexicanCurrency, SwedishCurrency, SaudiCurrency, NorwegianCurrency, ThaiCurrency, VietnameseCurrency]
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
 CurrencyStrings[0] += " [%s]" % _("detected")
 
