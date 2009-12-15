@@ -34,6 +34,9 @@ def createFromLocale(currencyName):
                 val = "u'%s'" % val.decode("utf-8")
             print (" "*8) + "self.LOCALECONV['%s'] = %s" % (key, val)
 
+    base.LOCALECONV = local.LOCALECONV
+    print "\nExamples: \"%s\" and \"%s\"" % (base.float2str(1234.56), base.float2str(-5))
+
 class BaseCurrency(object):
     """
     This object represents the base of a currency, seeded with Western values.
@@ -177,6 +180,44 @@ class SwedishCurrency(BaseCurrency):
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
 
+class SaudiCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['p_sep_by_space'] = 1
+        self.LOCALECONV['thousands_sep'] = u''
+        self.LOCALECONV['int_curr_symbol'] = u'SAR '
+        self.LOCALECONV['n_cs_precedes'] = 0
+        self.LOCALECONV['mon_thousands_sep'] = u''
+        self.LOCALECONV['currency_symbol'] = u'ريال'
+        self.LOCALECONV['n_sep_by_space'] = 1
+        self.LOCALECONV['mon_grouping'] = []
+        self.LOCALECONV['p_cs_precedes'] = 0
+        self.LOCALECONV['grouping'] = []
+
+class NorwegianCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['mon_decimal_point'] = u','
+        self.LOCALECONV['thousands_sep'] = u' '
+        self.LOCALECONV['n_sign_posn'] = 4
+        self.LOCALECONV['decimal_point'] = u','
+        self.LOCALECONV['int_curr_symbol'] = u'NOK '
+        self.LOCALECONV['p_sign_posn'] = 4
+        self.LOCALECONV['mon_thousands_sep'] = u' '
+        self.LOCALECONV['currency_symbol'] = u'kr'
+
+class ThaiCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['p_sep_by_space'] = 2
+        self.LOCALECONV['n_sign_posn'] = 4
+        self.LOCALECONV['int_curr_symbol'] = u'THB '
+        self.LOCALECONV['p_sign_posn'] = 4
+        self.LOCALECONV['currency_symbol'] = u'฿'
+        self.LOCALECONV['n_sep_by_space'] = 2
+        self.LOCALECONV['mon_grouping'] = [3, 0]
+        self.LOCALECONV['grouping'] = [3, 0]
+
 class LocalizedCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
@@ -188,7 +229,7 @@ def GetCurrencyInt(currency):
             return i
     return -1
 
-CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency, UkranianCurrency, MexicanCurrency, SwedishCurrency]
+CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency, UkranianCurrency, MexicanCurrency, SwedishCurrency, SaudiCurrency, NorwegianCurrency, ThaiCurrency]
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
 CurrencyStrings[0] += " [%s]" % _("detected")
 
