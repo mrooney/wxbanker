@@ -17,7 +17,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 # Set the default locale.
-import locale
+import locale, wx
 locale.setlocale(locale.LC_ALL, '')
 
 # Define the domain and localedir.
@@ -29,11 +29,12 @@ if os.path.exists('/usr/share/locale/es/LC_MESSAGES/wxbanker.mo'):
 elif os.path.exists('/usr/local/share/locale/es/LC_MESSAGES/wxbanker.mo'):
     DIR = '/usr/local/share/locale'
 else:
-    DIR = os.path.join(os.path.dirname(__file__), 'locale')
+    DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'locale')
 
 # Install gettext.
 import gettext
 gettext.install(APP, DIR, unicode=True)
+wxlang = wx.LANGUAGE_DEFAULT
 
 # Check if the user forced a language with --lang=XX.
 import sys
@@ -43,4 +44,15 @@ for arg in sys.argv[1:]:
         lang = arg[len(larg):]
         trans = gettext.translation(APP, DIR, languages=[lang])
         trans.install()
+
+        # Attempt to localize wx with this language as well.
+        if lang.lower().endswith(".utf8"):
+            lang = lang[:-5] # Strip that off for wx.
+        pylang = wx.Locale.FindLanguageInfo(lang)
+        if pylang:
+            wxlang = pylang.Language
+
         break
+
+# Store it as a module variable so it doesn't go out of scope!
+wxlocale = wx.Locale(wxlang)
