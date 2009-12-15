@@ -17,6 +17,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
+#
+# Usage: LC_ALL=vi_VN.utf8 python -c "from wxbanker.currencies import createFromLocale as c;c('Vietnamese')"
 
 import locale
 from wxbanker import localization
