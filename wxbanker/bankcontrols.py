@@ -70,7 +70,9 @@ def DateCtrlFactory(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY):
 
         try:
             dateCtrl.Children[0].Children[0].Bind(wx.EVT_KEY_DOWN, onDateChar)
+            dateCtrl.customKeyHandler = onDateChar
         except Exception:
+            dateCtrl.customKeyHandler = None
             print "Unable to bind to dateCtrl's text field, that's odd! Please file a bug: https://bugs.launchpad.net/wxbanker/+filebug"
             
         # date controls seem to need an extra bit of width to be fully visible.
@@ -142,7 +144,7 @@ class MultiStateButton(wx.Button):
 
 class HintedTextCtrl(wx.SearchCtrl):
     def __init__(self, *args, **kwargs):
-        conf = {"hint": "", "icon": None}
+        conf = {"hint": "", "icon": None, "handler": None}
         for kw in conf.keys():
             if kw in kwargs:
                 conf[kw] = kwargs[kw]
@@ -162,6 +164,8 @@ class HintedTextCtrl(wx.SearchCtrl):
 
         try:
             self.Children[0].Bind(wx.EVT_CHAR, self.onChar)
+            if conf['handler']:
+                self.Children[0].Bind(wx.EVT_KEY_DOWN, conf['handler'])
         except IndexError:
             # On OSX for example, a SearchCtrl is native and has no Children.
             pass

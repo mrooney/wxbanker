@@ -243,8 +243,9 @@ class NewTransactionRow(bankcontrols.GBRow):
         self.startText = wx.StaticText(parent, label=_("Starts:"))
 
         # The Description and Amount controls.
-        self.descCtrl = bankcontrols.HintedTextCtrl(parent, size=(140, -1), style=wx.TE_PROCESS_ENTER, hint=_("Description"), icon="wxART_page_edit")
-        self.amountCtrl = bankcontrols.HintedTextCtrl(parent, size=(90, -1), style=wx.TE_PROCESS_ENTER|wx.TE_RIGHT, hint=_("Amount"), icon="wxART_money_dollar")
+        handler = self.dateCtrl.customKeyHandler
+        self.descCtrl = bankcontrols.HintedTextCtrl(parent, size=(140, -1), style=wx.TE_PROCESS_ENTER, hint=_("Description"), icon="wxART_page_edit", handler=handler)
+        self.amountCtrl = bankcontrols.HintedTextCtrl(parent, size=(90, -1), style=wx.TE_PROCESS_ENTER|wx.TE_RIGHT, hint=_("Amount"), icon="wxART_money_dollar", handler=handler)
 
         # The add button.
         self.newButton = wx.BitmapButton(parent, bitmap=wx.ArtProvider.GetBitmap('wxART_money_add'))
