@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # CairoPlot.py
@@ -288,6 +288,8 @@ class ScatterPlot( Plot ):
                  series_legend = False,
                  x_labels = None,
                  y_labels = None,
+                 x_formatter = None,
+                 y_formatter = None,
                  x_bounds = None,
                  y_bounds = None,
                  z_bounds = None,
@@ -303,6 +305,9 @@ class ScatterPlot( Plot ):
         self.titles = {}
         self.titles[HORZ] = x_title
         self.titles[VERT] = y_title
+        self.label_formatters = {}
+        self.label_formatters[HORZ] = x_formatter
+        self.label_formatters[VERT] = y_formatter
         self.max_value = {}
         self.axis = axis
         self.discrete = discrete
@@ -396,19 +401,17 @@ class ScatterPlot( Plot ):
             self.errors[VERT] = [errory]
     
     def calc_labels(self):
-        if not self.labels[HORZ]:
-            amplitude = self.bounds[HORZ][1] - self.bounds[HORZ][0]
-            if amplitude % 10: #if horizontal labels need floating points
-                self.labels[HORZ] = ["%.2lf" % (float(self.bounds[HORZ][0] + (amplitude * i / 10.0))) for i in range(11) ]
-            else:
-                self.labels[HORZ] = ["%d" % (int(self.bounds[HORZ][0] + (amplitude * i / 10.0))) for i in range(11) ]
-        if not self.labels[VERT]:
-            amplitude = self.bounds[VERT][1] - self.bounds[VERT][0]
-            if amplitude % 10: #if vertical labels need floating points
-                self.labels[VERT] = ["%.2lf" % (float(self.bounds[VERT][0] + (amplitude * i / 10.0))) for i in range(11) ]
-            else:
-                self.labels[VERT] = ["%d" % (int(self.bounds[VERT][0] + (amplitude * i / 10.0))) for i in range(11) ]
-
+        for key in (HORZ, VERT):
+            if not self.labels[key]:
+                amplitude = self.bounds[key][1] - self.bounds[key][0]
+                labels = (self.bounds[key][0] + (amplitude * i / 10.0) for i in range(11))
+                if self.label_formatters[key]:
+                    self.labels[key] = [self.label_formatters[key](label) for label in labels]
+                elif amplitude % 10: #if horizontal labels need floating points
+                    self.labels[key] = ["%.2lf" % float(label) for label in labels]
+                else:
+                    self.labels[key] = ["%d" % int(label) for label in labels]
+        
     def calc_extents(self, direction):
         self.context.set_font_size(self.font_size * 0.8)
         self.max_value[direction] = max(self.context.text_extents(item)[2] for item in self.labels[direction])
@@ -1983,6 +1986,8 @@ def scatter_plot(name,
                  series_legend = False,
                  x_labels = None,
                  y_labels = None,
+                 x_formatter = None,
+                 y_formatter = None,
                  x_bounds = None,
                  y_bounds = None,
                  z_bounds = None,
@@ -2008,6 +2013,7 @@ def scatter_plot(name,
     
     plot = ScatterPlot( name, data, errorx, errory, width, height, background, border,
                         axis, dash, discrete, dots, grid, series_legend, x_labels, y_labels,
+                        x_formatter, y_formatter,
                         x_bounds, y_bounds, z_bounds, x_title, y_title, series_colors, circle_colors )
     plot.render()
     plot.commit()
