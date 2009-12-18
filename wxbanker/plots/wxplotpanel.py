@@ -37,7 +37,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas, baseplot.BasePlot):
             # without more than one unique value, a best fit line doesn't make sense (and also causes freezes!)
             bestfitline = pyplot.PolyBestFitLine(data, N=fitdegree, width=2, colour="blue", legend=_("Trend"))
             lines.append(bestfitline)
-        self.Draw(pyplot.PlotGraphics(lines, _("Total Balance Over Time"), _("Date"), _("Balance")))
+        self.Draw(pyplot.PlotGraphics(lines, _("Total Balance Over Time"), _("Time"), _("Balance")))
 
     def onMotion(self, event):
         #show closest point (when enbled)

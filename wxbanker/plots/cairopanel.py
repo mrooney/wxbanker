@@ -27,8 +27,8 @@ class CairoPlotPanel(wx.Panel, baseplot.BasePlot):
         self.data = {
             _("Balance") : [(i, total) for i, total in enumerate(amounts)],
         }
-        # The maximum number of X labels (dates) we want to show.
         
+        # The maximum number of X labels (dates) we want to show.        
         num_dates = 10
         if len(amounts) <= num_dates+1:
             labels = strdates
@@ -63,5 +63,7 @@ class CairoPlotPanel(wx.Panel, baseplot.BasePlot):
             series_colors = ["green"],
             series_legend = True,
             x_labels=self.x_labels,
+            x_title=_("Time"),
+            y_title=_("Balance"),
         )
 
