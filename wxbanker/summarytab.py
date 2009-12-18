@@ -16,26 +16,21 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-from wxbanker.bankexceptions import NoNumpyException
 from wxbanker import localization, bankcontrols, helpers
 import wx, datetime
-try:
-    from wxbanker import plot as pyplot
-except ImportError:
-    raise NoNumpyException()
-
 
 class SummaryPanel(wx.Panel):
-    def __init__(self, parent, bankController):
+    def __init__(self, parent, plotFactory, bankController):
         wx.Panel.__init__(self, parent)
         self.bankController = bankController
+        self.helper = SummaryHelper()
 
         self.plotSettings = {'FitDegree': 2, 'Granularity': 100, 'Account': None}
         self.cachedData = None
         self.dateRange = None
 
         # create the plot panel
-        self.plotPanel = AccountPlotCanvas(bankController, self)
+        self.plotPanel = plotFactory.createPanel(self, bankController)
 
         # create the controls at the bottom
         controlSizer = wx.BoxSizer()
@@ -133,124 +128,39 @@ class SummaryPanel(wx.Panel):
 
     def generateData(self, useCache=False):
         if useCache and self.cachedData is not None:
-            totals, startDate, delta = self.cachedData
+            totals = self.cachedData
         else:
-            totals, startDate, delta = self.getPoints(self.plotSettings['Granularity'])
-            endDate = startDate + (datetime.timedelta(days=delta) * len(totals))
-            self.cachedData = totals, startDate, delta
+            totals = self.bankController.Model.GetXTotals(self.plotSettings['Account'], daterange=self.getDateRange())
+            self.cachedData = totals
+        self.plotPanel.plotBalance(totals, self.plotSettings)
 
-        self.plotPanel.plotBalance(totals, startDate, delta, "Days", fitdegree=self.plotSettings['FitDegree'])
+class SummaryHelper(object):
+    def getPoints(self, totals, numPoints):
+       
+        # Don't ever return 0 as the dpp, you can't graph without SOME x delta.
+        smallDelta = 1.0/2**32
+        
+        # If there aren't any transactions, return 0 for every point and start at today.
+        if totals == []:
+            return [0] * 10, datetime.date.today(), smallDelta
+        
+        startDate = totals[0][0]
+        endDate = totals[-1][0]
 
-    def getPoints(self, numPoints):
-        return self.bankController.Model.GetXTotals(numPoints, self.plotSettings['Account'], daterange=self.getDateRange())
+        # Figure out the fraction of a day that exists between each point.
+        distance = (endDate - startDate).days
+        daysPerPoint = 1.0 * distance / numPoints
+        dppDelta = datetime.timedelta(daysPerPoint)
+        
+        # Generate all the points.
+        tindex = 0
+        points = [totals[0][1]]
 
-class AccountPlotCanvas(pyplot.PlotCanvas):
-    def __init__(self, bankController, *args, **kwargs):
-        pyplot.PlotCanvas.__init__(self, *args, **kwargs)
-        self.bankController = bankController
-        self.pointDates = []
-        self.startDate = None #TODO: get rid of this and use self.pointDates[0]
-        self.SetEnablePointLabel(True)
-        self.SetEnableLegend(True)
-        self.SetPointLabelFunc(self.drawPointLabel)
+        for i in range(numPoints):
+            while tindex < len(totals) and totals[tindex][0] <= startDate + (dppDelta * (i+1)):
+                points[i] = totals[tindex][1]
+                tindex += 1
+            points.append(points[-1])
 
-        self.canvas.Bind(wx.EVT_MOTION, self.onMotion)
-
-    def plotBalance(self, totals, startDate, every, xunits="Days", fitdegree=2):
-        self.startDate = startDate
-        timeDelta = datetime.timedelta( every * {'Days':1, 'Weeks':7, 'Months':30, 'Years':365}[xunits] )
-        pointDates = []
-
-        data = []
-        currentTime = 0
-        uniquePoints = set()
-        for i, total in enumerate(totals):
-            data.append((currentTime, total))
-            uniquePoints.add("%.2f"%total)
-            currentTime += every
-
-            # Don't just += the timeDelta to currentDate, since adding days is all or nothing, ie:
-            #   currentDate + timeDelta == currentDate, where timeDelta < 1 (bad!)
-            # ...so the date will never advance for timeDeltas < 1, no matter how many adds you do.
-            # As such we must start fresh each time and multiply the time delta appropriately.
-            currentDate = startDate + (i+1)*timeDelta
-
-            pointDates.append(currentDate.strftime('%m/%d/%Y'))
-
-        #drawPointLabel will need these later
-        self.pointDates = pointDates
-
-        line = pyplot.PolyLine(data, width=2, colour="green", legend=_("Balance"))
-        lines = [line]
-        if len(uniquePoints) > 1:
-            # without more than one unique value, a best fit line doesn't make sense (and also causes freezes!)
-            bestfitline = pyplot.PolyBestFitLine(data, N=fitdegree, width=2, colour="blue", legend=_("Trend"))
-            lines.append(bestfitline)
-        self.Draw(pyplot.PlotGraphics(lines, _("Total Balance Over Time"), _("Date"), _("Balance")))
-
-    def onMotion(self, event):
-        #show closest point (when enbled)
-        if self.GetEnablePointLabel() == True:
-            #make up dict with info for the pointLabel
-            #I've decided to mark the closest point on the closest curve
-            dlst = self.GetClosestPoint( self._getXY(event), pointScaled= True)
-            if dlst != []: #returns [] if none
-                curveNum, legend, pIndex, pointXY, scaledXY, distance = dlst
-                #make up dictionary to pass to my user function (see DrawPointLabel)
-                mDataDict= {"pointXY":pointXY, "scaledXY":scaledXY, "pIndex": pIndex}
-                #pass dict to update the pointLabel
-                self.UpdatePointLabel(mDataDict)
-        event.Skip() #go to next handler
-
-    def drawPointLabel(self, dc, mDataDict):
-        """
-        This is the fuction that defines how the pointLabels are plotted
-        dc - DC that will be passed
-        mDataDict - Dictionary of data that you want to use for the pointLabel
-
-        This just displays the total in a nicely-formatted money string.
-        """
-        #print mDataDict
-        #if mDataDict['legend'] != 'Balance':
-        #    return False
-
-        dc.SetPen(wx.Pen(wx.BLACK))
-        dc.SetBrush(wx.Brush( wx.BLACK, wx.SOLID ))
-
-        sx, sy = mDataDict["scaledXY"] #scaled x,y of closest point
-        dc.DrawRectangle(sx-5, sy-5, 10, 10)  #10by10 square centered on point
-        px, py = mDataDict["pointXY"]
-        #make a string to display
-        line1, line2 = self.bankController.Model.float2str(py), str(self.pointDates[mDataDict["pIndex"]])
-        x1, y1 = dc.GetTextExtent(line1)
-        x2, y2 = dc.GetTextExtent(line2)
-        dc.DrawText(line1, sx, sy+1)
-        dc.DrawText(line2, sx-(x2-x1)/2, sy+y1+3)
-
-    def _xticks(self, *args):
-        ticks = pyplot.PlotCanvas._xticks(self, *args)
-        myTicks = []
-        lastTick = None
-        for tick in ticks:
-            floatVal = tick[0]
-            stringVal = str(self.startDate + datetime.timedelta(floatVal))
-
-            # Don't display this xtick if it isn't different from the last one.
-            if stringVal == lastTick:
-                stringVal = ""
-            else:
-                lastTick = stringVal
-
-            myTicks.append( (floatVal, stringVal) )
-        return myTicks
-
-    def _yticks(self, *args):
-        ticks = pyplot.PlotCanvas._yticks(self, *args)
-        myTicks = []
-        for tick in ticks:
-            floatVal = tick[0]
-            stringVal = self.bankController.Model.float2str(floatVal)
-            if stringVal.endswith('.00'):
-                stringVal = stringVal[:-3]
-            myTicks.append( (floatVal, stringVal) )
-        return myTicks
+        return points[:-1], startDate, daysPerPoint or smallDelta
+    

@@ -22,9 +22,15 @@ from wxbanker.tests import testbase
 from wxbanker import bankobjects
 import unittest, datetime
 from wxbanker.tests.testbase import today, yesterday, one
+from wxbanker.summarytab import SummaryHelper
 
 class SummaryTests(testbase.TestCaseWithController):
-    def get(self, transactionsData, *args):
+    
+    def setUp(self):
+        testbase.TestCaseWithController.setUp(self)
+        self.helper = SummaryHelper()
+    
+    def get(self, transactionsData, numPoints, *args):
         # Remove all existing accounts, it is assumed that none exist
         for account in self.Model.Accounts:
             self.Model.RemoveAccount(account.Name)
@@ -32,8 +38,8 @@ class SummaryTests(testbase.TestCaseWithController):
         a = self.Model.CreateAccount("A")
         for (date, amount) in transactionsData:
             a.AddTransaction(amount=amount, date=date)
-
-        return self.Model.GetXTotals(*args)
+        
+        return self.helper.getPoints(self.Model.GetXTotals(*args), numPoints)
 
     def testGetTenPointsWithNoTransactions(self):
         result = self.get([], 10)

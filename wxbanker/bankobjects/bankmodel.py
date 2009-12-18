@@ -55,7 +55,7 @@ class BankModel(object):
             transactions.sort()
             return transactions[0].Date, transactions[-1].Date
 
-    def GetXTotals(self, numPoints, account=None, daterange=None):
+    def GetXTotals(self, account=None, daterange=None):
         """
         Get totals every so many days, optionally within a specific account
         and/or date range. This is particularly useful when we want to
@@ -66,13 +66,9 @@ class BankModel(object):
         else:
             transactions = account.Transactions[:]
         transactions.sort()
-
-        # Don't ever return 0 as the dpp, you can't graph without SOME x delta.
-        smallDelta = 1.0/2**32
-
-        # If there aren't any transactions, return 0 for every point and start at today.
+        
         if transactions == []:
-            return [0] * 10, datetime.date.today(), smallDelta
+            return []
         
         startingBalance = 0.0
         # Crop transactions around the date range, if supplied.
@@ -100,23 +96,21 @@ class BankModel(object):
             endDate = daterange[1]
         elif today > endDate:
             endDate = today
-
-        # Figure out the fraction of a day that exists between each point.
-        distance = (endDate - startDate).days
-        daysPerPoint = 1.0 * distance / numPoints
-        dppDelta = datetime.timedelta(daysPerPoint)
-        
-        # Generate all the points.
-        points = [startingBalance]
+       
+        onedaydelta = datetime.timedelta(days=1)
+        # Generate day totals
+        totals = []
+        currDate = startDate
         tindex = 0
-        for i in range(numPoints):
-            while tindex < len(transactions) and transactions[tindex].Date <= startDate + (dppDelta * (i+1)):
-                points[i] += transactions[tindex].Amount
+        balance = startingBalance
+        while currDate <= endDate:
+            while tindex < len(transactions) and transactions[tindex].Date <= currDate:
+                balance += transactions[tindex].Amount
                 tindex += 1
+            totals.append([currDate, balance])
+            currDate += onedaydelta
 
-            points.append(points[-1])
-
-        return points[:-1], startDate, daysPerPoint or smallDelta
+        return totals
 
     def CreateAccount(self, accountName):
         return self.Accounts.Create(accountName)

@@ -34,16 +34,12 @@ else:
 from wx.lib.pubsub import Publisher
 
 # wxBanker
-from wxbanker.bankexceptions import NoNumpyException
 from wxbanker.menubar import BankMenuBar
-from wxbanker import localization, messagepanel
+from wxbanker import localization, messagepanel, debug
+
 # Tabs
-from wxbanker import managetab
-try:
-    from wxbanker import summarytab
-except NoNumpyException:
-    summarytab = None
-    print _("Warning: Numpy module not available, disabling Summary tab. Install numpy to fix this.")
+from wxbanker import managetab, summarytab
+from plots.plotfactory import PlotFactory
 
 
 class BankerPanel(wx.Panel):
@@ -56,10 +52,12 @@ class BankerPanel(wx.Panel):
 
         self.managePanel = managetab.ManagePanel(notebook, bankController)
         notebook.AddPage(self.managePanel, _("Transactions"))
-
-        if summarytab:
-            self.summaryPanel = summarytab.SummaryPanel(notebook, bankController)
-            notebook.AddPage(self.summaryPanel, _("Summary"))
+        
+        if debug.on:
+            for factory in PlotFactory.getAvailableFactories():
+                self.AddSummaryTab(factory)
+        else:
+            self.AddSummaryTab()
             
         self.Sizer.Add(self.notebook, 1, wx.EXPAND)
 
@@ -67,6 +65,12 @@ class BankerPanel(wx.Panel):
         Publisher.subscribe(self.onRecurringTransactionAdded, "recurringtransaction.created")
         
         wx.CallLater(1000, self.CheckRecurringTransactions)
+    
+    def AddSummaryTab(self, factoryName=None):
+        plotFactory = PlotFactory.getFactory(factoryName)
+        if plotFactory is not None:
+            summaryPanel = summarytab.SummaryPanel(self.notebook, plotFactory, self.bankController)
+            self.notebook.AddPage(summaryPanel, _("Summary"))
         
     def AddMessagePanel(self, panel):
         self.Sizer.Insert(0, panel, 0, wx.EXPAND)
@@ -140,9 +144,10 @@ class BankerPanel(wx.Panel):
 
     def onTabSwitching(self, event):
         tabIndex = event.Selection
-        # If we are switching to the summary (graph) tab, update it!
-        if tabIndex == 1:
-            self.summaryPanel.update()
+        page = self.notebook.GetPage(tabIndex)
+        if isinstance(page, summarytab.SummaryPanel):
+            # If we are switching to the summary (graph) tab, update it!
+            page.update()
         
         
 class BankerFrame(wx.Frame):

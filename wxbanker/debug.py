@@ -18,8 +18,10 @@
 
 import sys
 
+on = "--debug" in sys.argv
+
 def debug(*args):
-    if "--debug" in sys.argv:
+    if on:
         for a in args:
             print a,
         print ""
