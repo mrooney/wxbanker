@@ -1,9 +1,10 @@
 class PlotFactory(object):
-    factories = {
-        'wx' : lambda : PlotFactory.__getWxFactory(),
-        'cairo' : lambda : PlotFactory.__getCairoFactory(),
-        'chaco' : lambda : PlotFactory.__getChacoFactory(),
-    }
+    # The available factories, in their preferred order.
+    factories = (
+        ('cairo', lambda : PlotFactory.__getCairoFactory()),
+        ('wx', lambda : PlotFactory.__getWxFactory()),
+        ('chaco', lambda : PlotFactory.__getChacoFactory()),
+    )
 
     @classmethod
     def getFactory(cls, factoryName=None):
@@ -15,7 +16,7 @@ class PlotFactory(object):
             return cls.__createFactory(cls.factories[factoryName])
         else:
             # return first available factory
-            for factory in cls.factories.itervalues():
+            for factoryName, factory in cls.factories:
                 factory = cls.__createFactory(factory)
                 if factory is not None:
                     return factory

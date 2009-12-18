@@ -53,11 +53,7 @@ class BankerPanel(wx.Panel):
         self.managePanel = managetab.ManagePanel(notebook, bankController)
         notebook.AddPage(self.managePanel, _("Transactions"))
         
-        if 1:
-            for factory in PlotFactory.getAvailableFactories():
-                self.AddSummaryTab(factory)
-        else:
-            self.AddSummaryTab()
+        self.AddSummaryTab()
             
         self.Sizer.Add(self.notebook, 1, wx.EXPAND)
 
