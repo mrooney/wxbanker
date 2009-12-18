@@ -16,8 +16,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-#TODO for new plots: * make changing fit degree work
-
 import datetime
 from wxbanker.plots.plotfactory import BasePlotImportException
 
@@ -65,7 +63,7 @@ class BasePlot(object):
 
         return points[:-1], startDate, daysPerPoint or smallDelta
     
-    def plotBalance(self, totals, plotSettings, xunits, fitdegree):
+    def plotBalance(self, totals, plotSettings, xunits):
         totals, startDate, every = self.getPoints(totals, plotSettings['Granularity'])
         
         self.startDate = startDate

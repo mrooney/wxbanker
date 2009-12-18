@@ -25,8 +25,8 @@ class AccountPlotCanvas(pyplot.PlotCanvas, baseplot.BasePlot):
 
         self.canvas.Bind(wx.EVT_MOTION, self.onMotion)
 
-    def plotBalance(self, totals, plotSettings, xunits="Days", fitdegree=2):
-        totals, dates, strdates, trendable = baseplot.BasePlot.plotBalance(self, totals, plotSettings, xunits, fitdegree)
+    def plotBalance(self, totals, plotSettings, xunits="Days"):
+        totals, dates, strdates, trendable = baseplot.BasePlot.plotBalance(self, totals, plotSettings, xunits)
 
         data = zip(dates, totals)
         #drawPointLabel will need these later
@@ -36,7 +36,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas, baseplot.BasePlot):
         lines = [line]
         # Without more than one unique value, a best fit line doesn't make sense (and also causes freezes!)
         if trendable:
-            bestFitData = self.getPolyData(data, N=fitdegree)
+            bestFitData = self.getPolyData(data, N=plotSettings["FitDegree"])
             bestfitline = pyplot.PolyLine(bestFitData, width=2, colour="blue", legend=_("Trend"))
             lines.append(bestfitline)
         self.Draw(pyplot.PlotGraphics(lines, _("Total Balance Over Time"), _("Time"), _("Balance")))
