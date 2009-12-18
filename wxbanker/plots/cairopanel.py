@@ -22,21 +22,21 @@ class CairoPlotPanel(wx.Panel, baseplot.BasePlot):
         self.x_labels = None
         
     def plotBalance(self, totals, plotSettings, xunits="Days", fitdegree=2):
-        totals, pointDates = baseplot.BasePlot.plotBalance(self, totals, plotSettings, xunits, fitdegree)
+        amounts, dates, strdates, trendable = baseplot.BasePlot.plotBalance(self, totals, plotSettings, xunits, fitdegree)
             
         self.data = {
-            _("Balance") : [(i, total) for i, total in enumerate(totals)],
+            _("Balance") : [(i, total) for i, total in enumerate(amounts)],
         }
         # The maximum number of X labels (dates) we want to show.
         
         num_dates = 10
-        if len(totals) <= num_dates+1:
-            labels = pointDates
+        if len(amounts) <= num_dates+1:
+            labels = strdates
         else:
             labels = []
-            delta = 1.0 * (len(totals)-1) / (num_dates)
+            delta = 1.0 * (len(amounts)-1) / (num_dates)
             for i in range(num_dates+1):
-                labels.append(pointDates[int(i*delta)])
+                labels.append(strdates[int(i*delta)])
         
         self.x_labels = labels
         self.Refresh()

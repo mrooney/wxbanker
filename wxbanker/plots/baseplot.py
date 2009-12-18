@@ -53,13 +53,13 @@ class BasePlot(object):
         
         self.startDate = startDate
         timeDelta = datetime.timedelta( every * {'Days':1, 'Weeks':7, 'Months':30, 'Years':365}[xunits] )
-        pointDates = []
 
-        data = []
+        dates = []
+        strdates = []
         currentTime = 0
         uniquePoints = set()
         for i, total in enumerate(totals):
-            data.append((currentTime, total))
+            dates.append(currentTime)
             uniquePoints.add("%.2f"%total)
             currentTime += every
 
@@ -69,6 +69,9 @@ class BasePlot(object):
             # As such we must start fresh each time and multiply the time delta appropriately.
             currentDate = startDate + (i+1)*timeDelta
 
-            pointDates.append(currentDate.strftime('%Y/%m/%d'))
+            strdates.append(currentDate.strftime('%Y/%m/%d'))
             
-        return totals, pointDates
+        # Is this data trendable? In other words, at least two different points.
+        trendable = bool(len(uniquePoints))
+        
+        return totals, dates, strdates, trendable

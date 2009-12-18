@@ -25,34 +25,15 @@ class AccountPlotCanvas(pyplot.PlotCanvas, baseplot.BasePlot):
         self.canvas.Bind(wx.EVT_MOTION, self.onMotion)
 
     def plotBalance(self, totals, plotSettings, xunits="Days", fitdegree=2):
-        totals, startDate, every = self.getPoints(totals, plotSettings['Granularity'])
-        
-        self.startDate = startDate
-        timeDelta = datetime.timedelta( every * {'Days':1, 'Weeks':7, 'Months':30, 'Years':365}[xunits] )
-        pointDates = []
+        totals, dates, strdates, trendable = baseplot.BasePlot.plotBalance(self, totals, plotSettings, xunits, fitdegree)
 
-        data = []
-        currentTime = 0
-        uniquePoints = set()
-        for i, total in enumerate(totals):
-            data.append((currentTime, total))
-            uniquePoints.add("%.2f"%total)
-            currentTime += every
-
-            # Don't just += the timeDelta to currentDate, since adding days is all or nothing, ie:
-            #   currentDate + timeDelta == currentDate, where timeDelta < 1 (bad!)
-            # ...so the date will never advance for timeDeltas < 1, no matter how many adds you do.
-            # As such we must start fresh each time and multiply the time delta appropriately.
-            currentDate = startDate + (i+1)*timeDelta
-
-            pointDates.append(currentDate.strftime('%m/%d/%Y'))
-
+        data = zip(dates, totals)
         #drawPointLabel will need these later
-        self.pointDates = pointDates
+        self.pointDates = strdates
 
         line = pyplot.PolyLine(data, width=2, colour="green", legend=_("Balance"))
         lines = [line]
-        if len(uniquePoints) > 1:
+        if trendable:
             # without more than one unique value, a best fit line doesn't make sense (and also causes freezes!)
             bestfitline = pyplot.PolyBestFitLine(data, N=fitdegree, width=2, colour="blue", legend=_("Trend"))
             lines.append(bestfitline)
