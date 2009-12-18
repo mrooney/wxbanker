@@ -1,7 +1,6 @@
 import wx
 import datetime
-from wxbanker.plots import plotfactory
-from wxbanker.summarytab import SummaryHelper
+from wxbanker.plots import plotfactory, baseplot
 
 try:
     from wxbanker.cairoplot import cairoplot, series
@@ -13,36 +12,17 @@ class CairoPlotPanelFactory(object):
     def createPanel(self, parent, bankController):
         return CairoPlotPanel(parent)
 
-class CairoPlotPanel(wx.Panel):
+class CairoPlotPanel(wx.Panel, baseplot.BasePlot):
     def __init__(self, parent):
         wx.Panel.__init__(self, parent)
+        baseplot.BasePlot.__init__(self)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.data = None
         self.x_labels = None
         
     def plotBalance(self, totals, plotSettings, xunits="Days", fitdegree=2):
-        totals, startDate, every = SummaryHelper().getPoints(totals, plotSettings['Granularity'])
-        
-        self.startDate = startDate
-        timeDelta = datetime.timedelta( every * {'Days':1, 'Weeks':7, 'Months':30, 'Years':365}[xunits] )
-        pointDates = []
-
-        data = []
-        currentTime = 0
-        uniquePoints = set()
-        for i, total in enumerate(totals):
-            data.append((currentTime, total))
-            uniquePoints.add("%.2f"%total)
-            currentTime += every
-
-            # Don't just += the timeDelta to currentDate, since adding days is all or nothing, ie:
-            #   currentDate + timeDelta == currentDate, where timeDelta < 1 (bad!)
-            # ...so the date will never advance for timeDeltas < 1, no matter how many adds you do.
-            # As such we must start fresh each time and multiply the time delta appropriately.
-            currentDate = startDate + (i+1)*timeDelta
-
-            pointDates.append(currentDate.strftime('%Y/%m/%d'))
+        totals, pointDates = baseplot.BasePlot.plotBalance(self, totals, plotSettings, xunits, fitdegree)
             
         self.data = {
             _("Balance") : [(i, total) for i, total in enumerate(totals)],

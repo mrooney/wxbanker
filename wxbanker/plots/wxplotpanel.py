@@ -1,7 +1,6 @@
 import wx
 import datetime
-from wxbanker.plots import plotfactory
-from wxbanker.summarytab import SummaryHelper
+from wxbanker.plots import plotfactory, baseplot
 
 try:
     from wxbanker import plot as pyplot
@@ -12,9 +11,10 @@ class WxPlotFactory(object):
     def createPanel(self, parent, bankController):
         return AccountPlotCanvas(bankController, parent)
 
-class AccountPlotCanvas(pyplot.PlotCanvas):
+class AccountPlotCanvas(pyplot.PlotCanvas, baseplot.BasePlot):
     def __init__(self, bankController, *args, **kwargs):
         pyplot.PlotCanvas.__init__(self, *args, **kwargs)
+        baseplot.BasePlot.__init__(self)
         self.bankController = bankController
         self.pointDates = []
         self.startDate = None #TODO: get rid of this and use self.pointDates[0]
@@ -25,7 +25,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas):
         self.canvas.Bind(wx.EVT_MOTION, self.onMotion)
 
     def plotBalance(self, totals, plotSettings, xunits="Days", fitdegree=2):
-        totals, startDate, every = SummaryHelper().getPoints(totals, plotSettings['Granularity'])
+        totals, startDate, every = self.getPoints(totals, plotSettings['Granularity'])
         
         self.startDate = startDate
         timeDelta = datetime.timedelta( every * {'Days':1, 'Weeks':7, 'Months':30, 'Years':365}[xunits] )
