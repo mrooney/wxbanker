@@ -1,8 +1,12 @@
 import wx
 import datetime
-from wxbanker.plots import plotfactory, baseplot
+from wxbanker.plots import plotfactory
 
 try:
+    try:
+        from wxbanker.plots import baseplot
+    except plotfactory.BasePlotImportException:
+        raise plotfactory.PlotLibraryImportException('cairo', 'python-numpy')
     from wxbanker.cairoplot import cairoplot, series
     import wx.lib.wxcairo
 except ImportError:

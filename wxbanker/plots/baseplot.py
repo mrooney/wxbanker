@@ -16,7 +16,11 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
+#TODO for new plots: * make changing fit degree work
+
 import datetime
+from wxbanker.plots.plotfactory import BasePlotImportException
+
 # Needs Numeric or numarray or NumPy
 try:
     import numpy.oldnumeric as _Numeric
@@ -24,7 +28,12 @@ except:
     try:
         import numarray as _Numeric  #if numarray is used it is renamed Numeric
     except:
-        import Numeric as _Numeric
+        try:
+            import Numeric as _Numeric
+        except:
+            _Numeric = None
+if not hasattr(_Numeric, 'polyfit'):
+    raise BasePlotImportException()
 
 class BasePlot(object):
     def getPoints(self, totals, numPoints):

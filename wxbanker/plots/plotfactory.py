@@ -55,4 +55,6 @@ class PlotLibraryImportException(Exception):
     
     def getImportHint(self):
         return _("To use '%s' plotting library, install following python modules: %s."%(self.library, self.module))
+    
+class BasePlotImportException(Exception): pass
         

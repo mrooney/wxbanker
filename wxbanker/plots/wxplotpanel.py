@@ -1,11 +1,12 @@
 import wx
 import datetime
-from wxbanker.plots import plotfactory, baseplot
+from wxbanker.plots import plotfactory
 
 try:
-    from wxbanker import plot as pyplot
-except ImportError:
-    raise plotfactory.PlotLibraryImportException('wx', 'numpy')
+    from wxbanker.plots import baseplot
+except plotfactory.BasePlotImportException:
+    raise plotfactory.PlotLibraryImportException('wx', 'python-numpy')
+from wxbanker import plot as pyplot
 
 class WxPlotFactory(object):
     def createPanel(self, parent, bankController):
