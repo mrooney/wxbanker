@@ -1,6 +1,8 @@
 import wx
 from wxbanker.plots import plotfactory
 
+#TODO-0.7: get this up to snuff or drop
+
 try:
     from enthought.chaco.api import Plot, ArrayPlotData
     from enthought.enable.wx_backend.api import Window as EnWindow
