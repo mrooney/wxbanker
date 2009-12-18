@@ -33,9 +33,10 @@ class AccountPlotCanvas(pyplot.PlotCanvas, baseplot.BasePlot):
 
         line = pyplot.PolyLine(data, width=2, colour="green", legend=_("Balance"))
         lines = [line]
+        # Without more than one unique value, a best fit line doesn't make sense (and also causes freezes!)
         if trendable:
-            # without more than one unique value, a best fit line doesn't make sense (and also causes freezes!)
-            bestfitline = pyplot.PolyBestFitLine(data, N=fitdegree, width=2, colour="blue", legend=_("Trend"))
+            bestFitData = self.getPolyData(data, N=fitdegree)
+            bestfitline = pyplot.PolyLine(bestFitData, width=2, colour="blue", legend=_("Trend"))
             lines.append(bestfitline)
         self.Draw(pyplot.PlotGraphics(lines, _("Total Balance Over Time"), _("Time"), _("Balance")))
 

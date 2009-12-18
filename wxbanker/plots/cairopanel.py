@@ -24,9 +24,14 @@ class CairoPlotPanel(wx.Panel, baseplot.BasePlot):
     def plotBalance(self, totals, plotSettings, xunits="Days", fitdegree=2):
         amounts, dates, strdates, trendable = baseplot.BasePlot.plotBalance(self, totals, plotSettings, xunits, fitdegree)
             
+        data = [(i, total) for i, total in enumerate(amounts)]
         self.data = {
-            _("Balance") : [(i, total) for i, total in enumerate(amounts)],
+            _("Balance") : data,
         }
+        
+        if trendable:
+            fitdata = self.getPolyData(data, N=fitdegree)
+            self.data[_("Trend")] = fitdata
         
         # The maximum number of X labels (dates) we want to show.        
         num_dates = 10
@@ -60,7 +65,7 @@ class CairoPlotPanel(wx.Panel, baseplot.BasePlot):
             axis = True,
             dots = 1,
             grid = True,
-            series_colors = ["green"],
+            series_colors = ["green", "blue"],
             series_legend = True,
             x_labels=self.x_labels,
             x_title=_("Time"),

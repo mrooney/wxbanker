@@ -17,6 +17,14 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
+# Needs Numeric or numarray or NumPy
+try:
+    import numpy.oldnumeric as _Numeric
+except:
+    try:
+        import numarray as _Numeric  #if numarray is used it is renamed Numeric
+    except:
+        import Numeric as _Numeric
 
 class BasePlot(object):
     def getPoints(self, totals, numPoints):
@@ -75,3 +83,19 @@ class BasePlot(object):
         trendable = bool(len(uniquePoints))
         
         return totals, dates, strdates, trendable
+    
+    def getPolyData(self, points, N=1):
+        xs = tuple((p[0] for p in points))
+        ys = tuple((p[1] for p in points))
+
+        coefficients = _Numeric.polyfit(xs, ys, N)
+
+        bestFitPoints = []
+        for x in xs:
+            newY = 0.0
+            power = len(coefficients)-1
+            for coefficient in coefficients:
+                newY += coefficient*(x**power)
+                power -= 1
+            bestFitPoints.append((int(x), float(newY)))
+        return bestFitPoints

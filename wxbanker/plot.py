@@ -110,10 +110,6 @@ except:
             downloading source or binaries."""
             raise ImportError, "Numeric, numarray or NumPy not found. \n" + msg
             
-if not hasattr(_Numeric, 'polyfit'):
-    raise ImportError, "Numeric/numarray/NumPy does not have polyfit, which is required. Please upgrade to a newer version."
-
-
 
 #
 # Plotting classes...
@@ -246,30 +242,6 @@ class PolyLine(PolyPoints):
         w= 5 * h
         return (w,h)
     
-    
-class PolyBestFitLine(PolyLine):
-    """
-    Acts just like a PolyLine except that the Line
-    will be the best-fit polynomial of the points
-    given, with degree N.
-    """
-    def __init__(self, points, N=1, **attr):
-        xs = tuple((p[0] for p in points))
-        ys = tuple((p[1] for p in points))
-
-        coefficients = _Numeric.polyfit(xs, ys, N)
-
-        bestFitPoints = []
-        for x in xs:
-            newY = 0.0
-            power = len(coefficients)-1
-            for coefficient in coefficients:
-                newY += coefficient*(x**power)
-                power -= 1
-            bestFitPoints.append((x, newY))
-            
-        PolyLine.__init__(self, bestFitPoints, **attr)
-
 
 class PolyMarker(PolyPoints):
     """Class to define marker type and style
