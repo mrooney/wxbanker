@@ -63,7 +63,7 @@ class CairoPlotPanel(wx.Panel, baseplot.BasePlot):
             width = size.width, height = size.height,
             border = 20, 
             axis = True,
-            dots = 1,
+            dots = 0,
             grid = True,
             series_colors = ["green", "blue"],
             series_legend = True,
