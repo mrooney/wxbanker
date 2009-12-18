@@ -10,12 +10,13 @@ except ImportError:
 
 class CairoPlotPanelFactory(object):
     def createPanel(self, parent, bankController):
-        return CairoPlotPanel(parent)
+        return CairoPlotPanel(parent, bankController)
 
 class CairoPlotPanel(wx.Panel, baseplot.BasePlot):
-    def __init__(self, parent):
+    def __init__(self, parent, bankController):
         wx.Panel.__init__(self, parent)
         baseplot.BasePlot.__init__(self)
+        self.bankController = bankController
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.data = None
@@ -23,12 +24,10 @@ class CairoPlotPanel(wx.Panel, baseplot.BasePlot):
         
     def plotBalance(self, totals, plotSettings, xunits="Days", fitdegree=2):
         amounts, dates, strdates, trendable = baseplot.BasePlot.plotBalance(self, totals, plotSettings, xunits, fitdegree)
-            
         data = [(i, total) for i, total in enumerate(amounts)]
         self.data = {
             _("Balance") : data,
         }
-        
         if trendable:
             fitdata = self.getPolyData(data, N=fitdegree)
             self.data[_("Trend")] = fitdata
@@ -68,6 +67,7 @@ class CairoPlotPanel(wx.Panel, baseplot.BasePlot):
             series_colors = ["green", "blue"],
             series_legend = True,
             x_labels=self.x_labels,
+            y_formatter=lambda s: self.bankController.Model.float2str(s),
             x_title=_("Time"),
             y_title=_("Balance"),
         )
