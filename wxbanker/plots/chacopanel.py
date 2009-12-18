@@ -31,6 +31,3 @@ class ChacoPlotPanel(wx.Panel):
         
         self.plot.data = pd
         self.plot.plot(("days", "totals"), type="line")
-        
-
-                

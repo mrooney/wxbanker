@@ -75,4 +75,3 @@ class CairoPlotPanel(wx.Panel, baseplot.BasePlot):
             x_title=_("Time"),
             y_title=_("Balance"),
         )
-

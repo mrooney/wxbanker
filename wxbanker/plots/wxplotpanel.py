@@ -6,7 +6,7 @@ try:
     from wxbanker.plots import baseplot
 except plotfactory.BasePlotImportException:
     raise plotfactory.PlotLibraryImportException('wx', 'python-numpy')
-from wxbanker import plot as pyplot
+import wx.lib.plot as pyplot
 
 class WxPlotFactory(object):
     def createPanel(self, parent, bankController):
