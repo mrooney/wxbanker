@@ -30,7 +30,7 @@ class PlotFactory(object):
         """Execute factory creation method. Handle thrown exception exception."""
         try:
             return method()
-        except PlotLibraryImportException as exc:
+        except PlotLibraryImportException, exc:
             print exc.getImportHint()
     
     @staticmethod
