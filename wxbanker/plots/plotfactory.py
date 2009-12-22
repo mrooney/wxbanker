@@ -3,7 +3,6 @@ class PlotFactory(object):
     factories = (
         ('cairo', lambda : PlotFactory.__getCairoFactory()),
         ('wx', lambda : PlotFactory.__getWxFactory()),
-        ('chaco', lambda : PlotFactory.__getChacoFactory()),
     )
 
     @classmethod
@@ -42,11 +41,6 @@ class PlotFactory(object):
     def __getWxFactory():
         from wxbanker.plots import wxplotpanel
         return wxplotpanel.WxPlotFactory()
-
-    @staticmethod
-    def __getChacoFactory():
-        from wxbanker.plots import chacopanel
-        return chacopanel.ChacoPlotFactory()
 
 class PlotLibraryImportException(Exception):
     def __init__(self, library, module):
