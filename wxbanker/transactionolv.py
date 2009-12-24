@@ -174,12 +174,14 @@ class TransactionOLV(GroupListView):
     def showContextMenu(self, transactions, col, removeOnly=False):
         menu = wx.Menu()
 
-        if not removeOnly and col in (self.COL_AMOUNT, self.COL_TOTAL):
-            # This is an amount cell, allow calculator options.
-            if col == self.COL_AMOUNT:
-                amount = sum((t.Amount for t in transactions))
-            else:
+        if not removeOnly:
+            # If the right-click was on the total column, use the total, otherwise the amount.
+            if col == self.COL_TOTAL:
+                # Use the last total if multiple are selected.
                 amount = transactions[-1]._Total
+            else:
+                amount = sum((t.Amount for t in transactions))
+                
             val = self.BankController.Model.float2str(amount)
 
             actions = [
@@ -229,13 +231,11 @@ class TransactionOLV(GroupListView):
         generate the string of characters necessary to perform that action
         in the calculator, and push them.
         """
-        if col == self.COL_AMOUNT:
-            amount = sum((t.Amount for t in transactions))
-        elif col == self.COL_TOTAL:
-            # Use the last total, if multiple are selected.
+        if col == self.COL_TOTAL:
+            # Use the last total if multiple are selected.
             amount = transactions[-1]._Total
         else:
-            raise Exception("onCalculatorAction should only be called with COL_AMOUNT or COL_TOTAL")
+            amount = sum((t.Amount for t in transactions))
 
         pushStr = ('C%s', '+%s=', '-%s=')[i] # Send, Add, Subtract commands
         pushStr %= amount
