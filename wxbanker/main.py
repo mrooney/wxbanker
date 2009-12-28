@@ -229,28 +229,23 @@ def init(path=None, welcome=True):
     from wxbanker import fileservice
     from wxbanker.controller import Controller
 
+    # Push our custom art provider.
+    import wx.lib.art.img2pyartprov as img2pyartprov
+    from wxbanker.art import silk
+    wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(silk))
+
     bankController = Controller(path)
+    # Initialize the wxBanker frame!
+    frame = BankerFrame(bankController, welcome)
 
-    if '--cli' in sys.argv:
-        from wxbanker import clibanker
-        clibanker.main(bankController)
-    else:
-        # Push our custom art provider.
-        import wx.lib.art.img2pyartprov as img2pyartprov
-        from wxbanker.art import silk
-        wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(silk))
+    # Greet the user if it appears this is their first time using wxBanker.
+    config = wx.Config.Get()
+    firstTime = not config.ReadBool("RUN_BEFORE")
+    if firstTime:
+        Publisher().sendMessage("first run")
+        config.WriteBool("RUN_BEFORE", True)
 
-        # Initialize the wxBanker frame!
-        frame = BankerFrame(bankController, welcome)
-
-        # Greet the user if it appears this is their first time using wxBanker.
-        config = wx.Config.Get()
-        firstTime = not config.ReadBool("RUN_BEFORE")
-        if firstTime:
-            Publisher().sendMessage("first run")
-            config.WriteBool("RUN_BEFORE", True)
-
-        return bankController.wxApp
+    return bankController.wxApp
 
 
 def main():
