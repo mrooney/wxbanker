@@ -229,12 +229,13 @@ def init(path=None, welcome=True):
     from wxbanker import fileservice
     from wxbanker.controller import Controller
 
+    bankController = Controller(path)
+    
     # Push our custom art provider.
     import wx.lib.art.img2pyartprov as img2pyartprov
     from wxbanker.art import silk
     wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(silk))
 
-    bankController = Controller(path)
     # Initialize the wxBanker frame!
     frame = BankerFrame(bankController, welcome)
 
