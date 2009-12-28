@@ -106,7 +106,7 @@ class AccountListCtrl(wx.Panel):
         configureButton.Bind(wx.EVT_BUTTON, self.onConfigureButton)
         hideBox.Bind(wx.EVT_CHECKBOX, self.onHideCheck)
         # Set up the link binding.
-        self.Bind(wx.EVT_HYPERLINK, self.onAccountClick)
+        self.Bind(wx.EVT_RADIOBUTTON, self.onAccountClick)
 
         # Subscribe to messages we are concerned about.
         Publisher.subscribe(self.onAccountBalanceChanged, "ormobject.updated.Account.Balance")
@@ -183,19 +183,11 @@ class AccountListCtrl(wx.Panel):
         return self.childSizer.GetItem(index+1).IsShown()
 
     def SelectItem(self, index):
-        """
-        Given an index (zero-based), select the
-        appropriate account.
-        """
-        # Return the old ctrl to an "unselected" state.
-        if self.currentIndex is not None:
-            self.UnhighlightItem(self.currentIndex)
-
+        """Given an index (zero-based), select the appropriate account."""
         if index is not None:
             # Set this as "selected".
             linkCtrl = self.hyperLinks[index]
-            linkCtrl.Visited = False
-            self.HighlightItem(index)
+            linkCtrl.Value = True
             account = self.accountObjects[index]
         else:
             account = None
@@ -224,14 +216,6 @@ class AccountListCtrl(wx.Panel):
                     return
         else: # If we didn't break (or return).
             self.SelectItem(None)
-
-    def HighlightItem(self, index):
-        #print "Highlighting", self.hyperLinks[index].Label[:-1]
-        self.hyperLinks[index].SetNormalColour(wx.BLACK)
-
-    def UnhighlightItem(self, index):
-        #print "Unhighlighting", self.hyperLinks[index].Label[:-1]
-        self.hyperLinks[index].SetNormalColour(wx.BLUE)
 
     def GetCount(self):
         return len(self.accountObjects)
@@ -276,7 +260,8 @@ class AccountListCtrl(wx.Panel):
         balance = account.Balance
 
         # Create the controls.
-        link = bankcontrols.HyperlinkText(self.childPanel, label=account.Name+":", url=str(index))
+        link = wx.RadioButton(self.childPanel, label=account.Name+":")
+        link.AccountIndex = index
         totalText = wx.StaticText(self.childPanel, label=account.float2str(balance))
         self.accountObjects.insert(index, account)
         self.hyperLinks.insert(index, link)
@@ -293,7 +278,7 @@ class AccountListCtrl(wx.Panel):
 
         # Renumber the links after this.
         for linkCtrl in self.hyperLinks[index+1:]:
-            linkCtrl.URL = str( int(linkCtrl.URL)+1 )
+            linkCtrl.AccountIndex = linkCtrl.AccountIndex+1
         if self.currentIndex >= index:
             self.currentIndex += 1
 
@@ -316,7 +301,7 @@ class AccountListCtrl(wx.Panel):
 
         # Renumber the links after this.
         for linkCtrl in self.hyperLinks[index:]:
-            linkCtrl.URL = str( int(linkCtrl.URL)-1 )
+            linkCtrl.AccountIndex = linkCtrl.AccountIndex-1
 
         # Actually remove (sort of) the account sizer.
         self.childSizer.Hide(index+1)
@@ -476,28 +461,22 @@ class AccountListCtrl(wx.Panel):
             wx.TipWindow(self, _("Account names cannot be blank."))
 
     def onAccountRenamed(self, message):
-        """
-        Called when an account has been renamed in the model.
-
-        TODO: don't assume it was the current account that was renamed.
-        """
+        """Called when an account has been renamed in the model."""
         account = message.data
         # Hide the edit control.
         self.onHideEditCtrl(restore=False) #ASSUMPTION!
         # Just renaming won't put it in the right alpha position, so remove it
         # and add it again, letting _PutAccount handle the ordering.
-        self.UnhighlightItem(self.currentIndex)
         self._RemoveItem(self.currentIndex, fixSel=False)
         self.currentIndex = self._PutAccount(account)
-        # Hightlight but don't select, account is already displayed elsewhere.
-        self.HighlightItem(self.currentIndex)
+        self.hyperLinks[self.currentIndex].Value = True
 
     def onAccountClick(self, event):
         """
         This method is called when the current account has
         been changed by clicking on an account name.
         """
-        self.SelectItem(int(event.URL))
+        self.SelectItem(event.EventObject.AccountIndex)
 
     def onHideCheck(self, event=None):
         """
