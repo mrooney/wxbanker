@@ -82,7 +82,7 @@ class AccountListCtrl(wx.Panel):
         self.totalText = wx.StaticText(self.childPanel, label=self.Model.float2str(0))
         self.totalTexts.append(self.totalText)
         miniSizer = wx.BoxSizer()
-        miniSizer.Add(wx.StaticText(self.childPanel, label=_("Total")+":"))
+        miniSizer.Add(wx.StaticText(self.childPanel, label=_("Total")))
         miniSizer.AddStretchSpacer(1)
         miniSizer.Add(self.totalText)
 
@@ -260,7 +260,7 @@ class AccountListCtrl(wx.Panel):
         balance = account.Balance
 
         # Create the controls.
-        link = wx.RadioButton(self.childPanel, label=account.Name+":")
+        link = wx.RadioButton(self.childPanel, label=account.Name)
         link.AccountIndex = index
         totalText = wx.StaticText(self.childPanel, label=account.float2str(balance))
         self.accountObjects.insert(index, account)
@@ -269,8 +269,7 @@ class AccountListCtrl(wx.Panel):
 
         # Put them in an hsizer.
         miniSizer = wx.BoxSizer()
-        miniSizer.Add(link)
-        miniSizer.AddStretchSpacer(1)
+        miniSizer.Add(link, 1)
         miniSizer.Add(totalText, 0, wx.LEFT, 10)
 
         # Insert the hsizer into the correct position in the list.
