@@ -357,6 +357,17 @@ class ModelTests(testbase.TestCaseWithController):
         self.assertEqual(model.Search(unicodeString), [])
         t = a.AddTransaction(1, description=unicodeString)
         self.assertEqual(model.Search(unicodeString), [t])
+        
+    def testAccountsAreSorted(self):
+        model = self.Controller.Model
+        b = model.CreateAccount("B")
+        self.assertEqual(model.Accounts, [b])
+        
+        a = model.CreateAccount("A")
+        self.assertEqual(model.Accounts, [a, b])
+        
+        a.Name = "Z"
+        self.assertEqual(model.Accounts, [b, a])
 
         
 if __name__ == "__main__":

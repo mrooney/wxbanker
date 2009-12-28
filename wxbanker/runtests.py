@@ -19,6 +19,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import doctest, pprint
+from wxbanker.tests import testbase
 from wxbanker import controller
 from wxbanker.testhelpers import displayhook
 from wxbanker.bankobjects import transaction

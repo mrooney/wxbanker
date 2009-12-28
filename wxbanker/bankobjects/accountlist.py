@@ -29,6 +29,9 @@ class AccountList(list):
             account.Parent = self
 
         self.Store = store
+        self.sort()
+        
+        Publisher.subscribe(self.onAccountRenamed, "ormobject.updated.Account.Name")
         
     def GetRecurringTransactions(self):
         allRecurrings = []
@@ -68,6 +71,7 @@ class AccountList(list):
         # Make sure this account knows its parent.
         account.Parent = self
         self.append(account)
+        self.sort()
         Publisher.sendMessage("account.created.%s" % accountName, account)
         return account
 
@@ -88,5 +92,8 @@ class AccountList(list):
                 return False
 
         return True
+    
+    def onAccountRenamed(self, message):
+        self.sort()
 
     Balance = property(GetBalance)

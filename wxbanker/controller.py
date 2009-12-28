@@ -24,7 +24,7 @@ including failing when it should.
 First, set up a generic event subscriber to make sure that events
 are getting published when they should be.
 
->>> from testhelpers import Subscriber
+>>> from wxbanker.testhelpers import Subscriber
 >>> messages = Subscriber()
 >>> len(messages)
 0
@@ -109,7 +109,7 @@ True
 >>> a2 = model.CreateAccount("Another Account")
 >>> len(model.Accounts)
 2
->>> [x.Name for x in sorted(model.Accounts)]
+>>> [a.Name for a in model.Accounts]
 ['Another Account', 'My Renamed Account']
 
 #testTransfer
@@ -292,4 +292,3 @@ class Controller(object):
                     break
 
     AutoSave = property(GetAutoSave, SetAutoSave)
-

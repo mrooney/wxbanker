@@ -34,16 +34,16 @@ class DBUpgradeTest(unittest.TestCase):
         c = Controller(path=self.tmpFile)
         model = c.Model
         accounts = model.Accounts
-        self.assertEqual([a.Name for a in accounts], ["My Checking", "Another"])
-        self.assertEqual(accounts[0].Balance, 25)
-        self.assertEqual(accounts[1].Balance, -123.45)
+        self.assertEqual([a.Name for a in accounts], ["Another", "My Checking"])
+        self.assertEqual(accounts[1].Balance, 25)
+        self.assertEqual(accounts[0].Balance, -123.45)
         
         # Make sure it is persisted!
         model2 = model.Store.GetModel(useCached=False)
         accounts = model2.Accounts
-        self.assertEqual([a.Name for a in accounts], ["My Checking", "Another"])
-        self.assertEqual(accounts[0].Balance, 25)
-        self.assertEqual(accounts[1].Balance, -123.45)
+        self.assertEqual([a.Name for a in accounts], ["Another", "My Checking"])
+        self.assertEqual(accounts[1].Balance, 25)
+        self.assertEqual(accounts[0].Balance, -123.45)
         
         return c
         
