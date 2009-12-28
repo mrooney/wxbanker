@@ -17,7 +17,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import wx
-from wxbanker import bankcontrols, bankexceptions, accountconfigdialog
+from wxbanker import bankcontrols, bankexceptions, accountconfigdialog, localization
 from wx.lib.pubsub import Publisher
 
 
@@ -391,15 +391,18 @@ class AccountListCtrl(wx.Panel):
             self.editCtrl.Bind(wx.EVT_KEY_DOWN, self.onEditCtrlKey)
 
         if pos == -1:
-            pos = self.GetCount()+1
+            pos = 1
+            self.editCtrl.Value = _("Account name")
             self.editCtrl.Bind(wx.EVT_TEXT_ENTER, self.onAddAccount)
         else:
             self.editCtrl.Value = self.accountObjects[pos].Name
-            self.editCtrl.SetSelection(-1, -1)
             pos += 1
             self.childSizer.Hide(pos)
             self.hiddenIndex = pos
             self.editCtrl.Bind(wx.EVT_TEXT_ENTER, self.onRenameAccount)
+            
+        # Select the text inside so it can be typed over.
+        self.editCtrl.SetSelection(-1, -1)
 
         self.childSizer.Insert(pos, self.editCtrl, 0, wx.EXPAND)#, smooth=True)
         self.Parent.Layout()
