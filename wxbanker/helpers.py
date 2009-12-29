@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import wx, datetime
+import wx, datetime, time
 
 def pydate2wxdate(date):
     tt = date.timetuple()
@@ -27,3 +27,7 @@ def pydate2wxdate(date):
 
 def wxdate2pydate(date):
     return datetime.date(date.Year, date.Month+1, date.Day)
+
+class Timer():
+    def __enter__(self): self.start = time.time()
+    def __exit__(self, *args): print time.time() - self.start
