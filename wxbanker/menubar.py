@@ -43,9 +43,11 @@ class BankMenuBar(wx.MenuBar):
         # File menu.
         fileMenu = wx.Menu()
         self.saveMenuItem = fileMenu.Append(wx.ID_SAVE)
+        self.autoSaveMenuItem = fileMenu.AppendCheckItem(self.ID_AUTOSAVE, _("Auto-save"), _("Automatically save changes"))
+        fileMenu.AppendSeparator()
         importCsvMenu = fileMenu.Append(self.ID_IMPORT_CSV, _("Import from CSV"), _("Import transactions from a CSV file"))
         fileMenu.AppendSeparator()
-        self.autoSaveMenuItem = fileMenu.AppendCheckItem(self.ID_AUTOSAVE, _("Auto-save"), _("Automatically save changes"))
+        quitItem = fileMenu.Append(wx.ID_EXIT)
 
         # Settings menu.
         settingsMenu = wx.Menu()
@@ -120,6 +122,7 @@ class BankMenuBar(wx.MenuBar):
             handler = {
                 wx.ID_SAVE: self.onClickSave,
                 self.ID_AUTOSAVE: self.onClickAutoSave,
+                wx.ID_EXIT: self.onClickQuit,
                 self.ID_FAQ: self.onClickFAQs,
                 self.ID_QUESTION: self.onClickAskQuestion,
                 self.ID_REPORTBUG: self.onClickReportBug,
@@ -145,6 +148,9 @@ class BankMenuBar(wx.MenuBar):
 
     def onClickAutoSave(self, event):
         Publisher().sendMessage("user.autosave_toggled", event.Checked())
+        
+    def onClickQuit(self, event):
+        Publisher.sendMessage("quit")
 
     def onSelectCurrency(self, currencyIndex):
         Publisher().sendMessage("user.currency_changed", currencyIndex)

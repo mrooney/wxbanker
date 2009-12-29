@@ -157,8 +157,10 @@ class BankerFrame(wx.Frame):
         self.SetIcon(wx.ArtProvider.GetIcon('wxART_coins'))
 
         self.Panel = BankerPanel(self, bankController)
-        
+
+        Publisher.subscribe(self.onQuit, "quit")
         Publisher.subscribe(self.onWarning, "warning")
+        
         if welcome:
             Publisher.subscribe(self.onFirstRun, "first run")
 
@@ -193,8 +195,14 @@ class BankerFrame(wx.Frame):
         event.Skip()
 
     def OnClose(self, event):
+        """This gets called on Alt+F4."""
         event.Skip() # This must be first, so handlers can override it.
         Publisher.sendMessage("exiting", event)
+        
+    def onQuit(self, message):
+        """The subscriber to the pubsub event which anyone can trigger."""
+        # This will trigger the event, triggering OnClose above.
+        self.Close()
 
     def onFirstRun(self, message):
         welcomeMsg = _("It looks like this is your first time using wxBanker!")
