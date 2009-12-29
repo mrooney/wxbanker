@@ -145,9 +145,16 @@ class ModelTests(testbase.TestCaseWithController):
         # Make sure the listener updated state appropriately
         self.assertTrue(parent)
 
-    def testNewAccountCanGetSiblings(self):
+    def testSiblingsSingleAccount(self):
         baby = self.Model.CreateAccount("Baby")
-        self.assertEqual(list(baby.GetSiblings()), [])
+        self.assertEqual(baby.GetSiblings(), [])
+        
+    def testSiblingsTwoAccounts(self):
+        a = self.Model.CreateAccount("A")
+        b = self.Model.CreateAccount("B")
+        
+        self.assertEqual(a.GetSiblings(), [b])
+        self.assertEqual(b.GetSiblings(), [a])
 
     def testTransfersAreLinked(self):
         a, b, atrans, btrans = self.createLinkedTransfers()

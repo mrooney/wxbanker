@@ -71,7 +71,7 @@ class Account(ORMObject):
         return float(strAmount)
 
     def GetSiblings(self):
-        return (account for account in self.Parent if account is not self)
+        return [account for account in self.Parent if account is not self]
 
     def SetCurrency(self, currency):
         if type(currency) == int:
