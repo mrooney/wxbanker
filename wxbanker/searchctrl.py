@@ -27,7 +27,10 @@ class SearchCtrl(wx.Panel):
         self.bankController = bankController
 
         self.searchCtrl = wx.SearchCtrl(self, value="", size=(200, -1), style=wx.TE_PROCESS_ENTER)
-        self.searchCtrl.SetCancelBitmap(wx.ArtProvider.GetBitmap('wxART_cancel'))
+        # Try to grab the GTK system icon for clearing a search, otherwise we'll get the wxPython one.
+        clearBitmap = wx.ArtProvider.GetBitmap('edit-clear')
+        if clearBitmap:
+            self.searchCtrl.SetCancelBitmap(clearBitmap)
         self.searchCtrl.ShowCancelButton(True)
         self.searchCtrl.ShowSearchButton(False)
         self.searchCtrl.DescriptiveText = _("Search transactions")
