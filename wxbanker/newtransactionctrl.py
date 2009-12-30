@@ -246,7 +246,7 @@ class NewTransactionRow(bankcontrols.GBRow):
         handler = self.dateCtrl.customKeyHandler
         self.descCtrl = bankcontrols.HintedTextCtrl(parent, size=(140, -1), style=wx.TE_PROCESS_ENTER, hint=_("Description"), icon="wxART_page_edit", handler=handler)
         self.amountCtrl = bankcontrols.HintedTextCtrl(parent, size=(90, -1), style=wx.TE_PROCESS_ENTER|wx.TE_RIGHT, hint=_("Amount"), icon="wxART_money_dollar", handler=handler)
-
+        
         # The add button.
         self.newButton = wx.BitmapButton(parent, bitmap=wx.ArtProvider.GetBitmap('wxART_money_add'))
         self.newButton.SetToolTipString(_("Enter this transaction"))
@@ -330,6 +330,10 @@ class NewTransactionRow(bankcontrols.GBRow):
     def onAccountChanged(self, message):
         account = message.data
         self.CurrentAccount = account
+        # Set the default focus, but not if there aren't any accounts since it will
+        # result in a distracting flashing cursor that can't be acted on.
+        if account:
+            self.defaultFocus()
 
     def onAmountChar(self, event):
         wx.CallAfter(self.updateAddIcon)
@@ -441,5 +445,11 @@ class NewTransactionRow(bankcontrols.GBRow):
         self.recursCheck.Value = False
         self.onTransferCheck()
         self.onRecurringCheck()
+        self.defaultFocus()
+        
+    def defaultFocus(self):
         # Give focus to the description ctrl so the user can enter another transaction.
+        # By default a focus will select the field, but that's annoying in this case, so restore the state.
+        preSelection = self.descCtrl.GetSelection()
         self.descCtrl.SetFocus()
+        self.descCtrl.SetSelection(*preSelection)
