@@ -99,7 +99,7 @@ class TransactionPanel(wx.Panel):
         subpanel.Sizer.Add(transactionCtrl, 1, wx.EXPAND)
 
         self.Sizer = mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(searchCtrl, 0, wx.ALIGN_CENTER_HORIZONTAL)
+        mainSizer.Add(searchCtrl, 0, wx.ALIGN_RIGHT)
         mainSizer.Add(subpanel, 1, wx.EXPAND)
         mainSizer.Add(newTransCtrl, 0, wx.EXPAND)
 
