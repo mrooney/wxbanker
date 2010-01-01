@@ -18,6 +18,7 @@
 
 import datetime
 from wxbanker.plots.plotfactory import BasePlotImportException
+from wxbanker.analyzers import MonthlyAnalyzer
 
 # Needs Numeric or numarray or NumPy
 try:
@@ -62,6 +63,11 @@ class BasePlot(object):
             points.append(points[-1])
 
         return points[:-1], startDate, daysPerPoint or smallDelta
+    
+    def plotMonthly(self, transactions):
+        monthly = MonthlyAnalyzer()
+        earnings = monthly.GetEarnings(transactions)
+        return earnings
     
     def plotBalance(self, totals, plotSettings, xunits):
         totals, startDate, every = self.getPoints(totals, plotSettings['Granularity'])

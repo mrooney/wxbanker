@@ -34,14 +34,14 @@ class AnalyzerTests(testbase.TestCaseWithController):
         monthly = MonthlyAnalyzer()
         monthly.Today = datetime.date(2010, 1, 15)
         start, end = monthly.GetDateRange()
-        self.assertEqual(start, datetime.date(2008, 12, 31))
+        self.assertEqual(start, datetime.date(2009, 1, 1))
         self.assertEqual(end, datetime.date(2009, 12, 31))
         
     def testMonthlyDateRangeOne(self):
         monthly = MonthlyAnalyzer(months=1)
         monthly.Today = datetime.date(2010, 1, 15)
         start, end = monthly.GetDateRange()
-        self.assertEqual(start, datetime.date(2009, 11, 30))
+        self.assertEqual(start, datetime.date(2009, 12, 1))
         self.assertEqual(end, datetime.date(2009, 12, 31))
         
     def testMonthlyAmountsDefault(self):

@@ -15,8 +15,8 @@ except ImportError:
 class CairoPlotPanelFactory(object):
     def createPanel(self, parent, bankController):
         return CairoPlotPanel(parent, bankController)
-
-class CairoPlotPanel(wx.Panel, baseplot.BasePlot):
+    
+class BaseCairoPlotPanel(wx.Panel, baseplot.BasePlot):
     def __init__(self, parent, bankController):
         wx.Panel.__init__(self, parent)
         baseplot.BasePlot.__init__(self)
@@ -26,6 +26,45 @@ class CairoPlotPanel(wx.Panel, baseplot.BasePlot):
         self.data = None
         self.x_labels = None
         
+    def OnSize(self, event):
+        self.Refresh()
+        
+class CairoPlotPanelMonthly(BaseCairoPlotPanel):
+    def plotBalance(self, totals, plotSettings):
+        model = self.bankController.Model
+        transactions = model.GetTransactions()
+        earnings = baseplot.BasePlot.plotMonthly(self, transactions)
+        self.data = [[e] for e in earnings]
+        self.x_labels = [model.float2str(e) for e in earnings]
+        
+    def OnPaint(self, event):
+        if self.data is None:
+            return
+        
+        dc = wx.BufferedPaintDC(self)
+        dc.Clear()
+        
+        cr = wx.lib.wxcairo.ContextFromDC(dc)
+        size = self.GetClientSize()
+        cairoplot.vertical_bar_plot(
+            cr.get_target(),
+            data = self.data,
+            width = size.width, height = size.height,
+            border = 20, 
+            #axis = True,
+            #dots = 0,
+            grid = True,
+            colors = ["green"],
+            #series_legend = True,
+            #x_labels=self.x_labels,
+            ##y_formatter=lambda s: self.bankController.Model.float2str(s),
+            #x_title=_("Earnings"),
+            #y_title=_("Month"),
+            rounded_corners = True,
+            x_labels = self.x_labels
+        )
+        
+class CairoPlotPanel(BaseCairoPlotPanel):
     def plotBalance(self, totals, plotSettings, xunits="Days"):
         amounts, dates, strdates, trendable = baseplot.BasePlot.plotBalance(self, totals, plotSettings, xunits)
         data = [(i, total) for i, total in enumerate(amounts)]
@@ -48,9 +87,6 @@ class CairoPlotPanel(wx.Panel, baseplot.BasePlot):
         
         self.x_labels = labels
         self.Refresh()
-    
-    def OnSize(self, event):
-        self.Refresh()
         
     def OnPaint(self, event):
         if self.data is None:
@@ -62,7 +98,8 @@ class CairoPlotPanel(wx.Panel, baseplot.BasePlot):
         cr = wx.lib.wxcairo.ContextFromDC(dc)
         size = self.GetClientSize()
         cairoplot.scatter_plot(
-            cr.get_target(), data = self.data,
+            cr.get_target(),
+            data = self.data,
             width = size.width, height = size.height,
             border = 20, 
             axis = True,

@@ -27,9 +27,8 @@ class MonthlyAnalyzer:
         self.Months = months
         
     def GetDateRange(self):
-        startMonth = self.Today - relativedelta(months=self.Months+1)
-        lastDay = calendar.monthrange(startMonth.year, startMonth.month)[1]
-        start = datetime.date(startMonth.year, startMonth.month, lastDay)
+        startMonth = self.Today - relativedelta(months=self.Months)
+        start = datetime.date(startMonth.year, startMonth.month, 1)
         
         endMonth = self.Today - relativedelta(months=1)
         lastDay = calendar.monthrange(endMonth.year, endMonth.month)[1]
