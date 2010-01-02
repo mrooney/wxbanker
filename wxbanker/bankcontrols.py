@@ -156,7 +156,6 @@ class HintedTextCtrl(wx.SearchCtrl):
             self.SetSearchBitmap(wx.ArtProvider.GetBitmap(conf['icon']))
             self.ShowSearchButton(True)
 
-        self.SetToolTipString(conf['hint'])
         self.SetDescriptiveText(conf['hint'])
 
         try:
