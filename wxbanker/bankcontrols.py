@@ -41,8 +41,10 @@ def DateCtrlFactory(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY):
     This factory prefers creating a generic (non-native) control as it is more flexible,
     but will return a native if necessary (Windows < wx 2.8.8.0, OSX).
     """
+    isGeneric = False
     try:
         DatePickerClass = wx.GenericDatePickerCtrl
+        isGeneric = True
     except AttributeError:
         DatePickerClass = wx.DatePickerCtrl
 
@@ -50,7 +52,7 @@ def DateCtrlFactory(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY):
     dateCtrl.SetToolTipString(_("Date"))
     dateCtrl.customKeyHandler = None
 
-    if isinstance(dateCtrl, wx.GenericDatePickerCtrl):
+    if isGeneric:
         def onDateChar(event):
             key = event.GetKeyCode()
             incr = 0
