@@ -239,6 +239,9 @@ def init(path=None, welcome=True):
 
     bankController = Controller(path)
     
+    # We can initialize the wx locale now that the wx.App is initialized.
+    localization.initWxLocale()
+    
     # Push our custom art provider.
     import wx.lib.art.img2pyartprov as img2pyartprov
     from wxbanker.art import silk

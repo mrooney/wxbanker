@@ -16,12 +16,11 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-# Set the default locale.
-import locale, wx
+# Set the locale to the system default.
+import locale, os, gettext, sys, wx
 locale.setlocale(locale.LC_ALL, '')
 
 # Define the domain and localedir.
-import os
 APP = 'wxbanker'
 # Figure out the directory...
 if os.path.exists('/usr/share/locale/es/LC_MESSAGES/wxbanker.mo'):
@@ -32,12 +31,10 @@ else:
     DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'locale')
 
 # Install gettext.
-import gettext
 gettext.install(APP, DIR, unicode=True)
 wxlang = wx.LANGUAGE_DEFAULT
 
 # Check if the user forced a language with --lang=XX.
-import sys
 larg = '--lang='
 for arg in sys.argv[1:]:
     if arg.startswith(larg):
@@ -54,5 +51,11 @@ for arg in sys.argv[1:]:
 
         break
 
-# Store it as a module variable so it doesn't go out of scope!
-wxlocale = wx.Locale(wxlang)
+def initWxLocale():
+    """
+    Initialize the wxPython locale so stock strings are translated.
+    Call this AFTER the wx.App is initialized to avoid crashes.
+    """
+    # Store it as a module variable so it doesn't go out of scope!
+    global wxlocale
+    wxlocale = wx.Locale(wxlang)
