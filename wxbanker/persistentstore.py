@@ -37,12 +37,13 @@ import sqlite3
 from wx.lib.pubsub import Publisher
 
 from wxbanker import currencies, debug
-from bankobjects.account import Account
-from bankobjects.accountlist import AccountList
-from bankobjects.bankmodel import BankModel
-from bankobjects.transaction import Transaction
-from bankobjects.transactionlist import TransactionList
-from bankobjects.recurringtransaction import RecurringTransaction
+from wxbanker.bankobjects.account import Account
+from wxbanker.bankobjects.accountlist import AccountList
+from wxbanker.bankobjects.bankmodel import BankModel
+from wxbanker.bankobjects.transaction import Transaction
+from wxbanker.bankobjects.transactionlist import TransactionList
+from wxbanker.bankobjects.recurringtransaction import RecurringTransaction
+from wxbanker.bankobjects.ormobject import ORMKeyValueObject
 
 class PersistentStore:
     """
@@ -51,7 +52,7 @@ class PersistentStore:
     """
     def __init__(self, path, autoSave=True):
         self.Subscriptions = []
-        self.Version = 8
+        self.Version = 9
         self.Path = path
         self.AutoSave = False
         self.Dirty = False
@@ -171,6 +172,14 @@ class PersistentStore:
         self.dbconn.close()
         for callback, topic in self.Subscriptions:
             Publisher.unsubscribe(callback)
+            
+    def PopulateKeyValues(self, ormkvobj):
+        table = ormkvobj.ORM_TABLE
+        for result in self.dbconn.cursor().execute("SELECT * from %s" % table).fetchall():
+            autoid, key, value = result
+            # eval the value since we store it repr'd. However null comes out as None, so cast to a string.
+            value = eval(str(value))
+            setattr(ormkvobj, key, value)
 
     def onBatchEvent(self, message):
         batchType = message.topic[1].lower()
@@ -267,6 +276,9 @@ class PersistentStore:
         elif fromVer == 7:
             # Force a re-sync for the 0.6.1 release after fixing LP: #496341
             self.needsSync = True
+        elif fromVer == 8:
+            # Add the LastAccountId meta key.
+            cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('LastAccountId', None))
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
 
@@ -418,17 +430,20 @@ class PersistentStore:
         ormobj = data
         
         table = ormobj.ORM_TABLE
-        
-        # Figure out the name of the column
-        colname = attrname.strip("_")
-        colname = colname[0].lower() + colname[1:]
-        colname = {"repeatOn": "repeatsOn", "source": "sourceId", "linkedTransaction": "linkId"}.get(colname, colname)
-        
-        query = "UPDATE %s SET %s=? WHERE id=?" % (table, colname)
-        objId = ormobj.ID
         value = ormobj.getAttrValue(attrname)
         
-        self.dbconn.cursor().execute(query, (value, objId))
+        if isinstance(ormobj, ORMKeyValueObject):
+            result = self.dbconn.cursor().execute("UPDATE %s SET value=? WHERE name=?" % table, (repr(value), attrname))
+        else:
+            # Figure out the name of the column
+            colname = attrname.strip("_")
+            colname = colname[0].lower() + colname[1:]
+            colname = {"repeatOn": "repeatsOn", "source": "sourceId", "linkedTransaction": "linkId"}.get(colname, colname)
+            
+            query = "UPDATE %s SET %s=? WHERE id=?" % (table, colname)
+            objId = ormobj.ID    
+            self.dbconn.cursor().execute(query, (value, objId))
+            
         self.commitIfAppropriate()
         debug.debug("Persisting %s.%s update (%s)" % (classname, attrname, value))
 

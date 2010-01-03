@@ -34,9 +34,12 @@ class ORMObject(object):
     def __setattr__(self, attrname, val):
         object.__setattr__(self, attrname, val)
         if not self.IsFrozen and self.ID is not None:
-            if attrname in self.ORM_ATTRIBUTES:
-                classname = self.__class__.__name__
-                Publisher.sendMessage("ormobject.updated.%s.%s" % (classname, attrname), self)
+            self.publishIfAppropriate(attrname, val)
+
+    def publishIfAppropriate(self, attrname, val):
+        if attrname in self.ORM_ATTRIBUTES:
+            classname = self.__class__.__name__
+            Publisher.sendMessage("ormobject.updated.%s.%s" % (classname, attrname), self)
             
     def getAttrValue(self, attrname):
         from wxbanker.bankobjects.account import Account
@@ -56,3 +59,18 @@ class ORMObject(object):
         for attr in self.ORM_ATTRIBUTES:
             result.append(self.getAttrValue(attr))
         return result
+    
+class ORMKeyValueObject(ORMObject):
+    """
+    This is an ORM object whose ORM_ATTRIBUTES are key:value pairs in a table.
+    """
+    def __init__(self, store):
+        self.IsFrozen = True
+        store.PopulateKeyValues(self)
+        self.IsFrozen = False
+    
+    def __setattr__(self, attrname, val):
+        object.__setattr__(self, attrname, val)
+        if not self.IsFrozen:
+            self.publishIfAppropriate(attrname, val)
+            

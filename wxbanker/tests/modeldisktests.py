@@ -344,9 +344,12 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         self.assertTrue(t2.RecurringParent is rt2)
         
     def testLastAccountIsStored(self):
-        pass
-
-
+        model1 = self.Controller.Model
+        a = model1.CreateAccount("A")
+        model1.LastAccountId = a.ID
+        
+        model2 = model1.Store.GetModel(useCached=False)
+        self.assertEqual(model2.LastAccountId, a.ID)
     
 if __name__ == "__main__":
     unittest.main()

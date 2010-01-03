@@ -22,12 +22,16 @@ from wx.lib.pubsub import Publisher
 import re, datetime
 
 from wxbanker import currencies
+from wxbanker.bankobjects.ormobject import ORMKeyValueObject
 
-class BankModel(object):
+class BankModel(ORMKeyValueObject):
+    ORM_TABLE = "meta"
+    ORM_ATTRIBUTES = ["LastAccountId"]
+    
     def __init__(self, store, accountList):
+        ORMKeyValueObject.__init__(self, store)
         self.Store = store
         self.Accounts = accountList
-        self.LastAccount = None
 
         Publisher().subscribe(self.onCurrencyChanged, "user.currency_changed")
         Publisher().subscribe(self.onAccountChanged, "view.account changed")
@@ -170,7 +174,10 @@ class BankModel(object):
         
     def onAccountChanged(self, message):
         account = message.data
-        self.LastAccount = account
+        if account:
+            self.LastAccountId = account.ID
+        else:
+            self.LastAccountId = None
 
     def __eq__(self, other):
         return self.Accounts == other.Accounts
