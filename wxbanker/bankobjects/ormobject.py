@@ -39,9 +39,9 @@ class ORMObject(object):
                 Publisher.sendMessage("ormobject.updated.%s.%s" % (classname, attrname), self)
             
     def getAttrValue(self, attrname):
-        from account import Account
-        from transaction import Transaction
-        
+        from wxbanker.bankobjects.account import Account
+        from wxbanker.bankobjects.transaction import Transaction
+
         value = getattr(self, attrname)
         if isinstance(value, (Account, Transaction)):
             value = value.ID
