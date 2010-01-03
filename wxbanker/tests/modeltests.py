@@ -379,6 +379,14 @@ class ModelTests(testbase.TestCaseWithController):
     def testDefaultLastAccountIsNone(self):
         model = self.Controller.Model
         self.assertEqual(model.LastAccount, None)
+        
+    def testLastAccountIsUpdated(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        self.assertEqual(model.LastAccount, None)
+        Publisher.sendMessage("view.account changed", a)
+        self.assertEqual(model.LastAccount, a)
+        
 
         
 if __name__ == "__main__":

@@ -342,6 +342,9 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         rt2 = model2.GetRecurringTransactions()[0]
         self.assertEqual(t2.RecurringParent, rt)
         self.assertTrue(t2.RecurringParent is rt2)
+        
+    def testLastAccountIsStored(self):
+        pass
 
 
     

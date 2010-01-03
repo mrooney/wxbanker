@@ -30,6 +30,7 @@ class BankModel(object):
         self.LastAccount = None
 
         Publisher().subscribe(self.onCurrencyChanged, "user.currency_changed")
+        Publisher().subscribe(self.onAccountChanged, "view.account changed")
 
     def GetBalance(self):
         return self.Accounts.Balance
@@ -166,6 +167,10 @@ class BankModel(object):
     def onCurrencyChanged(self, message):
         currencyIndex = message.data
         self.setCurrency(currencyIndex)
+        
+    def onAccountChanged(self, message):
+        account = message.data
+        self.LastAccount = account
 
     def __eq__(self, other):
         return self.Accounts == other.Accounts
