@@ -27,6 +27,7 @@ class BankModel(object):
     def __init__(self, store, accountList):
         self.Store = store
         self.Accounts = accountList
+        self.LastAccount = None
 
         Publisher().subscribe(self.onCurrencyChanged, "user.currency_changed")
 

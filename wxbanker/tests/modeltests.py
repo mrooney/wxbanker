@@ -375,6 +375,10 @@ class ModelTests(testbase.TestCaseWithController):
         
         a.Name = "Z"
         self.assertEqual(model.Accounts, [b, a])
+        
+    def testDefaultLastAccountIsNone(self):
+        model = self.Controller.Model
+        self.assertEqual(model.LastAccount, None)
 
         
 if __name__ == "__main__":
