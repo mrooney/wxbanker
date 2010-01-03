@@ -55,13 +55,13 @@ class ManagePanel(wx.Panel):
         topSizer.Add(leftPanel, 0, wx.EXPAND|wx.ALL, 5)
         topSizer.Add(transactionPanel, 1, wx.EXPAND|wx.ALL, 0)
 
-        #subscribe to messages that interest us
+        # Subscribe to messages that interest us.
         Publisher().subscribe(self.onChangeAccount, "view.account changed")
         Publisher().subscribe(self.onCalculatorToggled, "CALCULATOR.TOGGLED")
 
-        # Select the first account by default, if there are any.
-        # Windows needs a delay, to work around LP #339860
-        wx.CallLater(50, accountCtrl.SelectVisibleItem, 0)
+        # Select the last-selected account.
+        # Windows needs a delay, to work around LP #339860.
+        wx.CallLater(50, accountCtrl.SelectItemById, bankController.Model.LastAccountId)
 
         self.Layout()
 

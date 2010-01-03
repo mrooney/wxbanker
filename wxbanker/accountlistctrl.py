@@ -132,7 +132,7 @@ class AccountListCtrl(wx.Panel):
         # Update the checkbox at the end, so everything else is initialized.
         hideBox.Value = wx.Config.Get().ReadBool("HIDE_ZERO_BALANCE_ACCOUNTS")
         # Setting the value doesn't trigger an event, so force an update.
-        self.onHideCheck()
+        self.onHideCheck(reselect=False)
 
         self.staticBoxSizer.Layout()
         #self.staticBoxSizer.SetSmooth(True)
@@ -200,6 +200,18 @@ class AccountListCtrl(wx.Panel):
 
         # Tell the parent we changed.
         Publisher().sendMessage("view.account changed", account)
+        
+    def SelectItemById(self, theId):
+        # If there is no recently selected account, select the first visible if one exists.
+        print theId
+        if theId is None:
+            self.SelectVisibleItem(0)
+        else:
+            for i, account in enumerate(self.accountObjects):
+                if account.ID == theId:
+                    self.SelectItem(i)
+                    print account.Name
+                    break
 
     def SelectVisibleItem(self, index):
         """
@@ -480,7 +492,7 @@ class AccountListCtrl(wx.Panel):
         """
         self.SelectItem(event.EventObject.AccountIndex)
 
-    def onHideCheck(self, event=None):
+    def onHideCheck(self, event=None, reselect=True):
         """
         This method is called when the user checks/unchecks
         the option to hide zero-balance accounts.
@@ -497,8 +509,9 @@ class AccountListCtrl(wx.Panel):
 
         self.Parent.Layout()
 
-        # We hid the current selection, so select the first available.
-        if checked and not self.IsVisible(self.currentIndex):
-            self.SelectVisibleItem(0)
+        if reselect:
+            # We hid the current selection, so select the first available.
+            if checked and not self.IsVisible(self.currentIndex):
+                self.SelectVisibleItem(0)
 
         wx.Config.Get().WriteBool("HIDE_ZERO_BALANCE_ACCOUNTS", checked)

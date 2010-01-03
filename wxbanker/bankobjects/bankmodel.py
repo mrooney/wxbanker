@@ -30,6 +30,7 @@ class BankModel(ORMKeyValueObject):
     
     def __init__(self, store, accountList):
         ORMKeyValueObject.__init__(self, store)
+        print self.LastAccountId
         self.Store = store
         self.Accounts = accountList
 
