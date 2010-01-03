@@ -203,15 +203,16 @@ class AccountListCtrl(wx.Panel):
         
     def SelectItemById(self, theId):
         # If there is no recently selected account, select the first visible if one exists.
-        print theId
         if theId is None:
             self.SelectVisibleItem(0)
         else:
             for i, account in enumerate(self.accountObjects):
                 if account.ID == theId:
                     self.SelectItem(i)
-                    print account.Name
                     break
+            else:
+                # This seems rather unlikely, but let's handle it gracefully.
+                self.SelectVisibleItem(0)
 
     def SelectVisibleItem(self, index):
         """
