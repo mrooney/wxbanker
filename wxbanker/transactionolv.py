@@ -280,12 +280,8 @@ class TransactionOLV(GroupListView):
             self.ensureVisible(-1)
 
     def onSearch(self, message):
-        searchString, accountScope, match, caseSens = message.data
-
-        if accountScope == 0: # Search in just current account.
-            account = self.CurrentAccount
-        else: # Search in all accounts.
-            account = None
+        searchString, match, caseSens = message.data
+        account = self.CurrentAccount
 
         matches = self.BankController.Model.Search(searchString, account=account, matchIndex=match, matchCase=caseSens)
         self.SetObjects(matches)

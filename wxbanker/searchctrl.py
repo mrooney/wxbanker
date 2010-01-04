@@ -35,9 +35,6 @@ class SearchCtrl(wx.Panel):
         self.searchCtrl.ShowSearchButton(False)
         self.searchCtrl.DescriptiveText = _("Search transactions")
 
-        self.searchInChoices = [_("Current Account"), _("All Accounts")]
-        self.searchInBox = bankcontrols.CompactableComboBox(self, value=self.searchInChoices[0], choices=self.searchInChoices, style=wx.CB_READONLY)
-
         # The More/Less button.
         self.moreButton = bankcontrols.MultiStateButton(self, labelDict={True: _("More options"), False: _("Less options")}, state=True)
 
@@ -50,9 +47,6 @@ class SearchCtrl(wx.Panel):
         topSizer = wx.BoxSizer()
         topSizer.Add(self.searchCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
         topSizer.AddSpacer(10)
-        topSizer.Add(wx.StaticText(self, label=_("In: ")), 0, wx.ALIGN_CENTER_VERTICAL)
-        topSizer.Add(self.searchInBox, 0, wx.ALIGN_CENTER_VERTICAL)
-        topSizer.AddSpacer(10)
         topSizer.Add(self.moreButton, 0, wx.ALIGN_CENTER_VERTICAL)
 
         self.moreSizer = moreSizer = wx.BoxSizer()
@@ -64,7 +58,6 @@ class SearchCtrl(wx.Panel):
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
         self.Sizer.Add(topSizer, 0, wx.ALIGN_CENTER)
         self.Sizer.Add(moreSizer, 0, wx.ALIGN_CENTER)
-        self.searchInBox.Compact()
         self.matchBox.Compact()
         self.Layout()
 
@@ -74,7 +67,6 @@ class SearchCtrl(wx.Panel):
         self.moreButton.Bind(wx.EVT_BUTTON, self.onToggleMore)
         # Bindings to search on settings change automatically.
         self.matchBox.Bind(wx.EVT_COMBOBOX, self.onSearchTrigger)
-        self.searchInBox.Bind(wx.EVT_COMBOBOX, self.onSearchTrigger)
         self.caseCheck.Bind(wx.EVT_CHECKBOX, self.onSearchTrigger)
 
         # Initially hide the extra search options.
@@ -87,11 +79,10 @@ class SearchCtrl(wx.Panel):
     def onSearch(self, event=None):
         # TODO: enable search button in ctrl and appropriate event handling
         searchString = self.searchCtrl.Value # For a date, should be YYYY-MM-DD.
-        accountScope = self.searchInChoices.index(self.searchInBox.Value)
         matchType = self.matchChoices.index(self.matchBox.Value)
         caseSens = self.caseCheck.Value
 
-        searchInfo = (searchString, accountScope, matchType, caseSens)
+        searchInfo = (searchString, matchType, caseSens)
         Publisher().sendMessage("SEARCH.INITIATED", searchInfo)
 
     def onCancel(self, event):
