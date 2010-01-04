@@ -332,7 +332,8 @@ class NewTransactionRow(bankcontrols.GBRow):
         self.CurrentAccount = account
         # Set the default focus, but not if there aren't any accounts since it will
         # result in a distracting flashing cursor that can't be acted on.
-        if account:
+        # Also, don't focus if the transaction tab isn't being viewed, otherwise it snaps us back from viewing graphs.
+        if self.Parent.IsShownOnScreen() and account:
             self.defaultFocus()
 
     def onAmountChar(self, event):
