@@ -31,7 +31,7 @@ class GUITests(testbase.TestCaseHandlingConfig):
         self.App = wx.appInst
         self.Frame = self.App.TopWindow
         self.Model = self.Frame.Panel.bankController.Model
-        self.OLV = self.Frame.Panel.managePanel.transactionPanel.transactionCtrl
+        self.OLV = wx.FindWindowByName("TransactionOLV")
         
     def tearDown(self):
         for account in self.Model.Accounts[:]:

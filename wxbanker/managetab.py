@@ -22,7 +22,8 @@ from wxbanker import searchctrl, accountlistctrl, transactionctrl
 from wxbanker.transactionolv import TransactionOLV as TransactionCtrl
 from wxbanker.calculator import CollapsableWidget, SimpleCalculator
 from wx.lib.pubsub import Publisher
-from wxbanker import localization
+from wxbanker import localization, summarytab
+from wxbanker.plots.plotfactory import PlotFactory
 
 
 class ManagePanel(wx.Panel):
@@ -49,11 +50,11 @@ class ManagePanel(wx.Panel):
             widget.SetMinSize((accountCtrl.BestSize[0], -1))
 
         ## Right side, the transaction panel:
-        self.transactionPanel = transactionPanel = TransactionPanel(self, bankController)
+        self.rightPanel = RightPanel(self, bankController)
 
         self.Sizer = topSizer = wx.BoxSizer()
         topSizer.Add(leftPanel, 0, wx.EXPAND|wx.ALL, 5)
-        topSizer.Add(transactionPanel, 1, wx.EXPAND|wx.ALL, 0)
+        topSizer.Add(self.rightPanel, 1, wx.EXPAND|wx.ALL, 0)
 
         # Subscribe to messages that interest us.
         Publisher().subscribe(self.onChangeAccount, "view.account changed")
@@ -78,10 +79,44 @@ class ManagePanel(wx.Panel):
 
     def onChangeAccount(self, message):
         account = message.data
-        self.transactionPanel.setAccount(account)
+        self.rightPanel.transactionPanel.setAccount(account)
 
     def getCurrentAccount(self):
         return self.accountCtrl.GetCurrentAccount()
+    
+
+class RightPanel(wx.Panel):
+    def __init__(self, parent, bankController):
+        wx.Panel.__init__(self, parent)
+        self.bankController = bankController
+        
+        # The search control
+        self.searchCtrl = searchctrl.SearchCtrl(self, bankController)
+        
+        # The notebook
+        self.notebook = notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
+        self.transactionPanel = TransactionPanel(self, bankController)
+        notebook.AddPage(self.transactionPanel, _("Transactions"))
+        self.AddSummaryTab()
+        self.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.onTabSwitching)
+        
+        # Layout
+        self.Sizer = wx.BoxSizer(wx.VERTICAL)
+        self.Sizer.Add(self.searchCtrl, 0, wx.ALIGN_RIGHT)
+        self.Sizer.Add(self.notebook, 1, wx.EXPAND)
+        
+    def AddSummaryTab(self, factoryName=None):
+        plotFactory = PlotFactory.getFactory(factoryName)
+        if plotFactory is not None:
+            summaryPanel = summarytab.SummaryPanel(self.notebook, plotFactory, self.bankController)
+            self.notebook.AddPage(summaryPanel, _("Summary"))
+            
+    def onTabSwitching(self, event):
+        tabIndex = event.Selection
+        page = self.notebook.GetPage(tabIndex)
+        if isinstance(page, summarytab.SummaryPanel):
+            # If we are switching to the summary (graph) tab, update it!
+            page.update()
 
 
 class TransactionPanel(wx.Panel):
@@ -91,7 +126,6 @@ class TransactionPanel(wx.Panel):
 
         subpanel = wx.Panel(self)
 
-        self.searchCtrl = searchCtrl = searchctrl.SearchCtrl(self, bankController)
         self.transactionCtrl = transactionCtrl = TransactionCtrl(subpanel, bankController)
         self.newTransCtrl = newTransCtrl = transactionctrl.TransactionCtrl(self)
 
@@ -99,7 +133,6 @@ class TransactionPanel(wx.Panel):
         subpanel.Sizer.Add(transactionCtrl, 1, wx.EXPAND)
 
         self.Sizer = mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(searchCtrl, 0, wx.ALIGN_RIGHT)
         mainSizer.Add(subpanel, 1, wx.EXPAND)
         mainSizer.Add(newTransCtrl, 0, wx.EXPAND)
 

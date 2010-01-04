@@ -36,7 +36,7 @@ from wxbanker import bankcontrols
 
 class TransactionOLV(GroupListView):
     def __init__(self, parent, bankController):
-        GroupListView.__init__(self, parent, style=wx.LC_REPORT|wx.SUNKEN_BORDER)
+        GroupListView.__init__(self, parent, style=wx.LC_REPORT|wx.SUNKEN_BORDER, name="TransactionOLV")
         self.CurrentAccount = None
         self.BankController = bankController
 

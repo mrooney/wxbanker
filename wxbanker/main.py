@@ -36,37 +36,22 @@ from wx.lib.pubsub import Publisher
 # wxBanker
 from wxbanker.menubar import BankMenuBar
 from wxbanker import localization, messagepanel, debug
-
-# Tabs
-from wxbanker import managetab, summarytab
-from plots.plotfactory import PlotFactory
+from wxbanker import managetab
 
 
 class BankerPanel(wx.Panel):
     def __init__(self, parent, bankController):
         wx.Panel.__init__(self, parent)
         self.bankController = bankController
+        
+        self.managePanel = managetab.ManagePanel(self, bankController)
+        
+        Publisher.subscribe(self.onRecurringTransactionAdded, "recurringtransaction.created")
 
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
-        self.notebook = notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
-
-        self.managePanel = managetab.ManagePanel(notebook, bankController)
-        notebook.AddPage(self.managePanel, _("Transactions"))
-        
-        self.AddSummaryTab()
-            
-        self.Sizer.Add(self.notebook, 1, wx.EXPAND)
-
-        self.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.onTabSwitching)
-        Publisher.subscribe(self.onRecurringTransactionAdded, "recurringtransaction.created")
+        self.Sizer.Add(self.managePanel, 1, wx.EXPAND)
         
         wx.CallLater(1000, self.CheckRecurringTransactions)
-    
-    def AddSummaryTab(self, factoryName=None):
-        plotFactory = PlotFactory.getFactory(factoryName)
-        if plotFactory is not None:
-            summaryPanel = summarytab.SummaryPanel(self.notebook, plotFactory, self.bankController)
-            self.notebook.AddPage(summaryPanel, _("Summary"))
         
     def AddMessagePanel(self, panel):
         self.Sizer.Insert(0, panel, 0, wx.EXPAND)
@@ -137,13 +122,6 @@ class BankerPanel(wx.Panel):
             message += _("The first transaction will occur on %(date)s") % {"date": firstDate}
             mpanel = messagepanel.MessagePanel(self, message)
             self.AddMessagePanel(mpanel)
-
-    def onTabSwitching(self, event):
-        tabIndex = event.Selection
-        page = self.notebook.GetPage(tabIndex)
-        if isinstance(page, summarytab.SummaryPanel):
-            # If we are switching to the summary (graph) tab, update it!
-            page.update()
         
         
 class BankerFrame(wx.Frame):
