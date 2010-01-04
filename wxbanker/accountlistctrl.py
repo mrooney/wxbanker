@@ -87,8 +87,8 @@ class AccountListCtrl(wx.Panel):
         miniSizer.Add(self.totalText)
 
         # The hide zero-balance accounts option.
-        self.hideBox = hideBox = wx.CheckBox(self.childPanel, label=_("Hide zero-balance accounts"))
-        hideBox.SetToolTipString(_("When enabled, accounts with a balance of $0.00 will be hidden from the list"))
+        self.hideBox = hideBox = wx.CheckBox(self.childPanel, label=_("Show zero-balance accounts"))
+        hideBox.SetToolTipString(_("When disabled, accounts with a balance of $0.00 will be hidden from the list"))
 
         #self.staticBoxSizer = SmoothStaticBoxSizer(self.staticBox, wx.VERTICAL)
         self.staticBoxSizer = wx.StaticBoxSizer(self.staticBox, wx.VERTICAL)
@@ -130,7 +130,7 @@ class AccountListCtrl(wx.Panel):
         self.staticBoxSizer.SetMinSize((minWidth, -1))
 
         # Update the checkbox at the end, so everything else is initialized.
-        hideBox.Value = wx.Config.Get().ReadBool("HIDE_ZERO_BALANCE_ACCOUNTS")
+        hideBox.Value = not wx.Config.Get().ReadBool("HIDE_ZERO_BALANCE_ACCOUNTS")
         # Setting the value doesn't trigger an event, so force an update.
         self.onHideCheck(reselect=False)
 
@@ -504,7 +504,7 @@ class AccountListCtrl(wx.Panel):
             # zero-balance became a non-zero. otherwise it won't come up.
             # +1 offset is to take into account the buttons at the top.
             self.childSizer.Show(i+1)
-            if checked:
+            if not checked:
                 if abs(account.Balance) < .001:
                     self.childSizer.Hide(i+1)
 
@@ -512,7 +512,7 @@ class AccountListCtrl(wx.Panel):
 
         if reselect:
             # We hid the current selection, so select the first available.
-            if checked and not self.IsVisible(self.currentIndex):
+            if not checked and not self.IsVisible(self.currentIndex):
                 self.SelectVisibleItem(0)
 
-        wx.Config.Get().WriteBool("HIDE_ZERO_BALANCE_ACCOUNTS", checked)
+        wx.Config.Get().WriteBool("HIDE_ZERO_BALANCE_ACCOUNTS", not checked)
