@@ -18,6 +18,7 @@
 
 from wxbanker import localization, bankcontrols, helpers
 import wx, datetime
+from wx.lib.pubsub import Publisher
 
 class SummaryPanel(wx.Panel):
     def __init__(self, parent, plotFactory, bankController):
@@ -33,16 +34,11 @@ class SummaryPanel(wx.Panel):
 
         # create the controls at the bottom
         controlSizer = wx.BoxSizer()
-        self.accountList = wx.ComboBox(self, style=wx.CB_READONLY)
         degCtrl = wx.SpinCtrl(self, min=1, max=20, initial=self.plotSettings['FitDegree'])
         # the date range controls
         self.startDate = bankcontrols.DateCtrlFactory(self)
         self.endDate = bankcontrols.DateCtrlFactory(self)
 
-        controlSizer.Add(wx.StaticText(self, label=_("Account")), 0, wx.ALIGN_CENTER_VERTICAL)
-        controlSizer.AddSpacer(5)
-        controlSizer.Add(self.accountList, 0, wx.ALIGN_CENTER_VERTICAL)
-        controlSizer.AddSpacer(10)
         controlSizer.Add(wx.StaticText(self, label=_("From")), 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(5)
         controlSizer.Add(self.startDate, 0, wx.ALIGN_CENTER_VERTICAL)
@@ -61,15 +57,12 @@ class SummaryPanel(wx.Panel):
         self.Sizer.Add(self.plotPanel, 1, wx.EXPAND)
         self.Sizer.Add(controlSizer, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 2)
 
-        # fill in the accounts
-        self.updateAccountList(layout=False)
-
         self.Layout()
 
         # bind to the spin buttons
         degCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinFitDeg)
-        self.accountList.Bind(wx.EVT_COMBOBOX, self.onAccountSelect)
         self.Bind(wx.EVT_DATE_CHANGED, self.onDateRangeChanged)
+        Publisher.subscribe(self.onAccountSelect, "view.account changed")
         
     def onDateRangeChanged(self, event):
         self.generateData()
@@ -77,13 +70,8 @@ class SummaryPanel(wx.Panel):
     def getDateRange(self):
         return [helpers.wxdate2pydate(date) for date in (self.startDate.Value, self.endDate.Value)]
 
-    def onAccountSelect(self, event):
-        index = event.Int
-        if index == 0:
-            account = None
-        else:
-            account = self.accountList.GetClientData(index)
-
+    def onAccountSelect(self, message):
+        account = message.data
         self.plotSettings['Account'] = account
         self.generateData()
 
@@ -95,26 +83,7 @@ class SummaryPanel(wx.Panel):
         self.dateRange = self.bankController.Model.GetDateRange()
         self.startDate.Value = helpers.pydate2wxdate(self.dateRange[0])
         self.endDate.Value = helpers.pydate2wxdate(self.dateRange[1])
-        
-        self.updateAccountList()
         self.generateData()
-
-    def updateAccountList(self, layout=True):
-        self.accountList.Clear()
-
-        setToAll = True
-
-        self.accountList.Append(_("All accounts"))
-        for i, account in enumerate(self.bankController.Model.Accounts):
-            self.accountList.Append(account.Name, account)
-            if account is self.plotSettings['Account']:
-                self.accountList.SetSelection(i+1) # +1 since All accounts
-                setToAll = False
-
-        if setToAll:
-            self.accountList.SetSelection(0)
-            # Make sure to set this, in case it was set to a deleted account.
-            self.plotSettings['Account'] = None
 
     def generateData(self, useCache=False):
         if useCache and self.cachedData is not None:
