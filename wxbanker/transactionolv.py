@@ -131,7 +131,12 @@ class TransactionOLV(GroupListView):
             b._Total = a._Total + b.Amount
 
     def renderFloat(self, floatVal):
-        return self.CurrentAccount.float2str(floatVal)
+        if self.CurrentAccount:
+            return self.CurrentAccount.float2str(floatVal)
+        else:
+            #TODO: fix me, this function should be given the object which should have a float2str method
+            # so that for multiple currencies they can be displayed differently when viewing all.
+            return self.BankController.Model.float2str(floatVal)
     
     def renderEditFloat(self, modelObj):
         return "%.2f" % modelObj.Amount
@@ -143,7 +148,8 @@ class TransactionOLV(GroupListView):
         self.CurrentAccount = account
 
         if account is None:
-            transactions = []
+            # None represents the "All accounts" option, so we want all transactions.
+            transactions = self.BankController.Model.GetTransactions()
         else:
             transactions = account.Transactions
 

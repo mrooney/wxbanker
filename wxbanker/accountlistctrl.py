@@ -32,7 +32,7 @@ class AccountListCtrl(wx.Panel):
     ID_TIMER = wx.NewId()
 
     def __init__(self, parent, bankController, autoPopulate=True):
-        wx.Panel.__init__(self, parent)
+        wx.Panel.__init__(self, parent, name="AccountListCtrl")
         self.Model = bankController.Model
 
         # Initialize some attributes to their default values.
@@ -82,9 +82,9 @@ class AccountListCtrl(wx.Panel):
         self.totalText = wx.StaticText(self.childPanel, label=self.Model.float2str(0))
         self.totalTexts.append(self.totalText)
         miniSizer = wx.BoxSizer()
-        miniSizer.Add(wx.StaticText(self.childPanel, label=_("Total")))
-        miniSizer.AddStretchSpacer(1)
-        miniSizer.Add(self.totalText)
+        self.allAccountsRadio = wx.RadioButton(self.childPanel, label=_("All accounts"))
+        miniSizer.Add(self.allAccountsRadio, 1)
+        miniSizer.Add(self.totalText, 0, wx.LEFT, 10)
 
         # The hide zero-balance accounts option.
         self.hideBox = hideBox = wx.CheckBox(self.childPanel, label=_("Show zero-balance accounts"))
@@ -184,13 +184,13 @@ class AccountListCtrl(wx.Panel):
 
     def SelectItem(self, index):
         """Given an index (zero-based), select the appropriate account."""
-        if index is not None:
-            # Set this as "selected".
-            linkCtrl = self.hyperLinks[index]
-            linkCtrl.Value = True
-            account = self.accountObjects[index]
-        else:
+        if index is None:
             account = None
+            self.allAccountsRadio.Value = True
+        else:
+            account = self.accountObjects[index]
+            # Set the value in case it wasn't a click that triggered this.
+            self.hyperLinks[index].Value = True
 
         self.currentIndex = index
         # Update the remove/edit buttons.
@@ -488,10 +488,14 @@ class AccountListCtrl(wx.Panel):
 
     def onAccountClick(self, event):
         """
-        This method is called when the current account has
-        been changed by clicking on an account name.
+        This method is called when the current account has been changed by clicking on an account name.
         """
-        self.SelectItem(event.EventObject.AccountIndex)
+        radio = event.EventObject
+        if radio is self.allAccountsRadio:
+            selection = None
+        else:
+            selection = radio.AccountIndex
+        self.SelectItem(selection)
 
     def onHideCheck(self, event=None, reselect=True):
         """

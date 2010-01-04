@@ -31,6 +31,7 @@ class GUITests(testbase.TestCaseHandlingConfig):
         self.App = wx.appInst
         self.Frame = self.App.TopWindow
         self.Model = self.Frame.Panel.bankController.Model
+        self.OLV = self.Frame.Panel.managePanel.transactionPanel.transactionCtrl
         
     def tearDown(self):
         for account in self.Model.Accounts[:]:
@@ -49,7 +50,7 @@ class GUITests(testbase.TestCaseHandlingConfig):
         self.Model.CreateAccount(u"Lópezहिंदी")
         # Make sure the account ctrl has the first (0th) selection.
         managePanel = self.Frame.Panel.managePanel
-        self.assertEqual(0, managePanel.accountCtrl.currentIndex)
+        self.assertEqual(0, wx.FindWindowByName("AccountListCtrl").currentIndex)
         # Mock out the account removal dialog in-place to just return "Yes"
         managePanel.accountCtrl.showModal = lambda *args, **kwargs: wx.ID_YES
         # Now remove the account and make sure there is no selection.
@@ -104,17 +105,29 @@ class GUITests(testbase.TestCaseHandlingConfig):
         rt = a.AddRecurringTransaction(1, "fun", testbase.today, 0)
         self.assertEqual(self.Frame.Panel.CheckRecurringTransactions(), 1)
         
+    def testAccountNoneIsAllAccounts(self):
+        a = self.Model.CreateAccount("A")
+        b = self.Model.CreateAccount("B")
+        ta = a.AddTransaction(1)
+        tb = b.AddTransaction(2)
+        
+        # B was added most recently and as such should be selected.
+        self.assertEqual(self.OLV.GetObjects(), [tb])
+        
+        wx.FindWindowByName("AccountListCtrl").SelectItem(None)
+        
+        # Selecting None should show all transactions.
+        self.assertEqual(self.OLV.GetObjects(), [ta, tb])
+        
     def testOLVTotals(self):
         """Test the OLV total column works as expected."""
-        olv = self.Frame.Panel.managePanel.transactionPanel.transactionCtrl
-        
         def totals():
             totals = []
-            for i in range(len(olv.GetObjects())):
-                totals.append(olv.GetValueAt(olv.GetObjectAt(i), 3))
+            for i in range(len(self.OLV.GetObjects())):
+                totals.append(self.OLV.GetValueAt(self.OLV.GetObjectAt(i), 3))
             return totals
         
-        self.assertEqual(len(olv.GetObjects()), 0)
+        self.assertEqual(len(self.OLV.GetObjects()), 0)
         
         a = self.Model.CreateAccount("B")
         
@@ -132,7 +145,7 @@ class GUITests(testbase.TestCaseHandlingConfig):
         
         # Remove one not at the end.
         a.RemoveTransaction(t2)
-        self.assertEqual(t1, olv.GetObjectAt(0))
+        self.assertEqual(t1, self.OLV.GetObjectAt(0))
         self.assertEqual(totals(), [1, 1.5])
         
         # Now change an existing amount.
