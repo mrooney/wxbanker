@@ -34,7 +34,6 @@ class SummaryPanel(wx.Panel):
         # create the controls at the bottom
         controlSizer = wx.BoxSizer()
         self.accountList = wx.ComboBox(self, style=wx.CB_READONLY)
-        ##granCtrl = wx.SpinCtrl(self, min=10, max=1000, initial=self.plotSettings['Granularity'])
         degCtrl = wx.SpinCtrl(self, min=1, max=20, initial=self.plotSettings['FitDegree'])
         # the date range controls
         self.startDate = bankcontrols.DateCtrlFactory(self)
@@ -52,9 +51,6 @@ class SummaryPanel(wx.Panel):
         controlSizer.AddSpacer(5)
         controlSizer.Add(self.endDate, 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(10)
-        ##controlSizer.Add(wx.StaticText(self, label=_("Sample Points")), 0, wx.ALIGN_CENTER_VERTICAL)
-        ##controlSizer.Add(granCtrl)
-        ##controlSizer.AddSpacer(10)
         controlSizer.Add(wx.StaticText(self, label=_("Fit Curve Degree")), 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(5)
         controlSizer.Add(degCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
@@ -71,7 +67,6 @@ class SummaryPanel(wx.Panel):
         self.Layout()
 
         # bind to the spin buttons
-        ##granCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinGran)
         degCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinFitDeg)
         self.accountList.Bind(wx.EVT_COMBOBOX, self.onAccountSelect)
         self.Bind(wx.EVT_DATE_CHANGED, self.onDateRangeChanged)
@@ -90,10 +85,6 @@ class SummaryPanel(wx.Panel):
             account = self.accountList.GetClientData(index)
 
         self.plotSettings['Account'] = account
-        self.generateData()
-
-    def onSpinGran(self, event):
-        self.plotSettings['Granularity'] = event.EventObject.Value
         self.generateData()
 
     def onSpinFitDeg(self, event):
