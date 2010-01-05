@@ -38,12 +38,11 @@ class AccountListCtrl(wx.Panel):
         # Initialize some attributes to their default values.
         self.editCtrl = self.hiddenIndex = None
         self.currentIndex = None
-        self.boxLabel = _("Accounts") + " (%i)"
         self.hyperLinks, self.totalTexts, self.accountObjects = [], [], []
 
         # Create the staticboxsizer which is the home for everything.
         # This *MUST* be created first to ensure proper z-ordering (as per docs).
-        self.staticBox = wx.StaticBox(self, label=self.boxLabel%0)
+        self.staticBox = wx.StaticBox(self, label=_("Accounts"))
 
         # Create a single panel to be the "child" of the static box sizer,
         # to work around a wxPython regression that prevents tooltips. lp: xxxxxx
@@ -297,9 +296,6 @@ class AccountListCtrl(wx.Panel):
         # Update the total text, as sometimes the account already exists.
         self.updateGrandTotal()
 
-        # Update the static label.
-        self.staticBox.Label = self.boxLabel % self.GetCount()
-
         self.Layout()
         self.Parent.Layout()
 
@@ -332,9 +328,6 @@ class AccountListCtrl(wx.Panel):
 
         # Update the total text (subtract what was removed).
         self.updateGrandTotal()
-
-        # Update the static label.
-        self.staticBox.Label = self.boxLabel % self.GetCount()
 
         self.Layout()
         self.Parent.Layout()
