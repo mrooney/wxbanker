@@ -194,7 +194,7 @@ class BankMenuBar(wx.MenuBar):
             "hi: Ankur Kachru <ankurkachru@gmail.com>",
             "pl: Tomasz 'Zen' Napierala <tomasz@napierala.org>",
             "fr: Steve Dodier <steve.dodier@gmail.com>",
-            "de: Patrick Eigensatz",
+            "de: Patrick Eigensatz <patrick.eigensatz@gmail.com>",
         ]
         info.Translators = [unicode(s, 'iso-8859-15') for s in translators]
 
