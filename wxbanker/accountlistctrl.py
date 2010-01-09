@@ -198,7 +198,7 @@ class AccountListCtrl(wx.Panel):
         self.configureButton.Enabled = index is not None
 
         # Tell the parent we changed.
-        Publisher().sendMessage("view.account changed", account)
+        Publisher.sendMessage("view.account changed", account)
         
     def SelectItemById(self, theId):
         # If there is no recently selected account, select the first visible if one exists.

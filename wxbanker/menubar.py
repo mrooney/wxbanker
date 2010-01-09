@@ -144,16 +144,16 @@ class BankMenuBar(wx.MenuBar):
         self.saveMenuItem.Enable(not autosave)
 
     def onClickSave(self, event):
-        Publisher().sendMessage("user.saved")
+        Publisher.sendMessage("user.saved")
 
     def onClickAutoSave(self, event):
-        Publisher().sendMessage("user.autosave_toggled", event.Checked())
+        Publisher.sendMessage("user.autosave_toggled", event.Checked())
         
     def onClickQuit(self, event):
         Publisher.sendMessage("quit")
 
     def onSelectCurrency(self, currencyIndex):
-        Publisher().sendMessage("user.currency_changed", currencyIndex)
+        Publisher.sendMessage("user.currency_changed", currencyIndex)
 
     def onClickFAQs(self, event):
         webbrowser.open("https://answers.launchpad.net/wxbanker/+faqs")

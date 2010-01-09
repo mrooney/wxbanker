@@ -232,7 +232,7 @@ def init(path=None, welcome=True):
     config = wx.Config.Get()
     firstTime = not config.ReadBool("RUN_BEFORE")
     if firstTime:
-        Publisher().sendMessage("first run")
+        Publisher.sendMessage("first run")
         config.WriteBool("RUN_BEFORE", True)
 
     return bankController.wxApp

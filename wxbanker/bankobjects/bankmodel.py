@@ -33,8 +33,8 @@ class BankModel(ORMKeyValueObject):
         self.Store = store
         self.Accounts = accountList
 
-        Publisher().subscribe(self.onCurrencyChanged, "user.currency_changed")
-        Publisher().subscribe(self.onAccountChanged, "view.account changed")
+        Publisher.subscribe(self.onCurrencyChanged, "user.currency_changed")
+        Publisher.subscribe(self.onAccountChanged, "view.account changed")
 
     def GetBalance(self):
         return self.Accounts.Balance
@@ -163,7 +163,7 @@ class BankModel(ORMKeyValueObject):
         self.Store.setCurrency(currencyIndex)
         for account in self.Accounts:
             account.Currency = currencyIndex
-        Publisher().sendMessage("currency_changed", currencyIndex)
+        Publisher.sendMessage("currency_changed", currencyIndex)
 
     def onCurrencyChanged(self, message):
         currencyIndex = message.data

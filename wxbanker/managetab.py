@@ -57,8 +57,8 @@ class ManagePanel(wx.Panel):
         topSizer.Add(self.rightPanel, 1, wx.EXPAND|wx.ALL, 0)
 
         # Subscribe to messages that interest us.
-        Publisher().subscribe(self.onChangeAccount, "view.account changed")
-        Publisher().subscribe(self.onCalculatorToggled, "CALCULATOR.TOGGLED")
+        Publisher.subscribe(self.onChangeAccount, "view.account changed")
+        Publisher.subscribe(self.onCalculatorToggled, "CALCULATOR.TOGGLED")
 
         # Select the last-selected account.
         # Windows needs a delay, to work around LP #339860.
@@ -136,7 +136,7 @@ class TransactionPanel(wx.Panel):
         self.Sizer.Add(newTransCtrl, 0, wx.EXPAND)
 
         for message in ["account.created", "account.removed"]:
-            Publisher().subscribe(self.onSearchInvalidatingChange, message)
+            Publisher.subscribe(self.onSearchInvalidatingChange, message)
 
     def setAccount(self, *args, **kwargs):
         self.transactionCtrl.setAccount(*args, **kwargs)

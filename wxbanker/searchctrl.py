@@ -80,7 +80,7 @@ class SearchCtrl(wx.Panel):
 
     def onCancel(self, event):
         self.searchCtrl.Value = ""
-        Publisher().sendMessage("SEARCH.CANCELLED")
+        Publisher.sendMessage("SEARCH.CANCELLED")
         #event.Skip()
 
     def onToggleMore(self, event=None):
@@ -98,4 +98,4 @@ class SearchCtrl(wx.Panel):
 
         # Give or take the appropriate amount of space.
         self.Parent.Layout()
-        Publisher().sendMessage("SEARCH.MORETOGGLED")
+        Publisher.sendMessage("SEARCH.MORETOGGLED")

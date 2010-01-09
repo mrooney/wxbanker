@@ -397,7 +397,7 @@ class NewTransactionRow(bankcontrols.GBRow):
             dlg = wx.MessageDialog(self.Parent, msg, _("Clear search?"), style=wx.YES_NO|wx.ICON_WARNING)
             result = dlg.ShowModal()
             if result == wx.ID_YES:
-                Publisher().sendMessage("SEARCH.CANCELLED")
+                Publisher.sendMessage("SEARCH.CANCELLED")
             else:
                 return
 

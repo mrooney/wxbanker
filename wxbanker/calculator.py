@@ -152,7 +152,7 @@ class CollapsableWidget(wx.CollapsiblePane):
             modifier = "Show"
         self.Label = _(self.clickLabel % modifier)
 
-        Publisher().sendMessage("CALCULATOR.TOGGLED", modifier.upper())
+        Publisher.sendMessage("CALCULATOR.TOGGLED", modifier.upper())
 
 
 if __name__ == "__main__":

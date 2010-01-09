@@ -34,7 +34,7 @@ class Subscriber(list):
     """
     def __init__(self):
         list.__init__(self)
-        Publisher().subscribe(self.onMessage)
+        Publisher.subscribe(self.onMessage)
 
     def onMessage(self, message):
         self.insert(0, (message.topic, message.data))
