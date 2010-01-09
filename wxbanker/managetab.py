@@ -135,7 +135,7 @@ class TransactionPanel(wx.Panel):
         self.Sizer.Add(subpanel, 1, wx.EXPAND)
         self.Sizer.Add(newTransCtrl, 0, wx.EXPAND)
 
-        for message in ["account.created", "account.removed", "view.account changed"]:
+        for message in ["account.created", "account.removed"]:
             Publisher().subscribe(self.onSearchInvalidatingChange, message)
 
     def setAccount(self, *args, **kwargs):
@@ -147,4 +147,3 @@ class TransactionPanel(wx.Panel):
         required changes to state. These events will handle all other logic.
         """
         self.searchActive = False
-        #Publisher().sendMessage("SEARCH.CANCELLED")

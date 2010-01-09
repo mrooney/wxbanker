@@ -156,6 +156,35 @@ class GUITests(testbase.TestCaseHandlingConfig):
         t3.Date = testbase.yesterday
         self.assertEqual(totals(), [0.5, 2.25])
         
+    def testSearch(self):
+        a = self.Model.CreateAccount("A")
+        b = self.Model.CreateAccount("B")
+        
+        t1 = a.AddTransaction(1, "Cat")
+        t2 = a.AddTransaction(1, "Dog")
+        t3 = b.AddTransaction(1, "Pig")
+        t4 = b.AddTransaction(1, "Dog")
+        
+        # Ensure b is selected
+        self.assertEqual(self.OLV.GetObjects(), [t3, t4])
+        
+        # Search for dog, make sure b's matching transaction is shown.
+        Publisher.sendMessage("SEARCH.INITIATED", ("Dog", 1, False))
+        self.assertEqual(self.OLV.GetObjects(), [t4])
+        
+        # Change to a, make sure we see a's match.
+        Publisher.sendMessage("view.account changed", a)
+        self.assertEqual(self.OLV.GetObjects(), [t2])
+        
+        # Switch to all accounts, make sure we see both matches.
+        Publisher.sendMessage("view.account changed")
+        self.assertEqual(self.OLV.GetObjects(), [t2, t4])
+        
+        
+        
+        
+        
+        
 
 if __name__ == "__main__":
     unittest.main()

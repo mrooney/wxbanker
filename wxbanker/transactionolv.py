@@ -37,6 +37,7 @@ from wxbanker import bankcontrols
 class TransactionOLV(GroupListView):
     def __init__(self, parent, bankController):
         GroupListView.__init__(self, parent, style=wx.LC_REPORT|wx.SUNKEN_BORDER, name="TransactionOLV")
+        self.LastSearch = None
         self.CurrentAccount = None
         self.BankController = bankController
 
@@ -96,6 +97,12 @@ class TransactionOLV(GroupListView):
         # Force a re-size here, in the case that the vscrollbar-needed state
         # changed by this set account, to size correctly.
         wx.CallLater(50, self._ResizeSpaceFillingColumns)
+        
+    def IsSearchActive(self):
+        return self.GrandParent.searchActive
+    
+    def SetSearchActive(self, value):
+        self.GrandParent.searchActive = value
         
     def onTransactionDateUpdated(self, message):
         transaction = message.data
@@ -158,6 +165,9 @@ class TransactionOLV(GroupListView):
         self.SelectObjects([], deselectOthers=True)
         if scrollToBottom:
             self.ensureVisible(-1)
+            
+        if self.IsSearchActive():
+            self.doSearch(self.LastSearch)
 
     def ensureVisible(self, index):
         length = self.GetItemCount()
@@ -283,18 +293,21 @@ class TransactionOLV(GroupListView):
             self.ensureVisible(-1)
 
     def onSearch(self, message):
-        searchString, match, caseSens = message.data
+        self.LastSearch = message.data
+        self.doSearch(self.LastSearch)
+        
+    def doSearch(self, searchData):
+        searchString, match, caseSens = searchData
         account = self.CurrentAccount
-
         matches = self.BankController.Model.Search(searchString, account=account, matchIndex=match, matchCase=caseSens)
         self.SetObjects(matches)
-        self.Parent.Parent.searchActive = True
+        self.SetSearchActive(True)
 
     def onSearchCancelled(self, message):
         # Ignore cancels on an inactive search to avoid silly refreshes.
-        if self.Parent.Parent.searchActive:
+        if self.IsSearchActive:
             self.setAccount(self.CurrentAccount)
-            self.Parent.Parent.searchActive = False
+            self.SetSearchActive(False)
 
     def onSearchMoreToggled(self, message):
         # Perhaps necessary to not glitch overlap on Windows?
