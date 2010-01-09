@@ -38,6 +38,8 @@ def createFromLocale(currencyName):
 
     base.LOCALECONV = local.LOCALECONV
     print "\nExamples: \"%s\" and \"%s\"" % (base.float2str(1234.56), base.float2str(-5))
+    testAmount = base.float2str(1234.5)
+    print "self.assertEqual(currencies.%sCurrency().float2str(testAmount), u'%s')" % (currencyName, testAmount)
 
 class BaseCurrency(object):
     """
@@ -243,6 +245,18 @@ class IndianCurrency(BaseCurrency):
         self.LOCALECONV['mon_grouping'] = [3, 2, 0]
         self.LOCALECONV['grouping'] = [3, 2, 0]
 
+class RomanianCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['mon_decimal_point'] = u','
+        self.LOCALECONV['p_sep_by_space'] = 1
+        self.LOCALECONV['thousands_sep'] = u'.'
+        self.LOCALECONV['decimal_point'] = u','
+        self.LOCALECONV['int_curr_symbol'] = u'RON '
+        self.LOCALECONV['mon_thousands_sep'] = u'.'
+        self.LOCALECONV['currency_symbol'] = u'Lei'
+        self.LOCALECONV['n_sep_by_space'] = 1
+
 class LocalizedCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
@@ -254,7 +268,11 @@ def GetCurrencyInt(currency):
             return i
     return -1
 
-CurrencyList = [LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency, RussianCurrency, UkranianCurrency, MexicanCurrency, SwedishCurrency, SaudiCurrency, NorwegianCurrency, ThaiCurrency, VietnameseCurrency, IndianCurrency]
+CurrencyList = [
+    LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency,
+    RussianCurrency, UkranianCurrency, MexicanCurrency, SwedishCurrency, SaudiCurrency,
+    NorwegianCurrency, ThaiCurrency, VietnameseCurrency, IndianCurrency, RomanianCurrency,
+]
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
 CurrencyStrings[0] += " [%s]" % _("detected")
 
