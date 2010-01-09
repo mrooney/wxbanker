@@ -305,7 +305,7 @@ class TransactionOLV(GroupListView):
 
     def onSearchCancelled(self, message):
         # Ignore cancels on an inactive search to avoid silly refreshes.
-        if self.IsSearchActive:
+        if self.IsSearchActive():
             self.setAccount(self.CurrentAccount)
             self.SetSearchActive(False)
 

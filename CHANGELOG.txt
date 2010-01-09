@@ -1,5 +1,10 @@
-wxbanker 0.6
+wxbanker 0.7 [pending]
+  *
 
+wxbanker 0.6.1
+  * fix db upgrades from wxbanker 0.4 to 0.6 (LP: #496341)
+
+wxbanker 0.6
   * recurring transactions
   * summary graph date span is customizable
   * uses XDG directories by default if available
@@ -10,7 +15,6 @@ wxbanker 0.6
   * new shipped currencies: UAH, SEK, MXN
 
 wxbanker 0.5
-
   * refactor of infrastructure which greatly speeds up all operations, especially loading accounts and transactions
   * new, slicker transaction list control allowing for sorting and fixing many bugs in the previous grid
   * new CSV import tool (Tools->CSV Import) to import transactions from .csv files such as from online banks
