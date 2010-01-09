@@ -52,6 +52,7 @@ def DateCtrlFactory(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY):
     dateCtrl.SetToolTipString(_("Date"))
     dateCtrl.customKeyHandler = None
 
+    # An isinstance won't work here, as wx.GenericDatePickerCtrl doesn't exist on certain platforms.
     if isGeneric:
         def onDateChar(event):
             key = event.GetKeyCode()
