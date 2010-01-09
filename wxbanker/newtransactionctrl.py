@@ -307,7 +307,7 @@ class NewTransactionRow(bankcontrols.GBRow):
             dateTextCtrl = self.dateCtrl.Children[0].Children[0]
         except IndexError:
             # This will fail on MSW + wxPython < 2.8.8.0, nothing we can do.
-            print _("Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 to fix this.")
+            pass
         else:
             # Bind to DateCtrl Enter (LP: 252454).
             dateTextCtrl.WindowStyleFlag |= wx.TE_PROCESS_ENTER
