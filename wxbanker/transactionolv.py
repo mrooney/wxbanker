@@ -220,7 +220,10 @@ class TransactionOLV(GroupListView):
             # Create the sub-menu of sibling accounts to the move to.
             moveToAccountItem = wx.MenuItem(menu, -1, moveStr)
             accountsMenu = wx.Menu()
-            siblings = self.CurrentAccount.GetSiblings()
+            if self.CurrentAccount is None:
+                siblings = []
+            else:
+                siblings = self.CurrentAccount.GetSiblings()
             for account in siblings:
                 accountItem = wx.MenuItem(menu, -1, account.GetName())
                 accountsMenu.AppendItem(accountItem)
