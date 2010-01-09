@@ -41,9 +41,6 @@ class SearchCtrl(wx.Panel):
         self.matchChoices = [_("Amount"), _("Description"), _("Date")]
         self.matchBox = bankcontrols.CompactableComboBox(self, value=self.matchChoices[1], choices=self.matchChoices, style=wx.CB_READONLY)
 
-        self.caseCheck = wx.CheckBox(self, label=_("Case Sensitive"))
-        self.caseCheck.SetToolTipString(_("Whether or not to match based on capitalization"))
-
         topSizer = wx.BoxSizer()
         topSizer.Add(self.searchCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
         topSizer.AddSpacer(10)
@@ -52,12 +49,10 @@ class SearchCtrl(wx.Panel):
         self.moreSizer = moreSizer = wx.BoxSizer()
         moreSizer.Add(wx.StaticText(self, label=_("Match: ")), 0, wx.ALIGN_CENTER_VERTICAL)
         moreSizer.Add(self.matchBox, 0, wx.ALIGN_CENTER_VERTICAL)
-        moreSizer.AddSpacer(5)
-        moreSizer.Add(self.caseCheck, 0, wx.ALIGN_CENTER_VERTICAL)
 
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
-        self.Sizer.Add(topSizer, 0, wx.ALIGN_CENTER)
-        self.Sizer.Add(moreSizer, 0, wx.ALIGN_CENTER)
+        self.Sizer.Add(topSizer, 0, wx.ALIGN_RIGHT|wx.TOP|wx.BOTTOM, 2)
+        self.Sizer.Add(moreSizer, 0, wx.ALIGN_RIGHT|wx.BOTTOM, 2)
         self.matchBox.Compact()
         self.Layout()
 
@@ -67,7 +62,6 @@ class SearchCtrl(wx.Panel):
         self.moreButton.Bind(wx.EVT_BUTTON, self.onToggleMore)
         # Bindings to search on settings change automatically.
         self.matchBox.Bind(wx.EVT_COMBOBOX, self.onSearchTrigger)
-        self.caseCheck.Bind(wx.EVT_CHECKBOX, self.onSearchTrigger)
 
         # Initially hide the extra search options.
         self.onToggleMore()
@@ -80,10 +74,9 @@ class SearchCtrl(wx.Panel):
         # TODO: enable search button in ctrl and appropriate event handling
         searchString = self.searchCtrl.Value # For a date, should be YYYY-MM-DD.
         matchType = self.matchChoices.index(self.matchBox.Value)
-        caseSens = self.caseCheck.Value
 
-        searchInfo = (searchString, matchType, caseSens)
-        Publisher().sendMessage("SEARCH.INITIATED", searchInfo)
+        searchInfo = (searchString, matchType)
+        Publisher.sendMessage("SEARCH.INITIATED", searchInfo)
 
     def onCancel(self, event):
         self.searchCtrl.Value = ""

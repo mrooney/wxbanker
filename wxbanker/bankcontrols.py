@@ -107,7 +107,7 @@ class CompactableComboBox(wx.ComboBox):
         else:
             height = self.Size[1]
             maxTextWidth = max([self.Parent.GetTextExtent(s.strip())[0] for s in comboStrings])
-            self.SetMinSize((maxTextWidth + height + 8, height))
+            self.SetMinSize((maxTextWidth + height + 12, height))
 
 
 class MultiStateButton(wx.Button):

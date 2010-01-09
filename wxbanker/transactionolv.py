@@ -297,9 +297,9 @@ class TransactionOLV(GroupListView):
         self.doSearch(self.LastSearch)
         
     def doSearch(self, searchData):
-        searchString, match, caseSens = searchData
+        searchString, match = searchData
         account = self.CurrentAccount
-        matches = self.BankController.Model.Search(searchString, account=account, matchIndex=match, matchCase=caseSens)
+        matches = self.BankController.Model.Search(searchString, account=account, matchIndex=match)
         self.SetObjects(matches)
         self.SetSearchActive(True)
 

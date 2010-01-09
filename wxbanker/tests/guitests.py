@@ -169,7 +169,7 @@ class GUITests(testbase.TestCaseHandlingConfig):
         self.assertEqual(self.OLV.GetObjects(), [t3, t4])
         
         # Search for dog, make sure b's matching transaction is shown.
-        Publisher.sendMessage("SEARCH.INITIATED", ("Dog", 1, False))
+        Publisher.sendMessage("SEARCH.INITIATED", ("Dog", 1))
         self.assertEqual(self.OLV.GetObjects(), [t4])
         
         # Change to a, make sure we see a's match.
@@ -179,12 +179,7 @@ class GUITests(testbase.TestCaseHandlingConfig):
         # Switch to all accounts, make sure we see both matches.
         Publisher.sendMessage("view.account changed")
         self.assertEqual(self.OLV.GetObjects(), [t2, t4])
-        
-        
-        
-        
-        
-        
+
 
 if __name__ == "__main__":
     unittest.main()

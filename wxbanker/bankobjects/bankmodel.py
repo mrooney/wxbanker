@@ -124,15 +124,12 @@ class BankModel(ORMKeyValueObject):
     def RemoveAccount(self, accountName):
         return self.Accounts.Remove(accountName)
 
-    def Search(self, searchString, account=None, matchIndex=1, matchCase=False):
+    def Search(self, searchString, account=None, matchIndex=1):
         """
         matchIndex: 0: Amount, 1: Description, 2: Date
         I originally used strings here but passing around and then validating on translated
         strings seems like a bad and fragile idea.
         """
-        # Handle case-sensitive option.
-        reFlag = {False: re.IGNORECASE, True: 0}[matchCase]
-
         # Handle account options.
         if account is None:
             potentials = self.GetTransactions()
@@ -143,7 +140,7 @@ class BankModel(ORMKeyValueObject):
         matches = []
         for trans in potentials:
             potentialStr = unicode((trans.Amount, trans.Description, trans.Date)[matchIndex])
-            if re.findall(searchString, potentialStr, flags=reFlag):
+            if re.findall(searchString, potentialStr, flags=re.IGNORECASE):
                 matches.append(trans)
         return matches
 
