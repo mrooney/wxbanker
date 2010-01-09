@@ -90,9 +90,6 @@ class RightPanel(wx.Panel):
         wx.Panel.__init__(self, parent)
         self.bankController = bankController
         
-        # The search control
-        self.searchCtrl = searchctrl.SearchCtrl(self, bankController)
-        
         # The notebook
         self.notebook = notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
         self.transactionPanel = TransactionPanel(self, bankController)
@@ -102,7 +99,6 @@ class RightPanel(wx.Panel):
         
         # Layout
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
-        self.Sizer.Add(self.searchCtrl, 0, wx.ALIGN_RIGHT)
         self.Sizer.Add(self.notebook, 1, wx.EXPAND)
         
     def AddSummaryTab(self, factoryName=None):
@@ -126,15 +122,18 @@ class TransactionPanel(wx.Panel):
 
         subpanel = wx.Panel(self)
 
+        # The search control
+        self.searchCtrl = searchctrl.SearchCtrl(self, bankController)
         self.transactionCtrl = transactionCtrl = TransactionCtrl(subpanel, bankController)
         self.newTransCtrl = newTransCtrl = transactionctrl.TransactionCtrl(self)
 
         subpanel.Sizer = wx.BoxSizer()
         subpanel.Sizer.Add(transactionCtrl, 1, wx.EXPAND)
 
-        self.Sizer = mainSizer = wx.BoxSizer(wx.VERTICAL)
-        mainSizer.Add(subpanel, 1, wx.EXPAND)
-        mainSizer.Add(newTransCtrl, 0, wx.EXPAND)
+        self.Sizer = wx.BoxSizer(wx.VERTICAL)
+        self.Sizer.Add(self.searchCtrl, 0, wx.ALIGN_RIGHT)
+        self.Sizer.Add(subpanel, 1, wx.EXPAND)
+        self.Sizer.Add(newTransCtrl, 0, wx.EXPAND)
 
         for message in ["account.created", "account.removed", "view.account changed"]:
             Publisher().subscribe(self.onSearchInvalidatingChange, message)
