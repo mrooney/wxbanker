@@ -39,7 +39,7 @@ class ORMObject(object):
     def publishIfAppropriate(self, attrname, val):
         if attrname in self.ORM_ATTRIBUTES:
             classname = self.__class__.__name__
-            Publisher.sendMessage("ormobject.updated.%s.%s" % (classname, attrname), self)
+            Publisher.sendMessage("ormobject.updated.%s.%s" % (classname, attrname.strip("_")), self)
             
     def getAttrValue(self, attrname):
         from wxbanker.bankobjects.account import Account
@@ -50,7 +50,10 @@ class ORMObject(object):
             value = value.ID
         elif attrname == "RepeatOn" and value is not None:
             value = ",".join([str(x) for x in value])
-        elif attrname == "Date":
+        # Description is special in that GetDescription returns a decorated _Description, and should not be stored.
+        elif attrname == "Description":
+            value = self._Description
+        elif attrname == "Date": # No tests fail if this clause is removed; weird.
             value = "%s/%s/%s"%(self.Date.year, str(self.Date.month).zfill(2), str(self.Date.day).zfill(2))
         return value
             

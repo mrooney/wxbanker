@@ -387,9 +387,7 @@ class NewTransactionRow(bankcontrols.GBRow):
         if result is None:
             # Validation failed, user was informed.
             return
-
         amount, desc, date = result
-        isTransfer = self.transferCheck.Value
 
         # If a search is active, we have to ask the user what they want to do.
         if self.Parent.Parent.searchActive:
@@ -402,7 +400,8 @@ class NewTransactionRow(bankcontrols.GBRow):
                 return
 
         sourceAccount = None
-        if isTransfer:
+        # If the transfer box is checked, this is a transfer!
+        if self.transferCheck.Value:
             result = self.Parent.transferRow.GetAccounts(destAccount)
             if result is None:
                 dlg = wx.MessageDialog(self.Parent,

@@ -18,13 +18,13 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import os, unittest
-from wx.lib.pubsub import Publisher
-
 from wxbanker.tests import testbase
 from wxbanker import controller, bankobjects
 from wxbanker.bankobjects.recurringtransaction import RecurringTransaction
 from wxbanker.tests.testbase import today, tomorrow
+
+import os, unittest
+from wx.lib.pubsub import Publisher
 
 class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
     """
@@ -350,6 +350,46 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         
         model2 = model1.Store.GetModel(useCached=False)
         self.assertEqual(model2.LastAccountId, a.ID)
+        
+    def testTransferFieldsAreLinked(self):
+        """Test that changing the date, description, and amount in one transaction changes the link as well."""
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        b = model.CreateAccount("B")
+        
+        at, bt = a.AddTransaction(1, description="Happy Yogurt", source=b)
+        self.assertEqual(at.Description, "Transfer from B (Happy Yogurt)")
+        self.assertEqual(bt.Description, "Transfer to A (Happy Yogurt)")
+        
+        # Update the description, make sure it updates the link.
+        at.Description = "Pizza My Heart"
+        self.assertEqual(at.Description, "Transfer from B (Pizza My Heart)")
+        self.assertEqual(bt.Description, "Transfer to A (Pizza My Heart)")
+        
+        # Update the amount, make sure it updates the link.        
+        at.Amount = 2
+        self.assertEqual(at.Amount, 2)
+        self.assertEqual(bt.Amount, -2)
+        
+        # Update the date, make sure it updates the link.
+        at.Date = tomorrow
+        self.assertEqual(at.Date, tomorrow)
+        self.assertEqual(bt.Date, tomorrow)
+        
+        model2 = model.Store.GetModel(useCached=False)
+        self.assertEqual(model, model2)
+        
+    def testTransactionPropertiesChangedViaMethodsAreStored(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        t = a.AddTransaction(1, description="foo", date=today)
+        t.SetAmount(2)
+        t.SetDescription("bar")
+        t.SetDate(tomorrow)
+        
+        model2 = model.Store.GetModel(useCached=False)
+        self.assertEqual(model, model2)
+
     
 if __name__ == "__main__":
     unittest.main()

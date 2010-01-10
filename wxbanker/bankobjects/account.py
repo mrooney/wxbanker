@@ -43,7 +43,7 @@ class Account(ORMObject):
         self.Balance = balance
         self.IsFrozen = False
 
-        Publisher.subscribe(self.onTransactionAmountChanged, "transaction.updated.amount")
+        Publisher.subscribe(self.onTransactionAmountChanged, "ormobject.updated.Transaction.Amount")
 
     def ParseAmount(self, strAmount):
         """
@@ -232,10 +232,10 @@ class Account(ORMObject):
         Publisher.sendMessage("batch.end")
 
     def onTransactionAmountChanged(self, message):
-        transaction, difference = message.data
+        transaction = message.data
         if transaction.Parent == self:
-            debug.debug("Updating balance by %s because I am %s: %s" % (difference, self.Name, transaction))
-            self.Balance += difference
+            debug.debug("Updating balance because I am %s: %s" % (self.Name, transaction))
+            self.Balance = sum((t.Amount for t in self.Transactions))
         else:
             debug.debug("Ignoring transaction because I am %s: %s" % (self.Name, transaction))
 

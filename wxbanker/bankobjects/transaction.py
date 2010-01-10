@@ -32,18 +32,18 @@ class Transaction(ORMObject):
     typically causing the model to make the change.
     """
     ORM_TABLE = "transactions"
-    ORM_ATTRIBUTES = ["Amount", "_Description", "Date", "LinkedTransaction", "RecurringParent"]
+    ORM_ATTRIBUTES = ["_Amount", "_Description", "_Date", "LinkedTransaction", "RecurringParent"]
     
     def __init__(self, tID, parent, amount, description, date):
         ORMObject.__init__(self)
         self.IsFrozen = True
 
         self.ID = tID
+        self.LinkedTransaction = None
         self.Parent = parent
         self.Date = date
         self.Description = description
         self.Amount = amount
-        self.LinkedTransaction = None
         self.RecurringParent = None
 
         self.IsFrozen = False
@@ -51,8 +51,13 @@ class Transaction(ORMObject):
     def GetDate(self):
         return self._Date
 
-    def SetDate(self, date):
-        self._Date = self._MassageDate(date)
+    def SetDate(self, date, fromLink=False):
+        date = self._MassageDate(date)
+        self._Date = date
+        
+        # Update the linked transaction if one exists.
+        if not fromLink and self.LinkedTransaction:
+            self.LinkedTransaction.SetDate(date, fromLink=True)
 
     def _MassageDate(self, date):
         """
@@ -115,32 +120,31 @@ class Transaction(ORMObject):
             
         return description
 
-    def SetDescription(self, description):
+    def SetDescription(self, description, fromLink=False):
         """Update the description, ensuring it is a string."""
-        self._Description = unicode(description)
+        description = unicode(description)
+        self._Description = description
+        # Update the linked transaction if one exists.
+        if not fromLink and self.LinkedTransaction:
+            self.LinkedTransaction.SetDescription(description, fromLink=True)
 
     def GetAmount(self):
         return self._Amount
 
-    def SetAmount(self, amount):
+    def SetAmount(self, amount, fromLink=False):
         """Update the amount, ensuring it is a float."""
-        if hasattr(self, "_Amount"):
-            difference = amount - self._Amount
-
-        self._Amount = float(amount)
-
-        if not self.IsFrozen:
-            debug.debug("Setting transaction amount: ", self)
-            Publisher.sendMessage("transaction.updated.amount", (self, difference))
+        amount = float(amount)
+        self._Amount = amount
+        
+        # Update the linked transaction if one exists.
+        if not fromLink and self.LinkedTransaction:
+            self.LinkedTransaction.SetAmount(-amount, fromLink=True)
 
     def GetLinkedTransaction(self):
         return self._LinkedTransaction
 
     def SetLinkedTransaction(self, transaction):
         self._LinkedTransaction = transaction
-
-        if not self.IsFrozen:
-            Publisher.sendMessage("transaction.updated.link", (self, None))
 
     def GetLinkedTransactionID(self):
         """

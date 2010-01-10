@@ -387,7 +387,6 @@ class ModelTests(testbase.TestCaseWithController):
         Publisher.sendMessage("view.account changed", a)
         self.assertEqual(model.LastAccountId, a.ID)
         
-
         
 if __name__ == "__main__":
     unittest.main()
