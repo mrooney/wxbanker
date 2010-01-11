@@ -109,6 +109,7 @@ class AccountListCtrl(wx.Panel):
         Publisher.subscribe(self.onAccountAdded, "account.created")
         Publisher.subscribe(self.onCurrencyChanged, "currency_changed")
         Publisher.subscribe(self.onShowZeroToggled, "controller.showzero_toggled")
+        Publisher.subscribe(self.onAccountChanged, "user.account changed")
 
         # Populate ourselves initially unless explicitly told not to.
         if autoPopulate:
@@ -206,6 +207,12 @@ class AccountListCtrl(wx.Panel):
             else:
                 # This seems rather unlikely, but let's handle it gracefully.
                 self.SelectVisibleItem(0)
+                
+    def SelectItemByAccount(self, account):
+        if account:
+            return self.SelectItemById(account.ID)
+        else:
+            return self.SelectItem(None)
 
     def SelectVisibleItem(self, index):
         """
@@ -377,6 +384,10 @@ class AccountListCtrl(wx.Panel):
 
         # Stop flashing the add button if it was, since there is now an account.
         self.stopFlashTimer()
+        
+    def onAccountChanged(self, message):
+        account = message.data
+        self.SelectItemByAccount(account)
 
     def onEditCtrlKey(self, event):
         if event.GetKeyCode() == wx.WXK_ESCAPE:

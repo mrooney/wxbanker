@@ -28,6 +28,7 @@ from wxbanker.csvimportframe import CsvImportFrame
 
 class BankMenuBar(wx.MenuBar):
     ID_AUTOSAVE = wx.NewId()
+    ID_VIEW_ALLACCOUNTS = wx.NewId()
     ID_SHOWZERO = wx.NewId()
     ID_FAQ = wx.NewId()
     ID_QUESTION = wx.NewId()
@@ -54,6 +55,7 @@ class BankMenuBar(wx.MenuBar):
         
         # View menu.
         viewMenu = wx.Menu()
+        viewMenu.Append(self.ID_VIEW_ALLACCOUNTS, _("All accounts")+"\tCtrl+T") 
         viewMenu.AppendSeparator()
         self.showZeroMenuItem = viewMenu.AppendCheckItem(self.ID_SHOWZERO, _("Show zero-balance accounts")+"\tCtrl+B", _("When disabled, accounts with a balance of $0.00 will be hidden from the list"))
         
@@ -135,6 +137,7 @@ class BankMenuBar(wx.MenuBar):
             handler = {
                 wx.ID_SAVE: self.onClickSave,
                 self.ID_AUTOSAVE: self.onClickAutoSave,
+                self.ID_VIEW_ALLACCOUNTS: self.onClickViewAll,
                 self.ID_SHOWZERO: self.onClickShowZero,
                 wx.ID_EXIT: self.onClickQuit,
                 self.ID_FAQ: self.onClickFAQs,
@@ -167,6 +170,9 @@ class BankMenuBar(wx.MenuBar):
 
     def onClickAutoSave(self, event):
         Publisher.sendMessage("user.autosave_toggled", event.Checked())
+        
+    def onClickViewAll(self, event):
+        Publisher.sendMessage("user.account changed", None)
         
     def onClickShowZero(self, event):
         Publisher.sendMessage("user.showzero_toggled", event.Checked())
