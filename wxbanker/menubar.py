@@ -55,7 +55,7 @@ class BankMenuBar(wx.MenuBar):
         # View menu.
         viewMenu = wx.Menu()
         viewMenu.AppendSeparator()
-        self.showZeroMenuItem = viewMenu.AppendCheckItem(self.ID_SHOWZERO, _("Show zero-balance accounts"), _("When disabled, accounts with a balance of $0.00 will be hidden from the list"))
+        self.showZeroMenuItem = viewMenu.AppendCheckItem(self.ID_SHOWZERO, _("Show zero-balance accounts")+"\tCtrl+B", _("When disabled, accounts with a balance of $0.00 will be hidden from the list"))
         
         # Use the initial show-zero setting.
         self.showZeroMenuItem.Check(showZero)
