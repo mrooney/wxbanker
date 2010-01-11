@@ -28,6 +28,7 @@ from wxbanker.csvimportframe import CsvImportFrame
 
 class BankMenuBar(wx.MenuBar):
     ID_AUTOSAVE = wx.NewId()
+    ID_SHOWZERO = wx.NewId()
     ID_FAQ = wx.NewId()
     ID_QUESTION = wx.NewId()
     ID_REPORTBUG = wx.NewId()
@@ -37,8 +38,10 @@ class BankMenuBar(wx.MenuBar):
     ID_REQUESTCURRENCY = wx.NewId()
     ID_IMPORT_CSV = wx.NewId()
 
-    def __init__(self, autosave, *args, **kwargs):
+    def __init__(self, bankController, *args, **kwargs):
         wx.MenuBar.__init__(self, *args, **kwargs)
+        autosave = bankController.AutoSave
+        showZero = bankController.ShowZeroBalanceAccounts
 
         # File menu.
         fileMenu = wx.Menu()
@@ -48,6 +51,14 @@ class BankMenuBar(wx.MenuBar):
         importCsvMenu = fileMenu.Append(self.ID_IMPORT_CSV, _("Import from CSV"), _("Import transactions from a CSV file"))
         fileMenu.AppendSeparator()
         quitItem = fileMenu.Append(wx.ID_EXIT)
+        
+        # View menu.
+        viewMenu = wx.Menu()
+        viewMenu.AppendSeparator()
+        self.showZeroMenuItem = viewMenu.AppendCheckItem(self.ID_SHOWZERO, _("Show zero-balance accounts"), _("When disabled, accounts with a balance of $0.00 will be hidden from the list"))
+        
+        # Use the initial show-zero setting.
+        self.showZeroMenuItem.Check(showZero)
 
         # Settings menu.
         settingsMenu = wx.Menu()
@@ -104,6 +115,7 @@ class BankMenuBar(wx.MenuBar):
 
         # Add everything to the main menu.
         self.Append(fileMenu, _("&File"))
+        self.Append(viewMenu, _("&View"))
         self.Append(settingsMenu, _("&Settings"))
         self.Append(helpMenu, _("&Help"))
 
@@ -112,6 +124,7 @@ class BankMenuBar(wx.MenuBar):
 
         self.toggleAutoSave(autosave)
         Publisher.subscribe(self.onAutoSaveToggled, "controller.autosave_toggled")
+        Publisher.subscribe(self.onShowZeroToggled, "controller.showzero_toggled")
 
     def onMenuEvent(self, event):
         ID = event.Id
@@ -122,6 +135,7 @@ class BankMenuBar(wx.MenuBar):
             handler = {
                 wx.ID_SAVE: self.onClickSave,
                 self.ID_AUTOSAVE: self.onClickAutoSave,
+                self.ID_SHOWZERO: self.onClickShowZero,
                 wx.ID_EXIT: self.onClickQuit,
                 self.ID_FAQ: self.onClickFAQs,
                 self.ID_QUESTION: self.onClickAskQuestion,
@@ -137,17 +151,25 @@ class BankMenuBar(wx.MenuBar):
 
     def onAutoSaveToggled(self, message):
         self.toggleAutoSave(message.data)
+        
+    def onShowZeroToggled(self, message):
+        self.toggleShowZero(message.data)
 
     def toggleAutoSave(self, autosave):
-        debug.debug("Updating UI for auto-save: %s" % autosave)
         self.autoSaveMenuItem.Check(autosave)
         self.saveMenuItem.Enable(not autosave)
+        
+    def toggleShowZero(self, showzero):
+        self.showZeroMenuItem.Check(showzero)
 
     def onClickSave(self, event):
         Publisher.sendMessage("user.saved")
 
     def onClickAutoSave(self, event):
         Publisher.sendMessage("user.autosave_toggled", event.Checked())
+        
+    def onClickShowZero(self, event):
+        Publisher.sendMessage("user.showzero_toggled", event.Checked())
         
     def onClickQuit(self, event):
         Publisher.sendMessage("quit")

@@ -33,6 +33,7 @@ class AccountListCtrl(wx.Panel):
 
     def __init__(self, parent, bankController, autoPopulate=True):
         wx.Panel.__init__(self, parent, name="AccountListCtrl")
+        self.bankController = bankController
         self.Model = bankController.Model
 
         # Initialize some attributes to their default values.
@@ -85,16 +86,11 @@ class AccountListCtrl(wx.Panel):
         miniSizer.Add(self.allAccountsRadio, 1)
         miniSizer.Add(self.totalText, 0, wx.LEFT, 10)
 
-        # The hide zero-balance accounts option.
-        self.hideBox = hideBox = wx.CheckBox(self.childPanel, label=_("Show zero-balance accounts"))
-        hideBox.SetToolTipString(_("When disabled, accounts with a balance of $0.00 will be hidden from the list"))
-
         #self.staticBoxSizer = SmoothStaticBoxSizer(self.staticBox, wx.VERTICAL)
         self.staticBoxSizer = wx.StaticBoxSizer(self.staticBox, wx.VERTICAL)
         #self.staticBoxSizer.SetSmooth(False)
         childSizer.Add(buttonSizer, 0, wx.BOTTOM, 5)#, 0, wx.ALIGN_RIGHT)
         childSizer.Add(miniSizer, 0, wx.EXPAND)
-        childSizer.Add(hideBox, 0, wx.TOP, 10)
         self.childPanel.Sizer = childSizer
         self.staticBoxSizer.Add(self.childPanel, 1, wx.EXPAND)
 
@@ -103,7 +99,6 @@ class AccountListCtrl(wx.Panel):
         removeButton.Bind(wx.EVT_BUTTON, self.onRemoveButton)
         editButton.Bind(wx.EVT_BUTTON, self.onRenameButton)
         configureButton.Bind(wx.EVT_BUTTON, self.onConfigureButton)
-        hideBox.Bind(wx.EVT_CHECKBOX, self.onHideCheck)
         # Set up the link binding.
         self.Bind(wx.EVT_RADIOBUTTON, self.onAccountClick)
 
@@ -113,6 +108,7 @@ class AccountListCtrl(wx.Panel):
         Publisher.subscribe(self.onAccountRemoved, "account.removed")
         Publisher.subscribe(self.onAccountAdded, "account.created")
         Publisher.subscribe(self.onCurrencyChanged, "currency_changed")
+        Publisher.subscribe(self.onShowZeroToggled, "controller.showzero_toggled")
 
         # Populate ourselves initially unless explicitly told not to.
         if autoPopulate:
@@ -123,15 +119,13 @@ class AccountListCtrl(wx.Panel):
         # Set the minimum size to the amount it needs to display the edit box.
         self.Freeze()
         self.showEditCtrl(focus=False)
-        minWidth = self.staticBoxSizer.CalcMin()[0]
+        minWidth = max((self.staticBoxSizer.CalcMin()[0], 250))
         self.onHideEditCtrl()
         self.Thaw()
         self.staticBoxSizer.SetMinSize((minWidth, -1))
-
-        # Update the checkbox at the end, so everything else is initialized.
-        hideBox.Value = not wx.Config.Get().ReadBool("HIDE_ZERO_BALANCE_ACCOUNTS")
-        # Setting the value doesn't trigger an event, so force an update.
-        self.onHideCheck(reselect=False)
+        
+        # Initially load the visibility of zero-balance accounts!
+        self.refreshVisibility()
 
         self.staticBoxSizer.Layout()
         #self.staticBoxSizer.SetSmooth(True)
@@ -231,6 +225,9 @@ class AccountListCtrl(wx.Panel):
 
     def GetCount(self):
         return len(self.accountObjects)
+    
+    def GetVisibleCount(self):
+        return len([i for i in range(self.GetCount()) if self.IsVisible(i)])
 
     def GetCurrentAccount(self):
         if self.currentIndex is not None:
@@ -348,7 +345,7 @@ class AccountListCtrl(wx.Panel):
         self.updateGrandTotal()
 
         # Handle a zero-balance account going to non-zero or vice-versa.
-        self.onHideCheck()
+        self.refreshVisibility()
 
         self.Layout()
         self.Parent.Layout()
@@ -375,7 +372,7 @@ class AccountListCtrl(wx.Panel):
         Called when a new account is created in the model.
         """
         account = message.data
-        self.onHideEditCtrl() #ASSUMPTION!
+        self.onHideEditCtrl()
         self._PutAccount(account, select=True)
 
         # Stop flashing the add button if it was, since there is now an account.
@@ -489,27 +486,27 @@ class AccountListCtrl(wx.Panel):
         else:
             selection = radio.AccountIndex
         self.SelectItem(selection)
+        
+    def onShowZeroToggled(self, message):
+        self.refreshVisibility()
 
-    def onHideCheck(self, event=None, reselect=True):
+    def refreshVisibility(self):
         """
-        This method is called when the user checks/unchecks
-        the option to hide zero-balance accounts.
+        This method is called when the user checks/unchecks the option to hide zero-balance accounts.
         """
-        checked = self.hideBox.IsChecked()
+        showzero = self.bankController.ShowZeroBalanceAccounts
+        
         for i, account in enumerate(self.accountObjects):
             # Show it, in the case of calls from updateTotals where a
             # zero-balance became a non-zero. otherwise it won't come up.
             # +1 offset is to take into account the buttons at the top.
             self.childSizer.Show(i+1)
-            if not checked:
+            if not showzero:
                 if abs(account.Balance) < .001:
                     self.childSizer.Hide(i+1)
 
+        # We hid the current selection, so select the first available.
+        if not showzero and not self.IsVisible(self.currentIndex):
+            self.SelectVisibleItem(0)
+                
         self.Parent.Layout()
-
-        if reselect:
-            # We hid the current selection, so select the first available.
-            if not checked and not self.IsVisible(self.currentIndex):
-                self.SelectVisibleItem(0)
-
-        wx.Config.Get().WriteBool("HIDE_ZERO_BALANCE_ACCOUNTS", not checked)

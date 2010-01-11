@@ -32,6 +32,7 @@ class GUITests(testbase.TestCaseHandlingConfig):
         self.Frame = self.App.TopWindow
         self.Model = self.Frame.Panel.bankController.Model
         self.OLV = wx.FindWindowByName("TransactionOLV")
+        self.AccountListCtrl = wx.FindWindowByName("AccountListCtrl")
         
     def tearDown(self):
         for account in self.Model.Accounts[:]:
@@ -42,7 +43,26 @@ class GUITests(testbase.TestCaseHandlingConfig):
     def testAutoSaveSetAndSaveDisabled(self):
         self.assertTrue( self.Frame.MenuBar.autoSaveMenuItem.IsChecked() )
         self.assertFalse( self.Frame.MenuBar.saveMenuItem.IsEnabled() )
-
+        
+    def testShowZeroEnabled(self):
+        self.assertTrue( self.Frame.MenuBar.showZeroMenuItem.IsChecked() )
+        
+    def testToggleShowZero(self):
+        # Create two accounts, make sure they are visible.
+        a = self.Model.CreateAccount("A")
+        b = self.Model.CreateAccount("B")
+        b.AddTransaction(1)
+        self.assertEqual(self.AccountListCtrl.GetVisibleCount(), 2)
+        
+        # Disable showing zero balance accounts, make sure the menu item is unchecked and one account is hidden.
+        Publisher.sendMessage("user.showzero_toggled", False)
+        self.assertFalse( self.Frame.MenuBar.showZeroMenuItem.IsChecked() )
+        self.assertEqual(self.AccountListCtrl.GetVisibleCount(), 1)
+        
+        # Make sure that a balance going to / coming from zero results in a visibility toggle.
+        b.AddTransaction(-1)
+        self.assertEqual(self.AccountListCtrl.GetVisibleCount(), 0)
+        
     def testAppHasController(self):
         self.assertTrue( hasattr(self.App, "Controller") )
 
@@ -50,7 +70,7 @@ class GUITests(testbase.TestCaseHandlingConfig):
         self.Model.CreateAccount(u"Lópezहिंदी")
         # Make sure the account ctrl has the first (0th) selection.
         managePanel = self.Frame.Panel.managePanel
-        self.assertEqual(0, wx.FindWindowByName("AccountListCtrl").currentIndex)
+        self.assertEqual(0, self.AccountListCtrl.currentIndex)
         # Mock out the account removal dialog in-place to just return "Yes"
         managePanel.accountCtrl.showModal = lambda *args, **kwargs: wx.ID_YES
         # Now remove the account and make sure there is no selection.
@@ -114,7 +134,7 @@ class GUITests(testbase.TestCaseHandlingConfig):
         # B was added most recently and as such should be selected.
         self.assertEqual(self.OLV.GetObjects(), [tb])
         
-        wx.FindWindowByName("AccountListCtrl").SelectItem(None)
+        self.AccountListCtrl.SelectItem(None)
         
         # Selecting None should show all transactions.
         self.assertEqual(self.OLV.GetObjects(), [ta, tb])

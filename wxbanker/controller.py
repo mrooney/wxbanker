@@ -183,14 +183,16 @@ class Controller(object):
     CONFIG_NAME = "wxBanker.cfg"
     DB_NAME = "bank.db"
     
-    def __init__(self, path=None, autoSave=True):
-        self._AutoSave = autoSave
+    def __init__(self, path=None):
+        self._AutoSave = True
+        self._ShowZeroBalanceAccounts = True
         self.Models = []
         
         self.InitConfig()
         self.LoadPath(path, use=True)
 
         Publisher.subscribe(self.onAutoSaveToggled, "user.autosave_toggled")
+        Publisher.subscribe(self.onShowZeroToggled, "user.showzero_toggled")
         Publisher.subscribe(self.onSaveRequest, "user.saved")
         
     def MigrateIfFound(self, fromPath, toPath):
@@ -235,13 +237,20 @@ class Controller(object):
             config.WriteBool("SHOW_CALC", False)
         if not config.HasEntry("AUTO-SAVE"):
             config.WriteBool("AUTO-SAVE", True)
+        if not config.HasEntry("HIDE_ZERO_BALANCE_ACCOUNTS"):
+            config.WriteBool("HIDE_ZERO_BALANCE_ACCOUNTS", False)
 
         # Set the auto-save option as appropriate.
         self.AutoSave = config.ReadBool("AUTO-SAVE")
+        self.ShowZeroBalanceAccounts = not config.ReadBool("HIDE_ZERO_BALANCE_ACCOUNTS")
 
     def onAutoSaveToggled(self, message):
         val = message.data
         self.AutoSave = val
+        
+    def onShowZeroToggled(self, message):
+        val = message.data
+        self.ShowZeroBalanceAccounts = val
 
     def onSaveRequest(self, message):
         self.Model.Save()
@@ -260,6 +269,14 @@ class Controller(object):
         # If the user enables auto-save, we want to also save.
         if self.AutoSave:
             Publisher.sendMessage("user.saved")
+            
+    def GetShowZero(self):
+        return self._ShowZeroBalanceAccounts
+    
+    def SetShowZero(self, val):
+        self._ShowZeroBalanceAccounts = val
+        wx.Config.Get().WriteBool("HIDE_ZERO_BALANCE_ACCOUNTS", not val)
+        Publisher.sendMessage("controller.showzero_toggled", val)
 
     def LoadPath(self, path, use=False):
         if path is None:
@@ -292,3 +309,4 @@ class Controller(object):
                     break
 
     AutoSave = property(GetAutoSave, SetAutoSave)
+    ShowZeroBalanceAccounts = property(GetShowZero, SetShowZero)
