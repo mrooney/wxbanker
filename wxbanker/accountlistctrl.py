@@ -126,7 +126,8 @@ class AccountListCtrl(wx.Panel):
         self.staticBoxSizer.SetMinSize((minWidth, -1))
         
         # Initially load the visibility of zero-balance accounts!
-        self.refreshVisibility()
+        # Don't refresh the selection or we'll send an account changed message which will overwrite the LastAccountId before it gets used!
+        self.refreshVisibility(refreshSelection=False)
 
         self.staticBoxSizer.Layout()
         #self.staticBoxSizer.SetSmooth(True)
@@ -501,23 +502,23 @@ class AccountListCtrl(wx.Panel):
     def onShowZeroToggled(self, message):
         self.refreshVisibility()
 
-    def refreshVisibility(self):
+    def refreshVisibility(self, refreshSelection=True):
         """
         This method is called when the user checks/unchecks the option to hide zero-balance accounts.
         """
-        showzero = self.bankController.ShowZeroBalanceAccounts
+        showZero = self.bankController.ShowZeroBalanceAccounts
         
         for i, account in enumerate(self.accountObjects):
             # Show it, in the case of calls from updateTotals where a
             # zero-balance became a non-zero. otherwise it won't come up.
             # +1 offset is to take into account the buttons at the top.
             self.childSizer.Show(i+1)
-            if not showzero:
+            if not showZero:
                 if abs(account.Balance) < .001:
                     self.childSizer.Hide(i+1)
 
-        # We hid the current selection, so select the first available.
-        if not showzero and not self.IsVisible(self.currentIndex):
+        # If we hid the current selection, select the first available.
+        if refreshSelection and not showZero and not self.IsVisible(self.currentIndex):
             self.SelectVisibleItem(0)
                 
         self.Parent.Layout()
