@@ -238,6 +238,7 @@ class NewTransactionRow(bankcontrols.GBRow):
     def __init__(self, parent, row, editing=None):
         bankcontrols.GBRow.__init__(self, parent, row, name="NewTransactionCtrl")
         self.CurrentAccount = editing
+        self.isInitialAccountSet = False
 
         self.dateCtrl = bankcontrols.DateCtrlFactory(parent)
         self.startText = wx.StaticText(parent, label=_("Starts:"))
@@ -314,7 +315,7 @@ class NewTransactionRow(bankcontrols.GBRow):
             dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onDateEnter)
             
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
-        wx.CallLater(500, self.initialFocus)
+        wx.CallLater(50, self.initialFocus)
 
     def onRecurringCheck(self, event=None):
         Publisher.sendMessage("newtransaction.%i.recurringtoggled"%id(self), self.recursCheck.IsChecked())
@@ -332,10 +333,11 @@ class NewTransactionRow(bankcontrols.GBRow):
         account = message.data
         self.CurrentAccount = account
         # Reset the focus assuming an account was selected; otherwise the new focus can't be acted on
-        if account:
+        if self.isInitialAccountSet:
             # Also, don't focus if the transaction tab isn't being viewed, otherwise it snaps us back from viewing graphs.
-            if self.Parent.IsShownOnScreen():
-                self.defaultFocus()
+            if account and self.Parent.IsShownOnScreen():
+                self.defaultFocus()            
+            self.isInitialAccountSet = True
 
     def onAmountChar(self, event):
         wx.CallAfter(self.updateAddIcon)
