@@ -48,7 +48,7 @@ def DateCtrlFactory(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY):
     except AttributeError:
         DatePickerClass = wx.DatePickerCtrl
 
-    dateCtrl = DatePickerClass(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY)
+    dateCtrl = DatePickerClass(parent, style=wx.DP_DROPDOWN|wx.DP_SHOWCENTURY|wx.TAB_TRAVERSAL)
     dateCtrl.SetToolTipString(_("Date"))
     dateCtrl.customKeyHandler = None
 

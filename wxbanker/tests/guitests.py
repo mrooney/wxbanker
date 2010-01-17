@@ -193,11 +193,11 @@ class GUITests(testbase.TestCaseHandlingConfig):
         self.assertEqual(self.OLV.GetObjects(), [t4])
         
         # Change to a, make sure we see a's match.
-        Publisher.sendMessage("view.account changed", a)
+        Publisher.sendMessage("user.account changed", a)
         self.assertEqual(self.OLV.GetObjects(), [t2])
         
         # Switch to all accounts, make sure we see both matches.
-        Publisher.sendMessage("view.account changed")
+        Publisher.sendMessage("user.account changed", None)
         self.assertEqual(self.OLV.GetObjects(), [t2, t4])
 
 

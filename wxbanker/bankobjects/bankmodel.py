@@ -35,6 +35,9 @@ class BankModel(ORMKeyValueObject):
 
         Publisher.subscribe(self.onCurrencyChanged, "user.currency_changed")
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
+        
+    def GetLastAccount(self):
+        return self.Accounts.GetById(self.LastAccountId)
 
     def GetBalance(self):
         return self.Accounts.Balance

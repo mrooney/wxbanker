@@ -44,6 +44,11 @@ class AccountList(list):
 
     def GetBalance(self):
         return sum([account.Balance for account in self])
+    
+    def GetById(self, theId):
+        for account in self:
+            if account.ID == theId:
+                return account
 
     def AccountIndex(self, accountName):
         for i, account in enumerate(self):

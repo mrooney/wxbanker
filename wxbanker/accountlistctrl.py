@@ -193,7 +193,8 @@ class AccountListCtrl(wx.Panel):
         self.editButton.Enabled = index is not None
         self.configureButton.Enabled = index is not None
 
-        # Tell the parent we changed.
+        # Inform everyone that we've changed. This is different from the 'user.account changed' event,
+        # as account changes are also triggered by account removals and additions.
         Publisher.sendMessage("view.account changed", account)
         
     def SelectItemById(self, theId):
@@ -494,10 +495,10 @@ class AccountListCtrl(wx.Panel):
         """
         radio = event.EventObject
         if radio is self.allAccountsRadio:
-            selection = None
+            account = None
         else:
-            selection = radio.AccountIndex
-        self.SelectItem(selection)
+            account = self.accountObjects[radio.AccountIndex]
+        Publisher.sendMessage("user.account changed", account)
         
     def onShowZeroToggled(self, message):
         self.refreshVisibility()

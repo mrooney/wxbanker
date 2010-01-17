@@ -62,7 +62,7 @@ class ManagePanel(wx.Panel):
 
         # Select the last-selected account.
         # Windows needs a delay, to work around LP #339860.
-        wx.CallLater(50, accountCtrl.SelectItemById, bankController.Model.LastAccountId)
+        wx.CallLater(50, Publisher.sendMessage, "user.account changed", bankController.Model.GetLastAccount())
 
         self.Layout()
 

@@ -312,8 +312,9 @@ class NewTransactionRow(bankcontrols.GBRow):
             # Bind to DateCtrl Enter (LP: 252454).
             dateTextCtrl.WindowStyleFlag |= wx.TE_PROCESS_ENTER
             dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onDateEnter)
-
+            
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
+        wx.CallLater(500, self.initialFocus)
 
     def onRecurringCheck(self, event=None):
         Publisher.sendMessage("newtransaction.%i.recurringtoggled"%id(self), self.recursCheck.IsChecked())
@@ -330,11 +331,11 @@ class NewTransactionRow(bankcontrols.GBRow):
     def onAccountChanged(self, message):
         account = message.data
         self.CurrentAccount = account
-        # Set the default focus, but not if there aren't any accounts since it will
-        # result in a distracting flashing cursor that can't be acted on.
-        # Also, don't focus if the transaction tab isn't being viewed, otherwise it snaps us back from viewing graphs.
-        if self.Parent.IsShownOnScreen() and account:
-            self.defaultFocus()
+        # Reset the focus assuming an account was selected; otherwise the new focus can't be acted on
+        if account:
+            # Also, don't focus if the transaction tab isn't being viewed, otherwise it snaps us back from viewing graphs.
+            if self.Parent.IsShownOnScreen():
+                self.defaultFocus()
 
     def onAmountChar(self, event):
         wx.CallAfter(self.updateAddIcon)
@@ -446,6 +447,10 @@ class NewTransactionRow(bankcontrols.GBRow):
         self.onTransferCheck()
         self.onRecurringCheck()
         self.defaultFocus()
+        
+    def initialFocus(self):
+        """Set the focus to what it should be when initially starting the application."""
+        self.dateCtrl.SetFocus()
         
     def defaultFocus(self):
         # Give focus to the description ctrl so the user can enter another transaction.
