@@ -47,6 +47,18 @@ class GUITests(testbase.TestCaseHandlingConfig):
     def testShowZeroEnabled(self):
         self.assertTrue( self.Frame.MenuBar.showZeroMenuItem.IsChecked() )
         
+    def testControlFocus(self):
+        # This test is only half-useful, because we're testing the methods directly and not
+        # that they happen when expected via events; for some reason that doesn't work.
+        newCtrl = wx.FindWindowByName("NewTransactionCtrl")
+        newCtrl.initialFocus()
+        self.assertEqual(wx.Window.FindFocus(), newCtrl.dateCtrl)
+        newCtrl.defaultFocus()
+        self.assertEqual(wx.Window.FindFocus(), newCtrl.descCtrl)
+        
+    def testKeyboardAccountShortcuts(self):
+        pass
+        
     def testToggleShowZero(self):
         # Create two accounts, make sure they are visible.
         a = self.Model.CreateAccount("A")

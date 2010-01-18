@@ -336,7 +336,8 @@ class NewTransactionRow(bankcontrols.GBRow):
         if self.isInitialAccountSet:
             # Also, don't focus if the transaction tab isn't being viewed, otherwise it snaps us back from viewing graphs.
             if account and self.Parent.IsShownOnScreen():
-                self.defaultFocus()            
+                self.defaultFocus() 
+        else:
             self.isInitialAccountSet = True
 
     def onAmountChar(self, event):

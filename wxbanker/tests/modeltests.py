@@ -384,7 +384,7 @@ class ModelTests(testbase.TestCaseWithController):
         model = self.Controller.Model
         a = model.CreateAccount("A")
         self.assertEqual(model.LastAccountId, None)
-        Publisher.sendMessage("user.account changed", a)
+        Publisher.sendMessage("view.account changed", a)
         self.assertEqual(model.LastAccountId, a.ID)
         
         
