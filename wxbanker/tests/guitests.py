@@ -28,17 +28,29 @@ class GUITests(testbase.TestCaseHandlingConfig):
         testbase.TestCaseHandlingConfig.setUp(self)
         if not hasattr(wx, "appInst"):
             wx.appInst = main.init(":memory:", welcome=False)
+            
         self.App = wx.appInst
         self.Frame = self.App.TopWindow
         self.Model = self.Frame.Panel.bankController.Model
         self.OLV = wx.FindWindowByName("TransactionOLV")
         self.AccountListCtrl = wx.FindWindowByName("AccountListCtrl")
+        self.NewTransactionCtrl = wx.FindWindowByName("NewTransactionCtrl")
         
     def tearDown(self):
         for account in self.Model.Accounts[:]:
             self.Model.RemoveAccount(account.Name)
         # Clear out any state of the NTC.
-        wx.FindWindowByName("NewTransactionCtrl").clear()
+        self.NewTransactionCtrl.clear()
+        
+    def assertCurrentAccount(self, account):
+        alc = self.AccountListCtrl.GetCurrentAccount()
+        self.assertEqual(alc, account, alc and alc.Name)
+        if account is None:
+            expectedTransactions = self.Model.GetTransactions()
+        else:
+            expectedTransactions = account.Transactions
+        self.assertEqual(self.OLV.GetObjects(), expectedTransactions)
+        self.assertEqual(self.NewTransactionCtrl.CurrentAccount, account)
 
     def testAutoSaveSetAndSaveDisabled(self):
         self.assertTrue( self.Frame.MenuBar.autoSaveMenuItem.IsChecked() )
@@ -50,14 +62,61 @@ class GUITests(testbase.TestCaseHandlingConfig):
     def testControlFocus(self):
         # This test is only half-useful, because we're testing the methods directly and not
         # that they happen when expected via events; for some reason that doesn't work.
-        newCtrl = wx.FindWindowByName("NewTransactionCtrl")
+        newCtrl = self.NewTransactionCtrl
         newCtrl.initialFocus()
         self.assertEqual(wx.Window.FindFocus(), newCtrl.dateCtrl)
         newCtrl.defaultFocus()
         self.assertEqual(wx.Window.FindFocus(), newCtrl.descCtrl)
         
     def testKeyboardAccountShortcuts(self):
-        pass
+        model = self.Model
+        accountList = self.AccountListCtrl
+        
+        a = model.CreateAccount("A")
+        a.AddTransaction(1)
+        b = model.CreateAccount("B")
+        b.AddTransaction(2)
+        c = model.CreateAccount("C")
+        c.AddTransaction(3)
+        
+        self.assertCurrentAccount(c)
+        
+        Publisher.sendMessage("user.previous account")
+        self.assertCurrentAccount(b)
+        
+        Publisher.sendMessage("user.previous account")
+        self.assertCurrentAccount(a)
+        
+        Publisher.sendMessage("user.previous account")
+        self.assertCurrentAccount(a)
+        
+        Publisher.sendMessage("user.next account")
+        self.assertCurrentAccount(b)
+        
+        Publisher.sendMessage("user.next account")
+        self.assertCurrentAccount(c)
+        
+        Publisher.sendMessage("user.account changed", None)
+        self.assertCurrentAccount(None)
+        
+        Publisher.sendMessage("user.next account")
+        self.assertCurrentAccount(None)
+        
+        Publisher.sendMessage("user.previous account")
+        self.assertCurrentAccount(c)
+        
+        # Bring "B" to zero, and test that it gets skipped over when not viewing zero balances.
+        b.AddTransaction(-2)
+        Publisher.sendMessage("user.showzero_toggled", False)
+
+        try:
+            Publisher.sendMessage("user.previous account")
+            self.assertCurrentAccount(a)
+            
+            Publisher.sendMessage("user.next account")
+            self.assertCurrentAccount(c)
+        finally:
+            Publisher.sendMessage("user.showzero_toggled", True)
         
     def testToggleShowZero(self):
         # Create two accounts, make sure they are visible.
@@ -87,31 +146,29 @@ class GUITests(testbase.TestCaseHandlingConfig):
         managePanel.accountCtrl.showModal = lambda *args, **kwargs: wx.ID_YES
         # Now remove the account and make sure there is no selection.
         managePanel.accountCtrl.onRemoveButton(None)
-        self.assertEqual(None, managePanel.accountCtrl.currentIndex)
+        self.assertCurrentAccount(None)
 
     def testCanAddTransaction(self):
-        tctrl = wx.FindWindowByName("NewTransactionCtrl")
         a = self.Model.CreateAccount("testCanAddTransaction")
 
         self.assertEquals(len(a.Transactions), 0)
         self.assertEquals(a.Balance, 0)
 
-        tctrl.amountCtrl.Value = "12.34"
-        tctrl.onNewTransaction()
+        self.NewTransactionCtrl.amountCtrl.Value = "12.34"
+        self.NewTransactionCtrl.onNewTransaction()
 
         self.assertEquals(len(a.Transactions), 1)
         self.assertEquals(a.Balance, 12.34)
         
     def testCanAddRecurringTransaction(self):
         model = self.Model
-        tctrl = wx.FindWindowByName("NewTransactionCtrl")
         a = model.CreateAccount("testCanAddRecurringTransaction")
 
         self.assertEquals(len(a.Transactions), 0)
         self.assertEquals(a.Balance, 0)
 
-        tctrl.amountCtrl.Value = "12.34"
-        tctrl.recursCheck.Value = True
+        self.NewTransactionCtrl.amountCtrl.Value = "12.34"
+        self.NewTransactionCtrl.recursCheck.Value = True
         
         # Test the default of this field, and that it doesn't end.
         summaryText = wx.FindWindowByName("RecurringSummaryText")
@@ -125,7 +182,7 @@ class GUITests(testbase.TestCaseHandlingConfig):
         wx.FindWindowByName("RecurringPanel").Update()
         self.assertTrue("until" in summaryText.Label)
         
-        tctrl.onNewTransaction()
+        self.NewTransactionCtrl.onNewTransaction()
 
         self.assertEquals(len(a.Transactions), 0)
         self.assertEquals(a.Balance, 0)

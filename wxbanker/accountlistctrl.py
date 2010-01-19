@@ -110,6 +110,8 @@ class AccountListCtrl(wx.Panel):
         Publisher.subscribe(self.onCurrencyChanged, "currency_changed")
         Publisher.subscribe(self.onShowZeroToggled, "controller.showzero_toggled")
         Publisher.subscribe(self.onAccountChanged, "user.account changed")
+        Publisher.subscribe(self.onSelectNextAccount, "user.next account")
+        Publisher.subscribe(self.onSelectPreviousAccount, "user.previous account")
 
         # Populate ourselves initially unless explicitly told not to.
         if autoPopulate:
@@ -164,10 +166,7 @@ class AccountListCtrl(wx.Panel):
         self.Parent.Layout()
 
     def IsVisible(self, index):
-        """
-        Return whether or not the account at the given
-        index is visible.
-        """
+        """Return whether or not the account at the given index is visible."""
         if index is None:
             return False
 
@@ -196,6 +195,7 @@ class AccountListCtrl(wx.Panel):
         # Inform everyone that we've changed. This is different from the 'user.account changed' event,
         # as account changes are also triggered by account removals and additions.
         Publisher.sendMessage("view.account changed", account)
+        return account
         
     def SelectItemById(self, theId):
         # If there is no recently selected account, select the first visible if one exists.
@@ -230,6 +230,33 @@ class AccountListCtrl(wx.Panel):
                     self.SelectItem(i)
                     return
         else: # If we didn't break (or return).
+            self.SelectItem(None)
+            
+    def SelectPreviousAccount(self):
+        if self.currentIndex is not None:
+            i = self.currentIndex - 1
+        else:
+            i = len(self.accountObjects) - 1
+            
+        while i >= 0:
+            if self.IsVisible(i):
+                return self.SelectItem(i)
+            i -= 1
+        return self.accountObjects[0]
+    
+    def SelectNextAccount(self):
+        if self.currentIndex is not None:
+            i = self.currentIndex + 1
+        else:
+            i = len(self.accountObjects)
+            
+        while i < len(self.accountObjects):
+            if self.IsVisible(i):
+                return self.SelectItem(i)
+            i += 1
+            
+        # We reached the end. If "All" isn't already selected, do it.
+        if self.GetCurrentAccount() is not None:
             self.SelectItem(None)
 
     def GetCount(self):
@@ -502,6 +529,12 @@ class AccountListCtrl(wx.Panel):
         
     def onShowZeroToggled(self, message):
         self.refreshVisibility()
+        
+    def onSelectNextAccount(self, message):
+        self.SelectNextAccount()
+        
+    def onSelectPreviousAccount(self, message):
+        self.SelectPreviousAccount()
 
     def refreshVisibility(self, refreshSelection=True):
         """

@@ -179,11 +179,10 @@ class BankMenuBar(wx.MenuBar):
         Publisher.sendMessage("user.autosave_toggled", event.Checked())
         
     def onClickPrevAccount(self, event):
-        print "<"
-        #WXTODO: implement AccountListCtrl.Select(Previous|Next) and send a message here to trigger it
+        Publisher.sendMessage("user.previous account")
         
     def onClickNextAccount(self, event):
-        print ">"
+        Publisher.sendMessage("user.next account")
         
     def onClickViewAll(self, event):
         Publisher.sendMessage("user.account changed", None)
