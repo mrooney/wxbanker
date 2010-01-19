@@ -148,12 +148,6 @@ True
 >>> a.Balance == model.Balance
 True
 
->>> a3 = model.CreateAccount("Fresh New Account")
->>> a3.Balance
-0.0
->>> a3.Transactions
-[]
-
 >>> t1 in a.Transactions
 False
 >>> t1.Parent == a

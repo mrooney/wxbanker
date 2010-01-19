@@ -56,6 +56,12 @@ class ModelTests(testbase.TestCaseWithController):
         self.assertEquals(a.ParseAmount("1.000,23"), 1000.23)
         self.assertEquals(a.ParseAmount("1 000,23"), 1000.23)
         self.assertEquals(a.ParseAmount("1234567890"), 1234567890)
+        
+    def testFreshAccount(self):
+        a = self.Model.CreateAccount("Fresh")
+        self.assertEqual(a.Balance, 0)
+        self.assertEqual(a.Transactions, [])
+        self.assertEqual(a.Name, "Fresh")
 
     def testControllerIsAutoSavingByDefault(self):
         self.assertTrue( self.Controller.AutoSave )
