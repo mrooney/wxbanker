@@ -141,7 +141,7 @@ class TransactionOLV(GroupListView):
         if self.CurrentAccount:
             return self.CurrentAccount.float2str(floatVal)
         else:
-            #TODO: fix me, this function should be given the object which should have a float2str method
+            #WXTODO: fix me, this function should be given the object which should have a float2str method
             # so that for multiple currencies they can be displayed differently when viewing all.
             return self.BankController.Model.float2str(floatVal)
     
@@ -289,7 +289,7 @@ class TransactionOLV(GroupListView):
         if account is self.CurrentAccount:
             self.AddObject(transaction)
             self.updateTotals()
-            #TODO: Perhaps get the actual position and scroll to that, it may not be last.
+            #WXTODO: Perhaps get the actual position and scroll to that, it may not be last.
             self.ensureVisible(-1)
 
     def onSearch(self, message):

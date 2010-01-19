@@ -18,7 +18,7 @@ class AccountPlotCanvas(pyplot.PlotCanvas, baseplot.BasePlot):
         baseplot.BasePlot.__init__(self)
         self.bankController = bankController
         self.pointDates = []
-        self.startDate = None #TODO: get rid of this and use self.pointDates[0]
+        self.startDate = None #WXTODO: get rid of this and use self.pointDates[0]
         self.SetEnablePointLabel(True)
         self.SetEnableLegend(True)
         self.SetPointLabelFunc(self.drawPointLabel)

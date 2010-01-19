@@ -319,20 +319,20 @@ class NewTransactionRow(bankcontrols.GBRow):
 
     def onRecurringCheck(self, event=None):
         Publisher.sendMessage("newtransaction.%i.recurringtoggled"%id(self), self.recursCheck.IsChecked())
-        ##self.startText.Show(recurring) #TODO: perhaps remove startText?
+        ##self.startText.Show(recurring) #WXTODO: perhaps remove startText?
 
     def onTransferCheck(self, event=None):
         Publisher.sendMessage("newtransaction.%i.transfertoggled"%id(self), self.transferCheck.IsChecked())
 
     def onDateEnter(self, event):
-        # Force a focus-out/tab to work around LP #311934
+        # Force a focus-out/tab to work around LP #311934.
         self.dateCtrl.Navigate()
         self.onNewTransaction()
 
     def onAccountChanged(self, message):
         account = message.data
         self.CurrentAccount = account
-        # Reset the focus assuming an account was selected; otherwise the new focus can't be acted on
+        # Reset the focus assuming an account was selected; otherwise the new focus can't be acted on.
         if self.isInitialAccountSet:
             # Also, don't focus if the transaction tab isn't being viewed, otherwise it snaps us back from viewing graphs.
             if account and self.Parent.IsShownOnScreen():
