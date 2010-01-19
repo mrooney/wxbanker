@@ -62,28 +62,8 @@ class Transaction(ORMObject):
     def _MassageDate(self, date):
         """
         Takes a date and returns a valid datetime.date object.
-        `date` can be a datetime object, or a string.
-        In the case of a string, valid separators are '-' and '/'.
-
-        Abbreviated years will be converted into the "intended" year.
-
-        >>> _MassageData = Transaction(None, None, 0, "", '2001/01/01')._MassageDate
-        >>> _MassageData("2008-01-06")
-        datetime.date(2008, 1, 6)
-        >>> _MassageData("08-01-06")
-        datetime.date(2008, 1, 6)
-        >>> _MassageData("86-01-06")
-        datetime.date(1986, 1, 6)
-        >>> _MassageData("11-01-06")
-        datetime.date(2011, 1, 6)
-        >>> _MassageData("0-1-6")
-        datetime.date(2000, 1, 6)
-        >>> _MassageData("0/1/6")
-        datetime.date(2000, 1, 6)
-        >>> _MassageData(datetime.date(2008, 1, 6))
-        datetime.date(2008, 1, 6)
-        >>> _MassageData(None) == datetime.date.today()
-        True
+        `date` can be a datetime object, or a string. In the case of a string, valid separators are '-' and '/'.
+        Abbreviated years will be converted into the "intended" year: 86 => 1986, 08 => 2008.
         """
         if date is None:
             return datetime.date.today()

@@ -18,35 +18,18 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import doctest, pprint
+import doctest
 from wxbanker.tests import testbase
 from wxbanker import controller
 from wxbanker.testhelpers import displayhook
-from wxbanker.bankobjects import transaction
 from wxbanker.tests import alltests
 
 def main():
     import sys; sys.displayhook = displayhook
-    mods = [transaction, controller]
-
-    results = {}
-    for mod in mods:
-        result = doctest.testmod(mod)
-        results[mod.__name__] = result
-        
-    print "(Failures, Total):"
-    pprint.pprint(results)
-    failures = sum([v[0] for v in results.values()])
-    tests = sum([v[1] for v in results.values()])
-
-    print "\n%i total failures out of %i total tests in %i modules." % (failures, tests, len(mods))
-    if failures:
-        print "TESTS FAILED."
-    else:
-        print "TESTS PASSED."
-
+    # Run the legacy controller doctests and display the results.
+    print "DOCTESTS:", doctest.testmod(controller)
+    # Run all of the unit tests.
     alltests.main()
-
 
 if __name__ == "__main__":
     main()

@@ -387,6 +387,29 @@ class ModelTests(testbase.TestCaseWithController):
         Publisher.sendMessage("view.account changed", a)
         self.assertEqual(model.LastAccountId, a.ID)
         
+    def testTransactionDateMassaging(self):
+        model = self.Controller.Model
+        t = model.CreateAccount("A").AddTransaction(1)
+        self.assertEqual(t.Date, today)
+        t.Date = "2001/01/01"
+        self.assertEqual(t.Date, datetime.date(2001, 1, 1))
+        t.Date = "2008-01-06"
+        self.assertEqual(t.Date, datetime.date(2008, 1, 6))
+        t.Date = "08-01-06"
+        self.assertEqual(t.Date, datetime.date(2008, 1, 6))
+        t.Date = "86-01-06"
+        self.assertEqual(t.Date, datetime.date(1986, 1, 6))
+        t.Date = "11-01-06"
+        self.assertEqual(t.Date, datetime.date(2011, 1, 6))
+        t.Date = "0-1-6"
+        self.assertEqual(t.Date, datetime.date(2000, 1, 6))
+        t.Date = "0/1/6"
+        self.assertEqual(t.Date, datetime.date(2000, 1, 6))
+        t.Date = datetime.date(2008, 1, 6)
+        self.assertEqual(t.Date, datetime.date(2008, 1, 6))
+        t.Date = None
+        self.assertEqual(t.Date, datetime.date.today())
+        
         
 if __name__ == "__main__":
     unittest.main()
