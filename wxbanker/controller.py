@@ -26,8 +26,6 @@ are getting published when they should be.
 
 >>> from wxbanker.testhelpers import Subscriber
 >>> messages = Subscriber()
->>> len(messages)
-0
 
 # Ensure that we have a clean, fresh bank by removing a test one
 # if it already exists.
@@ -41,22 +39,9 @@ are getting published when they should be.
 >>> model.Accounts
 []
 
-# Now test that the appropriate exceptions are thrown.
-
->>> model.RemoveAccount("My Account")
-Traceback (most recent call last):
-  ...
-InvalidAccountException: Invalid account 'My Account' specified.
-
 # Now test valid account and transaction manipulation.
 
 >>> a1 = model.CreateAccount("My Account")
->>> model.CreateAccount("My Account")
-Traceback (most recent call last):
-  ...
-AccountAlreadyExistsException: Account 'My Account' already exists.
->>> len(model.Accounts) == 1
-True
 >>> a = model.Accounts[0]
 >>> a == a1
 True
@@ -81,16 +66,7 @@ datetime.date(2007, 1, 6)
 >>> model.float2str(model.Balance)
 u'$90.27'
 
-#testRenameAccount
 >>> a.Name = "My Renamed Account"
->>> len(model.Accounts)
-1
->>> model.Accounts[0].Name
-'My Renamed Account'
->>> model.RemoveAccount("My Account")
-Traceback (most recent call last):
-  ...
-InvalidAccountException: Invalid account 'My Account' specified.
 
 #testTransactionUpdating
 >>> t1.Amount = -101

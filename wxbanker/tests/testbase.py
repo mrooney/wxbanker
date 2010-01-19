@@ -67,6 +67,14 @@ class TestCaseHandlingConfig(unittest.TestCase):
         # The backup won't exist if there wasn't an original config to back-up.
         if os.path.exists(self.ConfigPathBackup):
             os.rename(self.ConfigPathBackup, self.ConfigPath)
+            
+    def assertRaisesWithMsg(self, function, args, exception, msg):
+        try:
+            function(*args)
+        except exception, e:
+            self.assertEqual(str(e), msg)
+        else:
+            fail()
 
 class TestCaseWithController(TestCaseHandlingConfig):
     """

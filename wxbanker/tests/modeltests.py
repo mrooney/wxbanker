@@ -62,6 +62,13 @@ class ModelTests(testbase.TestCaseWithController):
         self.assertEqual(a.Balance, 0)
         self.assertEqual(a.Transactions, [])
         self.assertEqual(a.Name, "Fresh")
+        
+    def testCannotRemoveNonexistentAccount(self):
+        self.assertRaisesWithMsg(self.Model.RemoveAccount, ["Foo"], bankexceptions.InvalidAccountException, "Invalid account 'Foo' specified.")
+            
+    def testCannotCreateAccountWithSameName(self):
+        a = self.Model.CreateAccount("A")
+        self.assertRaisesWithMsg(self.Model.CreateAccount, ["A"], bankexceptions.AccountAlreadyExistsException, "Account 'A' already exists.")
 
     def testControllerIsAutoSavingByDefault(self):
         self.assertTrue( self.Controller.AutoSave )
@@ -228,6 +235,7 @@ class ModelTests(testbase.TestCaseWithController):
         self.assertEqual(a.Name, "A")
         a.Name = "B"
         self.assertEqual(a.Name, "B")
+        self.assertRaisesWithMsg(model.RemoveAccount, ["A"], bankexceptions.InvalidAccountException, "Invalid account 'A' specified.")
         
     def testTransactionDescriptionChange(self):
         model = self.Controller.Model
