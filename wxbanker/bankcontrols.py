@@ -189,10 +189,12 @@ class GBRow(wx.Window):
         self.Column = 0
         
     def AddNext(self, ctrl, *args, **kwargs):
+        # Handle the arguments, including giving everything a top padding of 6 pixels.
         if "flag" in kwargs:
-            kwargs["flag"] = kwargs["flag"] | wx.ALIGN_CENTER_VERTICAL
+            kwargs["flag"] = kwargs["flag"] | wx.ALIGN_CENTER_VERTICAL | wx.TOP
         else:
-            kwargs["flag"] = wx.ALIGN_CENTER_VERTICAL
+            kwargs["flag"] = wx.ALIGN_CENTER_VERTICAL | wx.TOP
+        kwargs["border"] = 6
 
         # Add the item.
         self.Parent.Sizer.Add(ctrl, wx.GBPosition(self.Row, self.Column), *args, **kwargs)

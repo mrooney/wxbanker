@@ -47,7 +47,7 @@ class SummaryPanel(wx.Panel):
         controlSizer.AddSpacer(5)
         controlSizer.Add(self.endDate, 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(10)
-        controlSizer.Add(wx.StaticText(self, label=_("Fit Curve Degree")), 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.Add(wx.StaticText(self, label=_("Trend Degree")), 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(5)
         controlSizer.Add(degCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
         degCtrl.SetMinSize = (20, -1)
@@ -55,7 +55,7 @@ class SummaryPanel(wx.Panel):
         # put it all together
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
         self.Sizer.Add(self.plotPanel, 1, wx.EXPAND)
-        self.Sizer.Add(controlSizer, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 2)
+        self.Sizer.Add(controlSizer, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALL, 6)
 
         self.Layout()
 

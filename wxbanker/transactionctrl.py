@@ -35,7 +35,7 @@ class TransactionCtrl(wx.Panel):
         # Create the recurring object we will use internally.
         self.recurringObj = RecurringTransaction(None, None, 0, "", datetime.date.today(), RecurringTransaction.DAILY)
         
-        self.Sizer = wx.GridBagSizer(3, 3)
+        self.Sizer = wx.GridBagSizer(0, 3)
         self.Sizer.SetEmptyCellSize((0,0))
         self.Sizer.AddGrowableCol(1, 1)
         

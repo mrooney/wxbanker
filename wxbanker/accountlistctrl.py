@@ -74,9 +74,12 @@ class AccountListCtrl(wx.Panel):
         # Layout the buttons.
         buttonSizer = wx.BoxSizer()
         buttonSizer.Add(addButton)
-        buttonSizer.Add(removeButton)
+        buttonSizer.AddSpacer(6)
         buttonSizer.Add(editButton)
+        buttonSizer.AddSpacer(6)
         buttonSizer.Add(configureButton)
+        buttonSizer.AddSpacer(6)
+        buttonSizer.Add(removeButton)
 
         # Set up the "Total" sizer.
         self.totalText = wx.StaticText(self.childPanel, label=self.Model.float2str(0))
@@ -89,7 +92,7 @@ class AccountListCtrl(wx.Panel):
         #self.staticBoxSizer = SmoothStaticBoxSizer(self.staticBox, wx.VERTICAL)
         self.staticBoxSizer = wx.StaticBoxSizer(self.staticBox, wx.VERTICAL)
         #self.staticBoxSizer.SetSmooth(False)
-        childSizer.Add(buttonSizer, 0, wx.BOTTOM, 5)#, 0, wx.ALIGN_RIGHT)
+        childSizer.Add(buttonSizer, 0, wx.BOTTOM, 9)
         childSizer.Add(miniSizer, 0, wx.EXPAND)
         self.childPanel.Sizer = childSizer
         self.staticBoxSizer.Add(self.childPanel, 1, wx.EXPAND)

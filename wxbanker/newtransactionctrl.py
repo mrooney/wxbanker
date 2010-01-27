@@ -256,11 +256,11 @@ class NewTransactionRow(bankcontrols.GBRow):
         
         # The transfer check.
         self.transferCheck = wx.CheckBox(parent, label=_("Transfer"))
-        checkSizer.Add(self.transferCheck)
+        checkSizer.Add(self.transferCheck, 0, wx.RIGHT, 6)
         
         # The recurs check.
         self.recursCheck = wx.CheckBox(parent, label=_("Recurring"))
-        checkSizer.Add(self.recursCheck)
+        checkSizer.Add(self.recursCheck, 0, wx.RIGHT, 6)
     
         # If we are editing, it is inherently a recurring transaction.
         if editing:
@@ -274,7 +274,7 @@ class NewTransactionRow(bankcontrols.GBRow):
         # Set up the layout.
         dateSizer = wx.BoxSizer()
         dateSizer.Add(self.startText, flag=wx.ALIGN_CENTER)
-        dateSizer.Add(wx.StaticBitmap(parent, bitmap=wx.ArtProvider.GetBitmap('wxART_date')), 0, wx.ALIGN_CENTER|wx.ALL, 2)
+        dateSizer.Add(wx.StaticBitmap(parent, bitmap=wx.ArtProvider.GetBitmap('wxART_date')), 0, wx.ALIGN_CENTER|wx.RIGHT, 2)
         dateSizer.Add(self.dateCtrl, flag=wx.ALIGN_CENTER|wx.EXPAND)
         self.startText.Hide()
         

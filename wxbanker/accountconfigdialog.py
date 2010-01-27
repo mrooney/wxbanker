@@ -57,7 +57,7 @@ class RecurringConfigPanel(wx.Panel):
         self.Account = account
         wx.Panel.__init__(self, parent)
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
-        self.Sizer.AddSpacer(5)
+        self.Sizer.AddSpacer(6)
         
         self.staticBox = wx.StaticBox(self, label=_("Transaction details"))
         self.staticBoxSizer = wx.StaticBoxSizer(self.staticBox, wx.VERTICAL)
@@ -68,19 +68,20 @@ class RecurringConfigPanel(wx.Panel):
         self.transactions = self.Account.GetRecurringTransactions()
         
         self.buttonSizer = wx.BoxSizer()
-        self.Sizer.AddSpacer(5)
-        self.Sizer.AddSpacer(10)
-        self.Sizer.Add(self.staticBoxSizer, 0, wx.EXPAND|wx.LEFT|wx.RIGHT, 5)
+        self.Sizer.AddSpacer(6)
+        # Something can be inserted here so the double spacers makes some sense.
+        self.Sizer.AddSpacer(12)
+        self.Sizer.Add(self.staticBoxSizer, 0, wx.EXPAND|wx.LEFT|wx.RIGHT, 6)
         self.Sizer.AddStretchSpacer(1)
         self.Sizer.Add(self.buttonSizer, flag=wx.ALIGN_RIGHT)
-        self.Sizer.AddSpacer(5)
+        self.Sizer.AddSpacer(6)
         
         if not self.transactions:
             self.setupNoRecurringTransactions()
         else:
             self.setupRecurringTransactions()
             
-        self.buttonSizer.AddSpacer(5)
+        self.buttonSizer.AddSpacer(6)
         
         self.Bind(wx.EVT_BUTTON, self.onButton)
         
@@ -108,12 +109,13 @@ class RecurringConfigPanel(wx.Panel):
         strings = [rt.GetDescriptionString() for rt in self.transactions]
         self.transactionChoice = wx.Choice(self, choices=strings)
         
-        self.Sizer.Insert(1, self.transactionChoice, flag=wx.EXPAND)
+        self.Sizer.Insert(1, self.transactionChoice, flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=6)
         self.transactionCtrl.FromRecurring(self.transactions[0])
         
         saveButton = wx.Button(self, label=_("Save"), id=wx.ID_SAVE)
         closeButton = wx.Button(self, label=_("Cancel"), id=wx.ID_CLOSE)
         self.buttonSizer.Add(saveButton)
+        self.buttonSizer.AddSpacer(12)
         self.buttonSizer.Add(closeButton)
         
         self.transactionChoice.Bind(wx.EVT_CHOICE, self.onTransactionChoice)

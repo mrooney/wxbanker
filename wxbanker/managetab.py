@@ -131,9 +131,10 @@ class TransactionPanel(wx.Panel):
         subpanel.Sizer.Add(transactionCtrl, 1, wx.EXPAND)
 
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
-        self.Sizer.Add(self.searchCtrl, 0, wx.ALIGN_RIGHT)
+        self.Sizer.Add(self.searchCtrl, 0, wx.ALIGN_RIGHT|wx.RIGHT, 6)
         self.Sizer.Add(subpanel, 1, wx.EXPAND)
-        self.Sizer.Add(newTransCtrl, 0, wx.EXPAND)
+        self.Sizer.Add(newTransCtrl, 0, wx.EXPAND|wx.LEFT, 6)
+        self.Sizer.AddSpacer(3)
 
         for message in ["account.created", "account.removed"]:
             Publisher.subscribe(self.onSearchInvalidatingChange, message)
