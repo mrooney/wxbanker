@@ -22,8 +22,9 @@ from wxbanker.tests import testbase
 from wxbanker.controller import Controller
 import unittest, shutil, os, tempfile
 
-class DBUpgradeTest(unittest.TestCase):
+class DBUpgradeTest(testbase.TestCaseHandlingConfig):
     def setUp(self):
+        testbase.TestCaseHandlingConfig.setUp(self)
         self.tmpFile = None
         
     def doBaseTest(self, ver):

@@ -23,9 +23,9 @@ from wxbanker import main, controller
 import os, wx, unittest
 from wx.lib.pubsub import Publisher
 
-class GUITests(testbase.TestCaseHandlingConfig):
+class GUITests(testbase.TestCaseHandlingConfigBase):
     def setUp(self):
-        testbase.TestCaseHandlingConfig.setUp(self)
+        testbase.TestCaseHandlingConfigBase.setUp(self)
         if not hasattr(wx, "appInst"):
             wx.appInst = main.init(":memory:", welcome=False)
             
@@ -41,6 +41,7 @@ class GUITests(testbase.TestCaseHandlingConfig):
             self.Model.RemoveAccount(account.Name)
         # Clear out any state of the NTC.
         self.NewTransactionCtrl.clear()
+        testbase.TestCaseHandlingConfigBase.tearDown(self)
         
     def assertCurrentAccount(self, account):
         alc = self.AccountListCtrl.GetCurrentAccount()

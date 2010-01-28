@@ -53,7 +53,7 @@ def resetLocale():
     assert bool(locale.setlocale(locale.LC_ALL, ""))
     reload(currencies)
 
-class TestCaseHandlingConfig(unittest.TestCase):
+class TestCaseHandlingConfigBase(unittest.TestCase):
     """
     Handle not stomping over the config file.
     """
@@ -76,6 +76,19 @@ class TestCaseHandlingConfig(unittest.TestCase):
         else:
             fail()
 
+class TestCaseHandlingConfig(TestCaseHandlingConfigBase):
+        """
+        This class is basically its parent but unsubscribes everything in setUp and tearDown.
+        The GUI tests can't use this because they can't lose subscriptions, so they use the base.
+        """
+        def setUp(self):
+            Publisher.unsubAll()
+            TestCaseHandlingConfigBase.setUp(self)
+
+        def tearDown(self):
+            TestCaseHandlingConfigBase.tearDown(self)
+            Publisher.unsubAll()
+
 class TestCaseWithController(TestCaseHandlingConfig):
     """
     This is an abstract test case which handles setting up a database
@@ -83,13 +96,11 @@ class TestCaseWithController(TestCaseHandlingConfig):
     """
     def setUp(self, path=":memory:"):
         TestCaseHandlingConfig.setUp(self)
-        Publisher.unsubAll()
         self.Controller = controller.Controller(path)
         self.Model = self.Controller.Model
         
     def tearDown(self):
         self.Controller.Close()
-        Publisher.unsubAll()
         TestCaseHandlingConfig.tearDown(self)
         
     def createLinkedTransfers(self):
