@@ -91,6 +91,7 @@ class PersistentStore:
         self.Subscriptions = (
             (self.onORMObjectUpdated, "ormobject.updated"),
             (self.onAccountBalanceChanged, "account.balance changed"),
+            (self.onAccountRemoved, "account.removed"),
             (self.onBatchEvent, "batch"),
             (self.onExit, "exiting"),
         )
@@ -134,9 +135,6 @@ class PersistentStore:
         return account
 
     def RemoveAccount(self, account):
-        # First, remove all the transactions associated with this account.
-        # This is necessary to maintain integrity for dbs created at V1 (LP: 249954).
-        self.clearAccountTransactions(account)
         self.dbconn.cursor().execute('DELETE FROM accounts WHERE id=?',(account.ID,))
         self.commitIfAppropriate()
         
@@ -414,6 +412,10 @@ class PersistentStore:
     def onAccountRenamed(self, message):
         oldName, account = message.data
         self.renameAccount(oldName, account)
+        
+    def onAccountRemoved(self, message):
+        account = message.data
+        self.RemoveAccount(account)
 
     def onAccountBalanceChanged(self, message):
         account = message.data

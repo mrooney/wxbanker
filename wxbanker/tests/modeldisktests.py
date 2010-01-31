@@ -389,6 +389,22 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         
         model2 = model.Store.GetModel(useCached=False)
         self.assertEqual(model, model2)
+        
+    def testHandlesDeletingALinkedTransaction(self):
+        a, b, atrans, btrans = self.createLinkedTransfers()
+        
+        self.assertEqual(a.Balance, 1)
+        self.assertEqual(a.Transactions, [atrans])
+        
+        model = self.Model
+        model.RemoveAccount(b.Name)
+        
+        self.assertEqual(a.Balance, 1)
+        self.assertEqual(a.Transactions, [atrans])
+        
+        model2 = model.Store.GetModel(useCached=False)
+        
+        self.assertEqual(model, model2)
 
     
 if __name__ == "__main__":

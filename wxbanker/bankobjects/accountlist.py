@@ -86,7 +86,9 @@ class AccountList(list):
             raise bankexceptions.InvalidAccountException(accountName)
 
         account = self.pop(index)
-        self.Store.RemoveAccount(account)
+        # Remove all the transactions associated with this account.
+        account.Purge()
+        
         Publisher.sendMessage("account.removed.%s"%accountName, account)
 
     def __eq__(self, other):

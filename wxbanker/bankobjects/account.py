@@ -188,7 +188,12 @@ class Account(ORMObject):
     def RemoveTransaction(self, transaction):
         return self.RemoveTransactions([transaction])
 
-    def RemoveTransactions(self, transactions):
+    def RemoveTransactions(self, transactions, removeLinkedTransactions=True):
+        """
+        By default removing a transaction removes the linked transaction from its account too.
+        However when removeLinkedTransactions is False, only transactions in this account
+        will be removed, such as from Account.Purge().
+        """
         Publisher.sendMessage("batch.start")
         # Return the sources, if any, of the removed transactions, in case we are moving for example.
         sources = []
@@ -207,7 +212,9 @@ class Account(ORMObject):
                 sources.append(link.Parent)
                 # Kill the other transaction's link to this one, otherwise this is quite recursive.
                 link.LinkedTransaction = None
-                link.Remove()
+                # Delete the linked transaction from its account as well, if we should.
+                if removeLinkedTransactions:
+                    link.Remove()
             else:
                 sources.append(None)
 
@@ -221,6 +228,14 @@ class Account(ORMObject):
         self.Balance -= difference
         Publisher.sendMessage("batch.end")
         return sources
+    
+    def Purge(self):
+        """
+        Call this when the account is being deleted and should purge itself.
+        This will delete all transactions but NOT any linked transactions in other accounts,
+        because when you close a bank account it doesn't erase the historical transfers in other accounts.
+        """
+        self.RemoveTransactions(self.Transactions, removeLinkedTransactions=False)
 
     def MoveTransaction(self, transaction, destAccount):
         self.MoveTransactions([transaction], destAccount)

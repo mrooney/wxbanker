@@ -424,8 +424,21 @@ class ModelTests(testbase.TestCaseWithController):
         t.Date = None
         self.assertEqual(t.Date, datetime.date.today())
         
+    def testDeletingAccountDoesNotSiblingLinkedTransfers(self):
+        """If you close (delete) an account, it is still true that the transfers occurred."""
+        a, b, atrans, btrans = self.createLinkedTransfers()
+        model = self.Controller.Model
+        
+        self.assertTrue(atrans in a.Transactions)
+        self.assertTrue(btrans in b.Transactions)
+        self.assertEqual(atrans.LinkedTransaction, btrans)
+        self.assertEqual(btrans.LinkedTransaction, atrans)
+        
+        model.RemoveAccount(b.Name)
+        
+        self.assertTrue(atrans in a.Transactions)
+        self.assertEqual(atrans.LinkedTransaction, None)
+        
         
 if __name__ == "__main__":
     unittest.main()
-
-    
