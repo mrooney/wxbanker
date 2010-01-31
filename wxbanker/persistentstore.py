@@ -44,6 +44,7 @@ from wxbanker.bankobjects.transaction import Transaction
 from wxbanker.bankobjects.transactionlist import TransactionList
 from wxbanker.bankobjects.recurringtransaction import RecurringTransaction
 from wxbanker.bankobjects.ormobject import ORMKeyValueObject
+from wxbanker.bankexceptions import MissingLinkException
 
 class PersistentStore:
     """
@@ -354,17 +355,22 @@ class PersistentStore:
             # Handle recurring parents.
             if recurringId:
                 t.RecurringParent = recurringCache[recurringId]
-                
-            if linkId:
-                link, linkAccount = self.getTransactionAndParentById(linkId, parentObj, linked=t)
-                # If the link parent hasn't loaded its transactions yet, put this in its pre list so this
-                # object is used if and when they are loaded.
-                if linkAccount._Transactions is None:
-                    linkAccount._preTransactions.append(link)
-                t.LinkedTransaction = link
-                # Synchronize the RecurringParent attribute.
-                t.LinkedTransaction.RecurringParent = t.RecurringParent
 
+            # Handle linked transactions.
+            if linkId:
+                try:
+                    link, linkAccount = self.getTransactionAndParentById(linkId, parentObj, t)
+                except MissingLinkException:
+                    # The link is gone, it's Account was likely deleted before LP: #514183 was fixed. Remove it.
+                    t.LinkedTransaction = None
+                else:
+                    # If the link parent hasn't loaded its transactions yet, put this in its pre list so this
+                    # object is used if and when they are loaded.
+                    if linkAccount._Transactions is None:
+                        linkAccount._preTransactions.append(link)
+                    t.LinkedTransaction = link
+                    # Synchronize the RecurringParent attribute.
+                    t.LinkedTransaction.RecurringParent = t.RecurringParent
         return t
 
     def getTransactionsFrom(self, account):
@@ -379,8 +385,11 @@ class PersistentStore:
             transactions.append(t)
         return transactions
 
-    def getTransactionAndParentById(self, tId, parentObj, linked=None):
+    def getTransactionAndParentById(self, tId, parentObj, linked):
         result = self.dbconn.cursor().execute('SELECT * FROM transactions WHERE id=? LIMIT 1', (tId,)).fetchone()
+        if result is None:
+            # This is probably LP #514183: the account of the sibling was deleted.
+            raise MissingLinkException("Unable to find the linked transaction")
         
         # Before we can create the LinkedTransaction, we need to find its parent.
         linkedParent = None

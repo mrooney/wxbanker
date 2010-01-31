@@ -20,19 +20,21 @@
 
 from wxbanker.tests import testbase
 from wxbanker.controller import Controller
-import unittest, shutil, os, tempfile
+import unittest, shutil, os, tempfile, datetime
 
 class DBUpgradeTest(testbase.TestCaseHandlingConfig):
     def setUp(self):
         testbase.TestCaseHandlingConfig.setUp(self)
         self.tmpFile = None
         
-    def doBaseTest(self, ver):
+    def getController(self, ver):
         origpath = testbase.fixturefile("bank-%s.db"%ver)
         self.tmpFile = tempfile.mkstemp()[1]
         shutil.copyfile(origpath, self.tmpFile)
+        return Controller(path=self.tmpFile)
         
-        c = Controller(path=self.tmpFile)
+    def doBaseTest(self, ver):
+        c = self.getController(ver)
         model = c.Model
         accounts = model.Accounts
         self.assertEqual([a.Name for a in accounts], ["Another", "My Checking"])
@@ -57,6 +59,18 @@ class DBUpgradeTest(testbase.TestCaseHandlingConfig):
         
     def testUpgradeFrom05(self):
         c = self.doBaseTest("0.5")
+        
+    def testUpgradeFrom06Broken(self):
+        # Test we can upgrade/run if LP #514183 has already occurred.
+        c = self.getController("0.6-broken")
+        transactions = c.Model.Accounts[0].Transactions
+        self.assertEqual(len(transactions), 1)
+        
+        t = transactions[0]
+        self.assertEqual(t.Date, datetime.date(2010, 1, 30))
+        self.assertEqual(t.Amount, -1.1)
+        self.assertEqual(t.Description, "a")
+        self.assertEqual(t.LinkedTransaction, None)
         
     def tearDown(self):
         if self.tmpFile:
