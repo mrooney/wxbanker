@@ -86,8 +86,9 @@ class AccountListCtrl(wx.Panel):
         self.totalTexts.append(self.totalText)
         miniSizer = wx.BoxSizer()
         self.allAccountsRadio = wx.RadioButton(self.childPanel, label=_("All accounts"))
-        miniSizer.Add(self.allAccountsRadio, 1)
-        miniSizer.Add(self.totalText, 0, wx.LEFT, 10)
+        miniSizer.Add(self.allAccountsRadio, 1, wx.ALIGN_CENTER)
+        miniSizer.Add(self.totalText, 0, wx.ALIGN_CENTER|wx.LEFT, 10)
+        miniSizer.AddSpacer(3)
 
         #self.staticBoxSizer = SmoothStaticBoxSizer(self.staticBox, wx.VERTICAL)
         self.staticBoxSizer = wx.StaticBoxSizer(self.staticBox, wx.VERTICAL)
@@ -317,8 +318,9 @@ class AccountListCtrl(wx.Panel):
 
         # Put them in an hsizer.
         miniSizer = wx.BoxSizer()
-        miniSizer.Add(link, 1)
-        miniSizer.Add(totalText, 0, wx.LEFT, 10)
+        miniSizer.Add(link, 1, wx.ALIGN_CENTER)
+        miniSizer.Add(totalText, 0, wx.ALIGN_CENTER|wx.LEFT, 10)
+        miniSizer.AddSpacer(3)
 
         # Insert the hsizer into the correct position in the list.
         self.childSizer.Insert(index+1, miniSizer, 0, wx.EXPAND|wx.BOTTOM, 3)
