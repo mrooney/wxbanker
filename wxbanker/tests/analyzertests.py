@@ -30,26 +30,29 @@ class AnalyzerTests(testbase.TestCaseWithController):
         for i in xrange(1, 13):
             a.AddTransaction(amount=i, date=datetime.date(2009, i, 15))
             
-    def testMonthlyDateRangeDefault(self):
-        monthly = MonthlyAnalyzer()
+    def createMonthly(self, *args, **kwargs):
+        monthly = MonthlyAnalyzer(*args, **kwargs)
         monthly.Today = datetime.date(2010, 1, 15)
+        return monthly
+            
+    def testMonthlyDateRangeDefault(self):
+        monthly = self.createMonthly()
         start, end = monthly.GetDateRange()
         self.assertEqual(start, datetime.date(2009, 1, 1))
         self.assertEqual(end, datetime.date(2009, 12, 31))
         
     def testMonthlyDateRangeOne(self):
-        monthly = MonthlyAnalyzer(months=1)
-        monthly.Today = datetime.date(2010, 1, 15)
+        monthly = self.createMonthly(months=1)
         start, end = monthly.GetDateRange()
         self.assertEqual(start, datetime.date(2009, 12, 1))
         self.assertEqual(end, datetime.date(2009, 12, 31))
         
     def testMonthlyAmountsDefault(self):
-        monthly = MonthlyAnalyzer()
+        monthly = self.createMonthly()
         earnings = monthly.GetEarnings(self.Controller.Model.GetTransactions())
         self.assertEqual(earnings, range(1,13))
     
     def testMonthlyAmountsOne(self):
-        monthly = MonthlyAnalyzer(months=1)
+        monthly = self.createMonthly(months=1)
         earnings = monthly.GetEarnings(self.Controller.Model.GetTransactions())
         self.assertEqual(earnings, [12])

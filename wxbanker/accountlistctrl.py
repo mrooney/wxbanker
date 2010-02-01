@@ -337,7 +337,6 @@ class AccountListCtrl(wx.Panel):
 
     def _RemoveItem(self, index, fixSel=True):
         linkCtrl = self.hyperLinks[index]
-        removedAccount = linkCtrl.Label[:-1]
 
         self.accountObjects.pop(index)
         del self.hyperLinks[index]
