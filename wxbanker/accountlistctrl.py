@@ -94,6 +94,8 @@ class AccountListCtrl(wx.Panel):
         self.staticBoxSizer = wx.StaticBoxSizer(self.staticBox, wx.VERTICAL)
         #self.staticBoxSizer.SetSmooth(False)
         childSizer.Add(buttonSizer, 0, wx.BOTTOM, 9)
+        # Add just a tiny bit of padding between the accounts and the total item.
+        childSizer.AddSpacer(3)
         childSizer.Add(miniSizer, 0, wx.EXPAND)
         self.childPanel.Sizer = childSizer
         self.staticBoxSizer.Add(self.childPanel, 1, wx.EXPAND)
