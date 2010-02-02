@@ -249,7 +249,7 @@ class NewTransactionRow(bankcontrols.GBRow):
         self.amountCtrl = bankcontrols.HintedTextCtrl(parent, size=(90, -1), style=wx.TE_PROCESS_ENTER|wx.TE_RIGHT, hint=_("Amount"), icon="wxART_money_dollar", handler=handler)
         
         # The add button.
-        self.newButton = wx.BitmapButton(parent, bitmap=wx.ArtProvider.GetBitmap('wxART_money_add'))
+        self.newButton = bankcontrols.FlashableButton(parent, bitmap=wx.ArtProvider.GetBitmap('wxART_money_add'))
         self.newButton.SetToolTipString(_("Enter this transaction"))
 
         checkSizer = wx.BoxSizer(wx.VERTICAL)
@@ -332,6 +332,14 @@ class NewTransactionRow(bankcontrols.GBRow):
     def onAccountChanged(self, message):
         account = message.data
         self.CurrentAccount = account
+
+        # Flash the add transaction button if there are no transactions in this account.
+        # We could see if there are siblings, but they might not have transactions either.
+        if account and not account.Transactions:
+            self.newButton.StartFlashing()
+        else:
+            self.newButton.StopFlashing()
+            
         # Reset the focus assuming an account was selected; otherwise the new focus can't be acted on.
         if self.isInitialAccountSet:
             # Also, don't focus if the transaction tab isn't being viewed, otherwise it snaps us back from viewing graphs.
@@ -422,6 +430,11 @@ class NewTransactionRow(bankcontrols.GBRow):
             destAccount.AddRecurringTransaction(*args)
         else:
             destAccount.AddTransaction(amount, desc, date, sourceAccount)
+            
+        # A transaction was added, we can stop flashing if we were.
+        self.newButton.StopFlashing()
+        
+        # Reset the controls and focus to their default values.
         self.clear()
         
     def FromRecurring(self, rt):

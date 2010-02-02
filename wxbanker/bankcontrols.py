@@ -205,21 +205,28 @@ class GBRow(wx.Window):
         
 class FlashableButton(wx.BitmapButton):
     ID_TIMER = wx.NewId()
+    FLASH_DELAY = 1000
     
     def __init__(self, parent, bitmap):
         wx.BitmapButton.__init__(self, parent, bitmap=bitmap)
         self.EmptyBitmap = wx.EmptyBitmapRGBA(16,16)
         self.OriginalBitmap = bitmap
-        self.Timer = wx.Timer(self, self.ID_TIMER)
         self.FlashState = 0
+        self.Running = False
+        
+        self.Timer = wx.Timer(self, self.ID_TIMER)        
         wx.EVT_TIMER(self, self.ID_TIMER, self.onFlashTimer)
         
     def StopFlashing(self):
-        self.Timer.Stop()
-        self.SetBitmapLabel(self.OriginalBitmap)
+        if self.Running:
+            self.Timer.Stop()
+            self.SetBitmapLabel(self.OriginalBitmap)
+            self.Running = False
 
     def StartFlashing(self):
-        self.Timer.Start(1250)
+        if not self.Running:
+            self.Timer.Start(self.FLASH_DELAY)
+            self.Running = True
         
     def onFlashTimer(self, event):
         if self.FlashState:
