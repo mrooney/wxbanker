@@ -201,3 +201,31 @@ class GBRow(wx.Window):
         
         # Increment the column count by the number of columns the item spans.
         self.Column += self.Parent.Sizer.GetItemSpan(ctrl)[1]
+
+        
+class FlashableButton(wx.BitmapButton):
+    ID_TIMER = wx.NewId()
+    
+    def __init__(self, parent, bitmap):
+        wx.BitmapButton.__init__(self, parent, bitmap=bitmap)
+        self.EmptyBitmap = wx.EmptyBitmapRGBA(16,16)
+        self.OriginalBitmap = bitmap
+        self.Timer = wx.Timer(self, self.ID_TIMER)
+        self.FlashState = 0
+        wx.EVT_TIMER(self, self.ID_TIMER, self.onFlashTimer)
+        
+    def StopFlashing(self):
+        self.Timer.Stop()
+        self.SetBitmapLabel(self.OriginalBitmap)
+
+    def StartFlashing(self):
+        self.Timer.Start(1250)
+        
+    def onFlashTimer(self, event):
+        if self.FlashState:
+            self.SetBitmapLabel(self.OriginalBitmap)
+        else:
+            self.SetBitmapLabel(self.EmptyBitmap)
+
+        # Now toggle the flash state.
+        self.FlashState = not self.FlashState
