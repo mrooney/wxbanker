@@ -22,12 +22,11 @@ import os, subprocess
 """
 Some strings are displayed dynamically, and so we need to "hard code"
 the possibilities here so they get in the templates and translated.
+#WXTODO: make collapsible widget take the full hidden/shown args and remove this hack.
 """
 _ = lambda s: s
 _("Hide Calculator")
 _("Show Calculator")
-_("Transact") # Keep this here for now, might want it.
-
 
 def gentemplate(name="wxbanker.pot"):
     """Generate a .pot template with the given name."""
