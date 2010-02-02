@@ -57,7 +57,6 @@ class BankMenuBar(wx.MenuBar):
         
         # View menu.
         viewMenu = wx.Menu()
-        #WXTODO: test these three via a gui test by sending the messages they send and making sure the right things happen
         viewMenu.Append(self.ID_VIEW_PREVACCOUNT, _("Previous account")+"\tCtrl+J")
         viewMenu.Append(self.ID_VIEW_NEXTACCOUNT, _("Next account")+"\tCtrl+K")
         viewMenu.Append(self.ID_VIEW_ALLACCOUNTS, _("All accounts")+"\tCtrl+T") 
