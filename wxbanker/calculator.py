@@ -92,7 +92,7 @@ class SimpleCalculator(wx.Panel):
             self.numberClears = False
             self.display.AppendText(char)
         else:
-            # not a valid character
+            # Not a valid character.
             return
 
         self.display.SetFocus()
@@ -104,7 +104,7 @@ class SimpleCalculator(wx.Panel):
         Note no implicit order of operations is respected.
         """
         try:
-            # multiple by float first, so 1/2 is 0.50 and not 0.00
+            # Multiply by float first, so 1/2 is 0.50 and not 0.00
             result = eval("1.*"+self.display.Value)
         except:
             return
@@ -119,9 +119,9 @@ class SimpleCalculator(wx.Panel):
 
 
 class CollapsableWidget(wx.CollapsiblePane):
-    def __init__(self, parent, widget, name, *args, **kwargs):
-        self.clickLabel = "%s" + " %s"%name
-        wx.CollapsiblePane.__init__(self, parent, label=_(self.clickLabel%"Show"), style=wx.CP_DEFAULT_STYLE|wx.CP_NO_TLW_RESIZE)
+    def __init__(self, parent, widget, labels, *args, **kwargs):
+        self.Labels = labels
+        wx.CollapsiblePane.__init__(self, parent, label=self.Labels[0], style=wx.CP_DEFAULT_STYLE|wx.CP_NO_TLW_RESIZE)
 
         pane = self.GetPane()
         self.widget = widget(pane, *args, **kwargs)
@@ -132,39 +132,17 @@ class CollapsableWidget(wx.CollapsiblePane):
 
     def SetExpanded(self, expanded):
         """
-        Set whether the contained widget is collapsed or expanded. If there
-        will be no change, don't do anything.
+        Set whether the contained widget is collapsed or expanded. If there will be no change, don't do anything.
         """
         if expanded != self.IsExpanded():
             self.Collapse(not expanded)
             self.OnPaneChanged()
 
     def OnPaneChanged(self, evt=None):
-        """
-        Redo the text and layout when the widget state is toggled.
-        """
+        """Redo the text and layout when the widget state is toggled."""
         self.Layout()
-
-        # and also change the labels
-        if self.IsExpanded():
-            modifier = "Hide"
-        else:
-            modifier = "Show"
-        self.Label = _(self.clickLabel % modifier)
-
-        Publisher.sendMessage("CALCULATOR.TOGGLED", modifier.upper())
-
-
-if __name__ == "__main__":
-    app = wx.App(False)
-    frame = wx.Frame(None)
-    frame.Sizer = wx.BoxSizer()
-
-    ## DEMO OF COLLAPSABLE CALCULATOR
-    frame.Sizer.Add(CollapsableWidget(frame, SimpleCalculator, "Calculator"), 1, wx.EXPAND)
-
-    ## DEMO OF JUST CALCULATOR WIDGET
-    #frame.Sizer.Add(SimpleCalculator(frame), 1, wx.EXPAND)
-
-    frame.Show(True)
-    app.MainLoop()
+        
+        # Change the labels
+        expanded = int(self.IsExpanded())        
+        self.Label = self.Labels[expanded]
+        Publisher.sendMessage("CALCULATOR.TOGGLED", ("SHOW", "HIDE")[expanded])

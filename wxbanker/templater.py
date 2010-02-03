@@ -19,20 +19,6 @@
 
 import os, subprocess
 
-"""
-Some strings are displayed dynamically, and so we need to "hard code"
-the possibilities here so they get in the templates and translated.
-#WXTODO: make collapsible widget take the full hidden/shown args and remove this hack.
-"""
-_ = lambda s: s
-_("Hide Calculator")
-_("Show Calculator")
-
-def gentemplate(name="wxbanker.pot"):
-    """Generate a .pot template with the given name."""
-    translatableFiles = [f for f in os.listdir(".") if f.endswith(".py")]
-    subprocess.check_call(["xgettext"] + translatableFiles + ["--output=po/%s"%name])
-
 def compiletranslations():
     poFiles = [f for f in os.listdir("po/") if f.endswith(".po")]
     failed = []
@@ -49,9 +35,5 @@ def compiletranslations():
     print "Failed to compile: %s" % failed or None
         
 if __name__ == "__main__":
-    import sys
-    if len(sys.argv) > 1 and sys.argv[1] =="--compile":
-        compiletranslations()
-    else:
-        gentemplate()
+    compiletranslations()
 
