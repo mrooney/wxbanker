@@ -20,7 +20,8 @@
 import os, subprocess
 
 def compiletranslations():
-    poFiles = [f for f in os.listdir("po/") if f.endswith(".po")]
+    poBase = "wxbanker/po/"
+    poFiles = [f for f in os.listdir(poBase) if f.endswith(".po")]
     failed = []
     for poFile in poFiles:
         locale = poFile[:-3]
@@ -28,7 +29,7 @@ def compiletranslations():
         if not os.path.exists(path):
             os.makedirs(os.path.split(path)[0])
         try:
-            subprocess.check_call(("msgfmt", "-cv", "po/%s"%poFile, "-o", path), stdout=subprocess.PIPE)
+            subprocess.check_call(("msgfmt", "-v", poBase+poFile, "-o", path), stdout=subprocess.PIPE)
         except:
             failed.append(poFile)
     subprocess.check_call(("bzr", "add", "locale/"))
@@ -36,4 +37,3 @@ def compiletranslations():
         
 if __name__ == "__main__":
     compiletranslations()
-
