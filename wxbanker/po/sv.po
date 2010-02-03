@@ -7,692 +7,148 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2009-09-06 12:20-0700\n"
-"PO-Revision-Date: 2009-10-03 00:01+0000\n"
-"Last-Translator: Carl-Uno Olsson <Unknown>\n"
+"POT-Creation-Date: 2010-02-02 00:03-0800\n"
+"PO-Revision-Date: 2010-01-29 22:13+0000\n"
+"Last-Translator: Daniel Ruus <Unknown>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2009-10-03 06:44+0000\n"
+"X-Launchpad-Export-Date: 2010-02-03 04:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: menubar.py:79
-msgid "Ask a &Question"
-msgstr "Ställ en &fråga"
-
-#: newtransactionctrl.py:352
-msgid "No amount entered in the 'Amount' field."
-msgstr "Inget belopp ifyllt i \"Belopp\"-fältet."
-
-#: newtransactionctrl.py:358
-msgid "Invalid Transaction Amount"
-msgstr "Ogiltigt transaktionsbelopp"
-
-#: newtransactionctrl.py:369
-msgid "Please select an account and then try again."
-msgstr "Vänligen välj ett konto och försök igen."
-
-#: csvimportframe.py:60
-msgid "Target account"
-msgstr "Målkonto"
-
-#: csvimportframe.py:126
-msgid "Skip first line"
-msgstr "Hoppa över första raden"
-
-#: csvimportframe.py:164
-msgid "CSV profiles"
-msgstr "CSV-profiler"
-
-#: csvimportframe.py:250
-msgid "An error ocurred during the csv file import."
-msgstr "Ett fel uppstod under importeringen av CSV-filen."
-
-#: wxbanker.py:46
-msgid ""
-"Warning: Numpy module not available, disabling Summary tab. Install numpy to "
-"fix this."
-msgstr ""
-"Varning: Numpy-modulen är inte tillgänglig, avaktiverar summeringsfliken. "
-"Installera numpy för att åtgärda detta."
-
-#: calculator.py:124
-msgid "Show"
-msgstr "Visa"
-
-#: bankobjects.py:613
+#: wxbanker/bankobjects/transaction.py:92
 #, python-format
 msgid "Transfer from %s"
 msgstr "Överför från %s"
 
-#: bankobjects.py:615
+#: wxbanker/bankobjects/transaction.py:94
 #, python-format
 msgid "Transfer to %s"
 msgstr "Överför till %s"
 
-#: menubar.py:46
-msgid "Import from CSV"
-msgstr "Importera från CSV"
-
-#: menubar.py:46
-msgid "Import transactions from a CSV file"
-msgstr "Importera transaktioner från en CSV-fil"
-
-#: menubar.py:48
-msgid "Auto-save"
-msgstr "Automatisk sparning"
-
-#: menubar.py:48
-msgid "Automatically save changes"
-msgstr "Spara ändringar automatiskt"
-
-#: menubar.py:54
-msgid "&Currency"
-msgstr "&Valuta"
-
-#: menubar.py:54
-msgid "Select currency to display"
-msgstr "Välj valuta som ska visas"
-
-#: menubar.py:63
-msgid "Request a Currency"
-msgstr "Begär en ny valuta"
-
-#: menubar.py:74
-msgid "View &FAQs"
-msgstr "Visa &FAQ"
-
-#: menubar.py:74
-msgid "View Frequently Asked Questions online"
-msgstr "Visa Vanliga frågor online"
-
-#: menubar.py:79
-msgid "Ask a question online"
-msgstr "Fråga en fråga online"
-
-#: menubar.py:84
-msgid "&Report a Bug"
-msgstr "&Rapportera en bugg"
-
-#: menubar.py:84
-msgid "Report a bug to the developer online"
-msgstr "Rapportera en bugg till utvecklaren online"
-
-#: menubar.py:89
-msgid "Request a Fea&ture"
-msgstr "Begär en egenskap"
-
-#: menubar.py:89
-msgid "Request a new feature to be implemented"
-msgstr "Begär en ny funktion som ska implementeras"
-
-#: menubar.py:94
-msgid "Tran&slate wxBanker"
-msgstr "Över&sätt wxBanker"
-
-#: menubar.py:94
-msgid "Translate wxBanker to another language"
-msgstr "Översätt wxBanker till ett annat språk"
-
-#: menubar.py:101
-msgid "&About"
-msgstr "&Om"
-
-#: menubar.py:101
-msgid "More information about wxBanker"
-msgstr "Mer information om wxBanker"
-
-#: menubar.py:104
-msgid "&File"
-msgstr "&Arkiv"
-
-#: menubar.py:105
-msgid "&Settings"
-msgstr "In&ställningar"
-
-#: menubar.py:106
-msgid "&Help"
-msgstr "&Hjälp"
-
-#: menubar.py:174
-msgid "Copyright"
-msgstr "Copyright"
-
-#: menubar.py:175
-msgid "A lightweight personal finance management application."
-msgstr "Ett lättviktigt program för hantering av personliga finanser."
-
-#: newtransactionctrl.py:47
-msgid "from"
-msgstr "från"
-
-#: newtransactionctrl.py:47 summarytab.py:57
-msgid "to"
-msgstr "till"
-
-#: newtransactionctrl.py:51 newtransactionctrl.py:240
-msgid "Transfer"
-msgstr "Överföring"
-
-#: newtransactionctrl.py:55
-msgid "account:"
-msgstr "konto:"
-
-#: newtransactionctrl.py:91 newtransactionctrl.py:186
-#: newtransactionctrl.py:196
+#: wxbanker/bankobjects/recurringtransaction.py:147
+#: wxbanker/bankobjects/recurringtransaction.py:154
+#: wxbanker/newtransactionctrl.py:100
 #, python-format
 msgid "Daily"
 msgid_plural "Every %(num)d days"
 msgstr[0] "Dagligen"
 msgstr[1] "Var %(num)d dag"
 
-#: newtransactionctrl.py:91
-msgid "Weekly"
-msgstr "Veckovis"
+#: wxbanker/bankobjects/recurringtransaction.py:150
+msgid "Weekly on weekdays"
+msgstr "Veckovis på vardagar"
 
-#: newtransactionctrl.py:91 newtransactionctrl.py:208
+#: wxbanker/bankobjects/recurringtransaction.py:152
+msgid "Weekly on weekends"
+msgstr "Veckovis på helger"
+
+#: wxbanker/bankobjects/recurringtransaction.py:156
+msgid "Mondays"
+msgstr "Måndagar"
+
+#: wxbanker/bankobjects/recurringtransaction.py:156
+msgid "Tuesdays"
+msgstr "Tisdagar"
+
+#: wxbanker/bankobjects/recurringtransaction.py:156
+msgid "Wednesdays"
+msgstr "Onsdagar"
+
+#: wxbanker/bankobjects/recurringtransaction.py:156
+msgid "Thursdays"
+msgstr "Torsdagar"
+
+#: wxbanker/bankobjects/recurringtransaction.py:156
+msgid "Fridays"
+msgstr "Fredagar"
+
+#: wxbanker/bankobjects/recurringtransaction.py:156
+msgid "Saturdays"
+msgstr "Lördagar"
+
+#: wxbanker/bankobjects/recurringtransaction.py:156
+msgid "Sundays"
+msgstr "Söndagar"
+
+#: wxbanker/bankobjects/recurringtransaction.py:160
+#, python-format
+msgid "Weekly on %s"
+msgstr "Veckovis på %s"
+
+#: wxbanker/bankobjects/recurringtransaction.py:162
+#, python-format
+msgid "Every %(num)d weeks on %%s"
+msgstr ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:169
+#, python-format
+msgid " and %s"
+msgstr " och %s"
+
+#: wxbanker/bankobjects/recurringtransaction.py:171
+#: wxbanker/newtransactionctrl.py:100
 #, python-format
 msgid "Monthly"
 msgid_plural "Every %(num)d months"
 msgstr[0] "Månadsvis"
 msgstr[1] "Var %(num)d månad"
 
-#: newtransactionctrl.py:91
-msgid "Yearly"
-msgstr "Årligen"
-
-#: newtransactionctrl.py:101
-msgid "Never"
-msgstr "Aldrig"
-
-#: newtransactionctrl.py:111
-msgid "Mon"
-msgstr "Mån"
-
-#: newtransactionctrl.py:111
-msgid "Tue"
-msgstr "Tis"
-
-#: newtransactionctrl.py:111
-msgid "Wed"
-msgstr "Ons"
-
-#: newtransactionctrl.py:111
-msgid "Thu"
-msgstr "Tor"
-
-#: newtransactionctrl.py:111
-msgid "Fri"
-msgstr "Fre"
-
-#: newtransactionctrl.py:111
-msgid "Sat"
-msgstr "Lör"
-
-#: newtransactionctrl.py:111
-msgid "Sun"
-msgstr "Sön"
-
-#: newtransactionctrl.py:132
-msgid "Repeats:"
-msgstr "Återkommer:"
-
-#: newtransactionctrl.py:135
-msgid "Every"
-msgstr "Var"
-
-#: newtransactionctrl.py:141
-msgid "Ends:"
-msgstr "Slutar:"
-
-#: newtransactionctrl.py:185
-msgid "day"
-msgid_plural "days"
-msgstr[0] "dag"
-msgstr[1] "dagar"
-
-#: newtransactionctrl.py:188
-msgid "week"
-msgid_plural "weeks"
-msgstr[0] "vecka"
-msgstr[1] "veckor"
-
-#: newtransactionctrl.py:189
-msgid "Repeats on days:"
-msgstr "Återkommer på dagarna:"
-
-#: newtransactionctrl.py:192
-msgid "Weekly on weekdays"
-msgstr "Veckovis på vardagar"
-
-#: newtransactionctrl.py:194
-msgid "Weekly on weekends"
-msgstr "Veckovis på helger"
-
-#: newtransactionctrl.py:198
-msgid "Mondays"
-msgstr "Måndagar"
-
-#: newtransactionctrl.py:198
-msgid "Tuesdays"
-msgstr "Tisdagar"
-
-#: newtransactionctrl.py:198
-msgid "Wednesdays"
-msgstr "Onsdagar"
-
-#: newtransactionctrl.py:198
-msgid "Thursdays"
-msgstr "Torsdagar"
-
-#: newtransactionctrl.py:198
-msgid "Fridays"
-msgstr "Fredagar"
-
-#: newtransactionctrl.py:198
-msgid "Saturdays"
-msgstr "Lördagar"
-
-#: newtransactionctrl.py:198
-msgid "Sundays"
-msgstr "Söndagar"
-
-#: newtransactionctrl.py:203 newtransactionctrl.py:205
-#, python-format
-msgid "Weekly on %s"
-msgstr "Veckovis på %s"
-
-#: newtransactionctrl.py:205
-#, python-format
-msgid " and %s"
-msgstr " och %s"
-
-#: newtransactionctrl.py:207
-msgid "month"
-msgid_plural "months"
-msgstr[0] "månad"
-msgstr[1] "månader"
-
-#: newtransactionctrl.py:210
-msgid "year"
-msgid_plural "years"
-msgstr[0] "år"
-msgstr[1] "år"
-
-#: newtransactionctrl.py:211
+#: wxbanker/bankobjects/recurringtransaction.py:173
 #, python-format
 msgid "Annually"
 msgid_plural "Every %(num)d years"
 msgstr[0] "Årligen"
 msgstr[1] "Vart %(num)d år"
 
-#: newtransactionctrl.py:215
+#: wxbanker/bankobjects/recurringtransaction.py:177
 #, python-format
 msgid "until %s"
 msgstr "till och med %s"
 
-#: newtransactionctrl.py:229
-msgid "Starts:"
-msgstr "Börjar:"
-
-#: newtransactionctrl.py:232 searchctrl.py:40 csvimportframe.py:110
-#: transactionolv.py:60
-msgid "Description"
-msgstr "Beskrivning"
-
-#: newtransactionctrl.py:233 searchctrl.py:40 csvimportframe.py:104
-#: transactionolv.py:61
-msgid "Amount"
-msgstr "Belopp"
-
-#: newtransactionctrl.py:237
-msgid "Enter this transaction"
-msgstr "Fyll i transaktionen"
-
-#: newtransactionctrl.py:243
-msgid "Recurring"
-msgstr "Återkommande"
-
-#: newtransactionctrl.py:296
-msgid ""
-"Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
-"to fix this."
-msgstr ""
-"Varning: Oförmögen att binda till DateCtrl's ENTER. Uppgradera till wxPython "
-">= 2.8.8.1 för att ordna detta."
-
-#: newtransactionctrl.py:354
-#, python-format
-msgid "'%s' is not a valid amount."
-msgstr "'%s' är inget giltigt belopp."
-
-#: newtransactionctrl.py:357
-msgid "Please enter a number such as 12.34 or -20."
-msgstr "Vänligen fyll i ett nummer som t.ex. 12.34 eller -20."
-
-#: newtransactionctrl.py:370 newtransactionctrl.py:399
-msgid "No account selected"
-msgstr "Inget konto valt"
-
-#: newtransactionctrl.py:385
-msgid "A search is currently active."
-msgstr "En sökning är för tillfället aktiv."
-
-#: newtransactionctrl.py:385
-#, python-format
-msgid ""
-"Would you like to clear the current search and make this transaction in "
-"\"%s\"?"
-msgstr ""
-"Vill du rensa nuvarande sökning och utföra denna transaktion i \"%s\"?"
-
-#: newtransactionctrl.py:386
-msgid "Clear search?"
-msgstr "Rensa sökning?"
-
-#: newtransactionctrl.py:398
-msgid ""
-"This transaction is marked as a transfer. Please select the transfer account."
-msgstr ""
-"Den här transaktionen är markerad som en överföring. Var vänlig välj "
-"överföringskontot."
-
-#: newtransactionctrl.py:416
-msgid ""
-"If this box is checked when adding a transaction, you will be prompted for "
-"the account to use as the source of the transfer."
-msgstr ""
-"Om denna ruta är i kryssad när du lägger till en transaktion, kommer du "
-"behöva ange kontot som ska vara ursprungs kontot för överföringen."
-
-#: newtransactionctrl.py:417
-msgid ""
-"For example, checking this box and entering a transaction of $50 into this "
-"account will also subtract $50 from the account that you choose as the "
-"source."
-msgstr ""
-"t.ex. kryssa i rutan och skriv in en transaktion på $50 på det här kontot "
-"kommer också att dra ifrån $50 från kontot som du valde som ursprungs konto."
-
-#: messagepanel.py:45
-msgid "Dismiss"
-msgstr "Avfärda"
-
-#: summarytab.py:49
-msgid "Account"
-msgstr "Konto"
-
-#: summarytab.py:53
-msgid "From"
-msgstr "Från"
-
-#: summarytab.py:64
-msgid "Fit Curve Degree"
-msgstr "Anpassa Bågens Grad"
-
-#: summarytab.py:123
-msgid "All accounts"
-msgstr "Alla konton"
-
-#: summarytab.py:184 summarytab.py:190
-msgid "Balance"
-msgstr "Balans"
-
-#: summarytab.py:188
-msgid "Trend"
-msgstr "Trend"
-
-#: summarytab.py:190
-msgid "Total Balance Over Time"
-msgstr "Total balans över tid"
-
-#: summarytab.py:190 bankcontrols.py:49 searchctrl.py:40 csvimportframe.py:96
-#: transactionolv.py:59
-msgid "Date"
-msgstr "Datum"
-
-#: currconvert.py:59
-#, python-format
-msgid "No exchange rate for currency \"%s\""
-msgstr "Ingen växelkurs för valutan \"%s\""
-
-#: accountconfigdialog.py:29
-msgid ""
-"wxBanker can synchronize account balances online if you have an account with "
-"mint.com"
-msgstr ""
-"wxBanker kan synkronisera kontosaldona online om du har ett konto med "
-"mint.com"
-
-#: accountconfigdialog.py:37
-msgid "Username"
-msgstr "Användarnamn"
-
-#: accountconfigdialog.py:39
-msgid "Password"
-msgstr "Lösenord"
-
-#: templater.py:27
-msgid "Hide Calculator"
-msgstr "Göm miniräknare"
-
-#: templater.py:28
-msgid "Show Calculator"
-msgstr "Visa miniräknare"
-
-#: templater.py:29
-msgid "Transact"
-msgstr "Transaktion"
-
-#: searchctrl.py:32
-msgid "Search transactions"
-msgstr "Sök transaktioner"
-
-#: searchctrl.py:34
-msgid "Current Account"
-msgstr "Nuvarande konto"
-
-#: searchctrl.py:34
-msgid "All Accounts"
-msgstr "Alla konton"
-
-#: searchctrl.py:38
-msgid "More options"
-msgstr "Fler alternativ"
-
-#: searchctrl.py:38
-msgid "Less options"
-msgstr "Färre alternativ"
-
-#: searchctrl.py:43
-msgid "Case Sensitive"
-msgstr "Skiftlägeskänslig"
-
-#: searchctrl.py:44
-msgid "Whether or not to match based on capitalization"
-msgstr "Huruvida träffar baseras på Versaler/Gemener eller inte"
-
-#: searchctrl.py:49
-msgid "In: "
-msgstr "I: "
-
-#: searchctrl.py:55
-msgid "Match: "
-msgstr "Träff: "
-
-#: searchctrl.py:106
-msgid "Show advanced search options"
-msgstr "Visa avancerade sökalternativ"
-
-#: searchctrl.py:108
-msgid "Hide advanced search options"
-msgstr "Dölj avancerade sökalternativ"
-
-#: csvimportframe.py:28
-msgid "CSV import"
-msgstr "Importera CSV"
-
-#: csvimportframe.py:75 csvimportframe.py:77
-msgid "Import"
-msgstr "Importera"
-
-#: csvimportframe.py:87
-msgid "CSV columns mapping"
-msgstr "Kartläggning av CSV-kolumner"
-
-#: csvimportframe.py:99
-msgid "Date format"
-msgstr "Datumformat"
-
-#: csvimportframe.py:106
-msgid "Decimal separator"
-msgstr "Decimalavgränsare"
-
-#: csvimportframe.py:117
-msgid "CSV file settings"
-msgstr "CSV filinställningar"
-
-#: csvimportframe.py:129
-msgid "Encoding"
-msgstr "Kodning"
-
-#: csvimportframe.py:133
-msgid "Column delimiter"
-msgstr "Kolumnavskiljare"
-
-#: csvimportframe.py:144
-msgid "File to import"
-msgstr "Fil att importera"
-
-#: csvimportframe.py:149 csvimportframe.py:151 wxbanker.py:113
-msgid "Preview"
-msgstr "Förhandsgranskning"
-
-#: csvimportframe.py:169
-msgid "Python simplejson library is needed for csv profile loading/saving."
-msgstr ""
-"Pythons simplejson-bibliotek behövs för CVS-profilsladdning/sparning."
-
-#: csvimportframe.py:179
-msgid "Load"
-msgstr "Ladda"
-
-#: csvimportframe.py:184
-msgid "Save"
-msgstr "Spara"
-
-#: csvimportframe.py:189
-msgid "Delete"
-msgstr "Ta bort"
-
-#: csvimportframe.py:243
-#, python-format
-msgid "The file encoding does not seem to be '%s'."
-msgstr "Filkodningen verkar inte vara '%s'."
-
-#: csvimportframe.py:251
-msgid "CSV import error"
-msgstr "CSV importeringsfel"
-
-#: csvimportframe.py:301
-#, python-format
-msgid "Profile with the name '%s' exists already. Overwrite it ?"
-msgstr "Profilen med namnet '%s' existerar redan. Skriv över?"
-
-#: csvimportframe.py:302
-msgid "Overwrite profile ?"
-msgstr "Skriv över profil ?"
-
-#: csvimportframe.py:316
-msgid "Select file and click \"Preview\""
-msgstr "Välj fil och klicka \"Förhandsvisa\""
-
-#: currencies.py:192
-msgid "detected"
-msgstr "upptäckt"
-
-#: transactionolv.py:47
-msgid "No transactions entered."
-msgstr "Inga transaktioner angivan."
-
-#: transactionolv.py:62 accountlistctrl.py:87
-msgid "Total"
-msgstr "Totalt"
-
-#: transactionolv.py:186
-#, python-format
-msgid "Send %s to calculator"
-msgstr "Skicka %s till miniräknare"
-
-#: transactionolv.py:187
-#, python-format
-msgid "Add %s to calculator"
-msgstr "Addera %s i miniräknare"
-
-#: transactionolv.py:188
-#, python-format
-msgid "Subtract %s from calculator"
-msgstr "Subtrahera %s i miniräknare"
-
-#: transactionolv.py:200
-msgid "Remove this transaction"
-msgstr "Ta bort den här transaktionen"
-
-#: transactionolv.py:201
-msgid "Move this transaction to account"
-msgstr "Flytta denna transaktion till konto"
-
-#: transactionolv.py:203
-#, python-format
-msgid "Remove these %i transactions"
-msgstr "Ta bort följande %i transaktioner"
-
-#: transactionolv.py:204
-#, python-format
-msgid "Move these %i transactions to account"
-msgstr "Flytta dessa %i transaktioner till konto"
-
-#: accountlistctrl.py:42
+#: wxbanker/bankobjects/recurringtransaction.py:194
+msgid "No description"
+msgstr "Ingen beskrivning"
+
+#: wxbanker/accountlistctrl.py:45
 msgid "Accounts"
 msgstr "Konton"
 
-#: accountlistctrl.py:58
+#: wxbanker/accountlistctrl.py:56
 msgid "Add a new account"
 msgstr "Lägg till ett nytt konto"
 
-#: accountlistctrl.py:62
+#: wxbanker/accountlistctrl.py:60
 msgid "Remove the selected account"
 msgstr "Ta bort det valda kontot"
 
-#: accountlistctrl.py:67
+#: wxbanker/accountlistctrl.py:65
 msgid "Rename the selected account"
 msgstr "Ändra namn på valt konto"
 
-#: accountlistctrl.py:72
+#: wxbanker/accountlistctrl.py:70
 msgid "Configure the selected account"
 msgstr "Konfigurera valt konto"
 
-#: accountlistctrl.py:92
-msgid "Hide zero-balance accounts"
-msgstr "Göm kontom som har noll i balans."
+#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:62
+msgid "All accounts"
+msgstr "Alla konton"
 
-#: accountlistctrl.py:93
-msgid ""
-"When enabled, accounts with a balance of $0.00 will be hidden from the list"
-msgstr ""
-"När aktiverat kommer konton med en balans på $0.00 döljas från listan"
-
-#: accountlistctrl.py:381 accountlistctrl.py:476
+#: wxbanker/accountlistctrl.py:385 wxbanker/accountlistctrl.py:487
 msgid "Sorry, an account by that name already exists."
 msgstr "Ledsen, ett konto med det namnet existerar redan."
 
-#: accountlistctrl.py:383 accountlistctrl.py:478
+#: wxbanker/accountlistctrl.py:387 wxbanker/accountlistctrl.py:489
 msgid "Account names cannot be blank."
 msgstr "Kontonamn kan inte vara tomma."
 
-#: accountlistctrl.py:449
+#: wxbanker/accountlistctrl.py:421
+msgid "Account name"
+msgstr "Kontonamn"
+
+#: wxbanker/accountlistctrl.py:460
 #, python-format
 msgid ""
 "This will permanently remove the account '%s' and all its transactions. "
@@ -701,54 +157,484 @@ msgstr ""
 "Det här kommer att permanent ta bort kontot '%s' och alla dess "
 "transaktioner. Fortsätt?"
 
-#: accountlistctrl.py:450
+#: wxbanker/accountlistctrl.py:461
 msgid "Warning"
 msgstr "Varning"
 
-#: wxbanker.py:58
+#: wxbanker/accountconfigdialog.py:32
+msgid ""
+"wxBanker can synchronize account balances online if you have an account with "
+"mint.com"
+msgstr ""
+"wxBanker kan synkronisera kontosaldona online om du har ett konto med "
+"mint.com"
+
+#: wxbanker/accountconfigdialog.py:40
+msgid "Username"
+msgstr "Användarnamn"
+
+#: wxbanker/accountconfigdialog.py:42
+msgid "Password"
+msgstr "Lösenord"
+
+#: wxbanker/accountconfigdialog.py:62
+msgid "Transaction details"
+msgstr "Transaktionsdetaljer"
+
+#: wxbanker/accountconfigdialog.py:103
+msgid "This account currently has no recurring transactions."
+msgstr "Det här kontot har för närvarande inga återkommande transaktioner"
+
+#: wxbanker/accountconfigdialog.py:105
+msgid "Close"
+msgstr "Stäng"
+
+#: wxbanker/accountconfigdialog.py:115 wxbanker/csvimportframe.py:184
+msgid "Save"
+msgstr "Spara"
+
+#: wxbanker/accountconfigdialog.py:116
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: wxbanker/accountconfigdialog.py:136
+msgid "Recurring Transactions"
+msgstr "Återkommande Transaktioner"
+
+#: wxbanker/plots/cairopanel.py:72 wxbanker/plots/cairopanel.py:113
+#: wxbanker/plots/wxplotpanel.py:35 wxbanker/plots/wxplotpanel.py:42
+msgid "Balance"
+msgstr "Balans"
+
+#: wxbanker/plots/cairopanel.py:76 wxbanker/plots/wxplotpanel.py:40
+msgid "Trend"
+msgstr "Trend"
+
+#: wxbanker/plots/cairopanel.py:112 wxbanker/plots/wxplotpanel.py:42
+msgid "Time"
+msgstr "Tid"
+
+#: wxbanker/plots/wxplotpanel.py:42
+msgid "Total Balance Over Time"
+msgstr "Total balans över tid"
+
+#: wxbanker/plots/plotfactory.py:51
+#, python-format
+msgid "To use '%s' plotting library, install following python modules: %s."
+msgstr ""
+
+#: wxbanker/messagepanel.py:45
+msgid "Dismiss"
+msgstr "Avfärda"
+
+#: wxbanker/summarytab.py:42
+msgid "From"
+msgstr "Från"
+
+#: wxbanker/summarytab.py:46 wxbanker/newtransactionctrl.py:31
+msgid "to"
+msgstr "till"
+
+#: wxbanker/summarytab.py:50
+msgid "Trend Degree"
+msgstr ""
+
+#: wxbanker/templater.py:28
+msgid "Hide Calculator"
+msgstr "Göm miniräknare"
+
+#: wxbanker/templater.py:29
+msgid "Show Calculator"
+msgstr "Visa miniräknare"
+
+#: wxbanker/managetab.py:96
 msgid "Transactions"
 msgstr "Transaktioner"
 
-#: wxbanker.py:62
+#: wxbanker/managetab.py:108
 msgid "Summary"
 msgstr "Summering"
 
-#: wxbanker.py:94
+#: wxbanker/transactionolv.py:48
+msgid "No transactions entered."
+msgstr "Inga transaktioner angivan."
+
+#: wxbanker/transactionolv.py:60 wxbanker/bankcontrols.py:52
+#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:96
+msgid "Date"
+msgstr "Datum"
+
+#: wxbanker/transactionolv.py:61 wxbanker/newtransactionctrl.py:248
+#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:110
+msgid "Description"
+msgstr "Beskrivning"
+
+#: wxbanker/transactionolv.py:62 wxbanker/newtransactionctrl.py:249
+#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:104
+msgid "Amount"
+msgstr "Belopp"
+
+#: wxbanker/transactionolv.py:63
+msgid "Total"
+msgstr "Totalt"
+
+#: wxbanker/transactionolv.py:204
+#, python-format
+msgid "Send %s to calculator"
+msgstr "Skicka %s till miniräknare"
+
+#: wxbanker/transactionolv.py:205
+#, python-format
+msgid "Add %s to calculator"
+msgstr "Addera %s i miniräknare"
+
+#: wxbanker/transactionolv.py:206
+#, python-format
+msgid "Subtract %s from calculator"
+msgstr "Subtrahera %s i miniräknare"
+
+#: wxbanker/transactionolv.py:218
+msgid "Remove this transaction"
+msgstr "Ta bort den här transaktionen"
+
+#: wxbanker/transactionolv.py:219
+msgid "Move this transaction to account"
+msgstr "Flytta denna transaktion till konto"
+
+#: wxbanker/transactionolv.py:221
+#, python-format
+msgid "Remove these %i transactions"
+msgstr "Ta bort följande %i transaktioner"
+
+#: wxbanker/transactionolv.py:222
+#, python-format
+msgid "Move these %i transactions to account"
+msgstr "Flytta dessa %i transaktioner till konto"
+
+#: wxbanker/newtransactionctrl.py:31
+msgid "from"
+msgstr "från"
+
+#: wxbanker/newtransactionctrl.py:35 wxbanker/newtransactionctrl.py:258
+msgid "Transfer"
+msgstr "Överföring"
+
+#: wxbanker/newtransactionctrl.py:100
+msgid "Weekly"
+msgstr "Veckovis"
+
+#: wxbanker/newtransactionctrl.py:100
+msgid "Yearly"
+msgstr "Årligen"
+
+#: wxbanker/newtransactionctrl.py:109
+msgid "Never"
+msgstr "Aldrig"
+
+#: wxbanker/newtransactionctrl.py:130
+msgid "every"
+msgstr "varje"
+
+#: wxbanker/newtransactionctrl.py:135
+msgid "Ends:"
+msgstr "Slutar:"
+
+#: wxbanker/newtransactionctrl.py:140
+msgid "Repeats:"
+msgstr "Återkommer:"
+
+#: wxbanker/newtransactionctrl.py:169
+msgid "day"
+msgid_plural "days"
+msgstr[0] "dag"
+msgstr[1] "dagar"
+
+#: wxbanker/newtransactionctrl.py:171
+msgid "week"
+msgid_plural "weeks"
+msgstr[0] "vecka"
+msgstr[1] "veckor"
+
+#: wxbanker/newtransactionctrl.py:174
+msgid "month"
+msgid_plural "months"
+msgstr[0] "månad"
+msgstr[1] "månader"
+
+#: wxbanker/newtransactionctrl.py:176
+msgid "year"
+msgid_plural "years"
+msgstr[0] "år"
+msgstr[1] "år"
+
+#: wxbanker/newtransactionctrl.py:214
+msgid "Mon"
+msgstr "Mån"
+
+#: wxbanker/newtransactionctrl.py:214
+msgid "Tue"
+msgstr "Tis"
+
+#: wxbanker/newtransactionctrl.py:214
+msgid "Wed"
+msgstr "Ons"
+
+#: wxbanker/newtransactionctrl.py:214
+msgid "Thu"
+msgstr "Tor"
+
+#: wxbanker/newtransactionctrl.py:214
+msgid "Fri"
+msgstr "Fre"
+
+#: wxbanker/newtransactionctrl.py:214
+msgid "Sat"
+msgstr "Lör"
+
+#: wxbanker/newtransactionctrl.py:214
+msgid "Sun"
+msgstr "Sön"
+
+#: wxbanker/newtransactionctrl.py:221
+msgid "Repeats on days:"
+msgstr "Återkommer på dagarna:"
+
+#: wxbanker/newtransactionctrl.py:244
+msgid "Starts:"
+msgstr "Börjar:"
+
+#: wxbanker/newtransactionctrl.py:253
+msgid "Enter this transaction"
+msgstr "Fyll i transaktionen"
+
+#: wxbanker/newtransactionctrl.py:262
+msgid "Recurring"
+msgstr "Återkommande"
+
+#: wxbanker/newtransactionctrl.py:375
+msgid "No amount entered in the 'Amount' field."
+msgstr "Inget belopp ifyllt i \"Belopp\"-fältet."
+
+#: wxbanker/newtransactionctrl.py:377
+#, python-format
+msgid "'%s' is not a valid amount."
+msgstr "'%s' är inget giltigt belopp."
+
+#: wxbanker/newtransactionctrl.py:380
+msgid "Please enter a number such as 12.34 or -20."
+msgstr "Vänligen fyll i ett nummer som t.ex. 12.34 eller -20."
+
+#: wxbanker/newtransactionctrl.py:381
+msgid "Invalid Transaction Amount"
+msgstr "Ogiltigt transaktionsbelopp"
+
+#: wxbanker/newtransactionctrl.py:392
+msgid "Please select an account and then try again."
+msgstr "Vänligen välj ett konto och försök igen."
+
+#: wxbanker/newtransactionctrl.py:393 wxbanker/newtransactionctrl.py:421
+msgid "No account selected"
+msgstr "Inget konto valt"
+
+#: wxbanker/newtransactionctrl.py:406
+msgid "A search is currently active."
+msgstr "En sökning är för tillfället aktiv."
+
+#: wxbanker/newtransactionctrl.py:406
+#, python-format
+msgid ""
+"Would you like to clear the current search and make this transaction in "
+"\"%s\"?"
+msgstr ""
+"Vill du rensa nuvarande sökning och utföra denna transaktion i \"%s\"?"
+
+#: wxbanker/newtransactionctrl.py:407
+msgid "Clear search?"
+msgstr "Rensa sökning?"
+
+#: wxbanker/newtransactionctrl.py:420
+msgid ""
+"This transaction is marked as a transfer. Please select the transfer account."
+msgstr ""
+"Den här transaktionen är markerad som en överföring. Var vänlig välj "
+"överföringskontot."
+
+#: wxbanker/newtransactionctrl.py:453
+msgid ""
+"If this box is checked when adding a transaction, you will be prompted for "
+"the account to use as the source of the transfer."
+msgstr ""
+"Om denna ruta är i kryssad när du lägger till en transaktion, kommer du "
+"behöva ange kontot som ska vara ursprungs kontot för överföringen."
+
+#: wxbanker/newtransactionctrl.py:454
+msgid ""
+"For example, checking this box and entering a transaction of $50 into this "
+"account will also subtract $50 from the account that you choose as the "
+"source."
+msgstr ""
+"t.ex. kryssa i rutan och skriv in en transaktion på $50 på det här kontot "
+"kommer också att dra ifrån $50 från kontot som du valde som ursprungs konto."
+
+#: wxbanker/menubar.py:52
+msgid "Auto-save"
+msgstr "Automatisk sparning"
+
+#: wxbanker/menubar.py:52
+msgid "Automatically save changes"
+msgstr "Spara ändringar automatiskt"
+
+#: wxbanker/menubar.py:54
+msgid "Import from CSV"
+msgstr "Importera från CSV"
+
+#: wxbanker/menubar.py:54
+msgid "Import transactions from a CSV file"
+msgstr "Importera transaktioner från en CSV-fil"
+
+#: wxbanker/menubar.py:60
+msgid "Previous account"
+msgstr "Föregående konto"
+
+#: wxbanker/menubar.py:61
+msgid "Next account"
+msgstr "Nästa konto"
+
+#: wxbanker/menubar.py:64
+msgid "Show zero-balance accounts"
+msgstr ""
+
+#: wxbanker/menubar.py:64
+msgid ""
+"When disabled, accounts with a balance of $0.00 will be hidden from the list"
+msgstr ""
+"När avaktiverad kommer konton med ett saldo av $0.00 att döljas från listan."
+
+#: wxbanker/menubar.py:73
+msgid "&Currency"
+msgstr "&Valuta"
+
+#: wxbanker/menubar.py:73
+msgid "Select currency to display"
+msgstr "Välj valuta som ska visas"
+
+#: wxbanker/menubar.py:82
+msgid "Request a Currency"
+msgstr "Begär en ny valuta"
+
+#: wxbanker/menubar.py:93
+msgid "View &FAQs"
+msgstr "Visa &FAQ"
+
+#: wxbanker/menubar.py:93
+msgid "View Frequently Asked Questions online"
+msgstr "Visa Vanliga frågor online"
+
+#: wxbanker/menubar.py:98
+msgid "Ask a &Question"
+msgstr "Ställ en &fråga"
+
+#: wxbanker/menubar.py:98
+msgid "Ask a question online"
+msgstr "Fråga en fråga online"
+
+#: wxbanker/menubar.py:103
+msgid "&Report a Bug"
+msgstr "&Rapportera en bugg"
+
+#: wxbanker/menubar.py:103
+msgid "Report a bug to the developer online"
+msgstr "Rapportera en bugg till utvecklaren online"
+
+#: wxbanker/menubar.py:108
+msgid "Request a Fea&ture"
+msgstr "Begär en egenskap"
+
+#: wxbanker/menubar.py:108
+msgid "Request a new feature to be implemented"
+msgstr "Begär en ny funktion som ska implementeras"
+
+#: wxbanker/menubar.py:113
+msgid "Tran&slate wxBanker"
+msgstr "Över&sätt wxBanker"
+
+#: wxbanker/menubar.py:113
+msgid "Translate wxBanker to another language"
+msgstr "Översätt wxBanker till ett annat språk"
+
+#: wxbanker/menubar.py:120
+msgid "&About"
+msgstr "&Om"
+
+#: wxbanker/menubar.py:120
+msgid "More information about wxBanker"
+msgstr "Mer information om wxBanker"
+
+#: wxbanker/menubar.py:123
+msgid "&File"
+msgstr "&Arkiv"
+
+#: wxbanker/menubar.py:124
+msgid "&View"
+msgstr "&Visa"
+
+#: wxbanker/menubar.py:125
+msgid "&Settings"
+msgstr "In&ställningar"
+
+#: wxbanker/menubar.py:126
+msgid "&Help"
+msgstr "&Hjälp"
+
+#: wxbanker/menubar.py:220
+msgid "Copyright"
+msgstr "Copyright"
+
+#: wxbanker/menubar.py:221
+msgid "A lightweight personal finance management application."
+msgstr "Ett lättviktigt program för hantering av personliga finanser."
+
+#: wxbanker/main.py:79
 #, python-format
 msgid ""
 "The recurring transaction \"%(description)s\" has %(num)i transactions ready "
 "for %(amount)s on %(datelist)s."
 msgstr ""
+"Den återkommande transaktionen \"%(description)s\" har %(num)i transaktioner "
+"klara för %(amount)s på %(datelist)s."
 
-#: wxbanker.py:99
+#: wxbanker/main.py:84
 #, python-format
 msgid ""
 "%(num)i recurring transactions have a total of %(totalnum)i transactions "
 "ready."
 msgstr ""
+"%(num)i återkommande transaktioner har totalt %(totalnum)i färdiga "
+"transaktioner."
 
-#: wxbanker.py:103
-msgid "No description"
-msgstr "Ingen beskrivning"
+#: wxbanker/main.py:95 wxbanker/csvimportframe.py:149
+#: wxbanker/csvimportframe.py:151
+msgid "Preview"
+msgstr "Förhandsgranskning"
 
-#: wxbanker.py:122
+#: wxbanker/main.py:104
 msgid "Perform"
 msgstr "Utför"
 
-#: wxbanker.py:138
+#: wxbanker/main.py:120
 msgid "Recurring transaction successfully added."
 msgstr "Återkommande transaktion har framgångsrikt lagts till."
 
-#: wxbanker.py:141
+#: wxbanker/main.py:122
 #, python-format
 msgid "The first transaction will occur on %(date)s"
-msgstr ""
+msgstr "Den första transaktionen kommer att göras den %(date)s"
 
-#: wxbanker.py:203
+#: wxbanker/main.py:186
 msgid "It looks like this is your first time using wxBanker!"
 msgstr "Det ser ut som om det här är första gången du använder wxBanker!"
 
-#: wxbanker.py:204
+#: wxbanker/main.py:187
 msgid ""
 "To get started, add an account using the account control in the top left "
 "corner."
@@ -756,7 +642,7 @@ msgstr ""
 "För att komma igång, lägg till ett konto via kontrollpanelen i översta "
 "vänstra hörnet."
 
-#: wxbanker.py:205
+#: wxbanker/main.py:188
 msgid ""
 "The buttons in the account control allow you to add, remove, and rename an "
 "account, respectively."
@@ -764,7 +650,7 @@ msgstr ""
 "Respektive knappar i kontrollpanelen låter dig lägga till, ta bort och byta "
 "namn på ditt konto"
 
-#: wxbanker.py:206
+#: wxbanker/main.py:189
 msgid ""
 "Once you have created an account you can add transactions to it (such as "
 "your initial balance) using the controls below the grid on the bottom right."
@@ -772,19 +658,19 @@ msgstr ""
 "När du väl skapat ett konto kan du lägga till transaktioner (t.ex. ett "
 "initialt värde) genom att använda kontrollerna nere till höger."
 
-#: wxbanker.py:207
+#: wxbanker/main.py:190
 msgid "Have fun!"
 msgstr "Ha det så kul!"
 
-#: wxbanker.py:209
+#: wxbanker/main.py:192
 msgid "Welcome!"
 msgstr "Välkommen!"
 
-#: wxbanker.py:217
+#: wxbanker/main.py:200
 msgid "Save changes?"
 msgstr "Spara ändringar?"
 
-#: wxbanker.py:218
+#: wxbanker/main.py:201
 msgid ""
 "You have made changes since the last save. Would you like to save before "
 "exiting?"
@@ -792,13 +678,155 @@ msgstr ""
 "Du har gjort ändringar sedan du sparade sist. Vill du spara innan du "
 "avslutar?"
 
-#: wxbanker.py:219
+#: wxbanker/main.py:202
 msgid ""
 "Note that enabling auto-save from the File menu will eliminate the need for "
 "manual saving."
 msgstr ""
 "Notera att aktiveringen av automatisk sparning från Arkiv-meyn kommer att "
 "eliminera behovet av manuell sparning."
+
+#: wxbanker/searchctrl.py:36
+msgid "Search transactions"
+msgstr "Sök transaktioner"
+
+#: wxbanker/searchctrl.py:39
+msgid "More options"
+msgstr "Fler alternativ"
+
+#: wxbanker/searchctrl.py:39
+msgid "Less options"
+msgstr "Färre alternativ"
+
+#: wxbanker/searchctrl.py:50
+msgid "Match: "
+msgstr "Träff: "
+
+#: wxbanker/searchctrl.py:94
+msgid "Show advanced search options"
+msgstr "Visa avancerade sökalternativ"
+
+#: wxbanker/searchctrl.py:96
+msgid "Hide advanced search options"
+msgstr "Dölj avancerade sökalternativ"
+
+#: wxbanker/csvimportframe.py:28
+msgid "CSV import"
+msgstr "Importera CSV"
+
+#: wxbanker/csvimportframe.py:60
+msgid "Target account"
+msgstr "Målkonto"
+
+#: wxbanker/csvimportframe.py:75 wxbanker/csvimportframe.py:77
+msgid "Import"
+msgstr "Importera"
+
+#: wxbanker/csvimportframe.py:87
+msgid "CSV columns mapping"
+msgstr "Kartläggning av CSV-kolumner"
+
+#: wxbanker/csvimportframe.py:99
+msgid "Date format"
+msgstr "Datumformat"
+
+#: wxbanker/csvimportframe.py:106
+msgid "Decimal separator"
+msgstr "Decimalavgränsare"
+
+#: wxbanker/csvimportframe.py:117
+msgid "CSV file settings"
+msgstr "CSV filinställningar"
+
+#: wxbanker/csvimportframe.py:126
+msgid "Skip first line"
+msgstr "Hoppa över första raden"
+
+#: wxbanker/csvimportframe.py:129
+msgid "Encoding"
+msgstr "Kodning"
+
+#: wxbanker/csvimportframe.py:133
+msgid "Column delimiter"
+msgstr "Kolumnavskiljare"
+
+#: wxbanker/csvimportframe.py:144
+msgid "File to import"
+msgstr "Fil att importera"
+
+#: wxbanker/csvimportframe.py:164
+msgid "CSV profiles"
+msgstr "CSV-profiler"
+
+#: wxbanker/csvimportframe.py:169
+msgid "Python simplejson library is needed for csv profile loading/saving."
+msgstr ""
+"Pythons simplejson-bibliotek behövs för CVS-profilsladdning/sparning."
+
+#: wxbanker/csvimportframe.py:179
+msgid "Load"
+msgstr "Ladda"
+
+#: wxbanker/csvimportframe.py:189
+msgid "Delete"
+msgstr "Ta bort"
+
+#: wxbanker/csvimportframe.py:243
+#, python-format
+msgid "The file encoding does not seem to be '%s'."
+msgstr "Filkodningen verkar inte vara '%s'."
+
+#: wxbanker/csvimportframe.py:250
+msgid "An error ocurred during the csv file import."
+msgstr "Ett fel uppstod under importeringen av CSV-filen."
+
+#: wxbanker/csvimportframe.py:251
+msgid "CSV import error"
+msgstr "CSV importeringsfel"
+
+#: wxbanker/csvimportframe.py:301
+#, python-format
+msgid "Profile with the name '%s' exists already. Overwrite it ?"
+msgstr "Profilen med namnet '%s' existerar redan. Skriv över?"
+
+#: wxbanker/csvimportframe.py:302
+msgid "Overwrite profile ?"
+msgstr "Skriv över profil ?"
+
+#: wxbanker/csvimportframe.py:316
+msgid "Select file and click \"Preview\""
+msgstr "Välj fil och klicka \"Förhandsvisa\""
+
+#: wxbanker/recurringsummaryrow.py:45
+msgid "Summary:"
+msgstr "Sammanfattning:"
+
+#: wxbanker/currencies.py:277
+msgid "detected"
+msgstr "upptäckt"
+
+#: wxbanker/currconvert.py:59
+#, python-format
+msgid "No exchange rate for currency \"%s\""
+msgstr "Ingen växelkurs för valutan \"%s\""
+
+#~ msgid "All Accounts"
+#~ msgstr "Alla konton"
+
+#~ msgid "Current Account"
+#~ msgstr "Nuvarande konto"
+
+#~ msgid "Case Sensitive"
+#~ msgstr "Skiftlägeskänslig"
+
+#~ msgid "Hide zero-balance accounts"
+#~ msgstr "Göm kontom som har noll i balans."
+
+#~ msgid "In: "
+#~ msgstr "I: "
+
+#~ msgid "Show"
+#~ msgstr "Visa"
 
 #~ msgid "transfer"
 #~ msgstr "överför"
@@ -820,11 +848,48 @@ msgstr ""
 #~ "En sökning är aktiv för tillfället. Vill du rensa den nuvarande sökningen "
 #~ "och skriva %s i \"%s\"?"
 
+#~ msgid ""
+#~ "When enabled, accounts with a balance of $0.00 will be hidden from the list"
+#~ msgstr ""
+#~ "När aktiverat kommer konton med en balans på $0.00 döljas från listan"
+
+#~ msgid ""
+#~ "Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
+#~ "to fix this."
+#~ msgstr ""
+#~ "Varning: Oförmögen att binda till DateCtrl's ENTER. Uppgradera till wxPython "
+#~ ">= 2.8.8.1 för att ordna detta."
+
 #~ msgid "Sample Points"
 #~ msgstr "Sampelspunkter"
+
+#~ msgid "Transact"
+#~ msgstr "Transaktion"
+
+#~ msgid "Whether or not to match based on capitalization"
+#~ msgstr "Huruvida träffar baseras på Versaler/Gemener eller inte"
+
+#~ msgid "Fit Curve Degree"
+#~ msgstr "Anpassa Bågens Grad"
+
+#~ msgid "Account"
+#~ msgstr "Konto"
 
 #~ msgid "&Tools"
 #~ msgstr "&Verktyg"
 
 #~ msgid "CSV Import"
 #~ msgstr "CSV-importering"
+
+#~ msgid ""
+#~ "Warning: Numpy module not available, disabling Summary tab. Install numpy to "
+#~ "fix this."
+#~ msgstr ""
+#~ "Varning: Numpy-modulen är inte tillgänglig, avaktiverar summeringsfliken. "
+#~ "Installera numpy för att åtgärda detta."
+
+#~ msgid "account:"
+#~ msgstr "konto:"
+
+#~ msgid "Every"
+#~ msgstr "Var"
