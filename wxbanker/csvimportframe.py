@@ -26,6 +26,8 @@ class CsvImportFrame(wx.Frame):
     """
     def __init__(self):
         wx.Frame.__init__(self, None, title=_("CSV import"))
+        # Necessary to be able to preview imports since OLV looks for this attribute on its GrandParent.
+        self.searchActive = False
 
         self.dateFormats = ['%Y/%m/%d', '%d/%m/%Y', '%m/%d/%Y']
         self.encodings = ['cp1250', 'iso8859-1', 'iso8859-2', 'utf-8']
