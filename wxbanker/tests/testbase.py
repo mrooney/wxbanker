@@ -36,10 +36,17 @@ tomorrow = today + datetime.timedelta(days=1)
 one = datetime.timedelta(1)
 
 # The list of locales tested and assumed to be installed and available.
-if sys.platform == "win32":
-    LOCALES = ['English_United States.1252', 'Russian_Russia.1251', 'French_France.1252']
-else:
+if sys.platform == "linux2":
     LOCALES = ['en_US.utf8', 'ru_RU.utf8', 'fr_FR.utf8']
+elif sys.platform == "win32":
+    LOCALES = ['English_United States.1252', 'Russian_Russia.1251', 'French_France.1252']
+elif sys.platform == "darwin":
+    LOCALES = ['en_US.UTF-8', 'ru_RU.UTF-8', 'fr_FR.UTF-8']
+else:
+    #WXTODO: figure out the locale names for OSX and make an elif for those.
+    print "WARNING: Unknown locale mappings for your system: '%s'. Unable to run locale-specific tests." % sys.platform
+    LOCALES = []
+    
 
 # Import wxbanker here so wx gets initialized first, so wxversion calls work properly.
 import wxbanker

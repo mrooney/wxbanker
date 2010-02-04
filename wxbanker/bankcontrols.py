@@ -209,7 +209,14 @@ class FlashableButton(wx.BitmapButton):
     
     def __init__(self, parent, bitmap):
         wx.BitmapButton.__init__(self, parent, bitmap=bitmap)
-        self.EmptyBitmap = wx.EmptyBitmapRGBA(16,16)
+        
+        # Attempt to use an RGBA bitmap because it is transparent, but fall back where it doesn't exist (OSX).
+        try:
+            emptyBitmap = wx.EmptyBitmapRGBA(16,16)
+        except AttributeError:
+            emptyBitmap = wx.EmptyBitmap(16,16)
+            
+        self.EmptyBitmap = emptyBitmap
         self.OriginalBitmap = bitmap
         self.FlashState = 0
         self.Running = False
