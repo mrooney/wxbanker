@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-02-02 00:03-0800\n"
+"POT-Creation-Date: 2010-02-03 00:18-0800\n"
 "PO-Revision-Date: 2009-04-07 12:42+0000\n"
 "Last-Translator: Kaïs Bejaoui <kais.bejaoui@gmail.com>\n"
 "Language-Team: Arabic <ar@li.org>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n % 100 >= "
 "3 && n % 100 <= 10 ? 3 : n % 100 >= 11 && n % 100 <= 99 ? 4 : 5;\n"
-"X-Launchpad-Export-Date: 2010-02-03 04:45+0000\n"
+"X-Launchpad-Export-Date: 2010-02-04 04:46+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/bankobjects/transaction.py:92
@@ -236,19 +236,19 @@ msgstr ""
 msgid "Trend Degree"
 msgstr ""
 
-#: wxbanker/templater.py:28
-msgid "Hide Calculator"
-msgstr "أخف الحاسبة"
-
-#: wxbanker/templater.py:29
+#: wxbanker/managetab.py:43
 msgid "Show Calculator"
 msgstr "أظهر الحاسبة"
 
-#: wxbanker/managetab.py:96
+#: wxbanker/managetab.py:43
+msgid "Hide Calculator"
+msgstr "أخف الحاسبة"
+
+#: wxbanker/managetab.py:97
 msgid "Transactions"
 msgstr ""
 
-#: wxbanker/managetab.py:108
+#: wxbanker/managetab.py:109
 msgid "Summary"
 msgstr "موجز"
 
