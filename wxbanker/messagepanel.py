@@ -22,6 +22,8 @@ class MessagePanel(wx.Panel):
     def __init__(self, parent, message):
         wx.Panel.__init__(self, parent)
         self.Freeze()
+        # The flags to use based on whether or not lines are shown.
+        self.Flags = {False: wx.EXPAND|wx.ALL, True: wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP}
         self.BackgroundColour = wx.BLACK
         self.Panel = panel = wx.Panel(self)
         self.LinesPanel = wx.Panel(self)
@@ -29,7 +31,7 @@ class MessagePanel(wx.Panel):
         #self.Panel.BackgroundColour = self.LinesPanel.BackgroundColour = (0, 200, 100)
         
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
-        self.Sizer.Add(panel, 1, wx.EXPAND|wx.ALL, 1)
+        self.Sizer.Add(panel, 1, self.Flags[False], 1)
         self.Sizer.Add(self.LinesPanel, 0, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.BOTTOM, 1)
         self.LinesPanel.Hide()
     
@@ -82,7 +84,12 @@ class MessagePanel(wx.Panel):
             sizer.Add(wx.StaticText(self.LinesPanel, label=line), 0, wx.LEFT, 10)
     
     def ToggleLines(self, lines):
-        self.LinesPanel.Show(not self.LinesPanel.IsShown())
+        self.Freeze()
+        show = not self.LinesPanel.IsShown()
+        self.LinesPanel.Show(show)
+        # Handle the border, the top panel can't have a bottom border if there are lines under it!
+        self.Sizer.GetItem(0).SetFlag(self.Flags[show])
+        self.Thaw()
         self.Parent.Layout()
         
     def PushButton(self, label, callback):
