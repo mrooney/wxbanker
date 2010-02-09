@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-02-03 00:18-0800\n"
-"PO-Revision-Date: 2010-02-03 10:12+0000\n"
-"Last-Translator: Leandro Gómez <leogg@ubuntu.com>\n"
+"PO-Revision-Date: 2010-02-08 18:38+0000\n"
+"Last-Translator: DiegoJ <diegojromerolopez@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-02-04 04:46+0000\n"
+"X-Launchpad-Export-Date: 2010-02-09 05:09+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/bankobjects/transaction.py:92
@@ -81,7 +81,7 @@ msgstr "Semanalmente en %s"
 #: wxbanker/bankobjects/recurringtransaction.py:162
 #, python-format
 msgid "Every %(num)d weeks on %%s"
-msgstr ""
+msgstr "Cada %(num)d semanas de %%s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:169
 #, python-format
@@ -146,7 +146,7 @@ msgstr "Los nombres de cuenta no pueden quedar en blanco."
 
 #: wxbanker/accountlistctrl.py:421
 msgid "Account name"
-msgstr ""
+msgstr "Nombre de cuenta"
 
 #: wxbanker/accountlistctrl.py:460
 #, python-format
@@ -187,7 +187,7 @@ msgstr "Esta cuenta no tiene transacciones recurrentes por el momento."
 
 #: wxbanker/accountconfigdialog.py:105
 msgid "Close"
-msgstr ""
+msgstr "Cerrar"
 
 #: wxbanker/accountconfigdialog.py:115 wxbanker/csvimportframe.py:184
 msgid "Save"
@@ -195,7 +195,7 @@ msgstr "Guardar"
 
 #: wxbanker/accountconfigdialog.py:116
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: wxbanker/accountconfigdialog.py:136
 msgid "Recurring Transactions"
@@ -212,7 +212,7 @@ msgstr "Tendencia"
 
 #: wxbanker/plots/cairopanel.py:112 wxbanker/plots/wxplotpanel.py:42
 msgid "Time"
-msgstr ""
+msgstr "Tiempo"
 
 #: wxbanker/plots/wxplotpanel.py:42
 msgid "Total Balance Over Time"
@@ -222,6 +222,8 @@ msgstr "Balance total del periodo"
 #, python-format
 msgid "To use '%s' plotting library, install following python modules: %s."
 msgstr ""
+"Para usar la biblioteca para dibujar '%s', instale los siguientes módulos de "
+"Python: %s."
 
 #: wxbanker/messagepanel.py:45
 msgid "Dismiss"
@@ -493,20 +495,22 @@ msgstr "Importar transacciones desde un archivo CSV"
 
 #: wxbanker/menubar.py:60
 msgid "Previous account"
-msgstr ""
+msgstr "Cuenta anterior"
 
 #: wxbanker/menubar.py:61
 msgid "Next account"
-msgstr ""
+msgstr "Siguiente cuenta"
 
 #: wxbanker/menubar.py:64
 msgid "Show zero-balance accounts"
-msgstr ""
+msgstr "Mostrar cuentas con balance a cero"
 
 #: wxbanker/menubar.py:64
 msgid ""
 "When disabled, accounts with a balance of $0.00 will be hidden from the list"
 msgstr ""
+"Si está desactivado, las cuentas con un balance de $0.00 no se mostrarán en "
+"la lista"
 
 #: wxbanker/menubar.py:73
 msgid "&Currency"
@@ -574,7 +578,7 @@ msgstr "&Archivo"
 
 #: wxbanker/menubar.py:124
 msgid "&View"
-msgstr ""
+msgstr "&Ver"
 
 #: wxbanker/menubar.py:125
 msgid "&Settings"
