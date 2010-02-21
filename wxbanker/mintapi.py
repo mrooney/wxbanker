@@ -19,6 +19,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import re, getpass, datetime
+from BeautifulSoup import BeautifulSoup
 from wxbanker.csvimporter import CsvImporterProfileManager, CsvImporter
 from wxbanker import bankexceptions, urllib3
 urllib3.enablecookies()
@@ -54,12 +55,13 @@ class MintDotCom:
 
     def GetAccountBalance(self, accountid):
         accountPage = urllib3.read("https://wwws.mint.com/transaction.event?accountId=%s" % accountid)
-        balRegex = """<th>Balance</th><td class="money[^>]+>([^<]+)</td>"""
-        balance = re.findall(balRegex, accountPage)[0]
-        balance = balance.replace("–", "-") # Mint uses a weird negative sign!
+        soup = BeautifulSoup(accountPage)
+        balanceStr = soup.find("div", id="account-summary").find("tbody").find("td").contents[0]
+        balanceStr = balanceStr.replace("–".decode("utf-8"), "-") # Mint uses a weird negative sign!
         for char in ",$":
-            balance = balance.replace(char, "")
-        return float(balance)
+            balanceStr = balanceStr.replace(char, "")
+        balance = float(balanceStr)
+        return balance
 
     def GetAccountTransactionsCSV(self, accountid):
         return urllib3.read("https://wwws.mint.com/transactionDownload.event?accountId=%s&comparableType=8&offset=0" % accountid)
