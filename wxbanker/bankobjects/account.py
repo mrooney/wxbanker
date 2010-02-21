@@ -28,9 +28,9 @@ from wxbanker import currencies, bankexceptions, debug
 
 class Account(ORMObject):
     ORM_TABLE = "accounts"
-    ORM_ATTRIBUTES = ["Name", "Balance"]
+    ORM_ATTRIBUTES = ["Name", "Balance", "MintId"]
     
-    def __init__(self, store, aID, name, currency=0, balance=0.0):
+    def __init__(self, store, aID, name, currency=0, balance=0.0, mintId=None):
         ORMObject.__init__(self)
         self.IsFrozen = True
         self.Store = store
@@ -41,6 +41,7 @@ class Account(ORMObject):
         self._preTransactions = []
         self.Currency = currency
         self.Balance = balance
+        self.MintId = mintId
         self.IsFrozen = False
 
         Publisher.subscribe(self.onTransactionAmountChanged, "ormobject.updated.Transaction.Amount")
@@ -245,6 +246,13 @@ class Account(ORMObject):
         sources = self.RemoveTransactions(transactions)
         destAccount.AddTransactions(transactions, sources)
         Publisher.sendMessage("batch.end")
+        
+    def IsMintEnabled(self):
+        return self.MintId is not None
+        
+    def IsInSyncWithMint(self):
+        if self.MintId is None:
+            raise bankexceptions.MintIntegrationException("This account has no MintId.")
 
     def onTransactionAmountChanged(self, message):
         transaction = message.data

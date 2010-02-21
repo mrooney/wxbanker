@@ -28,32 +28,38 @@ class MintLoginException(Exception): pass
 
 
 class MintDotCom:
+    _shared_state = {}
+    
     def __init__(self, user, passwd):
-        self._username = user
-        self._passwd = passwd
-        self._cachedSummary = None
+        self.__dict__ = self._shared_state
 
-    def Login(self):
-        result = urllib3.post("https://wwws.mint.com/loginUserSubmit.xevent", {"username": self._username, "password": self._passwd, "task": "L", "nextPage": ""})
+        if not hasattr(self, "_Initialized"):
+            self._Username = user
+            self._Password = passwd
+            self._Login()
+            self._Initialized = True
+
+    def _Login(self):
+        result = urllib3.post("https://wwws.mint.com/loginUserSubmit.xevent", {"username": self._Username, "password": self._Password, "task": "L", "nextPage": ""})
         if "forgot your password?" in result.lower():
             raise MintLoginException("Invalid credentials")
-        self._cachedSummary = result
+        self._CachedSummary = result
 
     def ListAccounts(self):
-        if self._cachedSummary is None:
-            self.Login()
-
         accountsRegex = """<a class="" href="transaction.event\?accountId=([0-9]+)">([^<]+)</a></h4><h6><span class="last-updated">[^<]+</span>([^<]+)</h6>"""
         mintAccounts = []
-        for account in re.findall(accountsRegex, self._cachedSummary):
+        for account in re.findall(accountsRegex, self._CachedSummary):
             aid = account[0]
             name = "%s %s" % (account[1], account[2])
             mintAccounts.append((name.decode("utf-8"), aid))
 
         mintAccounts.sort()
         return mintAccounts
-
+    
     def GetAccountBalance(self, accountid):
+        return 1
+
+    def GetAccountBalance2(self, accountid):
         accountPage = urllib3.read("https://wwws.mint.com/transaction.event?accountId=%s" % accountid)
         soup = BeautifulSoup(accountPage)
         balanceStr = soup.find("div", id="account-summary").find("tbody").find("td").contents[0]

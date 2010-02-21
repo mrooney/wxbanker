@@ -17,12 +17,12 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 """
-Table: accounts                                v2                 v3
-+---------------------------------------------------------------+---------------+
-| id INTEGER PRIMARY KEY | name VARCHAR(255) | currency INTEGER | balance FLOAT |
-|------------------------+-------------------|------------------|---------------|
-| 1                      | "My Account"      | 0                | 0             |
-+---------------------------------------------------------------+---------------+
+Table: accounts                                v2                 v3              v10
++---------------------------------------------------------------+---------------+-----------------+
+| id INTEGER PRIMARY KEY | name VARCHAR(255) | currency INTEGER | balance FLOAT | mintId INTEGER  |
+|------------------------+-------------------+------------------+---------------+-----------------|
+| 1                      | "My Account"      | 0                | 0             | 123456          |
++---------------------------------------------------------------+---------------+-----------------+
 
 Table: transactions                                                                                       v4
 +-------------------------------------------------------------------------------------------------------+----------------+
@@ -53,7 +53,7 @@ class PersistentStore:
     """
     def __init__(self, path, autoSave=True):
         self.Subscriptions = []
-        self.Version = 9
+        self.Version = 10
         self.Path = path
         self.AutoSave = False
         self.Dirty = False
@@ -124,7 +124,7 @@ class PersistentStore:
             raise Exception("Currency code must be int and >= 0")
 
         cursor = self.dbconn.cursor()
-        cursor.execute('INSERT INTO accounts VALUES (null, ?, ?, ?)', (accountName, currency, 0.0))
+        cursor.execute('INSERT INTO accounts (name, currency) VALUES (?, ?)', (accountName, currency))
         ID = cursor.lastrowid
         self.commitIfAppropriate()
 
@@ -278,6 +278,10 @@ class PersistentStore:
         elif fromVer == 8:
             # Add the LastAccountId meta key.
             cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('LastAccountId', None))
+        elif fromVer == 9:
+            # Mint integration
+            cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('MintEnabled', False))
+            cursor.execute('ALTER TABLE accounts ADD mintId INTEGER')
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
 
@@ -308,8 +312,8 @@ class PersistentStore:
         return result
 
     def result2account(self, result):
-        ID, name, currency, balance = result
-        return Account(self, ID, name, currency, balance)
+        ID, name, currency, balance, mintId = result
+        return Account(self, ID, name, currency, balance, mintId)
     
     def result2recurringtransaction(self, result, parentAccount, allAccounts):
         rId, accountId, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, sourceId, lastTransacted = result

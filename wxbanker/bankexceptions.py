@@ -35,5 +35,5 @@ class BlankAccountNameException(Exception):
         return "Account names cannot be blank."
 
 class InvalidTransactionException(Exception): pass
-
 class MissingLinkException(Exception): pass
+class MintIntegrationException(Exception): pass
