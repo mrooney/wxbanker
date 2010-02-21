@@ -24,7 +24,7 @@ from wx.lib.pubsub import Publisher
 class AccountListCtrl(wx.Panel):
     """
     This control manages a clickable list of accounts,
-    displaying their totals to the right of them
+    displaying their totals to the right of them,
     as well as the grand total as the last entry.
 
     Accounts can be added, removed, and renamed.
@@ -38,7 +38,7 @@ class AccountListCtrl(wx.Panel):
         # Initialize some attributes to their default values.
         self.editCtrl = self.hiddenIndex = None
         self.currentIndex = None
-        self.hyperLinks, self.totalTexts, self.accountObjects = [], [], []
+        self.radioButtons, self.totalTexts, self.accountObjects, self.mintStatuses = [], [], [], []
 
         # Create the staticboxsizer which is the home for everything.
         # This *MUST* be created first to ensure proper z-ordering (as per docs).
@@ -117,6 +117,7 @@ class AccountListCtrl(wx.Panel):
         Publisher.subscribe(self.onAccountChanged, "user.account changed")
         Publisher.subscribe(self.onSelectNextAccount, "user.next account")
         Publisher.subscribe(self.onSelectPreviousAccount, "user.previous account")
+        Publisher.subscribe(self.onToggleMintIntegration, "user.mint.toggled")
 
         # Populate ourselves initially unless explicitly told not to.
         if autoPopulate:
@@ -149,6 +150,15 @@ class AccountListCtrl(wx.Panel):
         # Update the total text.
         self.updateGrandTotal()
         self.Parent.Layout()
+        
+    def onToggleMintIntegration(self, message):
+        enabled = message.data
+        self.ShowMintStatus(enabled)
+        
+    def ShowMintStatus(self, show):
+        for mintStatus in self.mintStatuses:
+            mintStatus.Show(show)
+        self.Layout()
 
     def IsVisible(self, index):
         """Return whether or not the account at the given index is visible."""
@@ -169,7 +179,7 @@ class AccountListCtrl(wx.Panel):
         else:
             account = self.accountObjects[index]
             # Set the value in case it wasn't a click that triggered this.
-            self.hyperLinks[index].Value = True
+            self.radioButtons[index].Value = True
 
         self.currentIndex = index
         # Update the remove/edit buttons.
@@ -293,21 +303,25 @@ class AccountListCtrl(wx.Panel):
         link = wx.RadioButton(self.childPanel, label=account.Name)
         link.AccountIndex = index
         totalText = wx.StaticText(self.childPanel, label=account.float2str(balance))
+        mintStatus = wx.StaticText(self.childPanel, label="!")
+        
         self.accountObjects.insert(index, account)
-        self.hyperLinks.insert(index, link)
+        self.radioButtons.insert(index, link)
         self.totalTexts.insert(index, totalText)
+        self.mintStatuses.insert(index, mintStatus)
 
         # Put them in an hsizer.
         miniSizer = wx.BoxSizer()
         miniSizer.Add(link, 1, wx.ALIGN_CENTER)
         miniSizer.Add(totalText, 0, wx.ALIGN_CENTER|wx.LEFT, 10)
+        miniSizer.Add(mintStatus, flag=wx.ALIGN_CENTER)
         miniSizer.AddSpacer(3)
 
         # Insert the hsizer into the correct position in the list.
         self.childSizer.Insert(index+1, miniSizer, 0, wx.EXPAND|wx.BOTTOM, 3)
 
         # Renumber the links after this.
-        for linkCtrl in self.hyperLinks[index+1:]:
+        for linkCtrl in self.radioButtons[index+1:]:
             linkCtrl.AccountIndex = linkCtrl.AccountIndex+1
         if self.currentIndex >= index:
             self.currentIndex += 1
@@ -319,14 +333,15 @@ class AccountListCtrl(wx.Panel):
         self.Parent.Layout()
 
     def _RemoveItem(self, index, fixSel=True):
-        linkCtrl = self.hyperLinks[index]
+        linkCtrl = self.radioButtons[index]
 
         self.accountObjects.pop(index)
-        del self.hyperLinks[index]
+        del self.radioButtons[index]
         del self.totalTexts[index]
+        del self.mintStatuses[index]
 
         # Renumber the links after this.
-        for linkCtrl in self.hyperLinks[index:]:
+        for linkCtrl in self.radioButtons[index:]:
             linkCtrl.AccountIndex = linkCtrl.AccountIndex-1
 
         # Actually remove (sort of) the account sizer.
@@ -497,7 +512,7 @@ class AccountListCtrl(wx.Panel):
         # and add it again, letting _PutAccount handle the ordering.
         self._RemoveItem(self.currentIndex, fixSel=False)
         self.currentIndex = self._PutAccount(account)
-        self.hyperLinks[self.currentIndex].Value = True
+        self.radioButtons[self.currentIndex].Value = True
 
     def onAccountClick(self, event):
         """

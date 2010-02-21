@@ -38,6 +38,7 @@ class BankMenuBar(wx.MenuBar):
     ID_REQUESTFEATURE = wx.NewId()
     ID_TRANSLATE = wx.NewId()
     IDS_CURRENCIES = [wx.NewId() for i in range(len(CurrencyStrings))]
+    ID_MINTINTEGRATION = wx.NewId()
     ID_REQUESTCURRENCY = wx.NewId()
     ID_IMPORT_CSV = wx.NewId()
 
@@ -85,6 +86,8 @@ class BankMenuBar(wx.MenuBar):
         currencyMenu.SetSubMenu(currencies)
 
         settingsMenu.AppendItem(currencyMenu)
+        
+        settingsMenu.AppendCheckItem(self.ID_MINTINTEGRATION, _("Integrate with Mint.com"), _("Sync account balances with an existing Mint.com account"))
 
         # Help menu.
         helpMenu = wx.Menu()
@@ -154,6 +157,7 @@ class BankMenuBar(wx.MenuBar):
                 self.ID_IMPORT_CSV: self.onClickImportCsv,
                 wx.ID_ABOUT: self.onClickAbout,
                 self.ID_REQUESTCURRENCY: self.onClickRequestCurrency,
+                self.ID_MINTINTEGRATION: self.onClickMintIntegration,
             }.get(ID, lambda e: e.Skip())
 
             handler(event)
@@ -212,6 +216,9 @@ class BankMenuBar(wx.MenuBar):
 
     def onClickRequestCurrency(self, event):
         webbrowser.open("https://answers.launchpad.net/wxbanker/+faq/477")
+        
+    def onClickMintIntegration(self, event):
+        Publisher.sendMessage("user.mint.toggled", event.Checked())
 
     def onClickAbout(self, event):
         info = wx.AboutDialogInfo()
