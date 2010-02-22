@@ -23,7 +23,7 @@ import re, datetime
 
 from wxbanker import currencies
 from wxbanker.bankobjects.ormobject import ORMKeyValueObject
-from wxbanker.mintapi import MintDotCom
+from wxbanker.mint import MintDotCom
 
 class BankModel(ORMKeyValueObject):
     ORM_TABLE = "meta"

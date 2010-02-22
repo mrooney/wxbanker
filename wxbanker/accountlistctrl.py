@@ -153,9 +153,12 @@ class AccountListCtrl(wx.Panel):
     def _UpdateMintStatuses(self):
         for account, mintCtrl in zip(self.accountObjects, self.mintStatuses):
             if account.IsMintEnabled():
-                mintCtrl.Label = "1"
+                if account.IsInSyncWithMint():
+                    mintCtrl.Label = "Y"
+                else:
+                    mintCtrl.Label = "N"
             else:
-                mintCtrl.Label = "0"
+                mintCtrl.Label = "-"
 
     def onCurrencyChanged(self, message):
         # Update all the accounts.
