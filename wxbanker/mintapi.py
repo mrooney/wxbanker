@@ -36,7 +36,7 @@ class MintDotCom:
         if not hasattr(self, "_Initialized"):
             self._Username = user
             self._Password = passwd
-            self._Login()
+            #self._Login()
             self._Initialized = True
 
     def _Login(self):

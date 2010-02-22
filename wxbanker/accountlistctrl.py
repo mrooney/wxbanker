@@ -140,8 +140,22 @@ class AccountListCtrl(wx.Panel):
         self.staticBoxSizer.Layout()
         #self.staticBoxSizer.SetSmooth(True)
 
+        mintEnabled = self.Model.MintEnabled
+        self.ShowMintStatus(mintEnabled)
+        
         if not self.GetCount():
             self.addButton.StartFlashing()
+        
+        if mintEnabled:
+            self._UpdateMintStatuses()
+            
+            
+    def _UpdateMintStatuses(self):
+        for account, mintCtrl in zip(self.accountObjects, self.mintStatuses):
+            if account.IsMintEnabled():
+                mintCtrl.Label = "1"
+            else:
+                mintCtrl.Label = "0"
 
     def onCurrencyChanged(self, message):
         # Update all the accounts.
@@ -153,11 +167,15 @@ class AccountListCtrl(wx.Panel):
         
     def onToggleMintIntegration(self, message):
         enabled = message.data
+        if enabled:
+            self._UpdateMintStatuses()
+            
         self.ShowMintStatus(enabled)
         
     def ShowMintStatus(self, show):
         for mintStatus in self.mintStatuses:
             mintStatus.Show(show)
+            
         self.Layout()
 
     def IsVisible(self, index):

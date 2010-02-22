@@ -23,6 +23,7 @@ import re, datetime
 
 from wxbanker import currencies
 from wxbanker.bankobjects.ormobject import ORMKeyValueObject
+from wxbanker.mintapi import MintDotCom
 
 class BankModel(ORMKeyValueObject):
     ORM_TABLE = "meta"
@@ -32,6 +33,10 @@ class BankModel(ORMKeyValueObject):
         ORMKeyValueObject.__init__(self, store)
         self.Store = store
         self.Accounts = accountList
+
+        self.Mint = None
+        if self.MintEnabled:
+            self.Mint = MintDotCom("foo", "bar")
 
         Publisher.subscribe(self.onCurrencyChanged, "user.currency_changed")
         Publisher.subscribe(self.onAccountChanged, "view.account changed")

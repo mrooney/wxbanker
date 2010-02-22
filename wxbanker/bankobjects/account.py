@@ -92,11 +92,10 @@ class Account(ORMObject):
     def GetTransactions(self):
         if self._Transactions is None:
             self._Transactions = self.Store.getTransactionsFrom(self)
-
-            # If transactions were added before this list was pulled, and then an attribute
-            # is changed on one of them (Amount/Description/Date), it won't be
-            # reflected on the new account at run-time because it has a replacement instance
-            # for that transaction. So we need to swap it in.
+            # If transactions were added before this list was pulled,
+            # and then an attribute is changed on one of them (Amount/Description/Date), it won't be
+            # reflected on the new account at run-time because it has a replacement instance for that transaction.
+            # So we need to swap it in.
             if self._preTransactions:
                 # Iterate over this first (and thus once) since it is probably larger than _pre.
                 for i, newT in enumerate(self._Transactions):
