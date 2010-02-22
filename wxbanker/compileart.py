@@ -118,7 +118,7 @@ for file in os.listdir(base):
 print "Fixing compatibility with wxPython < 2.8...",
 lines = open('%s.py'%base).readlines()
 assert lines[3] == "from wx.lib.embeddedimage import PyEmbeddedImage\n", lines[3]
-lines[3] = "from embeddedimage import PyEmbeddedImage\n"
+lines[3] = "from wxbanker.art.embeddedimage import PyEmbeddedImage\n"
 print "fixed!"
 
 print "Adding demo frame and making %s module runnable..."%base,

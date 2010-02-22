@@ -222,8 +222,9 @@ def init(path=None, welcome=True):
     
     # Push our custom art provider.
     import wx.lib.art.img2pyartprov as img2pyartprov
-    from wxbanker.art import silk
-    wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(silk))
+    from wxbanker.art import silk, transparent
+    for provider in (silk, transparent):
+        wx.ArtProvider.Push(img2pyartprov.Img2PyArtProvider(provider))
 
     # Initialize the wxBanker frame!
     frame = BankerFrame(bankController, welcome)
