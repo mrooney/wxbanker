@@ -152,13 +152,13 @@ class AccountListCtrl(wx.Panel):
             
     def _UpdateMintStatuses(self):
         for account, mintCtrl in zip(self.accountObjects, self.mintStatuses):
+            bitmapName = "transparent"
             if account.IsMintEnabled():
                 if account.IsInSyncWithMint():
-                    mintCtrl.Label = "Y"
+                    bitmapName = "accept"
                 else:
-                    mintCtrl.Label = "N"
-            else:
-                mintCtrl.Label = "-"
+                    bitmapName = "exclamation"
+            mintCtrl.SetBitmap(wx.ArtProvider.GetBitmap("wxART_%s" % bitmapName))
 
     def onCurrencyChanged(self, message):
         # Update all the accounts.
@@ -324,7 +324,7 @@ class AccountListCtrl(wx.Panel):
         link = wx.RadioButton(self.childPanel, label=account.Name)
         link.AccountIndex = index
         totalText = wx.StaticText(self.childPanel, label=account.float2str(balance))
-        mintStatus = wx.StaticText(self.childPanel, label="!")
+        mintStatus = wx.StaticBitmap(self.childPanel)
         
         self.accountObjects.insert(index, account)
         self.radioButtons.insert(index, link)
@@ -335,7 +335,7 @@ class AccountListCtrl(wx.Panel):
         miniSizer = wx.BoxSizer()
         miniSizer.Add(link, 1, wx.ALIGN_CENTER)
         miniSizer.Add(totalText, 0, wx.ALIGN_CENTER|wx.LEFT, 10)
-        miniSizer.Add(mintStatus, flag=wx.ALIGN_CENTER)
+        miniSizer.Add(mintStatus, 0, wx.ALIGN_CENTER|wx.LEFT, 3)
         miniSizer.AddSpacer(3)
 
         # Insert the hsizer into the correct position in the list.
