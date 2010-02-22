@@ -380,7 +380,7 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         self.assertEqual(model, model2)
         
     def testTransactionPropertiesChangedViaMethodsAreStored(self):
-        model = self.Controller.Model
+        model = self.Model
         a = model.CreateAccount("A")
         t = a.AddTransaction(1, description="foo", date=today)
         t.SetAmount(2)
@@ -405,6 +405,20 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         model2 = model.Store.GetModel(useCached=False)
         
         self.assertEqual(model, model2)
+        
+    def testMintIntegrationEnabledIsStored(self):
+        model = self.Model
+        self.assertEqual(model.MintEnabled, False)
+        model.MintEnabled = True
+        self.assertEqual(model.MintEnabled, True)
+        
+        model2 = model.Store.GetModel(useCached=False)
+        self.assertEqual(model2.MintIntegration, True)
+        
+        # Test equality
+        self.assertEqual(model, model2)
+        model.MintIntegration = False
+        self.assertNotEqual(model, model2)
 
     
 if __name__ == "__main__":
