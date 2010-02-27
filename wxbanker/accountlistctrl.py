@@ -174,12 +174,17 @@ class AccountListCtrl(wx.Panel):
             self._UpdateMintStatuses()
             
         self.ShowMintStatus(enabled)
+        self.Parent.Layout()
         
     def ShowMintStatus(self, show):
-        for mintStatus in self.mintStatuses:
-            mintStatus.Show(show)
+        for index, mintStatus in enumerate(self.mintStatuses):
+            if self.IsVisible(index):
+                mintStatus.Show(show)
             
         self.Layout()
+        
+    def MintStatusIsShown(self):
+        return self.mintStatuses and self.mintStatuses[0].IsShown()
 
     def IsVisible(self, index):
         """Return whether or not the account at the given index is visible."""
@@ -402,9 +407,6 @@ class AccountListCtrl(wx.Panel):
         # Handle a zero-balance account going to non-zero or vice-versa.
         self.refreshVisibility()
 
-        self.Layout()
-        self.Parent.Layout()
-
     def updateGrandTotal(self):
         self.totalText.Label = self.Model.float2str( self.Model.Balance )
 
@@ -560,6 +562,7 @@ class AccountListCtrl(wx.Panel):
         This method is called when the user checks/unchecks the option to hide zero-balance accounts.
         """
         showZero = self.bankController.ShowZeroBalanceAccounts
+        showMint = self.MintStatusIsShown()
         
         for i, account in enumerate(self.accountObjects):
             # Show it, in the case of calls from updateTotals where a
@@ -570,6 +573,8 @@ class AccountListCtrl(wx.Panel):
                 if abs(account.Balance) < .001:
                     self.childSizer.Hide(i+1)
 
+        # Restore the Mint status.
+        self.ShowMintStatus(showMint)
         # If we hid the current selection, select the first available.
         if refreshSelection and not showZero and not self.IsVisible(self.currentIndex):
             self.SelectVisibleItem(0)
