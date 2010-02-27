@@ -19,7 +19,6 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import re, getpass, datetime
-from BeautifulSoup import BeautifulSoup
 from wxbanker.csvimporter import CsvImporterProfileManager, CsvImporter
 from wxbanker import bankexceptions, urllib3
 urllib3.enablecookies()
@@ -77,6 +76,7 @@ class MintDotCom:
     @staticmethod
     def GetAccountBalance(accountid):
         return 1
+        from BeautifulSoup import BeautifulSoup
         accountPage = urllib3.read("https://wwws.mint.com/transaction.event?accountId=%s" % accountid)
         soup = BeautifulSoup(accountPage)
         balanceStr = soup.find("div", id="account-summary").find("tbody").find("td").contents[0]
