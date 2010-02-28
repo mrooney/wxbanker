@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-02-03 00:18-0800\n"
-"PO-Revision-Date: 2010-02-26 06:24+0000\n"
+"POT-Creation-Date: 2010-02-27 01:56-0800\n"
+"PO-Revision-Date: 2010-02-27 06:41+0000\n"
 "Last-Translator: sfantu <sfantus1@gmail.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1 ? 0: (((n % 100 > 19) || ((n % 100 "
 "== 0) && (n != 0))) ? 2: 1));\n"
-"X-Launchpad-Export-Date: 2010-02-27 04:46+0000\n"
+"X-Launchpad-Export-Date: 2010-02-28 04:51+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/bankobjects/transaction.py:92
@@ -133,23 +133,23 @@ msgstr "Redenumește contul selectat"
 msgid "Configure the selected account"
 msgstr "Configurează contul selectat"
 
-#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:62
+#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:63
 msgid "All accounts"
 msgstr "Toate conturile"
 
-#: wxbanker/accountlistctrl.py:385 wxbanker/accountlistctrl.py:487
+#: wxbanker/accountlistctrl.py:423 wxbanker/accountlistctrl.py:525
 msgid "Sorry, an account by that name already exists."
 msgstr "Din păcate un cont cu acest nume există deja"
 
-#: wxbanker/accountlistctrl.py:387 wxbanker/accountlistctrl.py:489
+#: wxbanker/accountlistctrl.py:425 wxbanker/accountlistctrl.py:527
 msgid "Account names cannot be blank."
 msgstr "Numele conturilor nu pot fi goale"
 
-#: wxbanker/accountlistctrl.py:421
+#: wxbanker/accountlistctrl.py:459
 msgid "Account name"
 msgstr "Denumirea contului"
 
-#: wxbanker/accountlistctrl.py:460
+#: wxbanker/accountlistctrl.py:498
 #, python-format
 msgid ""
 "This will permanently remove the account '%s' and all its transactions. "
@@ -158,7 +158,7 @@ msgstr ""
 "Aceasta va șterge definitiv contul „%s” și toate tranzacțiile sale. "
 "Continuați?"
 
-#: wxbanker/accountlistctrl.py:461
+#: wxbanker/accountlistctrl.py:499
 msgid "Warning"
 msgstr "Atenție"
 
@@ -190,7 +190,7 @@ msgstr "Acest cont nu are nicio tranzacție recurentă"
 msgid "Close"
 msgstr "Inchidere"
 
-#: wxbanker/accountconfigdialog.py:115 wxbanker/csvimportframe.py:184
+#: wxbanker/accountconfigdialog.py:115 wxbanker/csvimportframe.py:186
 msgid "Save"
 msgstr "Salvează"
 
@@ -226,7 +226,7 @@ msgstr ""
 "Pentru a folosi '%s' plotting library , instalati umatoarele module phython "
 "%s"
 
-#: wxbanker/messagepanel.py:45
+#: wxbanker/messagepanel.py:47
 msgid "Dismiss"
 msgstr "Închide"
 
@@ -263,17 +263,17 @@ msgid "No transactions entered."
 msgstr "Nicio tranzacție introdusă."
 
 #: wxbanker/transactionolv.py:60 wxbanker/bankcontrols.py:52
-#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:96
+#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:98
 msgid "Date"
 msgstr "Dată"
 
 #: wxbanker/transactionolv.py:61 wxbanker/newtransactionctrl.py:248
-#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:110
+#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:112
 msgid "Description"
 msgstr "Descriere"
 
 #: wxbanker/transactionolv.py:62 wxbanker/newtransactionctrl.py:249
-#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:104
+#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:106
 msgid "Amount"
 msgstr "Sumă"
 
@@ -483,121 +483,129 @@ msgstr ""
 "in acest cont , va substrade deasemenea 50RON din contul pe care il alegeti "
 "ca sursa."
 
-#: wxbanker/menubar.py:52
+#: wxbanker/menubar.py:53
 msgid "Auto-save"
 msgstr "Salvează automat"
 
-#: wxbanker/menubar.py:52
+#: wxbanker/menubar.py:53
 msgid "Automatically save changes"
 msgstr "Salvează modificările automat"
 
-#: wxbanker/menubar.py:54
+#: wxbanker/menubar.py:55
 msgid "Import from CSV"
 msgstr "Importă din CSV"
 
-#: wxbanker/menubar.py:54
+#: wxbanker/menubar.py:55
 msgid "Import transactions from a CSV file"
 msgstr "Importă tranzacțiile dintr-un fișier CSV"
 
-#: wxbanker/menubar.py:60
+#: wxbanker/menubar.py:61
 msgid "Previous account"
 msgstr "Contul precedent"
 
-#: wxbanker/menubar.py:61
+#: wxbanker/menubar.py:62
 msgid "Next account"
 msgstr "Contul urmator"
 
-#: wxbanker/menubar.py:64
+#: wxbanker/menubar.py:65
 msgid "Show zero-balance accounts"
 msgstr "Arata conturile cu balans zero"
 
-#: wxbanker/menubar.py:64
+#: wxbanker/menubar.py:65
 msgid ""
 "When disabled, accounts with a balance of $0.00 will be hidden from the list"
 msgstr ""
 "Cand dezactiva , conturile cu balans de 0.00 vor fi ascunse din lista"
 
-#: wxbanker/menubar.py:73
+#: wxbanker/menubar.py:74
 msgid "&Currency"
 msgstr "Valută"
 
-#: wxbanker/menubar.py:73
+#: wxbanker/menubar.py:74
 msgid "Select currency to display"
 msgstr "Selectați valuta pentru afișare"
 
-#: wxbanker/menubar.py:82
+#: wxbanker/menubar.py:83
 msgid "Request a Currency"
 msgstr "Solicitați o valută"
 
-#: wxbanker/menubar.py:93
+#: wxbanker/menubar.py:90
+msgid "Integrate with Mint.com"
+msgstr ""
+
+#: wxbanker/menubar.py:90
+msgid "Sync account balances with an existing Mint.com account"
+msgstr ""
+
+#: wxbanker/menubar.py:96
 msgid "View &FAQs"
 msgstr "Vedeți &FAQ-uri"
 
-#: wxbanker/menubar.py:93
+#: wxbanker/menubar.py:96
 msgid "View Frequently Asked Questions online"
 msgstr "Vedeți online întrebările puse frecvent"
 
-#: wxbanker/menubar.py:98
+#: wxbanker/menubar.py:101
 msgid "Ask a &Question"
 msgstr "Puneți o întrebare"
 
-#: wxbanker/menubar.py:98
+#: wxbanker/menubar.py:101
 msgid "Ask a question online"
 msgstr "Puneți online o întrebare"
 
-#: wxbanker/menubar.py:103
+#: wxbanker/menubar.py:106
 msgid "&Report a Bug"
 msgstr "Raportați o eroare"
 
-#: wxbanker/menubar.py:103
+#: wxbanker/menubar.py:106
 msgid "Report a bug to the developer online"
 msgstr "Raportați online o eroare către dezvoltatori"
 
-#: wxbanker/menubar.py:108
+#: wxbanker/menubar.py:111
 msgid "Request a Fea&ture"
 msgstr "Solicitați o funcționalitate"
 
-#: wxbanker/menubar.py:108
+#: wxbanker/menubar.py:111
 msgid "Request a new feature to be implemented"
 msgstr "Solicitați o funcționalitate nouă care să fie implementată"
 
-#: wxbanker/menubar.py:113
+#: wxbanker/menubar.py:116
 msgid "Tran&slate wxBanker"
 msgstr "Traduceți wxBanker"
 
-#: wxbanker/menubar.py:113
+#: wxbanker/menubar.py:116
 msgid "Translate wxBanker to another language"
 msgstr "Traduceți wxBanker într-o altă limbă"
 
-#: wxbanker/menubar.py:120
+#: wxbanker/menubar.py:123
 msgid "&About"
 msgstr "&Despre"
 
-#: wxbanker/menubar.py:120
+#: wxbanker/menubar.py:123
 msgid "More information about wxBanker"
 msgstr "Mai multe informații despre wxBanker"
 
-#: wxbanker/menubar.py:123
+#: wxbanker/menubar.py:126
 msgid "&File"
 msgstr "&Fișier"
 
-#: wxbanker/menubar.py:124
+#: wxbanker/menubar.py:127
 msgid "&View"
 msgstr "&Vizualizare"
 
-#: wxbanker/menubar.py:125
+#: wxbanker/menubar.py:128
 msgid "&Settings"
 msgstr "&Setări"
 
-#: wxbanker/menubar.py:126
+#: wxbanker/menubar.py:129
 msgid "&Help"
 msgstr "Ajutor"
 
-#: wxbanker/menubar.py:220
+#: wxbanker/menubar.py:227
 msgid "Copyright"
 msgstr "Drepturi de autor"
 
-#: wxbanker/menubar.py:221
+#: wxbanker/menubar.py:228
 msgid "A lightweight personal finance management application."
 msgstr "Un manager simplificat de finanțe personale."
 
@@ -619,8 +627,8 @@ msgstr ""
 "%(num)i tranzactii recursive au un total de  %(totalnum)i tranzactii "
 "pregatite."
 
-#: wxbanker/main.py:95 wxbanker/csvimportframe.py:149
-#: wxbanker/csvimportframe.py:151
+#: wxbanker/main.py:95 wxbanker/csvimportframe.py:151
+#: wxbanker/csvimportframe.py:153
 msgid "Preview"
 msgstr "Previzualizează"
 
@@ -721,87 +729,87 @@ msgstr "Ascunde opțiuni avansate de căutare"
 msgid "CSV import"
 msgstr "Import CSV"
 
-#: wxbanker/csvimportframe.py:60
+#: wxbanker/csvimportframe.py:62
 msgid "Target account"
 msgstr "Cont destinație"
 
-#: wxbanker/csvimportframe.py:75 wxbanker/csvimportframe.py:77
+#: wxbanker/csvimportframe.py:77 wxbanker/csvimportframe.py:79
 msgid "Import"
 msgstr "Importă"
 
-#: wxbanker/csvimportframe.py:87
+#: wxbanker/csvimportframe.py:89
 msgid "CSV columns mapping"
 msgstr "Indentificare coloane CSV"
 
-#: wxbanker/csvimportframe.py:99
+#: wxbanker/csvimportframe.py:101
 msgid "Date format"
 msgstr "Format dată"
 
-#: wxbanker/csvimportframe.py:106
+#: wxbanker/csvimportframe.py:108
 msgid "Decimal separator"
 msgstr "Separator zecimale"
 
-#: wxbanker/csvimportframe.py:117
+#: wxbanker/csvimportframe.py:119
 msgid "CSV file settings"
 msgstr "Setări fișier CSV"
 
-#: wxbanker/csvimportframe.py:126
+#: wxbanker/csvimportframe.py:128
 msgid "Skip first line"
 msgstr "Sari prima linie"
 
-#: wxbanker/csvimportframe.py:129
+#: wxbanker/csvimportframe.py:131
 msgid "Encoding"
 msgstr "Codificare"
 
-#: wxbanker/csvimportframe.py:133
+#: wxbanker/csvimportframe.py:135
 msgid "Column delimiter"
 msgstr "Delimitator coloane"
 
-#: wxbanker/csvimportframe.py:144
+#: wxbanker/csvimportframe.py:146
 msgid "File to import"
 msgstr "Fişier de importat"
 
-#: wxbanker/csvimportframe.py:164
+#: wxbanker/csvimportframe.py:166
 msgid "CSV profiles"
 msgstr "Profiluri CSV"
 
-#: wxbanker/csvimportframe.py:169
+#: wxbanker/csvimportframe.py:171
 msgid "Python simplejson library is needed for csv profile loading/saving."
 msgstr ""
 "Biblioteca Python simplejson este necesară epntru a încărca/salva profile "
 "CSV."
 
-#: wxbanker/csvimportframe.py:179
+#: wxbanker/csvimportframe.py:181
 msgid "Load"
 msgstr "Încarcă"
 
-#: wxbanker/csvimportframe.py:189
+#: wxbanker/csvimportframe.py:191
 msgid "Delete"
 msgstr "Șterge"
 
-#: wxbanker/csvimportframe.py:243
+#: wxbanker/csvimportframe.py:245
 #, python-format
 msgid "The file encoding does not seem to be '%s'."
 msgstr "Codificarea fișierului pare să nu fie „%s”."
 
-#: wxbanker/csvimportframe.py:250
+#: wxbanker/csvimportframe.py:252
 msgid "An error ocurred during the csv file import."
 msgstr "O eroare a avut loc la importul fișierului CSV."
 
-#: wxbanker/csvimportframe.py:251
+#: wxbanker/csvimportframe.py:253
 msgid "CSV import error"
 msgstr "Eroare la importarea fișierului CSV"
 
-#: wxbanker/csvimportframe.py:301
+#: wxbanker/csvimportframe.py:303
 #, python-format
 msgid "Profile with the name '%s' exists already. Overwrite it ?"
 msgstr "Un profil cu numele „%s” există deja. Îl suprascrieți?"
 
-#: wxbanker/csvimportframe.py:302
+#: wxbanker/csvimportframe.py:304
 msgid "Overwrite profile ?"
 msgstr "Suprascrieți profilul?"
 
-#: wxbanker/csvimportframe.py:316
+#: wxbanker/csvimportframe.py:318
 msgid "Select file and click \"Preview\""
 msgstr "Selectați fișierul și apăsați \"Previzualizează\""
 
