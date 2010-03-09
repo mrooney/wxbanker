@@ -124,9 +124,9 @@ class CsvImportFrame(wx.Frame):
         sizer.SetFlexibleDirection(wx.HORIZONTAL)
         staticBoxSizer.Add(sizer);
 
-        self.skipFirstLineCtrl = wx.CheckBox(topPanel)
-        sizer.Add(wx.StaticText(topPanel, label=_('Skip first line')), flag=wx.ALIGN_CENTER_VERTICAL)
-        sizer.Add(self.skipFirstLineCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
+        self.linesToSkipCtrl = wx.SpinCtrl(topPanel, size=(40,-1))
+        sizer.Add(wx.StaticText(topPanel, label=_('Linex to skip')), flag=wx.ALIGN_CENTER_VERTICAL)
+        sizer.Add(self.linesToSkipCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
 
         sizer.Add(wx.StaticText(topPanel, label=_('Encoding')), flag=wx.ALIGN_CENTER_VERTICAL)
         self.fileEncodingCtrl = wx.ComboBox(topPanel, choices=self.encodings, size=(110,-1))
@@ -200,7 +200,7 @@ class CsvImportFrame(wx.Frame):
         self.dateFormatCtrl.Value = settings['dateFormat']
         self.descriptionColumnCtrl.Value = settings['descriptionColumns']
         self.delimiterCtrl.Value = settings['delimiter']
-        self.skipFirstLineCtrl.Value = settings['skipFirstLine']
+        self.linesToSkipCtrl.Value = settings['linesToSkip']
         self.fileEncodingCtrl.Value = settings['encoding']
 
     def getDefaultSettings(self):
@@ -212,7 +212,7 @@ class CsvImportFrame(wx.Frame):
         settings['dateFormat'] = self.dateFormats[0]
         settings['descriptionColumns'] = "3, 4 (5)"
         settings['delimiter'] = ';'
-        settings['skipFirstLine'] = False
+        settings['linesToSkip'] = 0
         settings['encoding'] = 'utf-8'
 
         return settings
@@ -227,7 +227,7 @@ class CsvImportFrame(wx.Frame):
         settings['descriptionColumns'] = self.descriptionColumnCtrl.Value
         # delimiter must be 1-character string
         settings['delimiter'] = str(self.delimiterCtrl.Value)
-        settings['skipFirstLine'] = self.skipFirstLineCtrl.Value
+        settings['linesToSkip'] = self.linesToSkipCtrl.Value
         settings['encoding'] = self.fileEncodingCtrl.Value
 
         return settings
