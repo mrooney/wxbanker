@@ -125,7 +125,7 @@ class CsvImportFrame(wx.Frame):
         staticBoxSizer.Add(sizer);
 
         self.linesToSkipCtrl = wx.SpinCtrl(topPanel, size=(40,-1))
-        sizer.Add(wx.StaticText(topPanel, label=_('Linex to skip')), flag=wx.ALIGN_CENTER_VERTICAL)
+        sizer.Add(wx.StaticText(topPanel, label=_('Lines to skip')), flag=wx.ALIGN_CENTER_VERTICAL)
         sizer.Add(self.linesToSkipCtrl, flag=wx.ALIGN_CENTER_VERTICAL)
 
         sizer.Add(wx.StaticText(topPanel, label=_('Encoding')), flag=wx.ALIGN_CENTER_VERTICAL)

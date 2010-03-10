@@ -60,7 +60,7 @@ shippedProfiles = {
         "delimiter": ";",
         "descriptionColumns": "4 (3)",
         "encoding": "iso8859-1",
-        "linesToSkip": 23
+        "linesToSkip": 24
      }
 }
 

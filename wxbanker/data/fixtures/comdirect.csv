@@ -1,0 +1,33 @@
+
+
+
+
+
+
+
+
+
+
+"comdirect bank AG"
+"UMSÄTZE: MAX MUSTERMANN"
+"Erstellt am: 10.03.2010, 10:40 Uhr"
+
+"Kunden-Nummer:";"1234567"
+"BLZ:";"20041234"
+"Kontostand (Girokonto):";"1.234,56 EUR"
+"Kontostand (VR-Konto):";"0,00 EUR"
+
+"Umsätze Girokonto";" - Zeitraum: 90 Tage"
+
+"Neuer Kontostand";"+1.234,56"
+
+"Buchungstag";"Valuta";"Vorgang";"Buchungstext";"Umsatz in EUR"
+"09.03.2010";"09.03.2010";"Lastschrift Einzug";"Auftraggeber: FOO.DE Buchungstext: FOO.DE 12345467891234 Ref. AB123456789/00000 ";"-20,42"
+"09.03.2010";"09.03.2010";"Übertrag/Überweisung";"Auftraggeber: Max Mustermann Buchungstext: Max Mustermann ABCD1234";"190,00"
+"08.03.2010";"08.03.2010";"Lastschrift Einzug";"Auftraggeber: XYZ SAGT DANKE Buchungstext: XYZ SAGT DANKE EC 123456789 06.03 14.53 CE0 Ref. ABCDFER213456789/1480 ";"-32,27"
+"05.03.2010";"05.03.2010";"Übertrag/Überweisung";"Empfänger: Max Mustermann Kto/IBAN: 123456789 BLZ/BIC: 123456789 Buchungstext: MAX MUSTERMANN COMDIREKT ÜBERTRAG AUF ";"-1500,00"
+"05.03.2010";"05.03.2010";"Kontoübertrag";"Auftraggeber: Mustermann, Max  Kto/IBAN: 123456789 BLZ/BIC: 123456789 Buchungstext: MUSTERMANN, MAX ÜBERTRAG AUF GIROKONTO KDN-REF 123456789 Ref. ABCDFER213456789/1 ";"1500,00"
+
+"Alter Kontostand";"+2.345,67"
+
+
