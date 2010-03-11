@@ -330,6 +330,7 @@ class AccountListCtrl(wx.Panel):
         link.AccountIndex = index
         totalText = wx.StaticText(self.childPanel, label=account.float2str(balance))
         mintStatus = wx.StaticBitmap(self.childPanel)
+        mintStatus.Show(self.Model.MintEnabled)
         
         self.accountObjects.insert(index, account)
         self.radioButtons.insert(index, link)
@@ -530,7 +531,7 @@ class AccountListCtrl(wx.Panel):
         """Called when an account has been renamed in the model."""
         account = message.data
         # Hide the edit control.
-        self.onHideEditCtrl(restore=False) #ASSUMPTION!
+        self.onHideEditCtrl(restore=False)
         # Just renaming won't put it in the right alpha position, so remove it
         # and add it again, letting _PutAccount handle the ordering.
         self._RemoveItem(self.currentIndex, fixSel=False)

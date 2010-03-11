@@ -27,7 +27,7 @@ from wxbanker.mint import MintDotCom
 
 class BankModel(ORMKeyValueObject):
     ORM_TABLE = "meta"
-    ORM_ATTRIBUTES = ["LastAccountId"]
+    ORM_ATTRIBUTES = ["LastAccountId", "MintEnabled"]
     
     def __init__(self, store, accountList):
         ORMKeyValueObject.__init__(self, store)
@@ -36,7 +36,7 @@ class BankModel(ORMKeyValueObject):
 
         self.Mint = None
         if self.MintEnabled:
-            self.Mint = MintDotCom("foo", "bar")
+            self.Mint = MintDotCom()
 
         Publisher.subscribe(self.onCurrencyChanged, "user.currency_changed")
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
@@ -185,7 +185,10 @@ class BankModel(ORMKeyValueObject):
             self.LastAccountId = None
 
     def __eq__(self, other):
-        return self.Accounts == other.Accounts
+        return (
+            self.Accounts == other.Accounts and
+            self.MintEnabled == other.MintEnabled
+        )
 
     def Print(self):
         print "Model: %s" % self.Balance

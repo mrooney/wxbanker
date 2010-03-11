@@ -413,11 +413,11 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         self.assertEqual(model.MintEnabled, True)
         
         model2 = model.Store.GetModel(useCached=False)
-        self.assertEqual(model2.MintIntegration, True)
+        self.assertEqual(model2.MintEnabled, True)
         
         # Test equality
         self.assertEqual(model, model2)
-        model.MintIntegration = False
+        model.MintEnabled = False
         self.assertNotEqual(model, model2)
 
     
