@@ -40,7 +40,7 @@ shippedProfiles = {
         "delimiter": ",",
         "descriptionColumns": "2",
         "encoding": "utf-8",
-        "skipFirstLine": True
+        "linesToSkip": 1
     },
     "Sparkasse": {
         "amountColumn": 9,
@@ -50,7 +50,17 @@ shippedProfiles = {
         "delimiter": ";",
         "descriptionColumns": "6, 5 , 4",
         "encoding": "utf-8",
-        "skipFirstLine": True
+        "linesToSkip": 1
+     },
+     "comdirect": {
+        "amountColumn": 5,
+        "dateColumn": 1,
+        "dateFormat": "%d.%m.%Y",
+        "decimalSeparator": ",",
+        "delimiter": ";",
+        "descriptionColumns": "4 (3)",
+        "encoding": "iso8859-1",
+        "linesToSkip": 24
      }
 }
 
@@ -72,11 +82,13 @@ class CsvImporter:
 
         transactions = []
 
-        firstLineSkipped = False
+        linesSkipped = 0
         for row in csvReader:
-            if settings['skipFirstLine'] and not firstLineSkipped:
-                firstLineSkipped = True
+            if settings['linesToSkip']>linesSkipped:
+                linesSkipped+=1
                 continue
+            if len(row) == 0: #empty line, reached end of file
+                break
 
             # convert to python unicode strings
             row = [unicode(s, "utf-8") for s in row]

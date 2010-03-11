@@ -54,6 +54,15 @@ class CsvImporterTest(unittest.TestCase):
         self.assertEqual(tran.Date, datetime.date(2009, 7, 17))
         self.assertEqual(tran.Description, "PHONE CORP, ### , LASTSCHRIFT")
         self.assertEqual(tran.Amount, -31.24)
+       
+    def testCanImportComdirectData(self):
+        transactions = self.getTransactions("comdirect")
+        self.assertEqual(len(transactions), 5)
+        
+        tran = transactions[2]
+        self.assertEqual(tran.Date, datetime.date(2010, 3, 8))
+        self.assertEqual(tran.Description, "Auftraggeber: XYZ SAGT DANKE Buchungstext: XYZ SAGT DANKE EC 123456789 06.03 14.53 CE0 Ref. ABCDFER213456789/1480  (Lastschrift Einzug)")
+        self.assertEqual(tran.Amount, -32.27)   
         
 
 if __name__ == "__main__":
