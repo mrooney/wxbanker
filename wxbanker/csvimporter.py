@@ -81,13 +81,15 @@ class CsvImporter:
             delimiter=settings['delimiter'])
 
         transactions = []
-
         linesSkipped = 0
         for row in csvReader:
+            # Unfortunately csvReader is not subscriptable so we must count ourselves.
             if settings['linesToSkip']>linesSkipped:
                 linesSkipped+=1
                 continue
-            if len(row) == 0: #empty line, reached end of file
+
+            # If we find a blank line, assume we've hit the end of the transactions.
+            if not row:
                 break
 
             # convert to python unicode strings
