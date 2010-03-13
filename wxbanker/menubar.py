@@ -224,8 +224,8 @@ class BankMenuBar(wx.MenuBar):
         info = wx.AboutDialogInfo()
         info.Name = "wxBanker"
         info.Version = str(version.NUMBER)
-        info.Copyright = _("Copyright") + " 2007-2009 Mike Rooney (mrooney@ubuntu.com)"
-        info.Description = _("A lightweight personal finance management application.")
+        info.Copyright = _("Copyright") + " 2007-2010 Mike Rooney (mrooney@ubuntu.com)"
+        info.Description = _("Simple personal finance.")
         info.WebSite = ("https://launchpad.net/wxbanker", "https://launchpad.net/wxbanker")
 
         info.Developers = [
