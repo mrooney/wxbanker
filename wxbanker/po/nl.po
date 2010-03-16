@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-02-03 00:18-0800\n"
-"PO-Revision-Date: 2010-02-03 09:03+0000\n"
-"Last-Translator: Michael Rooney <mrooney@ubuntu.com>\n"
+"POT-Creation-Date: 2010-02-27 01:56-0800\n"
+"PO-Revision-Date: 2010-03-15 20:42+0000\n"
+"Last-Translator: MarniX <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-02-04 04:46+0000\n"
+"X-Launchpad-Export-Date: 2010-03-16 04:43+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/bankobjects/transaction.py:92
@@ -81,7 +81,7 @@ msgstr "Wekelijks op %s"
 #: wxbanker/bankobjects/recurringtransaction.py:162
 #, python-format
 msgid "Every %(num)d weeks on %%s"
-msgstr ""
+msgstr "Elke %(num)d weken op %%s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:169
 #, python-format
@@ -132,23 +132,23 @@ msgstr "De geselecteerde rekening hernoemen"
 msgid "Configure the selected account"
 msgstr "Configureer de geselecteerde rekening"
 
-#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:62
+#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:63
 msgid "All accounts"
 msgstr "Alle rekeningen"
 
-#: wxbanker/accountlistctrl.py:385 wxbanker/accountlistctrl.py:487
+#: wxbanker/accountlistctrl.py:423 wxbanker/accountlistctrl.py:525
 msgid "Sorry, an account by that name already exists."
 msgstr "Sorry, rekeningnaam bestaat al"
 
-#: wxbanker/accountlistctrl.py:387 wxbanker/accountlistctrl.py:489
+#: wxbanker/accountlistctrl.py:425 wxbanker/accountlistctrl.py:527
 msgid "Account names cannot be blank."
 msgstr "Rekeningnamen kunnen niet leeg zijn."
 
-#: wxbanker/accountlistctrl.py:421
+#: wxbanker/accountlistctrl.py:459
 msgid "Account name"
-msgstr ""
+msgstr "Rekeningnaam"
 
-#: wxbanker/accountlistctrl.py:460
+#: wxbanker/accountlistctrl.py:498
 #, python-format
 msgid ""
 "This will permanently remove the account '%s' and all its transactions. "
@@ -157,7 +157,7 @@ msgstr ""
 "Dit zal de rekening '%s' met bijbehorende transacties definitief "
 "verwijderen. Doorgaan?"
 
-#: wxbanker/accountlistctrl.py:461
+#: wxbanker/accountlistctrl.py:499
 msgid "Warning"
 msgstr "Waarschuwing"
 
@@ -187,15 +187,15 @@ msgstr "Dit account heeft momenteel geen herhalende transacties."
 
 #: wxbanker/accountconfigdialog.py:105
 msgid "Close"
-msgstr ""
+msgstr "Sluiten"
 
-#: wxbanker/accountconfigdialog.py:115 wxbanker/csvimportframe.py:184
+#: wxbanker/accountconfigdialog.py:115 wxbanker/csvimportframe.py:186
 msgid "Save"
 msgstr "Opslaan"
 
 #: wxbanker/accountconfigdialog.py:116
 msgid "Cancel"
-msgstr ""
+msgstr "Annuleren"
 
 #: wxbanker/accountconfigdialog.py:136
 msgid "Recurring Transactions"
@@ -212,7 +212,7 @@ msgstr "Trend"
 
 #: wxbanker/plots/cairopanel.py:112 wxbanker/plots/wxplotpanel.py:42
 msgid "Time"
-msgstr ""
+msgstr "Tijd"
 
 #: wxbanker/plots/wxplotpanel.py:42
 msgid "Total Balance Over Time"
@@ -223,7 +223,7 @@ msgstr "Totaal saldo over tijd"
 msgid "To use '%s' plotting library, install following python modules: %s."
 msgstr ""
 
-#: wxbanker/messagepanel.py:45
+#: wxbanker/messagepanel.py:47
 msgid "Dismiss"
 msgstr "Verwerpen"
 
@@ -260,17 +260,17 @@ msgid "No transactions entered."
 msgstr "Geen transacties toegevoegd"
 
 #: wxbanker/transactionolv.py:60 wxbanker/bankcontrols.py:52
-#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:96
+#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:98
 msgid "Date"
 msgstr "Datum"
 
 #: wxbanker/transactionolv.py:61 wxbanker/newtransactionctrl.py:248
-#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:110
+#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:112
 msgid "Description"
 msgstr "Omschrijving"
 
 #: wxbanker/transactionolv.py:62 wxbanker/newtransactionctrl.py:249
-#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:104
+#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:106
 msgid "Amount"
 msgstr "Bedrag"
 
@@ -479,120 +479,128 @@ msgstr ""
 "deze rekening, zal er $50 worden afgeschreven van de rekening die u heeft "
 "aangegeven."
 
-#: wxbanker/menubar.py:52
+#: wxbanker/menubar.py:53
 msgid "Auto-save"
 msgstr "Auto-opslaan"
 
-#: wxbanker/menubar.py:52
+#: wxbanker/menubar.py:53
 msgid "Automatically save changes"
 msgstr "Automatisch veranderingen opslaan"
 
-#: wxbanker/menubar.py:54
+#: wxbanker/menubar.py:55
 msgid "Import from CSV"
 msgstr "Importeer uit CSV"
 
-#: wxbanker/menubar.py:54
+#: wxbanker/menubar.py:55
 msgid "Import transactions from a CSV file"
 msgstr "Importeer transacties uit een CSV-bestand"
 
-#: wxbanker/menubar.py:60
-msgid "Previous account"
-msgstr ""
-
 #: wxbanker/menubar.py:61
-msgid "Next account"
-msgstr ""
+msgid "Previous account"
+msgstr "Vorige rekening"
 
-#: wxbanker/menubar.py:64
+#: wxbanker/menubar.py:62
+msgid "Next account"
+msgstr "Volgende rekening"
+
+#: wxbanker/menubar.py:65
 msgid "Show zero-balance accounts"
 msgstr ""
 
-#: wxbanker/menubar.py:64
+#: wxbanker/menubar.py:65
 msgid ""
 "When disabled, accounts with a balance of $0.00 will be hidden from the list"
 msgstr ""
 
-#: wxbanker/menubar.py:73
+#: wxbanker/menubar.py:74
 msgid "&Currency"
 msgstr "&Valuta"
 
-#: wxbanker/menubar.py:73
+#: wxbanker/menubar.py:74
 msgid "Select currency to display"
 msgstr "Selecteer valuta"
 
-#: wxbanker/menubar.py:82
+#: wxbanker/menubar.py:83
 msgid "Request a Currency"
 msgstr "Vraag een valuta aan"
 
-#: wxbanker/menubar.py:93
+#: wxbanker/menubar.py:90
+msgid "Integrate with Mint.com"
+msgstr ""
+
+#: wxbanker/menubar.py:90
+msgid "Sync account balances with an existing Mint.com account"
+msgstr ""
+
+#: wxbanker/menubar.py:96
 msgid "View &FAQs"
 msgstr "Bekijk veel gestelde vragen (&FAQ)"
 
-#: wxbanker/menubar.py:93
+#: wxbanker/menubar.py:96
 msgid "View Frequently Asked Questions online"
 msgstr "Bekijk veel gestelde vragen online"
 
-#: wxbanker/menubar.py:98
+#: wxbanker/menubar.py:101
 msgid "Ask a &Question"
 msgstr "Stel een vraag"
 
-#: wxbanker/menubar.py:98
+#: wxbanker/menubar.py:101
 msgid "Ask a question online"
 msgstr "Stel een vraag online"
 
-#: wxbanker/menubar.py:103
+#: wxbanker/menubar.py:106
 msgid "&Report a Bug"
 msgstr "Een fout &rapporteren"
 
-#: wxbanker/menubar.py:103
+#: wxbanker/menubar.py:106
 msgid "Report a bug to the developer online"
 msgstr "Een fout online rapporteren aan een ontwikkelaar"
 
-#: wxbanker/menubar.py:108
+#: wxbanker/menubar.py:111
 msgid "Request a Fea&ture"
 msgstr "Vraag nieuwe func&tionalitiet aan"
 
-#: wxbanker/menubar.py:108
+#: wxbanker/menubar.py:111
 msgid "Request a new feature to be implemented"
 msgstr "Vraag niet bestaande nieuwe functionaliteit aan"
 
-#: wxbanker/menubar.py:113
+#: wxbanker/menubar.py:116
 msgid "Tran&slate wxBanker"
 msgstr "Vertaal wxBanker"
 
-#: wxbanker/menubar.py:113
+#: wxbanker/menubar.py:116
 msgid "Translate wxBanker to another language"
 msgstr "Vertaal wxBanker naar een andere taal"
 
-#: wxbanker/menubar.py:120
+#: wxbanker/menubar.py:123
 msgid "&About"
 msgstr "Info &over"
 
-#: wxbanker/menubar.py:120
+#: wxbanker/menubar.py:123
 msgid "More information about wxBanker"
 msgstr "Meer informatie over wxBanker"
 
-#: wxbanker/menubar.py:123
+#: wxbanker/menubar.py:126
 msgid "&File"
 msgstr "&Bestand"
 
-#: wxbanker/menubar.py:124
+#: wxbanker/menubar.py:127
 msgid "&View"
 msgstr ""
 
-#: wxbanker/menubar.py:125
+#: wxbanker/menubar.py:128
 msgid "&Settings"
 msgstr "&Instellingen"
 
-#: wxbanker/menubar.py:126
+#: wxbanker/menubar.py:129
 msgid "&Help"
 msgstr "&Help"
 
-#: wxbanker/menubar.py:220
+#: wxbanker/menubar.py:227
 msgid "Copyright"
 msgstr "Auteursrecht"
 
-#: wxbanker/menubar.py:221
+#: wxbanker/menubar.py:228
 msgid "A lightweight personal finance management application."
 msgstr "Een lichtgewicht persoonlijk financieel management programma."
 
@@ -614,8 +622,8 @@ msgstr ""
 "%(num)i herhalende transacties hebben een totaal van %(totalnum)i "
 "transacties gereed."
 
-#: wxbanker/main.py:95 wxbanker/csvimportframe.py:149
-#: wxbanker/csvimportframe.py:151
+#: wxbanker/main.py:95 wxbanker/csvimportframe.py:151
+#: wxbanker/csvimportframe.py:153
 msgid "Preview"
 msgstr "Voorbeeld"
 
@@ -716,87 +724,87 @@ msgstr "Geavanceerde zoekopties verbergen"
 msgid "CSV import"
 msgstr "Importeer CSV"
 
-#: wxbanker/csvimportframe.py:60
+#: wxbanker/csvimportframe.py:62
 msgid "Target account"
 msgstr "Doelrekening"
 
-#: wxbanker/csvimportframe.py:75 wxbanker/csvimportframe.py:77
+#: wxbanker/csvimportframe.py:77 wxbanker/csvimportframe.py:79
 msgid "Import"
 msgstr "Importeer"
 
-#: wxbanker/csvimportframe.py:87
+#: wxbanker/csvimportframe.py:89
 msgid "CSV columns mapping"
 msgstr "CSV kolommenindeling"
 
-#: wxbanker/csvimportframe.py:99
+#: wxbanker/csvimportframe.py:101
 msgid "Date format"
 msgstr "Datumnotatie"
 
-#: wxbanker/csvimportframe.py:106
+#: wxbanker/csvimportframe.py:108
 msgid "Decimal separator"
 msgstr "Decimaalteken"
 
-#: wxbanker/csvimportframe.py:117
+#: wxbanker/csvimportframe.py:119
 msgid "CSV file settings"
 msgstr "CSV bestandsinstellingen"
 
-#: wxbanker/csvimportframe.py:126
+#: wxbanker/csvimportframe.py:128
 msgid "Skip first line"
 msgstr "Sla eerste regel over"
 
-#: wxbanker/csvimportframe.py:129
+#: wxbanker/csvimportframe.py:131
 msgid "Encoding"
 msgstr "Codering"
 
-#: wxbanker/csvimportframe.py:133
+#: wxbanker/csvimportframe.py:135
 msgid "Column delimiter"
 msgstr "Kolomn scheidingsteken"
 
-#: wxbanker/csvimportframe.py:144
+#: wxbanker/csvimportframe.py:146
 msgid "File to import"
 msgstr "Te importeren bestand"
 
-#: wxbanker/csvimportframe.py:164
+#: wxbanker/csvimportframe.py:166
 msgid "CSV profiles"
 msgstr "CSV profielen"
 
-#: wxbanker/csvimportframe.py:169
+#: wxbanker/csvimportframe.py:171
 msgid "Python simplejson library is needed for csv profile loading/saving."
 msgstr ""
 "Python simplejson bibliotheek is nodig voor het laden/opslaan van een CSV "
 "profiel."
 
-#: wxbanker/csvimportframe.py:179
+#: wxbanker/csvimportframe.py:181
 msgid "Load"
 msgstr "Laden"
 
-#: wxbanker/csvimportframe.py:189
+#: wxbanker/csvimportframe.py:191
 msgid "Delete"
 msgstr "Verwijderen"
 
-#: wxbanker/csvimportframe.py:243
+#: wxbanker/csvimportframe.py:245
 #, python-format
 msgid "The file encoding does not seem to be '%s'."
 msgstr "De bestandscodering lijkt geen '%s' te zijn"
 
-#: wxbanker/csvimportframe.py:250
+#: wxbanker/csvimportframe.py:252
 msgid "An error ocurred during the csv file import."
 msgstr "Er is een fout ontstaan tijdens het importeren van het CSV-bestand"
 
-#: wxbanker/csvimportframe.py:251
+#: wxbanker/csvimportframe.py:253
 msgid "CSV import error"
 msgstr "CSV importeerfout"
 
-#: wxbanker/csvimportframe.py:301
+#: wxbanker/csvimportframe.py:303
 #, python-format
 msgid "Profile with the name '%s' exists already. Overwrite it ?"
 msgstr "Profiel met de naam '%s' bestaat al. Overschrijven?"
 
-#: wxbanker/csvimportframe.py:302
+#: wxbanker/csvimportframe.py:304
 msgid "Overwrite profile ?"
 msgstr "Profiel overschrijven?"
 
-#: wxbanker/csvimportframe.py:316
+#: wxbanker/csvimportframe.py:318
 msgid "Select file and click \"Preview\""
 msgstr "Selecteer bestand en klik op 'Voorbeeld'"
 
