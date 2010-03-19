@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-02-03 00:18-0800\n"
-"PO-Revision-Date: 2009-11-30 02:28+0000\n"
-"Last-Translator: Michael Rooney <mrooney@ubuntu.com>\n"
+"POT-Creation-Date: 2010-02-27 01:56-0800\n"
+"PO-Revision-Date: 2010-03-18 20:02+0000\n"
+"Last-Translator: Artem <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2010-02-04 04:46+0000\n"
+"X-Launchpad-Export-Date: 2010-03-19 07:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/bankobjects/transaction.py:92
@@ -44,15 +44,15 @@ msgstr ""
 
 #: wxbanker/bankobjects/recurringtransaction.py:152
 msgid "Weekly on weekends"
-msgstr ""
+msgstr "Еженедельно по выходным"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Mondays"
-msgstr ""
+msgstr "Понедельники"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Tuesdays"
-msgstr ""
+msgstr "Вторники"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Wednesdays"
@@ -60,15 +60,15 @@ msgstr ""
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Thursdays"
-msgstr ""
+msgstr "Четверги"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Fridays"
-msgstr ""
+msgstr "Пятницы"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Saturdays"
-msgstr ""
+msgstr "Субботы"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Sundays"
@@ -111,7 +111,7 @@ msgstr ""
 
 #: wxbanker/bankobjects/recurringtransaction.py:194
 msgid "No description"
-msgstr ""
+msgstr "Без описания"
 
 #: wxbanker/accountlistctrl.py:45
 msgid "Accounts"
@@ -133,30 +133,30 @@ msgstr "Переименовать выбранный счёт"
 msgid "Configure the selected account"
 msgstr "Настроить выбранный счёт"
 
-#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:62
+#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:63
 msgid "All accounts"
-msgstr ""
+msgstr "Все счета"
 
-#: wxbanker/accountlistctrl.py:385 wxbanker/accountlistctrl.py:487
+#: wxbanker/accountlistctrl.py:423 wxbanker/accountlistctrl.py:525
 msgid "Sorry, an account by that name already exists."
 msgstr "Извините, такое имя счёта уже существует"
 
-#: wxbanker/accountlistctrl.py:387 wxbanker/accountlistctrl.py:489
+#: wxbanker/accountlistctrl.py:425 wxbanker/accountlistctrl.py:527
 msgid "Account names cannot be blank."
-msgstr ""
+msgstr "Название счета не может быть пустым"
 
-#: wxbanker/accountlistctrl.py:421
+#: wxbanker/accountlistctrl.py:459
 msgid "Account name"
 msgstr ""
 
-#: wxbanker/accountlistctrl.py:460
+#: wxbanker/accountlistctrl.py:498
 #, python-format
 msgid ""
 "This will permanently remove the account '%s' and all its transactions. "
 "Continue?"
 msgstr "Это полностью удалит счёт '%s' и все его транзакции. Продолжить?"
 
-#: wxbanker/accountlistctrl.py:461
+#: wxbanker/accountlistctrl.py:499
 msgid "Warning"
 msgstr "Предупреждение"
 
@@ -168,11 +168,11 @@ msgstr ""
 
 #: wxbanker/accountconfigdialog.py:40
 msgid "Username"
-msgstr ""
+msgstr "Имя пользователя"
 
 #: wxbanker/accountconfigdialog.py:42
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
 #: wxbanker/accountconfigdialog.py:62
 msgid "Transaction details"
@@ -184,15 +184,15 @@ msgstr ""
 
 #: wxbanker/accountconfigdialog.py:105
 msgid "Close"
-msgstr ""
+msgstr "Закрыть"
 
-#: wxbanker/accountconfigdialog.py:115 wxbanker/csvimportframe.py:184
+#: wxbanker/accountconfigdialog.py:115 wxbanker/csvimportframe.py:186
 msgid "Save"
-msgstr ""
+msgstr "Сохранить"
 
 #: wxbanker/accountconfigdialog.py:116
 msgid "Cancel"
-msgstr ""
+msgstr "Отмена"
 
 #: wxbanker/accountconfigdialog.py:136
 msgid "Recurring Transactions"
@@ -209,7 +209,7 @@ msgstr "Тренд"
 
 #: wxbanker/plots/cairopanel.py:112 wxbanker/plots/wxplotpanel.py:42
 msgid "Time"
-msgstr ""
+msgstr "Время"
 
 #: wxbanker/plots/wxplotpanel.py:42
 msgid "Total Balance Over Time"
@@ -220,7 +220,7 @@ msgstr "Общая сумма баланса с течением времени"
 msgid "To use '%s' plotting library, install following python modules: %s."
 msgstr ""
 
-#: wxbanker/messagepanel.py:45
+#: wxbanker/messagepanel.py:47
 msgid "Dismiss"
 msgstr ""
 
@@ -257,17 +257,17 @@ msgid "No transactions entered."
 msgstr ""
 
 #: wxbanker/transactionolv.py:60 wxbanker/bankcontrols.py:52
-#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:96
+#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:98
 msgid "Date"
 msgstr "Дата"
 
 #: wxbanker/transactionolv.py:61 wxbanker/newtransactionctrl.py:248
-#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:110
+#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:112
 msgid "Description"
 msgstr "Описание"
 
 #: wxbanker/transactionolv.py:62 wxbanker/newtransactionctrl.py:249
-#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:104
+#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:106
 msgid "Amount"
 msgstr "Сумма"
 
@@ -470,120 +470,128 @@ msgstr ""
 "Например, выбор этого поля и ввод $50 в этот счёт вычтет $50 из счёт, "
 "который вы выбрали в качестве источника."
 
-#: wxbanker/menubar.py:52
+#: wxbanker/menubar.py:53
 msgid "Auto-save"
 msgstr "Автосохранение"
 
-#: wxbanker/menubar.py:52
+#: wxbanker/menubar.py:53
 msgid "Automatically save changes"
 msgstr "Автоматически сохранять изменения"
 
-#: wxbanker/menubar.py:54
+#: wxbanker/menubar.py:55
 msgid "Import from CSV"
 msgstr "Импорт из CSV"
 
-#: wxbanker/menubar.py:54
+#: wxbanker/menubar.py:55
 msgid "Import transactions from a CSV file"
 msgstr ""
 
-#: wxbanker/menubar.py:60
+#: wxbanker/menubar.py:61
 msgid "Previous account"
 msgstr ""
 
-#: wxbanker/menubar.py:61
+#: wxbanker/menubar.py:62
 msgid "Next account"
 msgstr ""
 
-#: wxbanker/menubar.py:64
+#: wxbanker/menubar.py:65
 msgid "Show zero-balance accounts"
 msgstr ""
 
-#: wxbanker/menubar.py:64
+#: wxbanker/menubar.py:65
 msgid ""
 "When disabled, accounts with a balance of $0.00 will be hidden from the list"
 msgstr ""
 
-#: wxbanker/menubar.py:73
+#: wxbanker/menubar.py:74
 msgid "&Currency"
 msgstr "&Валюта"
 
-#: wxbanker/menubar.py:73
+#: wxbanker/menubar.py:74
 msgid "Select currency to display"
 msgstr "Выберите тип отображаемой валюты"
 
-#: wxbanker/menubar.py:82
+#: wxbanker/menubar.py:83
 msgid "Request a Currency"
 msgstr ""
 
-#: wxbanker/menubar.py:93
+#: wxbanker/menubar.py:90
+msgid "Integrate with Mint.com"
+msgstr ""
+
+#: wxbanker/menubar.py:90
+msgid "Sync account balances with an existing Mint.com account"
+msgstr ""
+
+#: wxbanker/menubar.py:96
 msgid "View &FAQs"
 msgstr "Просмотреть &ЧаВо"
 
-#: wxbanker/menubar.py:93
+#: wxbanker/menubar.py:96
 msgid "View Frequently Asked Questions online"
 msgstr "Просмотреть Часто Задаваемые Вопросы онлайн"
 
-#: wxbanker/menubar.py:98
+#: wxbanker/menubar.py:101
 msgid "Ask a &Question"
 msgstr "Задать &Вопрос"
 
-#: wxbanker/menubar.py:98
+#: wxbanker/menubar.py:101
 msgid "Ask a question online"
 msgstr "Задать вопрос онлайн"
 
-#: wxbanker/menubar.py:103
+#: wxbanker/menubar.py:106
 msgid "&Report a Bug"
 msgstr "Сообщить об ошибке"
 
-#: wxbanker/menubar.py:103
+#: wxbanker/menubar.py:106
 msgid "Report a bug to the developer online"
 msgstr "Сообщить разработчику об ошибке онлайн"
 
-#: wxbanker/menubar.py:108
+#: wxbanker/menubar.py:111
 msgid "Request a Fea&ture"
 msgstr ""
 
-#: wxbanker/menubar.py:108
+#: wxbanker/menubar.py:111
 msgid "Request a new feature to be implemented"
 msgstr ""
 
-#: wxbanker/menubar.py:113
+#: wxbanker/menubar.py:116
 msgid "Tran&slate wxBanker"
 msgstr ""
 
-#: wxbanker/menubar.py:113
+#: wxbanker/menubar.py:116
 msgid "Translate wxBanker to another language"
 msgstr ""
 
-#: wxbanker/menubar.py:120
+#: wxbanker/menubar.py:123
 msgid "&About"
 msgstr "&О программе"
 
-#: wxbanker/menubar.py:120
+#: wxbanker/menubar.py:123
 msgid "More information about wxBanker"
 msgstr "Больше информации о wxBanker"
 
-#: wxbanker/menubar.py:123
+#: wxbanker/menubar.py:126
 msgid "&File"
 msgstr "&Файл"
 
-#: wxbanker/menubar.py:124
+#: wxbanker/menubar.py:127
 msgid "&View"
 msgstr ""
 
-#: wxbanker/menubar.py:125
+#: wxbanker/menubar.py:128
 msgid "&Settings"
 msgstr "&Установки"
 
-#: wxbanker/menubar.py:126
+#: wxbanker/menubar.py:129
 msgid "&Help"
 msgstr "&Справка"
 
-#: wxbanker/menubar.py:220
+#: wxbanker/menubar.py:227
 msgid "Copyright"
 msgstr "Авторские и смежные права"
 
-#: wxbanker/menubar.py:221
+#: wxbanker/menubar.py:228
 msgid "A lightweight personal finance management application."
 msgstr "Легковесная программа управления личными финансами."
 
@@ -601,8 +609,8 @@ msgid ""
 "ready."
 msgstr ""
 
-#: wxbanker/main.py:95 wxbanker/csvimportframe.py:149
-#: wxbanker/csvimportframe.py:151
+#: wxbanker/main.py:95 wxbanker/csvimportframe.py:151
+#: wxbanker/csvimportframe.py:153
 msgid "Preview"
 msgstr ""
 
@@ -700,85 +708,85 @@ msgstr ""
 msgid "CSV import"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:60
+#: wxbanker/csvimportframe.py:62
 msgid "Target account"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:75 wxbanker/csvimportframe.py:77
+#: wxbanker/csvimportframe.py:77 wxbanker/csvimportframe.py:79
 msgid "Import"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:87
+#: wxbanker/csvimportframe.py:89
 msgid "CSV columns mapping"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:99
+#: wxbanker/csvimportframe.py:101
 msgid "Date format"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:106
+#: wxbanker/csvimportframe.py:108
 msgid "Decimal separator"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:117
+#: wxbanker/csvimportframe.py:119
 msgid "CSV file settings"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:126
+#: wxbanker/csvimportframe.py:128
 msgid "Skip first line"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:129
+#: wxbanker/csvimportframe.py:131
 msgid "Encoding"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:133
+#: wxbanker/csvimportframe.py:135
 msgid "Column delimiter"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:144
+#: wxbanker/csvimportframe.py:146
 msgid "File to import"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:164
+#: wxbanker/csvimportframe.py:166
 msgid "CSV profiles"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:169
+#: wxbanker/csvimportframe.py:171
 msgid "Python simplejson library is needed for csv profile loading/saving."
 msgstr ""
 
-#: wxbanker/csvimportframe.py:179
+#: wxbanker/csvimportframe.py:181
 msgid "Load"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:189
+#: wxbanker/csvimportframe.py:191
 msgid "Delete"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:243
+#: wxbanker/csvimportframe.py:245
 #, python-format
 msgid "The file encoding does not seem to be '%s'."
 msgstr ""
 
-#: wxbanker/csvimportframe.py:250
+#: wxbanker/csvimportframe.py:252
 msgid "An error ocurred during the csv file import."
 msgstr ""
 
-#: wxbanker/csvimportframe.py:251
+#: wxbanker/csvimportframe.py:253
 msgid "CSV import error"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:301
+#: wxbanker/csvimportframe.py:303
 #, python-format
 msgid "Profile with the name '%s' exists already. Overwrite it ?"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:302
+#: wxbanker/csvimportframe.py:304
 msgid "Overwrite profile ?"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:316
+#: wxbanker/csvimportframe.py:318
 msgid "Select file and click \"Preview\""
 msgstr ""
 
