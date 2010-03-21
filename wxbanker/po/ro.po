@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-02-27 01:56-0800\n"
-"PO-Revision-Date: 2010-03-19 08:09+0000\n"
-"Last-Translator: sfantu <sfantus1@gmail.com>\n"
+"PO-Revision-Date: 2010-03-20 23:22+0000\n"
+"Last-Translator: ValentinV <valentinverde@gmail.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n == 1 ? 0: (((n % 100 > 19) || ((n % 100 "
 "== 0) && (n != 0))) ? 2: 1));\n"
-"X-Launchpad-Export-Date: 2010-03-20 04:41+0000\n"
+"X-Launchpad-Export-Date: 2010-03-21 04:40+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/bankobjects/transaction.py:92
@@ -35,8 +35,9 @@ msgstr "Transfer la %s"
 #, python-format
 msgid "Daily"
 msgid_plural "Every %(num)d days"
-msgstr[0] "Zilnic"
+msgstr[0] "Daily"
 msgstr[1] "La fiecare %(num)d zile"
+msgstr[2] "La fiecare %(num)d zile"
 
 #: wxbanker/bankobjects/recurringtransaction.py:150
 msgid "Weekly on weekdays"
@@ -96,13 +97,15 @@ msgid "Monthly"
 msgid_plural "Every %(num)d months"
 msgstr[0] "Lunar"
 msgstr[1] "La fiercare %(num)d de luni"
+msgstr[2] "La fiercare %(num)d de luni"
 
 #: wxbanker/bankobjects/recurringtransaction.py:173
 #, python-format
 msgid "Annually"
 msgid_plural "Every %(num)d years"
-msgstr[0] "Anual"
+msgstr[0] "Annually"
 msgstr[1] "La fiecare %(num)d de ani"
+msgstr[2] "La fiecare %(num)d de ani"
 
 #: wxbanker/bankobjects/recurringtransaction.py:177
 #, python-format
@@ -531,11 +534,11 @@ msgstr "Solicitați o valută"
 
 #: wxbanker/menubar.py:90
 msgid "Integrate with Mint.com"
-msgstr ""
+msgstr "Integrare cu Mint.com"
 
 #: wxbanker/menubar.py:90
 msgid "Sync account balances with an existing Mint.com account"
-msgstr ""
+msgstr "Sincronizeaza balansul cuntului cu un cont deja existent la Mint.com"
 
 #: wxbanker/menubar.py:96
 msgid "View &FAQs"
