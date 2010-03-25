@@ -201,8 +201,6 @@ class Account(ORMObject):
         
         # Accumulate the difference and update the balance just once. Cuts 33% time of removals.
         difference = 0
-        # Send the message for all transactions at once, cuts _97%_ of time! OLV is slow here I guess.
-        Publisher.sendMessage("transactions.removed", (self, transactions))
         for transaction in transactions:
             if transaction not in self.Transactions:
                 raise bankexceptions.InvalidTransactionException("Transaction does not exist in account '%s'" % self.Name)
@@ -227,6 +225,8 @@ class Account(ORMObject):
 
         # Update the balance.
         self.Balance -= difference
+        # Send the message for all transactions at once, cuts _97%_ of time! OLV is slow here I guess.
+        Publisher.sendMessage("transactions.removed", (self, transactions))
         Publisher.sendMessage("batch.end")
         return sources
     

@@ -158,7 +158,7 @@ class Transaction(ORMObject):
         assert isinstance(other, Transaction), other
         return (
             self.Date == other.Date and
-            self.Description == other.Description and
+            self._Description == other._Description and
             self.Amount == other.Amount and
             self.GetLinkedTransactionID() == other.GetLinkedTransactionID() and
             self.ID == other.ID

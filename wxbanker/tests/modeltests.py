@@ -295,7 +295,32 @@ class ModelTests(testbase.TestCaseWithController):
         result = a.RemoveTransaction(ta)
         self.assertEqual(result, [b], result[0].Name)
         
-    def testCanMoveTransfer(self):
+    def testCanMoveTransferSource(self):
+        model = self.Controller.Model
+        a = model.CreateAccount("A")
+        b = model.CreateAccount("B")
+        
+        atrans, btrans = a.AddTransaction(1, source=b)
+        self.assertEqual(len(model.GetTransactions()), 2)
+        self.assertEqual(model.Balance, 0)
+        self.assertEqual(atrans.Description, "Transfer from B")
+        self.assertEqual(btrans.Description, "Transfer to A")
+        
+        c = model.CreateAccount("C")
+        b.MoveTransaction(btrans, c)
+        
+        self.assertEqual(b.Transactions, [])
+        self.assertEqual(len(a.Transactions), 1)
+        self.assertEqual(len(c.Transactions), 1)
+        
+        atrans = a.Transactions[0]
+        ctrans = c.Transactions[0]
+        self.assertEqual(atrans.LinkedTransaction, ctrans)
+        self.assertEqual(ctrans.LinkedTransaction, atrans)
+        self.assertEqual(atrans.Description, "Transfer from C")
+        self.assertEqual(ctrans.Description, "Transfer to A")
+        
+    def testCanMoveTransferDestination(self):
         model = self.Controller.Model
         a = model.CreateAccount("A")
         b = model.CreateAccount("B")
