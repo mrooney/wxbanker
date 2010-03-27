@@ -76,12 +76,15 @@ class SearchCtrl(wx.Panel):
         matchType = self.matchChoices.index(self.matchBox.Value)
 
         searchInfo = (searchString, matchType)
-        Publisher.sendMessage("SEARCH.INITIATED", searchInfo)
+        # Consider a blank search as a search cancellation.
+        if searchString == "":
+            self.onCancel()
+        else:
+            Publisher.sendMessage("SEARCH.INITIATED", searchInfo)
 
-    def onCancel(self, event):
+    def onCancel(self, event=None):
         self.searchCtrl.Value = ""
         Publisher.sendMessage("SEARCH.CANCELLED")
-        #event.Skip()
 
     def onToggleMore(self, event=None):
         # Show or hide the advanced search options.

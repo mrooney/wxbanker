@@ -306,8 +306,8 @@ class TransactionOLV(GroupListView):
     def onSearchCancelled(self, message):
         # Ignore cancels on an inactive search to avoid silly refreshes.
         if self.IsSearchActive():
-            self.setAccount(self.CurrentAccount)
             self.SetSearchActive(False)
+            self.setAccount(self.CurrentAccount)
 
     def onSearchMoreToggled(self, message):
         # Perhaps necessary to not glitch overlap on Windows?
