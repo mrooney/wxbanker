@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-02-03 00:18-0800\n"
-"PO-Revision-Date: 2009-11-30 02:28+0000\n"
-"Last-Translator: Ddorda <d.dorda@gmail.com>\n"
+"POT-Creation-Date: 2010-02-27 01:56-0800\n"
+"PO-Revision-Date: 2010-03-27 15:31+0000\n"
+"Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-02-04 04:46+0000\n"
+"X-Launchpad-Export-Date: 2010-03-28 03:45+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/bankobjects/transaction.py:92
@@ -39,11 +39,11 @@ msgstr[1] "בכל %(num)d ימים"
 
 #: wxbanker/bankobjects/recurringtransaction.py:150
 msgid "Weekly on weekdays"
-msgstr ""
+msgstr "מדי יום בימות השבוע"
 
 #: wxbanker/bankobjects/recurringtransaction.py:152
 msgid "Weekly on weekends"
-msgstr ""
+msgstr "מדי יום בסופי השבוע"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Mondays"
@@ -76,12 +76,12 @@ msgstr "ימי ראשון"
 #: wxbanker/bankobjects/recurringtransaction.py:160
 #, python-format
 msgid "Weekly on %s"
-msgstr ""
+msgstr "מדי שבוע ב%s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:162
 #, python-format
 msgid "Every %(num)d weeks on %%s"
-msgstr ""
+msgstr "בכל %(num)d שבועות ב%%s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:169
 #, python-format
@@ -132,30 +132,30 @@ msgstr "שנה את שם החשבון הנבחר"
 msgid "Configure the selected account"
 msgstr "הגדר את החשבון הנבחר"
 
-#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:62
+#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:63
 msgid "All accounts"
 msgstr "כל החשבונות"
 
-#: wxbanker/accountlistctrl.py:385 wxbanker/accountlistctrl.py:487
+#: wxbanker/accountlistctrl.py:423 wxbanker/accountlistctrl.py:525
 msgid "Sorry, an account by that name already exists."
 msgstr "אנו מתנצלים, חשבון בשם זה כבר קיים."
 
-#: wxbanker/accountlistctrl.py:387 wxbanker/accountlistctrl.py:489
+#: wxbanker/accountlistctrl.py:425 wxbanker/accountlistctrl.py:527
 msgid "Account names cannot be blank."
 msgstr "שמות חשבונות לא יכולים להיות ריקים."
 
-#: wxbanker/accountlistctrl.py:421
+#: wxbanker/accountlistctrl.py:459
 msgid "Account name"
-msgstr ""
+msgstr "שם החשבון"
 
-#: wxbanker/accountlistctrl.py:460
+#: wxbanker/accountlistctrl.py:498
 #, python-format
 msgid ""
 "This will permanently remove the account '%s' and all its transactions. "
 "Continue?"
 msgstr "פעולה זו תסיר לצמיתות את החשבון '%s' על כל עסקאותיות. להמשיך?"
 
-#: wxbanker/accountlistctrl.py:461
+#: wxbanker/accountlistctrl.py:499
 msgid "Warning"
 msgstr "אזהרה"
 
@@ -164,6 +164,7 @@ msgid ""
 "wxBanker can synchronize account balances online if you have an account with "
 "mint.com"
 msgstr ""
+"התכנית wxBanker יכולה לסנכרן את מאזני החשבונות שלך אם יש לך חשבון ב־mint.com"
 
 #: wxbanker/accountconfigdialog.py:40
 msgid "Username"
@@ -175,27 +176,27 @@ msgstr "סיסמה"
 
 #: wxbanker/accountconfigdialog.py:62
 msgid "Transaction details"
-msgstr ""
+msgstr "פרטי העסקה"
 
 #: wxbanker/accountconfigdialog.py:103
 msgid "This account currently has no recurring transactions."
-msgstr ""
+msgstr "לחשבון זה אין עסקאות חוזרות לעת עתה."
 
 #: wxbanker/accountconfigdialog.py:105
 msgid "Close"
-msgstr ""
+msgstr "סגור"
 
-#: wxbanker/accountconfigdialog.py:115 wxbanker/csvimportframe.py:184
+#: wxbanker/accountconfigdialog.py:115 wxbanker/csvimportframe.py:186
 msgid "Save"
 msgstr "שמירה"
 
 #: wxbanker/accountconfigdialog.py:116
 msgid "Cancel"
-msgstr ""
+msgstr "ביטול"
 
 #: wxbanker/accountconfigdialog.py:136
 msgid "Recurring Transactions"
-msgstr ""
+msgstr "עסקאות חוזרות"
 
 #: wxbanker/plots/cairopanel.py:72 wxbanker/plots/cairopanel.py:113
 #: wxbanker/plots/wxplotpanel.py:35 wxbanker/plots/wxplotpanel.py:42
@@ -208,7 +209,7 @@ msgstr "מגמה"
 
 #: wxbanker/plots/cairopanel.py:112 wxbanker/plots/wxplotpanel.py:42
 msgid "Time"
-msgstr ""
+msgstr "שעה"
 
 #: wxbanker/plots/wxplotpanel.py:42
 msgid "Total Balance Over Time"
@@ -218,8 +219,9 @@ msgstr "המאזן הכללי במשך הזמן"
 #, python-format
 msgid "To use '%s' plotting library, install following python modules: %s."
 msgstr ""
+"כדי להשתמש בספריית השרטוט '%s', יש להתקין את המודולים הבאים של פייתון: %s."
 
-#: wxbanker/messagepanel.py:45
+#: wxbanker/messagepanel.py:47
 msgid "Dismiss"
 msgstr "סגור"
 
@@ -233,7 +235,7 @@ msgstr "אל"
 
 #: wxbanker/summarytab.py:50
 msgid "Trend Degree"
-msgstr ""
+msgstr "אחוזי מגמה"
 
 #: wxbanker/managetab.py:43
 msgid "Show Calculator"
@@ -253,20 +255,20 @@ msgstr "תקציר"
 
 #: wxbanker/transactionolv.py:48
 msgid "No transactions entered."
-msgstr ""
+msgstr "לא הוזנו עסקאות"
 
 #: wxbanker/transactionolv.py:60 wxbanker/bankcontrols.py:52
-#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:96
+#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:98
 msgid "Date"
 msgstr "תאריך"
 
 #: wxbanker/transactionolv.py:61 wxbanker/newtransactionctrl.py:248
-#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:110
+#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:112
 msgid "Description"
 msgstr "תיאור"
 
 #: wxbanker/transactionolv.py:62 wxbanker/newtransactionctrl.py:249
-#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:104
+#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:106
 msgid "Amount"
 msgstr "סכום"
 
@@ -287,7 +289,7 @@ msgstr "הוסף את %s למחשבון"
 #: wxbanker/transactionolv.py:206
 #, python-format
 msgid "Subtract %s from calculator"
-msgstr ""
+msgstr "חיסור %s מהמחשבון"
 
 #: wxbanker/transactionolv.py:218
 msgid "Remove this transaction"
@@ -295,17 +297,17 @@ msgstr "הסר עסקה זו"
 
 #: wxbanker/transactionolv.py:219
 msgid "Move this transaction to account"
-msgstr ""
+msgstr "העברת העסקה לחשבון"
 
 #: wxbanker/transactionolv.py:221
 #, python-format
 msgid "Remove these %i transactions"
-msgstr ""
+msgstr "הסרת %i עסקאות אלו"
 
 #: wxbanker/transactionolv.py:222
 #, python-format
 msgid "Move these %i transactions to account"
-msgstr ""
+msgstr "העברת %i עסקאות אלו לחשבון"
 
 #: wxbanker/newtransactionctrl.py:31
 msgid "from"
@@ -329,7 +331,7 @@ msgstr "לעולם לא"
 
 #: wxbanker/newtransactionctrl.py:130
 msgid "every"
-msgstr ""
+msgstr "כל"
 
 #: wxbanker/newtransactionctrl.py:135
 msgid "Ends:"
@@ -337,7 +339,7 @@ msgstr "מסתיים ב־:"
 
 #: wxbanker/newtransactionctrl.py:140
 msgid "Repeats:"
-msgstr ""
+msgstr "חזרה:"
 
 #: wxbanker/newtransactionctrl.py:169
 msgid "day"
@@ -393,7 +395,7 @@ msgstr "ראשון"
 
 #: wxbanker/newtransactionctrl.py:221
 msgid "Repeats on days:"
-msgstr ""
+msgstr "חוזרת בימים:"
 
 #: wxbanker/newtransactionctrl.py:244
 msgid "Starts:"
@@ -441,7 +443,7 @@ msgstr "החיפוש פעיל כרגע"
 msgid ""
 "Would you like to clear the current search and make this transaction in "
 "\"%s\"?"
-msgstr ""
+msgstr "האם למחוק את החיפוש הנוכחי ולהפוך עסקה זו תוך \"%s\"?"
 
 #: wxbanker/newtransactionctrl.py:407
 msgid "Clear search?"
@@ -450,7 +452,7 @@ msgstr "לרוקן את החיפוש?"
 #: wxbanker/newtransactionctrl.py:420
 msgid ""
 "This transaction is marked as a transfer. Please select the transfer account."
-msgstr ""
+msgstr "עסקה זו מסומנת כהעברת כספים. יש לבחור את חשבון ההעברה."
 
 #: wxbanker/newtransactionctrl.py:453
 msgid ""
@@ -468,120 +470,128 @@ msgstr ""
 "לדוגמה, סימון תיבה זו והזנת עסקה בסך 50$ לחשבון זה תחסיר 50$ מהחשבון שנבחר "
 "כמקור."
 
-#: wxbanker/menubar.py:52
+#: wxbanker/menubar.py:53
 msgid "Auto-save"
 msgstr "שמירה אוטומטית"
 
-#: wxbanker/menubar.py:52
+#: wxbanker/menubar.py:53
 msgid "Automatically save changes"
 msgstr "שמירת השינויים אוטומטית"
 
-#: wxbanker/menubar.py:54
+#: wxbanker/menubar.py:55
 msgid "Import from CSV"
 msgstr "ייבוא מקובץ CSV"
 
-#: wxbanker/menubar.py:54
+#: wxbanker/menubar.py:55
 msgid "Import transactions from a CSV file"
 msgstr "ייבוא העברות מקובץ CSV"
 
-#: wxbanker/menubar.py:60
-msgid "Previous account"
-msgstr ""
-
 #: wxbanker/menubar.py:61
+msgid "Previous account"
+msgstr "החשבון הקודם"
+
+#: wxbanker/menubar.py:62
 msgid "Next account"
-msgstr ""
+msgstr "החשבון הבא"
 
-#: wxbanker/menubar.py:64
+#: wxbanker/menubar.py:65
 msgid "Show zero-balance accounts"
-msgstr ""
+msgstr "הצגת חשבונות בעלי מאזן 0"
 
-#: wxbanker/menubar.py:64
+#: wxbanker/menubar.py:65
 msgid ""
 "When disabled, accounts with a balance of $0.00 will be hidden from the list"
-msgstr ""
+msgstr "כשמבוטל, חשבונות בעלי 0.00₪ יוסתרו מהרשימה."
 
-#: wxbanker/menubar.py:73
+#: wxbanker/menubar.py:74
 msgid "&Currency"
 msgstr "&מטבע"
 
-#: wxbanker/menubar.py:73
+#: wxbanker/menubar.py:74
 msgid "Select currency to display"
 msgstr "בחירת סוג המטבע להצגה"
 
-#: wxbanker/menubar.py:82
+#: wxbanker/menubar.py:83
 msgid "Request a Currency"
 msgstr "בקשת מטבע"
 
-#: wxbanker/menubar.py:93
+#: wxbanker/menubar.py:90
+msgid "Integrate with Mint.com"
+msgstr "שילוב ב־Mint.com"
+
+#: wxbanker/menubar.py:90
+msgid "Sync account balances with an existing Mint.com account"
+msgstr "סנכרון מאזני חשבונות מול חשבון קיים ב־Mint.com"
+
+#: wxbanker/menubar.py:96
 msgid "View &FAQs"
 msgstr "עיון ב&שאלות נפוצות"
 
-#: wxbanker/menubar.py:93
+#: wxbanker/menubar.py:96
 msgid "View Frequently Asked Questions online"
 msgstr "עיון בשאלות נפוצות באתר האינטרנט"
 
-#: wxbanker/menubar.py:98
+#: wxbanker/menubar.py:101
 msgid "Ask a &Question"
 msgstr "לשאול ש&אלה"
 
-#: wxbanker/menubar.py:98
+#: wxbanker/menubar.py:101
 msgid "Ask a question online"
 msgstr "לשאול שאלה באתר האינטרנט"
 
-#: wxbanker/menubar.py:103
+#: wxbanker/menubar.py:106
 msgid "&Report a Bug"
 msgstr "דיווח על &תקלה"
 
-#: wxbanker/menubar.py:103
+#: wxbanker/menubar.py:106
 msgid "Report a bug to the developer online"
 msgstr "דיווח על תקלה למפתחים באתר האינטרנט"
 
-#: wxbanker/menubar.py:108
+#: wxbanker/menubar.py:111
 msgid "Request a Fea&ture"
 msgstr "בקשת &תכונה"
 
-#: wxbanker/menubar.py:108
+#: wxbanker/menubar.py:111
 msgid "Request a new feature to be implemented"
 msgstr "בקשה להטמיע תכונה חדשה בתוכנה"
 
-#: wxbanker/menubar.py:113
+#: wxbanker/menubar.py:116
 msgid "Tran&slate wxBanker"
 msgstr "&תרגום wxBanker"
 
-#: wxbanker/menubar.py:113
+#: wxbanker/menubar.py:116
 msgid "Translate wxBanker to another language"
 msgstr "תרגום wxBanker לשפה אחרת"
 
-#: wxbanker/menubar.py:120
+#: wxbanker/menubar.py:123
 msgid "&About"
 msgstr "&אודות"
 
-#: wxbanker/menubar.py:120
+#: wxbanker/menubar.py:123
 msgid "More information about wxBanker"
 msgstr "מידע נוסף אודות wxBanker"
 
-#: wxbanker/menubar.py:123
+#: wxbanker/menubar.py:126
 msgid "&File"
 msgstr "&קובץ"
 
-#: wxbanker/menubar.py:124
+#: wxbanker/menubar.py:127
 msgid "&View"
-msgstr ""
+msgstr "&תצוגה"
 
-#: wxbanker/menubar.py:125
+#: wxbanker/menubar.py:128
 msgid "&Settings"
 msgstr "ה&גדרות"
 
-#: wxbanker/menubar.py:126
+#: wxbanker/menubar.py:129
 msgid "&Help"
 msgstr "ע&זרה"
 
-#: wxbanker/menubar.py:220
+#: wxbanker/menubar.py:227
 msgid "Copyright"
 msgstr "זכויות יוצרים"
 
-#: wxbanker/menubar.py:221
+#: wxbanker/menubar.py:228
 msgid "A lightweight personal finance management application."
 msgstr "יישום קל משקל לניהול הכלכלה האישית."
 
@@ -591,31 +601,33 @@ msgid ""
 "The recurring transaction \"%(description)s\" has %(num)i transactions ready "
 "for %(amount)s on %(datelist)s."
 msgstr ""
+"לעסקה החוזרת \"%(description)s\" ישנן %(num)i העברות מוכנות על סך %(amount)s "
+"בתאריך %(datelist)s."
 
 #: wxbanker/main.py:84
 #, python-format
 msgid ""
 "%(num)i recurring transactions have a total of %(totalnum)i transactions "
 "ready."
-msgstr ""
+msgstr "ל־%(num)i העברות חוזרות ישנן סך הכל %(totalnum)i העברות מוכנות."
 
-#: wxbanker/main.py:95 wxbanker/csvimportframe.py:149
-#: wxbanker/csvimportframe.py:151
+#: wxbanker/main.py:95 wxbanker/csvimportframe.py:151
+#: wxbanker/csvimportframe.py:153
 msgid "Preview"
 msgstr "תצוגה מקדימה"
 
 #: wxbanker/main.py:104
 msgid "Perform"
-msgstr ""
+msgstr "ביצוע"
 
 #: wxbanker/main.py:120
 msgid "Recurring transaction successfully added."
-msgstr ""
+msgstr "העסקה החוזרת נוספה בהצלחה."
 
 #: wxbanker/main.py:122
 #, python-format
 msgid "The first transaction will occur on %(date)s"
-msgstr ""
+msgstr "ההעברה הראשונה תתבצע בתאריך %(date)s"
 
 #: wxbanker/main.py:186
 msgid "It looks like this is your first time using wxBanker!"
@@ -659,13 +671,13 @@ msgstr "לשמור את השינויים ?"
 msgid ""
 "You have made changes since the last save. Would you like to save before "
 "exiting?"
-msgstr ""
+msgstr "נערכו שינויים מאז השמירה האחרונה. האם לשמור בטרם היציאה?"
 
 #: wxbanker/main.py:202
 msgid ""
 "Note that enabling auto-save from the File menu will eliminate the need for "
 "manual saving."
-msgstr ""
+msgstr "נא לשים לב ששמירה אוטומטית מהתפריט קובץ תחסוך ממך שמירה באופן ידני."
 
 #: wxbanker/searchctrl.py:36
 msgid "Search transactions"
@@ -695,91 +707,92 @@ msgstr "הסתר אפשרויות חיפוש מתקדמות"
 msgid "CSV import"
 msgstr "ייבוא CSV"
 
-#: wxbanker/csvimportframe.py:60
+#: wxbanker/csvimportframe.py:62
 msgid "Target account"
-msgstr ""
+msgstr "חשבון היעד"
 
-#: wxbanker/csvimportframe.py:75 wxbanker/csvimportframe.py:77
+#: wxbanker/csvimportframe.py:77 wxbanker/csvimportframe.py:79
 msgid "Import"
 msgstr "ייבוא"
 
-#: wxbanker/csvimportframe.py:87
+#: wxbanker/csvimportframe.py:89
 msgid "CSV columns mapping"
-msgstr ""
+msgstr "מיפוי עמודות CSV"
 
-#: wxbanker/csvimportframe.py:99
+#: wxbanker/csvimportframe.py:101
 msgid "Date format"
 msgstr "תבנית תאריך"
 
-#: wxbanker/csvimportframe.py:106
+#: wxbanker/csvimportframe.py:108
 msgid "Decimal separator"
 msgstr "מפריד עשרוני"
 
-#: wxbanker/csvimportframe.py:117
+#: wxbanker/csvimportframe.py:119
 msgid "CSV file settings"
 msgstr "הגדרות קובץ CSV"
 
-#: wxbanker/csvimportframe.py:126
+#: wxbanker/csvimportframe.py:128
 msgid "Skip first line"
 msgstr "דלג על השורה הראשונה"
 
-#: wxbanker/csvimportframe.py:129
+#: wxbanker/csvimportframe.py:131
 msgid "Encoding"
 msgstr "קידוד"
 
-#: wxbanker/csvimportframe.py:133
+#: wxbanker/csvimportframe.py:135
 msgid "Column delimiter"
-msgstr ""
+msgstr "מפריד עמודות"
 
-#: wxbanker/csvimportframe.py:144
+#: wxbanker/csvimportframe.py:146
 msgid "File to import"
 msgstr "קובץ לייבוא"
 
-#: wxbanker/csvimportframe.py:164
+#: wxbanker/csvimportframe.py:166
 msgid "CSV profiles"
 msgstr "פרופילי CSV"
 
-#: wxbanker/csvimportframe.py:169
+#: wxbanker/csvimportframe.py:171
 msgid "Python simplejson library is needed for csv profile loading/saving."
 msgstr ""
+"ספריית ה־Python ‏בשם simplejson נדרשת לצורך טעינה/שמירה של פרופיל csv."
 
-#: wxbanker/csvimportframe.py:179
+#: wxbanker/csvimportframe.py:181
 msgid "Load"
 msgstr "טעינה"
 
-#: wxbanker/csvimportframe.py:189
+#: wxbanker/csvimportframe.py:191
 msgid "Delete"
 msgstr "מחיקה"
 
-#: wxbanker/csvimportframe.py:243
+#: wxbanker/csvimportframe.py:245
 #, python-format
 msgid "The file encoding does not seem to be '%s'."
-msgstr ""
+msgstr "נראה כי קידוד הקובץ אינו '%s'."
 
-#: wxbanker/csvimportframe.py:250
+#: wxbanker/csvimportframe.py:252
 msgid "An error ocurred during the csv file import."
-msgstr ""
+msgstr "ארעה שגיאה במהלך ייבוא קובץ ה־csv."
 
-#: wxbanker/csvimportframe.py:251
+#: wxbanker/csvimportframe.py:253
 msgid "CSV import error"
 msgstr "שגיאת ייבוא csv"
 
-#: wxbanker/csvimportframe.py:301
+#: wxbanker/csvimportframe.py:303
 #, python-format
 msgid "Profile with the name '%s' exists already. Overwrite it ?"
 msgstr "פרופיל עם השם '%s' כבר קיים. לשכתב אותו ?"
 
-#: wxbanker/csvimportframe.py:302
+#: wxbanker/csvimportframe.py:304
 msgid "Overwrite profile ?"
 msgstr "לשכתב פרופיל ?"
 
-#: wxbanker/csvimportframe.py:316
+#: wxbanker/csvimportframe.py:318
 msgid "Select file and click \"Preview\""
-msgstr ""
+msgstr "בחירת הקובץ ולחיצה על \"תצוגה מקדימה\""
 
 #: wxbanker/recurringsummaryrow.py:45
 msgid "Summary:"
-msgstr ""
+msgstr "תקציר:"
 
 #: wxbanker/currencies.py:277
 msgid "detected"
@@ -788,7 +801,7 @@ msgstr "זוהה"
 #: wxbanker/currconvert.py:59
 #, python-format
 msgid "No exchange rate for currency \"%s\""
-msgstr ""
+msgstr "אין שער המרה עבור סוג המטבע \"%s\""
 
 #~ msgid "Sample Points"
 #~ msgstr "נקודות לדוגמה"
