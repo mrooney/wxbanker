@@ -23,16 +23,18 @@ import re, datetime
 
 from wxbanker import currencies
 from wxbanker.bankobjects.ormobject import ORMKeyValueObject
+from wxbanker.bankobjects.accountlist import AccountList
 from wxbanker.mint import MintDotCom
 
 class BankModel(ORMKeyValueObject):
     ORM_TABLE = "meta"
     ORM_ATTRIBUTES = ["LastAccountId", "MintEnabled"]
     
-    def __init__(self, store, accountList):
+    def __init__(self, store):
         ORMKeyValueObject.__init__(self, store)
         self.Store = store
-        self.Accounts = accountList
+        self.Accounts = AccountList(store)
+        self.Tags = []
 
         self.Mint = None
         if self.MintEnabled:

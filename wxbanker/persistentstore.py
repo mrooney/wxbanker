@@ -110,9 +110,7 @@ class PersistentStore:
     def GetModel(self, useCached=True):
         if self.cachedModel is None or not useCached:
             debug.debug('Creating model...')
-            accounts = self.getAccounts()
-            accountList = AccountList(self, accounts)
-            self.cachedModel = BankModel(self, accountList)
+            self.cachedModel = BankModel(self)
 
         return self.cachedModel
 
@@ -282,6 +280,14 @@ class PersistentStore:
             # Mint integration
             cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('MintEnabled', False))
             cursor.execute('ALTER TABLE accounts ADD mintId INTEGER')
+        elif fromVer == 10:
+            # The obvious index to create, had I known about indexes previously.
+            cursor.execute('CREATE INDEX transactions_accountId_idx ON transactions(accountId)')
+            # Tagging infrastructure.
+            cursor.execute('CREATE TABLE tags (id INTEGER PRIMARY KEY, name VARCHAR(255))')
+            cursor.execute('CREATE TABLE transactions_tags_link (id INTEGER PRIMARY KEY, transactionId INTEGER, tagId INTEGER)')
+            cursor.execute('CREATE INDEX transactions_tags_transactionId_idx ON transactions_tags_link(transactionId)')
+            cursor.execute('CREATE INDEX transactions_tags_tagId_idx ON transactions_tags_link(tagId)')
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
 
@@ -328,7 +334,7 @@ class PersistentStore:
 
         return RecurringTransaction(rId, parentAccount, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, sourceAccount, lastTransacted)
 
-    def getAccounts(self):
+    def GetAccounts(self):
         # Fetch all the accounts.
         accounts = [self.result2account(result) for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()]
         # Add any recurring transactions that exist for each.

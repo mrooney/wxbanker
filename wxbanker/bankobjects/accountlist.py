@@ -22,8 +22,8 @@ from wx.lib.pubsub import Publisher
 from wxbanker import bankexceptions
 
 class AccountList(list):
-    def __init__(self, store, accounts):
-        list.__init__(self, accounts)
+    def __init__(self, store):
+        list.__init__(self, store.GetAccounts())
         # Make sure all the items know their parent list.
         for account in self:
             account.Parent = self
