@@ -24,6 +24,9 @@ from wx.lib.pubsub import Publisher
 class SearchCtrl(wx.Panel):
     def __init__(self, parent, bankController):
         wx.Panel.__init__(self, parent)
+        self.ID_TIMER = wx.NewId()
+        self.SearchTimer = wx.Timer(self, self.ID_TIMER)
+        
         self.bankController = bankController
 
         self.searchCtrl = wx.SearchCtrl(self, value="", size=(200, -1), style=wx.TE_PROCESS_ENTER)
@@ -57,14 +60,22 @@ class SearchCtrl(wx.Panel):
         self.Layout()
 
         self.searchCtrl.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, self.onCancel)
+        self.searchCtrl.Bind(wx.EVT_TEXT, self.onText)
         #self.searchCtrl.Bind(wx.EVT_SEARCHCTRL_SEARCH_BTN, self.onSearch)
         self.searchCtrl.Bind(wx.EVT_TEXT_ENTER, self.onSearch)
         self.moreButton.Bind(wx.EVT_BUTTON, self.onToggleMore)
         # Bindings to search on settings change automatically.
         self.matchBox.Bind(wx.EVT_COMBOBOX, self.onSearchTrigger)
+        self.Bind(wx.EVT_TIMER, self.onSearchTimer)
 
         # Initially hide the extra search options.
         self.onToggleMore()
+        
+    def onText(self, event):
+        self.SearchTimer.Start(500, wx.TIMER_ONE_SHOT)
+        
+    def onSearchTimer(self, event):
+        self.onSearch()
 
     def onSearchTrigger(self, event):
         event.Skip()
@@ -83,7 +94,9 @@ class SearchCtrl(wx.Panel):
             Publisher.sendMessage("SEARCH.INITIATED", searchInfo)
 
     def onCancel(self, event=None):
-        self.searchCtrl.Value = ""
+        # Don't clear the value if there isn't one, it will trigger an EVT_TEXT, causing an infinite search -> cancel loop.
+        if self.searchCtrl.Value:
+            self.searchCtrl.Value = ""
         Publisher.sendMessage("SEARCH.CANCELLED")
 
     def onToggleMore(self, event=None):
