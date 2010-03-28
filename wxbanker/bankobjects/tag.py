@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+#
 #    https://launchpad.net/wxbanker
-#    tagtests.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
+#    tag.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -18,25 +18,18 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-from wxbanker.tests import testbase
-from wxbanker.bankobjects.tag import Tag
+from wx.lib.pubsub import Publisher
+from wxbanker import bankexceptions
 
-class TagTests(testbase.TestCaseWithController):
-    def testEmptyModelHasNoTags(self):
-        self.assertEqual(self.Model.Tags, [])
+class Tag(object):
+    def __init__(self, ID, name):
+        self.ID = ID
+        self.Name = name
         
-    def testTagStringValue(self):
-        tag = Tag(0, "Foobar")
-        self.assertEqual(str(tag), "Foobar")
-        
-    def testTagEquality(self):
-        a = Tag(1, "A")
-        self.assertEqual(a, a)
-        self.assertNotEqual(a, None)
-        
-        a2 = Tag(2, "A")
-        self.assertNotEqual(a, a2)
-        
-        a3 = Tag(1, "A")
-        self.assertEqual(a, a3)
-        
+    def __str__(self):
+        return self.Name
+    
+    def __cmp__(self, other):
+        if not isinstance(other, Tag):
+            return 1
+        return cmp(self.ID, other.ID)
