@@ -34,7 +34,7 @@ class BankModel(ORMKeyValueObject):
         ORMKeyValueObject.__init__(self, store)
         self.Store = store
         self.Accounts = AccountList(store)
-        self.Tags = []
+        self._Tags = {}
 
         self.Mint = None
         if self.MintEnabled:
@@ -42,6 +42,8 @@ class BankModel(ORMKeyValueObject):
 
         Publisher.subscribe(self.onCurrencyChanged, "user.currency_changed")
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
+        Publisher.subscribe(self.onTransactionTagged, "transaction.tagged")
+        Publisher.subscribe(self.onTransactionUntagged, "transaction.untagged")
         
     def GetLastAccount(self):
         return self.Accounts.GetById(self.LastAccountId)
@@ -185,11 +187,27 @@ class BankModel(ORMKeyValueObject):
             self.LastAccountId = account.ID
         else:
             self.LastAccountId = None
+            
+    def onTransactionTagged(self, message):
+        tagNames = message.data
+        for tag in tagNames:
+            if tag in self._Tags:
+                self._Tags[tag] += 1
+            else:
+                self._Tags[tag] = 1
+                
+    def onTransactionUntagged(self, message):
+        tagNames = message.data
+        for tag in tagNames:
+            self._Tags[tag] -= 1
+            if self._Tags[tag] == 0:
+                self._Tags.pop(tag)
 
     def __eq__(self, other):
         return (
             self.Accounts == other.Accounts and
-            self.MintEnabled == other.MintEnabled
+            self.Tags == other.Tags and
+            self.MintEnabled == other.MintEnabled 
         )
 
     def Print(self):
@@ -198,5 +216,9 @@ class BankModel(ORMKeyValueObject):
             print "  %s: %s" % (a.Name, a.Balance)
             for t in a.Transactions:
                 print t
+                
+    def GetTags(self):
+        return set(self._Tags.keys())
 
     Balance = property(GetBalance)
+    Tags = property(GetTags)

@@ -22,8 +22,18 @@ from wxbanker.tests import testbase
 from wxbanker.bankobjects.tag import Tag
 
 class TagTests(testbase.TestCaseWithController):
+    def assertStringTagsEqual(self, tagList, strList):
+        self.assertEqual([str(x) for x in tagList], strList)
+        
     def testEmptyModelHasNoTags(self):
-        self.assertEqual(self.Model.Tags, [])
+        model = self.Model
+        self.assertEqual(model.Tags, set())
+        
+        a = model.CreateAccount("A")
+        t = a.AddTransaction(1)
+        self.assertEqual(t.Tags, set())
+        # For sanity.
+        self.assertEqual(model.Tags, set())
         
     def testTagStringValue(self):
         tag = Tag(0, "Foobar")
@@ -40,3 +50,31 @@ class TagTests(testbase.TestCaseWithController):
         a3 = Tag(1, "A")
         self.assertEqual(a, a3)
         
+    def testTaggingAndUntagging(self):
+        model = self.Model
+        a = model.CreateAccount("A")
+        t = a.AddTransaction(amount=1, description="testing #foo")
+        
+        self.assertEqual(t.Tags, set(["foo"]))
+        self.assertEqual(model.Tags, set(["foo"]))
+        
+        # foo should be untagged, bar should be tagged.
+        t.Description = "another #bar"
+        self.assertEqual(t.Tags, set(["bar"]))
+        self.assertEqual(model.Tags, set(["bar"]))
+        
+        t2 = a.AddTransaction(amount=1, description="testing #bar #baz")
+        self.assertEqual(t.Tags, set(["bar"]))
+        self.assertEqual(t2.Tags, set(["bar", "baz"]))
+        self.assertEqual(model.Tags, set(["bar", "baz"]))
+
+        # Make sure the transaction tags are expected, and model still has bar from 't'.
+        t2.Description = "nothing special"
+        self.assertEqual(t.Tags, set(["bar"]))
+        self.assertEqual(t2.Tags, set())
+        self.assertEqual(model.Tags, set(["bar"]))
+        
+        
+
+if __name__ == "__main__":
+    import unittest; unittest.main()

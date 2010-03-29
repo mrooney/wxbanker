@@ -72,6 +72,10 @@ class DBUpgradeTest(testbase.TestCaseHandlingConfig):
         self.assertEqual(t.Description, "a")
         self.assertEqual(t.LinkedTransaction, None)
         
+    def testUpgradeFromPre08GetsTags(self):
+        # Import a db with pre-tag tags in the description, make sure they are real tags.
+        self.markTestIncomplete("TODO")
+        
     def tearDown(self):
         if self.tmpFile:
             os.remove(self.tmpFile)

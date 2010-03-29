@@ -19,6 +19,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 from wxbanker.tests import testbase
+from wxbanker.bankobjects.transaction import Transaction
 import unittest
 
 class ModelEqualityTest(testbase.TestCaseWithController):
@@ -72,6 +73,24 @@ class ModelEqualityTest(testbase.TestCaseWithController):
         self.assertChangingAttributeTogglesEquality(rt, "EndDate", testbase.yesterday, model1, model2)
         self.assertChangingAttributeTogglesEquality(rt, "Source", a, model1, model2)
         self.assertChangingAttributeTogglesEquality(rt, "LastTransacted", testbase.yesterday, model1, model2)
+        
+    def testModelTagEquality(self):
+        model1 = self.Controller.Model
+        model2 = self.Controller.LoadPath(":memory:")
+        
+        self.assertEqual(model1, model2)
+        model2._Tags = {"foo": 1}
+        self.assertNotEqual(model1, model2)
+        
+    def testTransactionTagEquality(self):
+        t1 = Transaction(None, None, 1, "", None)
+        t2 = Transaction(None, None, 1, "", None)
+        
+        self.assertEqual(t1, t2)
+        
+        t2._Tags = set("foo")
+        
+        self.assertNotEqual(t1, t2)
 
 if __name__ == "__main__":
     unittest.main()

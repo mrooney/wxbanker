@@ -30,6 +30,10 @@ def main():
     print "DOCTESTS:", doctest.testmod(controller)
     # Run all of the unit tests.
     alltests.main()
+    
+    incomplete = testbase.INCOMPLETE_TESTS
+    if incomplete:
+        print "Incomplete tests: %i!" % incomplete
 
 if __name__ == "__main__":
     main()

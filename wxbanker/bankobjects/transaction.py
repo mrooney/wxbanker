@@ -42,6 +42,7 @@ class Transaction(ORMObject):
         self.LinkedTransaction = None
         self.Parent = parent
         self.Date = date
+        self.Tags = set()
         self.Description = description
         self.Amount = amount
         self.RecurringParent = None
@@ -107,6 +108,32 @@ class Transaction(ORMObject):
         # Update the linked transaction if one exists.
         if not fromLink and self.LinkedTransaction:
             self.LinkedTransaction.SetDescription(description, fromLink=True)
+            
+        # Parse/update tags.
+        tags = set()
+        for word in description.split(" "):
+            if word.startswith("#"):
+                tag = word[1:].lower()
+                tags.add(tag)
+        
+        removedTags = self._Tags.difference(tags)
+        addedTags = tags.difference(self._Tags)
+        self.RemoveTags(removedTags)
+        self.AddTags(addedTags)
+        
+    def AddTags(self, tagNames):
+        self.Tags.update(tagNames)
+        Publisher.sendMessage("transaction.tagged", tagNames)
+    
+    def RemoveTags(self, tagNames):
+        self.Tags.difference_update(tagNames)
+        Publisher.sendMessage("transaction.untagged", tagNames)
+                
+    def GetTags(self):
+        return self._Tags
+                
+    def SetTags(self, tagList):
+        self._Tags = tagList
 
     def GetAmount(self):
         return self._Amount
@@ -152,14 +179,14 @@ class Transaction(ORMObject):
         )
 
     def __eq__(self, other):
-        if other is None:
+        if not isinstance(other, Transaction):
             return False
 
-        assert isinstance(other, Transaction), other
         return (
             self.Date == other.Date and
             self._Description == other._Description and
             self.Amount == other.Amount and
+            self.Tags == other.Tags and
             self.GetLinkedTransactionID() == other.GetLinkedTransactionID() and
             self.ID == other.ID
         )
@@ -168,3 +195,4 @@ class Transaction(ORMObject):
     Description = property(GetDescription, SetDescription)
     Amount = property(GetAmount, SetAmount)
     LinkedTransaction = property(GetLinkedTransaction, SetLinkedTransaction)
+    Tags = property(GetTags, SetTags)
