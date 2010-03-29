@@ -419,6 +419,9 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         self.assertEqual(model, model2)
         model.MintEnabled = False
         self.assertNotEqual(model, model2)
+        
+    def testTagsAreStored(self):
+        self.markTestIncomplete("TODO")
 
     
 if __name__ == "__main__":
