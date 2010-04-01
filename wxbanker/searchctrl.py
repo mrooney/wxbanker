@@ -83,6 +83,8 @@ class SearchCtrl(wx.Panel):
 
     def onSearch(self, event=None):
         #WXTODO: enable search button in ctrl and appropriate event handling
+        # Stop any timer that may be active, in the case of a manual search.
+        self.SearchTimer.Stop()
         searchString = self.searchCtrl.Value # For a date, should be YYYY-MM-DD.
         matchType = self.matchChoices.index(self.matchBox.Value)
 
