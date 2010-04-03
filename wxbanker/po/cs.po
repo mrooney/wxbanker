@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-02-27 01:56-0800\n"
-"PO-Revision-Date: 2010-04-01 04:14+0000\n"
-"Last-Translator: Michael Rooney <mrooney@ubuntu.com>\n"
+"PO-Revision-Date: 2010-04-02 12:48+0000\n"
+"Last-Translator: Konki <pavel.konkol@seznam.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2010-04-02 03:40+0000\n"
+"X-Launchpad-Export-Date: 2010-04-03 03:53+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/bankobjects/transaction.py:92
@@ -34,49 +34,50 @@ msgstr "Převod na %s"
 #, python-format
 msgid "Daily"
 msgid_plural "Every %(num)d days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Denně"
+msgstr[1] "Každé %(num)d dny"
+msgstr[2] "Každé %(num)d dny"
 
 #: wxbanker/bankobjects/recurringtransaction.py:150
 msgid "Weekly on weekdays"
-msgstr ""
+msgstr "Týdně o běžných dnech"
 
 #: wxbanker/bankobjects/recurringtransaction.py:152
 msgid "Weekly on weekends"
-msgstr ""
+msgstr "Týdně o víkendu"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Mondays"
-msgstr ""
+msgstr "Pondělky"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Tuesdays"
-msgstr ""
+msgstr "Úterky"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Wednesdays"
-msgstr ""
+msgstr "Středy"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Thursdays"
-msgstr ""
+msgstr "Čtvrtky"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Fridays"
-msgstr ""
+msgstr "Pátky"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Saturdays"
-msgstr ""
+msgstr "Soboty"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Sundays"
-msgstr ""
+msgstr "Neděle"
 
 #: wxbanker/bankobjects/recurringtransaction.py:160
 #, python-format
 msgid "Weekly on %s"
-msgstr ""
+msgstr "Týdně ve %s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:162
 #, python-format
@@ -106,11 +107,11 @@ msgstr[1] ""
 #: wxbanker/bankobjects/recurringtransaction.py:177
 #, python-format
 msgid "until %s"
-msgstr ""
+msgstr "až do %s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:194
 msgid "No description"
-msgstr ""
+msgstr "Bez popisu"
 
 #: wxbanker/accountlistctrl.py:45
 msgid "Accounts"
@@ -134,7 +135,7 @@ msgstr "Konfigurovat vybraný účet"
 
 #: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:63
 msgid "All accounts"
-msgstr ""
+msgstr "Všechny účty"
 
 #: wxbanker/accountlistctrl.py:423 wxbanker/accountlistctrl.py:525
 msgid "Sorry, an account by that name already exists."
@@ -142,11 +143,11 @@ msgstr "Účet s tímto názvem již existuje."
 
 #: wxbanker/accountlistctrl.py:425 wxbanker/accountlistctrl.py:527
 msgid "Account names cannot be blank."
-msgstr ""
+msgstr "Názvy účtů nemohou být prázdné."
 
 #: wxbanker/accountlistctrl.py:459
 msgid "Account name"
-msgstr ""
+msgstr "Název účtu"
 
 #: wxbanker/accountlistctrl.py:498
 #, python-format
@@ -167,35 +168,35 @@ msgstr ""
 
 #: wxbanker/accountconfigdialog.py:40
 msgid "Username"
-msgstr ""
+msgstr "Uživatelské jméno"
 
 #: wxbanker/accountconfigdialog.py:42
 msgid "Password"
-msgstr ""
+msgstr "Heslo"
 
 #: wxbanker/accountconfigdialog.py:62
 msgid "Transaction details"
-msgstr ""
+msgstr "Transakční informace"
 
 #: wxbanker/accountconfigdialog.py:103
 msgid "This account currently has no recurring transactions."
-msgstr ""
+msgstr "Tento účet nemá v současné době žádné opakující se transakce."
 
 #: wxbanker/accountconfigdialog.py:105
 msgid "Close"
-msgstr ""
+msgstr "Zavřít"
 
 #: wxbanker/accountconfigdialog.py:115 wxbanker/csvimportframe.py:186
 msgid "Save"
-msgstr ""
+msgstr "Uložit"
 
 #: wxbanker/accountconfigdialog.py:116
 msgid "Cancel"
-msgstr ""
+msgstr "Zrušit"
 
 #: wxbanker/accountconfigdialog.py:136
 msgid "Recurring Transactions"
-msgstr ""
+msgstr "Opakující se transakce"
 
 #: wxbanker/plots/cairopanel.py:72 wxbanker/plots/cairopanel.py:113
 #: wxbanker/plots/wxplotpanel.py:35 wxbanker/plots/wxplotpanel.py:42
@@ -208,7 +209,7 @@ msgstr "Trend"
 
 #: wxbanker/plots/cairopanel.py:112 wxbanker/plots/wxplotpanel.py:42
 msgid "Time"
-msgstr ""
+msgstr "Čas"
 
 #: wxbanker/plots/wxplotpanel.py:42
 msgid "Total Balance Over Time"
@@ -225,7 +226,7 @@ msgstr ""
 
 #: wxbanker/summarytab.py:42
 msgid "From"
-msgstr ""
+msgstr "Z"
 
 #: wxbanker/summarytab.py:46 wxbanker/newtransactionctrl.py:31
 msgid "to"
@@ -277,12 +278,12 @@ msgstr "Celkem"
 #: wxbanker/transactionolv.py:204
 #, python-format
 msgid "Send %s to calculator"
-msgstr ""
+msgstr "Poslat %s do kalkulačky"
 
 #: wxbanker/transactionolv.py:205
 #, python-format
 msgid "Add %s to calculator"
-msgstr ""
+msgstr "Přidat %s do kalkulačky"
 
 #: wxbanker/transactionolv.py:206
 #, python-format
@@ -295,7 +296,7 @@ msgstr "Odstranit transakci"
 
 #: wxbanker/transactionolv.py:219
 msgid "Move this transaction to account"
-msgstr ""
+msgstr "Přesun této transakce na účet"
 
 #: wxbanker/transactionolv.py:221
 #, python-format
@@ -321,7 +322,7 @@ msgstr ""
 
 #: wxbanker/newtransactionctrl.py:100
 msgid "Yearly"
-msgstr ""
+msgstr "Ročně"
 
 #: wxbanker/newtransactionctrl.py:109
 msgid "Never"
@@ -329,15 +330,15 @@ msgstr "Nikdy"
 
 #: wxbanker/newtransactionctrl.py:130
 msgid "every"
-msgstr ""
+msgstr "každý"
 
 #: wxbanker/newtransactionctrl.py:135
 msgid "Ends:"
-msgstr ""
+msgstr "Končí:"
 
 #: wxbanker/newtransactionctrl.py:140
 msgid "Repeats:"
-msgstr ""
+msgstr "Opakování:"
 
 #: wxbanker/newtransactionctrl.py:169
 msgid "day"
@@ -349,7 +350,7 @@ msgstr[2] "dnů"
 #: wxbanker/newtransactionctrl.py:171
 msgid "week"
 msgid_plural "weeks"
-msgstr[0] ""
+msgstr[0] "týden"
 msgstr[1] "týdny"
 msgstr[2] "týdnů"
 
@@ -363,12 +364,13 @@ msgstr[2] "měsíců"
 #: wxbanker/newtransactionctrl.py:176
 msgid "year"
 msgid_plural "years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "rok"
+msgstr[1] "roky"
+msgstr[2] "let"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Mon"
-msgstr ""
+msgstr "Po"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Tue"
