@@ -24,7 +24,7 @@ from wxbanker.bankobjects.ormobject import ORMObject
 from wxbanker.bankobjects.transaction import Transaction
 from wxbanker.bankobjects.recurringtransaction import RecurringTransaction
 from wxbanker import currencies, bankexceptions, debug
-from wxbanker.mint import MintDotCom
+from wxbanker.mint.api import Mint
 
 
 class Account(ORMObject):
@@ -254,7 +254,7 @@ class Account(ORMObject):
         if self.MintId is None:
             raise bankexceptions.MintIntegrationException("This account has no MintId.")
         
-        mintBalance = MintDotCom.GetAccountBalance(self.MintId)
+        mintBalance = Mint.GetAccountBalance(self.MintId)
         return mintBalance == self.Balance
 
     def onTransactionAmountChanged(self, message):

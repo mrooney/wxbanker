@@ -19,12 +19,11 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import re, getpass, datetime
-from wxbanker.csvimporter import CsvImporterProfileManager, CsvImporter
-from wxbanker import bankexceptions, urllib3
-urllib3.enablecookies()
+import web
+web.enablecookies()
 
-class MintLoginException(Exception): pass
-
+class MintLoginException(Exception):
+    pass
 
 class MintConnection:
     """
@@ -42,8 +41,8 @@ class MintConnection:
             self._Initialized = True
 
     def Login(self, username, password):
-        postArgs = {"username": username, "password": self.password, "task": "L", "nextPage": ""}
-        result = urllib3.post("https://wwws.mint.com/loginUserSubmit.xevent", postArgs)
+        postArgs = {"username": username, "password": password, "task": "L", "nextPage": ""}
+        result = web.post("https://wwws.mint.com/loginUserSubmit.xevent", postArgs)
         if "forgot your password?" in result.lower():
             raise MintLoginException("Invalid credentials")
         self._CachedSummary = result
@@ -55,7 +54,7 @@ class MintConnection:
         return self._CachedSummary
         
 
-class MintDotCom:
+class Mint:
     @staticmethod
     def Login(username, password):
         MintConnection().Login(username, password)
@@ -75,9 +74,8 @@ class MintDotCom:
 
     @staticmethod
     def GetAccountBalance(accountid):
-        return 1
         from BeautifulSoup import BeautifulSoup
-        accountPage = urllib3.read("https://wwws.mint.com/transaction.event?accountId=%s" % accountid)
+        accountPage = web.read("https://wwws.mint.com/transaction.event?accountId=%s" % accountid)
         soup = BeautifulSoup(accountPage)
         balanceStr = soup.find("div", id="account-summary").find("tbody").find("td").contents[0]
         balanceStr = balanceStr.replace("–".decode("utf-8"), "-") # Mint uses a weird negative sign!
@@ -88,64 +86,20 @@ class MintDotCom:
 
     @staticmethod
     def GetAccountTransactionsCSV(accountid):
-        return urllib3.read("https://wwws.mint.com/transactionDownload.event?accountId=%s&comparableType=8&offset=0" % accountid)
-    
-    @staticmethod
-    def ImportAccounts(model):
-        """For each account in Mint, create one in wxBanker with all known transactions."""
-        mintSettings = CsvImporterProfileManager().getProfile("mint")
-        importer = CsvImporter()
-        for accountName, mintId in self.GetAccounts():
-            # Create an account, grab the transactions, and add them.
-            try:
-                account = model.CreateAccount(accountName)
-            except bankexceptions.AccountAlreadyExistsException:
-                account = model.CreateAccount("%s (%s)" % (accountName, mintId))
-            csv = self.GetAccountTransactionsCSV(mintId)
-            container = importer.getTransactionsFromCSV(csv, mintSettings)
-            transactions = container.Transactions
-            account.AddTransactions(transactions)
-            
-            # Now we have to add an initial transaction for the initial balance.
-            if transactions:
-                firstTransaction = sorted(transactions)[0]
-                initialDate = firstTransaction.Date
+        return web.read("https://wwws.mint.com/transactionDownload.event?accountId=%s&comparableType=8&offset=0" % accountid)
 
-                balance = self.GetAccountBalance(mintId)
-                initialBalance = balance - account.Balance
-                account.AddTransaction(initialBalance, "Initial Balance", initialDate)
-            
-            print "Imported account %s with %i transactions" % (accountName, len(transactions))
-            
-            
-def doImport():
-    from wxbanker import controller
-    bankController = controller.Controller()
-    
-    username = raw_input("Mint email: ")
-    password = getpass.getpass("Password: ")
-    
-    MintDotCom.Login(username, password)
-    MintDotCom.ImportAccounts(bankController.Model)
 
 def main():
     import pprint
     username = raw_input("Username: ")
     password = getpass.getpass("Password: ")
 
-    MintDotCom.Login(username, password)
-    accounts = MintDotCom.GetAccounts()
+    Mint.Login(username, password)
+    accounts = Mint.GetAccounts()
     pprint.pprint(accounts)
 
     for account in accounts:
-        print account[0], MintDotCom.GetAccountBalance(account[1])
-
-    print MintDotCom.GetAccountTransactionsCSV(account[1])
-        
+        print account[0], Mint.GetAccountBalance(account[1])
     
 if __name__ == "__main__":
-    import sys
-    if "--import" in sys.argv:
-        doImport()
-    else:
-        main()
+    main()

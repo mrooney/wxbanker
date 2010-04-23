@@ -476,7 +476,19 @@ class ModelTests(testbase.TestCaseWithController):
         
         a.MintId = 1
         self.assertTrue(a.IsMintEnabled())
-        self.assertTrue(a.IsInSyncWithMint)
+        
+        self.usedMock = False
+        class MintMock:
+            @staticmethod
+            def GetAccountBalance(accountId):
+                self.assertEqual(accountId, a.MintId)
+                self.usedMock = True
+                return 0
+        from wxbanker.bankobjects import account
+        account.Mint = MintMock
+        
+        self.assertTrue(a.IsInSyncWithMint())
+        self.assertTrue(self.usedMock)
         
         
 if __name__ == "__main__":
