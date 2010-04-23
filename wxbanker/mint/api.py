@@ -55,6 +55,8 @@ class MintConnection:
         
 
 class Mint:
+    AccountBalances = {}
+    
     @staticmethod
     def Login(username, password):
         MintConnection().Login(username, password)
@@ -73,7 +75,9 @@ class Mint:
         return mintAccounts
 
     @staticmethod
-    def GetAccountBalance(accountid):
+    def CacheAccountBalance(accountid):
+        # Ensure we are logged in.
+        summary = MintConnection().GetSummary()
         from BeautifulSoup import BeautifulSoup
         accountPage = web.read("https://wwws.mint.com/transaction.event?accountId=%s" % accountid)
         soup = BeautifulSoup(accountPage)
@@ -82,7 +86,12 @@ class Mint:
         for char in ",$":
             balanceStr = balanceStr.replace(char, "")
         balance = float(balanceStr)
-        return balance
+        
+        Mint.AccountBalances[accountid] = balance
+        
+    @staticmethod
+    def GetAccountBalance(accountid):
+        return Mint.AccountBalances[accountid]
 
     @staticmethod
     def GetAccountTransactionsCSV(accountid):
