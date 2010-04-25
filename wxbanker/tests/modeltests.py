@@ -473,22 +473,19 @@ class ModelTests(testbase.TestCaseWithController):
         
         self.assertFalse(a.IsMintEnabled())
         self.assertRaises(bankexceptions.MintIntegrationException, a.IsInSyncWithMint)
-        
-        a.MintId = 1
+
+        a.MintId = '1218040'
         self.assertTrue(a.IsMintEnabled())
+
+        # Put the fixture cached summary in, so we can test.
+        from wxbanker.mint.api import Mint
+        Mint()._CachedSummary = open(testbase.fixturefile("mint_index.html")).read()
         
-        self.usedMock = False
-        class MintMock:
-            @staticmethod
-            def GetAccountBalance(accountId):
-                self.assertEqual(accountId, a.MintId)
-                self.usedMock = True
-                return 0
-        from wxbanker.bankobjects import account
-        account.Mint = MintMock
-        
+        self.assertFalse(a.IsInSyncWithMint())
+
+        # Add the balance and we should be in sync.
+        a.AddTransaction(4277.24)
         self.assertTrue(a.IsInSyncWithMint())
-        self.assertTrue(self.usedMock)
         
         
 if __name__ == "__main__":

@@ -64,34 +64,28 @@ class Mint:
     @staticmethod
     def GetAccounts():
         summary = MintConnection().GetSummary()
-        accountsRegex = """<a class="" href="transaction.event\?accountId=([0-9]+)">([^<]+)</a></h4><h6><span class="last-updated">[^<]+</span>([^<]+)</h6>"""
-        mintAccounts = []
-        for account in re.findall(accountsRegex, summary):
-            aid = account[0]
-            name = "%s %s" % (account[1], account[2])
-            mintAccounts.append((name.decode("utf-8"), aid))
+        accountsRegex = """accountId=([0-9]+)">([^<]+)</a></h4><h6><span class="last-updated">[^<]+</span>([^<]+)</h6>"""
+        balancesRegex = """balance[^>]+>([^<]+)"""
+        accounts = re.findall(accountsRegex, summary)
+        balances = re.findall(balancesRegex, summary)
+        # Ignore the first balance; it is the total.
+        balances = balances[1:]
 
-        mintAccounts.sort()
+        mintAccounts = {}
+        for account, balanceStr in zip(accounts, balances):
+            balanceStr = balanceStr.replace("–".decode("utf-8"), "-") # Mint uses a weird negative sign!
+            for char in ",$":
+                balanceStr = balanceStr.replace(char, "")
+            balance = float(balanceStr)
+            aid = account[0]
+            name = ("%s %s" % (account[1], account[2])).decode("utf-8")
+            mintAccounts[aid] = (name, balance)
+
         return mintAccounts
 
     @staticmethod
-    def CacheAccountBalance(accountid):
-        # Ensure we are logged in.
-        summary = MintConnection().GetSummary()
-        from BeautifulSoup import BeautifulSoup
-        accountPage = web.read("https://wwws.mint.com/transaction.event?accountId=%s" % accountid)
-        soup = BeautifulSoup(accountPage)
-        balanceStr = soup.find("div", id="account-summary").find("tbody").find("td").contents[0]
-        balanceStr = balanceStr.replace("–".decode("utf-8"), "-") # Mint uses a weird negative sign!
-        for char in ",$":
-            balanceStr = balanceStr.replace(char, "")
-        balance = float(balanceStr)
-        
-        Mint.AccountBalances[accountid] = balance
-        
-    @staticmethod
     def GetAccountBalance(accountid):
-        return Mint.AccountBalances[accountid]
+        return Mint.GetAccounts()[accountid][1]
 
     @staticmethod
     def GetAccountTransactionsCSV(accountid):

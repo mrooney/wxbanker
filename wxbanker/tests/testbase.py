@@ -20,6 +20,7 @@
 
 import os, sys, datetime, locale, unittest
 from wxbanker import main, currencies
+TestCase = unittest.TestCase
 
 INCOMPLETE_TESTS = 0
 # Make sure path contains both the test dir and its parent (wxbanker root dir).
@@ -61,7 +62,8 @@ def resetLocale():
     assert bool(locale.setlocale(locale.LC_ALL, ""))
     reload(currencies)
 
-class TestCaseHandlingConfigBase(unittest.TestCase):
+
+class TestCaseHandlingConfigBase(TestCase):
     """
     Handle not stomping over the config file.
     """
