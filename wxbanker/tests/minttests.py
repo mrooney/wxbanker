@@ -26,7 +26,7 @@ class MintTests(testbase.TestCase):
         conn = MintConnection()
         index = open(testbase.fixturefile("mint_index.html")).read()
         expectedAccounts = {
-            '1218040': ('PayPal PayPal Balance' , 4277.24),
+            '1218040': ('PayPal PayPal Balance' , -4277.24),
             '1218022': ('Wells Fargo Dojo Checking', 19497.25)
         }
 

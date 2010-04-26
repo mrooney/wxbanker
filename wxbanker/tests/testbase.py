@@ -20,7 +20,6 @@
 
 import os, sys, datetime, locale, unittest
 from wxbanker import main, currencies
-TestCase = unittest.TestCase
 
 INCOMPLETE_TESTS = 0
 # Make sure path contains both the test dir and its parent (wxbanker root dir).
@@ -62,6 +61,11 @@ def resetLocale():
     assert bool(locale.setlocale(locale.LC_ALL, ""))
     reload(currencies)
 
+class TestCase(unittest.TestCase):
+    def markTestIncomplete(self, msg):
+        # Globals are hacky but hey, this is hacking something into unittest.
+        global INCOMPLETE_TESTS
+        INCOMPLETE_TESTS += 1
 
 class TestCaseHandlingConfigBase(TestCase):
     """
@@ -85,11 +89,7 @@ class TestCaseHandlingConfigBase(TestCase):
             self.assertEqual(str(e), msg)
         else:
             fail()
-            
-    def markTestIncomplete(self, msg):
-        # Globals are hacky but hey, this is hacking something into unittest.
-        global INCOMPLETE_TESTS
-        INCOMPLETE_TESTS += 1
+
 
 class TestCaseHandlingConfig(TestCaseHandlingConfigBase):
         """

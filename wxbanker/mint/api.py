@@ -19,7 +19,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import re, getpass, datetime
-import web
+from wxbanker.mint import web
 web.enablecookies()
 
 class MintLoginException(Exception):
@@ -27,18 +27,14 @@ class MintLoginException(Exception):
 
 class MintConnection:
     """
-    A MintConnection represents a static connection to Mint.com, implementing the Borg pattern.
+    A MintConnection represents a static connection to Mint.com.
     """
     _shared_state = {}
     
     def __init__(self):
         self.__dict__ = self._shared_state
-
-        if not hasattr(self, "_Initialized"):
+        if not hasattr(self, "_CachedSummary"):
             self._CachedSummary = None
-            self._Username = None
-            self._Password = None
-            self._Initialized = True
 
     def Login(self, username, password):
         postArgs = {"username": username, "password": password, "task": "L", "nextPage": ""}
@@ -73,6 +69,7 @@ class Mint:
 
         mintAccounts = {}
         for account, balanceStr in zip(accounts, balances):
+            balanceStr = balanceStr.decode("utf-8").replace(u"\u2013", "-") # Mint uses a weird negative sign!
             balanceStr = balanceStr.replace("–".decode("utf-8"), "-") # Mint uses a weird negative sign!
             for char in ",$":
                 balanceStr = balanceStr.replace(char, "")
@@ -102,7 +99,7 @@ def main():
     pprint.pprint(accounts)
 
     for account in accounts:
-        print account[0], Mint.GetAccountBalance(account[1])
+        print account, accounts[account]
     
 if __name__ == "__main__":
     main()

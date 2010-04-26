@@ -484,7 +484,7 @@ class ModelTests(testbase.TestCaseWithController):
         self.assertFalse(a.IsInSyncWithMint())
 
         # Add the balance and we should be in sync.
-        a.AddTransaction(4277.24)
+        a.AddTransaction(-4277.24)
         self.assertTrue(a.IsInSyncWithMint())
         
         
