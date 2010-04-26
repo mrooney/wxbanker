@@ -171,7 +171,8 @@ class AccountListCtrl(wx.Panel):
     def onToggleMintIntegration(self, message):
         enabled = message.data
         if enabled:
-            self._UpdateMintStatuses()
+            self.onConfigureButton()
+            #self._UpdateMintStatuses()
             
         self.ShowMintStatus(enabled)
         self.Parent.Layout()
@@ -502,7 +503,7 @@ class AccountListCtrl(wx.Panel):
                 # Remove the account from the model.
                 account.Remove()
 
-    def onConfigureButton(self, event):
+    def onConfigureButton(self, event=None):
         dlg = accountconfigdialog.AccountConfigDialog(self, self.GetCurrentAccount())
         dlg.ShowModal()
 

@@ -478,14 +478,16 @@ class ModelTests(testbase.TestCaseWithController):
         self.assertTrue(a.IsMintEnabled())
 
         # Put the fixture cached summary in, so we can test.
-        from wxbanker.mint.api import Mint
-        Mint()._CachedSummary = open(testbase.fixturefile("mint_index.html")).read()
+        from wxbanker.mint.api import MintConnection
+        MintConnection()._CachedSummary = open(testbase.fixturefile("mint_index.html")).read()
         
         self.assertFalse(a.IsInSyncWithMint())
 
         # Add the balance and we should be in sync.
         a.AddTransaction(-4277.24)
         self.assertTrue(a.IsInSyncWithMint())
+
+        del MintConnection()._CachedSummary
         
         
 if __name__ == "__main__":

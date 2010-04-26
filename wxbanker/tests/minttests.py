@@ -33,3 +33,4 @@ class MintTests(testbase.TestCase):
         conn._CachedSummary = index
         self.assertEqual(index, conn.GetSummary())
         self.assertEqual(Mint.GetAccounts(), expectedAccounts)
+        del conn._CachedSummary

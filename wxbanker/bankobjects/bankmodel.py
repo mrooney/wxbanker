@@ -36,13 +36,9 @@ class BankModel(ORMKeyValueObject):
         self.Accounts = AccountList(store)
         self._Tags = {}
 
-        if self.MintEnabled and 0:
-            import sys
-            user, passwd = sys.argv[1:3]
-            Mint.Login(user, passwd)
-            for account in self.Accounts:
-                if account.IsMintEnabled():
-                    Mint.CacheAccountBalance(account.MintId)
+        # Handle Mint integration.
+        if self.MintEnabled:
+            Mint.LoginFromKeyring()
 
         Publisher.subscribe(self.onCurrencyChanged, "user.currency_changed")
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
