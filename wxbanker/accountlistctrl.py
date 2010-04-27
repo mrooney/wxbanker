@@ -171,8 +171,7 @@ class AccountListCtrl(wx.Panel):
     def onToggleMintIntegration(self, message):
         enabled = message.data
         if enabled:
-            self.onConfigureButton()
-            #self._UpdateMintStatuses()
+            self.ConfigureCurrentAccount(tab="mint")
             
         self.ShowMintStatus(enabled)
         self.Parent.Layout()
@@ -292,6 +291,10 @@ class AccountListCtrl(wx.Panel):
             return self.accountObjects[self.currentIndex]
         else: # Not necessary, but explicit is clearer here.
             return None
+
+    def ConfigureCurrentAccount(self, tab="default"):
+        dlg = accountconfigdialog.AccountConfigDialog(self, self.GetCurrentAccount(), tab)
+        dlg.ShowModal()
 
     def onAccountRemoved(self, message):
         """
@@ -504,8 +507,7 @@ class AccountListCtrl(wx.Panel):
                 account.Remove()
 
     def onConfigureButton(self, event=None):
-        dlg = accountconfigdialog.AccountConfigDialog(self, self.GetCurrentAccount())
-        dlg.ShowModal()
+        self.ConfigureSelectedAccount()
 
     def onRenameButton(self, event):
         if self.currentIndex is not None:

@@ -20,36 +20,38 @@ import wx
 from wxbanker.transactionctrl import TransactionCtrl
 
 try:
-    import gnomekeyring
+    from wxbanker.mint.keyring import Keyring
 except ImportError:
-    gnomekeyring = None
+    Keyring = None
 
 
-class MintConfigPanel(wx.Config):
-    def  __init__(self, parent):
+class MintConfigPanel(wx.Panel):
+    def  __init__(self, parent, account):
         wx.Panel.__init__(self, parent)
-        self.SetBackgroundColour(wx.RED)
         self.headerText = wx.StaticText(self, -1, _("wxBanker can synchronize account balances online if you have an account with mint.com"))
 
         self.usernameBox = wx.TextCtrl(self)
         self.passwordBox = wx.TextCtrl(self, style=wx.TE_PASSWORD)
-        self.saveAuthCheck = wx.CheckBox(self, label="Save Mint.com authentication in keyring")
+            
+        self.saveAuthCheck = wx.CheckBox(self, label=_("Save credentials in keyring"))
         self.closeButton = wx.Button(self, id=wx.ID_OK)
 
         gridSizer = wx.GridSizer(2, 2, 3, 3)
-        gridSizer.Add(wx.StaticText(self, label=_("Username")))
-        gridSizer.Add(self.usernameBox)
-        gridSizer.Add(wx.StaticText(self, label=_("Password")))
-        gridSizer.Add(self.passwordBox)
+        gridSizer.Add(wx.StaticText(self, label=_("Username:")), flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_RIGHT)
+        gridSizer.Add(self.usernameBox, flag=wx.ALIGN_CENTER|wx.LEFT, border=6)
+        gridSizer.Add(wx.StaticText(self, label=_("Password:")), flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_RIGHT)
+        gridSizer.Add(self.passwordBox, flag=wx.ALIGN_CENTER|wx.LEFT, border=6)
 
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
-        self.Sizer.Add(self.headerText)
-        self.Sizer.AddSpacer(10)
-        self.Sizer.Add(gridSizer)
-        self.Sizer.Add(self.saveAuthCheck)
+        self.Sizer.AddSpacer(6)
+        self.Sizer.Add(self.headerText, 0, wx.LEFT, 6)
+        self.Sizer.AddSpacer(12)
+        self.Sizer.Add(gridSizer, 0, wx.LEFT, 6)
+        self.Sizer.AddSpacer(12)
+        self.Sizer.Add(self.saveAuthCheck, 0, wx.LEFT, 6)
         self.Sizer.AddStretchSpacer(1)
-        self.Sizer.Add(self.closeButton)
-        self.saveAuthCheck.Enable(bool(gnomekeyring))
+        self.Sizer.Add(self.closeButton, 0, wx.LEFT, 6)
+        self.saveAuthCheck.Enable(bool(Keyring))
         
 
 class RecurringConfigPanel(wx.Panel):
@@ -126,14 +128,17 @@ class RecurringConfigPanel(wx.Panel):
         self.transactionCtrl.FromRecurring(transaction)
 
 class AccountConfigDialog(wx.Dialog):
-    def __init__(self, parent, account):
+    def __init__(self, parent, account, tab="default"):
         wx.Dialog.__init__(self, parent, title=account.Name, size=(600, 400))
         self.Sizer = wx.BoxSizer()
         self.notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
         self.Sizer.Add(self.notebook, 1, wx.EXPAND)
         
         self.recurringPanel = RecurringConfigPanel(self.notebook, account)
+        self.mintPanel = MintConfigPanel(self.notebook, account)
         self.notebook.AddPage(self.recurringPanel, _("Recurring Transactions"))
+        self.notebook.AddPage(self.mintPanel, _("Mint.com Integration"))
         
-    def createMintConfigPanel(self):
-        panel = wx.Panel(self)
+        if tab == "mint":
+            # Setting the selection synchronously gets changed back somewhere in the event queue.
+            wx.CallAfter(self.notebook.SetSelection, 1)
