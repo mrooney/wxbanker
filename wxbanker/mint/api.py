@@ -51,10 +51,7 @@ class MintConnection:
         
     def GetSummary(self):
         if self._CachedSummary is None:
-            if Keyring:
-                Mint.LoginFromKeyring()
-            else:
-                raise Exception("Please call Login(username, password) first.")
+            raise Exception("Please call Login(username, password) first.")
         
         return self._CachedSummary
         
@@ -83,7 +80,7 @@ class Mint:
     def GetAccounts():
         """Returns a dictionary like {account_id: (account_name, account_balance)}"""
         summary = MintConnection().GetSummary()
-        print summary
+        #print summary
         accountsRegex = """accountId=([0-9]+)">([^<]+)</a></h4><h6><span class="last-updated">[^<]+</span>([^<]+)</h6>"""
         balancesRegex = """balance[^>]+>([^<]+)"""
         accounts = re.findall(accountsRegex, summary)
@@ -101,7 +98,7 @@ class Mint:
             aid = account[0]
             name = ("%s %s" % (account[1], account[2])).decode("utf-8")
             mintAccounts[aid] = (name, balance)
-        print mintAccounts
+        #print mintAccounts
         return mintAccounts
 
     @staticmethod
