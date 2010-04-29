@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-04-19 19:09-0700\n"
-"PO-Revision-Date: 2010-04-27 04:13+0000\n"
+"POT-Creation-Date: 2010-04-28 00:01-0700\n"
+"PO-Revision-Date: 2010-04-28 04:47+0000\n"
 "Last-Translator: Michael Rooney <mrooney@ubuntu.com>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-04-28 03:42+0000\n"
+"X-Launchpad-Export-Date: 2010-04-29 03:51+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/bankcontrols.py:52 wxbanker/csvimportframe.py:98
@@ -118,7 +118,7 @@ msgstr ""
 msgid "Load"
 msgstr "Carica"
 
-#: wxbanker/csvimportframe.py:186 wxbanker/accountconfigdialog.py:115
+#: wxbanker/csvimportframe.py:186 wxbanker/accountconfigdialog.py:117
 msgid "Save"
 msgstr "Salva"
 
@@ -212,39 +212,47 @@ msgstr "Sommario"
 msgid "Summary:"
 msgstr "Riepilogo:"
 
-#: wxbanker/accountconfigdialog.py:32
+#: wxbanker/accountconfigdialog.py:31
 msgid ""
 "wxBanker can synchronize account balances online if you have an account with "
 "mint.com"
 msgstr ""
 
+#: wxbanker/accountconfigdialog.py:36
+msgid "Save credentials in keyring"
+msgstr ""
+
 #: wxbanker/accountconfigdialog.py:40
-msgid "Username"
-msgstr "Utente"
+msgid "Username:"
+msgstr ""
 
 #: wxbanker/accountconfigdialog.py:42
-msgid "Password"
-msgstr "Password:"
+msgid "Password:"
+msgstr ""
 
-#: wxbanker/accountconfigdialog.py:62
+#: wxbanker/accountconfigdialog.py:64
 msgid "Transaction details"
 msgstr "Dettagli della transazione"
 
-#: wxbanker/accountconfigdialog.py:103
+#: wxbanker/accountconfigdialog.py:105
 msgid "This account currently has no recurring transactions."
 msgstr "Qesto conto non ha transazioni ricorrenti"
 
-#: wxbanker/accountconfigdialog.py:105
+#: wxbanker/accountconfigdialog.py:107
 msgid "Close"
 msgstr "Chiudi"
 
-#: wxbanker/accountconfigdialog.py:116
+#: wxbanker/accountconfigdialog.py:118
 msgid "Cancel"
 msgstr "Annulla"
 
-#: wxbanker/accountconfigdialog.py:136
+#: wxbanker/accountconfigdialog.py:139
 msgid "Recurring Transactions"
 msgstr "Transazioni ricorrenti"
+
+#: wxbanker/accountconfigdialog.py:140
+msgid "Mint.com Integration"
+msgstr ""
 
 #: wxbanker/newtransactionctrl.py:31
 msgid "from"
@@ -491,19 +499,19 @@ msgstr "Configura l'account selezionato"
 msgid "All accounts"
 msgstr "Tutti i conti"
 
-#: wxbanker/accountlistctrl.py:424 wxbanker/accountlistctrl.py:526
+#: wxbanker/accountlistctrl.py:428 wxbanker/accountlistctrl.py:529
 msgid "Sorry, an account by that name already exists."
 msgstr "Spiacente ma esiste già un conto con questo nome"
 
-#: wxbanker/accountlistctrl.py:426 wxbanker/accountlistctrl.py:528
+#: wxbanker/accountlistctrl.py:430 wxbanker/accountlistctrl.py:531
 msgid "Account names cannot be blank."
 msgstr "I nomi degli account non possono essere vuoti."
 
-#: wxbanker/accountlistctrl.py:460
+#: wxbanker/accountlistctrl.py:464
 msgid "Account name"
 msgstr "Nome conto"
 
-#: wxbanker/accountlistctrl.py:499
+#: wxbanker/accountlistctrl.py:503
 #, python-format
 msgid ""
 "This will permanently remove the account '%s' and all its transactions. "
@@ -512,7 +520,7 @@ msgstr ""
 "Ciò cancellerà permanentemente l'account '%s' e tutte le sue transazioni. "
 "Continuare?"
 
-#: wxbanker/accountlistctrl.py:500
+#: wxbanker/accountlistctrl.py:504
 msgid "Warning"
 msgstr "Attenzione"
 
@@ -810,6 +818,12 @@ msgstr "Trasferisci a %s"
 #: wxbanker/messagepanel.py:47
 msgid "Dismiss"
 msgstr "Rimuovi"
+
+#~ msgid "Password"
+#~ msgstr "Password:"
+
+#~ msgid "Username"
+#~ msgstr "Utente"
 
 #~ msgid "Skip first line"
 #~ msgstr "Ignora la prima linea"
