@@ -18,10 +18,10 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-import re, getpass
 from wx.lib.pubsub import Publisher
 from wxbanker.mint import web
 web.enablecookies()
+from BeautifulSoup import BeautifulSoup
 
 try:
     from wxbanker.mint.keyring import Keyring
@@ -68,6 +68,10 @@ class Mint:
     AccountBalances = {}
     
     @staticmethod
+    def IsLoggedIn():
+        return MintConnection().GetSummary() is not None
+    
+    @staticmethod
     def Login(username, password):
         MintConnection().Login(username, password)
 
@@ -85,26 +89,26 @@ class Mint:
         
     @staticmethod
     def GetAccounts():
-        """Returns a dictionary like {account_id: (account_name, account_balance)}"""
+        """Returns a dictionary like {account_id: {'name': name, 'balance': balance}}"""
         summary = MintConnection().GetSummary()
-        #print summary
-        accountsRegex = """accountId=([0-9]+)">([^<]+)</a></h4><h6><span class="last-updated">[^<]+</span>([^<]+)</h6>"""
-        balancesRegex = """balance[^>]+>([^<]+)"""
-        accounts = re.findall(accountsRegex, summary)
-        balances = re.findall(balancesRegex, summary)
-        # Ignore the first balance; it is the total.
-        balances = balances[1:]
-
+        soup = BeautifulSoup(summary)
         mintAccounts = {}
-        for account, balanceStr in zip(accounts, balances):
-            balanceStr = balanceStr.decode("utf-8").replace(u"\u2013", "-") # Mint uses a weird negative sign!
+        
+        for li in soup.findAll("li", "account"):
+            h4 = li.find("h4")
+            h6 = li.find("h6")
+            balanceStr = h4.find("span").contents[0]
             balanceStr = balanceStr.replace("–".decode("utf-8"), "-") # Mint uses a weird negative sign!
             for char in ",$":
                 balanceStr = balanceStr.replace(char, "")
+                
+            aid = int(li.get("id").split("-")[1])
             balance = float(balanceStr)
-            aid = int(account[0])
-            name = ("%s %s" % (account[1], account[2])).decode("utf-8")
+            bankName = h4.find("a").contents[0]
+            accountName = h6.contents[1]
+            name = bankName + ' ' + accountName
             mintAccounts[aid] = {'name': name, 'balance': balance}
+            
         return mintAccounts
 
     @staticmethod
@@ -117,10 +121,11 @@ class Mint:
 
 
 def main():
-    import pprint
+    import pprint, getpass
     username = raw_input("Username: ")
     password = getpass.getpass("Password: ")
 
+    #Mint.LoginFromKeyring()
     Mint.Login(username, password)
     accounts = Mint.GetAccounts()
     pprint.pprint(accounts)
