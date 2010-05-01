@@ -87,7 +87,7 @@ class BankMenuBar(wx.MenuBar):
 
         settingsMenu.AppendItem(currencyMenu)
         
-        settingsMenu.AppendCheckItem(self.ID_MINTINTEGRATION, _("Integrate with Mint.com"), _("Sync account balances with an existing Mint.com account"))
+        self.mintEnabledItem = settingsMenu.AppendCheckItem(self.ID_MINTINTEGRATION, _("Integrate with Mint.com"), _("Sync account balances with an existing Mint.com account"))
 
         # Help menu.
         helpMenu = wx.Menu()
@@ -134,6 +134,8 @@ class BankMenuBar(wx.MenuBar):
         self.toggleAutoSave(autosave)
         Publisher.subscribe(self.onAutoSaveToggled, "controller.autosave_toggled")
         Publisher.subscribe(self.onShowZeroToggled, "controller.showzero_toggled")
+        # Subscribe to a Mint update event, which tells us the checkbox should be enabled after startup.
+        Publisher.subscribe(self.onMintUpdate, "mint.updated")
 
     def onMenuEvent(self, event):
         ID = event.Id
@@ -161,6 +163,9 @@ class BankMenuBar(wx.MenuBar):
             }.get(ID, lambda e: e.Skip())
 
             handler(event)
+            
+    def onMintUpdate(self, message):
+        self.toggleMintEnabled(True)
 
     def onAutoSaveToggled(self, message):
         self.toggleAutoSave(message.data)
@@ -174,6 +179,9 @@ class BankMenuBar(wx.MenuBar):
         
     def toggleShowZero(self, showzero):
         self.showZeroMenuItem.Check(showzero)
+        
+    def toggleMintEnabled(self, enabled):
+        self.mintEnabledItem.Check(enabled)
 
     def onClickSave(self, event):
         Publisher.sendMessage("user.saved")

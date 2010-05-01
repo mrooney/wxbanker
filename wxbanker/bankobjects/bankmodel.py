@@ -18,6 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
+import wx
 from wx.lib.pubsub import Publisher
 import re, datetime
 
@@ -37,10 +38,11 @@ class BankModel(ORMKeyValueObject):
         self._Tags = {}
 
         # Handle Mint integration.
-        if self.MintEnabled and 1:
-            Mint.LoginFromKeyring()
+        if self.MintEnabled:
+            wx.CallLater(1000, Mint.LoginFromKeyring)
 
         Publisher.subscribe(self.onCurrencyChanged, "user.currency_changed")
+        Publisher.subscribe(self.onMintToggled, "user.mint.toggled")
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
         Publisher.subscribe(self.onTransactionTagged, "transaction.tagged")
         Publisher.subscribe(self.onTransactionUntagged, "transaction.untagged")
@@ -202,6 +204,10 @@ class BankModel(ORMKeyValueObject):
             self._Tags[tag] -= 1
             if self._Tags[tag] == 0:
                 self._Tags.pop(tag)
+                
+    def onMintToggled(self, message):
+        enabled = message.data
+        self.MintEnabled = enabled
 
     def __eq__(self, other):
         return (

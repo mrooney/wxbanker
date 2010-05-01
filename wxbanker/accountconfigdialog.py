@@ -92,9 +92,18 @@ class MintConfigPanel(wx.Panel):
     def onUpdateButton(self, event):
         self.mintLogin()
         accounts = Mint.GetAccounts()
-        for mintId, item in Mint.GetAccounts().items():
+        for i, (mintId, item) in enumerate(Mint.GetAccounts().items()):
             option = "%s - %s" % (item['name'], self.Account.float2str(item['balance']))
             self.mintCombo.Append(option, mintId)
+            # If this is the currently configured account, select it.
+            if mintId == self.Account.GetMintId():
+                self.mintCombo.Selection = i
+        
+        # If there are accounts but none is currently set, choose the first one. 
+        if accounts and not self.Account.IsMintEnabled():
+            self.mintCombo.Selection = 0
+            
+        self.Layout()
         
     def onButton(self, event):
         """If the save button was clicked save, and close the dialog in any case (Close/Cancel/Save)."""

@@ -247,6 +247,9 @@ class Account(ORMObject):
         destAccount.AddTransactions(transactions, sources)
         Publisher.sendMessage("batch.end")
         
+    def GetMintId(self):
+        return self.MintId
+        
     def IsMintEnabled(self):
         return self.MintId is not None
         

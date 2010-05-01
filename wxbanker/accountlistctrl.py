@@ -173,6 +173,8 @@ class AccountListCtrl(wx.Panel):
         enabled = message.data
         if enabled:
             self.ConfigureCurrentAccount(tab="mint")
+        else:
+            self.ShowMintStatus(False)
            
     def onMintDataUpdated(self, message):
         self.ShowMintStatus(True)

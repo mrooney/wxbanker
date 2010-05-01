@@ -475,6 +475,7 @@ class ModelTests(testbase.TestCaseWithController):
         self.assertRaises(bankexceptions.MintIntegrationException, a.IsInSyncWithMint)
 
         a.MintId = 1218040
+        self.assertEquals(1218040, a.GetMintId())
         self.assertTrue(a.IsMintEnabled())
 
         # Put the fixture cached summary in, so we can test.
