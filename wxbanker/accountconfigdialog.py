@@ -31,6 +31,7 @@ class MintConfigPanel(wx.Panel):
     
     def  __init__(self, parent, account):
         wx.Panel.__init__(self, parent)
+        self.Account = account
         self.headerText = wx.StaticText(self, -1, _("Mint.com credentials:"))
 
         self.usernameBox = wx.TextCtrl(self)
@@ -85,22 +86,37 @@ class MintConfigPanel(wx.Panel):
                 self.usernameBox.Value = user
                 self.passwordBox.Value = passwd
         
+        self.mintUpdateButton.Bind(wx.EVT_BUTTON, self.onUpdateButton)
         self.Bind(wx.EVT_BUTTON, self.onButton)
+        
+    def onUpdateButton(self, event):
+        self.mintLogin()
+        accounts = Mint.GetAccounts()
+        for mintId, item in Mint.GetAccounts().items():
+            option = "%s - %s" % (item['name'], self.Account.float2str(item['balance']))
+            self.mintCombo.Append(option, mintId)
         
     def onButton(self, event):
         """If the save button was clicked save, and close the dialog in any case (Close/Cancel/Save)."""
         assert event.Id in (wx.ID_CLOSE, wx.ID_SAVE)
         
         if event.Id == wx.ID_SAVE:
-            if self.saveAuthCheck.IsEnabled():
-                username, passwd = [ctrl.Value for ctrl in (self.usernameBox, self.passwordBox)]
-                print username, passwd
-                Keyring().set_credentials(username, passwd)
-                Mint.LoginFromKeyring()
-            else:
-                Mint.Login(username, passwd)
+            self.mintLogin()
+            sel = self.mintCombo.Selection
+            if sel != -1:
+                mintId = self.mintCombo.GetClientData(sel)
+                self.Account.MintId = mintId
             
         self.GrandParent.Destroy()
+        
+    def mintLogin(self):
+        if self.saveAuthCheck.IsEnabled():
+            username, passwd = [ctrl.Value for ctrl in (self.usernameBox, self.passwordBox)]
+            Keyring().set_credentials(username, passwd)
+            Mint.LoginFromKeyring()
+        else:
+            Mint.Login(username, passwd)
+        
  
 class RecurringConfigPanel(wx.Panel):
     def __init__(self, parent, account):

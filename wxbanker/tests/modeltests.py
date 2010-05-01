@@ -486,6 +486,8 @@ class ModelTests(testbase.TestCaseWithController):
         # Add the balance and we should be in sync.
         a.AddTransaction(-4277.24)
         self.assertTrue(a.IsInSyncWithMint())
+        
+        self.assertEqual(a.GetSyncString(), "PayPal PayPal Balance: -$4,277.24")
 
         del MintConnection()._CachedSummary
         

@@ -110,6 +110,7 @@ class AccountListCtrl(wx.Panel):
         # Subscribe to messages we are concerned about.
         Publisher.subscribe(self.onAccountBalanceChanged, "ormobject.updated.Account.Balance")
         Publisher.subscribe(self.onAccountRenamed, "ormobject.updated.Account.Name")
+        Publisher.subscribe(self.onAccountMintIdChanged, "ormobject.updated.Account.MintId")
         Publisher.subscribe(self.onAccountRemoved, "account.removed")
         Publisher.subscribe(self.onAccountAdded, "account.created")
         Publisher.subscribe(self.onCurrencyChanged, "currency_changed")
@@ -143,16 +144,22 @@ class AccountListCtrl(wx.Panel):
 
         if not self.GetCount():
             self.addButton.StartFlashing()
+            
+    def onAccountMintIdChanged(self, message):
+        self._UpdateMintStatuses()
         
     def _UpdateMintStatuses(self):
         for account, mintCtrl in zip(self.accountObjects, self.mintStatuses):
             bitmapName = "transparent"
+            tooltip = _("Not synchronized with Mint.com")
             if account.IsMintEnabled():
+                tooltip = account.GetSyncString()
                 if account.IsInSyncWithMint():
                     bitmapName = "accept"
                 else:
                     bitmapName = "exclamation"
             mintCtrl.SetBitmap(wx.ArtProvider.GetBitmap("wxART_%s" % bitmapName))
+            mintCtrl.SetToolTipString(tooltip)
 
     def onCurrencyChanged(self, message):
         # Update all the accounts.
@@ -405,6 +412,9 @@ class AccountListCtrl(wx.Panel):
 
         # Handle a zero-balance account going to non-zero or vice-versa.
         self.refreshVisibility()
+        
+        # Refresh sync status
+        self._UpdateMintStatuses()
 
     def updateGrandTotal(self):
         self.totalText.Label = self.Model.float2str( self.Model.Balance )
@@ -501,7 +511,7 @@ class AccountListCtrl(wx.Panel):
                 account.Remove()
 
     def onConfigureButton(self, event=None):
-        self.ConfigureSelectedAccount()
+        self.ConfigureCurrentAccount()
 
     def onRenameButton(self, event):
         if self.currentIndex is not None:
