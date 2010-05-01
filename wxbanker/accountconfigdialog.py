@@ -65,7 +65,7 @@ class MintConfigPanel(wx.Panel):
         self.Sizer.AddSpacer(6)
         self.Sizer.Add(self.headerText, 0, wx.LEFT, 6)
         self.Sizer.AddSpacer(12)
-        self.Sizer.Add(gridSizer, 0, wx.LEFT, 6)
+        self.Sizer.Add(gridSizer, 0, wx.EXPAND|wx.LEFT, 6)
         self.Sizer.AddSpacer(12)
         self.Sizer.Add(self.saveAuthCheck, 0, wx.LEFT, 12)
         self.Sizer.AddSpacer(24)
@@ -85,11 +85,18 @@ class MintConfigPanel(wx.Panel):
                 user, passwd = keyring.get_credentials()
                 self.usernameBox.Value = user
                 self.passwordBox.Value = passwd
-        
+
+        # Properly populate the list of accounts if we are already logged in.
+        if Mint().IsLoggedIn():
+            self.updateMintAccounts()
+            
         self.mintUpdateButton.Bind(wx.EVT_BUTTON, self.onUpdateButton)
         self.Bind(wx.EVT_BUTTON, self.onButton)
         
     def onUpdateButton(self, event):
+        self.updateMintAccounts()
+        
+    def updateMintAccounts(self):
         self.mintLogin()
         accounts = Mint.GetAccounts()
         for i, (mintId, item) in enumerate(Mint.GetAccounts().items()):

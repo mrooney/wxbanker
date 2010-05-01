@@ -154,7 +154,7 @@ class AccountListCtrl(wx.Panel):
             tooltip = _("Not synchronized with Mint.com")
             if account.IsMintEnabled():
                 tooltip = account.GetSyncString()
-                if account.IsInSyncWithMint():
+                if account.IsInSync():
                     bitmapName = "accept"
                 else:
                     bitmapName = "exclamation"
@@ -179,6 +179,8 @@ class AccountListCtrl(wx.Panel):
     def onMintDataUpdated(self, message):
         self.ShowMintStatus(True)
         self._UpdateMintStatuses()
+        # A zero-balance account could be out of/ in sync, potentially toggling its visibility.
+        self.refreshVisibility()
         
     def ShowMintStatus(self, show):
         for index, mintStatus in enumerate(self.mintStatuses):
@@ -580,7 +582,8 @@ class AccountListCtrl(wx.Panel):
             # +1 offset is to take into account the buttons at the top.
             self.childSizer.Show(i+1)
             if not showZero:
-                if abs(account.Balance) < .001:
+                # If the account is out of sync, always show it so as not to hide discrepencies.
+                if abs(account.Balance) < .001 and not account.IsOutOfSync():
                     self.childSizer.Hide(i+1)
 
         # Restore the Mint status.

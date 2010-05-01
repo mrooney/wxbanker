@@ -472,7 +472,7 @@ class ModelTests(testbase.TestCaseWithController):
         a = model.CreateAccount("Foo")
         
         self.assertFalse(a.IsMintEnabled())
-        self.assertRaises(bankexceptions.MintIntegrationException, a.IsInSyncWithMint)
+        self.assertRaises(bankexceptions.MintIntegrationException, a.IsInSync)
 
         a.MintId = 1218040
         self.assertEquals(1218040, a.GetMintId())
@@ -482,11 +482,11 @@ class ModelTests(testbase.TestCaseWithController):
         from wxbanker.mint.api import MintConnection
         MintConnection()._CachedSummary = open(testbase.fixturefile("mint_index.html")).read()
         
-        self.assertFalse(a.IsInSyncWithMint())
+        self.assertFalse(a.IsInSync())
 
         # Add the balance and we should be in sync.
         a.AddTransaction(-4277.24)
-        self.assertTrue(a.IsInSyncWithMint())
+        self.assertTrue(a.IsInSync())
         
         self.assertEqual(a.GetSyncString(), "PayPal PayPal Balance: -$4,277.24")
 

@@ -252,8 +252,15 @@ class Account(ORMObject):
         
     def IsMintEnabled(self):
         return self.MintId is not None
+    
+    def IsOutOfSync(self):
+        """Returns true only if explicitly out of sync: set to sync and able to get a balance, and balance is different."""
+        if self.IsMintEnabled():
+            if Mint.IsLoggedIn():
+                return not self.IsInSync()
+        return False
         
-    def IsInSyncWithMint(self):
+    def IsInSync(self):
         if self.MintId is None:
             raise bankexceptions.MintIntegrationException("This account has no MintId.")
         

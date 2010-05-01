@@ -69,7 +69,7 @@ class Mint:
     
     @staticmethod
     def IsLoggedIn():
-        return MintConnection().GetSummary() is not None
+        return MintConnection()._CachedSummary is not None
     
     @staticmethod
     def Login(username, password):
@@ -84,6 +84,7 @@ class Mint:
         if not keyring.has_credentials():
             raise Exception("Keyring does not have Mint.com credentials")
 
+        print 'keyring'
         user, passwd = keyring.get_credentials()
         Mint.Login(user, passwd)
         
