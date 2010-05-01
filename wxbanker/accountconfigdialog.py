@@ -19,6 +19,7 @@
 import wx
 from wxbanker.transactionctrl import TransactionCtrl
 
+from wxbanker.mint.api import Mint
 try:
     from wxbanker.mint.keyring import Keyring
 except ImportError:
@@ -26,34 +27,81 @@ except ImportError:
 
 
 class MintConfigPanel(wx.Panel):
+    ID_UPDATE = wx.NewId()
+    
     def  __init__(self, parent, account):
         wx.Panel.__init__(self, parent)
-        self.headerText = wx.StaticText(self, -1, _("wxBanker can synchronize account balances online if you have an account with mint.com"))
+        self.headerText = wx.StaticText(self, -1, _("Mint.com credentials:"))
 
         self.usernameBox = wx.TextCtrl(self)
         self.passwordBox = wx.TextCtrl(self, style=wx.TE_PASSWORD)
             
         self.saveAuthCheck = wx.CheckBox(self, label=_("Save credentials in keyring"))
-        self.closeButton = wx.Button(self, id=wx.ID_OK)
+        
+        self.accountText = wx.StaticText(self, -1, _("Corresponding Mint account for %(name)s:") % {"name": account.Name})
+        self.mintCombo = wx.Choice(self)
+        self.mintUpdateButton = wx.Button(self, label=_("Update"), id=self.ID_UPDATE)
 
         gridSizer = wx.GridSizer(2, 2, 3, 3)
         gridSizer.Add(wx.StaticText(self, label=_("Username:")), flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_RIGHT)
         gridSizer.Add(self.usernameBox, flag=wx.ALIGN_CENTER|wx.LEFT, border=6)
         gridSizer.Add(wx.StaticText(self, label=_("Password:")), flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_RIGHT)
         gridSizer.Add(self.passwordBox, flag=wx.ALIGN_CENTER|wx.LEFT, border=6)
+        
+        mintAccountSizer = wx.BoxSizer()
+        mintAccountSizer.Add(self.mintCombo, 0, wx.LEFT, 6)
+        mintAccountSizer.Add(self.mintUpdateButton, wx.LEFT, 6)
 
+        saveButton = wx.Button(self, label=_("Save"), id=wx.ID_SAVE)
+        closeButton = wx.Button(self, label=_("Cancel"), id=wx.ID_CLOSE)
+        buttonSizer = wx.BoxSizer()
+        buttonSizer.Add(saveButton)
+        buttonSizer.AddSpacer(12)
+        buttonSizer.Add(closeButton)
+        buttonSizer.AddSpacer(6)
+        
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
         self.Sizer.AddSpacer(6)
         self.Sizer.Add(self.headerText, 0, wx.LEFT, 6)
         self.Sizer.AddSpacer(12)
         self.Sizer.Add(gridSizer, 0, wx.LEFT, 6)
         self.Sizer.AddSpacer(12)
-        self.Sizer.Add(self.saveAuthCheck, 0, wx.LEFT, 6)
+        self.Sizer.Add(self.saveAuthCheck, 0, wx.LEFT, 12)
+        self.Sizer.AddSpacer(24)
+        self.Sizer.Add(self.accountText, 0, wx.LEFT, 6)
+        self.Sizer.AddSpacer(6)
+        self.Sizer.Add(mintAccountSizer)
         self.Sizer.AddStretchSpacer(1)
-        self.Sizer.Add(self.closeButton, 0, wx.LEFT, 6)
-        self.saveAuthCheck.Enable(bool(Keyring))
+        self.Sizer.Add(buttonSizer, flag=wx.ALIGN_RIGHT)
+        self.Sizer.AddSpacer(6)
         
-
+        # If we have a keyring, enable the checkbox, and populate any existing data.
+        if Keyring:
+            self.saveAuthCheck.Enable(True)
+            keyring = Keyring()
+            if keyring.has_credentials():
+                self.saveAuthCheck.Value = True
+                user, passwd = keyring.get_credentials()
+                self.usernameBox.Value = user
+                self.passwordBox.Value = passwd
+        
+        self.Bind(wx.EVT_BUTTON, self.onButton)
+        
+    def onButton(self, event):
+        """If the save button was clicked save, and close the dialog in any case (Close/Cancel/Save)."""
+        assert event.Id in (wx.ID_CLOSE, wx.ID_SAVE)
+        
+        if event.Id == wx.ID_SAVE:
+            if self.saveAuthCheck.IsEnabled():
+                username, passwd = [ctrl.Value for ctrl in (self.usernameBox, self.passwordBox)]
+                print username, passwd
+                Keyring().set_credentials(username, passwd)
+                Mint.LoginFromKeyring()
+            else:
+                Mint.Login(username, passwd)
+            
+        self.GrandParent.Destroy()
+ 
 class RecurringConfigPanel(wx.Panel):
     def __init__(self, parent, account):
         self.Account = account

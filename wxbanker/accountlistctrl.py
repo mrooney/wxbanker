@@ -118,6 +118,7 @@ class AccountListCtrl(wx.Panel):
         Publisher.subscribe(self.onSelectNextAccount, "user.next account")
         Publisher.subscribe(self.onSelectPreviousAccount, "user.previous account")
         Publisher.subscribe(self.onToggleMintIntegration, "user.mint.toggled")
+        Publisher.subscribe(self.onMintDataUpdated, "mint.updated")
 
         # Populate ourselves initially unless explicitly told not to.
         if autoPopulate:
@@ -140,16 +141,9 @@ class AccountListCtrl(wx.Panel):
         self.staticBoxSizer.Layout()
         #self.staticBoxSizer.SetSmooth(True)
 
-        mintEnabled = self.Model.MintEnabled
-        self.ShowMintStatus(mintEnabled)
-        
         if not self.GetCount():
             self.addButton.StartFlashing()
         
-        if mintEnabled:
-            self._UpdateMintStatuses()
-            
-            
     def _UpdateMintStatuses(self):
         for account, mintCtrl in zip(self.accountObjects, self.mintStatuses):
             bitmapName = "transparent"
@@ -172,15 +166,15 @@ class AccountListCtrl(wx.Panel):
         enabled = message.data
         if enabled:
             self.ConfigureCurrentAccount(tab="mint")
-            
-        self.ShowMintStatus(enabled)
-        self.Parent.Layout()
+           
+    def onMintDataUpdated(self, message):
+        self.ShowMintStatus(True)
+        self._UpdateMintStatuses()
         
     def ShowMintStatus(self, show):
         for index, mintStatus in enumerate(self.mintStatuses):
             if self.IsVisible(index):
                 mintStatus.Show(show)
-            
         self.Layout()
         
     def MintStatusIsShown(self):

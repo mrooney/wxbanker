@@ -27,7 +27,7 @@ class Keyring(object):
     def __init__(self):
         self._name = "wxBanker Mint.com Credentials"
         self._server = "mint.com"
-	self._type = gkey.ITEM_GENERIC_SECRET
+        self._type = gkey.ITEM_GENERIC_SECRET
         self._keyring = gkey.get_default_keyring_sync()
 
     def has_credentials(self):
@@ -37,6 +37,8 @@ class Keyring(object):
             return len(items) > 0
         except gkey.DeniedError:
             return False
+        except gkey.NoMatchError:
+            return False
 
     def get_credentials(self):
         attrs = {"server": self._server}
@@ -44,5 +46,8 @@ class Keyring(object):
         return (items[0].attributes["user"], items[0].secret)
 
     def set_credentials(self, user, pw):
+        if self.has_credentials() and self.get_credentials() == (user, pw):
+            return
+        
         attrs = {"user": user, "server": self._server}
         gkey.item_create_sync(gkey.get_default_keyring_sync(), self._type, self._name, attrs, pw, True)

@@ -37,9 +37,8 @@ class BankModel(ORMKeyValueObject):
         self._Tags = {}
 
         # Handle Mint integration.
-        if self.MintEnabled:
-            pass
-            #Mint.LoginFromKeyring()
+        if self.MintEnabled and 0:
+            Mint.LoginFromKeyring()
 
         Publisher.subscribe(self.onCurrencyChanged, "user.currency_changed")
         Publisher.subscribe(self.onAccountChanged, "view.account changed")

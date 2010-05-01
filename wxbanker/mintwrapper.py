@@ -26,7 +26,8 @@ def ImportAccounts(model):
     """For each account in Mint, create one in wxBanker with all known transactions."""
     mintSettings = CsvImporterProfileManager().getProfile("mint")
     importer = CsvImporter()
-    for accountName, mintId in Mint.GetAccounts():
+    for mintId, item in Mint.GetAccounts().items():
+        accountName, balance = item['name'], item['balance']
         # Create an account, grab the transactions, and add them.
         try:
             account = model.CreateAccount(accountName)
@@ -42,7 +43,6 @@ def ImportAccounts(model):
             firstTransaction = sorted(transactions)[0]
             initialDate = firstTransaction.Date
 
-            balance = Mint.GetAccountBalance(mintId)
             initialBalance = balance - account.Balance
             account.AddTransaction(initialBalance, "Initial Balance", initialDate)
         

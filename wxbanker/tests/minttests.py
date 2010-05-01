@@ -26,8 +26,8 @@ class MintTests(testbase.TestCase):
         conn = MintConnection()
         index = open(testbase.fixturefile("mint_index.html")).read()
         expectedAccounts = {
-            '1218040': ('PayPal PayPal Balance' , -4277.24),
-            '1218022': ('Wells Fargo Dojo Checking', 19497.25)
+            1218040: {'name': 'PayPal PayPal Balance', 'balance': -4277.24},
+            1218022: {'name': 'Wells Fargo Dojo Checking', 'balance': 19497.25}
         }
 
         conn._CachedSummary = index

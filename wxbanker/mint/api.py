@@ -19,6 +19,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import re, getpass
+from wx.lib.pubsub import Publisher
 from wxbanker.mint import web
 web.enablecookies()
 
@@ -43,11 +44,17 @@ class MintConnection:
             self._CachedSummary = None
 
     def Login(self, username, password):
+        # If we are already logged in, this is a no-op. Use Refresh if you want updated data.
+        if self._CachedSummary:
+            return
+        
         postArgs = {"username": username, "password": password, "task": "L", "nextPage": ""}
         result = web.post("https://wwws.mint.com/loginUserSubmit.xevent", postArgs)
         if "your password?" in result.lower():
             raise MintLoginException("Invalid credentials")
+        
         self._CachedSummary = result
+        Publisher.sendMessage("mint.updated")
         
     def GetSummary(self):
         if self._CachedSummary is None:
@@ -95,15 +102,14 @@ class Mint:
             for char in ",$":
                 balanceStr = balanceStr.replace(char, "")
             balance = float(balanceStr)
-            aid = account[0]
+            aid = int(account[0])
             name = ("%s %s" % (account[1], account[2])).decode("utf-8")
-            mintAccounts[aid] = (name, balance)
-        #print mintAccounts
+            mintAccounts[aid] = {'name': name, 'balance': balance}
         return mintAccounts
 
     @staticmethod
     def GetAccountBalance(accountid):
-        return Mint.GetAccounts()[accountid][1]
+        return Mint.GetAccounts()[accountid]['balance']
 
     @staticmethod
     def GetAccountTransactionsCSV(accountid):
