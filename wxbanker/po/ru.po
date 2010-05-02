@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-04-19 19:09-0700\n"
-"PO-Revision-Date: 2010-04-26 04:20+0000\n"
-"Last-Translator: Artem Karimov <skybon@gmail.com>\n"
+"POT-Creation-Date: 2010-04-28 00:01-0700\n"
+"PO-Revision-Date: 2010-05-01 10:13+0000\n"
+"Last-Translator: HeartsinAtlantis <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2010-04-27 03:36+0000\n"
+"X-Launchpad-Export-Date: 2010-05-02 03:55+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/bankcontrols.py:52 wxbanker/csvimportframe.py:98
@@ -119,7 +119,7 @@ msgstr "Для работы с CSV необходима библиотека Pyt
 msgid "Load"
 msgstr "Загрузить"
 
-#: wxbanker/csvimportframe.py:186 wxbanker/accountconfigdialog.py:115
+#: wxbanker/csvimportframe.py:186 wxbanker/accountconfigdialog.py:117
 msgid "Save"
 msgstr "Сохранить"
 
@@ -213,7 +213,7 @@ msgstr "Итог"
 msgid "Summary:"
 msgstr "Сводка:"
 
-#: wxbanker/accountconfigdialog.py:32
+#: wxbanker/accountconfigdialog.py:31
 msgid ""
 "wxBanker can synchronize account balances online if you have an account with "
 "mint.com"
@@ -221,33 +221,41 @@ msgstr ""
 "wxBanker может синхронизировать баланс счета в он-лайне если у вас есть "
 "аккаунт на mint.com"
 
+#: wxbanker/accountconfigdialog.py:36
+msgid "Save credentials in keyring"
+msgstr "Сохранить доступ"
+
 #: wxbanker/accountconfigdialog.py:40
-msgid "Username"
-msgstr "Имя пользователя"
+msgid "Username:"
+msgstr ""
 
 #: wxbanker/accountconfigdialog.py:42
-msgid "Password"
-msgstr "Пароль"
+msgid "Password:"
+msgstr ""
 
-#: wxbanker/accountconfigdialog.py:62
+#: wxbanker/accountconfigdialog.py:64
 msgid "Transaction details"
 msgstr "Детали операции"
 
-#: wxbanker/accountconfigdialog.py:103
+#: wxbanker/accountconfigdialog.py:105
 msgid "This account currently has no recurring transactions."
 msgstr "На данном счете нет повторяющихся операций"
 
-#: wxbanker/accountconfigdialog.py:105
+#: wxbanker/accountconfigdialog.py:107
 msgid "Close"
 msgstr "Закрыть"
 
-#: wxbanker/accountconfigdialog.py:116
+#: wxbanker/accountconfigdialog.py:118
 msgid "Cancel"
 msgstr "Отмена"
 
-#: wxbanker/accountconfigdialog.py:136
+#: wxbanker/accountconfigdialog.py:139
 msgid "Recurring Transactions"
 msgstr "Повторяющиеся операции"
+
+#: wxbanker/accountconfigdialog.py:140
+msgid "Mint.com Integration"
+msgstr "Соединение с Mint.com"
 
 #: wxbanker/newtransactionctrl.py:31
 msgid "from"
@@ -499,26 +507,26 @@ msgstr "Настроить выбранный счёт"
 msgid "All accounts"
 msgstr "Все счета"
 
-#: wxbanker/accountlistctrl.py:424 wxbanker/accountlistctrl.py:526
+#: wxbanker/accountlistctrl.py:428 wxbanker/accountlistctrl.py:529
 msgid "Sorry, an account by that name already exists."
 msgstr "Извините, такое имя счёта уже существует"
 
-#: wxbanker/accountlistctrl.py:426 wxbanker/accountlistctrl.py:528
+#: wxbanker/accountlistctrl.py:430 wxbanker/accountlistctrl.py:531
 msgid "Account names cannot be blank."
 msgstr "Название счета не может быть пустым"
 
-#: wxbanker/accountlistctrl.py:460
+#: wxbanker/accountlistctrl.py:464
 msgid "Account name"
 msgstr "Название счета"
 
-#: wxbanker/accountlistctrl.py:499
+#: wxbanker/accountlistctrl.py:503
 #, python-format
 msgid ""
 "This will permanently remove the account '%s' and all its transactions. "
 "Continue?"
 msgstr "Это полностью удалит счёт '%s' и все его транзакции. Продолжить?"
 
-#: wxbanker/accountlistctrl.py:500
+#: wxbanker/accountlistctrl.py:504
 msgid "Warning"
 msgstr "Предупреждение"
 
@@ -888,6 +896,12 @@ msgstr "Отменить"
 
 #~ msgid "Other accounts"
 #~ msgstr "Другие счета"
+
+#~ msgid "Password"
+#~ msgstr "Пароль"
+
+#~ msgid "Username"
+#~ msgstr "Имя пользователя"
 
 #~ msgid "Skip first line"
 #~ msgstr "Пропускать первую строку"
