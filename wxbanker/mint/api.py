@@ -115,8 +115,16 @@ class Mint:
         return Mint._CachedAccounts
 
     @staticmethod
+    def GetAccount(accountid):
+        accounts = Mint.GetAccounts()
+        account = accounts.get(accountid, None)
+        if account is None:
+            raise Exception("No such account with ID: %r. Valid accounts: %s" % (accountid, accounts))
+        return account
+        
+    @staticmethod
     def GetAccountBalance(accountid):
-        return Mint.GetAccounts()[accountid]['balance']
+        return Mint.GetAccount(accountid)['balance']
 
     @staticmethod
     def GetAccountTransactionsCSV(accountid):

@@ -33,4 +33,5 @@ class MintTests(testbase.TestCase):
         conn._CachedSummary = index
         self.assertEqual(index, conn.GetSummary())
         self.assertEqual(Mint.GetAccounts(), expectedAccounts)
+        self.assertEqual(Mint.GetAccount(1218040), {'name': 'PayPal PayPal Balance', 'balance': -4277.24})
         del conn._CachedSummary

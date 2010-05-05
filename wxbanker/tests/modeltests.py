@@ -492,6 +492,12 @@ class ModelTests(testbase.TestCaseWithController):
 
         del MintConnection()._CachedSummary
         
+    def testAccountMintIdIsInt(self):
+        model = self.Model
+        a = model.CreateAccount("Foo")
+        
+        a.MintId = "12345"
+        self.assertEquals(a.MintId, 12345)
         
 if __name__ == "__main__":
     unittest.main()

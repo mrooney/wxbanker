@@ -248,7 +248,12 @@ class Account(ORMObject):
         Publisher.sendMessage("batch.end")
         
     def GetMintId(self):
-        return self.MintId
+        return self._MintId
+    
+    def SetMintId(self, mintId):
+        if mintId is not None:
+            mintId = int(mintId)
+        self._MintId = mintId
         
     def IsMintEnabled(self):
         return self.MintId is not None
@@ -272,7 +277,7 @@ class Account(ORMObject):
         if self.MintId is None:
             raise bankexceptions.MintIntegrationException("This account has no MintId.")
         
-        item = Mint.GetAccounts()[self.MintId]
+        item = Mint.GetAccount(self.MintId)
         return "%s: %s" % (item['name'], self.float2str(item['balance']))
 
     def onTransactionAmountChanged(self, message):
@@ -305,3 +310,4 @@ class Account(ORMObject):
     Transactions = property(GetTransactions)
     RecurringTransactions = property(GetRecurringTransactions)
     Currency = property(GetCurrency, SetCurrency)
+    MintId = property(GetMintId, SetMintId)
