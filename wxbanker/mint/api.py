@@ -65,7 +65,7 @@ class MintConnection:
 
 class Mint:
     """A collection of methods for interfacing with a MintConnection."""
-    AccountBalances = {}
+    _CachedAccounts = None
     
     @staticmethod
     def IsLoggedIn():
@@ -84,33 +84,35 @@ class Mint:
         if not keyring.has_credentials():
             raise Exception("Keyring does not have Mint.com credentials")
 
-        print 'keyring'
         user, passwd = keyring.get_credentials()
         Mint.Login(user, passwd)
         
     @staticmethod
     def GetAccounts():
         """Returns a dictionary like {account_id: {'name': name, 'balance': balance}}"""
-        summary = MintConnection().GetSummary()
-        soup = BeautifulSoup(summary)
-        mintAccounts = {}
-        
-        for li in soup.findAll("li", "account"):
-            h4 = li.find("h4")
-            h6 = li.find("h6")
-            balanceStr = h4.find("span").contents[0]
-            balanceStr = balanceStr.replace("–".decode("utf-8"), "-") # Mint uses a weird negative sign!
-            for char in ",$":
-                balanceStr = balanceStr.replace(char, "")
-                
-            aid = int(li.get("id").split("-")[1])
-            balance = float(balanceStr)
-            bankName = h4.find("a").contents[0]
-            accountName = h6.contents[1]
-            name = bankName + ' ' + accountName
-            mintAccounts[aid] = {'name': name, 'balance': balance}
+        if Mint._CachedAccounts is None:
+            summary = MintConnection().GetSummary()
+            soup = BeautifulSoup(summary)
+            mintAccounts = {}
             
-        return mintAccounts
+            for li in soup.findAll("li", "account"):
+                h4 = li.find("h4")
+                h6 = li.find("h6")
+                balanceStr = h4.find("span").contents[0]
+                balanceStr = balanceStr.replace("–".decode("utf-8"), "-") # Mint uses a weird negative sign!
+                for char in ",$":
+                    balanceStr = balanceStr.replace(char, "")
+                    
+                aid = int(li.get("id").split("-")[1])
+                balance = float(balanceStr)
+                bankName = h4.find("a").contents[0]
+                accountName = h6.contents[1]
+                name = bankName + ' ' + accountName
+                mintAccounts[aid] = {'name': name, 'balance': balance}
+                
+            Mint._CachedAccounts = mintAccounts
+             
+        return Mint._CachedAccounts
 
     @staticmethod
     def GetAccountBalance(accountid):
