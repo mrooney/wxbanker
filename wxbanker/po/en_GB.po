@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-04-19 19:09-0700\n"
-"PO-Revision-Date: 2010-04-22 07:35+0000\n"
-"Last-Translator: Michael Rooney <mrooney@ubuntu.com>\n"
+"POT-Creation-Date: 2010-05-02 00:01-0700\n"
+"PO-Revision-Date: 2010-05-05 20:08+0000\n"
+"Last-Translator: jgraeme <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-04-23 03:44+0000\n"
+"X-Launchpad-Export-Date: 2010-05-06 04:02+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/bankcontrols.py:52 wxbanker/csvimportframe.py:98
@@ -116,7 +116,8 @@ msgstr "Python simplejson library is needed for csv profile loading/saving."
 msgid "Load"
 msgstr "Load"
 
-#: wxbanker/csvimportframe.py:186 wxbanker/accountconfigdialog.py:115
+#: wxbanker/csvimportframe.py:186 wxbanker/accountconfigdialog.py:56
+#: wxbanker/accountconfigdialog.py:197
 msgid "Save"
 msgstr "Save"
 
@@ -210,41 +211,54 @@ msgstr "Summary"
 msgid "Summary:"
 msgstr "Summary:"
 
-#: wxbanker/accountconfigdialog.py:32
-msgid ""
-"wxBanker can synchronize account balances online if you have an account with "
-"mint.com"
-msgstr ""
-"wxBanker can synchronise account balances online if you have an account with "
-"mint.com"
+#: wxbanker/accountconfigdialog.py:35
+msgid "Mint.com credentials:"
+msgstr "Mint.com credentials:"
 
 #: wxbanker/accountconfigdialog.py:40
-msgid "Username"
-msgstr "Username"
+msgid "Save credentials in keyring"
+msgstr "Save credentials in keyring"
 
 #: wxbanker/accountconfigdialog.py:42
-msgid "Password"
-msgstr "Password"
+#, python-format
+msgid "Corresponding Mint account for %(name)s:"
+msgstr "Corresponding Mint account for %(name)s:"
 
-#: wxbanker/accountconfigdialog.py:62
-msgid "Transaction details"
-msgstr "Transaction details"
+#: wxbanker/accountconfigdialog.py:44
+msgid "Update"
+msgstr "Update"
 
-#: wxbanker/accountconfigdialog.py:103
-msgid "This account currently has no recurring transactions."
-msgstr "This account currently has no recurring transactions."
+#: wxbanker/accountconfigdialog.py:47
+msgid "Username:"
+msgstr "Username:"
 
-#: wxbanker/accountconfigdialog.py:105
-msgid "Close"
-msgstr "Close"
+#: wxbanker/accountconfigdialog.py:49
+msgid "Password:"
+msgstr "Password:"
 
-#: wxbanker/accountconfigdialog.py:116
+#: wxbanker/accountconfigdialog.py:57 wxbanker/accountconfigdialog.py:198
 msgid "Cancel"
 msgstr "Cancel"
 
-#: wxbanker/accountconfigdialog.py:136
+#: wxbanker/accountconfigdialog.py:144
+msgid "Transaction details"
+msgstr "Transaction details"
+
+#: wxbanker/accountconfigdialog.py:185
+msgid "This account currently has no recurring transactions."
+msgstr "This account currently has no recurring transactions."
+
+#: wxbanker/accountconfigdialog.py:187
+msgid "Close"
+msgstr "Close"
+
+#: wxbanker/accountconfigdialog.py:219
 msgid "Recurring Transactions"
 msgstr "Recurring Transactions"
+
+#: wxbanker/accountconfigdialog.py:220
+msgid "Mint.com Integration"
+msgstr "Mint.com Integration"
 
 #: wxbanker/newtransactionctrl.py:31
 msgid "from"
@@ -494,19 +508,23 @@ msgstr "Configure the selected account"
 msgid "All accounts"
 msgstr "All accounts"
 
-#: wxbanker/accountlistctrl.py:424 wxbanker/accountlistctrl.py:526
+#: wxbanker/accountlistctrl.py:154
+msgid "Not synchronized with Mint.com"
+msgstr "Not synchronised with Mint.com"
+
+#: wxbanker/accountlistctrl.py:436 wxbanker/accountlistctrl.py:537
 msgid "Sorry, an account by that name already exists."
 msgstr "Sorry, an account by that name already exists."
 
-#: wxbanker/accountlistctrl.py:426 wxbanker/accountlistctrl.py:528
+#: wxbanker/accountlistctrl.py:438 wxbanker/accountlistctrl.py:539
 msgid "Account names cannot be blank."
 msgstr "Account names cannot be blank."
 
-#: wxbanker/accountlistctrl.py:460
+#: wxbanker/accountlistctrl.py:472
 msgid "Account name"
 msgstr "Account name"
 
-#: wxbanker/accountlistctrl.py:499
+#: wxbanker/accountlistctrl.py:511
 #, python-format
 msgid ""
 "This will permanently remove the account '%s' and all its transactions. "
@@ -515,7 +533,7 @@ msgstr ""
 "This will permanently remove the account '%s' and all its transactions. "
 "Continue?"
 
-#: wxbanker/accountlistctrl.py:500
+#: wxbanker/accountlistctrl.py:512
 msgid "Warning"
 msgstr "Warning"
 
@@ -729,11 +747,11 @@ msgstr "&Settings"
 msgid "&Help"
 msgstr "&Help"
 
-#: wxbanker/menubar.py:227
+#: wxbanker/menubar.py:235
 msgid "Copyright"
 msgstr "Copyright"
 
-#: wxbanker/menubar.py:228
+#: wxbanker/menubar.py:236
 msgid "Simple personal finance."
 msgstr "Simple personal finance."
 
@@ -901,3 +919,16 @@ msgstr "Dismiss"
 
 #~ msgid "Account"
 #~ msgstr "Account"
+
+#~ msgid "Password"
+#~ msgstr "Password"
+
+#~ msgid ""
+#~ "wxBanker can synchronize account balances online if you have an account with "
+#~ "mint.com"
+#~ msgstr ""
+#~ "wxBanker can synchronise account balances online if you have an account with "
+#~ "mint.com"
+
+#~ msgid "Username"
+#~ msgstr "Username"
