@@ -492,12 +492,49 @@ class ModelTests(testbase.TestCaseWithController):
 
         del MintConnection()._CachedSummary
         
+    def testAccountMintSyncWithFutureDates(self):
+        model = self.Model
+        a = model.CreateAccount("Foo")
+        a.MintId = 1218040
+
+        # Put the fixture cached summary in, so we can test.
+        from wxbanker.mint.api import MintConnection
+        MintConnection()._CachedSummary = open(testbase.fixturefile("mint_index.html")).read()
+        
+        # Add the balance and we should be in sync.
+        a.AddTransaction(-4277.24)
+        self.assertTrue(a.IsInSync())
+  
+        # Add a transaction today, we should be out of sync.
+        t = a.AddTransaction(1)
+        self.assertFalse(a.IsInSync())
+        
+        # Change the date to tomorrow, we should be back in sync as of today.
+        t.Date = tomorrow
+        self.assertTrue(a.IsInSync())
+        
     def testAccountMintIdIsInt(self):
         model = self.Model
         a = model.CreateAccount("Foo")
         
         a.MintId = "12345"
         self.assertEquals(a.MintId, 12345)
+        
+    def testAccountCurrentBalance(self):
+        model = self.Model
+        a = model.CreateAccount("Bar")
+        
+        self.assertEqual(a.Balance, 0)
+        self.assertEqual(a.CurrentBalance, 0)
+        
+        a.AddTransaction(1)
+        self.assertEqual(a.Balance, 1)
+        self.assertEqual(a.CurrentBalance, 1)
+ 
+        a.AddTransaction(1, date=tomorrow)
+        self.assertEqual(a.Balance, 2)
+        self.assertEqual(a.CurrentBalance, 1)
+ 
         
 if __name__ == "__main__":
     unittest.main()

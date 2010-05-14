@@ -26,6 +26,7 @@ from wxbanker.bankobjects.recurringtransaction import RecurringTransaction
 from wxbanker import currencies, bankexceptions, debug
 from wxbanker.mint.api import Mint
 
+import datetime
 
 class Account(ORMObject):
     ORM_TABLE = "accounts"
@@ -83,6 +84,17 @@ class Account(ORMObject):
 
     def GetCurrency(self):
         return self._Currency
+    
+    def GetCurrentBalance(self):
+        """Returns the balance up to and including today, but not transactions in the future."""
+        currentBalance = self.Balance
+        today = datetime.date.today()
+        transactions = self.Transactions
+        index = len(transactions) - 1
+        while index >= 0 and transactions[index].Date > today:
+            currentBalance -= transactions[index].Amount
+            index -= 1
+        return currentBalance
         
     def GetRecurringTransactions(self):
         return self._RecurringTransactions
@@ -274,7 +286,7 @@ class Account(ORMObject):
         except:
             return False
         
-        inSync = abs(mintBalance - self.Balance) < .001
+        inSync = abs(mintBalance - self.CurrentBalance) < .001
         return inSync
     
     def GetSyncString(self):
@@ -321,3 +333,4 @@ class Account(ORMObject):
     RecurringTransactions = property(GetRecurringTransactions)
     Currency = property(GetCurrency, SetCurrency)
     MintId = property(GetMintId, SetMintId)
+    CurrentBalance = property(GetCurrentBalance)
