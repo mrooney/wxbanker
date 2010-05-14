@@ -43,7 +43,7 @@ class MintConnection:
         if not hasattr(self, "_CachedSummary"):
             self._CachedSummary = None
 
-    def Login(self, username, password):
+    def Login(self, username, password, notify=True):
         # If we are already logged in, this is a no-op. Use Refresh if you want updated data.
         if self._CachedSummary:
             return
@@ -54,7 +54,9 @@ class MintConnection:
             raise MintLoginException("Invalid credentials")
         
         self._CachedSummary = result
-        Publisher.sendMessage("mint.updated")
+        
+        if notify:
+            Publisher.sendMessage("mint.updated")
         
     def GetSummary(self):
         if self._CachedSummary is None:
@@ -72,11 +74,11 @@ class Mint:
         return MintConnection()._CachedSummary is not None
     
     @staticmethod
-    def Login(username, password):
-        MintConnection().Login(username, password)
+    def Login(username, password, notify=True):
+        return MintConnection().Login(username, password, notify)
 
     @staticmethod
-    def LoginFromKeyring():
+    def LoginFromKeyring(notify=True):
         if Keyring is None:
             raise Exception("Keyring was unable to be imported")
 
@@ -85,7 +87,7 @@ class Mint:
             raise Exception("Keyring does not have Mint.com credentials")
 
         user, passwd = keyring.get_credentials()
-        Mint.Login(user, passwd)
+        return Mint.Login(user, passwd, notify)
         
     @staticmethod
     def GetAccounts():

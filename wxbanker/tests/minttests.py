@@ -35,3 +35,9 @@ class MintTests(testbase.TestCase):
         self.assertEqual(Mint.GetAccounts(), expectedAccounts)
         self.assertEqual(Mint.GetAccount(1218040), {'name': 'PayPal PayPal Balance', 'balance': -4277.24})
         del conn._CachedSummary
+
+        
+    def testFailureToConnectIsNotRetried(self):
+        def loginMock(instance, user, passwd):
+            pass
+        self.markTestIncomplete("not implemented yet")

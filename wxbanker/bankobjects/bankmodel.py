@@ -20,6 +20,7 @@
 
 import wx
 from wx.lib.pubsub import Publisher
+import wx.lib.delayedresult as delayedresult
 import re, datetime
 
 from wxbanker import currencies
@@ -37,9 +38,9 @@ class BankModel(ORMKeyValueObject):
         self.Accounts = AccountList(store)
         self._Tags = {}
 
-        # Handle Mint integration.
+        # Handle Mint integration, but send the message in the main thread, otherwise, dead.
         if self.MintEnabled:
-            wx.CallLater(1000, Mint.LoginFromKeyring)
+            delayedresult.startWorker(lambda result: Publisher.sendMessage("mint.updated"), Mint.LoginFromKeyring, wkwargs={"notify": False})
 
         Publisher.subscribe(self.onCurrencyChanged, "user.currency_changed")
         Publisher.subscribe(self.onMintToggled, "user.mint.toggled")

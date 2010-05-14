@@ -269,7 +269,11 @@ class Account(ORMObject):
         if self.MintId is None:
             raise bankexceptions.MintIntegrationException("This account has no MintId.")
         
-        mintBalance = Mint.GetAccountBalance(self.MintId)
+        try:
+            mintBalance = Mint.GetAccountBalance(self.MintId)
+        except:
+            return False
+        
         inSync = abs(mintBalance - self.Balance) < .001
         return inSync
     
@@ -277,8 +281,14 @@ class Account(ORMObject):
         if self.MintId is None:
             raise bankexceptions.MintIntegrationException("This account has no MintId.")
         
-        item = Mint.GetAccount(self.MintId)
-        return "%s: %s" % (item['name'], self.float2str(item['balance']))
+        try:
+            item = Mint.GetAccount(self.MintId)
+        except:
+            syncString = "Unable to synchronize with Mint.com"
+        else:
+            syncString = "%s: %s" % (item['name'], self.float2str(item['balance']))
+        
+        return syncString
 
     def onTransactionAmountChanged(self, message):
         transaction = message.data
