@@ -89,7 +89,8 @@ class Account(ORMObject):
         """Returns the balance up to and including today, but not transactions in the future."""
         currentBalance = self.Balance
         today = datetime.date.today()
-        transactions = self.Transactions
+        transactions = self.Transactions[:]
+        transactions.sort()
         index = len(transactions) - 1
         while index >= 0 and transactions[index].Date > today:
             currentBalance -= transactions[index].Amount

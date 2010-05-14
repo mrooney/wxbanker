@@ -527,13 +527,20 @@ class ModelTests(testbase.TestCaseWithController):
         self.assertEqual(a.Balance, 0)
         self.assertEqual(a.CurrentBalance, 0)
         
-        a.AddTransaction(1)
+        t1 = a.AddTransaction(1)
         self.assertEqual(a.Balance, 1)
         self.assertEqual(a.CurrentBalance, 1)
  
-        a.AddTransaction(1, date=tomorrow)
+        t2 = a.AddTransaction(1, date=tomorrow)
         self.assertEqual(a.Balance, 2)
         self.assertEqual(a.CurrentBalance, 1)
+        
+        # Make sure that it isn't just by transaction order but actually date.
+        t2.Date = today
+        t1.Date = tomorrow
+        self.assertEqual(a.Balance, 2)
+        self.assertEqual(a.CurrentBalance, 1)
+        
  
         
 if __name__ == "__main__":
