@@ -41,6 +41,7 @@ class BankMenuBar(wx.MenuBar):
     ID_MINTINTEGRATION = wx.NewId()
     ID_REQUESTCURRENCY = wx.NewId()
     ID_IMPORT_CSV = wx.NewId()
+    ID_EXPORT_CSV = wx.NewId()
 
     def __init__(self, bankController, *args, **kwargs):
         wx.MenuBar.__init__(self, *args, **kwargs)
@@ -53,6 +54,7 @@ class BankMenuBar(wx.MenuBar):
         self.autoSaveMenuItem = fileMenu.AppendCheckItem(self.ID_AUTOSAVE, _("Auto-save"), _("Automatically save changes"))
         fileMenu.AppendSeparator()
         importCsvMenu = fileMenu.Append(self.ID_IMPORT_CSV, _("Import from CSV"), _("Import transactions from a CSV file"))
+        exportCsvMenu = fileMenu.Append(self.ID_EXPORT_CSV, _("Export to CSV"), _("Export transactions to a CSV file"))
         fileMenu.AppendSeparator()
         quitItem = fileMenu.Append(wx.ID_EXIT)
         
@@ -157,6 +159,7 @@ class BankMenuBar(wx.MenuBar):
                 self.ID_REQUESTFEATURE: self.onClickRequestFeature,
                 self.ID_TRANSLATE: self.onClickTranslate,
                 self.ID_IMPORT_CSV: self.onClickImportCsv,
+                self.ID_EXPORT_CSV: self.onClickExportCsv,
                 wx.ID_ABOUT: self.onClickAbout,
                 self.ID_REQUESTCURRENCY: self.onClickRequestCurrency,
                 self.ID_MINTINTEGRATION: self.onClickMintIntegration,
@@ -259,3 +262,9 @@ class BankMenuBar(wx.MenuBar):
 
     def onClickImportCsv(self, event):
         CsvImportFrame()
+
+    def onClickExportCsv(self, event):
+        dlg = wx.FileDialog(None, style=wx.FD_SAVE, wildcard="CSV|*.csv")
+        result = dlg.ShowModal()
+        if result == wx.OK:
+            print dlg.GetPath()
