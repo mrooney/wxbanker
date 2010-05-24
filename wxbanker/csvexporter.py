@@ -23,10 +23,9 @@ class CsvExporter:
         return result.getvalue()
     
     @staticmethod
-    def Export(exportPath):
-        # Open the CSV file for writing, write headers.
-        exportFile = open(exportPath, 'w')
+    def Export(model, exportPath):
         # Generate the contents.
-        result = CsvExporter.Generate()
+        result = CsvExporter.Generate(model)
         # Write it.
+        exportFile = open(exportPath, 'w')
         exportFile.write(result)

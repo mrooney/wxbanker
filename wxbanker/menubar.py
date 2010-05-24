@@ -25,6 +25,7 @@ from wx.lib.pubsub import Publisher
 from wxbanker import version, localization, debug, fileservice
 from wxbanker.currencies import CurrencyStrings
 from wxbanker.csvimportframe import CsvImportFrame
+from wxbanker.csvexporter import CsvExporter
 
 class BankMenuBar(wx.MenuBar):
     ID_AUTOSAVE = wx.NewId()
@@ -45,6 +46,7 @@ class BankMenuBar(wx.MenuBar):
 
     def __init__(self, bankController, *args, **kwargs):
         wx.MenuBar.__init__(self, *args, **kwargs)
+        self.bankController = bankController
         autosave = bankController.AutoSave
         showZero = bankController.ShowZeroBalanceAccounts
 
@@ -264,7 +266,9 @@ class BankMenuBar(wx.MenuBar):
         CsvImportFrame()
 
     def onClickExportCsv(self, event):
-        dlg = wx.FileDialog(None, style=wx.FD_SAVE, wildcard="CSV|*.csv")
+        dlg = wx.FileDialog(None, style=wx.FD_SAVE)
         result = dlg.ShowModal()
-        if result == wx.OK:
-            print dlg.GetPath()
+        if result == wx.ID_OK:
+            csvpath = dlg.GetPath()
+            CsvExporter.Export(self.bankController.Model, csvpath) 
+            
