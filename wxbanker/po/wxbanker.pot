@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-05-02 00:01-0700\n"
+"POT-Creation-Date: 2010-05-25 00:01-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -495,7 +495,7 @@ msgstr ""
 msgid "Configure the selected account"
 msgstr ""
 
-#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:63
+#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:67
 msgid "All accounts"
 msgstr ""
 
@@ -604,128 +604,136 @@ msgstr ""
 msgid "No exchange rate for currency \"%s\""
 msgstr ""
 
-#: wxbanker/menubar.py:53
+#: wxbanker/menubar.py:56
 msgid "Auto-save"
 msgstr ""
 
-#: wxbanker/menubar.py:53
+#: wxbanker/menubar.py:56
 msgid "Automatically save changes"
 msgstr ""
 
-#: wxbanker/menubar.py:55
+#: wxbanker/menubar.py:58
 msgid "Import from CSV"
 msgstr ""
 
-#: wxbanker/menubar.py:55
+#: wxbanker/menubar.py:58
 msgid "Import transactions from a CSV file"
 msgstr ""
 
-#: wxbanker/menubar.py:61
+#: wxbanker/menubar.py:59
+msgid "Export to CSV"
+msgstr ""
+
+#: wxbanker/menubar.py:59
+msgid "Export transactions to a CSV file"
+msgstr ""
+
+#: wxbanker/menubar.py:65
 msgid "Previous account"
 msgstr ""
 
-#: wxbanker/menubar.py:62
+#: wxbanker/menubar.py:66
 msgid "Next account"
 msgstr ""
 
-#: wxbanker/menubar.py:65
+#: wxbanker/menubar.py:69
 msgid "Show zero-balance accounts"
 msgstr ""
 
-#: wxbanker/menubar.py:65
+#: wxbanker/menubar.py:69
 msgid ""
 "When disabled, accounts with a balance of $0.00 will be hidden from the list"
 msgstr ""
 
-#: wxbanker/menubar.py:74
+#: wxbanker/menubar.py:78
 msgid "&Currency"
 msgstr ""
 
-#: wxbanker/menubar.py:74
+#: wxbanker/menubar.py:78
 msgid "Select currency to display"
 msgstr ""
 
-#: wxbanker/menubar.py:83
+#: wxbanker/menubar.py:87
 msgid "Request a Currency"
 msgstr ""
 
-#: wxbanker/menubar.py:90
+#: wxbanker/menubar.py:94
 msgid "Integrate with Mint.com"
 msgstr ""
 
-#: wxbanker/menubar.py:90
+#: wxbanker/menubar.py:94
 msgid "Sync account balances with an existing Mint.com account"
 msgstr ""
 
-#: wxbanker/menubar.py:96
+#: wxbanker/menubar.py:100
 msgid "View &FAQs"
 msgstr ""
 
-#: wxbanker/menubar.py:96
+#: wxbanker/menubar.py:100
 msgid "View Frequently Asked Questions online"
 msgstr ""
 
-#: wxbanker/menubar.py:101
+#: wxbanker/menubar.py:105
 msgid "Ask a &Question"
 msgstr ""
 
-#: wxbanker/menubar.py:101
+#: wxbanker/menubar.py:105
 msgid "Ask a question online"
 msgstr ""
 
-#: wxbanker/menubar.py:106
+#: wxbanker/menubar.py:110
 msgid "&Report a Bug"
 msgstr ""
 
-#: wxbanker/menubar.py:106
+#: wxbanker/menubar.py:110
 msgid "Report a bug to the developer online"
 msgstr ""
 
-#: wxbanker/menubar.py:111
+#: wxbanker/menubar.py:115
 msgid "Request a Fea&ture"
 msgstr ""
 
-#: wxbanker/menubar.py:111
+#: wxbanker/menubar.py:115
 msgid "Request a new feature to be implemented"
 msgstr ""
 
-#: wxbanker/menubar.py:116
+#: wxbanker/menubar.py:120
 msgid "Tran&slate wxBanker"
 msgstr ""
 
-#: wxbanker/menubar.py:116
+#: wxbanker/menubar.py:120
 msgid "Translate wxBanker to another language"
 msgstr ""
 
-#: wxbanker/menubar.py:123
+#: wxbanker/menubar.py:127
 msgid "&About"
 msgstr ""
 
-#: wxbanker/menubar.py:123
+#: wxbanker/menubar.py:127
 msgid "More information about wxBanker"
 msgstr ""
 
-#: wxbanker/menubar.py:126
+#: wxbanker/menubar.py:130
 msgid "&File"
 msgstr ""
 
-#: wxbanker/menubar.py:127
+#: wxbanker/menubar.py:131
 msgid "&View"
 msgstr ""
 
-#: wxbanker/menubar.py:128
+#: wxbanker/menubar.py:132
 msgid "&Settings"
 msgstr ""
 
-#: wxbanker/menubar.py:129
+#: wxbanker/menubar.py:133
 msgid "&Help"
 msgstr ""
 
-#: wxbanker/menubar.py:235
+#: wxbanker/menubar.py:240
 msgid "Copyright"
 msgstr ""
 
-#: wxbanker/menubar.py:236
+#: wxbanker/menubar.py:241
 msgid "Simple personal finance."
 msgstr ""
 
