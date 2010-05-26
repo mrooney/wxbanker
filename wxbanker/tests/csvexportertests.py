@@ -26,7 +26,7 @@ class CsvExporterTest(testbase.TestCaseWithController):
     def testExpectedOutput(self):
         model = self.Model
         a = model.CreateAccount("foo")
-        a.AddTransaction(1, "Baz")
+        a.AddTransaction(1, "Baz", "2010-5-24")
         
         result = CsvExporter.Generate(model)
         
