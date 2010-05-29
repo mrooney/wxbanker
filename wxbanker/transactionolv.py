@@ -35,6 +35,9 @@ from wxbanker import bankcontrols
 
 
 class TransactionOLV(GroupListView):
+    EMPTY_MSG_NORMAL = _("No transactions entered.")
+    EMPTY_MSG_SEARCH = _("No matching transactions.")
+    
     def __init__(self, parent, bankController):
         GroupListView.__init__(self, parent, style=wx.LC_REPORT|wx.SUNKEN_BORDER, name="TransactionOLV")
         self.LastSearch = None
@@ -45,7 +48,7 @@ class TransactionOLV(GroupListView):
         self.evenRowsBackColor = wx.Color(224,238,238)
         self.oddRowsBackColor = wx.WHITE
         self.cellEditMode = GroupListView.CELLEDIT_DOUBLECLICK
-        self.SetEmptyListMsg(_("No transactions entered."))
+        self.SetEmptyListMsg(self.EMPTY_MSG_NORMAL)
 
         # Calculate the necessary width for the date column.
         dateStr = str(datetime.date.today())
@@ -293,6 +296,7 @@ class TransactionOLV(GroupListView):
             self.ensureVisible(-1)
 
     def onSearch(self, message):
+        self.SetEmptyListMsg(self.EMPTY_MSG_SEARCH)
         self.LastSearch = message.data
         self.doSearch(self.LastSearch)
         
@@ -308,6 +312,7 @@ class TransactionOLV(GroupListView):
         if self.IsSearchActive():
             self.SetSearchActive(False)
             self.setAccount(self.CurrentAccount)
+        self.SetEmptyListMsg(self.EMPTY_MSG_NORMAL)
 
     def onSearchMoreToggled(self, message):
         # Perhaps necessary to not glitch overlap on Windows?
