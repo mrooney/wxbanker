@@ -116,6 +116,11 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         model1 = self.Controller.Model
         model2 = model1.Store.GetModel(useCached=False)
         self.assertFalse(model1 is model2)
+        self.assertEqual(model1, model2)
+        
+        # Now make sure a diversion in one makes them unequal.
+        model1.CreateAccount("foo")
+        self.assertNotEqual(model1, model2)
 
     def testRenameIsStored(self):
         model1 = self.Controller.Model
@@ -421,7 +426,18 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         self.assertNotEqual(model, model2)
         
     def testTagsAreStored(self):
-        self.markTestIncomplete("TODO")
+        model = self.Model
+        a = model.CreateAccount("A")
+        t = a.AddTransaction(amount=1, description="testing #foo")
+        
+        self.assertEqual(t.Tags, set(["foo"]))
+        self.assertEqual(model.Tags, set(["foo"]))
+        
+        model2 = model.Store.GetModel(useCached=False)
+        a2 = model2.Accounts[0]
+        t2 = a2.Transactions[0]
+        self.assertEqual(t2.Tags, set(["foo"]))
+        self.assertEqual(model2.Tags, set(["foo"]))
 
     
 if __name__ == "__main__":
