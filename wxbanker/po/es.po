@@ -7,19 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-05-25 00:01-0700\n"
-"PO-Revision-Date: 2010-05-28 03:58+0000\n"
+"POT-Creation-Date: 2010-05-29 00:01-0700\n"
+"PO-Revision-Date: 2010-06-11 16:28+0000\n"
 "Last-Translator: DiegoJ <diegojromerolopez@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-05-29 03:49+0000\n"
+"X-Launchpad-Export-Date: 2010-06-12 03:40+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/bankcontrols.py:52 wxbanker/csvimportframe.py:98
-#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:60
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:63
 msgid "Date"
 msgstr "Fecha"
 
@@ -68,7 +68,7 @@ msgid "Date format"
 msgstr "Formato de fecha"
 
 #: wxbanker/csvimportframe.py:106 wxbanker/searchctrl.py:44
-#: wxbanker/newtransactionctrl.py:249 wxbanker/transactionolv.py:62
+#: wxbanker/newtransactionctrl.py:249 wxbanker/transactionolv.py:65
 msgid "Amount"
 msgstr "Cantidad"
 
@@ -77,7 +77,7 @@ msgid "Decimal separator"
 msgstr "Separador decimal"
 
 #: wxbanker/csvimportframe.py:112 wxbanker/searchctrl.py:44
-#: wxbanker/newtransactionctrl.py:248 wxbanker/transactionolv.py:61
+#: wxbanker/newtransactionctrl.py:248 wxbanker/transactionolv.py:64
 msgid "Description"
 msgstr "Descripción"
 
@@ -445,43 +445,47 @@ msgstr ""
 "Por ejemplo, al marcar la casilla al introducir una transacción de 50$ en "
 "esta cuenta le quitará 50$ de la cuenta que haya escogido como origen."
 
-#: wxbanker/transactionolv.py:48
+#: wxbanker/transactionolv.py:38
 msgid "No transactions entered."
 msgstr "No se ha introducido una transacción."
 
-#: wxbanker/transactionolv.py:63
+#: wxbanker/transactionolv.py:39
+msgid "No matching transactions."
+msgstr "No hay traducciones que coincidan."
+
+#: wxbanker/transactionolv.py:66
 msgid "Total"
 msgstr "Total"
 
-#: wxbanker/transactionolv.py:204
+#: wxbanker/transactionolv.py:207
 #, python-format
 msgid "Send %s to calculator"
 msgstr "Enviar %s a la calculadora."
 
-#: wxbanker/transactionolv.py:205
+#: wxbanker/transactionolv.py:208
 #, python-format
 msgid "Add %s to calculator"
 msgstr "Sumar %s a la calculadora"
 
-#: wxbanker/transactionolv.py:206
+#: wxbanker/transactionolv.py:209
 #, python-format
 msgid "Subtract %s from calculator"
 msgstr "Restar %s de la calculadora"
 
-#: wxbanker/transactionolv.py:218
+#: wxbanker/transactionolv.py:221
 msgid "Remove this transaction"
 msgstr "Eliminar transacción"
 
-#: wxbanker/transactionolv.py:219
+#: wxbanker/transactionolv.py:222
 msgid "Move this transaction to account"
 msgstr "Mover esta transacción a cuenta"
 
-#: wxbanker/transactionolv.py:221
+#: wxbanker/transactionolv.py:224
 #, python-format
 msgid "Remove these %i transactions"
 msgstr "Eliminar estas %i transacciones"
 
-#: wxbanker/transactionolv.py:222
+#: wxbanker/transactionolv.py:225
 #, python-format
 msgid "Move these %i transactions to account"
 msgstr "Mover estas %i transacciones a cuenta"
