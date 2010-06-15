@@ -32,7 +32,9 @@ def ImportAccounts(model):
         try:
             account = model.CreateAccount(accountName)
         except bankexceptions.AccountAlreadyExistsException:
-            account = model.CreateAccount("%s (%s)" % (accountName, mintId))
+            #account = model.CreateAccount("%s (%s)" % (accountName, mintId))
+            print "Account '%s' already exists...skipping." % accountName
+            continue
         csv = Mint.GetAccountTransactionsCSV(mintId)
         container = importer.getTransactionsFromCSV(csv, mintSettings)
         transactions = container.Transactions
@@ -50,9 +52,13 @@ def ImportAccounts(model):
             
             
 def doImport():
+    import getpass
     bankController = controller.Controller()
     username = raw_input("Mint email: ")
     password = getpass.getpass("Password: ")
     Mint.Login(username, password)
     ImportAccounts(bankController.Model)
+
+if __name__ == "__main__":
+    doImport()
 
