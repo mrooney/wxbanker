@@ -126,8 +126,8 @@ class MintConfigPanel(wx.Panel):
         self.GrandParent.Destroy()
         
     def mintLogin(self):
-        if self.saveAuthCheck.IsEnabled():
-            username, passwd = [ctrl.Value for ctrl in (self.usernameBox, self.passwordBox)]
+        username, passwd = [ctrl.Value for ctrl in (self.usernameBox, self.passwordBox)]
+        if self.saveAuthCheck.IsChecked():
             Keyring().set_credentials(username, passwd)
             Mint.LoginFromKeyring()
         else:
