@@ -32,6 +32,7 @@ class MintConfigPanel(wx.Panel):
     def  __init__(self, parent, account):
         wx.Panel.__init__(self, parent)
         self.Account = account
+        self.NoneAccount = _("None")
         self.headerText = wx.StaticText(self, -1, _("Mint.com credentials:"))
 
         self.usernameBox = wx.TextCtrl(self)
@@ -40,7 +41,7 @@ class MintConfigPanel(wx.Panel):
         self.saveAuthCheck = wx.CheckBox(self, label=_("Save credentials in keyring"))
         
         self.accountText = wx.StaticText(self, -1, _("Corresponding Mint account for %(name)s:") % {"name": account.Name})
-        self.mintCombo = wx.Choice(self)
+        self.mintCombo = wx.Choice(self, choices=[self.NoneAccount])
         self.mintUpdateButton = wx.Button(self, label=_("Update"), id=self.ID_UPDATE)
 
         gridSizer = wx.GridSizer(2, 2, 3, 3)
@@ -97,6 +98,7 @@ class MintConfigPanel(wx.Panel):
         self.updateMintAccounts()
         
     def updateMintAccounts(self):
+        self.mintCombo.Append(self.NoneAccount, None)
         self.mintLogin()
         accounts = Mint.GetAccounts()
         for i, (mintId, item) in enumerate(Mint.GetAccounts().items()):
