@@ -1295,12 +1295,14 @@ class VerticalBarPlot(BarPlot):
                  y_labels = None,
                  x_bounds = None,
                  y_bounds = None,
-                 series_colors = None):
+                 series_colors = None,
+                 value_formatter = None):
 
         BarPlot.__init__(self, surface, data, width, height, background, border, 
                          display_values, grid, rounded_corners, stack, three_dimension,
                          x_labels, y_labels, x_bounds, y_bounds, series_colors, VERT)
         self.series_labels = series_labels
+        self.value_formatter = value_formatter or str
 
     def calc_vert_extents(self):
         self.calc_extents(VERT)
@@ -1402,7 +1404,7 @@ class VerticalBarPlot(BarPlot):
                 x = self.borders[HORZ] + (i+0.5)*self.steps[HORZ] + (i+1)*self.space - width/2
                 y = value*self.steps[VERT] + 2
                 self.context.move_to(x, self.plot_top-y)
-                self.context.show_text(str(value))
+                self.context.show_text(self.value_formatter(value))
         else:
             for i,group in enumerate(self.series):
                 inner_step = self.steps[HORZ]/len(group)
@@ -1410,7 +1412,7 @@ class VerticalBarPlot(BarPlot):
                 for number,data in enumerate(group):
                     width = self.context.text_extents(str(data.content))[2]
                     self.context.move_to(x0 + 0.5*inner_step - width/2, self.plot_top - data.content*self.steps[VERT] - 2)
-                    self.context.show_text(str(data.content))
+                    self.context.show_text(self.value_formatter(data.content))
                     x0 += inner_step
 
     def render_plot(self):
@@ -2230,7 +2232,8 @@ def vertical_bar_plot(name,
                       y_labels = None, 
                       x_bounds = None, 
                       y_bounds = None,
-                      colors = None):
+                      colors = None,
+                      value_formatter = None):
     #TODO: Fix docstring for vertical_bar_plot
     '''
         - Function to generate vertical Bar Plot Charts.
@@ -2252,6 +2255,7 @@ def vertical_bar_plot(name,
         x_labels, y_labels - lists of strings containing the horizontal and vertical labels for the axis;
         x_bounds, y_bounds - tuples containing the lower and upper value bounds for the data to be plotted;
         colors - List containing the colors expected for each of the bars.
+        value_formatter - if present, this function will be called with the value, and the string it returns will be used
 
         - Example of use
 
@@ -2261,7 +2265,7 @@ def vertical_bar_plot(name,
     
     plot = VerticalBarPlot(name, data, width, height, background, border, 
                            display_values, grid, rounded_corners, stack, three_dimension, 
-                           series_labels, x_labels, y_labels, x_bounds, y_bounds, colors)
+                           series_labels, x_labels, y_labels, x_bounds, y_bounds, colors, value_formatter)
     plot.render()
     plot.commit()
 

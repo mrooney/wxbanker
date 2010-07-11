@@ -63,7 +63,7 @@ class CairoPlotPanelMonthly(BaseCairoPlotPanel):
             colors = ["green"],
             #series_legend = True,
             display_values = True,
-            ##y_formatter=lambda s: self.bankController.Model.float2str(s),
+            value_formatter = lambda s: self.bankController.Model.float2str(s),
             #x_title=_("Earnings"),
             #y_title=_("Month"),
             rounded_corners = True,
