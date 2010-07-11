@@ -8,11 +8,13 @@ except plotfactory.BasePlotImportException:
     raise plotfactory.PlotLibraryImportException('wx', 'python-numpy')
 import wx.lib.plot as pyplot
 
-class WxPlotFactory(object):
-    def createPanel(self, parent, bankController):
-        return AccountPlotCanvas(bankController, parent)
-
+class WxPlotFactory(baseplot.BaseFactory):
+    def __init__(self):
+        self.Plots = [AccountPlotCanvas]
+    
 class AccountPlotCanvas(pyplot.PlotCanvas, baseplot.BasePlot):
+    NAME = _("balance")
+    
     def __init__(self, bankController, *args, **kwargs):
         pyplot.PlotCanvas.__init__(self, *args, **kwargs)
         baseplot.BasePlot.__init__(self)

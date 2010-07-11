@@ -23,6 +23,7 @@ from wx.lib.pubsub import Publisher
 class SummaryPanel(wx.Panel):
     def __init__(self, parent, plotFactory, bankController):
         wx.Panel.__init__(self, parent)
+        self.plotFactory = plotFactory
         self.bankController = bankController
 
         self.plotSettings = {'FitDegree': 2, 'Granularity': 100, 'Account': None}
@@ -34,11 +35,16 @@ class SummaryPanel(wx.Panel):
 
         # create the controls at the bottom
         controlSizer = wx.BoxSizer()
+        self.graphChoice = wx.Choice(self, choices=[plot.NAME for plot in plotFactory.Plots])
         degCtrl = wx.SpinCtrl(self, min=1, max=20, initial=self.plotSettings['FitDegree'])
         # the date range controls
         self.startDate = bankcontrols.DateCtrlFactory(self)
         self.endDate = bankcontrols.DateCtrlFactory(self)
 
+        controlSizer.Add(wx.StaticText(self, label=_("Graph")), 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.AddSpacer(5)
+        controlSizer.Add(self.graphChoice, 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.AddSpacer(10)
         controlSizer.Add(wx.StaticText(self, label=_("From")), 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(5)
         controlSizer.Add(self.startDate, 0, wx.ALIGN_CENTER_VERTICAL)
@@ -60,9 +66,18 @@ class SummaryPanel(wx.Panel):
         self.Layout()
 
         # bind to the spin buttons
+        self.graphChoice.Bind(wx.EVT_CHOICE, self.onGraphChoice)
         degCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinFitDeg)
         self.Bind(wx.EVT_DATE_CHANGED, self.onDateRangeChanged)
         Publisher.subscribe(self.onAccountSelect, "view.account changed")
+        
+    def onGraphChoice(self, event):
+        index = self.graphChoice.GetSelection()
+        newPlot = self.plotFactory.createPanel(self, self.bankController, index)
+        self.Sizer.Replace(self.plotPanel, newPlot)
+        self.plotPanel = newPlot
+        self.generateData(useCache=True)
+        self.Layout()
         
     def onDateRangeChanged(self, event):
         self.generateData()

@@ -34,6 +34,16 @@ except:
 if not hasattr(_Numeric, 'polyfit'):
     raise BasePlotImportException()
 
+
+class BaseFactory(object):
+    def __init__(self):
+        self.Plots = []
+        
+    def createPanel(self, parent, bankController, graphIndex=0):
+        plotPanel = self.Plots[graphIndex]
+        return plotPanel(bankController, parent)
+    
+    
 class BasePlot(object):
     def getPoints(self, totals, numPoints):
        

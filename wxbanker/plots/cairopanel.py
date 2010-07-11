@@ -12,12 +12,12 @@ try:
 except ImportError:
     raise plotfactory.PlotLibraryImportException('cairo', 'pycairo')
 
-class CairoPlotPanelFactory(object):
-    def createPanel(self, parent, bankController):
-        return CairoPlotPanel(parent, bankController)
+class CairoPlotPanelFactory(baseplot.BaseFactory):
+    def __init__(self):
+        self.Plots = [CairoPlotPanel, CairoPlotPanelMonthly]
     
 class BaseCairoPlotPanel(wx.Panel, baseplot.BasePlot):
-    def __init__(self, parent, bankController):
+    def __init__(self, bankController, parent):
         wx.Panel.__init__(self, parent)
         baseplot.BasePlot.__init__(self)
         self.bankController = bankController
@@ -30,6 +30,8 @@ class BaseCairoPlotPanel(wx.Panel, baseplot.BasePlot):
         self.Refresh()
         
 class CairoPlotPanelMonthly(BaseCairoPlotPanel):
+    NAME = _("monthly")
+    
     def plotBalance(self, totals, plotSettings):
         model = self.bankController.Model
         transactions = model.GetTransactions()
@@ -56,7 +58,7 @@ class CairoPlotPanelMonthly(BaseCairoPlotPanel):
             grid = True,
             colors = ["green"],
             #series_legend = True,
-            #x_labels=self.x_labels,
+            display_values = True,
             ##y_formatter=lambda s: self.bankController.Model.float2str(s),
             #x_title=_("Earnings"),
             #y_title=_("Month"),
@@ -65,6 +67,8 @@ class CairoPlotPanelMonthly(BaseCairoPlotPanel):
         )
         
 class CairoPlotPanel(BaseCairoPlotPanel):
+    NAME = _("balance")
+    
     def plotBalance(self, totals, plotSettings, xunits="Days"):
         amounts, dates, strdates, trendable = baseplot.BasePlot.plotBalance(self, totals, plotSettings, xunits)
         data = [(i, total) for i, total in enumerate(amounts)]
