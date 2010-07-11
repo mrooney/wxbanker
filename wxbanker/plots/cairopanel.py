@@ -36,8 +36,14 @@ class CairoPlotPanelMonthly(BaseCairoPlotPanel):
         model = self.bankController.Model
         transactions = model.GetTransactions()
         earnings = baseplot.BasePlot.plotMonthly(self, transactions)
-        self.data = [[e] for e in earnings]
-        self.x_labels = [model.float2str(e) for e in earnings]
+        self.data, self.x_labels = [], []
+        for month, amount in earnings:
+            # Add the amount to the data.
+            self.data.append([amount])
+            # Generate the x_label representing the month.
+            year, month = [int(x) for x in month.split(".")]
+            x_label = datetime.date(year, month, 1).strftime("%b %Y")
+            self.x_labels.append(x_label)
         
     def OnPaint(self, event):
         if self.data is None:
@@ -53,8 +59,6 @@ class CairoPlotPanelMonthly(BaseCairoPlotPanel):
             data = self.data,
             width = size.width, height = size.height,
             border = 20, 
-            #axis = True,
-            #dots = 0,
             grid = True,
             colors = ["green"],
             #series_legend = True,

@@ -51,6 +51,6 @@ class MonthlyAnalyzer:
                 bucket = "%i.%s" % (date.year, str(date.month).zfill(2))
                 addtobucket(bucket, t.Amount)
                 
-        return [buckets[key] for key in sorted(buckets)]
+        return [(key, buckets[key]) for key in sorted(buckets)]
                 
         

@@ -50,9 +50,13 @@ class AnalyzerTests(testbase.TestCaseWithController):
     def testMonthlyAmountsDefault(self):
         monthly = self.createMonthly()
         earnings = monthly.GetEarnings(self.Controller.Model.GetTransactions())
-        self.assertEqual(earnings, range(1,13))
+        self.assertEqual(
+            earnings,
+            [('2009.01', 1), ('2009.02', 2), ('2009.03', 3), ('2009.04', 4), ('2009.05', 5), ('2009.06', 6),
+             ('2009.07', 7), ('2009.08', 8), ('2009.09', 9), ('2009.10', 10), ('2009.11', 11), ('2009.12', 12)]
+        )
     
     def testMonthlyAmountsOne(self):
         monthly = self.createMonthly(months=1)
         earnings = monthly.GetEarnings(self.Controller.Model.GetTransactions())
-        self.assertEqual(earnings, [12])
+        self.assertEqual(earnings, [("2009.12", 12)])
