@@ -1399,20 +1399,22 @@ class VerticalBarPlot(BarPlot):
         self.context.set_font_size(self.font_size * 0.8)
         if self.stack:
             for i,group in enumerate(self.series):
+                strvalue = self.value_formatter(value)
                 value = sum(group.to_list())
-                width = self.context.text_extents(str(value))[2]
+                width = self.context.text_extents(strvalue)[2]
                 x = self.borders[HORZ] + (i+0.5)*self.steps[HORZ] + (i+1)*self.space - width/2
                 y = value*self.steps[VERT] + 2
                 self.context.move_to(x, self.plot_top-y)
-                self.context.show_text(self.value_formatter(value))
+                self.context.show_text(strvalue)
         else:
             for i,group in enumerate(self.series):
                 inner_step = self.steps[HORZ]/len(group)
                 x0 = self.borders[HORZ] + i*self.steps[HORZ] + (i+1)*self.space
                 for number,data in enumerate(group):
-                    width = self.context.text_extents(str(data.content))[2]
+                    strvalue = self.value_formatter(data.content)
+                    width = self.context.text_extents(strvalue)[2]
                     self.context.move_to(x0 + 0.5*inner_step - width/2, self.plot_top - data.content*self.steps[VERT] - 2)
-                    self.context.show_text(self.value_formatter(data.content))
+                    self.context.show_text(strvalue)
                     x0 += inner_step
 
     def render_plot(self):
