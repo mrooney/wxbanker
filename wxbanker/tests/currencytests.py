@@ -55,7 +55,7 @@ class CurrencyTest(unittest.TestCase):
     def testCurrencyDisplay(self):
         # First make sure we know how many currencies there are. If this is wrong, we are
         # testing too much or not enough and need to alter the test.
-        self.assertEqual(len(currencies.CurrencyList), 15)
+        self.assertEqual(len(currencies.CurrencyList), 19)
 
         americanLocale = testbase.LOCALES[0]
         self.assertEqual(locale.setlocale(locale.LC_ALL, americanLocale), americanLocale)
@@ -76,6 +76,10 @@ class CurrencyTest(unittest.TestCase):
         self.assertEqual(currencies.VietnameseCurrency().float2str(testAmount), u'1.234₫')
         self.assertEqual(currencies.IndianCurrency().float2str(testAmount), u'₨ 1,234.50')
         self.assertEqual(currencies.RomanianCurrency().float2str(testAmount), u'Lei 1.234,50')
+        self.assertEqual(currencies.AramEmiratesCurrency().float2str(testAmount), u'د.إ. 1,234.500')
+        self.assertEqual(currencies.LithuanianCurrency().float2str(testAmount), u'1.234,50 Lt')
+        self.assertEqual(currencies.SerbianCurrency().float2str(testAmount), u'1.234,50 дин')
+        self.assertEqual(currencies.HungarianCurrency().float2str(testAmount), u'1.234,50 Ft')
 
 
 if __name__ == "__main__":

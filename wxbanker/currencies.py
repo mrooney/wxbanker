@@ -256,6 +256,62 @@ class RomanianCurrency(BaseCurrency):
         self.LOCALECONV['mon_thousands_sep'] = u'.'
         self.LOCALECONV['currency_symbol'] = u'Lei'
         self.LOCALECONV['n_sep_by_space'] = 1
+        
+class ArabEmiratesCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['int_frac_digits'] = 3
+        self.LOCALECONV['p_sep_by_space'] = 1
+        self.LOCALECONV['frac_digits'] = 3
+        self.LOCALECONV['n_sign_posn'] = 2
+        self.LOCALECONV['int_curr_symbol'] = u'AED '
+        self.LOCALECONV['currency_symbol'] = u'د.إ.'
+        self.LOCALECONV['n_sep_by_space'] = 1
+        self.LOCALECONV['mon_grouping'] = [3, 0]
+        self.LOCALECONV['grouping'] = [3, 0]
+
+class LithuanianCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['mon_decimal_point'] = u','
+        self.LOCALECONV['p_sep_by_space'] = 1
+        self.LOCALECONV['thousands_sep'] = u'.'
+        self.LOCALECONV['decimal_point'] = u','
+        self.LOCALECONV['int_curr_symbol'] = u'LTL '
+        self.LOCALECONV['n_cs_precedes'] = 0
+        self.LOCALECONV['mon_thousands_sep'] = u'.'
+        self.LOCALECONV['currency_symbol'] = u'Lt'
+        self.LOCALECONV['n_sep_by_space'] = 1
+        self.LOCALECONV['p_cs_precedes'] = 0
+        
+class SerbianCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['mon_decimal_point'] = u','
+        self.LOCALECONV['p_sep_by_space'] = 1
+        self.LOCALECONV['thousands_sep'] = u''
+        self.LOCALECONV['decimal_point'] = u','
+        self.LOCALECONV['int_curr_symbol'] = u'RSD '
+        self.LOCALECONV['n_cs_precedes'] = 0
+        self.LOCALECONV['mon_thousands_sep'] = u'.'
+        self.LOCALECONV['currency_symbol'] = u'дин'
+        self.LOCALECONV['n_sep_by_space'] = 1
+        self.LOCALECONV['p_cs_precedes'] = 0
+        self.LOCALECONV['grouping'] = []
+        
+class HungarianCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['mon_decimal_point'] = u','
+        self.LOCALECONV['p_sep_by_space'] = 1
+        self.LOCALECONV['thousands_sep'] = u'.'
+        self.LOCALECONV['decimal_point'] = u','
+        self.LOCALECONV['int_curr_symbol'] = u'HUF '
+        self.LOCALECONV['n_cs_precedes'] = 0
+        self.LOCALECONV['mon_thousands_sep'] = u'.'
+        self.LOCALECONV['currency_symbol'] = u'Ft'
+        self.LOCALECONV['n_sep_by_space'] = 1
+        self.LOCALECONV['p_cs_precedes'] = 0
 
 class LocalizedCurrency(BaseCurrency):
     def __init__(self):
@@ -272,6 +328,7 @@ CurrencyList = [
     LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency,
     RussianCurrency, UkranianCurrency, MexicanCurrency, SwedishCurrency, SaudiCurrency,
     NorwegianCurrency, ThaiCurrency, VietnameseCurrency, IndianCurrency, RomanianCurrency,
+    ArabEmiratesCurrency, LithuanianCurrency, SerbianCurrency, HungarianCurrency,
 ]
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
 CurrencyStrings[0] += " [%s]" % _("detected")
