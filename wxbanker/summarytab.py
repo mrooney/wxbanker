@@ -31,6 +31,7 @@ class SummaryPanel(wx.Panel):
         self.currentPlotIndex = 0
         self.cachedData = None
         self.dateRange = None
+        self.isActive = False
 
         # create the plot panel
         self.plotPanel = plotFactory.createPanel(self, bankController)
@@ -106,17 +107,23 @@ class SummaryPanel(wx.Panel):
     def onAccountSelect(self, message):
         account = message.data
         self.plotSettings['Account'] = account
-        self.generateData()
+        # If this tab isn't being viewed, no need to generate anything just yet.
+        if self.isActive:
+            self.generateData()
 
     def onOptionSpin(self, event):
         self.plotSettings[self.getOptionKey(self.currentPlotIndex)] = event.EventObject.Value
         self.generateData(useCache=True)
 
-    def update(self):
+    def onEnter(self):
+        self.isActive = True
         self.dateRange = self.bankController.Model.GetDateRange()
         self.startDate.Value = helpers.pydate2wxdate(self.dateRange[0])
         self.endDate.Value = helpers.pydate2wxdate(self.dateRange[1])
         self.generateData()
+        
+    def onExit(self):
+        self.isActive = False
 
     def generateData(self, useCache=False):
         if useCache and self.cachedData is not None:

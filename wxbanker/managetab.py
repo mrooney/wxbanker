@@ -26,7 +26,7 @@ from wxbanker import localization, summarytab
 from wxbanker.plots.plotfactory import PlotFactory
 
 
-class ManagePanel(wx.Panel):
+class MainPanel(wx.Panel):
     """
     This panel contains the list of accounts on the left
     and the transaction panel on the right.
@@ -51,11 +51,11 @@ class ManagePanel(wx.Panel):
             widget.SetMinSize((accountCtrl.BestSize[0], -1))
 
         ## Right side, the transaction panel:
-        self.rightPanel = RightPanel(self, bankController)
+        self.tabPanel = TabPanel(self, bankController)
 
         self.Sizer = topSizer = wx.BoxSizer()
         topSizer.Add(leftPanel, 0, wx.EXPAND|wx.ALL, 5)
-        topSizer.Add(self.rightPanel, 1, wx.EXPAND|wx.ALL, 0)
+        topSizer.Add(self.tabPanel, 1, wx.EXPAND|wx.ALL, 0)
 
         # Subscribe to messages that interest us.
         Publisher.subscribe(self.onChangeAccount, "view.account changed")
@@ -80,13 +80,13 @@ class ManagePanel(wx.Panel):
 
     def onChangeAccount(self, message):
         account = message.data
-        self.rightPanel.transactionPanel.setAccount(account)
+        self.tabPanel.transactionPanel.setAccount(account)
 
     def getCurrentAccount(self):
         return self.accountCtrl.GetCurrentAccount()
     
 
-class RightPanel(wx.Panel):
+class TabPanel(wx.Panel):
     def __init__(self, parent, bankController):
         wx.Panel.__init__(self, parent)
         self.bankController = bankController
@@ -95,6 +95,7 @@ class RightPanel(wx.Panel):
         self.notebook = notebook = wx.aui.AuiNotebook(self, style=wx.aui.AUI_NB_TOP)
         self.transactionPanel = TransactionPanel(self, bankController)
         notebook.AddPage(self.transactionPanel, _("Transactions"))
+        self.currentPage = self.transactionPanel
         self.AddSummaryTab()
         self.Bind(wx.aui.EVT_AUINOTEBOOK_PAGE_CHANGING, self.onTabSwitching)
         
@@ -110,10 +111,11 @@ class RightPanel(wx.Panel):
             
     def onTabSwitching(self, event):
         tabIndex = event.Selection
-        page = self.notebook.GetPage(tabIndex)
-        if isinstance(page, summarytab.SummaryPanel):
-            # If we are switching to the summary (graph) tab, update it!
-            page.update()
+        # Tell the previvous page we are leaving it.
+        self.currentPage.onExit()
+        # Tell the panel we are entering it.
+        self.currentPage = self.notebook.GetPage(tabIndex)
+        self.currentPage.onEnter()
 
 
 class TransactionPanel(wx.Panel):
@@ -149,3 +151,6 @@ class TransactionPanel(wx.Panel):
         required changes to state. These events will handle all other logic.
         """
         self.searchActive = False
+
+    def onEnter(self): pass
+    def onExit(self): pass

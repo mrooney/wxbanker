@@ -141,12 +141,12 @@ class GUITests(testbase.TestCaseHandlingConfigBase):
     def testCanAddAndRemoveUnicodeAccount(self):
         self.Model.CreateAccount(u"Lópezहिंदी")
         # Make sure the account ctrl has the first (0th) selection.
-        managePanel = self.Frame.Panel.managePanel
+        mainPanel = self.Frame.Panel.mainPanel
         self.assertEqual(0, self.AccountListCtrl.currentIndex)
         # Mock out the account removal dialog in-place to just return "Yes"
-        managePanel.accountCtrl.showModal = lambda *args, **kwargs: wx.ID_YES
+        mainPanel.accountCtrl.showModal = lambda *args, **kwargs: wx.ID_YES
         # Now remove the account and make sure there is no selection.
-        managePanel.accountCtrl.onRemoveButton(None)
+        mainPanel.accountCtrl.onRemoveButton(None)
         self.assertCurrentAccount(None)
 
     def testCanAddTransaction(self):

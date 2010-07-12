@@ -44,12 +44,12 @@ class BankerPanel(wx.Panel):
         wx.Panel.__init__(self, parent)
         self.bankController = bankController
         
-        self.managePanel = managetab.ManagePanel(self, bankController)
+        self.mainPanel = managetab.MainPanel(self, bankController)
         
         Publisher.subscribe(self.onRecurringTransactionAdded, "recurringtransaction.created")
 
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
-        self.Sizer.Add(self.managePanel, 1, wx.EXPAND)
+        self.Sizer.Add(self.mainPanel, 1, wx.EXPAND)
         
         wx.CallLater(1000, self.CheckRecurringTransactions)
         
