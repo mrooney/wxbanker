@@ -26,7 +26,9 @@ class SummaryPanel(wx.Panel):
         self.plotFactory = plotFactory
         self.bankController = bankController
 
-        self.plotSettings = {'FitDegree': 2, 'Granularity': 100, 'Account': None}
+        self.plotSettings = {'FitDegree': 2, 'Granularity': 100, 'Account': None, 'Months': 12}
+        self.plotLabels = [_("Trend Degree"), _("Months")]
+        self.currentPlotIndex = 0
         self.cachedData = None
         self.dateRange = None
 
@@ -36,27 +38,30 @@ class SummaryPanel(wx.Panel):
         # create the controls at the bottom
         controlSizer = wx.BoxSizer()
         self.graphChoice = wx.Choice(self, choices=[plot.NAME for plot in plotFactory.Plots])
-        degCtrl = wx.SpinCtrl(self, min=1, max=20, initial=self.plotSettings['FitDegree'])
+        self.optionCtrl = wx.SpinCtrl(self, min=1, max=24, initial=self.plotSettings['FitDegree'])
         # the date range controls
         self.startDate = bankcontrols.DateCtrlFactory(self)
         self.endDate = bankcontrols.DateCtrlFactory(self)
 
+        self.optionText = wx.StaticText(self, label=self.plotLabels[0])
+        self.fromText = wx.StaticText(self, label=_("From"))
+        self.toText = wx.StaticText(self, label=_("to"))
         controlSizer.Add(wx.StaticText(self, label=_("Graph")), 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(5)
         controlSizer.Add(self.graphChoice, 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(10)
-        controlSizer.Add(wx.StaticText(self, label=_("From")), 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.Add(self.fromText, 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(5)
         controlSizer.Add(self.startDate, 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(5)
-        controlSizer.Add(wx.StaticText(self, label=_("to")), 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.Add(self.toText, 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(5)
         controlSizer.Add(self.endDate, 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(10)
-        controlSizer.Add(wx.StaticText(self, label=_("Trend Degree")), 0, wx.ALIGN_CENTER_VERTICAL)
+        controlSizer.Add(self.optionText, 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(5)
-        controlSizer.Add(degCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
-        degCtrl.SetMinSize = (20, -1)
+        controlSizer.Add(self.optionCtrl, 0, wx.ALIGN_CENTER_VERTICAL)
+        self.optionCtrl.SetMinSize = (20, -1)
 
         # put it all together
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
@@ -67,20 +72,33 @@ class SummaryPanel(wx.Panel):
 
         # bind to the spin buttons
         self.graphChoice.Bind(wx.EVT_CHOICE, self.onGraphChoice)
-        degCtrl.Bind(wx.EVT_SPINCTRL, self.onSpinFitDeg)
+        self.optionCtrl.Bind(wx.EVT_SPINCTRL, self.onOptionSpin)
         self.Bind(wx.EVT_DATE_CHANGED, self.onDateRangeChanged)
         Publisher.subscribe(self.onAccountSelect, "view.account changed")
         
     def onGraphChoice(self, event):
         index = self.graphChoice.GetSelection()
+        # Replace the graph
         newPlot = self.plotFactory.createPanel(self, self.bankController, index)
         self.Sizer.Replace(self.plotPanel, newPlot)
         self.plotPanel = newPlot
+        self.currentPlotIndex = index
         self.generateData(useCache=True)
+        
+        # Update the controls
+        self.optionText.Label = self.plotLabels[index]
+        self.optionCtrl.Value = self.plotSettings[self.getOptionKey(index)]
+        for ctrl in (self.fromText, self.toText, self.startDate, self.endDate):
+            ctrl.Show(index == 0)
+        
+        # A replace does not Layout, and we have made some changes.
         self.Layout()
         
     def onDateRangeChanged(self, event):
         self.generateData()
+        
+    def getOptionKey(self, index):
+        return ['FitDegree', 'Months'][index]
     
     def getDateRange(self):
         return [helpers.wxdate2pydate(date) for date in (self.startDate.Value, self.endDate.Value)]
@@ -90,8 +108,8 @@ class SummaryPanel(wx.Panel):
         self.plotSettings['Account'] = account
         self.generateData()
 
-    def onSpinFitDeg(self, event):
-        self.plotSettings['FitDegree'] = event.EventObject.Value
+    def onOptionSpin(self, event):
+        self.plotSettings[self.getOptionKey(self.currentPlotIndex)] = event.EventObject.Value
         self.generateData(useCache=True)
 
     def update(self):

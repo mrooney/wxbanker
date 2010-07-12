@@ -74,8 +74,8 @@ class BasePlot(object):
 
         return points[:-1], startDate, daysPerPoint or smallDelta
     
-    def plotMonthly(self, transactions):
-        monthly = MonthlyAnalyzer()
+    def plotMonthly(self, transactions, months):
+        monthly = MonthlyAnalyzer(months)
         earnings = monthly.GetEarnings(transactions)
         return earnings
     
