@@ -331,7 +331,7 @@ CurrencyList = [
     ArabEmiratesCurrency, LithuanianCurrency, SerbianCurrency, HungarianCurrency,
 ]
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
-CurrencyStrings[0] += " [%s]" % _("detected")
+CurrencyStrings[0] += " (%s)" % _("detected")
 
 if __name__ == "__main__":
     import sys

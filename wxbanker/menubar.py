@@ -49,6 +49,7 @@ class BankMenuBar(wx.MenuBar):
         self.bankController = bankController
         autosave = bankController.AutoSave
         showZero = bankController.ShowZeroBalanceAccounts
+        self.currencyStrings = CurrencyStrings[:]
 
         # File menu.
         fileMenu = wx.Menu()
@@ -78,14 +79,19 @@ class BankMenuBar(wx.MenuBar):
         currencyMenu = wx.MenuItem(settingsMenu, -1, _("&Currency"), _("Select currency to display"))
         currencyMenu.SetBitmap(wx.ArtProvider.GetBitmap("wxART_money"))
 
-        currencies = wx.Menu()
         # Add an entry for each available currency.
-        for i, cstr in enumerate(CurrencyStrings):
-            item = wx.MenuItem(currencies, self.IDS_CURRENCIES[i], cstr)
+        currencies = wx.Menu()
+        # Place the local detected one first, then the rest sorted.
+        currencies.Append(self.IDS_CURRENCIES[0], self.currencyStrings[0])
+        currencies.AppendSeparator()
+        for i, cstr in enumerate(sorted(self.currencyStrings[1:])):
+            idIndex = self.currencyStrings.index(cstr)
+            item = wx.MenuItem(currencies, self.IDS_CURRENCIES[idIndex], cstr)
             currencies.AppendItem(item)
         # Add an entry to request a new currency.
         requestCurrencyItem = wx.MenuItem(currencies, self.ID_REQUESTCURRENCY, _("Request a Currency"))
         requestCurrencyItem.Bitmap = wx.ArtProvider.GetBitmap("wxART_lightning")
+        currencies.AppendSeparator()
         currencies.AppendItem(requestCurrencyItem)
         currencyMenu.SetSubMenu(currencies)
 
