@@ -31,8 +31,6 @@ class DBUpgradeTest(testbase.TestCaseHandlingConfig):
         if self.tmpFile:
             os.remove(self.tmpFile)
 
-if __name__ == "__main__":
-    main()
     def getController(self, ver):
         origpath = testbase.fixturefile("bank-%s.db"%ver)
         self.tmpFile = tempfile.mkstemp()[1]
@@ -79,11 +77,11 @@ if __name__ == "__main__":
         self.assertEqual(t.LinkedTransaction, None)
 
     def testCanDeleteAccountWithOldTransfer(self):
-        model = self.getController("0.7-605591.db").Model
-        a = model.Accounts[0]
+        model = self.getController("0.7-605591").Model
+        a = model.Accounts[1]
         model.RemoveAccount(a.Name)
         
-        model2 = Controller(path=self.tmpFile)
+        model2 = model.Store.GetModel(useCached=False)
         self.assertEqual(model, model2)
         
     def testUpgradeFromPre08GetsTags(self):
