@@ -27,6 +27,12 @@ class DBUpgradeTest(testbase.TestCaseHandlingConfig):
         testbase.TestCaseHandlingConfig.setUp(self)
         self.tmpFile = None
         
+    def tearDown(self):
+        if self.tmpFile:
+            os.remove(self.tmpFile)
+
+if __name__ == "__main__":
+    main()
     def getController(self, ver):
         origpath = testbase.fixturefile("bank-%s.db"%ver)
         self.tmpFile = tempfile.mkstemp()[1]
@@ -71,17 +77,19 @@ class DBUpgradeTest(testbase.TestCaseHandlingConfig):
         self.assertEqual(t.Amount, -1.1)
         self.assertEqual(t.Description, "a")
         self.assertEqual(t.LinkedTransaction, None)
+
+    def testCanDeleteAccountWithOldTransfer(self):
+        model = self.getController("0.7-605591.db").Model
+        a = model.Accounts[0]
+        model.RemoveAccount(a.Name)
+        
+        model2 = Controller(path=self.tmpFile)
+        self.assertEqual(model, model2)
         
     def testUpgradeFromPre08GetsTags(self):
         # Import a db with pre-tag tags in the description, make sure they are real tags.
         self.markTestIncomplete("TODO")
         
-    def tearDown(self):
-        if self.tmpFile:
-            os.remove(self.tmpFile)
-
 def main():
     unittest.main()
 
-if __name__ == "__main__":
-    main()
