@@ -152,7 +152,9 @@ class PersistentStore:
         return transaction
 
     def RemoveTransaction(self, transaction):
-        result = self.dbconn.cursor().execute('DELETE FROM transactions WHERE id=?', (transaction.ID,)).fetchone()
+        ID = transaction.ID
+        print self.dbconn.cursor().execute('SELECT COUNT(*) FROM transactions WHERE id=?', (ID,))
+        result = self.dbconn.cursor().execute('DELETE FROM transactions WHERE id=?', (ID,)).fetchone()
         self.commitIfAppropriate()
         # The result doesn't appear to be useful here, it is None regardless of whether the DELETE matched anything
         # the controller already checks for existence of the ID though, so if this doesn't raise an exception, theoretically
@@ -397,6 +399,7 @@ class PersistentStore:
 
     def getTransactionAndParentById(self, tId, parentObj, linked):
         result = self.dbconn.cursor().execute('SELECT * FROM transactions WHERE id=? LIMIT 1', (tId,)).fetchone()
+        print result
         if result is None:
             # This is probably LP #514183: the account of the sibling was deleted.
             raise MissingLinkException("Unable to find the linked transaction")
