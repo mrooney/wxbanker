@@ -941,11 +941,13 @@ class BarPlot(Plot):
     
     def calc_boundaries(self):
         if not self.bounds[self.main_dir]:
+            min_data_value = 0
             if self.stack:
                 max_data_value = max(sum(group.to_list()) for group in self.series)
             else:
                 max_data_value = max(max(group.to_list()) for group in self.series)
-            self.bounds[self.main_dir] = (0, max_data_value)
+                min_data_value = min(min(group.to_list()) for group in self.series)
+            self.bounds[self.main_dir] = (min(0, min_data_value), max_data_value)
         if not self.bounds[other_direction(self.main_dir)]:
             self.bounds[other_direction(self.main_dir)] = (0, len(self.series))
     
@@ -995,6 +997,8 @@ class BarPlot(Plot):
     def render(self):
         self.calc_all_extents()
         self.calc_steps()
+        if self.bounds[VERT][0] < 0:
+            self.plot_top += self.bounds[VERT][0] * self.steps[VERT]
         self.render_background()
         self.render_bounding_box()
         if self.grid:
@@ -1007,7 +1011,7 @@ class BarPlot(Plot):
         self.render_plot()
         if self.series_labels:
             self.render_legend()
-    
+        
     def draw_3d_rectangle_front(self, x0, y0, x1, y1, shift):
         self.context.rectangle(x0-shift, y0+shift, x1-x0, y1-y0)
 
@@ -1028,6 +1032,8 @@ class BarPlot(Plot):
         self.context.close_path()
                 
     def draw_round_rectangle(self, x0, y0, x1, y1):
+        if y0 > y1:
+            y0, y1 = y1, y0
         self.context.arc(x0+5, y0+5, 5, -math.pi, -math.pi/2)
         self.context.line_to(x1-5, y0)
         self.context.arc(x1-5, y0+5, 5, -math.pi/2, 0)
@@ -1347,7 +1353,7 @@ class VerticalBarPlot(BarPlot):
         else:
             lines = 11
             vertical_step = float(self.plot_dimensions[self.main_dir])/(lines-1)
-            y = 1.2*self.border + self.value_label
+            y = 1.2*self.border + self.value_label + self.bounds[VERT][0]*self.steps[VERT]
         for x in xrange(0, lines):
             self.context.move_to(self.borders[HORZ], y)
             self.context.line_to(self.dimensions[HORZ] - self.border, y)
@@ -1413,7 +1419,10 @@ class VerticalBarPlot(BarPlot):
                 for number,data in enumerate(group):
                     strvalue = self.value_formatter(data.content)
                     width = self.context.text_extents(strvalue)[2]
-                    self.context.move_to(x0 + 0.5*inner_step - width/2, self.plot_top - data.content*self.steps[VERT] - 2)
+                    negative_value_correction = 0
+                    if data.content < 0:
+                        negative_value_correction = 6 + self.steps[VERT]
+                    self.context.move_to(x0 + 0.5*inner_step - width/2, self.plot_top - data.content*self.steps[VERT] - 2 + negative_value_correction)
                     self.context.show_text(strvalue)
                     x0 += inner_step
 
