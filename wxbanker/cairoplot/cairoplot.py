@@ -1405,8 +1405,8 @@ class VerticalBarPlot(BarPlot):
         self.context.set_font_size(self.font_size * 0.8)
         if self.stack:
             for i,group in enumerate(self.series):
-                strvalue = self.value_formatter(value)
                 value = sum(group.to_list())
+                strvalue = self.value_formatter(value)
                 width = self.context.text_extents(strvalue)[2]
                 x = self.borders[HORZ] + (i+0.5)*self.steps[HORZ] + (i+1)*self.space - width/2
                 y = value*self.steps[VERT] + 2
