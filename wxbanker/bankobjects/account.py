@@ -214,6 +214,11 @@ class Account(ORMObject):
         
         # Accumulate the difference and update the balance just once. Cuts 33% time of removals.
         difference = 0
+        
+        # Make a copy of the list, to protect against getting passed self.Transactions itself.
+        # Otherwise when we remove from self.Transactions, we'd end up iterating over every other transaction! (LP: #605591)
+        transactions = transactions[:]
+        
         for transaction in transactions:
             if transaction not in self.Transactions:
                 raise bankexceptions.InvalidTransactionException("Transaction does not exist in account '%s'" % self.Name)
