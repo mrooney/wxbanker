@@ -46,6 +46,9 @@ class Keyring(object):
         return (items[0].attributes["user"], items[0].secret)
 
     def set_credentials(self, user, pw):
+        # Ensure the arguments are simple strings; it can't handle unicode.
+        user, pw = str(user), str(pw)
+        
         if self.has_credentials() and self.get_credentials() == (user, pw):
             return
         

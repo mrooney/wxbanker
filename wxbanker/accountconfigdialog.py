@@ -98,7 +98,10 @@ class MintConfigPanel(wx.Panel):
         self.updateMintAccounts()
         
     def updateMintAccounts(self):
-        self.mintCombo.Append(self.NoneAccount, None)
+        # Reset the choices.
+        self.mintCombo.SetItems([self.NoneAccount])
+        
+        # Login (potentially using the cache) and populate accounts.
         self.mintLogin()
         accounts = Mint.GetAccounts()
         for i, (mintId, item) in enumerate(Mint.GetAccounts().items()):
@@ -108,9 +111,9 @@ class MintConfigPanel(wx.Panel):
             if mintId == self.Account.GetMintId():
                 self.mintCombo.Selection = i
         
-        # If there are accounts but none is currently set, choose the first one. 
+        # If there are accounts but none is currently set, choose the first actual one. 
         if accounts and not self.Account.IsMintEnabled():
-            self.mintCombo.Selection = 0
+            self.mintCombo.Selection = 1
             
         self.Layout()
         
@@ -223,4 +226,4 @@ class AccountConfigDialog(wx.Dialog):
         
         if tab == "mint":
             # Setting the selection synchronously gets changed back somewhere in the event queue.
-            wx.CallAfter(self.notebook.SetSelection, 1)
+            wx.CallLater(50, self.notebook.SetSelection, 1)
