@@ -46,9 +46,9 @@ class MintConfigPanel(wx.Panel):
 
         gridSizer = wx.GridSizer(2, 2, 3, 3)
         gridSizer.Add(wx.StaticText(self, label=_("Username:")), flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_RIGHT)
-        gridSizer.Add(self.usernameBox, flag=wx.ALIGN_CENTER|wx.LEFT, border=6)
+        gridSizer.Add(self.usernameBox, flag=wx.ALIGN_LEFT|wx.LEFT, border=6)
         gridSizer.Add(wx.StaticText(self, label=_("Password:")), flag=wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_RIGHT)
-        gridSizer.Add(self.passwordBox, flag=wx.ALIGN_CENTER|wx.LEFT, border=6)
+        gridSizer.Add(self.passwordBox, flag=wx.ALIGN_LEFT|wx.LEFT, border=6)
         
         mintAccountSizer = wx.BoxSizer()
         mintAccountSizer.Add(self.mintCombo, 0, wx.LEFT, 6)
