@@ -392,7 +392,7 @@ class PersistentStore:
                 try:
                     link, linkAccount = self.getTransactionAndParentById(linkId, parentObj, t)
                 except MissingLinkException:
-                    # The link is gone, it's Account was likely deleted before LP: #514183 was fixed. Remove it.
+                    # The link is gone, it's Account was likely deleted before LP: #514183/605591 was fixed. Remove it.
                     t.LinkedTransaction = None
                 else:
                     # If the link parent hasn't loaded its transactions yet, put this in its pre list so this
