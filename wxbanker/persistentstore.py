@@ -53,7 +53,7 @@ class PersistentStore:
     """
     def __init__(self, path, autoSave=True):
         self.Subscriptions = []
-        self.Version = 10
+        self.Version = 11
         self.Path = path
         self.AutoSave = False
         self.Dirty = False
@@ -127,10 +127,6 @@ class PersistentStore:
         self.commitIfAppropriate()
 
         account = Account(self, ID, accountName, currency)
-
-        # Ensure there are no orphaned transactions, for accounts removed before #249954 was fixed.
-        self.clearAccountTransactions(account)
-
         return account
 
     def RemoveAccount(self, account):
@@ -155,9 +151,7 @@ class PersistentStore:
         ID = transaction.ID
         result = self.dbconn.cursor().execute('DELETE FROM transactions WHERE id=?', (ID,)).fetchone()
         self.commitIfAppropriate()
-        # The result doesn't appear to be useful here, it is None regardless of whether the DELETE matched anything
-        # the controller already checks for existence of the ID though, so if this doesn't raise an exception, theoretically
-        # everything is fine. So just return True, as there we no errors that we are aware of.
+        # The result doesn't appear to be useful here, it is None regardless of whether the DELETE matched anything.
         return True
 
     def Save(self):
@@ -283,14 +277,22 @@ class PersistentStore:
             cursor.execute('ALTER TABLE accounts ADD mintId INTEGER')
         elif fromVer == 10:
             # The obvious index to create, had I known about indexes previously.
-            cursor.execute('CREATE INDEX transactions_accountId_idx ON transactions(accountId)')
-            # Tagging infrastructure.
-            cursor.execute('CREATE TABLE tags (id INTEGER PRIMARY KEY, name VARCHAR(255))')
-            cursor.execute('CREATE TABLE transactions_tags_link (id INTEGER PRIMARY KEY, transactionId INTEGER, tagId INTEGER)')
-            cursor.execute('CREATE INDEX transactions_tags_transactionId_idx ON transactions_tags_link(transactionId)')
-            cursor.execute('CREATE INDEX transactions_tags_tagId_idx ON transactions_tags_link(tagId)')
+            # It is nice to use IF NOT EXISTS here as some devs and branch users might have it outside of an upgrade.
+            cursor.execute('CREATE INDEX IF NOT EXISTS transactions_accountId_idx ON transactions(accountId)')
+            # Due to bug LP #605591 there can be orphaned transactions which can cause errors if linked.
+            # This is tested by testOrphanedTransactionsAreDeleted (dbupgradetests.DBUpgradeTest)
+            # Also takes care of LP #249954 without the explicit need to defensively remove on any account creation.
+            self.cleanOrphanedTransactions()
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
+        
+        """
+        # Tagging infrastructure (currently unused due to speed of parsing on startup).
+        cursor.execute('CREATE TABLE tags (id INTEGER PRIMARY KEY, name VARCHAR(255))')
+        cursor.execute('CREATE TABLE transactions_tags_link (id INTEGER PRIMARY KEY, transactionId INTEGER, tagId INTEGER)')
+        cursor.execute('CREATE INDEX transactions_tags_transactionId_idx ON transactions_tags_link(transactionId)')
+        cursor.execute('CREATE INDEX transactions_tags_tagId_idx ON transactions_tags_link(tagId)')
+        """
 
         metaVer = fromVer + 1
         cursor.execute('UPDATE meta SET value=? WHERE name=?', (metaVer, "VERSION"))
@@ -335,9 +337,12 @@ class PersistentStore:
 
         return RecurringTransaction(rId, parentAccount, amount, description, date, repeatType, repeatEvery, repeatOn, endDate, sourceAccount, lastTransacted)
 
+    def getAccountRows(self):
+        return self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()
+        
     def GetAccounts(self):
         # Fetch all the accounts.
-        accounts = [self.result2account(result) for result in self.dbconn.cursor().execute("SELECT * FROM accounts").fetchall()]
+        accounts = [self.result2account(result) for result in self.getAccountRows()]
         # Add any recurring transactions that exist for each.
         recurrings = self.getRecurringTransactions()
         for recurring in recurrings:
@@ -350,10 +355,25 @@ class PersistentStore:
     
     def getRecurringTransactions(self):
         return self.dbconn.cursor().execute('SELECT * FROM recurring_transactions').fetchall()
-
-    def clearAccountTransactions(self, account):
-        self.dbconn.cursor().execute('DELETE FROM transactions WHERE accountId=?', (account.ID,))
-        self.commitIfAppropriate()
+        
+    def cleanOrphanedTransactions(self):
+        # Grab all the accounts that currently exist, to check against.
+        accountIDs = [row[0] for row in self.getAccountRows()]
+        # We'll keep a list of deceased accounts to clean, so we aren't doing a DELETE per orphan.
+        deceasedAccounts = set()
+        
+        # Iterate over the transactions, treating the cursor as an iterator instead of fetchall() in case there are a lot.
+        for transactionRow in self.dbconn.cursor().execute('SELECT * FROM transactions'):
+            accountID = transactionRow[1]
+            # If the account ID isn't in the current accounts, it must not exist and this transaction is an orphan, so note the parent.
+            if accountID not in accountIDs:
+                deceasedAccounts.add(accountID)
+                
+        # Now iterate over the deceased accounts of which to remove orphans.
+        for accountID in deceasedAccounts:
+            self.dbconn.cursor().execute('DELETE FROM transactions WHERE accountId=?', (accountID,))
+        
+        self.commitIfAppropriate()        
 
     def result2transaction(self, result, parentObj, linkedTransaction=None, recurringCache=None):
         tid, pid, amount, description, date, linkId, recurringId = result

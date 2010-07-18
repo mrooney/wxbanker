@@ -84,6 +84,11 @@ class DBUpgradeTest(testbase.TestCaseHandlingConfig):
         model2 = model.Store.GetModel(useCached=False)
         self.assertEqual(model, model2)
         
+    def testOrphanedTransactionsAreDeleted(self):
+        model = self.getController("0.7-605591-orphaned").Model
+        # This will raise an Exception if the orphans aren't deleted.
+        self.assertEqual(len(model.Accounts[0].Transactions), 4)
+        
     def testUpgradeFromPre08GetsTags(self):
         # Import a db with pre-tag tags in the description, make sure they are real tags.
         self.markTestIncomplete("TODO")
