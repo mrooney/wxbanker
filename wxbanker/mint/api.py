@@ -22,6 +22,7 @@ from wx.lib.pubsub import Publisher
 from wxbanker.mint import web
 web.enablecookies()
 from BeautifulSoup import BeautifulSoup
+import re
 
 try:
     from wxbanker.mint.keyring import Keyring
@@ -97,7 +98,8 @@ class Mint:
             soup = BeautifulSoup(summary)
             mintAccounts = {}
             
-            for li in soup.findAll("li", "account"):
+            accountRe = re.compile("account( refreshing|)")
+            for li in soup.findAll("li", {"class": accountRe}):
                 h4 = li.find("h4")
                 h6 = li.find("h6")
                 balanceStr = h4.find("span").contents[0]
