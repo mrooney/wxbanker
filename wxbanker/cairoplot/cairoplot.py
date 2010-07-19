@@ -592,7 +592,7 @@ class ScatterPlot( Plot ):
         #Draw a bounding box
         bounding_box_width = max_width + color_box_width + 15
         bounding_box_height = (len(self.series_labels)+0.5) * max_height
-        cr.set_source_rgba(1,1,1)
+        cr.set_source_rgba(1,1,1,0.5)
         cr.rectangle(self.dimensions[HORZ] - self.borders[HORZ] - bounding_box_width, self.borders[VERT],
                             bounding_box_width, bounding_box_height)
         cr.fill()
@@ -1080,7 +1080,7 @@ class BarPlot(Plot):
         #Draw a bounding box
         bounding_box_width = max_width + color_box_width + 15
         bounding_box_height = (len(self.series_labels)+0.5) * max_height
-        cr.set_source_rgba(1,1,1)
+        cr.set_source_rgba(1,1,1,0.5)
         cr.rectangle(self.dimensions[HORZ] - self.border - bounding_box_width, self.border,
                             bounding_box_width, bounding_box_height)
         cr.fill()
