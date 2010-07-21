@@ -28,9 +28,40 @@ class RecurringTest(testbase.TestCaseWithController):
     def createAccount(self):
         model = self.Controller.Model
         return model, model.CreateAccount("A")
-        
-    def testRecurringTransactionsAreEmpty(self):
+
+    def testRecurringTransactionsAreInitiallyEmpty(self):
         self.assertEqual(self.Controller.Model.GetRecurringTransactions(), [])
+    
+    def testGetChildren(self):
+        model, account = self.createAccount()
+        rt = account.AddRecurringTransaction(1, "test", today, RecurringTransaction.DAILY, endDate=today)
+        
+        # Initially empty.
+        self.assertLength(rt.GetChildren(), 0)
+        
+        # Make a transaction that shouldn't be a child.
+        t = account.AddTransaction(1)
+        self.assertLength(rt.GetChildren(), 0)
+        
+        rt.PerformTransactions()
+        self.assertLength(rt.GetChildren(), 1)
+        
+    def testCanDeleteRecurringTransaction(self):
+        model, account = self.createAccount()
+        
+        rt = account.AddRecurringTransaction(1, "test", today, RecurringTransaction.DAILY, endDate=today)
+        self.assertEqual(account.RecurringTransactions, [rt])
+        
+        rt.PerformTransactions()        
+        self.assertEqual(len(account.Transactions), 1)
+        self.assertEqual(account.Transactions[0].RecurringParent, rt)
+        
+        # Now remove it and make sure it is gone.
+        account.RemoveRecurringTransaction(rt)
+        self.assertEqual(account.RecurringTransactions, [])
+        # The performed transaction should still exist but have no RecurringParent.
+        self.assertEqual(len(account.Transactions), 1)
+        self.assertEqual(account.Transactions[0].RecurringParent, None)
         
     def testRecurringDefaults(self):
         model, account = self.createAccount()

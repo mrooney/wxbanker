@@ -153,6 +153,17 @@ class Account(ORMObject):
         Publisher.sendMessage("recurringtransaction.created", (self, recurring))
         
         return recurring
+    
+    def RemoveRecurringTransaction(self, recurring):
+        # Orphan any recurring children so that they are normal transactions.
+        for child in recurring.GetChildren():
+            child.RecurringParent = None
+            if child.LinkedTransaction:
+                child.LinkedTransaction.RecurringParent = None
+                
+        # Now remove the actual recurring transaction.
+        self.RecurringTransactions.remove(recurring)
+        self.Store.RemoveRecurringTransaction(recurring)
 
     def AddTransaction(self, amount=None, description="", date=None, source=None, transaction=None):
         """

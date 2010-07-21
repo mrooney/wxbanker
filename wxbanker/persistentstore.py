@@ -153,6 +153,11 @@ class PersistentStore:
         self.commitIfAppropriate()
         # The result doesn't appear to be useful here, it is None regardless of whether the DELETE matched anything.
         return True
+    
+    def RemoveRecurringTransaction(self, recurring):
+        ID = recurring.ID
+        result = self.dbconn.cursor().execute('DELETE FROM recurring_transactions WHERE id=?', (ID,))
+        self.commitIfAppropriate()
 
     def Save(self):
         import time; t = time.time()

@@ -438,6 +438,26 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         t2 = a2.Transactions[0]
         self.assertEqual(t2.Tags, set(["foo"]))
         self.assertEqual(model2.Tags, set(["foo"]))
+        
+    def testDeletedRecurringTransactionIsStored(self):
+        model1 = self.Controller.Model
+        a = model1.CreateAccount("A")
+        rt = a.AddRecurringTransaction(1, "test", today, repeatType=1)
+        
+        rt.PerformTransactions()
+        self.assertLength(a.Transactions, 1)
+        self.assertEqual(a.Transactions[0].RecurringParent, rt)
+        
+        a.RemoveRecurringTransaction(rt)
+        self.assertLength(a.RecurringTransactions, 0)
+        self.assertEqual(a.Transactions[0].RecurringParent, None)
+        
+        # Make sure it has no RecurringTransactions and that the existing transaction has no RecurringParent.
+        model2 = model1.Store.GetModel(useCached=False)
+        self.assertEqual(model1, model2)
+        a2 = model2.Accounts[0]
+        self.assertEqual(a2.RecurringTransactions, [])
+        self.assertEqual(model2.Accounts[0].Transactions[0].RecurringParent, None)
 
     
 if __name__ == "__main__":

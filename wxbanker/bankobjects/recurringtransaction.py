@@ -199,6 +199,11 @@ class RecurringTransaction(Transaction, ORMObject):
     
     def GetDescriptionString(self):
         return self.GetStringBase() + self.GetRecurrance()
+    
+    def GetChildren(self):
+        for transaction in self.Parent.Transactions:
+            if transaction.RecurringParent == self:
+                yield transaction
         
     def __eq__(self, other):
         if other is None:

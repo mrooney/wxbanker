@@ -88,6 +88,9 @@ class TestCaseHandlingConfigBase(TestCase):
             self.assertEqual(str(e), msg)
         else:
             fail()
+            
+    def assertLength(self, iterable, expectedLength):
+        self.assertEqual(len(list(iterable)), expectedLength)
 
 
 class TestCaseHandlingConfig(TestCaseHandlingConfigBase):
