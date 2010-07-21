@@ -160,7 +160,7 @@ class RecurringConfigPanel(wx.Panel):
         self.Sizer.AddSpacer(12)
         self.Sizer.Add(self.staticBoxSizer, 0, wx.EXPAND|wx.LEFT|wx.RIGHT, 6)
         self.Sizer.AddStretchSpacer(1)
-        self.Sizer.Add(self.buttonSizer, flag=wx.ALIGN_RIGHT)
+        self.Sizer.Add(self.buttonSizer, flag=wx.ALIGN_RIGHT|wx.EXPAND)
         self.Sizer.AddSpacer(6)
         
         if not self.transactions:
@@ -172,15 +172,25 @@ class RecurringConfigPanel(wx.Panel):
         
         self.Bind(wx.EVT_BUTTON, self.onButton)
         
+    def GetCurrentRecurringTransaction(self):
+        return self.transactions[self.transactionChoice.GetSelection()]
+        
     def onButton(self, event):
         """If the save button was clicked save, and close the dialog in any case (Close/Cancel/Save)."""
-        assert event.Id in (wx.ID_CLOSE, wx.ID_SAVE)
+        assert event.Id in (wx.ID_CLOSE, wx.ID_SAVE, wx.ID_DELETE)
         
         if event.Id == wx.ID_SAVE:
             self.transactionCtrl.ToRecurring()
             originalTransaction = self.transactions[self.transactionChoice.Selection]
             modifiedTransaction = self.transactionCtrl.recurringObj
             originalTransaction.UpdateFrom(modifiedTransaction)
+        elif event.Id == wx.ID_DELETE:
+            recurring = self.GetCurrentRecurringTransaction()
+            warningMsg = _("This will permanently remove this recurring transaction. Continue?")
+            dlg = wx.MessageDialog(self, warningMsg, _("Warning"), style=wx.YES_NO|wx.ICON_EXCLAMATION)
+            result = dlg.ShowModal()
+            if result == wx.ID_YES:
+                recurring.Parent.RemoveRecurringTransaction(recurring)
         
         self.GrandParent.Destroy()
             
@@ -190,6 +200,7 @@ class RecurringConfigPanel(wx.Panel):
         self.Sizer.Insert(1, wx.StaticText(self, label=_("This account currently has no recurring transactions.")), flag=wx.ALIGN_CENTER)
         
         closeButton = wx.Button(self, label=_("Close"), id=wx.ID_CLOSE)
+        self.buttonSizer.AddStretchSpacer(1)
         self.buttonSizer.Add(closeButton)
         
     def setupRecurringTransactions(self):
@@ -199,8 +210,12 @@ class RecurringConfigPanel(wx.Panel):
         self.Sizer.Insert(1, self.transactionChoice, flag=wx.EXPAND|wx.LEFT|wx.RIGHT, border=6)
         self.transactionCtrl.FromRecurring(self.transactions[0])
         
+        deleteButton = wx.Button(self, label=_("Delete"), id=wx.ID_DELETE)
         saveButton = wx.Button(self, label=_("Save"), id=wx.ID_SAVE)
         closeButton = wx.Button(self, label=_("Cancel"), id=wx.ID_CLOSE)
+        self.buttonSizer.AddSpacer(6)
+        self.buttonSizer.Add(deleteButton)
+        self.buttonSizer.AddStretchSpacer(1)
         self.buttonSizer.Add(saveButton)
         self.buttonSizer.AddSpacer(12)
         self.buttonSizer.Add(closeButton)
@@ -208,8 +223,7 @@ class RecurringConfigPanel(wx.Panel):
         self.transactionChoice.Bind(wx.EVT_CHOICE, self.onTransactionChoice)
         
     def onTransactionChoice(self, event):
-        tnum = event.Selection
-        transaction = self.transactions[tnum]
+        transaction = self.GetCurrentRecurringTransaction()
         self.transactionCtrl.FromRecurring(transaction)
 
 class AccountConfigDialog(wx.Dialog):
