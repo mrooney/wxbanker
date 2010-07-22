@@ -148,6 +148,12 @@ class GUITests(testbase.TestCaseHandlingConfigBase):
         # Now remove the account and make sure there is no selection.
         mainPanel.accountCtrl.onRemoveButton(None)
         self.assertCurrentAccount(None)
+        
+    def testInitialBalanceHint(self):
+        # Test LP: 520285
+        self.assertEqual(self.NewTransactionCtrl.descCtrl.Value, "")
+        a = self.Model.CreateAccount("testInitialBalanceHint")
+        self.assertEqual(self.NewTransactionCtrl.descCtrl.Value, "Initial balance")
 
     def testCanAddTransaction(self):
         a = self.Model.CreateAccount("testCanAddTransaction")

@@ -337,6 +337,11 @@ class NewTransactionRow(bankcontrols.GBRow):
         # We could see if there are siblings, but they might not have transactions either.
         if account and not account.Transactions:
             self.newButton.StartFlashing()
+            # For a new account, set the description to "Initial balance" as a suggestion/hint (LP: #520285)
+            # We need to focus it so it loses the DescriptiveText, set the Value, then put the caret at the end.
+            self.descCtrl.SetFocus()
+            self.descCtrl.Value = _("Initial balance")
+            self.descCtrl.SetInsertionPoint(len(self.descCtrl.Value))
         else:
             self.newButton.StopFlashing()
             
@@ -344,7 +349,7 @@ class NewTransactionRow(bankcontrols.GBRow):
         if self.isInitialAccountSet:
             # Also, don't focus if the transaction tab isn't being viewed, otherwise it snaps us back from viewing graphs.
             if account and self.Parent.IsShownOnScreen():
-                self.defaultFocus() 
+                self.defaultFocus()
         else:
             self.isInitialAccountSet = True
 
