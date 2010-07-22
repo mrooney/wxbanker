@@ -30,7 +30,7 @@ for filepath in glob.glob("locale/*/LC_MESSAGES/*.mo"):
 setup(
     version = version.NUMBER,
     name = "wxBanker",
-    description = "Lightweight personal finance manager",
+    description = "Simple personal finance.",
     author = "Michael Rooney",
     author_email = "mrooney@ubuntu.com",
     url = "https://launchpad.net/wxbanker",
