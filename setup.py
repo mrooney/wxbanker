@@ -36,7 +36,7 @@ setup(
     url = "https://launchpad.net/wxbanker",
     download_url='https://launchpad.net/wxbanker/+download',
     packages = ["wxbanker", "wxbanker.art", "wxbanker.bankobjects",
-        "wxbanker.plots", "wxbanker.tests",
+        "wxbanker.plots", "wxbanker.tests", "wxbanker.mint",
         "wxbanker.cairoplot", "wxbanker.ObjectListView"],
     license='GNU GPL',
     platforms='linux',
