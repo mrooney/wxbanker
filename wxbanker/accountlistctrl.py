@@ -173,10 +173,12 @@ class AccountListCtrl(wx.Panel):
         enabled = message.data
         if enabled:
             self.ConfigureCurrentAccount(tab="mint")
+            # Refresh everything in the case of a cancel which won't trigger an update event.
+            self.onMintDataUpdated()
         else:
             self.ShowMintStatus(False)
            
-    def onMintDataUpdated(self, message):
+    def onMintDataUpdated(self, message=None):
         self.ShowMintStatus(True)
         self._UpdateMintStatuses()
         # A zero-balance account could be out of/ in sync, potentially toggling its visibility.
@@ -189,7 +191,7 @@ class AccountListCtrl(wx.Panel):
         self.Layout()
         
     def MintStatusIsShown(self):
-        return self.mintStatuses and self.mintStatuses[0].IsShown()
+        return self.Model.MintEnabled
 
     def IsVisible(self, index):
         """Return whether or not the account at the given index is visible."""

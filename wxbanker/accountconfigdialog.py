@@ -104,15 +104,25 @@ class MintConfigPanel(wx.Panel):
         # Login (potentially using the cache) and populate accounts.
         self.mintLogin()
         accounts = Mint.GetAccounts()
-        for i, (mintId, item) in enumerate(Mint.GetAccounts().items()):
+        accountMintId = self.Account.GetMintId()
+        # Init i in the case that there aren't accounts as we use it below.
+        i = 0
+        matched = False
+        for i, (mintId, item) in enumerate(sorted(Mint.GetAccounts().items(), cmp=lambda a,b: cmp(a[1]['name'], b[1]['name']))):
             option = "%s - %s" % (item['name'], self.Account.float2str(item['balance']))
             self.mintCombo.Append(option, mintId)
             # If this is the currently configured account, select it.
-            if mintId == self.Account.GetMintId():
-                self.mintCombo.Selection = i
+            if mintId == accountMintId:
+                # It is offset by one as NoneAccount is first.
+                self.mintCombo.Selection = i+1
+                matched = True
         
-        # If there are accounts but none is currently set, choose the first actual one. 
-        if accounts and not self.Account.IsMintEnabled():
+        # If the account has an ID configured but it wasn't matched, show/select it so a save is not lossy.
+        if not matched and accountMintId:
+            self.mintCombo.Append(str(accountMintId), accountMintId)
+            self.mintCombo.Selection = i+1
+        # If there are accounts but none is currently set, choose the first actual one.
+        elif accounts and not self.Account.IsMintEnabled():
             self.mintCombo.Selection = 1
             
         self.Layout()
