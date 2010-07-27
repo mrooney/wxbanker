@@ -47,6 +47,7 @@ class BankerPanel(wx.Panel):
         self.mainPanel = managetab.MainPanel(self, bankController)
         
         Publisher.subscribe(self.onRecurringTransactionAdded, "recurringtransaction.created")
+        Publisher.subscribe(self.onRecurringTransactionUpdated, "recurringtransaction.updated")
 
         self.Sizer = wx.BoxSizer(wx.VERTICAL)
         self.Sizer.Add(self.mainPanel, 1, wx.EXPAND)
@@ -57,6 +58,10 @@ class BankerPanel(wx.Panel):
         self.Sizer.Insert(0, panel, 0, wx.EXPAND)
         self.Layout()
 
+    def onRecurringTransactionUpdated(self, message):
+        # If a recurring transaction was updated, perhaps there are more to enter.
+        self.CheckRecurringTransactions()
+        
     def CheckRecurringTransactions(self):
         recurrings = self.bankController.Model.GetRecurringTransactions()
         # Figure out how many due recurring transactions there are.

@@ -17,6 +17,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import wx
+from wx.lib.pubsub import Publisher
 from wxbanker.transactionctrl import TransactionCtrl
 
 from wxbanker.mint.api import Mint
@@ -194,6 +195,8 @@ class RecurringConfigPanel(wx.Panel):
             originalTransaction = self.transactions[self.transactionChoice.Selection]
             modifiedTransaction = self.transactionCtrl.recurringObj
             originalTransaction.UpdateFrom(modifiedTransaction)
+            # Let everyone know about this, someone might want to check if there are new pending transactions.
+            Publisher.sendMessage("recurringtransaction.updated")
         elif event.Id == wx.ID_DELETE:
             recurring = self.GetCurrentRecurringTransaction()
             warningMsg = _("This will permanently remove this recurring transaction. Continue?")
