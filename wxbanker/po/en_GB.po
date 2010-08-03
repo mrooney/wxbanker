@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-07-20 23:40-0700\n"
-"PO-Revision-Date: 2010-07-21 08:27+0000\n"
-"Last-Translator: Michael Rooney <mrooney@ubuntu.com>\n"
+"POT-Creation-Date: 2010-07-22 00:01-0700\n"
+"PO-Revision-Date: 2010-08-02 17:26+0000\n"
+"Last-Translator: jgraeme <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-07-22 03:54+0000\n"
+"X-Launchpad-Export-Date: 2010-08-03 03:35+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/summarytab.py:30
@@ -24,7 +24,7 @@ msgstr "Trend Degree"
 
 #: wxbanker/summarytab.py:30
 msgid "Months"
-msgstr ""
+msgstr "Months"
 
 #: wxbanker/summarytab.py:48
 msgid "From"
@@ -36,7 +36,7 @@ msgstr "to"
 
 #: wxbanker/summarytab.py:50
 msgid "Graph"
-msgstr ""
+msgstr "Graph"
 
 #: wxbanker/csvimportframe.py:28
 msgid "CSV import"
@@ -266,36 +266,40 @@ msgstr "Enter this transaction"
 msgid "Recurring"
 msgstr "Recurring"
 
-#: wxbanker/newtransactionctrl.py:375
+#: wxbanker/newtransactionctrl.py:343
+msgid "Initial balance"
+msgstr "Initial balance"
+
+#: wxbanker/newtransactionctrl.py:380
 msgid "No amount entered in the 'Amount' field."
 msgstr "No amount entered in the 'Amount' field."
 
-#: wxbanker/newtransactionctrl.py:377
+#: wxbanker/newtransactionctrl.py:382
 #, python-format
 msgid "'%s' is not a valid amount."
 msgstr "'%s' is not a valid amount."
 
-#: wxbanker/newtransactionctrl.py:380
+#: wxbanker/newtransactionctrl.py:385
 msgid "Please enter a number such as 12.34 or -20."
 msgstr "Please enter a number such as 12.34 or -20."
 
-#: wxbanker/newtransactionctrl.py:381
+#: wxbanker/newtransactionctrl.py:386
 msgid "Invalid Transaction Amount"
 msgstr "Invalid Transaction Amount"
 
-#: wxbanker/newtransactionctrl.py:392
+#: wxbanker/newtransactionctrl.py:397
 msgid "Please select an account and then try again."
 msgstr "Please select an account and then try again."
 
-#: wxbanker/newtransactionctrl.py:393 wxbanker/newtransactionctrl.py:421
+#: wxbanker/newtransactionctrl.py:398 wxbanker/newtransactionctrl.py:426
 msgid "No account selected"
 msgstr "No account selected"
 
-#: wxbanker/newtransactionctrl.py:406
+#: wxbanker/newtransactionctrl.py:411
 msgid "A search is currently active."
 msgstr "A search is currently active."
 
-#: wxbanker/newtransactionctrl.py:406
+#: wxbanker/newtransactionctrl.py:411
 #, python-format
 msgid ""
 "Would you like to clear the current search and make this transaction in "
@@ -304,17 +308,17 @@ msgstr ""
 "Would you like to clear the current search and make this transaction in "
 "\"%s\"?"
 
-#: wxbanker/newtransactionctrl.py:407
+#: wxbanker/newtransactionctrl.py:412
 msgid "Clear search?"
 msgstr "Clear search?"
 
-#: wxbanker/newtransactionctrl.py:420
+#: wxbanker/newtransactionctrl.py:425
 msgid ""
 "This transaction is marked as a transfer. Please select the transfer account."
 msgstr ""
 "This transaction is marked as a transfer. Please select the transfer account."
 
-#: wxbanker/newtransactionctrl.py:453
+#: wxbanker/newtransactionctrl.py:458
 msgid ""
 "If this box is checked when adding a transaction, you will be prompted for "
 "the account to use as the source of the transfer."
@@ -322,7 +326,7 @@ msgstr ""
 "If this box is ticked when adding a transaction, you will be prompted for "
 "the account to use as the source of the transfer."
 
-#: wxbanker/newtransactionctrl.py:454
+#: wxbanker/newtransactionctrl.py:459
 msgid ""
 "For example, checking this box and entering a transaction of $50 into this "
 "account will also subtract $50 from the account that you choose as the "
@@ -779,7 +783,7 @@ msgstr "Move these %i transactions to account"
 
 #: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:75
 msgid "balance"
-msgstr ""
+msgstr "balance"
 
 #: wxbanker/plots/wxplotpanel.py:37 wxbanker/plots/wxplotpanel.py:44
 #: wxbanker/plots/cairopanel.py:81 wxbanker/plots/cairopanel.py:122
@@ -800,7 +804,7 @@ msgstr "Time"
 
 #: wxbanker/plots/cairopanel.py:33
 msgid "monthly"
-msgstr ""
+msgstr "monthly"
 
 #: wxbanker/plots/plotfactory.py:51
 #, python-format
@@ -817,7 +821,7 @@ msgstr "detected"
 
 #: wxbanker/accountconfigdialog.py:35
 msgid "None"
-msgstr ""
+msgstr "None"
 
 #: wxbanker/accountconfigdialog.py:36
 msgid "Mint.com credentials:"
@@ -854,7 +858,7 @@ msgstr "Transaction details"
 
 #: wxbanker/accountconfigdialog.py:189
 msgid "This will permanently remove this recurring transaction. Continue?"
-msgstr ""
+msgstr "This will permanently remove this recurring transaction. Continue?"
 
 #: wxbanker/accountconfigdialog.py:200
 msgid "This account currently has no recurring transactions."
