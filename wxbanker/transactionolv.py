@@ -191,8 +191,13 @@ class TransactionOLV(GroupListView):
             self.showContextMenu(transactions, col)
 
     def showContextMenu(self, transactions, col, removeOnly=False):
+        # This seems unlikely but let's defend against it.
+        if not transactions:
+            return
+        
         menu = wx.Menu()
-
+        
+        # removeOnly means only show the remove entry, such as from the CSV import frame.
         if not removeOnly:
             # If the right-click was on the total column, use the total, otherwise the amount.
             if col == self.COL_TOTAL:
@@ -220,9 +225,13 @@ class TransactionOLV(GroupListView):
         if len(transactions) == 1:
             removeStr = _("Remove this transaction")
             moveStr = _("Move this transaction to account")
+            tagStr = _("No tags yet")
         else:
             removeStr = _("Remove these %i transactions") % len(transactions)
             moveStr = _("Move these %i transactions to account") % len(transactions)
+            tagStr = _("No common tags yet")
+            
+        addTagStr = _("Add a tag")
 
         removeItem = wx.MenuItem(menu, -1, removeStr)
         menu.Bind(wx.EVT_MENU, lambda e: self.onRemoveTransactions(transactions), source=removeItem)
@@ -243,6 +252,36 @@ class TransactionOLV(GroupListView):
                 accountsMenu.Bind(wx.EVT_MENU, lambda e, account=account: self.onMoveTransactions(transactions, account), source=accountItem)
             moveToAccountItem.SetSubMenu(accountsMenu)
             moveMenuItem = menu.AppendItem(moveToAccountItem)
+            
+            # The tag menu.
+            tagsItem = wx.MenuItem(menu, -1, _("Tags"))
+            tagsMenu = wx.Menu()
+
+            ## The initial tags are the ones in the first transaction. If there are more, intersect across them.
+            commonTags = set(transactions[0].Tags)
+            for transaction in transactions[1:]:
+                commonTags = commonTags.intersection(transaction.Tags)
+                
+            ## If we have any common tags, add them to the menu, otherwise the no tags item.
+            if commonTags:
+                for tag in commonTags:
+                    tagItem = wx.MenuItem(tagsMenu, -1, tag)
+                    tagItemMenu = wx.Menu()
+                    tagItemMenu.Append(-1, _("Search for this tag"))
+                    tagItemMenu.Append(-1, _("Remove this tag"))
+                    tagItem.SetSubMenu(tagItemMenu)
+                    tagsMenu.AppendItem(tagItem)
+            else:
+                noTagsItem = tagsMenu.Append(-1, tagStr)
+                menu.Enable(noTagsItem.Id, False)
+            tagsMenu.AppendSeparator()
+            tagsMenu.Append(-1, addTagStr)
+            tagsItem.SetSubMenu(tagsMenu)
+            
+            ## Append it at the bottom after a separator.
+            menu.AppendSeparator()
+            menu.AppendItem(tagsItem)
+            
             # If there are no siblings, disable the item, but leave it there for consistency.
             if not siblings:
                 menu.Enable(moveMenuItem.Id, False)
