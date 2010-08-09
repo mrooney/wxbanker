@@ -21,6 +21,10 @@
 from wx.lib.pubsub import Publisher
 from wxbanker import bankexceptions
 
+class EmptyTagException(Exception):
+    def __str__(self):
+        return "Tags cannot be empty"
+
 class Tag(object):
     TAG_CHAR = "#"
     
@@ -28,6 +32,11 @@ class Tag(object):
         # Support a copy-constructor of sorts as well.
         if isinstance(tag, Tag):
             tag = tag.Name
+        
+        # A tag cannot be blank!
+        if not tag:
+            raise EmptyTagException()
+        
         self.Name = tag
         
     def __str__(self):

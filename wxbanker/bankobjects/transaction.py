@@ -23,7 +23,7 @@ import datetime
 import re
 
 from wxbanker.bankobjects.ormobject import ORMObject
-from wxbanker.bankobjects.tag import Tag
+from wxbanker.bankobjects.tag import Tag, EmptyTagException
 from wxbanker import debug
 
 class Transaction(ORMObject):
@@ -116,7 +116,11 @@ class Transaction(ORMObject):
         for word in description.split(" "):
             if word.startswith("#"):
                 tagName = word[1:].lower()
-                tag = Tag(tagName)
+                try:
+                    tag = Tag(tagName)
+                except EmptyTagException:
+                    # This is not so good but, we can't argue with the description, it just isn't a tag.
+                    continue
                 tags.add(tag)
         
         removedTags = self._Tags.difference(tags)

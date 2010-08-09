@@ -31,7 +31,7 @@ TODO (for feature parity):
 import wx, datetime
 from wx.lib.pubsub import Publisher
 from wxbanker.ObjectListView import GroupListView, ColumnDefn, CellEditorRegistry
-from wxbanker import bankcontrols
+from wxbanker import bankcontrols, tagtransactiondialog
 
 
 class TransactionOLV(GroupListView):
@@ -278,8 +278,9 @@ class TransactionOLV(GroupListView):
                 noTagsItem = tagsMenu.Append(-1, tagStr)
                 menu.Enable(noTagsItem.Id, False)
             tagsMenu.AppendSeparator()
-            tagsMenu.Append(-1, addTagStr)
+            addItem = tagsMenu.Append(-1, addTagStr)
             tagsItem.SetSubMenu(tagsMenu)
+            tagsMenu.Bind(wx.EVT_MENU, lambda e: self.onTagTransactions(transactions), source=addItem)
             
             ## Append it at the bottom after a separator.
             menu.AppendSeparator()
@@ -343,7 +344,13 @@ class TransactionOLV(GroupListView):
     def onTagRemoval(self, tag, transactions):
         for transaction in transactions:
             transaction.RemoveTag(tag)
-        # The removal won't appear unless we refresh.
+        # The removal won't appear unless we refresh the affected transactions.
+        self.RefreshObjects(transactions)
+        
+    def onTagTransactions(self, transactions):
+        dlg = tagtransactiondialog.TagTransactionsDialog(self, transactions)
+        dlg.ShowModal()
+        # Unconditionally refresh, since hitting enter in the tag field requires a refresh but doesn't provide a useful result.
         self.RefreshObjects(transactions)
         
     def onSearch(self, message):

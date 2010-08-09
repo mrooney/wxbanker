@@ -19,7 +19,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 from wxbanker.tests import testbase
-from wxbanker.bankobjects.tag import Tag
+from wxbanker.bankobjects.tag import Tag, EmptyTagException
 
 class TagTests(testbase.TestCaseWithController):
     def getTransaction(self):
@@ -34,6 +34,9 @@ class TagTests(testbase.TestCaseWithController):
         self.assertEqual(t.Tags, set())
         # For sanity.
         self.assertEqual(model.Tags, set())
+        
+    def testCannotCreateEmptyTag(self):
+        self.assertRaisesWithMsg(Tag, [""], EmptyTagException, "Tags cannot be empty")
         
     def testTagStringValue(self):
         tag = Tag("Foobar")
