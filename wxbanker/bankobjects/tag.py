@@ -24,8 +24,11 @@ from wxbanker import bankexceptions
 class Tag(object):
     TAG_CHAR = "#"
     
-    def __init__(self, name):
-        self.Name = name
+    def __init__(self, tag):
+        # Support a copy-constructor of sorts as well.
+        if isinstance(tag, Tag):
+            tag = tag.Name
+        self.Name = tag
         
     def __str__(self):
         return "%s%s" % (self.TAG_CHAR, self.Name)

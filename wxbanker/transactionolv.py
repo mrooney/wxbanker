@@ -268,11 +268,12 @@ class TransactionOLV(GroupListView):
                     tagItem = wx.MenuItem(tagsMenu, -1, tag.Name)
                     tagItemMenu = wx.Menu()
                     searchItem = tagItemMenu.Append(-1, _("Search for this tag"))
-                    tagItemMenu.Append(-1, _("Remove this tag"))
+                    removeItem = tagItemMenu.Append(-1, _("Remove this tag"))
                     tagItem.SetSubMenu(tagItemMenu)
                     tagsMenu.AppendItem(tagItem)
                     
-                    tagItemMenu.Bind(wx.EVT_MENU, lambda e, tag=tag: self.onTagSearch(tag))
+                    tagItemMenu.Bind(wx.EVT_MENU, lambda e, tag=tag: self.onTagSearch(tag), source=searchItem)
+                    tagItemMenu.Bind(wx.EVT_MENU, lambda e, tag=tag: self.onTagRemoval(tag, transactions), source=removeItem)
             else:
                 noTagsItem = tagsMenu.Append(-1, tagStr)
                 menu.Enable(noTagsItem.Id, False)
@@ -338,6 +339,12 @@ class TransactionOLV(GroupListView):
 
     def onTagSearch(self, tag):
         Publisher.sendMessage("SEARCH.EXTERNAL", str(tag))
+        
+    def onTagRemoval(self, tag, transactions):
+        for transaction in transactions:
+            transaction.RemoveTag(tag)
+        # The removal won't appear unless we refresh.
+        self.RefreshObjects(transactions)
         
     def onSearch(self, message):
         self.SetEmptyListMsg(self.EMPTY_MSG_SEARCH)

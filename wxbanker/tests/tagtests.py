@@ -22,8 +22,8 @@ from wxbanker.tests import testbase
 from wxbanker.bankobjects.tag import Tag
 
 class TagTests(testbase.TestCaseWithController):
-    def assertStringTagsEqual(self, tagList, strList):
-        self.assertEqual([str(x) for x in tagList], strList)
+    def getTransaction(self):
+        return self.Model.CreateAccount("A").AddTransaction(1)
         
     def testEmptyModelHasNoTags(self):
         model = self.Model
@@ -40,6 +40,48 @@ class TagTests(testbase.TestCaseWithController):
         self.assertEqual(str(tag), "#Foobar")
         self.assertEqual(tag.Name, "Foobar")
         
+    def testTagAddition(self):
+        t = self.getTransaction()
+        t.Description = "Bats and Snakes"
+        self.assertEqual(t.Tags, set())
+        
+        t.AddTag("warning")
+        self.assertEqual(t.Tags, set([Tag("warning")]))
+        self.assertEqual(t.Description, "Bats and Snakes #warning")
+        
+        return t
+        
+    def testDuplicateTagAddition(self):
+        # Test that adding a tag which already exists does nothing.
+        t = self.testTagAddition()
+        self.assertEqual(t.Description, "Bats and Snakes #warning")
+        t.AddTag("warning")
+        self.assertEqual(t.Description, "Bats and Snakes #warning")
+        
+    def testTagRemovalFromEndSubtag(self):
+        t = self.getTransaction()
+        # This is a test to make sure that when we replace '#greet' with nothing,
+        # we don't also remove the beginning of the '#greeting' tag.
+        t.Description = "hello there #greeting #greet"
+        t.RemoveTag("greet")
+        self.assertEqual(t.Description, "hello there #greeting")
+        self.assertEqual(t.Tags, set([Tag("greeting")]))
+        
+    def testTagRemovalFromBeginning(self):
+        t = self.getTransaction()
+        t.Description = "#groceries Whole Foods"
+        t.RemoveTag("groceries")
+        self.assertEqual(t.Description, "Whole Foods")
+        self.assertEqual(t.Tags, set())
+        
+    def testTagRemovalWithTagObject(self):
+        # Remove a Tag object should also be valid, and this is how the OLV does it.
+        t = self.getTransaction()
+        t.Description = "#groceries Whole Foods"
+        t.RemoveTag(Tag("groceries"))
+        self.assertEqual(t.Description, "Whole Foods")
+        self.assertEqual(t.Tags, set())
+    
     def testTagEquality(self):
         a = Tag("A")
         self.assertEqual(a, a)

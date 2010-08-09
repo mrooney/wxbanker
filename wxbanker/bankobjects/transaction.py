@@ -20,6 +20,7 @@
 
 from wx.lib.pubsub import Publisher
 import datetime
+import re
 
 from wxbanker.bankobjects.ormobject import ORMObject
 from wxbanker.bankobjects.tag import Tag
@@ -132,10 +133,14 @@ class Transaction(ORMObject):
         Publisher.sendMessage("transaction.untagged", tagNames)
         
     def AddTag(self, tagName):
-        pass
+        tag = Tag(tagName)
+        if tag not in self.Tags:
+            self.Description += " %s" % tag
     
     def RemoveTag(self, tagName):
-        pass
+        fullTag = str(Tag(tagName))
+        pattern = "( %s$|%s )" % (fullTag, fullTag)
+        self.Description = re.sub(pattern, "", self.Description)
                 
     def GetTags(self):
         return self._Tags
