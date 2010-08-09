@@ -29,7 +29,7 @@ class SearchCtrl(wx.Panel):
         
         self.bankController = bankController
 
-        self.searchCtrl = wx.SearchCtrl(self, value="", size=(200, -1), style=wx.TE_PROCESS_ENTER)
+        self.searchCtrl = bankcontrols.UpdatableSearchCtrl(self, value="", size=(200, -1), style=wx.TE_PROCESS_ENTER)
         # Try to grab the GTK system icon for clearing a search, otherwise we'll get the wxPython one.
         clearBitmap = wx.ArtProvider.GetBitmap('edit-clear')
         if clearBitmap:
@@ -42,6 +42,7 @@ class SearchCtrl(wx.Panel):
         self.moreButton = bankcontrols.MultiStateButton(self, labelDict={True: _("More options"), False: _("Less options")}, state=True)
 
         self.matchChoices = [_("Amount"), _("Description"), _("Date")]
+        self.descriptionSelection = 1
         self.matchBox = bankcontrols.CompactableComboBox(self, value=self.matchChoices[1], choices=self.matchChoices, style=wx.CB_READONLY)
 
         topSizer = wx.BoxSizer()
@@ -67,6 +68,8 @@ class SearchCtrl(wx.Panel):
         # Bindings to search on settings change automatically.
         self.matchBox.Bind(wx.EVT_COMBOBOX, self.onSearchTrigger)
         self.Bind(wx.EVT_TIMER, self.onSearchTimer)
+        
+        Publisher.subscribe(self.onExternalSearch, "SEARCH.EXTERNAL")
 
         # Initially hide the extra search options.
         self.onToggleMore()
@@ -82,7 +85,6 @@ class SearchCtrl(wx.Panel):
         self.onSearch()
 
     def onSearch(self, event=None):
-        #WXTODO: enable search button in ctrl and appropriate event handling
         # Stop any timer that may be active, in the case of a manual search.
         self.SearchTimer.Stop()
         searchString = self.searchCtrl.Value # For a date, should be YYYY-MM-DD.
@@ -94,6 +96,16 @@ class SearchCtrl(wx.Panel):
             self.onCancel()
         else:
             Publisher.sendMessage("SEARCH.INITIATED", searchInfo)
+            
+    def onExternalSearch(self, message):
+        # If something else performs a search (such as Tag context menu), update the Value and search.
+        tagObj = message.data
+        fullTag = str(tagObj)
+        # An external search is on description, so set that.
+        self.matchBox.Selection = self.descriptionSelection
+        self.searchCtrl.UpdateValue(fullTag)
+        # A SetValue will trigger a search after the timer, but let's trigger one immediately for responsiveness.
+        self.onSearch()
 
     def onCancel(self, event=None):
         # Don't clear the value if there isn't one, it will trigger an EVT_TEXT, causing an infinite search -> cancel loop.

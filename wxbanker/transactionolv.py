@@ -265,12 +265,14 @@ class TransactionOLV(GroupListView):
             ## If we have any common tags, add them to the menu, otherwise the no tags item.
             if commonTags:
                 for tag in commonTags:
-                    tagItem = wx.MenuItem(tagsMenu, -1, tag)
+                    tagItem = wx.MenuItem(tagsMenu, -1, tag.Name)
                     tagItemMenu = wx.Menu()
-                    tagItemMenu.Append(-1, _("Search for this tag"))
+                    searchItem = tagItemMenu.Append(-1, _("Search for this tag"))
                     tagItemMenu.Append(-1, _("Remove this tag"))
                     tagItem.SetSubMenu(tagItemMenu)
                     tagsMenu.AppendItem(tagItem)
+                    
+                    tagItemMenu.Bind(wx.EVT_MENU, lambda e, tag=tag: self.onTagSearch(tag))
             else:
                 noTagsItem = tagsMenu.Append(-1, tagStr)
                 menu.Enable(noTagsItem.Id, False)
@@ -334,6 +336,9 @@ class TransactionOLV(GroupListView):
             #WXTODO: Perhaps get the actual position and scroll to that, it may not be last.
             self.ensureVisible(-1)
 
+    def onTagSearch(self, tag):
+        Publisher.sendMessage("SEARCH.EXTERNAL", str(tag))
+        
     def onSearch(self, message):
         self.SetEmptyListMsg(self.EMPTY_MSG_SEARCH)
         self.LastSearch = message.data

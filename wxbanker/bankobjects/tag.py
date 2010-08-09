@@ -22,14 +22,21 @@ from wx.lib.pubsub import Publisher
 from wxbanker import bankexceptions
 
 class Tag(object):
-    def __init__(self, ID, name):
-        self.ID = ID
+    TAG_CHAR = "#"
+    
+    def __init__(self, name):
         self.Name = name
         
     def __str__(self):
-        return self.Name
+        return "%s%s" % (self.TAG_CHAR, self.Name)
+    
+    def __eq__(self, other):
+        return isinstance(other, Tag) and self.Name == other.Name
     
     def __cmp__(self, other):
         if not isinstance(other, Tag):
             return 1
-        return cmp(self.ID, other.ID)
+        return cmp(self.Name, other.Name)
+    
+    def __hash__(self):
+        return hash(self.Name)

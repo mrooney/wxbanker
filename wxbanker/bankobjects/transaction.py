@@ -22,6 +22,7 @@ from wx.lib.pubsub import Publisher
 import datetime
 
 from wxbanker.bankobjects.ormobject import ORMObject
+from wxbanker.bankobjects.tag import Tag
 from wxbanker import debug
 
 class Transaction(ORMObject):
@@ -113,7 +114,8 @@ class Transaction(ORMObject):
         tags = set()
         for word in description.split(" "):
             if word.startswith("#"):
-                tag = word[1:].lower()
+                tagName = word[1:].lower()
+                tag = Tag(tagName)
                 tags.add(tag)
         
         removedTags = self._Tags.difference(tags)

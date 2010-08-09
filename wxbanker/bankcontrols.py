@@ -140,7 +140,15 @@ class MultiStateButton(wx.Button):
     State = property(GetState, SetState)
 
 
-class HintedTextCtrl(wx.SearchCtrl):
+class UpdatableSearchCtrl(wx.SearchCtrl):
+    def UpdateValue(self, value):
+        """Update the value such that the control has focus and the text is not gray."""
+        self.SetFocus()
+        self.SetValue(value)
+        self.SetInsertionPoint(len(self.Value))
+            
+        
+class HintedTextCtrl(UpdatableSearchCtrl):
     def __init__(self, *args, **kwargs):
         conf = {"hint": "", "icon": None, "handler": None}
         for kw in conf.keys():
@@ -148,7 +156,7 @@ class HintedTextCtrl(wx.SearchCtrl):
                 conf[kw] = kwargs[kw]
                 del kwargs[kw]
 
-        wx.SearchCtrl.__init__(self, *args, **kwargs)
+        UpdatableSearchCtrl.__init__(self, *args, **kwargs)
         self.ShowCancelButton(False)
 
         if conf['icon'] is None:

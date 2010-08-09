@@ -36,43 +36,47 @@ class TagTests(testbase.TestCaseWithController):
         self.assertEqual(model.Tags, set())
         
     def testTagStringValue(self):
-        tag = Tag(0, "Foobar")
-        self.assertEqual(str(tag), "Foobar")
+        tag = Tag("Foobar")
+        self.assertEqual(str(tag), "#Foobar")
+        self.assertEqual(tag.Name, "Foobar")
         
     def testTagEquality(self):
-        a = Tag(1, "A")
+        a = Tag("A")
         self.assertEqual(a, a)
         self.assertNotEqual(a, None)
         
-        a2 = Tag(2, "A")
-        self.assertNotEqual(a, a2)
+        a2 = Tag("A")
+        self.assertEqual(a, a2)
         
-        a3 = Tag(1, "A")
-        self.assertEqual(a, a3)
+        a3 = Tag("B")
+        self.assertNotEqual(a3, a)
+        self.assertNotEqual(a3, a2)
         
     def testTaggingAndUntagging(self):
         model = self.Model
         a = model.CreateAccount("A")
         t = a.AddTransaction(amount=1, description="testing #foo")
         
-        self.assertEqual(t.Tags, set(["foo"]))
-        self.assertEqual(model.Tags, set(["foo"]))
+        self.assertEqual([Tag("foo")], [Tag("foo")])
+        self.assertEqual(set([Tag("foo")]), set([Tag("foo")]))
+        self.assertEqual(t.Tags, set([Tag("foo")]))
+        self.assertEqual(model.Tags, set([Tag("foo")]))
         
         # foo should be untagged, bar should be tagged.
         t.Description = "another #bar"
-        self.assertEqual(t.Tags, set(["bar"]))
-        self.assertEqual(model.Tags, set(["bar"]))
+        self.assertEqual(t.Tags, set([Tag("bar")]))
+        self.assertEqual(model.Tags, set([Tag("bar")]))
         
         t2 = a.AddTransaction(amount=1, description="testing #bar #baz")
-        self.assertEqual(t.Tags, set(["bar"]))
-        self.assertEqual(t2.Tags, set(["bar", "baz"]))
-        self.assertEqual(model.Tags, set(["bar", "baz"]))
+        self.assertEqual(t.Tags, set([Tag("bar")]))
+        self.assertEqual(t2.Tags, set([Tag("bar"), Tag("baz")]))
+        self.assertEqual(model.Tags, set([Tag("bar"), Tag("baz")]))
 
         # Make sure the transaction tags are expected, and model still has bar from 't'.
         t2.Description = "nothing special"
-        self.assertEqual(t.Tags, set(["bar"]))
+        self.assertEqual(t.Tags, set([Tag("bar")]))
         self.assertEqual(t2.Tags, set())
-        self.assertEqual(model.Tags, set(["bar"]))
+        self.assertEqual(model.Tags, set([Tag("bar")]))
         
         
 

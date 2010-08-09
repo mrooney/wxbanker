@@ -338,10 +338,7 @@ class NewTransactionRow(bankcontrols.GBRow):
         if account and not account.Transactions:
             self.newButton.StartFlashing()
             # For a new account, set the description to "Initial balance" as a suggestion/hint (LP: #520285)
-            # We need to focus it so it loses the DescriptiveText, set the Value, then put the caret at the end.
-            self.descCtrl.SetFocus()
-            self.descCtrl.Value = _("Initial balance")
-            self.descCtrl.SetInsertionPoint(len(self.descCtrl.Value))
+            self.descCtrl.UpdateValue(_("Initial balance"))
         else:
             self.newButton.StopFlashing()
             

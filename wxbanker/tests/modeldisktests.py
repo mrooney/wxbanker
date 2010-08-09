@@ -21,6 +21,7 @@
 from wxbanker.tests import testbase
 from wxbanker import controller, bankobjects
 from wxbanker.bankobjects.recurringtransaction import RecurringTransaction
+from wxbanker.bankobjects.tag import Tag
 from wxbanker.tests.testbase import today, tomorrow
 
 import os, unittest
@@ -430,14 +431,14 @@ class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
         a = model.CreateAccount("A")
         t = a.AddTransaction(amount=1, description="testing #foo")
         
-        self.assertEqual(t.Tags, set(["foo"]))
-        self.assertEqual(model.Tags, set(["foo"]))
+        self.assertEqual(t.Tags, set([Tag("foo")]))
+        self.assertEqual(model.Tags, set([Tag("foo")]))
         
         model2 = model.Store.GetModel(useCached=False)
         a2 = model2.Accounts[0]
         t2 = a2.Transactions[0]
-        self.assertEqual(t2.Tags, set(["foo"]))
-        self.assertEqual(model2.Tags, set(["foo"]))
+        self.assertEqual(t2.Tags, set([Tag("foo")]))
+        self.assertEqual(model2.Tags, set([Tag("foo")]))
         
     def testDeletedRecurringTransactionIsStored(self):
         model1 = self.Controller.Model
