@@ -120,16 +120,22 @@ class Transaction(ORMObject):
         
         removedTags = self._Tags.difference(tags)
         addedTags = tags.difference(self._Tags)
-        self.RemoveTags(removedTags)
-        self.AddTags(addedTags)
+        self.TagsRemoved(removedTags)
+        self.TagsAdded(addedTags)
         
-    def AddTags(self, tagNames):
+    def TagsAdded(self, tagNames):
         self.Tags.update(tagNames)
         Publisher.sendMessage("transaction.tagged", tagNames)
     
-    def RemoveTags(self, tagNames):
+    def TagsRemoved(self, tagNames):
         self.Tags.difference_update(tagNames)
         Publisher.sendMessage("transaction.untagged", tagNames)
+        
+    def AddTag(self, tagName):
+        pass
+    
+    def RemoveTag(self, tagName):
+        pass
                 
     def GetTags(self):
         return self._Tags
