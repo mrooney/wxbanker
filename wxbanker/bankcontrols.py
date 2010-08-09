@@ -1,5 +1,5 @@
 #    https://launchpad.net/wxbanker
-#    bankcontrols.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
+#    bankcontrols.py: Copyright 2007-2010 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #

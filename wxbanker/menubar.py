@@ -1,7 +1,7 @@
 # -*- coding: iso-8859-15 -*-
 #
 #    https://launchpad.net/wxbanker
-#    menubar.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
+#    menubar.py: Copyright 2007-2010 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #

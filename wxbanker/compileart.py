@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 #    https://launchpad.net/wxbanker
-#    compileart.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
+#    compileart.py: Copyright 2007-2010 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
@@ -38,7 +38,7 @@ validExts = ['png',]
 header = """#!/usr/bin/env python
 #
 #    https://launchpad.net/wxbanker
-#    silk.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
+#    silk.py: Copyright 2007-2010 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #

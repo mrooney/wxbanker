@@ -1,5 +1,5 @@
 #    https://launchpad.net/wxbanker
-#    baseplot.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
+#    baseplot.py: Copyright 2007-2010 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #

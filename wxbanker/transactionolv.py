@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 #    https://launchpad.net/wxbanker
-#    transactionolv.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
+#    transactionolv.py: Copyright 2007-2010 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #

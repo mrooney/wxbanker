@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #    https://launchpad.net/wxbanker
-#    controller.py: Copyright 2007-2009 Mike Rooney <mrooney@ubuntu.com>
+#    controller.py: Copyright 2007-2010 Mike Rooney <mrooney@ubuntu.com>
 #
 #    This file is part of wxBanker.
 #
