@@ -7,44 +7,36 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-05-29 00:01-0700\n"
-"PO-Revision-Date: 2010-07-05 11:28+0000\n"
+"POT-Creation-Date: 2010-07-20 23:40-0700\n"
+"PO-Revision-Date: 2010-07-21 08:41+0000\n"
 "Last-Translator: Yaron <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-07-06 03:35+0000\n"
+"X-Launchpad-Export-Date: 2010-07-22 03:53+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: wxbanker/bankcontrols.py:52 wxbanker/csvimportframe.py:98
-#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:63
-msgid "Date"
-msgstr "תאריך"
+#: wxbanker/summarytab.py:30
+msgid "Trend Degree"
+msgstr "אחוזי מגמה"
 
-#: wxbanker/plots/wxplotpanel.py:35 wxbanker/plots/wxplotpanel.py:42
-#: wxbanker/plots/cairopanel.py:72 wxbanker/plots/cairopanel.py:113
-msgid "Balance"
-msgstr "מאזן"
-
-#: wxbanker/plots/wxplotpanel.py:40 wxbanker/plots/cairopanel.py:76
-msgid "Trend"
-msgstr "מגמה"
-
-#: wxbanker/plots/wxplotpanel.py:42
-msgid "Total Balance Over Time"
-msgstr "המאזן הכללי במשך הזמן"
-
-#: wxbanker/plots/wxplotpanel.py:42 wxbanker/plots/cairopanel.py:112
-msgid "Time"
-msgstr "שעה"
-
-#: wxbanker/plots/plotfactory.py:51
-#, python-format
-msgid "To use '%s' plotting library, install following python modules: %s."
+#: wxbanker/summarytab.py:30
+msgid "Months"
 msgstr ""
-"כדי להשתמש בספריית השרטוט '%s', יש להתקין את המודולים הבאים של פייתון: %s."
+
+#: wxbanker/summarytab.py:48
+msgid "From"
+msgstr "מאת"
+
+#: wxbanker/summarytab.py:49 wxbanker/newtransactionctrl.py:31
+msgid "to"
+msgstr "אל"
+
+#: wxbanker/summarytab.py:50
+msgid "Graph"
+msgstr ""
 
 #: wxbanker/csvimportframe.py:28
 msgid "CSV import"
@@ -62,12 +54,17 @@ msgstr "ייבוא"
 msgid "CSV columns mapping"
 msgstr "מיפוי עמודות CSV"
 
+#: wxbanker/csvimportframe.py:98 wxbanker/bankcontrols.py:52
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:63
+msgid "Date"
+msgstr "תאריך"
+
 #: wxbanker/csvimportframe.py:101
 msgid "Date format"
 msgstr "תבנית תאריך"
 
-#: wxbanker/csvimportframe.py:106 wxbanker/searchctrl.py:44
-#: wxbanker/newtransactionctrl.py:249 wxbanker/transactionolv.py:65
+#: wxbanker/csvimportframe.py:106 wxbanker/newtransactionctrl.py:249
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:65
 msgid "Amount"
 msgstr "סכום"
 
@@ -75,8 +72,8 @@ msgstr "סכום"
 msgid "Decimal separator"
 msgstr "מפריד עשרוני"
 
-#: wxbanker/csvimportframe.py:112 wxbanker/searchctrl.py:44
-#: wxbanker/newtransactionctrl.py:248 wxbanker/transactionolv.py:64
+#: wxbanker/csvimportframe.py:112 wxbanker/newtransactionctrl.py:248
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:64
 msgid "Description"
 msgstr "תיאור"
 
@@ -118,12 +115,12 @@ msgstr ""
 msgid "Load"
 msgstr "טעינה"
 
-#: wxbanker/csvimportframe.py:186 wxbanker/accountconfigdialog.py:56
-#: wxbanker/accountconfigdialog.py:197
+#: wxbanker/csvimportframe.py:186 wxbanker/accountconfigdialog.py:57
+#: wxbanker/accountconfigdialog.py:214
 msgid "Save"
 msgstr "שמירה"
 
-#: wxbanker/csvimportframe.py:191
+#: wxbanker/csvimportframe.py:191 wxbanker/accountconfigdialog.py:213
 msgid "Delete"
 msgstr "מחיקה"
 
@@ -152,115 +149,6 @@ msgstr "לשכתב פרופיל ?"
 #: wxbanker/csvimportframe.py:318
 msgid "Select file and click \"Preview\""
 msgstr "בחירת הקובץ ולחיצה על \"תצוגה מקדימה\""
-
-#: wxbanker/currencies.py:277
-msgid "detected"
-msgstr "זוהה"
-
-#: wxbanker/summarytab.py:42
-msgid "From"
-msgstr "מאת"
-
-#: wxbanker/summarytab.py:46 wxbanker/newtransactionctrl.py:31
-msgid "to"
-msgstr "אל"
-
-#: wxbanker/summarytab.py:50
-msgid "Trend Degree"
-msgstr "אחוזי מגמה"
-
-#: wxbanker/searchctrl.py:39
-msgid "Search transactions"
-msgstr "חפש עסקאות"
-
-#: wxbanker/searchctrl.py:42
-msgid "More options"
-msgstr "אפשרויות נוספות"
-
-#: wxbanker/searchctrl.py:42
-msgid "Less options"
-msgstr "פחות אפשרויות"
-
-#: wxbanker/searchctrl.py:53
-msgid "Match: "
-msgstr "תואם: "
-
-#: wxbanker/searchctrl.py:112
-msgid "Show advanced search options"
-msgstr "הצג אפשרויות חיפוש מתקדמות"
-
-#: wxbanker/searchctrl.py:114
-msgid "Hide advanced search options"
-msgstr "הסתר אפשרויות חיפוש מתקדמות"
-
-#: wxbanker/managetab.py:43
-msgid "Show Calculator"
-msgstr "הצג את המחשבון"
-
-#: wxbanker/managetab.py:43
-msgid "Hide Calculator"
-msgstr "הסתר את המחשבון"
-
-#: wxbanker/managetab.py:97
-msgid "Transactions"
-msgstr "עסקאות"
-
-#: wxbanker/managetab.py:109
-msgid "Summary"
-msgstr "תקציר"
-
-#: wxbanker/recurringsummaryrow.py:45
-msgid "Summary:"
-msgstr "תקציר:"
-
-#: wxbanker/accountconfigdialog.py:35
-msgid "Mint.com credentials:"
-msgstr "פרטי האימות מול Mint.com:"
-
-#: wxbanker/accountconfigdialog.py:40
-msgid "Save credentials in keyring"
-msgstr "שמירת פרטי הזיהוי במפתח הסיסמאות"
-
-#: wxbanker/accountconfigdialog.py:42
-#, python-format
-msgid "Corresponding Mint account for %(name)s:"
-msgstr "חשבון ה־Mint התואם עבור %(name)s:"
-
-#: wxbanker/accountconfigdialog.py:44
-msgid "Update"
-msgstr "עדכון"
-
-#: wxbanker/accountconfigdialog.py:47
-msgid "Username:"
-msgstr "שם המשתמש:"
-
-#: wxbanker/accountconfigdialog.py:49
-msgid "Password:"
-msgstr "סיסמה:"
-
-#: wxbanker/accountconfigdialog.py:57 wxbanker/accountconfigdialog.py:198
-msgid "Cancel"
-msgstr "ביטול"
-
-#: wxbanker/accountconfigdialog.py:144
-msgid "Transaction details"
-msgstr "פרטי העסקה"
-
-#: wxbanker/accountconfigdialog.py:185
-msgid "This account currently has no recurring transactions."
-msgstr "לחשבון זה אין עסקאות חוזרות לעת עתה."
-
-#: wxbanker/accountconfigdialog.py:187
-msgid "Close"
-msgstr "סגור"
-
-#: wxbanker/accountconfigdialog.py:219
-msgid "Recurring Transactions"
-msgstr "עסקאות חוזרות"
-
-#: wxbanker/accountconfigdialog.py:220
-msgid "Mint.com Integration"
-msgstr "שילוב ב־Mint.com"
 
 #: wxbanker/newtransactionctrl.py:31
 msgid "from"
@@ -440,101 +328,29 @@ msgstr ""
 "לדוגמה, סימון תיבה זו והזנת עסקה בסך 50$ לחשבון זה תחסיר 50$ מהחשבון שנבחר "
 "כמקור."
 
-#: wxbanker/transactionolv.py:38
-msgid "No transactions entered."
-msgstr "לא הוזנו עסקאות"
+#: wxbanker/searchctrl.py:39
+msgid "Search transactions"
+msgstr "חפש עסקאות"
 
-#: wxbanker/transactionolv.py:39
-msgid "No matching transactions."
-msgstr "אין העברות תואמות."
+#: wxbanker/searchctrl.py:42
+msgid "More options"
+msgstr "אפשרויות נוספות"
 
-#: wxbanker/transactionolv.py:66
-msgid "Total"
-msgstr "סך־הכל"
+#: wxbanker/searchctrl.py:42
+msgid "Less options"
+msgstr "פחות אפשרויות"
 
-#: wxbanker/transactionolv.py:207
-#, python-format
-msgid "Send %s to calculator"
-msgstr "שלח את %s למחשבון"
+#: wxbanker/searchctrl.py:53
+msgid "Match: "
+msgstr "תואם: "
 
-#: wxbanker/transactionolv.py:208
-#, python-format
-msgid "Add %s to calculator"
-msgstr "הוסף את %s למחשבון"
+#: wxbanker/searchctrl.py:112
+msgid "Show advanced search options"
+msgstr "הצג אפשרויות חיפוש מתקדמות"
 
-#: wxbanker/transactionolv.py:209
-#, python-format
-msgid "Subtract %s from calculator"
-msgstr "חיסור %s מהמחשבון"
-
-#: wxbanker/transactionolv.py:221
-msgid "Remove this transaction"
-msgstr "הסר עסקה זו"
-
-#: wxbanker/transactionolv.py:222
-msgid "Move this transaction to account"
-msgstr "העברת העסקה לחשבון"
-
-#: wxbanker/transactionolv.py:224
-#, python-format
-msgid "Remove these %i transactions"
-msgstr "הסרת %i עסקאות אלו"
-
-#: wxbanker/transactionolv.py:225
-#, python-format
-msgid "Move these %i transactions to account"
-msgstr "העברת %i עסקאות אלו לחשבון"
-
-#: wxbanker/accountlistctrl.py:45
-msgid "Accounts"
-msgstr "חשבונות"
-
-#: wxbanker/accountlistctrl.py:56
-msgid "Add a new account"
-msgstr "הוסף חשבון חדש"
-
-#: wxbanker/accountlistctrl.py:60
-msgid "Remove the selected account"
-msgstr "הסר את החשבון הנבחר"
-
-#: wxbanker/accountlistctrl.py:65
-msgid "Rename the selected account"
-msgstr "שנה את שם החשבון הנבחר"
-
-#: wxbanker/accountlistctrl.py:70
-msgid "Configure the selected account"
-msgstr "הגדר את החשבון הנבחר"
-
-#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:67
-msgid "All accounts"
-msgstr "כל החשבונות"
-
-#: wxbanker/accountlistctrl.py:154
-msgid "Not synchronized with Mint.com"
-msgstr "לא בסנכרון מול Mint.com"
-
-#: wxbanker/accountlistctrl.py:436 wxbanker/accountlistctrl.py:537
-msgid "Sorry, an account by that name already exists."
-msgstr "אנו מתנצלים, חשבון בשם זה כבר קיים."
-
-#: wxbanker/accountlistctrl.py:438 wxbanker/accountlistctrl.py:539
-msgid "Account names cannot be blank."
-msgstr "שמות חשבונות לא יכולים להיות ריקים."
-
-#: wxbanker/accountlistctrl.py:472
-msgid "Account name"
-msgstr "שם החשבון"
-
-#: wxbanker/accountlistctrl.py:511
-#, python-format
-msgid ""
-"This will permanently remove the account '%s' and all its transactions. "
-"Continue?"
-msgstr "פעולה זו תסיר לצמיתות את החשבון '%s' על כל עסקאותיות. להמשיך?"
-
-#: wxbanker/accountlistctrl.py:512
-msgid "Warning"
-msgstr "אזהרה"
+#: wxbanker/searchctrl.py:114
+msgid "Hide advanced search options"
+msgstr "הסתר אפשרויות חיפוש מתקדמות"
 
 #: wxbanker/main.py:79
 #, python-format
@@ -620,136 +436,187 @@ msgstr "נא לשים לב ששמירה אוטומטית מהתפריט קובץ
 msgid "No exchange rate for currency \"%s\""
 msgstr "אין שער המרה עבור סוג המטבע \"%s\""
 
-#: wxbanker/menubar.py:56
+#: wxbanker/accountlistctrl.py:45
+msgid "Accounts"
+msgstr "חשבונות"
+
+#: wxbanker/accountlistctrl.py:56
+msgid "Add a new account"
+msgstr "הוסף חשבון חדש"
+
+#: wxbanker/accountlistctrl.py:60
+msgid "Remove the selected account"
+msgstr "הסר את החשבון הנבחר"
+
+#: wxbanker/accountlistctrl.py:65
+msgid "Rename the selected account"
+msgstr "שנה את שם החשבון הנבחר"
+
+#: wxbanker/accountlistctrl.py:70
+msgid "Configure the selected account"
+msgstr "הגדר את החשבון הנבחר"
+
+#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:68
+msgid "All accounts"
+msgstr "כל החשבונות"
+
+#: wxbanker/accountlistctrl.py:154
+msgid "Not synchronized with Mint.com"
+msgstr "לא בסנכרון מול Mint.com"
+
+#: wxbanker/accountlistctrl.py:436 wxbanker/accountlistctrl.py:537
+msgid "Sorry, an account by that name already exists."
+msgstr "אנו מתנצלים, חשבון בשם זה כבר קיים."
+
+#: wxbanker/accountlistctrl.py:438 wxbanker/accountlistctrl.py:539
+msgid "Account names cannot be blank."
+msgstr "שמות חשבונות לא יכולים להיות ריקים."
+
+#: wxbanker/accountlistctrl.py:472
+msgid "Account name"
+msgstr "שם החשבון"
+
+#: wxbanker/accountlistctrl.py:511
+#, python-format
+msgid ""
+"This will permanently remove the account '%s' and all its transactions. "
+"Continue?"
+msgstr "פעולה זו תסיר לצמיתות את החשבון '%s' על כל עסקאותיות. להמשיך?"
+
+#: wxbanker/accountlistctrl.py:512 wxbanker/accountconfigdialog.py:190
+msgid "Warning"
+msgstr "אזהרה"
+
+#: wxbanker/menubar.py:57
 msgid "Auto-save"
 msgstr "שמירה אוטומטית"
 
-#: wxbanker/menubar.py:56
+#: wxbanker/menubar.py:57
 msgid "Automatically save changes"
 msgstr "שמירת השינויים אוטומטית"
 
-#: wxbanker/menubar.py:58
+#: wxbanker/menubar.py:59
 msgid "Import from CSV"
 msgstr "ייבוא מקובץ CSV"
 
-#: wxbanker/menubar.py:58
+#: wxbanker/menubar.py:59
 msgid "Import transactions from a CSV file"
 msgstr "ייבוא העברות מקובץ CSV"
 
-#: wxbanker/menubar.py:59
+#: wxbanker/menubar.py:60
 msgid "Export to CSV"
 msgstr "יצוא ל־CSV"
 
-#: wxbanker/menubar.py:59
+#: wxbanker/menubar.py:60
 msgid "Export transactions to a CSV file"
 msgstr "יצוא תזרים הכספים לקובץ CSV"
 
-#: wxbanker/menubar.py:65
+#: wxbanker/menubar.py:66
 msgid "Previous account"
 msgstr "החשבון הקודם"
 
-#: wxbanker/menubar.py:66
+#: wxbanker/menubar.py:67
 msgid "Next account"
 msgstr "החשבון הבא"
 
-#: wxbanker/menubar.py:69
+#: wxbanker/menubar.py:70
 msgid "Show zero-balance accounts"
 msgstr "הצגת חשבונות בעלי מאזן 0"
 
-#: wxbanker/menubar.py:69
+#: wxbanker/menubar.py:70
 msgid ""
 "When disabled, accounts with a balance of $0.00 will be hidden from the list"
 msgstr "כשמבוטל, חשבונות בעלי 0.00₪ יוסתרו מהרשימה."
 
-#: wxbanker/menubar.py:78
+#: wxbanker/menubar.py:79
 msgid "&Currency"
 msgstr "&מטבע"
 
-#: wxbanker/menubar.py:78
+#: wxbanker/menubar.py:79
 msgid "Select currency to display"
 msgstr "בחירת סוג המטבע להצגה"
 
-#: wxbanker/menubar.py:87
+#: wxbanker/menubar.py:92
 msgid "Request a Currency"
 msgstr "בקשת מטבע"
 
-#: wxbanker/menubar.py:94
+#: wxbanker/menubar.py:100
 msgid "Integrate with Mint.com"
 msgstr "שילוב ב־Mint.com"
 
-#: wxbanker/menubar.py:94
+#: wxbanker/menubar.py:100
 msgid "Sync account balances with an existing Mint.com account"
 msgstr "סנכרון מאזני חשבונות מול חשבון קיים ב־Mint.com"
 
-#: wxbanker/menubar.py:100
+#: wxbanker/menubar.py:106
 msgid "View &FAQs"
 msgstr "עיון ב&שאלות נפוצות"
 
-#: wxbanker/menubar.py:100
+#: wxbanker/menubar.py:106
 msgid "View Frequently Asked Questions online"
 msgstr "עיון בשאלות נפוצות באתר האינטרנט"
 
-#: wxbanker/menubar.py:105
+#: wxbanker/menubar.py:111
 msgid "Ask a &Question"
 msgstr "לשאול ש&אלה"
 
-#: wxbanker/menubar.py:105
+#: wxbanker/menubar.py:111
 msgid "Ask a question online"
 msgstr "לשאול שאלה באתר האינטרנט"
 
-#: wxbanker/menubar.py:110
+#: wxbanker/menubar.py:116
 msgid "&Report a Bug"
 msgstr "דיווח על &תקלה"
 
-#: wxbanker/menubar.py:110
+#: wxbanker/menubar.py:116
 msgid "Report a bug to the developer online"
 msgstr "דיווח על תקלה למפתחים באתר האינטרנט"
 
-#: wxbanker/menubar.py:115
+#: wxbanker/menubar.py:121
 msgid "Request a Fea&ture"
 msgstr "בקשת &תכונה"
 
-#: wxbanker/menubar.py:115
+#: wxbanker/menubar.py:121
 msgid "Request a new feature to be implemented"
 msgstr "בקשה להטמיע תכונה חדשה בתוכנה"
 
-#: wxbanker/menubar.py:120
+#: wxbanker/menubar.py:126
 msgid "Tran&slate wxBanker"
 msgstr "&תרגום wxBanker"
 
-#: wxbanker/menubar.py:120
+#: wxbanker/menubar.py:126
 msgid "Translate wxBanker to another language"
 msgstr "תרגום wxBanker לשפה אחרת"
 
-#: wxbanker/menubar.py:127
+#: wxbanker/menubar.py:133
 msgid "&About"
 msgstr "&אודות"
 
-#: wxbanker/menubar.py:127
+#: wxbanker/menubar.py:133
 msgid "More information about wxBanker"
 msgstr "מידע נוסף אודות wxBanker"
 
-#: wxbanker/menubar.py:130
+#: wxbanker/menubar.py:136
 msgid "&File"
 msgstr "&קובץ"
 
-#: wxbanker/menubar.py:131
+#: wxbanker/menubar.py:137
 msgid "&View"
 msgstr "&תצוגה"
 
-#: wxbanker/menubar.py:132
+#: wxbanker/menubar.py:138
 msgid "&Settings"
 msgstr "ה&גדרות"
 
-#: wxbanker/menubar.py:133
+#: wxbanker/menubar.py:139
 msgid "&Help"
 msgstr "ע&זרה"
 
-#: wxbanker/menubar.py:240
+#: wxbanker/menubar.py:246
 msgid "Copyright"
 msgstr "זכויות יוצרים"
 
-#: wxbanker/menubar.py:241
+#: wxbanker/menubar.py:247
 msgid "Simple personal finance."
 msgstr "כלכלה אישית בפשטות."
 
@@ -830,9 +697,166 @@ msgstr "העברה מ־%s"
 msgid "Transfer to %s"
 msgstr "העברה אל %s"
 
+#: wxbanker/recurringsummaryrow.py:45
+msgid "Summary:"
+msgstr "תקציר:"
+
+#: wxbanker/managetab.py:43
+msgid "Show Calculator"
+msgstr "הצג את המחשבון"
+
+#: wxbanker/managetab.py:43
+msgid "Hide Calculator"
+msgstr "הסתר את המחשבון"
+
+#: wxbanker/managetab.py:97
+msgid "Transactions"
+msgstr "עסקאות"
+
+#: wxbanker/managetab.py:110
+msgid "Summary"
+msgstr "תקציר"
+
+#: wxbanker/transactionolv.py:38
+msgid "No transactions entered."
+msgstr "לא הוזנו עסקאות"
+
+#: wxbanker/transactionolv.py:39
+msgid "No matching transactions."
+msgstr "אין העברות תואמות."
+
+#: wxbanker/transactionolv.py:66
+msgid "Total"
+msgstr "סך־הכל"
+
+#: wxbanker/transactionolv.py:207
+#, python-format
+msgid "Send %s to calculator"
+msgstr "שלח את %s למחשבון"
+
+#: wxbanker/transactionolv.py:208
+#, python-format
+msgid "Add %s to calculator"
+msgstr "הוסף את %s למחשבון"
+
+#: wxbanker/transactionolv.py:209
+#, python-format
+msgid "Subtract %s from calculator"
+msgstr "חיסור %s מהמחשבון"
+
+#: wxbanker/transactionolv.py:221
+msgid "Remove this transaction"
+msgstr "הסר עסקה זו"
+
+#: wxbanker/transactionolv.py:222
+msgid "Move this transaction to account"
+msgstr "העברת העסקה לחשבון"
+
+#: wxbanker/transactionolv.py:224
+#, python-format
+msgid "Remove these %i transactions"
+msgstr "הסרת %i עסקאות אלו"
+
+#: wxbanker/transactionolv.py:225
+#, python-format
+msgid "Move these %i transactions to account"
+msgstr "העברת %i עסקאות אלו לחשבון"
+
+#: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:75
+msgid "balance"
+msgstr ""
+
+#: wxbanker/plots/wxplotpanel.py:37 wxbanker/plots/wxplotpanel.py:44
+#: wxbanker/plots/cairopanel.py:81 wxbanker/plots/cairopanel.py:122
+msgid "Balance"
+msgstr "מאזן"
+
+#: wxbanker/plots/wxplotpanel.py:42 wxbanker/plots/cairopanel.py:85
+msgid "Trend"
+msgstr "מגמה"
+
+#: wxbanker/plots/wxplotpanel.py:44
+msgid "Total Balance Over Time"
+msgstr "המאזן הכללי במשך הזמן"
+
+#: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:121
+msgid "Time"
+msgstr "שעה"
+
+#: wxbanker/plots/cairopanel.py:33
+msgid "monthly"
+msgstr ""
+
+#: wxbanker/plots/plotfactory.py:51
+#, python-format
+msgid "To use '%s' plotting library, install following python modules: %s."
+msgstr ""
+"כדי להשתמש בספריית השרטוט '%s', יש להתקין את המודולים הבאים של פייתון: %s."
+
 #: wxbanker/messagepanel.py:47
 msgid "Dismiss"
 msgstr "סגור"
+
+#: wxbanker/currencies.py:334
+msgid "detected"
+msgstr "זוהה"
+
+#: wxbanker/accountconfigdialog.py:35
+msgid "None"
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:36
+msgid "Mint.com credentials:"
+msgstr "פרטי האימות מול Mint.com:"
+
+#: wxbanker/accountconfigdialog.py:41
+msgid "Save credentials in keyring"
+msgstr "שמירת פרטי הזיהוי במפתח הסיסמאות"
+
+#: wxbanker/accountconfigdialog.py:43
+#, python-format
+msgid "Corresponding Mint account for %(name)s:"
+msgstr "חשבון ה־Mint התואם עבור %(name)s:"
+
+#: wxbanker/accountconfigdialog.py:45
+msgid "Update"
+msgstr "עדכון"
+
+#: wxbanker/accountconfigdialog.py:48
+msgid "Username:"
+msgstr "שם המשתמש:"
+
+#: wxbanker/accountconfigdialog.py:50
+msgid "Password:"
+msgstr "סיסמה:"
+
+#: wxbanker/accountconfigdialog.py:58 wxbanker/accountconfigdialog.py:215
+msgid "Cancel"
+msgstr "ביטול"
+
+#: wxbanker/accountconfigdialog.py:149
+msgid "Transaction details"
+msgstr "פרטי העסקה"
+
+#: wxbanker/accountconfigdialog.py:189
+msgid "This will permanently remove this recurring transaction. Continue?"
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:200
+msgid "This account currently has no recurring transactions."
+msgstr "לחשבון זה אין עסקאות חוזרות לעת עתה."
+
+#: wxbanker/accountconfigdialog.py:202
+msgid "Close"
+msgstr "סגור"
+
+#: wxbanker/accountconfigdialog.py:238
+msgid "Recurring Transactions"
+msgstr "עסקאות חוזרות"
+
+#: wxbanker/accountconfigdialog.py:239
+msgid "Mint.com Integration"
+msgstr "שילוב ב־Mint.com"
 
 #~ msgid "Sample Points"
 #~ msgstr "נקודות לדוגמה"

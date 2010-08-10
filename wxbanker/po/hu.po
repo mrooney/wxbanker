@@ -7,307 +7,149 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-02-27 01:56-0800\n"
-"PO-Revision-Date: 2010-03-22 21:57+0000\n"
-"Last-Translator: Mgabor <Unknown>\n"
+"POT-Creation-Date: 2010-08-08 00:01-0700\n"
+"PO-Revision-Date: 2010-08-08 21:05+0000\n"
+"Last-Translator: habub <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-03-23 04:45+0000\n"
+"X-Launchpad-Export-Date: 2010-08-09 03:38+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: wxbanker/bankobjects/transaction.py:92
-#, python-format
-msgid "Transfer from %s"
-msgstr ""
-
-#: wxbanker/bankobjects/transaction.py:94
-#, python-format
-msgid "Transfer to %s"
-msgstr ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:147
-#: wxbanker/bankobjects/recurringtransaction.py:154
-#: wxbanker/newtransactionctrl.py:100
-#, python-format
-msgid "Daily"
-msgid_plural "Every %(num)d days"
-msgstr[0] ""
-msgstr[1] ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:150
-msgid "Weekly on weekdays"
-msgstr ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:152
-msgid "Weekly on weekends"
-msgstr ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:156
-msgid "Mondays"
-msgstr ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:156
-msgid "Tuesdays"
-msgstr ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:156
-msgid "Wednesdays"
-msgstr ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:156
-msgid "Thursdays"
-msgstr ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:156
-msgid "Fridays"
-msgstr ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:156
-msgid "Saturdays"
-msgstr ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:156
-msgid "Sundays"
-msgstr ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:160
-#, python-format
-msgid "Weekly on %s"
-msgstr ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:162
-#, python-format
-msgid "Every %(num)d weeks on %%s"
-msgstr ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:169
-#, python-format
-msgid " and %s"
-msgstr ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:171
-#: wxbanker/newtransactionctrl.py:100
-#, python-format
-msgid "Monthly"
-msgid_plural "Every %(num)d months"
-msgstr[0] ""
-msgstr[1] ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:173
-#, python-format
-msgid "Annually"
-msgid_plural "Every %(num)d years"
-msgstr[0] ""
-msgstr[1] ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:177
-#, python-format
-msgid "until %s"
-msgstr ""
-
-#: wxbanker/bankobjects/recurringtransaction.py:194
-msgid "No description"
-msgstr ""
-
-#: wxbanker/accountlistctrl.py:45
-msgid "Accounts"
-msgstr "Számlák"
-
-#: wxbanker/accountlistctrl.py:56
-msgid "Add a new account"
-msgstr "Új számla"
-
-#: wxbanker/accountlistctrl.py:60
-msgid "Remove the selected account"
-msgstr "A kijelölt számla törlése"
-
-#: wxbanker/accountlistctrl.py:65
-msgid "Rename the selected account"
-msgstr "A kijelölt számla átnevezése"
-
-#: wxbanker/accountlistctrl.py:70
-msgid "Configure the selected account"
-msgstr "A kijelölt számla beállítása"
-
-#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:63
-msgid "All accounts"
-msgstr "Minde számla"
-
-#: wxbanker/accountlistctrl.py:423 wxbanker/accountlistctrl.py:525
-msgid "Sorry, an account by that name already exists."
-msgstr "Bocsi, az adott névvel már létezik számla."
-
-#: wxbanker/accountlistctrl.py:425 wxbanker/accountlistctrl.py:527
-msgid "Account names cannot be blank."
-msgstr ""
-
-#: wxbanker/accountlistctrl.py:459
-msgid "Account name"
-msgstr ""
-
-#: wxbanker/accountlistctrl.py:498
-#, python-format
-msgid ""
-"This will permanently remove the account '%s' and all its transactions. "
-"Continue?"
-msgstr ""
-"Ezzel véglegesen letöröljük a '%s' számlát és az összes tranzakcióját. "
-"Folytassuk?"
-
-#: wxbanker/accountlistctrl.py:499
-msgid "Warning"
-msgstr "Figyelmeztetés"
-
-#: wxbanker/accountconfigdialog.py:32
-msgid ""
-"wxBanker can synchronize account balances online if you have an account with "
-"mint.com"
-msgstr ""
-
-#: wxbanker/accountconfigdialog.py:40
-msgid "Username"
-msgstr ""
-
-#: wxbanker/accountconfigdialog.py:42
-msgid "Password"
-msgstr ""
-
-#: wxbanker/accountconfigdialog.py:62
-msgid "Transaction details"
-msgstr "Tranzakció részletek"
-
-#: wxbanker/accountconfigdialog.py:103
-msgid "This account currently has no recurring transactions."
-msgstr ""
-
-#: wxbanker/accountconfigdialog.py:105
-msgid "Close"
-msgstr ""
-
-#: wxbanker/accountconfigdialog.py:115 wxbanker/csvimportframe.py:186
-msgid "Save"
-msgstr "Mentés"
-
-#: wxbanker/accountconfigdialog.py:116
-msgid "Cancel"
-msgstr ""
-
-#: wxbanker/accountconfigdialog.py:136
-msgid "Recurring Transactions"
-msgstr ""
-
-#: wxbanker/plots/cairopanel.py:72 wxbanker/plots/cairopanel.py:113
-#: wxbanker/plots/wxplotpanel.py:35 wxbanker/plots/wxplotpanel.py:42
-msgid "Balance"
-msgstr "Egyenleg"
-
-#: wxbanker/plots/cairopanel.py:76 wxbanker/plots/wxplotpanel.py:40
-msgid "Trend"
-msgstr "Trend"
-
-#: wxbanker/plots/cairopanel.py:112 wxbanker/plots/wxplotpanel.py:42
-msgid "Time"
-msgstr ""
-
-#: wxbanker/plots/wxplotpanel.py:42
-msgid "Total Balance Over Time"
-msgstr "Teljes egyenleg az adott időben"
-
-#: wxbanker/plots/plotfactory.py:51
-#, python-format
-msgid "To use '%s' plotting library, install following python modules: %s."
-msgstr ""
-
-#: wxbanker/messagepanel.py:47
-msgid "Dismiss"
-msgstr ""
-
-#: wxbanker/summarytab.py:42
-msgid "From"
-msgstr ""
-
-#: wxbanker/summarytab.py:46 wxbanker/newtransactionctrl.py:31
-msgid "to"
-msgstr ""
-
-#: wxbanker/summarytab.py:50
+#: wxbanker/summarytab.py:30
 msgid "Trend Degree"
 msgstr ""
 
-#: wxbanker/managetab.py:43
-msgid "Show Calculator"
-msgstr "Számológép Megjelenítése"
+#: wxbanker/summarytab.py:30
+msgid "Months"
+msgstr "hónapok"
 
-#: wxbanker/managetab.py:43
-msgid "Hide Calculator"
-msgstr "Számológép Elrejtése"
+#: wxbanker/summarytab.py:48
+msgid "From"
+msgstr "Ettől"
 
-#: wxbanker/managetab.py:97
-msgid "Transactions"
-msgstr "Tranzakciók"
+#: wxbanker/summarytab.py:49 wxbanker/newtransactionctrl.py:31
+msgid "to"
+msgstr "eddig"
 
-#: wxbanker/managetab.py:109
-msgid "Summary"
-msgstr "Összesen"
+#: wxbanker/summarytab.py:50
+msgid "Graph"
+msgstr "Grafikon"
 
-#: wxbanker/transactionolv.py:48
-msgid "No transactions entered."
-msgstr ""
+#: wxbanker/csvimportframe.py:28
+msgid "CSV import"
+msgstr "CSV import"
 
-#: wxbanker/transactionolv.py:60 wxbanker/bankcontrols.py:52
-#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:98
+#: wxbanker/csvimportframe.py:62
+msgid "Target account"
+msgstr "Célszámla"
+
+#: wxbanker/csvimportframe.py:77 wxbanker/csvimportframe.py:79
+msgid "Import"
+msgstr "Importálás"
+
+#: wxbanker/csvimportframe.py:89
+msgid "CSV columns mapping"
+msgstr "CSV oszlop-egyeztetés"
+
+#: wxbanker/csvimportframe.py:98 wxbanker/bankcontrols.py:52
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:63
 msgid "Date"
 msgstr "Dátum"
 
-#: wxbanker/transactionolv.py:61 wxbanker/newtransactionctrl.py:248
-#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:112
-msgid "Description"
-msgstr "Leírás"
+#: wxbanker/csvimportframe.py:101
+msgid "Date format"
+msgstr "Dátum formátum"
 
-#: wxbanker/transactionolv.py:62 wxbanker/newtransactionctrl.py:249
-#: wxbanker/searchctrl.py:41 wxbanker/csvimportframe.py:106
+#: wxbanker/csvimportframe.py:106 wxbanker/newtransactionctrl.py:249
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:65
 msgid "Amount"
 msgstr "Összeg"
 
-#: wxbanker/transactionolv.py:63
-msgid "Total"
-msgstr "Teljes összeg"
+#: wxbanker/csvimportframe.py:108
+msgid "Decimal separator"
+msgstr "Tizedesjel"
 
-#: wxbanker/transactionolv.py:204
-#, python-format
-msgid "Send %s to calculator"
+#: wxbanker/csvimportframe.py:112 wxbanker/newtransactionctrl.py:248
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:64
+msgid "Description"
+msgstr "Leírás"
+
+#: wxbanker/csvimportframe.py:119
+msgid "CSV file settings"
+msgstr "CSV fájl beállításai"
+
+#: wxbanker/csvimportframe.py:128
+msgid "Lines to skip"
 msgstr ""
 
-#: wxbanker/transactionolv.py:205
-#, python-format
-msgid "Add %s to calculator"
-msgstr "Adjunk a számításhoz a %s-t."
+#: wxbanker/csvimportframe.py:131
+msgid "Encoding"
+msgstr "Karakterkódolás"
 
-#: wxbanker/transactionolv.py:206
-#, python-format
-msgid "Subtract %s from calculator"
-msgstr "Vonjunk ki a számításból %s-t."
+#: wxbanker/csvimportframe.py:135
+msgid "Column delimiter"
+msgstr "Oszlop elválasztó"
 
-#: wxbanker/transactionolv.py:218
-msgid "Remove this transaction"
+#: wxbanker/csvimportframe.py:146
+msgid "File to import"
+msgstr "Importálandó fájl"
+
+#: wxbanker/csvimportframe.py:151 wxbanker/csvimportframe.py:153
+#: wxbanker/main.py:100
+msgid "Preview"
+msgstr "Előnézet"
+
+#: wxbanker/csvimportframe.py:166
+msgid "CSV profiles"
+msgstr "CSV profilok"
+
+#: wxbanker/csvimportframe.py:171
+msgid "Python simplejson library is needed for csv profile loading/saving."
 msgstr ""
+"A Python simplejson könyvtár szükséges a csv profilok "
+"betöltéséhez/mentéséhez."
 
-#: wxbanker/transactionolv.py:219
-msgid "Move this transaction to account"
-msgstr ""
+#: wxbanker/csvimportframe.py:181
+msgid "Load"
+msgstr "Betöltés"
 
-#: wxbanker/transactionolv.py:221
+#: wxbanker/csvimportframe.py:186 wxbanker/accountconfigdialog.py:58
+#: wxbanker/accountconfigdialog.py:227
+msgid "Save"
+msgstr "Mentés"
+
+#: wxbanker/csvimportframe.py:191 wxbanker/accountconfigdialog.py:226
+msgid "Delete"
+msgstr "Törlés"
+
+#: wxbanker/csvimportframe.py:245
 #, python-format
-msgid "Remove these %i transactions"
-msgstr ""
+msgid "The file encoding does not seem to be '%s'."
+msgstr "A fájl karakterkódolása valószínűleg '%s'."
 
-#: wxbanker/transactionolv.py:222
+#: wxbanker/csvimportframe.py:252
+msgid "An error ocurred during the csv file import."
+msgstr "Hiba történt a csv importálás során."
+
+#: wxbanker/csvimportframe.py:253
+msgid "CSV import error"
+msgstr "CVS import hiba"
+
+#: wxbanker/csvimportframe.py:303
 #, python-format
-msgid "Move these %i transactions to account"
-msgstr ""
+msgid "Profile with the name '%s' exists already. Overwrite it ?"
+msgstr "A '%s' profil már létezik. Felülírjuk?"
+
+#: wxbanker/csvimportframe.py:304
+msgid "Overwrite profile ?"
+msgstr "Felülírjuk a profilt?"
+
+#: wxbanker/csvimportframe.py:318
+msgid "Select file and click \"Preview\""
+msgstr "Válassz fájlt és kattints az \"Előnézet\"-re"
 
 #: wxbanker/newtransactionctrl.py:31
 msgid "from"
@@ -318,8 +160,25 @@ msgid "Transfer"
 msgstr ""
 
 #: wxbanker/newtransactionctrl.py:100
+#: wxbanker/bankobjects/recurringtransaction.py:147
+#: wxbanker/bankobjects/recurringtransaction.py:154
+#, python-format
+msgid "Daily"
+msgid_plural "Every %(num)d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: wxbanker/newtransactionctrl.py:100
 msgid "Weekly"
 msgstr ""
+
+#: wxbanker/newtransactionctrl.py:100
+#: wxbanker/bankobjects/recurringtransaction.py:171
+#, python-format
+msgid "Monthly"
+msgid_plural "Every %(num)d months"
+msgstr[0] ""
+msgstr[1] ""
 
 #: wxbanker/newtransactionctrl.py:100
 msgid "Yearly"
@@ -409,391 +268,616 @@ msgstr ""
 msgid "Recurring"
 msgstr ""
 
-#: wxbanker/newtransactionctrl.py:375
+#: wxbanker/newtransactionctrl.py:343
+msgid "Initial balance"
+msgstr ""
+
+#: wxbanker/newtransactionctrl.py:380
 msgid "No amount entered in the 'Amount' field."
 msgstr "Nem adtál meg összeget az 'Összeg' mezőben."
 
-#: wxbanker/newtransactionctrl.py:377
+#: wxbanker/newtransactionctrl.py:382
 #, python-format
 msgid "'%s' is not a valid amount."
 msgstr "A '%s' összeg nem valós."
 
-#: wxbanker/newtransactionctrl.py:380
+#: wxbanker/newtransactionctrl.py:385
 msgid "Please enter a number such as 12.34 or -20."
 msgstr "Kérlek, számot írj. Például: 12.34 vagy -20."
 
-#: wxbanker/newtransactionctrl.py:381
+#: wxbanker/newtransactionctrl.py:386
 msgid "Invalid Transaction Amount"
 msgstr "Érvénytelen tranzakciós összeg"
 
-#: wxbanker/newtransactionctrl.py:392
+#: wxbanker/newtransactionctrl.py:397
 msgid "Please select an account and then try again."
 msgstr "Kérlek, válassz egy számlát és próbáld újra."
 
-#: wxbanker/newtransactionctrl.py:393 wxbanker/newtransactionctrl.py:421
+#: wxbanker/newtransactionctrl.py:398 wxbanker/newtransactionctrl.py:426
 msgid "No account selected"
 msgstr "Nem választottál számlát."
 
-#: wxbanker/newtransactionctrl.py:406
+#: wxbanker/newtransactionctrl.py:411
 msgid "A search is currently active."
 msgstr ""
 
-#: wxbanker/newtransactionctrl.py:406
+#: wxbanker/newtransactionctrl.py:411
 #, python-format
 msgid ""
 "Would you like to clear the current search and make this transaction in "
 "\"%s\"?"
 msgstr ""
 
-#: wxbanker/newtransactionctrl.py:407
+#: wxbanker/newtransactionctrl.py:412
 msgid "Clear search?"
 msgstr "Töröljük a keresést?"
 
-#: wxbanker/newtransactionctrl.py:420
+#: wxbanker/newtransactionctrl.py:425
 msgid ""
 "This transaction is marked as a transfer. Please select the transfer account."
 msgstr ""
 
-#: wxbanker/newtransactionctrl.py:453
+#: wxbanker/newtransactionctrl.py:458
 msgid ""
 "If this box is checked when adding a transaction, you will be prompted for "
 "the account to use as the source of the transfer."
 msgstr ""
 
-#: wxbanker/newtransactionctrl.py:454
+#: wxbanker/newtransactionctrl.py:459
 msgid ""
 "For example, checking this box and entering a transaction of $50 into this "
 "account will also subtract $50 from the account that you choose as the "
 "source."
 msgstr ""
 
-#: wxbanker/menubar.py:53
-msgid "Auto-save"
-msgstr "Automatikus mentés"
-
-#: wxbanker/menubar.py:53
-msgid "Automatically save changes"
-msgstr "Változtatások automatikus mentése"
-
-#: wxbanker/menubar.py:55
-msgid "Import from CSV"
+#: wxbanker/searchctrl.py:39
+msgid "Search transactions"
 msgstr ""
 
-#: wxbanker/menubar.py:55
-msgid "Import transactions from a CSV file"
+#: wxbanker/searchctrl.py:42
+msgid "More options"
+msgstr "Több lehetőség"
+
+#: wxbanker/searchctrl.py:42
+msgid "Less options"
+msgstr "Kevesebb lehetőség"
+
+#: wxbanker/searchctrl.py:53
+msgid "Match: "
 msgstr ""
 
-#: wxbanker/menubar.py:61
-msgid "Previous account"
-msgstr ""
+#: wxbanker/searchctrl.py:112
+msgid "Show advanced search options"
+msgstr "Részletes keresési beállítások megjelenítése"
 
-#: wxbanker/menubar.py:62
-msgid "Next account"
-msgstr ""
+#: wxbanker/searchctrl.py:114
+msgid "Hide advanced search options"
+msgstr "Részletes keresési beállítások elrejtése"
 
-#: wxbanker/menubar.py:65
-msgid "Show zero-balance accounts"
-msgstr ""
-
-#: wxbanker/menubar.py:65
-msgid ""
-"When disabled, accounts with a balance of $0.00 will be hidden from the list"
-msgstr ""
-
-#: wxbanker/menubar.py:74
-msgid "&Currency"
-msgstr "&Pénznem"
-
-#: wxbanker/menubar.py:74
-msgid "Select currency to display"
-msgstr ""
-
-#: wxbanker/menubar.py:83
-msgid "Request a Currency"
-msgstr "Pénznem kérése"
-
-#: wxbanker/menubar.py:90
-msgid "Integrate with Mint.com"
-msgstr ""
-
-#: wxbanker/menubar.py:90
-msgid "Sync account balances with an existing Mint.com account"
-msgstr ""
-
-#: wxbanker/menubar.py:96
-msgid "View &FAQs"
-msgstr ""
-
-#: wxbanker/menubar.py:96
-msgid "View Frequently Asked Questions online"
-msgstr "A Gyakran Ismételt Kérdések megtekintése interneten"
-
-#: wxbanker/menubar.py:101
-msgid "Ask a &Question"
-msgstr "Kér&dezek"
-
-#: wxbanker/menubar.py:101
-msgid "Ask a question online"
-msgstr "Interneten kérdezek"
-
-#: wxbanker/menubar.py:106
-msgid "&Report a Bug"
-msgstr "&Hiba bejelentése"
-
-#: wxbanker/menubar.py:106
-msgid "Report a bug to the developer online"
-msgstr "Hiba bejelentése interneten"
-
-#: wxbanker/menubar.py:111
-msgid "Request a Fea&ture"
-msgstr "Új szolgáltatás kérése"
-
-#: wxbanker/menubar.py:111
-msgid "Request a new feature to be implemented"
-msgstr "Új szolgáltatás megvalósításának kérése"
-
-#: wxbanker/menubar.py:116
-msgid "Tran&slate wxBanker"
-msgstr "A vxBanker le&fordítása"
-
-#: wxbanker/menubar.py:116
-msgid "Translate wxBanker to another language"
-msgstr "A vxBanker lefordítása más nyelvre"
-
-#: wxbanker/menubar.py:123
-msgid "&About"
-msgstr "Név&jegy"
-
-#: wxbanker/menubar.py:123
-msgid "More information about wxBanker"
-msgstr "További információk a vxBanker-ről"
-
-#: wxbanker/menubar.py:126
-msgid "&File"
-msgstr "&Fájl"
-
-#: wxbanker/menubar.py:127
-msgid "&View"
-msgstr ""
-
-#: wxbanker/menubar.py:128
-msgid "&Settings"
-msgstr "&Beállítások"
-
-#: wxbanker/menubar.py:129
-msgid "&Help"
-msgstr "&Súgó"
-
-#: wxbanker/menubar.py:227
-msgid "Copyright"
-msgstr "Copyright"
-
-#: wxbanker/menubar.py:228
-msgid "A lightweight personal finance management application."
-msgstr "Pehelykönnyű személyi pénzügyi menedzser alkalmazás."
-
-#: wxbanker/main.py:79
+#: wxbanker/main.py:84
 #, python-format
 msgid ""
 "The recurring transaction \"%(description)s\" has %(num)i transactions ready "
 "for %(amount)s on %(datelist)s."
 msgstr ""
 
-#: wxbanker/main.py:84
+#: wxbanker/main.py:89
 #, python-format
 msgid ""
 "%(num)i recurring transactions have a total of %(totalnum)i transactions "
 "ready."
 msgstr ""
 
-#: wxbanker/main.py:95 wxbanker/csvimportframe.py:151
-#: wxbanker/csvimportframe.py:153
-msgid "Preview"
-msgstr "Előnézet"
-
-#: wxbanker/main.py:104
+#: wxbanker/main.py:109
 msgid "Perform"
 msgstr ""
 
-#: wxbanker/main.py:120
+#: wxbanker/main.py:125
 msgid "Recurring transaction successfully added."
 msgstr ""
 
-#: wxbanker/main.py:122
+#: wxbanker/main.py:127
 #, python-format
 msgid "The first transaction will occur on %(date)s"
 msgstr ""
 
-#: wxbanker/main.py:186
+#: wxbanker/main.py:191
 msgid "It looks like this is your first time using wxBanker!"
 msgstr ""
 
-#: wxbanker/main.py:187
+#: wxbanker/main.py:192
 msgid ""
 "To get started, add an account using the account control in the top left "
 "corner."
 msgstr ""
 
-#: wxbanker/main.py:188
+#: wxbanker/main.py:193
 msgid ""
 "The buttons in the account control allow you to add, remove, and rename an "
 "account, respectively."
 msgstr ""
 
-#: wxbanker/main.py:189
+#: wxbanker/main.py:194
 msgid ""
 "Once you have created an account you can add transactions to it (such as "
 "your initial balance) using the controls below the grid on the bottom right."
 msgstr ""
 
-#: wxbanker/main.py:190
+#: wxbanker/main.py:195
 msgid "Have fun!"
 msgstr ""
 
-#: wxbanker/main.py:192
+#: wxbanker/main.py:197
 msgid "Welcome!"
 msgstr "Üdv!"
 
-#: wxbanker/main.py:200
+#: wxbanker/main.py:205
 msgid "Save changes?"
 msgstr "Mentsük a változtatásokat?"
 
-#: wxbanker/main.py:201
+#: wxbanker/main.py:206
 msgid ""
 "You have made changes since the last save. Would you like to save before "
 "exiting?"
 msgstr ""
 
-#: wxbanker/main.py:202
+#: wxbanker/main.py:207
 msgid ""
 "Note that enabling auto-save from the File menu will eliminate the need for "
 "manual saving."
-msgstr ""
-
-#: wxbanker/searchctrl.py:36
-msgid "Search transactions"
-msgstr ""
-
-#: wxbanker/searchctrl.py:39
-msgid "More options"
-msgstr "Több lehetőség"
-
-#: wxbanker/searchctrl.py:39
-msgid "Less options"
-msgstr "Kevesebb lehetőség"
-
-#: wxbanker/searchctrl.py:50
-msgid "Match: "
-msgstr ""
-
-#: wxbanker/searchctrl.py:94
-msgid "Show advanced search options"
-msgstr "Részletes keresési beállítások megjelenítése"
-
-#: wxbanker/searchctrl.py:96
-msgid "Hide advanced search options"
-msgstr "Részletes keresési beállítások elrejtése"
-
-#: wxbanker/csvimportframe.py:28
-msgid "CSV import"
-msgstr "CSV import"
-
-#: wxbanker/csvimportframe.py:62
-msgid "Target account"
-msgstr "Célszámla"
-
-#: wxbanker/csvimportframe.py:77 wxbanker/csvimportframe.py:79
-msgid "Import"
-msgstr "Import"
-
-#: wxbanker/csvimportframe.py:89
-msgid "CSV columns mapping"
-msgstr "CSV oszlop-egyeztetés"
-
-#: wxbanker/csvimportframe.py:101
-msgid "Date format"
-msgstr "Dátumformátum"
-
-#: wxbanker/csvimportframe.py:108
-msgid "Decimal separator"
-msgstr "Tizedesjel"
-
-#: wxbanker/csvimportframe.py:119
-msgid "CSV file settings"
-msgstr "CSV fájl beállításai"
-
-#: wxbanker/csvimportframe.py:128
-msgid "Skip first line"
-msgstr "Első sor kihagyása"
-
-#: wxbanker/csvimportframe.py:131
-msgid "Encoding"
-msgstr "Karakterkódolás"
-
-#: wxbanker/csvimportframe.py:135
-msgid "Column delimiter"
-msgstr "Oszlop elválasztó"
-
-#: wxbanker/csvimportframe.py:146
-msgid "File to import"
-msgstr "Importálandó fájl"
-
-#: wxbanker/csvimportframe.py:166
-msgid "CSV profiles"
-msgstr "CSV profilok"
-
-#: wxbanker/csvimportframe.py:171
-msgid "Python simplejson library is needed for csv profile loading/saving."
-msgstr ""
-"A Python simplejson könyvtár szükséges a csv profilok "
-"betöltéséhez/mentéséhez."
-
-#: wxbanker/csvimportframe.py:181
-msgid "Load"
-msgstr "Betöltés"
-
-#: wxbanker/csvimportframe.py:191
-msgid "Delete"
-msgstr "Törlés"
-
-#: wxbanker/csvimportframe.py:245
-#, python-format
-msgid "The file encoding does not seem to be '%s'."
-msgstr "A fájl karakterkódolása valószínűleg '%s'."
-
-#: wxbanker/csvimportframe.py:252
-msgid "An error ocurred during the csv file import."
-msgstr "Hiba történt a csv importálás során."
-
-#: wxbanker/csvimportframe.py:253
-msgid "CSV import error"
-msgstr "CVS import hiba"
-
-#: wxbanker/csvimportframe.py:303
-#, python-format
-msgid "Profile with the name '%s' exists already. Overwrite it ?"
-msgstr "A '%s' profil már létezik. Felülírjuk?"
-
-#: wxbanker/csvimportframe.py:304
-msgid "Overwrite profile ?"
-msgstr "Felülírjuk a profilt?"
-
-#: wxbanker/csvimportframe.py:318
-msgid "Select file and click \"Preview\""
-msgstr "Válassz fájlt és kattints az \"Előnézet\"-re"
-
-#: wxbanker/recurringsummaryrow.py:45
-msgid "Summary:"
-msgstr ""
-
-#: wxbanker/currencies.py:277
-msgid "detected"
 msgstr ""
 
 #: wxbanker/currconvert.py:59
 #, python-format
 msgid "No exchange rate for currency \"%s\""
 msgstr "Nincs váltószám megadva a \"%s\" valutához."
+
+#: wxbanker/accountlistctrl.py:45
+msgid "Accounts"
+msgstr "Számlák"
+
+#: wxbanker/accountlistctrl.py:56
+msgid "Add a new account"
+msgstr "Új számla"
+
+#: wxbanker/accountlistctrl.py:60
+msgid "Remove the selected account"
+msgstr "A kijelölt számla törlése"
+
+#: wxbanker/accountlistctrl.py:65
+msgid "Rename the selected account"
+msgstr "A kijelölt számla átnevezése"
+
+#: wxbanker/accountlistctrl.py:70
+msgid "Configure the selected account"
+msgstr "A kijelölt számla beállítása"
+
+#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:68
+msgid "All accounts"
+msgstr "Minde számla"
+
+#: wxbanker/accountlistctrl.py:154
+msgid "Not synchronized with Mint.com"
+msgstr ""
+
+#: wxbanker/accountlistctrl.py:438 wxbanker/accountlistctrl.py:539
+msgid "Sorry, an account by that name already exists."
+msgstr "Bocsi, az adott névvel már létezik számla."
+
+#: wxbanker/accountlistctrl.py:440 wxbanker/accountlistctrl.py:541
+msgid "Account names cannot be blank."
+msgstr ""
+
+#: wxbanker/accountlistctrl.py:474
+msgid "Account name"
+msgstr ""
+
+#: wxbanker/accountlistctrl.py:513
+#, python-format
+msgid ""
+"This will permanently remove the account '%s' and all its transactions. "
+"Continue?"
+msgstr ""
+"Ezzel véglegesen letöröljük a '%s' számlát és az összes tranzakcióját. "
+"Folytassuk?"
+
+#: wxbanker/accountlistctrl.py:514 wxbanker/accountconfigdialog.py:203
+msgid "Warning"
+msgstr "Figyelmeztetés"
+
+#: wxbanker/menubar.py:57
+msgid "Auto-save"
+msgstr "Automatikus mentés"
+
+#: wxbanker/menubar.py:57
+msgid "Automatically save changes"
+msgstr "Változtatások automatikus mentése"
+
+#: wxbanker/menubar.py:59
+msgid "Import from CSV"
+msgstr ""
+
+#: wxbanker/menubar.py:59
+msgid "Import transactions from a CSV file"
+msgstr ""
+
+#: wxbanker/menubar.py:60
+msgid "Export to CSV"
+msgstr ""
+
+#: wxbanker/menubar.py:60
+msgid "Export transactions to a CSV file"
+msgstr ""
+
+#: wxbanker/menubar.py:66
+msgid "Previous account"
+msgstr ""
+
+#: wxbanker/menubar.py:67
+msgid "Next account"
+msgstr ""
+
+#: wxbanker/menubar.py:70
+msgid "Show zero-balance accounts"
+msgstr ""
+
+#: wxbanker/menubar.py:70
+msgid ""
+"When disabled, accounts with a balance of $0.00 will be hidden from the list"
+msgstr ""
+
+#: wxbanker/menubar.py:79
+msgid "&Currency"
+msgstr "&Pénznem"
+
+#: wxbanker/menubar.py:79
+msgid "Select currency to display"
+msgstr ""
+
+#: wxbanker/menubar.py:92
+msgid "Request a Currency"
+msgstr "Pénznem kérése"
+
+#: wxbanker/menubar.py:100
+msgid "Integrate with Mint.com"
+msgstr ""
+
+#: wxbanker/menubar.py:100
+msgid "Sync account balances with an existing Mint.com account"
+msgstr ""
+
+#: wxbanker/menubar.py:106
+msgid "View &FAQs"
+msgstr ""
+
+#: wxbanker/menubar.py:106
+msgid "View Frequently Asked Questions online"
+msgstr "A Gyakran Ismételt Kérdések megtekintése interneten"
+
+#: wxbanker/menubar.py:111
+msgid "Ask a &Question"
+msgstr "Kér&dezek"
+
+#: wxbanker/menubar.py:111
+msgid "Ask a question online"
+msgstr "Interneten kérdezek"
+
+#: wxbanker/menubar.py:116
+msgid "&Report a Bug"
+msgstr "&Hiba bejelentése"
+
+#: wxbanker/menubar.py:116
+msgid "Report a bug to the developer online"
+msgstr "Hiba bejelentése interneten"
+
+#: wxbanker/menubar.py:121
+msgid "Request a Fea&ture"
+msgstr "Új szolgáltatás kérése"
+
+#: wxbanker/menubar.py:121
+msgid "Request a new feature to be implemented"
+msgstr "Új szolgáltatás megvalósításának kérése"
+
+#: wxbanker/menubar.py:126
+msgid "Tran&slate wxBanker"
+msgstr "A vxBanker le&fordítása"
+
+#: wxbanker/menubar.py:126
+msgid "Translate wxBanker to another language"
+msgstr "A vxBanker lefordítása más nyelvre"
+
+#: wxbanker/menubar.py:133
+msgid "&About"
+msgstr "Név&jegy"
+
+#: wxbanker/menubar.py:133
+msgid "More information about wxBanker"
+msgstr "További információk a vxBanker-ről"
+
+#: wxbanker/menubar.py:136
+msgid "&File"
+msgstr "&Fájl"
+
+#: wxbanker/menubar.py:137
+msgid "&View"
+msgstr ""
+
+#: wxbanker/menubar.py:138
+msgid "&Settings"
+msgstr "&Beállítások"
+
+#: wxbanker/menubar.py:139
+msgid "&Help"
+msgstr "&Súgó"
+
+#: wxbanker/menubar.py:246
+msgid "Copyright"
+msgstr "Copyright"
+
+#: wxbanker/menubar.py:247
+msgid "Simple personal finance."
+msgstr ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:150
+msgid "Weekly on weekdays"
+msgstr ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:152
+msgid "Weekly on weekends"
+msgstr ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:156
+msgid "Mondays"
+msgstr ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:156
+msgid "Tuesdays"
+msgstr ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:156
+msgid "Wednesdays"
+msgstr ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:156
+msgid "Thursdays"
+msgstr ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:156
+msgid "Fridays"
+msgstr ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:156
+msgid "Saturdays"
+msgstr ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:156
+msgid "Sundays"
+msgstr ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:160
+#, python-format
+msgid "Weekly on %s"
+msgstr ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:162
+#, python-format
+msgid "Every %(num)d weeks on %%s"
+msgstr ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:169
+#, python-format
+msgid " and %s"
+msgstr ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:173
+#, python-format
+msgid "Annually"
+msgid_plural "Every %(num)d years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:177
+#, python-format
+msgid "until %s"
+msgstr ""
+
+#: wxbanker/bankobjects/recurringtransaction.py:194
+msgid "No description"
+msgstr ""
+
+#: wxbanker/bankobjects/transaction.py:93
+#, python-format
+msgid "Transfer from %s"
+msgstr ""
+
+#: wxbanker/bankobjects/transaction.py:95
+#, python-format
+msgid "Transfer to %s"
+msgstr ""
+
+#: wxbanker/recurringsummaryrow.py:45
+msgid "Summary:"
+msgstr ""
+
+#: wxbanker/managetab.py:43
+msgid "Show Calculator"
+msgstr "Számológép Megjelenítése"
+
+#: wxbanker/managetab.py:43
+msgid "Hide Calculator"
+msgstr "Számológép Elrejtése"
+
+#: wxbanker/managetab.py:97
+msgid "Transactions"
+msgstr "Tranzakciók"
+
+#: wxbanker/managetab.py:110
+msgid "Summary"
+msgstr "Összesen"
+
+#: wxbanker/transactionolv.py:38
+msgid "No transactions entered."
+msgstr ""
+
+#: wxbanker/transactionolv.py:39
+msgid "No matching transactions."
+msgstr ""
+
+#: wxbanker/transactionolv.py:66
+msgid "Total"
+msgstr "Teljes összeg"
+
+#: wxbanker/transactionolv.py:212
+#, python-format
+msgid "Send %s to calculator"
+msgstr ""
+
+#: wxbanker/transactionolv.py:213
+#, python-format
+msgid "Add %s to calculator"
+msgstr "Adjunk a számításhoz a %s-t."
+
+#: wxbanker/transactionolv.py:214
+#, python-format
+msgid "Subtract %s from calculator"
+msgstr "Vonjunk ki a számításból %s-t."
+
+#: wxbanker/transactionolv.py:226
+msgid "Remove this transaction"
+msgstr ""
+
+#: wxbanker/transactionolv.py:227
+msgid "Move this transaction to account"
+msgstr ""
+
+#: wxbanker/transactionolv.py:228
+msgid "No tags yet"
+msgstr ""
+
+#: wxbanker/transactionolv.py:230
+#, python-format
+msgid "Remove these %i transactions"
+msgstr ""
+
+#: wxbanker/transactionolv.py:231
+#, python-format
+msgid "Move these %i transactions to account"
+msgstr ""
+
+#: wxbanker/transactionolv.py:232
+msgid "No common tags yet"
+msgstr ""
+
+#: wxbanker/transactionolv.py:234
+msgid "Add a tag"
+msgstr ""
+
+#: wxbanker/transactionolv.py:257
+msgid "Tags"
+msgstr ""
+
+#: wxbanker/transactionolv.py:270
+msgid "Search for this tag"
+msgstr ""
+
+#: wxbanker/transactionolv.py:271
+msgid "Remove this tag"
+msgstr ""
+
+#: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:75
+msgid "balance"
+msgstr ""
+
+#: wxbanker/plots/wxplotpanel.py:37 wxbanker/plots/wxplotpanel.py:44
+#: wxbanker/plots/cairopanel.py:81 wxbanker/plots/cairopanel.py:122
+msgid "Balance"
+msgstr "Egyenleg"
+
+#: wxbanker/plots/wxplotpanel.py:42 wxbanker/plots/cairopanel.py:85
+msgid "Trend"
+msgstr "Trend"
+
+#: wxbanker/plots/wxplotpanel.py:44
+msgid "Total Balance Over Time"
+msgstr "Teljes egyenleg az adott időben"
+
+#: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:121
+msgid "Time"
+msgstr ""
+
+#: wxbanker/plots/cairopanel.py:33
+msgid "monthly"
+msgstr ""
+
+#: wxbanker/plots/plotfactory.py:51
+#, python-format
+msgid "To use '%s' plotting library, install following python modules: %s."
+msgstr ""
+
+#: wxbanker/messagepanel.py:47
+msgid "Dismiss"
+msgstr ""
+
+#: wxbanker/currencies.py:334
+msgid "detected"
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:36
+msgid "None"
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:37
+msgid "Mint.com credentials:"
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:42
+msgid "Save credentials in keyring"
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:44
+#, python-format
+msgid "Corresponding Mint account for %(name)s:"
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:46
+msgid "Update"
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:49
+msgid "Username:"
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:51
+msgid "Password:"
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:59 wxbanker/accountconfigdialog.py:228
+msgid "Cancel"
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:160
+msgid "Transaction details"
+msgstr "Tranzakció részletek"
+
+#: wxbanker/accountconfigdialog.py:202
+msgid "This will permanently remove this recurring transaction. Continue?"
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:213
+msgid "This account currently has no recurring transactions."
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:215
+msgid "Close"
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:251
+msgid "Recurring Transactions"
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:252
+msgid "Mint.com Integration"
+msgstr ""
 
 #~ msgid ""
 #~ "When enabled, accounts with a balance of $0.00 will be hidden from the list"
@@ -812,6 +896,12 @@ msgstr "Nincs váltószám megadva a \"%s\" valutához."
 
 #~ msgid "Case Sensitive"
 #~ msgstr "Kisbetű-nagybetű számít"
+
+#~ msgid "A lightweight personal finance management application."
+#~ msgstr "Pehelykönnyű személyi pénzügyi menedzser alkalmazás."
+
+#~ msgid "Skip first line"
+#~ msgstr "Első sor kihagyása"
 
 #~ msgid "Fit Curve Degree"
 #~ msgstr "A görbeillesztés foka"

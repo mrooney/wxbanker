@@ -7,45 +7,36 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-05-29 00:01-0700\n"
-"PO-Revision-Date: 2010-06-11 16:28+0000\n"
+"POT-Creation-Date: 2010-08-08 00:01-0700\n"
+"PO-Revision-Date: 2010-08-08 16:48+0000\n"
 "Last-Translator: DiegoJ <diegojromerolopez@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-06-12 03:40+0000\n"
+"X-Launchpad-Export-Date: 2010-08-09 03:38+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: wxbanker/bankcontrols.py:52 wxbanker/csvimportframe.py:98
-#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:63
-msgid "Date"
-msgstr "Fecha"
+#: wxbanker/summarytab.py:30
+msgid "Trend Degree"
+msgstr "Grado de tendencia"
 
-#: wxbanker/plots/wxplotpanel.py:35 wxbanker/plots/wxplotpanel.py:42
-#: wxbanker/plots/cairopanel.py:72 wxbanker/plots/cairopanel.py:113
-msgid "Balance"
-msgstr "Balance"
+#: wxbanker/summarytab.py:30
+msgid "Months"
+msgstr "Meses"
 
-#: wxbanker/plots/wxplotpanel.py:40 wxbanker/plots/cairopanel.py:76
-msgid "Trend"
-msgstr "Tendencia"
+#: wxbanker/summarytab.py:48
+msgid "From"
+msgstr "De"
 
-#: wxbanker/plots/wxplotpanel.py:42
-msgid "Total Balance Over Time"
-msgstr "Balance total del periodo"
+#: wxbanker/summarytab.py:49 wxbanker/newtransactionctrl.py:31
+msgid "to"
+msgstr "hacia"
 
-#: wxbanker/plots/wxplotpanel.py:42 wxbanker/plots/cairopanel.py:112
-msgid "Time"
-msgstr "Tiempo"
-
-#: wxbanker/plots/plotfactory.py:51
-#, python-format
-msgid "To use '%s' plotting library, install following python modules: %s."
-msgstr ""
-"Para usar la biblioteca para dibujar '%s', instale los siguientes módulos de "
-"Python: %s."
+#: wxbanker/summarytab.py:50
+msgid "Graph"
+msgstr "Gráfica"
 
 #: wxbanker/csvimportframe.py:28
 msgid "CSV import"
@@ -63,12 +54,17 @@ msgstr "Importar"
 msgid "CSV columns mapping"
 msgstr "Asociación de columnas CSV"
 
+#: wxbanker/csvimportframe.py:98 wxbanker/bankcontrols.py:52
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:63
+msgid "Date"
+msgstr "Fecha"
+
 #: wxbanker/csvimportframe.py:101
 msgid "Date format"
 msgstr "Formato de fecha"
 
-#: wxbanker/csvimportframe.py:106 wxbanker/searchctrl.py:44
-#: wxbanker/newtransactionctrl.py:249 wxbanker/transactionolv.py:65
+#: wxbanker/csvimportframe.py:106 wxbanker/newtransactionctrl.py:249
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:65
 msgid "Amount"
 msgstr "Cantidad"
 
@@ -76,8 +72,8 @@ msgstr "Cantidad"
 msgid "Decimal separator"
 msgstr "Separador decimal"
 
-#: wxbanker/csvimportframe.py:112 wxbanker/searchctrl.py:44
-#: wxbanker/newtransactionctrl.py:248 wxbanker/transactionolv.py:64
+#: wxbanker/csvimportframe.py:112 wxbanker/newtransactionctrl.py:248
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:64
 msgid "Description"
 msgstr "Descripción"
 
@@ -102,7 +98,7 @@ msgid "File to import"
 msgstr "Archivo a importar"
 
 #: wxbanker/csvimportframe.py:151 wxbanker/csvimportframe.py:153
-#: wxbanker/main.py:95
+#: wxbanker/main.py:100
 msgid "Preview"
 msgstr "Vista previa"
 
@@ -120,12 +116,12 @@ msgstr ""
 msgid "Load"
 msgstr "Cargar"
 
-#: wxbanker/csvimportframe.py:186 wxbanker/accountconfigdialog.py:56
-#: wxbanker/accountconfigdialog.py:197
+#: wxbanker/csvimportframe.py:186 wxbanker/accountconfigdialog.py:58
+#: wxbanker/accountconfigdialog.py:227
 msgid "Save"
 msgstr "Guardar"
 
-#: wxbanker/csvimportframe.py:191
+#: wxbanker/csvimportframe.py:191 wxbanker/accountconfigdialog.py:226
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -154,115 +150,6 @@ msgstr "¿Sobrescribir perfil?"
 #: wxbanker/csvimportframe.py:318
 msgid "Select file and click \"Preview\""
 msgstr "Seleccione un archivo y puse \"Previsualizar\""
-
-#: wxbanker/currencies.py:277
-msgid "detected"
-msgstr "detectado"
-
-#: wxbanker/summarytab.py:42
-msgid "From"
-msgstr "De"
-
-#: wxbanker/summarytab.py:46 wxbanker/newtransactionctrl.py:31
-msgid "to"
-msgstr "hacia"
-
-#: wxbanker/summarytab.py:50
-msgid "Trend Degree"
-msgstr "Grado de tendencia"
-
-#: wxbanker/searchctrl.py:39
-msgid "Search transactions"
-msgstr "Buscar transacciones"
-
-#: wxbanker/searchctrl.py:42
-msgid "More options"
-msgstr "Más opciones"
-
-#: wxbanker/searchctrl.py:42
-msgid "Less options"
-msgstr "Menos opciones"
-
-#: wxbanker/searchctrl.py:53
-msgid "Match: "
-msgstr "Coincide: "
-
-#: wxbanker/searchctrl.py:112
-msgid "Show advanced search options"
-msgstr "Mostrar opciones avanzadas de búsqueda"
-
-#: wxbanker/searchctrl.py:114
-msgid "Hide advanced search options"
-msgstr "Ocultar opciones avanzadas de búsqueda"
-
-#: wxbanker/managetab.py:43
-msgid "Show Calculator"
-msgstr "Mostrar calculadora"
-
-#: wxbanker/managetab.py:43
-msgid "Hide Calculator"
-msgstr "Ocultar calculadora"
-
-#: wxbanker/managetab.py:97
-msgid "Transactions"
-msgstr "Transacciones"
-
-#: wxbanker/managetab.py:109
-msgid "Summary"
-msgstr "Resumen"
-
-#: wxbanker/recurringsummaryrow.py:45
-msgid "Summary:"
-msgstr "Resumen:"
-
-#: wxbanker/accountconfigdialog.py:35
-msgid "Mint.com credentials:"
-msgstr "Credenciales de Mint.com:"
-
-#: wxbanker/accountconfigdialog.py:40
-msgid "Save credentials in keyring"
-msgstr "Guardar credenciales en anillo de claves"
-
-#: wxbanker/accountconfigdialog.py:42
-#, python-format
-msgid "Corresponding Mint account for %(name)s:"
-msgstr "Cuenta de Mint correspondiente a %(name)s:"
-
-#: wxbanker/accountconfigdialog.py:44
-msgid "Update"
-msgstr "Actualizar"
-
-#: wxbanker/accountconfigdialog.py:47
-msgid "Username:"
-msgstr "Nombre de usuario:"
-
-#: wxbanker/accountconfigdialog.py:49
-msgid "Password:"
-msgstr "Contraseña:"
-
-#: wxbanker/accountconfigdialog.py:57 wxbanker/accountconfigdialog.py:198
-msgid "Cancel"
-msgstr "Cancelar"
-
-#: wxbanker/accountconfigdialog.py:144
-msgid "Transaction details"
-msgstr "Detalles de la transacción"
-
-#: wxbanker/accountconfigdialog.py:185
-msgid "This account currently has no recurring transactions."
-msgstr "Esta cuenta no tiene transacciones recurrentes por el momento."
-
-#: wxbanker/accountconfigdialog.py:187
-msgid "Close"
-msgstr "Cerrar"
-
-#: wxbanker/accountconfigdialog.py:219
-msgid "Recurring Transactions"
-msgstr "Transacciones recurrentes"
-
-#: wxbanker/accountconfigdialog.py:220
-msgid "Mint.com Integration"
-msgstr "Integración con mint.com"
 
 #: wxbanker/newtransactionctrl.py:31
 msgid "from"
@@ -381,54 +268,58 @@ msgstr "Introducir transacción"
 msgid "Recurring"
 msgstr "Recurrente"
 
-#: wxbanker/newtransactionctrl.py:375
+#: wxbanker/newtransactionctrl.py:343
+msgid "Initial balance"
+msgstr "Balance inicial"
+
+#: wxbanker/newtransactionctrl.py:380
 msgid "No amount entered in the 'Amount' field."
 msgstr "No se ha introducido ningún valor en el campo 'Cantidad'"
 
-#: wxbanker/newtransactionctrl.py:377
+#: wxbanker/newtransactionctrl.py:382
 #, python-format
 msgid "'%s' is not a valid amount."
 msgstr "'%s' no es una cantidad válida."
 
-#: wxbanker/newtransactionctrl.py:380
+#: wxbanker/newtransactionctrl.py:385
 msgid "Please enter a number such as 12.34 or -20."
 msgstr "Por favor, introduzca un número como 12.34 o -20."
 
-#: wxbanker/newtransactionctrl.py:381
+#: wxbanker/newtransactionctrl.py:386
 msgid "Invalid Transaction Amount"
 msgstr "Cantidad inválidad para realizar transacción"
 
-#: wxbanker/newtransactionctrl.py:392
+#: wxbanker/newtransactionctrl.py:397
 msgid "Please select an account and then try again."
 msgstr "Por favor, seleccione una cuenta e inténtelo de nuevo."
 
-#: wxbanker/newtransactionctrl.py:393 wxbanker/newtransactionctrl.py:421
+#: wxbanker/newtransactionctrl.py:398 wxbanker/newtransactionctrl.py:426
 msgid "No account selected"
 msgstr "No hay ninguna cuenta seleccionada"
 
-#: wxbanker/newtransactionctrl.py:406
+#: wxbanker/newtransactionctrl.py:411
 msgid "A search is currently active."
 msgstr "Hay una búsqueda activa."
 
-#: wxbanker/newtransactionctrl.py:406
+#: wxbanker/newtransactionctrl.py:411
 #, python-format
 msgid ""
 "Would you like to clear the current search and make this transaction in "
 "\"%s\"?"
 msgstr "Desea limpiar la búsqueda actual y hacer esta transacción en \"%s\"?"
 
-#: wxbanker/newtransactionctrl.py:407
+#: wxbanker/newtransactionctrl.py:412
 msgid "Clear search?"
 msgstr "¿Limpiar búsqueda?"
 
-#: wxbanker/newtransactionctrl.py:420
+#: wxbanker/newtransactionctrl.py:425
 msgid ""
 "This transaction is marked as a transfer. Please select the transfer account."
 msgstr ""
 "Esta transacción está marcada como una transferencia. Por favor, seleccione "
 "la cuenta a transferir."
 
-#: wxbanker/newtransactionctrl.py:453
+#: wxbanker/newtransactionctrl.py:458
 msgid ""
 "If this box is checked when adding a transaction, you will be prompted for "
 "the account to use as the source of the transfer."
@@ -436,7 +327,7 @@ msgstr ""
 "Si esta opción está seleccionada cuando se realice una transacción, se le "
 "preguntará cuál es la cuenta de la que viene el dinero."
 
-#: wxbanker/newtransactionctrl.py:454
+#: wxbanker/newtransactionctrl.py:459
 msgid ""
 "For example, checking this box and entering a transaction of $50 into this "
 "account will also subtract $50 from the account that you choose as the "
@@ -445,50 +336,122 @@ msgstr ""
 "Por ejemplo, al marcar la casilla al introducir una transacción de 50$ en "
 "esta cuenta le quitará 50$ de la cuenta que haya escogido como origen."
 
-#: wxbanker/transactionolv.py:38
-msgid "No transactions entered."
-msgstr "No se ha introducido una transacción."
+#: wxbanker/searchctrl.py:39
+msgid "Search transactions"
+msgstr "Buscar transacciones"
 
-#: wxbanker/transactionolv.py:39
-msgid "No matching transactions."
-msgstr "No hay traducciones que coincidan."
+#: wxbanker/searchctrl.py:42
+msgid "More options"
+msgstr "Más opciones"
 
-#: wxbanker/transactionolv.py:66
-msgid "Total"
-msgstr "Total"
+#: wxbanker/searchctrl.py:42
+msgid "Less options"
+msgstr "Menos opciones"
 
-#: wxbanker/transactionolv.py:207
+#: wxbanker/searchctrl.py:53
+msgid "Match: "
+msgstr "Coincide: "
+
+#: wxbanker/searchctrl.py:112
+msgid "Show advanced search options"
+msgstr "Mostrar opciones avanzadas de búsqueda"
+
+#: wxbanker/searchctrl.py:114
+msgid "Hide advanced search options"
+msgstr "Ocultar opciones avanzadas de búsqueda"
+
+#: wxbanker/main.py:84
 #, python-format
-msgid "Send %s to calculator"
-msgstr "Enviar %s a la calculadora."
+msgid ""
+"The recurring transaction \"%(description)s\" has %(num)i transactions ready "
+"for %(amount)s on %(datelist)s."
+msgstr ""
+"La transacción recurrente \"%(description)s\" tiene %(num)i transacciones "
+"listas por %(amount)s en %(datelist)s."
 
-#: wxbanker/transactionolv.py:208
+#: wxbanker/main.py:89
 #, python-format
-msgid "Add %s to calculator"
-msgstr "Sumar %s a la calculadora"
+msgid ""
+"%(num)i recurring transactions have a total of %(totalnum)i transactions "
+"ready."
+msgstr ""
+"%(num)i transacciones recurrentes tienen un total de %(totalnum)i "
+"transacciones listas."
 
-#: wxbanker/transactionolv.py:209
+#: wxbanker/main.py:109
+msgid "Perform"
+msgstr "Ejecutar"
+
+#: wxbanker/main.py:125
+msgid "Recurring transaction successfully added."
+msgstr "Transacción recurrente añadida exitosamente."
+
+#: wxbanker/main.py:127
 #, python-format
-msgid "Subtract %s from calculator"
-msgstr "Restar %s de la calculadora"
+msgid "The first transaction will occur on %(date)s"
+msgstr "La primera transacción ocurrirá el %(date)s"
 
-#: wxbanker/transactionolv.py:221
-msgid "Remove this transaction"
-msgstr "Eliminar transacción"
+#: wxbanker/main.py:191
+msgid "It looks like this is your first time using wxBanker!"
+msgstr "¡Parece que es la primera vez que usa wxBanker!"
 
-#: wxbanker/transactionolv.py:222
-msgid "Move this transaction to account"
-msgstr "Mover esta transacción a cuenta"
+#: wxbanker/main.py:192
+msgid ""
+"To get started, add an account using the account control in the top left "
+"corner."
+msgstr ""
+"Para empezar, añada una cuenta usando el control de cuentas en la esquina "
+"superior izquierda."
 
-#: wxbanker/transactionolv.py:224
+#: wxbanker/main.py:193
+msgid ""
+"The buttons in the account control allow you to add, remove, and rename an "
+"account, respectively."
+msgstr ""
+"Los botones de control de cuentas le permiten añadir, eliminar y cambiar el "
+"nombre a una cuenta (resp.)."
+
+#: wxbanker/main.py:194
+msgid ""
+"Once you have created an account you can add transactions to it (such as "
+"your initial balance) using the controls below the grid on the bottom right."
+msgstr ""
+"Una vez que haya creado una cuenta, le puede añadir transacciones como por "
+"ejemplo, su balance inicial, usando los controles por debajo de la rejilla, "
+"abajo a la derecha."
+
+#: wxbanker/main.py:195
+msgid "Have fun!"
+msgstr "¡Páselo bien!"
+
+#: wxbanker/main.py:197
+msgid "Welcome!"
+msgstr "¡Bienvenido!"
+
+#: wxbanker/main.py:205
+msgid "Save changes?"
+msgstr "¿Guardar los cambios?"
+
+#: wxbanker/main.py:206
+msgid ""
+"You have made changes since the last save. Would you like to save before "
+"exiting?"
+msgstr ""
+"Ha hecho cambios desde la última vez que guardó. ¿Dese guardar antes de "
+"salir?"
+
+#: wxbanker/main.py:207
+msgid ""
+"Note that enabling auto-save from the File menu will eliminate the need for "
+"manual saving."
+msgstr ""
+"Tenga en cuenta que activar el autoguardado desde el menú de archivos "
+"eliminará la necesidad de guardar manualmente."
+
+#: wxbanker/currconvert.py:59
 #, python-format
-msgid "Remove these %i transactions"
-msgstr "Eliminar estas %i transacciones"
-
-#: wxbanker/transactionolv.py:225
-#, python-format
-msgid "Move these %i transactions to account"
-msgstr "Mover estas %i transacciones a cuenta"
+msgid "No exchange rate for currency \"%s\""
+msgstr "No hay tipo de cambio para la moneda \"%s\""
 
 #: wxbanker/accountlistctrl.py:45
 msgid "Accounts"
@@ -510,7 +473,7 @@ msgstr "Renombrar la cuenta seleccionada"
 msgid "Configure the selected account"
 msgstr "Configurar la cuenta seleccionada"
 
-#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:67
+#: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:68
 msgid "All accounts"
 msgstr "Todas las cuentas"
 
@@ -518,19 +481,19 @@ msgstr "Todas las cuentas"
 msgid "Not synchronized with Mint.com"
 msgstr "No está sicronizado con Mint.com"
 
-#: wxbanker/accountlistctrl.py:436 wxbanker/accountlistctrl.py:537
+#: wxbanker/accountlistctrl.py:438 wxbanker/accountlistctrl.py:539
 msgid "Sorry, an account by that name already exists."
 msgstr "Lo siento, pero ya existe una cuenta con ese nombre."
 
-#: wxbanker/accountlistctrl.py:438 wxbanker/accountlistctrl.py:539
+#: wxbanker/accountlistctrl.py:440 wxbanker/accountlistctrl.py:541
 msgid "Account names cannot be blank."
 msgstr "Los nombres de cuenta no pueden quedar en blanco."
 
-#: wxbanker/accountlistctrl.py:472
+#: wxbanker/accountlistctrl.py:474
 msgid "Account name"
 msgstr "Nombre de cuenta"
 
-#: wxbanker/accountlistctrl.py:511
+#: wxbanker/accountlistctrl.py:513
 #, python-format
 msgid ""
 "This will permanently remove the account '%s' and all its transactions. "
@@ -539,235 +502,142 @@ msgstr ""
 "Se eliminará permanentemente la cuenta '%s' y todas sus transacciones. "
 "¿Desea continuar?"
 
-#: wxbanker/accountlistctrl.py:512
+#: wxbanker/accountlistctrl.py:514 wxbanker/accountconfigdialog.py:203
 msgid "Warning"
 msgstr "Aviso"
 
-#: wxbanker/main.py:79
-#, python-format
-msgid ""
-"The recurring transaction \"%(description)s\" has %(num)i transactions ready "
-"for %(amount)s on %(datelist)s."
-msgstr ""
-"La transacción recurrente \"%(description)s\" tiene %(num)i transacciones "
-"listas por %(amount)s en %(datelist)s."
-
-#: wxbanker/main.py:84
-#, python-format
-msgid ""
-"%(num)i recurring transactions have a total of %(totalnum)i transactions "
-"ready."
-msgstr ""
-"%(num)i transacciones recurrentes tienen un total de %(totalnum)i "
-"transacciones listas."
-
-#: wxbanker/main.py:104
-msgid "Perform"
-msgstr "Ejecutar"
-
-#: wxbanker/main.py:120
-msgid "Recurring transaction successfully added."
-msgstr "Transacción recurrente añadida exitosamente."
-
-#: wxbanker/main.py:122
-#, python-format
-msgid "The first transaction will occur on %(date)s"
-msgstr "La primera transacción ocurrirá el %(date)s"
-
-#: wxbanker/main.py:186
-msgid "It looks like this is your first time using wxBanker!"
-msgstr "¡Parece que es la primera vez que usa wxBanker!"
-
-#: wxbanker/main.py:187
-msgid ""
-"To get started, add an account using the account control in the top left "
-"corner."
-msgstr ""
-"Para empezar, añada una cuenta usando el control de cuentas en la esquina "
-"superior izquierda."
-
-#: wxbanker/main.py:188
-msgid ""
-"The buttons in the account control allow you to add, remove, and rename an "
-"account, respectively."
-msgstr ""
-"Los botones de control de cuentas le permiten añadir, eliminar y cambiar el "
-"nombre a una cuenta (resp.)."
-
-#: wxbanker/main.py:189
-msgid ""
-"Once you have created an account you can add transactions to it (such as "
-"your initial balance) using the controls below the grid on the bottom right."
-msgstr ""
-"Una vez que haya creado una cuenta, le puede añadir transacciones como por "
-"ejemplo, su balance inicial, usando los controles por debajo de la rejilla, "
-"abajo a la derecha."
-
-#: wxbanker/main.py:190
-msgid "Have fun!"
-msgstr "¡Páselo bien!"
-
-#: wxbanker/main.py:192
-msgid "Welcome!"
-msgstr "¡Bienvenido!"
-
-#: wxbanker/main.py:200
-msgid "Save changes?"
-msgstr "¿Guardar los cambios?"
-
-#: wxbanker/main.py:201
-msgid ""
-"You have made changes since the last save. Would you like to save before "
-"exiting?"
-msgstr ""
-"Ha hecho cambios desde la última vez que guardó. ¿Dese guardar antes de "
-"salir?"
-
-#: wxbanker/main.py:202
-msgid ""
-"Note that enabling auto-save from the File menu will eliminate the need for "
-"manual saving."
-msgstr ""
-"Tenga en cuenta que activar el autoguardado desde el menú de archivos "
-"eliminará la necesidad de guardar manualmente."
-
-#: wxbanker/currconvert.py:59
-#, python-format
-msgid "No exchange rate for currency \"%s\""
-msgstr "No hay tipo de cambio para la moneda \"%s\""
-
-#: wxbanker/menubar.py:56
+#: wxbanker/menubar.py:57
 msgid "Auto-save"
 msgstr "Autoguardar"
 
-#: wxbanker/menubar.py:56
+#: wxbanker/menubar.py:57
 msgid "Automatically save changes"
 msgstr "Guardar automáticamente los cambios"
 
-#: wxbanker/menubar.py:58
+#: wxbanker/menubar.py:59
 msgid "Import from CSV"
 msgstr "Importar desde CSV"
 
-#: wxbanker/menubar.py:58
+#: wxbanker/menubar.py:59
 msgid "Import transactions from a CSV file"
 msgstr "Importar transacciones desde un archivo CSV"
 
-#: wxbanker/menubar.py:59
+#: wxbanker/menubar.py:60
 msgid "Export to CSV"
 msgstr "Exportar a CSV"
 
-#: wxbanker/menubar.py:59
+#: wxbanker/menubar.py:60
 msgid "Export transactions to a CSV file"
 msgstr "Exportar transacciones a un archivo CSV"
 
-#: wxbanker/menubar.py:65
+#: wxbanker/menubar.py:66
 msgid "Previous account"
 msgstr "Cuenta anterior"
 
-#: wxbanker/menubar.py:66
+#: wxbanker/menubar.py:67
 msgid "Next account"
 msgstr "Siguiente cuenta"
 
-#: wxbanker/menubar.py:69
+#: wxbanker/menubar.py:70
 msgid "Show zero-balance accounts"
 msgstr "Mostrar cuentas con balance a cero"
 
-#: wxbanker/menubar.py:69
+#: wxbanker/menubar.py:70
 msgid ""
 "When disabled, accounts with a balance of $0.00 will be hidden from the list"
 msgstr ""
 "Si está desactivado, las cuentas con un balance de $0.00 no se mostrarán en "
 "la lista"
 
-#: wxbanker/menubar.py:78
+#: wxbanker/menubar.py:79
 msgid "&Currency"
 msgstr "&Moneda"
 
-#: wxbanker/menubar.py:78
+#: wxbanker/menubar.py:79
 msgid "Select currency to display"
 msgstr "Selecionar moneda a mostrar"
 
-#: wxbanker/menubar.py:87
+#: wxbanker/menubar.py:92
 msgid "Request a Currency"
 msgstr "Solicitar una moneda"
 
-#: wxbanker/menubar.py:94
+#: wxbanker/menubar.py:100
 msgid "Integrate with Mint.com"
 msgstr "Integrar con Mint.com"
 
-#: wxbanker/menubar.py:94
+#: wxbanker/menubar.py:100
 msgid "Sync account balances with an existing Mint.com account"
 msgstr "Sincronizar balances de cuenta con una cuenta existente de Mint.com."
 
-#: wxbanker/menubar.py:100
+#: wxbanker/menubar.py:106
 msgid "View &FAQs"
 msgstr "Ver PU&Fs"
 
-#: wxbanker/menubar.py:100
+#: wxbanker/menubar.py:106
 msgid "View Frequently Asked Questions online"
 msgstr "Ver Preguntas Usualmente Frecuentes en internet"
 
-#: wxbanker/menubar.py:105
+#: wxbanker/menubar.py:111
 msgid "Ask a &Question"
 msgstr "Hacer una &pregunta"
 
-#: wxbanker/menubar.py:105
+#: wxbanker/menubar.py:111
 msgid "Ask a question online"
 msgstr "Haga una pregunta en línea"
 
-#: wxbanker/menubar.py:110
+#: wxbanker/menubar.py:116
 msgid "&Report a Bug"
 msgstr "&Informar de un error"
 
-#: wxbanker/menubar.py:110
+#: wxbanker/menubar.py:116
 msgid "Report a bug to the developer online"
 msgstr "Informar de un error a un desarrollador vía internet"
 
-#: wxbanker/menubar.py:115
+#: wxbanker/menubar.py:121
 msgid "Request a Fea&ture"
 msgstr "Solicitar una cara&cterística"
 
-#: wxbanker/menubar.py:115
+#: wxbanker/menubar.py:121
 msgid "Request a new feature to be implemented"
 msgstr "Solicitar que se implemente una nueva característica"
 
-#: wxbanker/menubar.py:120
+#: wxbanker/menubar.py:126
 msgid "Tran&slate wxBanker"
 msgstr "Tradu&cir wxBanker"
 
-#: wxbanker/menubar.py:120
+#: wxbanker/menubar.py:126
 msgid "Translate wxBanker to another language"
 msgstr "Traducir wxBanker a otro idioma"
 
-#: wxbanker/menubar.py:127
+#: wxbanker/menubar.py:133
 msgid "&About"
 msgstr "&Acerca de"
 
-#: wxbanker/menubar.py:127
+#: wxbanker/menubar.py:133
 msgid "More information about wxBanker"
 msgstr "Más información sobre wxBanker"
 
-#: wxbanker/menubar.py:130
+#: wxbanker/menubar.py:136
 msgid "&File"
 msgstr "&Archivo"
 
-#: wxbanker/menubar.py:131
+#: wxbanker/menubar.py:137
 msgid "&View"
 msgstr "&Ver"
 
-#: wxbanker/menubar.py:132
+#: wxbanker/menubar.py:138
 msgid "&Settings"
 msgstr "Opcione&s"
 
-#: wxbanker/menubar.py:133
+#: wxbanker/menubar.py:139
 msgid "&Help"
 msgstr "A&yuda"
 
-#: wxbanker/menubar.py:240
+#: wxbanker/menubar.py:246
 msgid "Copyright"
 msgstr "Copyright"
 
-#: wxbanker/menubar.py:241
+#: wxbanker/menubar.py:247
 msgid "Simple personal finance."
 msgstr "Finanzas personales sencillas."
 
@@ -848,9 +718,191 @@ msgstr "Transferir desde %s"
 msgid "Transfer to %s"
 msgstr "Transferir a %s"
 
+#: wxbanker/recurringsummaryrow.py:45
+msgid "Summary:"
+msgstr "Resumen:"
+
+#: wxbanker/managetab.py:43
+msgid "Show Calculator"
+msgstr "Mostrar calculadora"
+
+#: wxbanker/managetab.py:43
+msgid "Hide Calculator"
+msgstr "Ocultar calculadora"
+
+#: wxbanker/managetab.py:97
+msgid "Transactions"
+msgstr "Transacciones"
+
+#: wxbanker/managetab.py:110
+msgid "Summary"
+msgstr "Resumen"
+
+#: wxbanker/transactionolv.py:38
+msgid "No transactions entered."
+msgstr "No se ha introducido una transacción."
+
+#: wxbanker/transactionolv.py:39
+msgid "No matching transactions."
+msgstr "No hay traducciones que coincidan."
+
+#: wxbanker/transactionolv.py:66
+msgid "Total"
+msgstr "Total"
+
+#: wxbanker/transactionolv.py:212
+#, python-format
+msgid "Send %s to calculator"
+msgstr "Enviar %s a la calculadora."
+
+#: wxbanker/transactionolv.py:213
+#, python-format
+msgid "Add %s to calculator"
+msgstr "Sumar %s a la calculadora"
+
+#: wxbanker/transactionolv.py:214
+#, python-format
+msgid "Subtract %s from calculator"
+msgstr "Restar %s de la calculadora"
+
+#: wxbanker/transactionolv.py:226
+msgid "Remove this transaction"
+msgstr "Eliminar transacción"
+
+#: wxbanker/transactionolv.py:227
+msgid "Move this transaction to account"
+msgstr "Mover esta transacción a cuenta"
+
+#: wxbanker/transactionolv.py:228
+msgid "No tags yet"
+msgstr "Sin etiquetas"
+
+#: wxbanker/transactionolv.py:230
+#, python-format
+msgid "Remove these %i transactions"
+msgstr "Eliminar estas %i transacciones"
+
+#: wxbanker/transactionolv.py:231
+#, python-format
+msgid "Move these %i transactions to account"
+msgstr "Mover estas %i transacciones a cuenta"
+
+#: wxbanker/transactionolv.py:232
+msgid "No common tags yet"
+msgstr "Sin etiquetas comunes"
+
+#: wxbanker/transactionolv.py:234
+msgid "Add a tag"
+msgstr "Añadir una etiqueta"
+
+#: wxbanker/transactionolv.py:257
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: wxbanker/transactionolv.py:270
+msgid "Search for this tag"
+msgstr ""
+
+#: wxbanker/transactionolv.py:271
+msgid "Remove this tag"
+msgstr "Eliminar esta etiqueta"
+
+#: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:75
+msgid "balance"
+msgstr "balance"
+
+#: wxbanker/plots/wxplotpanel.py:37 wxbanker/plots/wxplotpanel.py:44
+#: wxbanker/plots/cairopanel.py:81 wxbanker/plots/cairopanel.py:122
+msgid "Balance"
+msgstr "Balance"
+
+#: wxbanker/plots/wxplotpanel.py:42 wxbanker/plots/cairopanel.py:85
+msgid "Trend"
+msgstr "Tendencia"
+
+#: wxbanker/plots/wxplotpanel.py:44
+msgid "Total Balance Over Time"
+msgstr "Balance total del periodo"
+
+#: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:121
+msgid "Time"
+msgstr "Tiempo"
+
+#: wxbanker/plots/cairopanel.py:33
+msgid "monthly"
+msgstr "mensualmente"
+
+#: wxbanker/plots/plotfactory.py:51
+#, python-format
+msgid "To use '%s' plotting library, install following python modules: %s."
+msgstr ""
+"Para usar la biblioteca para dibujar '%s', instale los siguientes módulos de "
+"Python: %s."
+
 #: wxbanker/messagepanel.py:47
 msgid "Dismiss"
 msgstr "Descartar"
+
+#: wxbanker/currencies.py:334
+msgid "detected"
+msgstr "detectado"
+
+#: wxbanker/accountconfigdialog.py:36
+msgid "None"
+msgstr "Ninguno"
+
+#: wxbanker/accountconfigdialog.py:37
+msgid "Mint.com credentials:"
+msgstr "Credenciales de Mint.com:"
+
+#: wxbanker/accountconfigdialog.py:42
+msgid "Save credentials in keyring"
+msgstr "Guardar credenciales en anillo de claves"
+
+#: wxbanker/accountconfigdialog.py:44
+#, python-format
+msgid "Corresponding Mint account for %(name)s:"
+msgstr "Cuenta de Mint correspondiente a %(name)s:"
+
+#: wxbanker/accountconfigdialog.py:46
+msgid "Update"
+msgstr "Actualizar"
+
+#: wxbanker/accountconfigdialog.py:49
+msgid "Username:"
+msgstr "Nombre de usuario:"
+
+#: wxbanker/accountconfigdialog.py:51
+msgid "Password:"
+msgstr "Contraseña:"
+
+#: wxbanker/accountconfigdialog.py:59 wxbanker/accountconfigdialog.py:228
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: wxbanker/accountconfigdialog.py:160
+msgid "Transaction details"
+msgstr "Detalles de la transacción"
+
+#: wxbanker/accountconfigdialog.py:202
+msgid "This will permanently remove this recurring transaction. Continue?"
+msgstr "Esto eliminará esta operación recurrente. ¿Desea continuar?"
+
+#: wxbanker/accountconfigdialog.py:213
+msgid "This account currently has no recurring transactions."
+msgstr "Esta cuenta no tiene transacciones recurrentes por el momento."
+
+#: wxbanker/accountconfigdialog.py:215
+msgid "Close"
+msgstr "Cerrar"
+
+#: wxbanker/accountconfigdialog.py:251
+msgid "Recurring Transactions"
+msgstr "Transacciones recurrentes"
+
+#: wxbanker/accountconfigdialog.py:252
+msgid "Mint.com Integration"
+msgstr "Integración con mint.com"
 
 #~ msgid "Sample Points"
 #~ msgstr "Puntos de ejemplo"
