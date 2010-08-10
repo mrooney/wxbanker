@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-09 00:01-0700\n"
+"POT-Creation-Date: 2010-08-10 00:01-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -763,7 +763,7 @@ msgstr ""
 msgid "No common tags yet"
 msgstr ""
 
-#: wxbanker/transactionolv.py:234
+#: wxbanker/transactionolv.py:234 wxbanker/tagtransactiondialog.py:100
 msgid "Add a tag"
 msgstr ""
 
@@ -847,6 +847,7 @@ msgid "Password:"
 msgstr ""
 
 #: wxbanker/accountconfigdialog.py:59 wxbanker/accountconfigdialog.py:228
+#: wxbanker/tagtransactiondialog.py:43
 msgid "Cancel"
 msgstr ""
 
@@ -872,4 +873,24 @@ msgstr ""
 
 #: wxbanker/accountconfigdialog.py:252
 msgid "Mint.com Integration"
+msgstr ""
+
+#: wxbanker/tagtransactiondialog.py:29
+msgid ""
+"You can also tag a transaction by putting #tagname anywhere in the "
+"description."
+msgstr ""
+
+#: wxbanker/tagtransactiondialog.py:30
+msgid "Tag:"
+msgstr ""
+
+#: wxbanker/tagtransactiondialog.py:32
+msgid ""
+"To remove this tag later, simply remove it from the description or right-"
+"click on the transaction."
+msgstr ""
+
+#: wxbanker/tagtransactiondialog.py:42
+msgid "Add Tag"
 msgstr ""
