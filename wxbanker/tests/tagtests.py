@@ -38,6 +38,17 @@ class TagTests(testbase.TestCaseWithController):
     def testCannotCreateEmptyTag(self):
         self.assertRaisesWithMsg(Tag, [""], EmptyTagException, "Tags cannot be empty")
         
+    def testTaggingTransferDoesNotNestDescription(self):
+        model = self.Model
+        a = model.CreateAccount("A")
+        b = model.CreateAccount("B")
+        ta, tb = a.AddTransaction(1, description="test", source=b)
+        
+        self.assertEqual(ta.Description, "Transfer from B (test)")
+        ta.AddTag("dontmessup")
+        self.assertEqual(ta.Description, "Transfer from B (test #dontmessup)")
+        self.assertEqual(tb.Description, "Transfer to A (test #dontmessup)")
+        
     def testTagStringValue(self):
         tag = Tag("Foobar")
         self.assertEqual(str(tag), "#Foobar")

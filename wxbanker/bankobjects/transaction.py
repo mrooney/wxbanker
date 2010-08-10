@@ -139,7 +139,7 @@ class Transaction(ORMObject):
     def AddTag(self, tagName):
         tag = Tag(tagName)
         if tag not in self.Tags:
-            self.Description += " %s" % tag
+            self.Description = self._Description + " %s" % tag
     
     def RemoveTag(self, tagName):
         fullTag = str(Tag(tagName))
