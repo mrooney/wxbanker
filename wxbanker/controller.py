@@ -198,8 +198,8 @@ class Controller(object):
         config = wx.FileConfig(localFilename=configPath)
         wx.Config.Set(config)
         if not config.HasEntry("SIZE_X"):
-            config.WriteInt("SIZE_X", 800)
-            config.WriteInt("SIZE_Y", 600)
+            config.WriteInt("SIZE_X", 960)
+            config.WriteInt("SIZE_Y", 720)
         if not config.HasEntry("POS_X"):
             config.WriteInt("POS_X", 100)
             config.WriteInt("POS_Y", 100)
