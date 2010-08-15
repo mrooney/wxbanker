@@ -217,6 +217,7 @@ class BankerFrame(wx.Frame):
 
 def init(path=None, welcome=True):
     import os
+    # Work around LP: #617385 by disabling appmenu for Maverick so we don't segfault.
     for crashKey in ("UBUNTU_MENUPROXY", "GTK_MENUPROXY"):
         os.environ[crashKey] = ''
 
