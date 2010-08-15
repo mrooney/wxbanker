@@ -216,7 +216,11 @@ class BankerFrame(wx.Frame):
 
 
 def init(path=None, welcome=True):
-    import wx, os, sys
+    import os
+    for crashKey in ("UBUNTU_MENUPROXY", "GTK_MENUPROXY"):
+        os.environ[crashKey] = ''
+
+    import wx, sys
     from wxbanker import fileservice
     from wxbanker.controller import Controller
 
