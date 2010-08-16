@@ -17,6 +17,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import wx
+from wx.lib.pubsub import Publisher
 from wxbanker.csvimporter import CsvImporter, CsvImporterProfileManager, json
 from wxbanker.transactionolv import TransactionOLV
 
@@ -37,6 +38,7 @@ class CsvImportFrame(wx.Frame):
         topPanel = wx.Panel(self)
         topHorizontalSizer = wx.BoxSizer(wx.VERTICAL)
         topSizer = wx.BoxSizer(wx.VERTICAL)
+        topSizer.AddSpacer(6)
 
         horizontalSizer = wx.BoxSizer(wx.HORIZONTAL)
         topSizer.Add(horizontalSizer, flag=wx.EXPAND)
@@ -59,26 +61,32 @@ class CsvImportFrame(wx.Frame):
         self.Show(True)
 
     def initTargetAccountControl(self, topPanel, topSizer):
-        staticBox = wx.StaticBox(topPanel, label=_("Target account"))
-        staticBoxSizer = wx.StaticBoxSizer(staticBox, wx.HORIZONTAL)
-        topSizer.Add(staticBoxSizer, flag=wx.ALL|wx.EXPAND, border=1)
+        targetText = wx.StaticText(topPanel, label=_("Target account"))
+        targetSizer = wx.BoxSizer()
 
         try:
             bankModel = wx.GetApp().Controller.Model
             self.accountsDict = dict([(acc.GetName(), acc) for acc in bankModel.Accounts])
-            accounts = self.accountsDict.keys()
+            accounts = sorted(self.accountsDict.keys())
         except:
             accounts = []
 
-        self.targetAccountCtrl = wx.ComboBox(topPanel, style=wx.CB_READONLY, choices=accounts)
-        self.targetAccountCtrl.Bind(wx.EVT_COMBOBOX, self.onTargetAccountChange)
-        staticBoxSizer.Add(self.targetAccountCtrl)
+        self.targetAccountCtrl = wx.Choice(topPanel, choices=accounts)
 
         self.importButton = wx.Button(topPanel, label=_("Import"))
-        self.importButton.Disable()
         self.importButton.SetToolTipString(_("Import"))
         self.importButton.Bind(wx.EVT_BUTTON, self.onClickImportButton)
-        staticBoxSizer.Add(self.importButton, flag=wx.LEFT, border=5)
+        
+        targetSizer.AddSpacer(6)
+        targetSizer.Add(targetText, flag=wx.ALIGN_CENTER_VERTICAL)
+        targetSizer.AddSpacer(6)
+        targetSizer.Add(self.targetAccountCtrl)
+        targetSizer.AddStretchSpacer(1)
+        targetSizer.Add(self.importButton)
+        targetSizer.AddSpacer(6)
+        
+        topSizer.AddSpacer(6)
+        topSizer.Add(targetSizer, flag=wx.ALL|wx.EXPAND)
 
     def initSettingsControls(self, topPanel, parentSizer):
         # csv columns to wxBanker data mapping
@@ -118,6 +126,7 @@ class CsvImportFrame(wx.Frame):
 
         staticBox = wx.StaticBox(topPanel, label=_("CSV file settings"))
         staticBoxSizer = wx.StaticBoxSizer(staticBox, wx.VERTICAL)
+        topSizer.AddSpacer(6)
         topSizer.Add(staticBoxSizer, flag=wx.ALL|wx.EXPAND, border=1)
 
         sizer = wx.FlexGridSizer(rows=3, cols=2, hgap=15, vgap=0)
@@ -139,8 +148,8 @@ class CsvImportFrame(wx.Frame):
 
     def initFileAndActionControls(self, topPanel, topSizer):
         # file picker control and import button
-
         sizer = wx.BoxSizer(wx.HORIZONTAL)
+        topSizer.AddSpacer(6)
         topSizer.Add(sizer, flag=wx.EXPAND|wx.ALL, border=5)
 
         sizer.Add(wx.StaticText(topPanel, label=_('File to import')), flag=wx.ALIGN_CENTER_VERTICAL)
@@ -236,8 +245,6 @@ class CsvImportFrame(wx.Frame):
             self.showErrorDialog(_("The file encoding does not seem to be '%s'.") % settings['encoding'], e)
         except Exception, e:
             self.showErrorDialog(exc=e)
-        finally:
-            self.toggleImportButton()
 
     def showErrorDialog(self, errDetail = '', exc = None):
         errString = _('An error ocurred during the csv file import.')
@@ -248,18 +255,14 @@ class CsvImportFrame(wx.Frame):
         dlg.Destroy()
 
     def importTransactions(self):
-        account = self.accountsDict[self.targetAccountCtrl.Value]
+        account = self.accountsDict[self.targetAccountCtrl.StringSelection]
         account.AddTransactions(self.transactionContainer.Transactions)
-
-    def toggleImportButton(self):
-        self.importButton.Enable(self.targetAccountCtrl.Value != '' and self.transactionContainer is not None)
+        # Trigger an account change so the user is now looking at the imported transactions.
+        Publisher.sendMessage("user.account changed", account)
 
     def onFileChange(self, event):
         if self.filePickerCtrl.Path != '':
             self.runPreview()
-
-    def onTargetAccountChange(self, event):
-        self.toggleImportButton()
 
     def onProfileCtrlChange(self, event):
         if self.profileCtrl.Value != '':
@@ -275,6 +278,7 @@ class CsvImportFrame(wx.Frame):
 
     def onClickImportButton(self, event):
         self.importTransactions()
+        self.Destroy()
 
     def initProfileCtrl(self, value=None):
         self.profileCtrl.Items = self.profileManager.profiles.keys()
