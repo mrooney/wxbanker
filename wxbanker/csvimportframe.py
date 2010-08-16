@@ -148,12 +148,6 @@ class CsvImportFrame(wx.Frame):
         self.filePickerCtrl.Bind(wx.EVT_FILEPICKER_CHANGED, self.onFileChange)
         sizer.Add(self.filePickerCtrl, flag=wx.EXPAND|wx.LEFT|wx.RIGHT, proportion=2, border=10)
 
-        self.previewButton = wx.Button(topPanel, label=_("Preview"))
-        self.previewButton.Disable()
-        self.previewButton.SetToolTipString(_("Preview"))
-        self.previewButton.Bind(wx.EVT_BUTTON, self.onClickPreviewButton)
-        sizer.Add(self.previewButton)
-
     def initTransactionCtrl(self, topPanel, topSizer):
         sizer = wx.BoxSizer(wx.HORIZONTAL)
         topSizer.Add(sizer, flag=wx.EXPAND|wx.ALL, proportion=1, border=5)
@@ -262,7 +256,7 @@ class CsvImportFrame(wx.Frame):
 
     def onFileChange(self, event):
         if self.filePickerCtrl.Path != '':
-            self.previewButton.Enable()
+            self.runPreview()
 
     def onTargetAccountChange(self, event):
         self.toggleImportButton()
@@ -278,9 +272,6 @@ class CsvImportFrame(wx.Frame):
         else :
             self.saveProfileButton.Disable()
             self.deleteProfileButton.Disable()
-
-    def onClickPreviewButton(self, event):
-        self.runPreview()
 
     def onClickImportButton(self, event):
         self.importTransactions()
