@@ -175,19 +175,16 @@ class CsvImportFrame(wx.Frame):
             return
 
         self.profileCtrl = wx.ComboBox(topPanel, choices=self.profileManager.profiles.keys(), size=(110,-1))
-        self.profileCtrl.Bind(wx.EVT_TEXT, self.onProfileCtrlChange)
+        self.profileCtrl.Bind(wx.EVT_COMBOBOX, self.onProfileCtrlChange)
         sizer.Add(self.profileCtrl, flag=wx.ALIGN_CENTER)
 
-        self.loadProfileButton = wx.Button(topPanel, label=_("Load"))
-        self.loadProfileButton.Bind(wx.EVT_BUTTON, self.onClickLoadProfileButton)
-        self.loadProfileButton.Disable()
-        sizer.Add(self.loadProfileButton, flag=wx.ALIGN_CENTER)
-
+        sizer.AddSpacer(6)
         self.saveProfileButton = wx.Button(topPanel, label=_("Save"))
         self.saveProfileButton.Bind(wx.EVT_BUTTON, self.onClickSaveProfileButton)
         self.saveProfileButton.Disable()
         sizer.Add(self.saveProfileButton, flag=wx.ALIGN_CENTER)
 
+        sizer.AddSpacer(6)
         self.deleteProfileButton = wx.Button(topPanel, label=_("Delete"))
         self.deleteProfileButton.Bind(wx.EVT_BUTTON, self.onClickDeleteProfileButton)
         self.deleteProfileButton.Disable()
@@ -274,10 +271,11 @@ class CsvImportFrame(wx.Frame):
         if self.profileCtrl.Value != '':
             self.saveProfileButton.Enable()
             enabled = self.profileManager.getProfile(self.profileCtrl.Value) != None
-            self.loadProfileButton.Enable(enabled)
             self.deleteProfileButton.Enable(enabled)
+            # Load it.
+            key = self.profileCtrl.Value
+            self.initCtrlValuesFromSettings(self.profileManager.getProfile(key))
         else :
-            self.loadProfileButton.Disable()
             self.saveProfileButton.Disable()
             self.deleteProfileButton.Disable()
 
@@ -287,14 +285,11 @@ class CsvImportFrame(wx.Frame):
     def onClickImportButton(self, event):
         self.importTransactions()
 
-    def initProfileCtrl(self):
+    def initProfileCtrl(self, value=None):
         self.profileCtrl.Items = self.profileManager.profiles.keys()
+        if self.profileCtrl.Items:
+            self.profileCtrl.Value = value or self.profileCtrl.Items[0]
         self.onProfileCtrlChange(None)
-
-    def onClickLoadProfileButton(self, event):
-        key = self.profileCtrl.Value
-        self.initCtrlValuesFromSettings(self.profileManager.getProfile(key))
-        self.initProfileCtrl()
 
     def onClickSaveProfileButton(self, event):
         key = self.profileCtrl.Value
@@ -305,7 +300,7 @@ class CsvImportFrame(wx.Frame):
             if d.ShowModal() != wx.ID_YES:
                 return
         self.profileManager.saveProfile(key, self.getSettingsFromControls())
-        self.initProfileCtrl()
+        self.initProfileCtrl(value=key)
 
     def onClickDeleteProfileButton(self, event):
         key = self.profileCtrl.Value
