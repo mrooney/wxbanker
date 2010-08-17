@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-08-10 00:01-0700\n"
-"PO-Revision-Date: 2010-08-13 13:54+0000\n"
-"Last-Translator: tzachi portal <Unknown>\n"
+"PO-Revision-Date: 2010-08-16 20:25+0000\n"
+"Last-Translator: Koala <Unknown>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-08-14 05:57+0000\n"
+"X-Launchpad-Export-Date: 2010-08-17 06:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/summarytab.py:30
@@ -24,7 +24,7 @@ msgstr "אחוזי מגמה"
 
 #: wxbanker/summarytab.py:30
 msgid "Months"
-msgstr ""
+msgstr "חודשים"
 
 #: wxbanker/summarytab.py:48
 msgid "From"
@@ -36,7 +36,7 @@ msgstr "אל"
 
 #: wxbanker/summarytab.py:50
 msgid "Graph"
-msgstr ""
+msgstr "תרשים"
 
 #: wxbanker/csvimportframe.py:28
 msgid "CSV import"
@@ -780,7 +780,7 @@ msgstr "הוספת תגית"
 
 #: wxbanker/transactionolv.py:257
 msgid "Tags"
-msgstr ""
+msgstr "תגיות"
 
 #: wxbanker/transactionolv.py:270
 msgid "Search for this tag"
@@ -813,7 +813,7 @@ msgstr "שעה"
 
 #: wxbanker/plots/cairopanel.py:33
 msgid "monthly"
-msgstr ""
+msgstr "מדי חודש"
 
 #: wxbanker/plots/plotfactory.py:51
 #, python-format
@@ -905,7 +905,7 @@ msgstr ""
 
 #: wxbanker/tagtransactiondialog.py:42
 msgid "Add Tag"
-msgstr ""
+msgstr "הוספת תגית"
 
 #~ msgid "Sample Points"
 #~ msgstr "נקודות לדוגמה"
