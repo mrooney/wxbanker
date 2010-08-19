@@ -35,6 +35,7 @@ from wx.lib.pubsub import Publisher
 
 # wxBanker
 from wxbanker.menubar import BankMenuBar
+from wxbanker.brandedframe import BrandedFrame
 from wxbanker import localization, messagepanel, debug
 from wxbanker import managetab
 
@@ -129,15 +130,14 @@ class BankerPanel(wx.Panel):
             self.AddMessagePanel(mpanel)
         
         
-class BankerFrame(wx.Frame):
+class BankerFrame(BrandedFrame):
     def __init__(self, bankController, welcome):
         # Load our window settings.
         config = wx.Config.Get()
         size = config.ReadInt('SIZE_X'), config.ReadInt('SIZE_Y')
         pos = config.ReadInt('POS_X'), config.ReadInt('POS_Y')
 
-        wx.Frame.__init__(self, None, title="wxBanker", size=size, pos=pos)
-        self.SetIcon(wx.ArtProvider.GetIcon('wxART_coins'))
+        BrandedFrame.__init__(self, None, title="wxBanker", size=size, pos=pos)
 
         self.Panel = BankerPanel(self, bankController)
 

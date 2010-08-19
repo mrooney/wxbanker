@@ -20,13 +20,14 @@ import wx
 from wx.lib.pubsub import Publisher
 from wxbanker.csvimporter import CsvImporter, CsvImporterProfileManager, json
 from wxbanker.transactionolv import TransactionOLV
+from wxbanker.brandedframe import BrandedFrame
 
-class CsvImportFrame(wx.Frame):
+class CsvImportFrame(BrandedFrame):
     """
     Window for importing data from a CSV file
     """
     def __init__(self):
-        wx.Frame.__init__(self, None, title=_("CSV import"))
+        BrandedFrame.__init__(self, None, title=_("CSV import"))
         # Necessary to be able to preview imports since OLV looks for this attribute on its GrandParent.
         self.searchActive = False
 
