@@ -22,7 +22,7 @@ import wx, webbrowser, os
 from wx.lib.wordwrap import wordwrap
 from wx.lib.pubsub import Publisher
 
-from wxbanker import version, localization, debug, fileservice
+from wxbanker import version, localization, debug, fileservice, brandedframe
 from wxbanker.currencies import CurrencyStrings
 from wxbanker.csvimportframe import CsvImportFrame
 from wxbanker.csvexporter import CsvExporter
@@ -243,6 +243,7 @@ class BankMenuBar(wx.MenuBar):
         info = wx.AboutDialogInfo()
         info.Name = "wxBanker"
         info.Version = str(version.NUMBER)
+        #info.Icon = brandedframe.getIcon()
         info.Copyright = _("Copyright") + " 2007-2010 Mike Rooney (mrooney@ubuntu.com)"
         info.Description = _("Simple personal finance.")
         info.WebSite = ("https://launchpad.net/wxbanker", "https://launchpad.net/wxbanker")
