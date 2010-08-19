@@ -110,6 +110,7 @@ class AccountListCtrl(wx.Panel):
         # Subscribe to messages we are concerned about.
         Publisher.subscribe(self.onAccountBalanceChanged, "ormobject.updated.Account.Balance")
         Publisher.subscribe(self.onAccountRenamed, "ormobject.updated.Account.Name")
+        Publisher.subscribe(self.onTransactionDateChanged, "ormobject.updated.Transaction.Date")
         Publisher.subscribe(self.onAccountMintIdChanged, "ormobject.updated.Account.MintId")
         Publisher.subscribe(self.onAccountRemoved, "account.removed")
         Publisher.subscribe(self.onAccountAdded, "account.created")
@@ -146,6 +147,9 @@ class AccountListCtrl(wx.Panel):
             self.addButton.StartFlashing()
             
     def onAccountMintIdChanged(self, message):
+        self._UpdateMintStatuses()
+        
+    def onTransactionDateChanged(self, event):
         self._UpdateMintStatuses()
         
     def _UpdateMintStatuses(self):
