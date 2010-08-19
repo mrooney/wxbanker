@@ -74,6 +74,10 @@ class CsvImportFrame(BrandedFrame):
 
         self.targetAccountCtrl = wx.Choice(topPanel, choices=accounts)
 
+        self.cancelButton = wx.Button(topPanel, label=_("Cancel"))
+        self.cancelButton.SetToolTipString(_("Cancel"))
+        self.cancelButton.Bind(wx.EVT_BUTTON, lambda e: self.Destroy())
+        
         self.importButton = wx.Button(topPanel, label=_("Import"))
         self.importButton.SetToolTipString(_("Import"))
         self.importButton.Bind(wx.EVT_BUTTON, self.onClickImportButton)
@@ -83,6 +87,8 @@ class CsvImportFrame(BrandedFrame):
         targetSizer.AddSpacer(6)
         targetSizer.Add(self.targetAccountCtrl)
         targetSizer.AddStretchSpacer(1)
+        targetSizer.Add(self.cancelButton)
+        targetSizer.AddSpacer(6)
         targetSizer.Add(self.importButton)
         targetSizer.AddSpacer(6)
         
