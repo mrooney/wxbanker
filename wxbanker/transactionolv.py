@@ -154,6 +154,20 @@ class TransactionOLV(GroupListView):
     def renderEditDescription(self, modelObj):
         return modelObj._Description
 
+    def sizeAmounts(self):
+        """Set the width of the Amount and Total columns based on the approximated widest value."""
+        transactions = self.GetObjects()
+        # If there aren't any transactions, there's nothing to do.
+        if len(transactions) == 0:
+            return
+
+        for i, attr in enumerate(("Amount", "_Total")):
+            # Sort by amount, then compare the highest and lowest, to take into account a negative sign.
+            sortedtrans = list(sorted(transactions, cmp=lambda a,b: cmp(getattr(a, attr), getattr(b, attr))))
+            high, low = sortedtrans[0], sortedtrans[-1]
+            widestWidth = max([self.GetTextExtent(self.BankController.Model.float2str(getattr(t, attr)))[0] for t in (high, low)])
+            self.SetColumnFixedWidth(self.COL_AMOUNT+i, widestWidth + 10)
+
     def setAccount(self, account, scrollToBottom=True):
         self.CurrentAccount = account
 
@@ -164,6 +178,8 @@ class TransactionOLV(GroupListView):
             transactions = account.Transactions
 
         self.SetObjects(transactions)
+        # Update the width of the amount/total columns.
+        self.sizeAmounts()
         # Unselect everything.
         self.SelectObjects([], deselectOthers=True)
         if scrollToBottom:
@@ -313,7 +329,12 @@ class TransactionOLV(GroupListView):
 
     def onRemoveTransactions(self, transactions):
         """Remove the transactions from the account."""
-        self.CurrentAccount.RemoveTransactions(transactions)
+        if self.CurrentAccount:
+            self.CurrentAccount.RemoveTransactions(transactions)
+        # We won't have a CurrentAccount when viewing all accounts (LP: #620924)
+        else:
+            for transaction in transactions:
+                transaction.Parent.RemoveTransaction(transaction)
 
     def onMoveTransactions(self, transactions, targetAccount):
         """Move the transactions to the target account."""
@@ -377,7 +398,12 @@ class TransactionOLV(GroupListView):
         self.Refresh()
 
     def onCurrencyChanged(self, message):
+        # Refresh all the transaction objects, re-rendering the amounts.
         self.RefreshObjects()
+        # The current likely changed the widths of the amount/total column.
+        self.sizeAmounts()
+        # Now we need to adjust the description width so we don't have a horizontal scrollbar.
+        self.AutoSizeColumns()
 
     def __del__(self):
         for callback, topic in self.Subscriptions:
