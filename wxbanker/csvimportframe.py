@@ -315,7 +315,7 @@ class DetachedTransactionOLV(TransactionOLV):
         self.SetEmptyListMsg(_('Select file and click "Preview"'))
 
     def renderFloat(self, floatVal):
-        return floatVal
+        return str(floatVal)
 
     def showContextMenu(self, transactions, col):
         TransactionOLV.showContextMenu(self, transactions, col, removeOnly=True)
