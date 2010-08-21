@@ -165,7 +165,8 @@ class TransactionOLV(GroupListView):
             # Sort by amount, then compare the highest and lowest, to take into account a negative sign.
             sortedtrans = list(sorted(transactions, cmp=lambda a,b: cmp(getattr(a, attr), getattr(b, attr))))
             high, low = sortedtrans[0], sortedtrans[-1]
-            widestWidth = max([self.GetTextExtent(self.BankController.Model.float2str(getattr(t, attr)))[0] for t in (high, low)])
+            # Take the max of the two as well as the column header width, as we need to at least display that.
+            widestWidth = max([self.GetTextExtent(_(attr.strip("_")))[0]] + [self.GetTextExtent(self.renderFloat(getattr(t, attr)))[0] for t in (high, low)])
             self.SetColumnFixedWidth(self.COL_AMOUNT+i, widestWidth + 10)
 
     def setAccount(self, account, scrollToBottom=True):
