@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-20 00:01-0700\n"
+"POT-Creation-Date: 2010-08-22 03:01-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -115,8 +115,8 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:198 wxbanker/accountconfigdialog.py:226
-msgid "Delete"
+#: wxbanker/csvimportframe.py:198
+msgid "Remove"
 msgstr ""
 
 #: wxbanker/csvimportframe.py:252
@@ -391,8 +391,8 @@ msgstr ""
 
 #: wxbanker/main.py:193
 msgid ""
-"The buttons in the account control allow you to add, remove, and rename an "
-"account, respectively."
+"The buttons in the account control allow you to add, rename, configure, and "
+"remove an account, respectively."
 msgstr ""
 
 #: wxbanker/main.py:194
@@ -723,60 +723,60 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
-#: wxbanker/transactionolv.py:212
+#: wxbanker/transactionolv.py:229
 #, python-format
 msgid "Send %s to calculator"
 msgstr ""
 
-#: wxbanker/transactionolv.py:213
+#: wxbanker/transactionolv.py:230
 #, python-format
 msgid "Add %s to calculator"
 msgstr ""
 
-#: wxbanker/transactionolv.py:214
+#: wxbanker/transactionolv.py:231
 #, python-format
 msgid "Subtract %s from calculator"
 msgstr ""
 
-#: wxbanker/transactionolv.py:226
+#: wxbanker/transactionolv.py:243
 msgid "Remove this transaction"
 msgstr ""
 
-#: wxbanker/transactionolv.py:227
+#: wxbanker/transactionolv.py:244
 msgid "Move this transaction to account"
 msgstr ""
 
-#: wxbanker/transactionolv.py:228
+#: wxbanker/transactionolv.py:245
 msgid "No tags yet"
 msgstr ""
 
-#: wxbanker/transactionolv.py:230
+#: wxbanker/transactionolv.py:247
 #, python-format
 msgid "Remove these %i transactions"
 msgstr ""
 
-#: wxbanker/transactionolv.py:231
+#: wxbanker/transactionolv.py:248
 #, python-format
 msgid "Move these %i transactions to account"
 msgstr ""
 
-#: wxbanker/transactionolv.py:232
+#: wxbanker/transactionolv.py:249
 msgid "No common tags yet"
 msgstr ""
 
-#: wxbanker/transactionolv.py:234 wxbanker/tagtransactiondialog.py:100
+#: wxbanker/transactionolv.py:251 wxbanker/tagtransactiondialog.py:100
 msgid "Add a tag"
 msgstr ""
 
-#: wxbanker/transactionolv.py:257
+#: wxbanker/transactionolv.py:274
 msgid "Tags"
 msgstr ""
 
-#: wxbanker/transactionolv.py:270
+#: wxbanker/transactionolv.py:287
 msgid "Search for this tag"
 msgstr ""
 
-#: wxbanker/transactionolv.py:271
+#: wxbanker/transactionolv.py:288
 msgid "Remove this tag"
 msgstr ""
 
@@ -861,6 +861,10 @@ msgstr ""
 
 #: wxbanker/accountconfigdialog.py:215
 msgid "Close"
+msgstr ""
+
+#: wxbanker/accountconfigdialog.py:226
+msgid "Delete"
 msgstr ""
 
 #: wxbanker/accountconfigdialog.py:251
