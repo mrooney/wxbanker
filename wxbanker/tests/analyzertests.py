@@ -25,8 +25,7 @@ import unittest, datetime
 class AnalyzerTests(testbase.TestCaseWithController):
     def setUp(self):
         testbase.TestCaseWithController.setUp(self)
-        model = self.Controller.Model
-        a = model.CreateAccount("A")
+        a = self.Model.CreateAccount("A")
         for i in xrange(1, 13):
             a.AddTransaction(amount=i, date=datetime.date(2009, i, 15))
             
@@ -49,7 +48,7 @@ class AnalyzerTests(testbase.TestCaseWithController):
         
     def testMonthlyAmountsDefault(self):
         monthly = self.createMonthly()
-        earnings = monthly.GetEarnings(self.Controller.Model.GetTransactions())
+        earnings = monthly.GetEarnings(self.Model.GetTransactions())
         self.assertEqual(
             earnings,
             [('2009.01', 1), ('2009.02', 2), ('2009.03', 3), ('2009.04', 4), ('2009.05', 5), ('2009.06', 6),
@@ -58,5 +57,16 @@ class AnalyzerTests(testbase.TestCaseWithController):
     
     def testMonthlyAmountsOne(self):
         monthly = self.createMonthly(months=1)
-        earnings = monthly.GetEarnings(self.Controller.Model.GetTransactions())
+        earnings = monthly.GetEarnings(self.Model.GetTransactions())
         self.assertEqual(earnings, [("2009.12", 12)])
+
+    def testMonthlyAmountsEmpty(self):
+        # With no transactions from a previous month, we should have a zero for all months to show. (LP: #623055)
+        self.Model.Accounts[0].Remove()
+        monthly = self.createMonthly()
+        earnings = monthly.GetEarnings(self.Model.GetTransactions())
+        self.assertEqual(
+            earnings,
+            [('2009.01', 0), ('2009.02', 0), ('2009.03', 0), ('2009.04', 0), ('2009.05', 0), ('2009.06', 0),
+             ('2009.07', 0), ('2009.08', 0), ('2009.09', 0), ('2009.10', 0), ('2009.11', 0), ('2009.12', 0)]
+        )
