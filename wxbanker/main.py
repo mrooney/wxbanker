@@ -190,7 +190,7 @@ class BankerFrame(BrandedFrame):
     def onFirstRun(self, message):
         welcomeMsg = _("It looks like this is your first time using wxBanker!")
         welcomeMsg += "\n\n" + _("To get started, add an account using the account control in the top left corner.")
-        welcomeMsg += " " + _("The buttons in the account control allow you to add, remove, and rename an account, respectively.")
+        welcomeMsg += " " + _("The buttons in the account control allow you to add, rename, configure, and remove an account, respectively.")
         welcomeMsg += "\n\n" + _("Once you have created an account you can add transactions to it (such as your initial balance) using the controls below the grid on the bottom right.")
         welcomeMsg += "\n\n" + _("Have fun!")
         #wx.TipWindow(self, welcomeMsg, maxLength=300)

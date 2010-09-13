@@ -195,7 +195,7 @@ class CsvImportFrame(BrandedFrame):
         sizer.Add(self.saveProfileButton, flag=wx.ALIGN_CENTER)
 
         sizer.AddSpacer(6)
-        self.deleteProfileButton = wx.Button(topPanel, label=_("Delete"))
+        self.deleteProfileButton = wx.Button(topPanel, label=_("Remove"))
         self.deleteProfileButton.Bind(wx.EVT_BUTTON, self.onClickDeleteProfileButton)
         self.deleteProfileButton.Disable()
         sizer.Add(self.deleteProfileButton, flag=wx.ALIGN_CENTER)
