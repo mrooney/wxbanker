@@ -261,10 +261,6 @@ class NewTransactionRow(bankcontrols.GBRow):
         # The recurs check.
         self.recursCheck = wx.CheckBox(parent, label=_("Recurring"))
         checkSizer.Add(self.recursCheck, 0, wx.RIGHT, 6)
-    
-        # If we are editing, it is inherently a recurring transaction.
-        if editing:
-            self.recursCheck.Hide()
 
         # Checkboxes seem to have an overly large horizontal margin that looks bad.
         for check in (self.transferCheck, self.recursCheck):
@@ -314,8 +310,15 @@ class NewTransactionRow(bankcontrols.GBRow):
             dateTextCtrl.WindowStyleFlag |= wx.TE_PROCESS_ENTER
             dateTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onDateEnter)
             
-        Publisher.subscribe(self.onAccountChanged, "view.account changed")
-        wx.CallLater(50, self.initialFocus)
+    
+        # If we are editing, it is inherently a recurring transaction.
+        if editing:
+            self.recursCheck.Hide()
+            self.newButton.Hide()
+        else:
+            # Only subscribe to the event and set focus if it is the permanent control (LP: #623238)
+            Publisher.subscribe(self.onAccountChanged, "view.account changed")
+            wx.CallLater(50, self.initialFocus)
 
     def onRecurringCheck(self, event=None):
         Publisher.sendMessage("newtransaction.%i.recurringtoggled"%id(self), self.recursCheck.IsChecked())

@@ -47,6 +47,7 @@ class CairoPlotPanelMonthly(BaseCairoPlotPanel):
         self.Refresh()
         
     def OnPaint(self, event):
+        # I'm not sure when this might happen, but I recall doing it for a reason. Perhaps OnPaint can occur without a plotBalance?
         if self.data is None:
             return
         

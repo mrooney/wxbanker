@@ -29,28 +29,31 @@ class MonthlyAnalyzer:
     def GetDateRange(self):
         startMonth = self.Today - relativedelta(months=self.Months)
         start = datetime.date(startMonth.year, startMonth.month, 1)
-        
         endMonth = self.Today - relativedelta(months=1)
         lastDay = calendar.monthrange(endMonth.year, endMonth.month)[1]
         end = datetime.date(endMonth.year, endMonth.month, lastDay)
         
         return start, end
     
+    def _DateToBucket(self, date):
+        return "%i.%s" % (date.year, str(date.month).zfill(2))
+    
+    def _AddToBucket(self, buckets, date, amount):
+        bucket = self._DateToBucket(date)
+        buckets[bucket] += amount
+    
     def GetEarnings(self, transactions):
         start, end = self.GetDateRange()
-        buckets = {}
-        def addtobucket(bucket, amount):
-            if bucket in buckets: buckets[bucket] += amount
-            else: buckets[bucket] = amount
-                
+        # Initialize all buckets to zero, so we always get the desired months on the graph, even empty. (LP: #623055)
+        buckets = dict([(self._DateToBucket(start+relativedelta(months=i)), 0) for i in range(self.Months)]) 
+        
         for t in sorted(transactions):
             date = t.Date
             if date >= start:
                 if date > end:
                     break
-                bucket = "%i.%s" % (date.year, str(date.month).zfill(2))
-                addtobucket(bucket, t.Amount)
-                
+                self._AddToBucket(buckets, date, t.Amount)
+            
         return [(key, buckets[key]) for key in sorted(buckets)]
                 
         
