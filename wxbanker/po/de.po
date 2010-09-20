@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-08-22 03:01-0700\n"
-"PO-Revision-Date: 2010-08-30 20:33+0000\n"
-"Last-Translator: neo24 <Unknown>\n"
+"PO-Revision-Date: 2010-09-19 17:58+0000\n"
+"Last-Translator: Patrick Eigensatz <patrick.eigensatz@gmail.com>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-08-31 03:53+0000\n"
+"X-Launchpad-Export-Date: 2010-09-20 04:57+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/summarytab.py:30
@@ -89,7 +89,7 @@ msgstr "CSV Datei Einstellungen"
 
 #: wxbanker/csvimportframe.py:144
 msgid "Lines to skip"
-msgstr ""
+msgstr "Zu überspringende Zeilen"
 
 #: wxbanker/csvimportframe.py:147
 msgid "Encoding"
@@ -120,7 +120,7 @@ msgstr "Speichern"
 
 #: wxbanker/csvimportframe.py:198
 msgid "Remove"
-msgstr ""
+msgstr "Entfernen"
 
 #: wxbanker/csvimportframe.py:252
 #, python-format
@@ -268,7 +268,7 @@ msgstr "Wiederkehrend"
 
 #: wxbanker/newtransactionctrl.py:341
 msgid "Initial balance"
-msgstr ""
+msgstr "Eröffnungskontostand"
 
 #: wxbanker/newtransactionctrl.py:377
 msgid "No amount entered in the 'Amount' field."
@@ -413,6 +413,8 @@ msgid ""
 "The buttons in the account control allow you to add, rename, configure, and "
 "remove an account, respectively."
 msgstr ""
+"Diese Buttons in der Kontokontrolle erlauben es ihnen, Konten um zubenennen, "
+"hinzuzufügen, Einstellungen festzulegen und Solche zu entfernen."
 
 #: wxbanker/main.py:194
 msgid ""
@@ -482,7 +484,7 @@ msgstr "Alle Konten"
 
 #: wxbanker/accountlistctrl.py:158
 msgid "Not synchronized with Mint.com"
-msgstr ""
+msgstr "Nicht mit Mint.com synchronisiert"
 
 #: wxbanker/accountlistctrl.py:442 wxbanker/accountlistctrl.py:543
 msgid "Sorry, an account by that name already exists."
@@ -527,11 +529,11 @@ msgstr "Transaktionen aus einer CSV-Datei importieren"
 
 #: wxbanker/menubar.py:60
 msgid "Export to CSV"
-msgstr ""
+msgstr "Exportiere in eine CSV Datei"
 
 #: wxbanker/menubar.py:60
 msgid "Export transactions to a CSV file"
-msgstr ""
+msgstr "Exportiere Transaktionen in eine CSV Datei"
 
 #: wxbanker/menubar.py:66
 msgid "Previous account"
@@ -688,7 +690,7 @@ msgstr "Wöchentlich an %s"
 #: wxbanker/bankobjects/recurringtransaction.py:162
 #, python-format
 msgid "Every %(num)d weeks on %%s"
-msgstr ""
+msgstr "Jede %(num)d Wochen am %%s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:169
 #, python-format
@@ -747,7 +749,7 @@ msgstr "Keine Transaktionen eingegeben."
 
 #: wxbanker/transactionolv.py:39
 msgid "No matching transactions."
-msgstr ""
+msgstr "Keine übereinsprechenden Transaktionen"
 
 #: wxbanker/transactionolv.py:66
 msgid "Total"
@@ -778,7 +780,7 @@ msgstr "Verschieben dieser Transaktion zu Konto"
 
 #: wxbanker/transactionolv.py:245
 msgid "No tags yet"
-msgstr ""
+msgstr "Keine Schlagwörter"
 
 #: wxbanker/transactionolv.py:247
 #, python-format
@@ -792,11 +794,11 @@ msgstr "Diese %i Transaktionen verschieben zu Konto"
 
 #: wxbanker/transactionolv.py:249
 msgid "No common tags yet"
-msgstr ""
+msgstr "Keine allgemeinen Schlagwörter gesetzt"
 
 #: wxbanker/transactionolv.py:251 wxbanker/tagtransactiondialog.py:100
 msgid "Add a tag"
-msgstr ""
+msgstr "Ein Schlagwort hinzufügen"
 
 #: wxbanker/transactionolv.py:274
 msgid "Tags"
@@ -812,7 +814,7 @@ msgstr "Lösche dieses Schlagword"
 
 #: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:75
 msgid "balance"
-msgstr ""
+msgstr "Kontostand"
 
 #: wxbanker/plots/wxplotpanel.py:37 wxbanker/plots/wxplotpanel.py:44
 #: wxbanker/plots/cairopanel.py:81 wxbanker/plots/cairopanel.py:122
@@ -856,16 +858,16 @@ msgstr "Nichts"
 
 #: wxbanker/accountconfigdialog.py:37
 msgid "Mint.com credentials:"
-msgstr ""
+msgstr "Mint.com Daten:"
 
 #: wxbanker/accountconfigdialog.py:42
 msgid "Save credentials in keyring"
-msgstr ""
+msgstr "Daten im Schlüsselbund speichern"
 
 #: wxbanker/accountconfigdialog.py:44
 #, python-format
 msgid "Corresponding Mint account for %(name)s:"
-msgstr ""
+msgstr "Das zugehörige Mint Konto für %(name)s:"
 
 #: wxbanker/accountconfigdialog.py:46
 msgid "Update"
@@ -886,6 +888,7 @@ msgstr "Details der Transaktion"
 #: wxbanker/accountconfigdialog.py:202
 msgid "This will permanently remove this recurring transaction. Continue?"
 msgstr ""
+"Diese Aktion wird die wiederkehrende Überweisung entfernen. Fortfahren?"
 
 #: wxbanker/accountconfigdialog.py:213
 msgid "This account currently has no recurring transactions."
@@ -905,13 +908,15 @@ msgstr "Daueraufträge"
 
 #: wxbanker/accountconfigdialog.py:252
 msgid "Mint.com Integration"
-msgstr ""
+msgstr "Mint.com Einbindung"
 
 #: wxbanker/tagtransactiondialog.py:29
 msgid ""
 "You can also tag a transaction by putting #tagname anywhere in the "
 "description."
 msgstr ""
+"Sie können ein Schlagwort einer Überweisung hinzufügen indem Sie #tagname "
+"irgendwo in die Beschreibung setzen."
 
 #: wxbanker/tagtransactiondialog.py:30
 msgid "Tag:"
@@ -922,6 +927,8 @@ msgid ""
 "To remove this tag later, simply remove it from the description or right-"
 "click on the transaction."
 msgstr ""
+"Um dieses Schlagwort später zu entfernen, entfernen Sie es von der "
+"Beschreibung oder klicken Sie rechts auf die Überweisung."
 
 #: wxbanker/tagtransactiondialog.py:42
 msgid "Add Tag"
