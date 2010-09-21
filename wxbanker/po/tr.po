@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-08-22 03:01-0700\n"
-"PO-Revision-Date: 2010-09-15 18:01+0000\n"
-"Last-Translator: Mustafa Doğan <Unknown>\n"
+"PO-Revision-Date: 2010-09-20 22:10+0000\n"
+"Last-Translator: zeugma <Unknown>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2010-09-16 04:58+0000\n"
+"X-Launchpad-Export-Date: 2010-09-21 04:57+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/summarytab.py:30
@@ -76,7 +76,7 @@ msgstr "Miktar"
 
 #: wxbanker/csvimportframe.py:123
 msgid "Decimal separator"
-msgstr ""
+msgstr "Ondalık ayırıcı"
 
 #: wxbanker/csvimportframe.py:127 wxbanker/newtransactionctrl.py:248
 #: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:64
