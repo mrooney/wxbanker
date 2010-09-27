@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-08-20 00:01-0700\n"
-"PO-Revision-Date: 2010-08-20 08:15+0000\n"
-"Last-Translator: Tomasz 'Zen' Napierala <tomasz@napierala.org>\n"
+"POT-Creation-Date: 2010-08-22 03:01-0700\n"
+"PO-Revision-Date: 2010-09-26 21:16+0000\n"
+"Last-Translator: pp/bs <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2010-08-21 03:48+0000\n"
+"X-Launchpad-Export-Date: 2010-09-27 04:40+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/summarytab.py:30
@@ -37,7 +37,7 @@ msgstr "do"
 
 #: wxbanker/summarytab.py:50
 msgid "Graph"
-msgstr ""
+msgstr "Wykres"
 
 #: wxbanker/csvimportframe.py:30
 msgid "CSV import"
@@ -118,8 +118,8 @@ msgstr ""
 msgid "Save"
 msgstr "Zapisz"
 
-#: wxbanker/csvimportframe.py:198 wxbanker/accountconfigdialog.py:226
-msgid "Delete"
+#: wxbanker/csvimportframe.py:198
+msgid "Remove"
 msgstr "Usuń"
 
 #: wxbanker/csvimportframe.py:252
@@ -216,7 +216,7 @@ msgstr[2] "tygodni"
 #: wxbanker/newtransactionctrl.py:174
 msgid "month"
 msgid_plural "months"
-msgstr[0] ""
+msgstr[0] "miesiąc"
 msgstr[1] "miesiące"
 msgstr[2] "miesięcy"
 
@@ -273,7 +273,7 @@ msgstr "Powtarzanie"
 
 #: wxbanker/newtransactionctrl.py:341
 msgid "Initial balance"
-msgstr ""
+msgstr "Saldo początkowe"
 
 #: wxbanker/newtransactionctrl.py:377
 msgid "No amount entered in the 'Amount' field."
@@ -407,11 +407,11 @@ msgstr ""
 
 #: wxbanker/main.py:193
 msgid ""
-"The buttons in the account control allow you to add, remove, and rename an "
-"account, respectively."
+"The buttons in the account control allow you to add, rename, configure, and "
+"remove an account, respectively."
 msgstr ""
-"Przyciski w kontroli konta pozwolą Ci odpowiednio dodać, usunąć i zmienić "
-"nazwę konta."
+"Przyciski kontroli konta pozwalają odpowiednio na dodawanie, zmianę nazwy, "
+"konfigurowanie i usuwanie konta."
 
 #: wxbanker/main.py:194
 msgid ""
@@ -752,66 +752,66 @@ msgstr "Brak pasujących transakcji."
 msgid "Total"
 msgstr "Suma"
 
-#: wxbanker/transactionolv.py:212
+#: wxbanker/transactionolv.py:229
 #, python-format
 msgid "Send %s to calculator"
 msgstr "Wyślij %s do kalkulatora"
 
-#: wxbanker/transactionolv.py:213
+#: wxbanker/transactionolv.py:230
 #, python-format
 msgid "Add %s to calculator"
 msgstr "Dodaj %s do kalkulatora"
 
-#: wxbanker/transactionolv.py:214
+#: wxbanker/transactionolv.py:231
 #, python-format
 msgid "Subtract %s from calculator"
 msgstr "Odejmij %s z kalkulatora"
 
-#: wxbanker/transactionolv.py:226
+#: wxbanker/transactionolv.py:243
 msgid "Remove this transaction"
 msgstr "Usuń transakcję"
 
-#: wxbanker/transactionolv.py:227
+#: wxbanker/transactionolv.py:244
 msgid "Move this transaction to account"
 msgstr "Przesuń transakcję na konto"
 
-#: wxbanker/transactionolv.py:228
+#: wxbanker/transactionolv.py:245
 msgid "No tags yet"
 msgstr ""
 
-#: wxbanker/transactionolv.py:230
+#: wxbanker/transactionolv.py:247
 #, python-format
 msgid "Remove these %i transactions"
 msgstr "Usuń %i transakcji"
 
-#: wxbanker/transactionolv.py:231
+#: wxbanker/transactionolv.py:248
 #, python-format
 msgid "Move these %i transactions to account"
 msgstr "Przesuń %i transakcji na konto"
 
-#: wxbanker/transactionolv.py:232
+#: wxbanker/transactionolv.py:249
 msgid "No common tags yet"
 msgstr ""
 
-#: wxbanker/transactionolv.py:234 wxbanker/tagtransactiondialog.py:100
+#: wxbanker/transactionolv.py:251 wxbanker/tagtransactiondialog.py:100
 msgid "Add a tag"
 msgstr ""
 
-#: wxbanker/transactionolv.py:257
+#: wxbanker/transactionolv.py:274
 msgid "Tags"
 msgstr ""
 
-#: wxbanker/transactionolv.py:270
+#: wxbanker/transactionolv.py:287
 msgid "Search for this tag"
 msgstr ""
 
-#: wxbanker/transactionolv.py:271
+#: wxbanker/transactionolv.py:288
 msgid "Remove this tag"
 msgstr ""
 
 #: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:75
 msgid "balance"
-msgstr ""
+msgstr "saldo"
 
 #: wxbanker/plots/wxplotpanel.py:37 wxbanker/plots/wxplotpanel.py:44
 #: wxbanker/plots/cairopanel.py:81 wxbanker/plots/cairopanel.py:122
@@ -872,7 +872,7 @@ msgstr "Aktualizuj"
 
 #: wxbanker/accountconfigdialog.py:49
 msgid "Username:"
-msgstr ""
+msgstr "Nazwa użytkownika:"
 
 #: wxbanker/accountconfigdialog.py:51
 msgid "Password:"
@@ -893,6 +893,10 @@ msgstr "Brak obecnie transakcji okresowych dla tego konta."
 #: wxbanker/accountconfigdialog.py:215
 msgid "Close"
 msgstr "Zamknij"
+
+#: wxbanker/accountconfigdialog.py:226
+msgid "Delete"
+msgstr "Usuń"
 
 #: wxbanker/accountconfigdialog.py:251
 msgid "Recurring Transactions"
@@ -921,6 +925,13 @@ msgstr ""
 #: wxbanker/tagtransactiondialog.py:42
 msgid "Add Tag"
 msgstr ""
+
+#~ msgid ""
+#~ "The buttons in the account control allow you to add, remove, and rename an "
+#~ "account, respectively."
+#~ msgstr ""
+#~ "Przyciski w kontroli konta pozwolą Ci odpowiednio dodać, usunąć i zmienić "
+#~ "nazwę konta."
 
 #~ msgid "Fit Curve Degree"
 #~ msgstr "Dopasuj Stopień Krzywej"
