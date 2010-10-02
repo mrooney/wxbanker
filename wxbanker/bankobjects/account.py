@@ -41,8 +41,8 @@ class Account(ORMObject):
         self._Transactions = None
         self._RecurringTransactions = []
         self._preTransactions = []
-        self.Currency = currency
-        self.Balance = balance
+        self.Currency = currency if currency else 0
+        self.Balance = balance if balance else 0.0
         self.MintId = mintId
         self.IsFrozen = False
 
