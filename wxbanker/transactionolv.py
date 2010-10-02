@@ -45,8 +45,10 @@ class TransactionOLV(GroupListView):
         self.BankController = bankController
 
         self.showGroups = False
+        #WXTODO: figure out these (and the text color, or is that already?) from theme (LP: ???)
         self.evenRowsBackColor = wx.Color(224,238,238)
         self.oddRowsBackColor = wx.WHITE
+
         self.cellEditMode = GroupListView.CELLEDIT_DOUBLECLICK
         self.SetEmptyListMsg(self.EMPTY_MSG_NORMAL)
 
@@ -59,11 +61,12 @@ class TransactionOLV(GroupListView):
         self.COL_AMOUNT = 2
         self.COL_TOTAL = 3
 
+        # If you change these column names, update sizeAmounts()!
         self.SetColumns([
             ColumnDefn(_("Date"), valueGetter=self.getDateOf, valueSetter=self.setDateOf, width=dateWidth),
             ColumnDefn(_("Description"), valueGetter="Description", isSpaceFilling=True, editFormatter=self.renderEditDescription),
             ColumnDefn(_("Amount"), "right", valueGetter="Amount", stringConverter=self.renderFloat, editFormatter=self.renderEditFloat),
-            ColumnDefn(_("Total"), "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
+            ColumnDefn(_("Balance"), "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
         ])
         # Our custom hack in OLV.py:2017 will render amount floats appropriately as %.2f when editing.
 
@@ -165,8 +168,10 @@ class TransactionOLV(GroupListView):
             # Sort by amount, then compare the highest and lowest, to take into account a negative sign.
             sortedtrans = list(sorted(transactions, cmp=lambda a,b: cmp(getattr(a, attr), getattr(b, attr))))
             high, low = sortedtrans[0], sortedtrans[-1]
+            # Get the (translated) displayed column name to calculate width.
+            header = _({"_Total": "Balance"}.get(attr, attr))
             # Take the max of the two as well as the column header width, as we need to at least display that.
-            widestWidth = max([self.GetTextExtent(_(attr.strip("_")))[0]] + [self.GetTextExtent(self.renderFloat(getattr(t, attr)))[0] for t in (high, low)])
+            widestWidth = max([self.GetTextExtent(header)[0]] + [self.GetTextExtent(self.renderFloat(getattr(t, attr)))[0] for t in (high, low)])
             self.SetColumnFixedWidth(self.COL_AMOUNT+i, widestWidth + 10)
 
     def setAccount(self, account, scrollToBottom=True):
