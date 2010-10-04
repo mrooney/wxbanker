@@ -15,6 +15,7 @@ for simple instructions. It's easy, I promise!
  - Python >= 2.5
  - wxPython >= 2.8.8.0
  - python-dateutil
+ - python-beautifulsoup
  * numpy >= 1.04 (optional; enables graphing capabilities)
  * python-simplejson (optional; enables csv import)
 
@@ -23,6 +24,10 @@ dependencies on your specific operating system.
 
 
 == INSTALLING ==
+ - Ubuntu
+   - sudo apt-get install wxbanker
+ - Fedora
+   - su -c 'yum install python wxPython numpy'
  - Windows 2000/XP/Vista/7:
    - Download and install python from:
       http://python.org/ftp/python/2.6.2/python-2.6.2.msi
@@ -30,12 +35,6 @@ dependencies on your specific operating system.
       http://downloads.sourceforge.net/wxpython/wxPython2.8-win32-unicode-2.8.10.1-py26.exe
    - Optionally, for graphing capabilities, download and install
       http://sourceforge.net/projects/numpy/files/NumPy/1.3.0/numpy-1.3.0-win32-superpack-python2.6.exe/download
- - Ubuntu/Debian
-   - sudo apt-get install python-wxgtk2.8 python-numpy python-simplejson python-dateutil
- 
- - Fedora
-   - su -c 'yum install python wxPython numpy'
-
  - Mac OSX (PPC or Intel)
    - If you are using Leopard 10.5 or newer, you already have Python 2.5 installed.
      Otherwise, download and install python from:
