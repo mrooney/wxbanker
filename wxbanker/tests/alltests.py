@@ -35,5 +35,9 @@ def main():
     suite = unittest.TestLoader().loadTestsFromNames(modules)
     runner.run(suite)
 
+    incomplete = testbase.INCOMPLETE_TESTS
+    if incomplete:
+        print "Incomplete tests: %i!" % incomplete
+
 if __name__ == "__main__":
     main()
