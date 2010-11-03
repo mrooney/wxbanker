@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-08-22 03:01-0700\n"
-"PO-Revision-Date: 2010-09-26 21:16+0000\n"
-"Last-Translator: pp/bs <Unknown>\n"
+"POT-Creation-Date: 2010-10-04 03:01-0700\n"
+"PO-Revision-Date: 2010-11-02 13:40+0000\n"
+"Last-Translator: Jarosław Ogrodnik <nobodythere@gmail.com>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2010-09-27 04:40+0000\n"
+"X-Launchpad-Export-Date: 2010-11-03 04:57+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: wxbanker/summarytab.py:30
@@ -62,7 +62,7 @@ msgid "CSV columns mapping"
 msgstr "Mapowanie kolumn CSV"
 
 #: wxbanker/csvimportframe.py:113 wxbanker/bankcontrols.py:52
-#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:63
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:66
 msgid "Date"
 msgstr "Data"
 
@@ -71,7 +71,7 @@ msgid "Date format"
 msgstr "Format daty"
 
 #: wxbanker/csvimportframe.py:121 wxbanker/newtransactionctrl.py:249
-#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:65
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:68
 msgid "Amount"
 msgstr "Kwota"
 
@@ -80,7 +80,7 @@ msgid "Decimal separator"
 msgstr "Separator dziesiętny"
 
 #: wxbanker/csvimportframe.py:127 wxbanker/newtransactionctrl.py:248
-#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:64
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:67
 msgid "Description"
 msgstr "Opis"
 
@@ -271,57 +271,57 @@ msgstr "Wprowadź tę transakcję"
 msgid "Recurring"
 msgstr "Powtarzanie"
 
-#: wxbanker/newtransactionctrl.py:341
+#: wxbanker/newtransactionctrl.py:344
 msgid "Initial balance"
 msgstr "Saldo początkowe"
 
-#: wxbanker/newtransactionctrl.py:377
+#: wxbanker/newtransactionctrl.py:380
 msgid "No amount entered in the 'Amount' field."
 msgstr "Nie wpisano kwoty w polu 'Kwota'."
 
-#: wxbanker/newtransactionctrl.py:379
+#: wxbanker/newtransactionctrl.py:382
 #, python-format
 msgid "'%s' is not a valid amount."
 msgstr "'%s' nie jest ważną kwotą."
 
-#: wxbanker/newtransactionctrl.py:382
+#: wxbanker/newtransactionctrl.py:385
 msgid "Please enter a number such as 12.34 or -20."
 msgstr "Proszę wpisać liczbę np. 12.34 or -20."
 
-#: wxbanker/newtransactionctrl.py:383
+#: wxbanker/newtransactionctrl.py:386
 msgid "Invalid Transaction Amount"
 msgstr "Nieważna Kwota Transakcji"
 
-#: wxbanker/newtransactionctrl.py:394
+#: wxbanker/newtransactionctrl.py:397
 msgid "Please select an account and then try again."
 msgstr "Proszę wybrać konto i spróbować ponownie."
 
-#: wxbanker/newtransactionctrl.py:395 wxbanker/newtransactionctrl.py:423
+#: wxbanker/newtransactionctrl.py:398 wxbanker/newtransactionctrl.py:426
 msgid "No account selected"
 msgstr "Nie wybrano konta"
 
-#: wxbanker/newtransactionctrl.py:408
+#: wxbanker/newtransactionctrl.py:411
 msgid "A search is currently active."
 msgstr "Włączone jest wyszukiwanie."
 
-#: wxbanker/newtransactionctrl.py:408
+#: wxbanker/newtransactionctrl.py:411
 #, python-format
 msgid ""
 "Would you like to clear the current search and make this transaction in "
 "\"%s\"?"
 msgstr ""
 
-#: wxbanker/newtransactionctrl.py:409
+#: wxbanker/newtransactionctrl.py:412
 msgid "Clear search?"
 msgstr "Wyczyścić wyszukiwanie?"
 
-#: wxbanker/newtransactionctrl.py:422
+#: wxbanker/newtransactionctrl.py:425
 msgid ""
 "This transaction is marked as a transfer. Please select the transfer account."
 msgstr ""
 "Ta transakcja jest oznaczona jako przelew. Wynierz konto do przelewu."
 
-#: wxbanker/newtransactionctrl.py:455
+#: wxbanker/newtransactionctrl.py:458
 msgid ""
 "If this box is checked when adding a transaction, you will be prompted for "
 "the account to use as the source of the transfer."
@@ -329,7 +329,7 @@ msgstr ""
 "Będziesz pytany którego konta użyć jako źródła przelewu, jeśli ta opcja jest "
 "aktywna podczas dodawania transakcji."
 
-#: wxbanker/newtransactionctrl.py:456
+#: wxbanker/newtransactionctrl.py:459
 msgid ""
 "For example, checking this box and entering a transaction of $50 into this "
 "account will also subtract $50 from the account that you choose as the "
@@ -748,77 +748,78 @@ msgstr "Brak wprowadzonych transakcji"
 msgid "No matching transactions."
 msgstr "Brak pasujących transakcji."
 
-#: wxbanker/transactionolv.py:66
-msgid "Total"
-msgstr "Suma"
+#: wxbanker/transactionolv.py:69 wxbanker/plots/wxplotpanel.py:37
+#: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:82
+#: wxbanker/plots/cairopanel.py:123
+msgid "Balance"
+msgstr "Saldo"
 
-#: wxbanker/transactionolv.py:229
+#: wxbanker/transactionolv.py:172
+msgid "_Total"
+msgstr ""
+
+#: wxbanker/transactionolv.py:234
 #, python-format
 msgid "Send %s to calculator"
 msgstr "Wyślij %s do kalkulatora"
 
-#: wxbanker/transactionolv.py:230
+#: wxbanker/transactionolv.py:235
 #, python-format
 msgid "Add %s to calculator"
 msgstr "Dodaj %s do kalkulatora"
 
-#: wxbanker/transactionolv.py:231
+#: wxbanker/transactionolv.py:236
 #, python-format
 msgid "Subtract %s from calculator"
 msgstr "Odejmij %s z kalkulatora"
 
-#: wxbanker/transactionolv.py:243
+#: wxbanker/transactionolv.py:248
 msgid "Remove this transaction"
 msgstr "Usuń transakcję"
 
-#: wxbanker/transactionolv.py:244
+#: wxbanker/transactionolv.py:249
 msgid "Move this transaction to account"
 msgstr "Przesuń transakcję na konto"
 
-#: wxbanker/transactionolv.py:245
+#: wxbanker/transactionolv.py:250
 msgid "No tags yet"
 msgstr ""
 
-#: wxbanker/transactionolv.py:247
+#: wxbanker/transactionolv.py:252
 #, python-format
 msgid "Remove these %i transactions"
 msgstr "Usuń %i transakcji"
 
-#: wxbanker/transactionolv.py:248
+#: wxbanker/transactionolv.py:253
 #, python-format
 msgid "Move these %i transactions to account"
 msgstr "Przesuń %i transakcji na konto"
 
-#: wxbanker/transactionolv.py:249
+#: wxbanker/transactionolv.py:254
 msgid "No common tags yet"
 msgstr ""
 
-#: wxbanker/transactionolv.py:251 wxbanker/tagtransactiondialog.py:100
+#: wxbanker/transactionolv.py:256 wxbanker/tagtransactiondialog.py:100
 msgid "Add a tag"
 msgstr ""
 
-#: wxbanker/transactionolv.py:274
+#: wxbanker/transactionolv.py:279
 msgid "Tags"
 msgstr ""
 
-#: wxbanker/transactionolv.py:287
+#: wxbanker/transactionolv.py:292
 msgid "Search for this tag"
 msgstr ""
 
-#: wxbanker/transactionolv.py:288
+#: wxbanker/transactionolv.py:293
 msgid "Remove this tag"
 msgstr ""
 
-#: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:75
+#: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:76
 msgid "balance"
 msgstr "saldo"
 
-#: wxbanker/plots/wxplotpanel.py:37 wxbanker/plots/wxplotpanel.py:44
-#: wxbanker/plots/cairopanel.py:81 wxbanker/plots/cairopanel.py:122
-msgid "Balance"
-msgstr "Saldo"
-
-#: wxbanker/plots/wxplotpanel.py:42 wxbanker/plots/cairopanel.py:85
+#: wxbanker/plots/wxplotpanel.py:42 wxbanker/plots/cairopanel.py:86
 msgid "Trend"
 msgstr "Trend"
 
@@ -826,13 +827,13 @@ msgstr "Trend"
 msgid "Total Balance Over Time"
 msgstr "Przebieg całkowitego salda w czasie"
 
-#: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:121
+#: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:122
 msgid "Time"
 msgstr "Czas"
 
 #: wxbanker/plots/cairopanel.py:33
 msgid "monthly"
-msgstr ""
+msgstr "miesięcznie"
 
 #: wxbanker/plots/plotfactory.py:51
 #, python-format
@@ -944,6 +945,9 @@ msgstr ""
 
 #~ msgid "Current Account"
 #~ msgstr "Bieżące konto"
+
+#~ msgid "Total"
+#~ msgstr "Suma"
 
 #~ msgid "In: "
 #~ msgstr "W: "
