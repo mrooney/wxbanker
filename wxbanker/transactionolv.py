@@ -58,6 +58,7 @@ class TransactionOLV(GroupListView):
 
         # Define some constants to use throughout.
         self.COL_DATE = 0
+        self.COL_DESCRIPTION = 1
         self.COL_AMOUNT = 2
         self.COL_TOTAL = 3
 
