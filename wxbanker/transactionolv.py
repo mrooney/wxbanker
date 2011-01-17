@@ -58,12 +58,13 @@ class TransactionOLV(GroupListView):
 
         # Define some constants to use throughout.
         self.COL_DATE = 0
+        self.COL_DESCRIPTION = 1
         self.COL_AMOUNT = 2
         self.COL_TOTAL = 3
 
         # If you change these column names, update sizeAmounts()!
         self.SetColumns([
-            ColumnDefn(_("Date"), valueGetter=self.getDateOf, valueSetter=self.setDateOf, width=dateWidth),
+            ColumnDefn(_("Date"), valueGetter=self.getDateAndIDOf, valueSetter=self.setDateOf, stringConverter=self.renderDateIDTuple, editFormatter=self.renderEditDate, width=dateWidth),
             ColumnDefn(_("Description"), valueGetter="Description", isSpaceFilling=True, editFormatter=self.renderEditDescription),
             ColumnDefn(_("Amount"), "right", valueGetter="Amount", stringConverter=self.renderFloat, editFormatter=self.renderEditFloat),
             ColumnDefn(_("Balance"), "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
@@ -116,8 +117,10 @@ class TransactionOLV(GroupListView):
         self.SortBy(self.SORT_COL)
         self.updateTotals()
 
-    def getDateOf(self, transaction):
-        return str(transaction.Date)
+    def getDateAndIDOf(self, transaction):
+        # A date and ID two-tuple is used to allow for correct sorting
+        # by date (bug #653697)
+        return (transaction.Date, transaction.ID)
 
     def setDateOf(self, transaction, date):
         transaction.Date = date
@@ -142,7 +145,10 @@ class TransactionOLV(GroupListView):
         for i in range(1, len(self.GetObjects())):
             a, b = b, self.GetObjectAt(i)
             b._Total = a._Total + b.Amount
-
+    
+    def renderDateIDTuple(self, pair):
+        return str(pair[0])
+    
     def renderFloat(self, floatVal):
         if self.CurrentAccount:
             return self.CurrentAccount.float2str(floatVal)
@@ -150,6 +156,9 @@ class TransactionOLV(GroupListView):
             #WXTODO: fix me, this function should be given the object which should have a float2str method
             # so that for multiple currencies they can be displayed differently when viewing all.
             return self.BankController.Model.float2str(floatVal)
+    
+    def renderEditDate(self, transaction):
+        return str(transaction.Date)
     
     def renderEditFloat(self, modelObj):
         return "%.2f" % modelObj.Amount

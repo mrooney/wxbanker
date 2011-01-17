@@ -227,6 +227,8 @@ class GUITests(testbase.TestCaseHandlingConfigBase):
         
         a = self.Model.CreateAccount("B")
         
+        self.OLV.SortBy(self.OLV.COL_DATE)
+        
         # Super basic test, one transaction.
         t1 = a.AddTransaction(1)
         self.assertEqual(totals(), [1])
@@ -252,6 +254,23 @@ class GUITests(testbase.TestCaseHandlingConfigBase):
         t3.Date = testbase.yesterday
         self.assertEqual(totals(), [0.5, 2.25])
         
+        # Now add two transactions on the same date but in descending
+        # alphabetical order
+        t4 = a.AddTransaction(5, "BB", testbase.tomorrow)
+        t5 = a.AddTransaction(6, "AA", testbase.tomorrow)
+        self.assertEqual(totals(), [0.5, 2.25, 7.25, 13.25])
+        
+        # Test that sorting by date always sorts transactions in the
+        # correct order, even transactions on the same date (bug #653697)
+        self.OLV.SortBy(self.OLV.COL_DESCRIPTION)
+        self.OLV.SortBy(self.OLV.COL_DATE)
+        self.assertEqual(totals(), [0.5, 2.25, 7.25, 13.25])
+        
+        self.OLV.SortBy(self.OLV.COL_DESCRIPTION, ascending=False)
+        self.OLV.SortBy(self.OLV.COL_DATE, ascending=False)
+        self.assertEqual(totals(), [13.25, 7.25, 2.25, 0.5])
+        
+        
     def testSearch(self):
         a = self.Model.CreateAccount("A")
         b = self.Model.CreateAccount("B")
@@ -262,7 +281,7 @@ class GUITests(testbase.TestCaseHandlingConfigBase):
         t4 = b.AddTransaction(1, "Dog")
         
         # Ensure b is selected
-        self.assertEqual(self.OLV.GetObjects(), [t3, t4])
+        self.assertEqual(set(self.OLV.GetObjects()), set([t3, t4]))
         
         # Search for dog, make sure b's matching transaction is shown.
         Publisher.sendMessage("SEARCH.INITIATED", ("Dog", 1))
@@ -274,8 +293,8 @@ class GUITests(testbase.TestCaseHandlingConfigBase):
         
         # Switch to all accounts, make sure we see both matches.
         Publisher.sendMessage("user.account changed", None)
-        self.assertEqual(self.OLV.GetObjects(), [t2, t4])
-
+        self.assertEqual(set(self.OLV.GetObjects()), set([t2, t4]))
+        
 
 if __name__ == "__main__":
     unittest.main()
