@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-04 03:01-0700\n"
-"PO-Revision-Date: 2010-12-14 13:45+0000\n"
-"Last-Translator: Tomáš Král <tomas.kral@gmail.com>\n"
+"PO-Revision-Date: 2011-01-17 21:37+0000\n"
+"Last-Translator: Adam <Unknown>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Launchpad-Export-Date: 2010-12-15 04:35+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-01-18 04:32+0000\n"
+"X-Generator: Launchpad (build 12177)\n"
 
 #: wxbanker/summarytab.py:30
 msgid "Trend Degree"
@@ -58,7 +58,7 @@ msgstr "Importovat"
 
 #: wxbanker/csvimportframe.py:104
 msgid "CSV columns mapping"
-msgstr ""
+msgstr "Formát sloupců CSV souboru"
 
 #: wxbanker/csvimportframe.py:113 wxbanker/bankcontrols.py:52
 #: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:66
@@ -85,7 +85,7 @@ msgstr "Popis"
 
 #: wxbanker/csvimportframe.py:134
 msgid "CSV file settings"
-msgstr ""
+msgstr "Nastavení souboru CSV"
 
 #: wxbanker/csvimportframe.py:144
 msgid "Lines to skip"
@@ -105,7 +105,7 @@ msgstr "Soubor pro importování"
 
 #: wxbanker/csvimportframe.py:176
 msgid "CSV profiles"
-msgstr ""
+msgstr "CSV profily"
 
 #: wxbanker/csvimportframe.py:181
 msgid "Python simplejson library is needed for csv profile loading/saving."
@@ -141,11 +141,11 @@ msgstr "Profil '%s' již existuje. Přepsat?"
 
 #: wxbanker/csvimportframe.py:301
 msgid "Overwrite profile ?"
-msgstr ""
+msgstr "Přepsat profil ?"
 
 #: wxbanker/csvimportframe.py:315
 msgid "Select file and click \"Preview\""
-msgstr ""
+msgstr "Vyberte soubor a klikněte na \"Náhled\""
 
 #: wxbanker/newtransactionctrl.py:31
 msgid "from"
@@ -300,7 +300,7 @@ msgstr "Není vybrán žádný účet"
 
 #: wxbanker/newtransactionctrl.py:411
 msgid "A search is currently active."
-msgstr ""
+msgstr "Právě probíhá vyhledávání."
 
 #: wxbanker/newtransactionctrl.py:411
 #, python-format
@@ -317,6 +317,8 @@ msgstr "Vymazat hledání ?"
 msgid ""
 "This transaction is marked as a transfer. Please select the transfer account."
 msgstr ""
+"Tato transakce je označena jako převod mezi používanými účty. Vyberte prosím "
+"účet."
 
 #: wxbanker/newtransactionctrl.py:458
 msgid ""
@@ -379,7 +381,7 @@ msgstr ""
 
 #: wxbanker/main.py:126
 msgid "Recurring transaction successfully added."
-msgstr ""
+msgstr "Opakovaná transakce úspěšně přidána."
 
 #: wxbanker/main.py:128
 #, python-format
@@ -411,7 +413,7 @@ msgstr ""
 
 #: wxbanker/main.py:195
 msgid "Have fun!"
-msgstr ""
+msgstr "Bavte se !!"
 
 #: wxbanker/main.py:197
 msgid "Welcome!"
@@ -425,7 +427,7 @@ msgstr "Uložit změny?"
 msgid ""
 "You have made changes since the last save. Would you like to save before "
 "exiting?"
-msgstr ""
+msgstr "Provedli jste změny. Chcete změny uložit před ukončením aplikace?"
 
 #: wxbanker/main.py:207
 msgid ""
@@ -436,7 +438,7 @@ msgstr ""
 #: wxbanker/currconvert.py:59
 #, python-format
 msgid "No exchange rate for currency \"%s\""
-msgstr ""
+msgstr "Není stanoven kurs měny \"%s\""
 
 #: wxbanker/accountlistctrl.py:45
 msgid "Accounts"
@@ -503,7 +505,7 @@ msgstr "Importovat z CSV"
 
 #: wxbanker/menubar.py:59
 msgid "Import transactions from a CSV file"
-msgstr ""
+msgstr "Importovat transakce ze souboru CSV"
 
 #: wxbanker/menubar.py:60
 msgid "Export to CSV"
@@ -725,7 +727,7 @@ msgstr "Nejsou vloženy žádné transakce."
 
 #: wxbanker/transactionolv.py:39
 msgid "No matching transactions."
-msgstr ""
+msgstr "Žádné odpovídající transakce"
 
 #: wxbanker/transactionolv.py:69 wxbanker/plots/wxplotpanel.py:37
 #: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:82
@@ -812,12 +814,13 @@ msgstr "Čas"
 
 #: wxbanker/plots/cairopanel.py:33
 msgid "monthly"
-msgstr ""
+msgstr "měsíčně"
 
 #: wxbanker/plots/plotfactory.py:51
 #, python-format
 msgid "To use '%s' plotting library, install following python modules: %s."
 msgstr ""
+"K použití grafické knihovny '%s', nainstalujte následující python moduly: %s."
 
 #: wxbanker/messagepanel.py:47
 msgid "Dismiss"
@@ -862,7 +865,7 @@ msgstr "Transakční informace"
 
 #: wxbanker/accountconfigdialog.py:202
 msgid "This will permanently remove this recurring transaction. Continue?"
-msgstr ""
+msgstr "Tato opakovaná transakce bude trvale zrušena. Pokračovat?"
 
 #: wxbanker/accountconfigdialog.py:213
 msgid "This account currently has no recurring transactions."
@@ -979,3 +982,6 @@ msgstr ""
 
 #~ msgid "Username"
 #~ msgstr "Uživatelské jméno"
+
+#~ msgid "Load"
+#~ msgstr "Nahrát"
