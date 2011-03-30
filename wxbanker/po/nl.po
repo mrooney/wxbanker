@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-08-22 03:01-0700\n"
-"PO-Revision-Date: 2010-08-24 14:51+0000\n"
-"Last-Translator: Bert de Bruijn <Unknown>\n"
+"POT-Creation-Date: 2010-10-04 03:01-0700\n"
+"PO-Revision-Date: 2011-03-29 17:00+0000\n"
+"Last-Translator: Bert Timmerman <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-08-25 03:49+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-03-30 04:35+0000\n"
+"X-Generator: Launchpad (build 12559)\n"
 
 #: wxbanker/summarytab.py:30
 msgid "Trend Degree"
@@ -61,7 +61,7 @@ msgid "CSV columns mapping"
 msgstr "CSV kolommenindeling"
 
 #: wxbanker/csvimportframe.py:113 wxbanker/bankcontrols.py:52
-#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:63
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:66
 msgid "Date"
 msgstr "Datum"
 
@@ -70,7 +70,7 @@ msgid "Date format"
 msgstr "Datumnotatie"
 
 #: wxbanker/csvimportframe.py:121 wxbanker/newtransactionctrl.py:249
-#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:65
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:68
 msgid "Amount"
 msgstr "Bedrag"
 
@@ -79,7 +79,7 @@ msgid "Decimal separator"
 msgstr "Decimaalteken"
 
 #: wxbanker/csvimportframe.py:127 wxbanker/newtransactionctrl.py:248
-#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:64
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:67
 msgid "Description"
 msgstr "Omschrijving"
 
@@ -265,41 +265,41 @@ msgstr "Voeg deze transactie toe"
 msgid "Recurring"
 msgstr "Herhalend"
 
-#: wxbanker/newtransactionctrl.py:341
+#: wxbanker/newtransactionctrl.py:344
 msgid "Initial balance"
 msgstr "Startbedrag"
 
-#: wxbanker/newtransactionctrl.py:377
+#: wxbanker/newtransactionctrl.py:380
 msgid "No amount entered in the 'Amount' field."
 msgstr "Geen bedrag ingevuld bij 'Bedrag'"
 
-#: wxbanker/newtransactionctrl.py:379
+#: wxbanker/newtransactionctrl.py:382
 #, python-format
 msgid "'%s' is not a valid amount."
 msgstr "'%s' is geen geldige hoeveelheid."
 
-#: wxbanker/newtransactionctrl.py:382
+#: wxbanker/newtransactionctrl.py:385
 msgid "Please enter a number such as 12.34 or -20."
 msgstr "Voeg alstublieft een bedrag in zoals 12.34 of -20"
 
-#: wxbanker/newtransactionctrl.py:383
+#: wxbanker/newtransactionctrl.py:386
 msgid "Invalid Transaction Amount"
 msgstr "Ongeldige transactie hoeveelheid"
 
-#: wxbanker/newtransactionctrl.py:394
+#: wxbanker/newtransactionctrl.py:397
 msgid "Please select an account and then try again."
 msgstr ""
 "Alstublieft eerst een rekening selecteren, probeer het daarna nogmaals."
 
-#: wxbanker/newtransactionctrl.py:395 wxbanker/newtransactionctrl.py:423
+#: wxbanker/newtransactionctrl.py:398 wxbanker/newtransactionctrl.py:426
 msgid "No account selected"
 msgstr "Geen rekening geselecteerd"
 
-#: wxbanker/newtransactionctrl.py:408
+#: wxbanker/newtransactionctrl.py:411
 msgid "A search is currently active."
 msgstr "Momenteel is een zoekopdracht bezig."
 
-#: wxbanker/newtransactionctrl.py:408
+#: wxbanker/newtransactionctrl.py:411
 #, python-format
 msgid ""
 "Would you like to clear the current search and make this transaction in "
@@ -308,18 +308,18 @@ msgstr ""
 "Zou u de huidige zoekopdracht willen wissen en deze transactie maken in "
 "\"%s\"?"
 
-#: wxbanker/newtransactionctrl.py:409
+#: wxbanker/newtransactionctrl.py:412
 msgid "Clear search?"
 msgstr "Zoekveld wissen?"
 
-#: wxbanker/newtransactionctrl.py:422
+#: wxbanker/newtransactionctrl.py:425
 msgid ""
 "This transaction is marked as a transfer. Please select the transfer account."
 msgstr ""
 "Deze transactie is gemarkeerd als overboeking. Selecteer alstublieft de "
 "overboekingsrekening."
 
-#: wxbanker/newtransactionctrl.py:455
+#: wxbanker/newtransactionctrl.py:458
 msgid ""
 "If this box is checked when adding a transaction, you will be prompted for "
 "the account to use as the source of the transfer."
@@ -327,7 +327,7 @@ msgstr ""
 "Als dit vakje is aangevinkt tijdens het toevoegen van een transactie, wordt "
 "u gevraagd aan te geven van welke rekening het geld komt."
 
-#: wxbanker/newtransactionctrl.py:456
+#: wxbanker/newtransactionctrl.py:459
 msgid ""
 "For example, checking this box and entering a transaction of $50 into this "
 "account will also subtract $50 from the account that you choose as the "
@@ -751,77 +751,78 @@ msgstr "Geen transacties toegevoegd"
 msgid "No matching transactions."
 msgstr "Geen overeenkomende transacties."
 
-#: wxbanker/transactionolv.py:66
-msgid "Total"
-msgstr "Totaal"
+#: wxbanker/transactionolv.py:69 wxbanker/plots/wxplotpanel.py:37
+#: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:82
+#: wxbanker/plots/cairopanel.py:123
+msgid "Balance"
+msgstr "Saldo"
 
-#: wxbanker/transactionolv.py:229
+#: wxbanker/transactionolv.py:172
+msgid "_Total"
+msgstr "_Totaal"
+
+#: wxbanker/transactionolv.py:234
 #, python-format
 msgid "Send %s to calculator"
 msgstr "Stuur %s naar rekenmachine"
 
-#: wxbanker/transactionolv.py:230
+#: wxbanker/transactionolv.py:235
 #, python-format
 msgid "Add %s to calculator"
 msgstr "Tel %s op in rekenmachine"
 
-#: wxbanker/transactionolv.py:231
+#: wxbanker/transactionolv.py:236
 #, python-format
 msgid "Subtract %s from calculator"
 msgstr "Trek %s af in rekenmachine"
 
-#: wxbanker/transactionolv.py:243
+#: wxbanker/transactionolv.py:248
 msgid "Remove this transaction"
 msgstr "Verwijder deze transactie"
 
-#: wxbanker/transactionolv.py:244
+#: wxbanker/transactionolv.py:249
 msgid "Move this transaction to account"
 msgstr "Verplaats deze transactie naar rekening"
 
-#: wxbanker/transactionolv.py:245
+#: wxbanker/transactionolv.py:250
 msgid "No tags yet"
 msgstr "Nog geen label"
 
-#: wxbanker/transactionolv.py:247
+#: wxbanker/transactionolv.py:252
 #, python-format
 msgid "Remove these %i transactions"
 msgstr "Verwijder deze %i transacties"
 
-#: wxbanker/transactionolv.py:248
+#: wxbanker/transactionolv.py:253
 #, python-format
 msgid "Move these %i transactions to account"
 msgstr "Verplaatse deze %i transacties naar rekening"
 
-#: wxbanker/transactionolv.py:249
+#: wxbanker/transactionolv.py:254
 msgid "No common tags yet"
 msgstr "Nog geen gemeenschappelijke labels"
 
-#: wxbanker/transactionolv.py:251 wxbanker/tagtransactiondialog.py:100
+#: wxbanker/transactionolv.py:256 wxbanker/tagtransactiondialog.py:100
 msgid "Add a tag"
 msgstr "Voeg een label toe"
 
-#: wxbanker/transactionolv.py:274
+#: wxbanker/transactionolv.py:279
 msgid "Tags"
 msgstr "Labels"
 
-#: wxbanker/transactionolv.py:287
+#: wxbanker/transactionolv.py:292
 msgid "Search for this tag"
 msgstr "Zoek naar dit label"
 
-#: wxbanker/transactionolv.py:288
+#: wxbanker/transactionolv.py:293
 msgid "Remove this tag"
 msgstr "Verwijder dit label"
 
-#: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:75
+#: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:76
 msgid "balance"
 msgstr "balans"
 
-#: wxbanker/plots/wxplotpanel.py:37 wxbanker/plots/wxplotpanel.py:44
-#: wxbanker/plots/cairopanel.py:81 wxbanker/plots/cairopanel.py:122
-msgid "Balance"
-msgstr "Saldo"
-
-#: wxbanker/plots/wxplotpanel.py:42 wxbanker/plots/cairopanel.py:85
+#: wxbanker/plots/wxplotpanel.py:42 wxbanker/plots/cairopanel.py:86
 msgid "Trend"
 msgstr "Trend"
 
@@ -829,7 +830,7 @@ msgstr "Trend"
 msgid "Total Balance Over Time"
 msgstr "Totaal saldo over tijd"
 
-#: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:121
+#: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:122
 msgid "Time"
 msgstr "Tijd"
 
@@ -933,6 +934,9 @@ msgstr ""
 #: wxbanker/tagtransactiondialog.py:42
 msgid "Add Tag"
 msgstr "Label toevoegen"
+
+#~ msgid "Total"
+#~ msgstr "Totaal"
 
 #~ msgid "A lightweight personal finance management application."
 #~ msgstr "Een lichtgewicht persoonlijk financieel management programma."

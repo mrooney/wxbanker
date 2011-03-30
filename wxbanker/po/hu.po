@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-04 03:01-0700\n"
-"PO-Revision-Date: 2011-03-29 04:37+0000\n"
+"PO-Revision-Date: 2011-03-29 05:08+0000\n"
 "Last-Translator: gergely87 <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-03-29 04:38+0000\n"
+"X-Launchpad-Export-Date: 2011-03-30 04:35+0000\n"
 "X-Generator: Launchpad (build 12559)\n"
 
 #: wxbanker/summarytab.py:30
@@ -150,11 +150,11 @@ msgstr "Válassz fájlt és kattints az \"Előnézet\"-re"
 
 #: wxbanker/newtransactionctrl.py:31
 msgid "from"
-msgstr ""
+msgstr "tól"
 
 #: wxbanker/newtransactionctrl.py:35 wxbanker/newtransactionctrl.py:258
 msgid "Transfer"
-msgstr ""
+msgstr "Átvitel"
 
 #: wxbanker/newtransactionctrl.py:100
 #: wxbanker/bankobjects/recurringtransaction.py:147
@@ -162,28 +162,28 @@ msgstr ""
 #, python-format
 msgid "Daily"
 msgid_plural "Every %(num)d days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Napi"
+msgstr[1] "Minden %(num)d nap"
 
 #: wxbanker/newtransactionctrl.py:100
 msgid "Weekly"
-msgstr ""
+msgstr "Heti"
 
 #: wxbanker/newtransactionctrl.py:100
 #: wxbanker/bankobjects/recurringtransaction.py:171
 #, python-format
 msgid "Monthly"
 msgid_plural "Every %(num)d months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Havi"
+msgstr[1] "Minden %(num)d hónap"
 
 #: wxbanker/newtransactionctrl.py:100
 msgid "Yearly"
-msgstr ""
+msgstr "Éves"
 
 #: wxbanker/newtransactionctrl.py:109
 msgid "Never"
-msgstr ""
+msgstr "Soha"
 
 #: wxbanker/newtransactionctrl.py:130
 msgid "every"
@@ -223,31 +223,31 @@ msgstr[1] ""
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Mon"
-msgstr ""
+msgstr "H"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Tue"
-msgstr ""
+msgstr "K"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Wed"
-msgstr ""
+msgstr "Sze"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Thu"
-msgstr ""
+msgstr "Cs"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Fri"
-msgstr ""
+msgstr "P"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Sat"
-msgstr ""
+msgstr "Szo"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Sun"
-msgstr ""
+msgstr "V"
 
 #: wxbanker/newtransactionctrl.py:221
 msgid "Repeats on days:"
@@ -341,7 +341,7 @@ msgstr "Kevesebb lehetőség"
 
 #: wxbanker/searchctrl.py:54
 msgid "Match: "
-msgstr ""
+msgstr "Egyezik: "
 
 #: wxbanker/searchctrl.py:124
 msgid "Show advanced search options"
@@ -384,33 +384,39 @@ msgstr ""
 
 #: wxbanker/main.py:191
 msgid "It looks like this is your first time using wxBanker!"
-msgstr ""
+msgstr "Úgy tűnik, ez az első alkalom, hogy használja a wxBankert!"
 
 #: wxbanker/main.py:192
 msgid ""
 "To get started, add an account using the account control in the top left "
 "corner."
 msgstr ""
+"A kezdéshez, adjon hozzá egy számlát a számlabeállításoknál, a bal felső "
+"sarokban."
 
 #: wxbanker/main.py:193
 msgid ""
 "The buttons in the account control allow you to add, rename, configure, and "
 "remove an account, respectively."
 msgstr ""
+"A gombokkal a számlabeállításoknál hozzáadhat, átnevezheti, beállíthatja, és "
+"eltávolíthatja a számláit."
 
 #: wxbanker/main.py:194
 msgid ""
 "Once you have created an account you can add transactions to it (such as "
 "your initial balance) using the controls below the grid on the bottom right."
 msgstr ""
+"Miután létrehozott egy számlát, felveheti a tranzakciókat (például induló "
+"egyenleg), használva a gombokat a jobb alsó sarokban"
 
 #: wxbanker/main.py:195
 msgid "Have fun!"
-msgstr ""
+msgstr "Jó szórakozást!"
 
 #: wxbanker/main.py:197
 msgid "Welcome!"
-msgstr "Üdv!"
+msgstr "Üdvözöljük!"
 
 #: wxbanker/main.py:205
 msgid "Save changes?"
@@ -421,6 +427,8 @@ msgid ""
 "You have made changes since the last save. Would you like to save before "
 "exiting?"
 msgstr ""
+"Változások történtek az utolsó mentés óta. Szeretné, hogy menteni kilépés "
+"elõtt?"
 
 #: wxbanker/main.py:207
 msgid ""
@@ -455,7 +463,7 @@ msgstr "A kijelölt számla beállítása"
 
 #: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:68
 msgid "All accounts"
-msgstr "Minde számla"
+msgstr "Minden számla"
 
 #: wxbanker/accountlistctrl.py:158
 msgid "Not synchronized with Mint.com"
@@ -471,7 +479,7 @@ msgstr ""
 
 #: wxbanker/accountlistctrl.py:478
 msgid "Account name"
-msgstr ""
+msgstr "Fiók neve"
 
 #: wxbanker/accountlistctrl.py:517
 #, python-format
@@ -496,7 +504,7 @@ msgstr "Változtatások automatikus mentése"
 
 #: wxbanker/menubar.py:59
 msgid "Import from CSV"
-msgstr ""
+msgstr "Importálás CSV-ből"
 
 #: wxbanker/menubar.py:59
 msgid "Import transactions from a CSV file"
@@ -504,7 +512,7 @@ msgstr ""
 
 #: wxbanker/menubar.py:60
 msgid "Export to CSV"
-msgstr ""
+msgstr "Exportálás CSV-be"
 
 #: wxbanker/menubar.py:60
 msgid "Export transactions to a CSV file"
@@ -601,7 +609,7 @@ msgstr "&Fájl"
 
 #: wxbanker/menubar.py:137
 msgid "&View"
-msgstr ""
+msgstr "&Nézet"
 
 #: wxbanker/menubar.py:138
 msgid "&Settings"
@@ -617,43 +625,43 @@ msgstr "Copyright"
 
 #: wxbanker/menubar.py:248
 msgid "Simple personal finance."
-msgstr ""
+msgstr "Egyszerű személyes pénzügyek."
 
 #: wxbanker/bankobjects/recurringtransaction.py:150
 msgid "Weekly on weekdays"
-msgstr ""
+msgstr "Heti hétköznapokon"
 
 #: wxbanker/bankobjects/recurringtransaction.py:152
 msgid "Weekly on weekends"
-msgstr ""
+msgstr "Heti hétvégén"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Mondays"
-msgstr ""
+msgstr "Hétfőnként"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Tuesdays"
-msgstr ""
+msgstr "Keddenként"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Wednesdays"
-msgstr ""
+msgstr "Szerdánként"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Thursdays"
-msgstr ""
+msgstr "Csütörtökönként"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Fridays"
-msgstr ""
+msgstr "Péntekenként"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Saturdays"
-msgstr ""
+msgstr "Szombatonként"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Sundays"
-msgstr ""
+msgstr "Vasárnaponként"
 
 #: wxbanker/bankobjects/recurringtransaction.py:160
 #, python-format
@@ -668,7 +676,7 @@ msgstr ""
 #: wxbanker/bankobjects/recurringtransaction.py:169
 #, python-format
 msgid " and %s"
-msgstr ""
+msgstr " és %s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:173
 #, python-format
@@ -684,7 +692,7 @@ msgstr ""
 
 #: wxbanker/bankobjects/recurringtransaction.py:194
 msgid "No description"
-msgstr ""
+msgstr "Nincs leírás"
 
 #: wxbanker/bankobjects/transaction.py:95
 #, python-format
@@ -809,7 +817,7 @@ msgstr ""
 
 #: wxbanker/plots/cairopanel.py:33
 msgid "monthly"
-msgstr ""
+msgstr "Havi"
 
 #: wxbanker/plots/plotfactory.py:51
 #, python-format
