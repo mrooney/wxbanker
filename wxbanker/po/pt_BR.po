@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-04 03:01-0700\n"
-"PO-Revision-Date: 2010-10-21 23:38+0000\n"
-"Last-Translator: André Gondim <andregondim@ubuntu.com>\n"
+"PO-Revision-Date: 2011-03-31 21:16+0000\n"
+"Last-Translator: Bruno SXS Alves <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Launchpad-Export-Date: 2010-10-23 04:49+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-04-01 04:46+0000\n"
+"X-Generator: Launchpad (build 12559)\n"
 
 #: wxbanker/summarytab.py:30
 msgid "Trend Degree"
@@ -24,7 +24,7 @@ msgstr "Grau de Tendência"
 
 #: wxbanker/summarytab.py:30
 msgid "Months"
-msgstr ""
+msgstr "Meses"
 
 #: wxbanker/summarytab.py:48
 msgid "From"
@@ -89,7 +89,7 @@ msgstr "Preferências de arquivo CSV"
 
 #: wxbanker/csvimportframe.py:144
 msgid "Lines to skip"
-msgstr ""
+msgstr "Linhas para ignorar"
 
 #: wxbanker/csvimportframe.py:147
 msgid "Encoding"
@@ -965,17 +965,6 @@ msgstr ""
 #~ msgid "transaction"
 #~ msgstr "transação"
 
-#~ msgid "Other accounts"
-#~ msgstr "Outra conta"
-
-#, python-format
-#~ msgid ""
-#~ "A search is currently active. Would you like to clear the current search and "
-#~ "make this %s in \"%s\"?"
-#~ msgstr ""
-#~ "Uma busca está ativa, deseja limpar a busca atual e fazer com que %s in "
-#~ "\"%s\"?"
-
 #~ msgid "Load"
 #~ msgstr "Carregar"
 
@@ -988,6 +977,9 @@ msgstr ""
 #~ msgid "Account"
 #~ msgstr "Conta"
 
+#~ msgid "&Tools"
+#~ msgstr "&Ferramentas"
+
 #~ msgid ""
 #~ "Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
 #~ "to fix this."
@@ -995,8 +987,22 @@ msgstr ""
 #~ "Atenção: impossível vincular ao DateCtrl's ENTER. Faça o upgrade do wxPython "
 #~ "para 2.8.8.1 ou superior."
 
+#, python-format
+#~ msgid ""
+#~ "A search is currently active. Would you like to clear the current search and "
+#~ "make this %s in \"%s\"?"
+#~ msgstr ""
+#~ "Uma busca está ativa. Deseja limpar a busca atual e fazer com que %s em "
+#~ "\"%s\"?"
+
+#~ msgid "Other accounts"
+#~ msgstr "Outras contas"
+
 #~ msgid "Fit Curve Degree"
 #~ msgstr "Grau de ajuste da curva"
+
+#~ msgid "CSV Import"
+#~ msgstr "Importar CSV"
 
 #~ msgid "A lightweight personal finance management application."
 #~ msgstr "Uma aplicação leve para gerenciamento financeiro pessoal."
