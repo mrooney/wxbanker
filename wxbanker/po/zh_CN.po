@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-04 03:01-0700\n"
-"PO-Revision-Date: 2011-03-17 08:09+0000\n"
+"PO-Revision-Date: 2011-05-02 14:26+0000\n"
 "Last-Translator: Heling Yao <Unknown>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2011-03-18 04:35+0000\n"
-"X-Generator: Launchpad (build 12559)\n"
+"X-Launchpad-Export-Date: 2011-05-03 04:37+0000\n"
+"X-Generator: Launchpad (build 12758)\n"
 
 #: wxbanker/summarytab.py:30
 msgid "Trend Degree"
@@ -389,7 +389,7 @@ msgstr "要开始使用本软件，请先在左上角的帐户控制区中增加
 msgid ""
 "The buttons in the account control allow you to add, rename, configure, and "
 "remove an account, respectively."
-msgstr ""
+msgstr "用账户控制中的按钮，您可以添加、重命名、配置、删除账户。"
 
 #: wxbanker/main.py:194
 msgid ""
@@ -722,7 +722,7 @@ msgstr "余额"
 
 #: wxbanker/transactionolv.py:172
 msgid "_Total"
-msgstr ""
+msgstr "合计(_T)"
 
 #: wxbanker/transactionolv.py:234
 #, python-format
