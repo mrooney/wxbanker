@@ -8,19 +8,19 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-04 03:01-0700\n"
-"PO-Revision-Date: 2011-05-18 13:56+0000\n"
+"PO-Revision-Date: 2011-05-23 21:55+0000\n"
 "Last-Translator: mjjzf <mjjzf@syntaktisk.dk>\n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-05-19 04:37+0000\n"
+"X-Launchpad-Export-Date: 2011-05-24 04:31+0000\n"
 "X-Generator: Launchpad (build 12959)\n"
 
 #: wxbanker/summarytab.py:30
 msgid "Trend Degree"
-msgstr ""
+msgstr "Tendensgrad"
 
 #: wxbanker/summarytab.py:30
 msgid "Months"
@@ -58,7 +58,7 @@ msgstr "Import"
 
 #: wxbanker/csvimportframe.py:104
 msgid "CSV columns mapping"
-msgstr ""
+msgstr "Opstilling af CSV-kolonner"
 
 #: wxbanker/csvimportframe.py:113 wxbanker/bankcontrols.py:52
 #: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:66
@@ -338,7 +338,7 @@ msgstr ""
 
 #: wxbanker/searchctrl.py:39
 msgid "Search transactions"
-msgstr ""
+msgstr "Søg i transaktioner"
 
 #: wxbanker/searchctrl.py:42
 msgid "More options"
@@ -366,6 +366,8 @@ msgid ""
 "The recurring transaction \"%(description)s\" has %(num)i transactions ready "
 "for %(amount)s on %(datelist)s."
 msgstr ""
+"Den gentagne transaktion \"%(description)s\" har %(num)i transaktioner klar, "
+"svarende til %(amount)s på %(datelist)s."
 
 #: wxbanker/main.py:90
 #, python-format
@@ -373,6 +375,7 @@ msgid ""
 "%(num)i recurring transactions have a total of %(totalnum)i transactions "
 "ready."
 msgstr ""
+"%(num)i gentagne transaktioner har totalt %(totalnum)i transaktioner klar."
 
 #: wxbanker/main.py:101
 msgid "Preview"
@@ -389,7 +392,7 @@ msgstr "Fast transaktion oprettet korrekt."
 #: wxbanker/main.py:128
 #, python-format
 msgid "The first transaction will occur on %(date)s"
-msgstr ""
+msgstr "Den første transaktion vil finde sted den %(date)s"
 
 #: wxbanker/main.py:191
 msgid "It looks like this is your first time using wxBanker!"
@@ -625,298 +628,305 @@ msgstr "&Vis"
 
 #: wxbanker/menubar.py:138
 msgid "&Settings"
-msgstr ""
+msgstr "&Indstillinger"
 
 #: wxbanker/menubar.py:139
 msgid "&Help"
-msgstr ""
+msgstr "&Hjælp"
 
 #: wxbanker/menubar.py:247
 msgid "Copyright"
-msgstr ""
+msgstr "Ophavsret"
 
 #: wxbanker/menubar.py:248
 msgid "Simple personal finance."
-msgstr ""
+msgstr "Enkle personlige finanser"
 
 #: wxbanker/bankobjects/recurringtransaction.py:150
 msgid "Weekly on weekdays"
-msgstr ""
+msgstr "Ugentligt på hverdage"
 
 #: wxbanker/bankobjects/recurringtransaction.py:152
 msgid "Weekly on weekends"
-msgstr ""
+msgstr "Ugentligt på weekender"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Mondays"
-msgstr ""
+msgstr "Mandage"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Tuesdays"
-msgstr ""
+msgstr "Tirsdage"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Wednesdays"
-msgstr ""
+msgstr "Onsdage"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Thursdays"
-msgstr ""
+msgstr "Torsdage"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Fridays"
-msgstr ""
+msgstr "Fredage"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Saturdays"
-msgstr ""
+msgstr "Lørdage"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Sundays"
-msgstr ""
+msgstr "Søndage"
 
 #: wxbanker/bankobjects/recurringtransaction.py:160
 #, python-format
 msgid "Weekly on %s"
-msgstr ""
+msgstr "Ugentligt på %s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:162
 #, python-format
 msgid "Every %(num)d weeks on %%s"
-msgstr ""
+msgstr "Hver %(num)d uger på %%s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:169
 #, python-format
 msgid " and %s"
-msgstr ""
+msgstr " og %s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:173
 #, python-format
 msgid "Annually"
 msgid_plural "Every %(num)d years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Årligt"
+msgstr[1] "For hver %(num)d år"
 
 #: wxbanker/bankobjects/recurringtransaction.py:177
 #, python-format
 msgid "until %s"
-msgstr ""
+msgstr "Indtil %s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:194
 msgid "No description"
-msgstr ""
+msgstr "Ingen beskrivelse"
 
 #: wxbanker/bankobjects/transaction.py:95
 #, python-format
 msgid "Transfer from %s"
-msgstr ""
+msgstr "Overfør fra %s"
 
 #: wxbanker/bankobjects/transaction.py:97
 #, python-format
 msgid "Transfer to %s"
-msgstr ""
+msgstr "Overfør til %s"
 
 #: wxbanker/recurringsummaryrow.py:45
 msgid "Summary:"
-msgstr ""
+msgstr "Resume:"
 
 #: wxbanker/managetab.py:43
 msgid "Show Calculator"
-msgstr ""
+msgstr "Vis regnemaskine"
 
 #: wxbanker/managetab.py:43
 msgid "Hide Calculator"
-msgstr ""
+msgstr "Skjul regnemaskine"
 
 #: wxbanker/managetab.py:97
 msgid "Transactions"
-msgstr ""
+msgstr "Transaktioner"
 
 #: wxbanker/managetab.py:110
 msgid "Summary"
-msgstr ""
+msgstr "Opsummering"
 
 #: wxbanker/transactionolv.py:38
 msgid "No transactions entered."
-msgstr ""
+msgstr "Ingen transaktioner indlagt."
 
 #: wxbanker/transactionolv.py:39
 msgid "No matching transactions."
-msgstr ""
+msgstr "Ingen matchende transaktioner."
 
 #: wxbanker/transactionolv.py:69 wxbanker/plots/wxplotpanel.py:37
 #: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:82
 #: wxbanker/plots/cairopanel.py:123
 msgid "Balance"
-msgstr ""
+msgstr "Balance"
 
 #: wxbanker/transactionolv.py:172
 msgid "_Total"
-msgstr ""
+msgstr "_Total"
 
 #: wxbanker/transactionolv.py:234
 #, python-format
 msgid "Send %s to calculator"
-msgstr ""
+msgstr "Send %s til regnemaskine"
 
 #: wxbanker/transactionolv.py:235
 #, python-format
 msgid "Add %s to calculator"
-msgstr ""
+msgstr "Læg %s til i regnemaskine"
 
 #: wxbanker/transactionolv.py:236
 #, python-format
 msgid "Subtract %s from calculator"
-msgstr ""
+msgstr "Træk %s fra regnemaskine"
 
 #: wxbanker/transactionolv.py:248
 msgid "Remove this transaction"
-msgstr ""
+msgstr "Fjern denne transaktion"
 
 #: wxbanker/transactionolv.py:249
 msgid "Move this transaction to account"
-msgstr ""
+msgstr "Flyt denne transaktion til konto"
 
 #: wxbanker/transactionolv.py:250
 msgid "No tags yet"
-msgstr ""
+msgstr "Endnu ingen tags"
 
 #: wxbanker/transactionolv.py:252
 #, python-format
 msgid "Remove these %i transactions"
-msgstr ""
+msgstr "Fjern disse %i transaktioner"
 
 #: wxbanker/transactionolv.py:253
 #, python-format
 msgid "Move these %i transactions to account"
-msgstr ""
+msgstr "Flyt disse %i transaktioner til konto"
 
 #: wxbanker/transactionolv.py:254
 msgid "No common tags yet"
-msgstr ""
+msgstr "Ingen fælles tags endnu"
 
 #: wxbanker/transactionolv.py:256 wxbanker/tagtransactiondialog.py:100
 msgid "Add a tag"
-msgstr ""
+msgstr "Tilføj tag"
 
 #: wxbanker/transactionolv.py:279
 msgid "Tags"
-msgstr ""
+msgstr "Tags"
 
 #: wxbanker/transactionolv.py:292
 msgid "Search for this tag"
-msgstr ""
+msgstr "Søg efter dette tag"
 
 #: wxbanker/transactionolv.py:293
 msgid "Remove this tag"
-msgstr ""
+msgstr "Fjern dette tag"
 
 #: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:76
 msgid "balance"
-msgstr ""
+msgstr "balance"
 
 #: wxbanker/plots/wxplotpanel.py:42 wxbanker/plots/cairopanel.py:86
 msgid "Trend"
-msgstr ""
+msgstr "Trend"
 
 #: wxbanker/plots/wxplotpanel.py:44
 msgid "Total Balance Over Time"
-msgstr ""
+msgstr "Total balance over tid"
 
 #: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:122
 msgid "Time"
-msgstr ""
+msgstr "Tid"
 
 #: wxbanker/plots/cairopanel.py:33
 msgid "monthly"
-msgstr ""
+msgstr "månedligt"
 
 #: wxbanker/plots/plotfactory.py:51
 #, python-format
 msgid "To use '%s' plotting library, install following python modules: %s."
 msgstr ""
+"For at bruge plot-biblioteket '%s', så installer følgende Python-moduler: %s."
 
 #: wxbanker/messagepanel.py:47
 msgid "Dismiss"
-msgstr ""
+msgstr "Afvis"
 
 #: wxbanker/currencies.py:334
 msgid "detected"
-msgstr ""
+msgstr "registreret"
 
 #: wxbanker/accountconfigdialog.py:36
 msgid "None"
-msgstr ""
+msgstr "Ingen"
 
 #: wxbanker/accountconfigdialog.py:37
 msgid "Mint.com credentials:"
-msgstr ""
+msgstr "Oplysninger til Mint.com:"
 
 #: wxbanker/accountconfigdialog.py:42
 msgid "Save credentials in keyring"
-msgstr ""
+msgstr "Gem oplysninger i nøglering"
 
 #: wxbanker/accountconfigdialog.py:44
 #, python-format
 msgid "Corresponding Mint account for %(name)s:"
-msgstr ""
+msgstr "Tilhørende Mint-konto for %(name)s:"
 
 #: wxbanker/accountconfigdialog.py:46
 msgid "Update"
-msgstr ""
+msgstr "Opdatering"
 
 #: wxbanker/accountconfigdialog.py:49
 msgid "Username:"
-msgstr ""
+msgstr "Brugernavn:"
 
 #: wxbanker/accountconfigdialog.py:51
 msgid "Password:"
-msgstr ""
+msgstr "Adgangskode:"
 
 #: wxbanker/accountconfigdialog.py:160
 msgid "Transaction details"
-msgstr ""
+msgstr "Transaktionsoplysninger"
 
 #: wxbanker/accountconfigdialog.py:202
 msgid "This will permanently remove this recurring transaction. Continue?"
 msgstr ""
+"Dette vil fjerne denne gentagne transaktion permanent. Ønsker du at "
+"fortsætte?"
 
 #: wxbanker/accountconfigdialog.py:213
 msgid "This account currently has no recurring transactions."
-msgstr ""
+msgstr "Denne konto har ingen gentagne transaktioner."
 
 #: wxbanker/accountconfigdialog.py:215
 msgid "Close"
-msgstr ""
+msgstr "Luk"
 
 #: wxbanker/accountconfigdialog.py:226
 msgid "Delete"
-msgstr ""
+msgstr "Slet"
 
 #: wxbanker/accountconfigdialog.py:251
 msgid "Recurring Transactions"
-msgstr ""
+msgstr "Gentagne transaktioner"
 
 #: wxbanker/accountconfigdialog.py:252
 msgid "Mint.com Integration"
-msgstr ""
+msgstr "Integration af Mint.com"
 
 #: wxbanker/tagtransactiondialog.py:29
 msgid ""
 "You can also tag a transaction by putting #tagname anywhere in the "
 "description."
 msgstr ""
+"Du kan også tagge en transaktion ved at sætte #navn_på_tag hvor som helst i "
+"beskrivelsen."
 
 #: wxbanker/tagtransactiondialog.py:30
 msgid "Tag:"
-msgstr ""
+msgstr "Tag:"
 
 #: wxbanker/tagtransactiondialog.py:32
 msgid ""
 "To remove this tag later, simply remove it from the description or right-"
 "click on the transaction."
 msgstr ""
+"For at fjerne dette tag senere kan det ganske enkelt fjernes fra "
+"beskrivelsen eller ved højreklik på transaktionen."
 
 #: wxbanker/tagtransactiondialog.py:42
 msgid "Add Tag"
-msgstr ""
+msgstr "Tilføj tag"
