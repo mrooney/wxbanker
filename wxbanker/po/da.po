@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-04 03:01-0700\n"
-"PO-Revision-Date: 2011-05-23 21:55+0000\n"
+"PO-Revision-Date: 2011-05-24 13:02+0000\n"
 "Last-Translator: mjjzf <mjjzf@syntaktisk.dk>\n"
 "Language-Team: Danish <da@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-05-24 04:31+0000\n"
+"X-Launchpad-Export-Date: 2011-05-25 04:33+0000\n"
 "X-Generator: Launchpad (build 12959)\n"
 
 #: wxbanker/summarytab.py:30
@@ -782,7 +782,7 @@ msgstr "Flyt denne transaktion til konto"
 
 #: wxbanker/transactionolv.py:250
 msgid "No tags yet"
-msgstr "Endnu ingen tags"
+msgstr "Endnu ingen mærker"
 
 #: wxbanker/transactionolv.py:252
 #, python-format
@@ -796,23 +796,23 @@ msgstr "Flyt disse %i transaktioner til konto"
 
 #: wxbanker/transactionolv.py:254
 msgid "No common tags yet"
-msgstr "Ingen fælles tags endnu"
+msgstr "Ingen fælles mærker endnu"
 
 #: wxbanker/transactionolv.py:256 wxbanker/tagtransactiondialog.py:100
 msgid "Add a tag"
-msgstr "Tilføj tag"
+msgstr "Tilføj mærke"
 
 #: wxbanker/transactionolv.py:279
 msgid "Tags"
-msgstr "Tags"
+msgstr "Mærker"
 
 #: wxbanker/transactionolv.py:292
 msgid "Search for this tag"
-msgstr "Søg efter dette tag"
+msgstr "Søg efter dette mærke"
 
 #: wxbanker/transactionolv.py:293
 msgid "Remove this tag"
-msgstr "Fjern dette tag"
+msgstr "Fjern dette mærke"
 
 #: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:76
 msgid "balance"
@@ -912,21 +912,21 @@ msgid ""
 "You can also tag a transaction by putting #tagname anywhere in the "
 "description."
 msgstr ""
-"Du kan også tagge en transaktion ved at sætte #navn_på_tag hvor som helst i "
-"beskrivelsen."
+"Du kan også mærke en transaktion ved at sætte #navn_på_mærke hvor som helst "
+"i beskrivelsen."
 
 #: wxbanker/tagtransactiondialog.py:30
 msgid "Tag:"
-msgstr "Tag:"
+msgstr "Mærke:"
 
 #: wxbanker/tagtransactiondialog.py:32
 msgid ""
 "To remove this tag later, simply remove it from the description or right-"
 "click on the transaction."
 msgstr ""
-"For at fjerne dette tag senere kan det ganske enkelt fjernes fra "
+"For at fjerne dette mærke senere kan det ganske enkelt fjernes fra "
 "beskrivelsen eller ved højreklik på transaktionen."
 
 #: wxbanker/tagtransactiondialog.py:42
 msgid "Add Tag"
-msgstr "Tilføj tag"
+msgstr "Tilføj mærke"
