@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-04 03:01-0700\n"
-"PO-Revision-Date: 2010-12-01 11:27+0000\n"
+"PO-Revision-Date: 2011-09-09 06:29+0000\n"
 "Last-Translator: Jiri Grönroos <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-12-02 04:44+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-09-10 04:42+0000\n"
+"X-Generator: Launchpad (build 13900)\n"
 
 #: wxbanker/summarytab.py:30
 msgid "Trend Degree"
@@ -254,7 +254,7 @@ msgstr "Toista seuraavina päivinä:"
 
 #: wxbanker/newtransactionctrl.py:244
 msgid "Starts:"
-msgstr ""
+msgstr "Alkaa:"
 
 #: wxbanker/newtransactionctrl.py:253
 msgid "Enter this transaction"
@@ -944,3 +944,15 @@ msgstr "Lisää tunniste"
 
 #~ msgid "Load"
 #~ msgstr "Lataa"
+
+#~ msgid "Skip first line"
+#~ msgstr "Ohita ensimmäinen rivi"
+
+#~ msgid "Which account will the money come from?"
+#~ msgstr "Miltä tililtä rahat tulevat?"
+
+#~ msgid "Case Sensitive"
+#~ msgstr "Huomioi kirjainkoko"
+
+#~ msgid "Account"
+#~ msgstr "Tili"
