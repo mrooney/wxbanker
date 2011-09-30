@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-04 03:01-0700\n"
-"PO-Revision-Date: 2010-10-27 18:05+0000\n"
-"Last-Translator: Andrea Amoroso <andrea.amoroso@alice.it>\n"
+"PO-Revision-Date: 2011-09-29 13:23+0000\n"
+"Last-Translator: Loris <Unknown>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-10-28 05:00+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-09-30 04:34+0000\n"
+"X-Generator: Launchpad (build 14071)\n"
 
 #: wxbanker/summarytab.py:30
 msgid "Trend Degree"
@@ -58,7 +58,7 @@ msgstr "Importa"
 
 #: wxbanker/csvimportframe.py:104
 msgid "CSV columns mapping"
-msgstr "Mappatura delle colonne CSV"
+msgstr "Mappatura Colonne CSV"
 
 #: wxbanker/csvimportframe.py:113 wxbanker/bankcontrols.py:52
 #: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:66
@@ -85,7 +85,7 @@ msgstr "Descrizione"
 
 #: wxbanker/csvimportframe.py:134
 msgid "CSV file settings"
-msgstr "Impostazioni del file CSV"
+msgstr "Impostazione file CSV"
 
 #: wxbanker/csvimportframe.py:144
 msgid "Lines to skip"
@@ -97,7 +97,7 @@ msgstr "Codifica"
 
 #: wxbanker/csvimportframe.py:151
 msgid "Column delimiter"
-msgstr "Delimitatore colonne"
+msgstr "Delimita colonne"
 
 #: wxbanker/csvimportframe.py:162
 msgid "File to import"
@@ -935,17 +935,50 @@ msgstr "Aggiungi Etichetta"
 #~ msgid "Total"
 #~ msgstr "Totale"
 
-#~ msgid "Password"
-#~ msgstr "Password:"
-
-#~ msgid "Username"
-#~ msgstr "Utente"
-
 #~ msgid "Skip first line"
 #~ msgstr "Ignora la prima linea"
 
 #~ msgid "Load"
 #~ msgstr "Carica"
+
+#~ msgid ""
+#~ "When enabled, accounts with a balance of $0.00 will be hidden from the list"
+#~ msgstr ""
+#~ "Quando è abilitato, gli accounto con un bilancio pari a €0,00 saranno "
+#~ "nascosti dalla lista"
+
+#~ msgid "Hide zero-balance accounts"
+#~ msgstr "Nascondi gli account con bilancio pari a zero"
+
+#~ msgid "transfer"
+#~ msgstr "trasferisci"
+
+#~ msgid "transaction"
+#~ msgstr "transazione"
+
+#~ msgid "Transact"
+#~ msgstr "Transazione"
+
+#~ msgid "Which account will the money come from?"
+#~ msgstr "Da che account vengono i soldi?"
+
+#~ msgid "Other accounts"
+#~ msgstr "Altri account"
+
+#~ msgid "All Accounts"
+#~ msgstr "Tutti gli account"
+
+#~ msgid "Current Account"
+#~ msgstr "Account corrente"
+
+#~ msgid "Case Sensitive"
+#~ msgstr "Maiuscole/Minuscole"
+
+#~ msgid "Account"
+#~ msgstr "Account"
+
+#~ msgid "Show"
+#~ msgstr "Mostra"
 
 #~ msgid ""
 #~ "The buttons in the account control allow you to add, remove, and rename an "
@@ -954,5 +987,45 @@ msgstr "Aggiungi Etichetta"
 #~ "I pulsanti per gli account ti permettono di aggiungere, rimuovere e "
 #~ "rinominare un account, rispettivamente."
 
+#~ msgid "CSV Import"
+#~ msgstr "Importa CSV"
+
+#~ msgid "&Tools"
+#~ msgstr "S&trumenti"
+
 #~ msgid "A lightweight personal finance management application."
 #~ msgstr "Una leggera applicazione per la gestione delle finanze personali."
+
+#~ msgid "Sample Points"
+#~ msgstr "Punti di Campionamento"
+
+#, python-format
+#~ msgid ""
+#~ "A search is currently active. Would you like to clear the current search and "
+#~ "make this %s in \"%s\"?"
+#~ msgstr ""
+#~ "E' già attiva una ricerca. Vuoi scartare la ricerca attuale e fare questo %s "
+#~ "in \"%s\"?"
+
+#~ msgid ""
+#~ "Warning: Unable to bind to DateCtrl's ENTER. Upgrade to wxPython >= 2.8.8.1 "
+#~ "to fix this."
+#~ msgstr ""
+#~ "Attenzione: Impossibile legare all'INVIO di DateCtrl. Aggiorna a wxPython >= "
+#~ "2.8.8.1 per correggere il problema."
+
+#~ msgid "Whether or not to match based on capitalization"
+#~ msgstr "Se uguagliare o meno basandosi sulla capitalizzazione"
+
+#~ msgid "Fit Curve Degree"
+#~ msgstr "Grado di Curva Adattiva"
+
+#~ msgid "In: "
+#~ msgstr "In: "
+
+#~ msgid ""
+#~ "Warning: Numpy module not available, disabling Summary tab. Install numpy to "
+#~ "fix this."
+#~ msgstr ""
+#~ "Attenzione: il modulo Numpy non è disponibile, viene disabilitato il tab "
+#~ "Riepilogo. Installa numpy per correggere il problema."
