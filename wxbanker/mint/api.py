@@ -111,6 +111,9 @@ class Mint:
                 balance = float(balanceStr)
                 bankName = h4.find("a").contents[0]
                 accountName = h6.contents[1]
+                # Support BeautifulSoup 3(.2.0)
+                if hasattr(accountName, 'text'):
+                    accountName = accountName.text
                 name = bankName + ' ' + accountName
                 mintAccounts[aid] = {'name': name, 'balance': balance}
                 
