@@ -22,6 +22,7 @@ from wxbanker.tests import testbase
 import os, datetime, unittest
 from wxbanker import controller, bankexceptions, currencies
 from wx.lib.pubsub import Publisher
+from wxbanker.bankobjects.account import Account
 
 from wxbanker.tests.testbase import today, yesterday, tomorrow
 
@@ -541,6 +542,20 @@ class ModelTests(testbase.TestCaseWithController):
         self.assertEqual(a.Balance, 2)
         self.assertEqual(a.CurrentBalance, 1)
         
+    def testAccountBalanceAndCurrencyNotNone(self):
+        model = self.Model
+        accounts = [
+            Account(model, None, "Foo"),
+            Account(model, None, "Bar", currency=None),
+            Account(model, None, "Food", balance=None),
+            Account(model, None, "Pub", currency=None, balance=None)
+        ]
+        
+        for account in accounts:
+            self.assertEqual(account.Currency, currencies.CurrencyList[0]())
+            self.assertEqual(account.Balance, 0.0)
+            self.assertTrue(type(account.Balance) is float)
+                
  
         
 if __name__ == "__main__":
