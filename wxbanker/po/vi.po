@@ -8,151 +8,151 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-04 03:01-0700\n"
-"PO-Revision-Date: 2011-10-20 12:46+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2011-10-23 04:39+0000\n"
+"Last-Translator: Hoàng Ngọc Long <Unknown>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Launchpad-Export-Date: 2011-10-21 04:36+0000\n"
-"X-Generator: Launchpad (build 14165)\n"
+"X-Launchpad-Export-Date: 2011-10-23 05:11+0000\n"
+"X-Generator: Launchpad (build 14170)\n"
 
 #: wxbanker/summarytab.py:30
 msgid "Trend Degree"
-msgstr ""
+msgstr "Cấp Xu hướng"
 
 #: wxbanker/summarytab.py:30
 msgid "Months"
-msgstr ""
+msgstr "Tháng"
 
 #: wxbanker/summarytab.py:48
 msgid "From"
-msgstr ""
+msgstr "Từ"
 
 #: wxbanker/summarytab.py:49 wxbanker/newtransactionctrl.py:31
 msgid "to"
-msgstr ""
+msgstr "đến"
 
 #: wxbanker/summarytab.py:50
 msgid "Graph"
-msgstr ""
+msgstr "Đồ thị"
 
 #: wxbanker/csvimportframe.py:30
 msgid "CSV import"
-msgstr ""
+msgstr "Nhập CSV"
 
 #: wxbanker/csvimportframe.py:65
 msgid "Target account"
-msgstr ""
+msgstr "Tài khoản đích"
 
 #: wxbanker/csvimportframe.py:77 wxbanker/csvimportframe.py:78
 #: wxbanker/accountconfigdialog.py:59 wxbanker/accountconfigdialog.py:228
 #: wxbanker/tagtransactiondialog.py:43
 msgid "Cancel"
-msgstr ""
+msgstr "Huỷ bỏ"
 
 #: wxbanker/csvimportframe.py:81 wxbanker/csvimportframe.py:82
 msgid "Import"
-msgstr ""
+msgstr "Nhập"
 
 #: wxbanker/csvimportframe.py:104
 msgid "CSV columns mapping"
-msgstr ""
+msgstr "Sắp xếp các cột CSV"
 
 #: wxbanker/csvimportframe.py:113 wxbanker/bankcontrols.py:52
 #: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:66
 msgid "Date"
-msgstr ""
+msgstr "Ngày"
 
 #: wxbanker/csvimportframe.py:116
 msgid "Date format"
-msgstr ""
+msgstr "Định dạng ngày"
 
 #: wxbanker/csvimportframe.py:121 wxbanker/newtransactionctrl.py:249
 #: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:68
 msgid "Amount"
-msgstr ""
+msgstr "Tổng số"
 
 #: wxbanker/csvimportframe.py:123
 msgid "Decimal separator"
-msgstr ""
+msgstr "Dấu thập phân"
 
 #: wxbanker/csvimportframe.py:127 wxbanker/newtransactionctrl.py:248
 #: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:67
 msgid "Description"
-msgstr ""
+msgstr "Mô tả"
 
 #: wxbanker/csvimportframe.py:134
 msgid "CSV file settings"
-msgstr ""
+msgstr "Các thiết đặt tệp CSV"
 
 #: wxbanker/csvimportframe.py:144
 msgid "Lines to skip"
-msgstr ""
+msgstr "Số dòng để bỏ qua"
 
 #: wxbanker/csvimportframe.py:147
 msgid "Encoding"
-msgstr ""
+msgstr "Mã hoá"
 
 #: wxbanker/csvimportframe.py:151
 msgid "Column delimiter"
-msgstr ""
+msgstr "Phân cách cột"
 
 #: wxbanker/csvimportframe.py:162
 msgid "File to import"
-msgstr ""
+msgstr "Tệp để nhập"
 
 #: wxbanker/csvimportframe.py:176
 msgid "CSV profiles"
-msgstr ""
+msgstr "Hồ sơ CSV"
 
 #: wxbanker/csvimportframe.py:181
 msgid "Python simplejson library is needed for csv profile loading/saving."
-msgstr ""
+msgstr "Thư viện Python simplejson cần cho việc tải/lưu hồ sơ csv."
 
 #: wxbanker/csvimportframe.py:192 wxbanker/accountconfigdialog.py:58
 #: wxbanker/accountconfigdialog.py:227
 msgid "Save"
-msgstr ""
+msgstr "Lưu"
 
 #: wxbanker/csvimportframe.py:198
 msgid "Remove"
-msgstr ""
+msgstr "Loại bỏ"
 
 #: wxbanker/csvimportframe.py:252
 #, python-format
 msgid "The file encoding does not seem to be '%s'."
-msgstr ""
+msgstr "Mã hoá của tệp có vẻ như không phải là '%s'."
 
 #: wxbanker/csvimportframe.py:257
 msgid "An error ocurred during the csv file import."
-msgstr ""
+msgstr "Một lỗi đã xảy ra trong quá trình nhập tệp csv."
 
 #: wxbanker/csvimportframe.py:258
 msgid "CSV import error"
-msgstr ""
+msgstr "Lỗi nhập CSV"
 
 #: wxbanker/csvimportframe.py:300
 #, python-format
 msgid "Profile with the name '%s' exists already. Overwrite it ?"
-msgstr ""
+msgstr "Hồ sơ với tên '%s' đã tồn tại. Ghi đè lên nó ?"
 
 #: wxbanker/csvimportframe.py:301
 msgid "Overwrite profile ?"
-msgstr ""
+msgstr "Ghi đè lên hồ sơ ?"
 
 #: wxbanker/csvimportframe.py:315
 msgid "Select file and click \"Preview\""
-msgstr ""
+msgstr "Chọn tệp và nhấn \"Xem trước\""
 
 #: wxbanker/newtransactionctrl.py:31
 msgid "from"
-msgstr ""
+msgstr "từ"
 
 #: wxbanker/newtransactionctrl.py:35 wxbanker/newtransactionctrl.py:258
 msgid "Transfer"
-msgstr ""
+msgstr "Chuyển khoản"
 
 #: wxbanker/newtransactionctrl.py:100
 #: wxbanker/bankobjects/recurringtransaction.py:147
@@ -165,7 +165,7 @@ msgstr[1] ""
 
 #: wxbanker/newtransactionctrl.py:100
 msgid "Weekly"
-msgstr ""
+msgstr "Hàng tuần"
 
 #: wxbanker/newtransactionctrl.py:100
 #: wxbanker/bankobjects/recurringtransaction.py:171
@@ -177,124 +177,120 @@ msgstr[1] ""
 
 #: wxbanker/newtransactionctrl.py:100
 msgid "Yearly"
-msgstr ""
+msgstr "Hàng năm"
 
 #: wxbanker/newtransactionctrl.py:109
 msgid "Never"
-msgstr ""
+msgstr "Không bao giờ"
 
 #: wxbanker/newtransactionctrl.py:130
 msgid "every"
-msgstr ""
+msgstr "mọi"
 
 #: wxbanker/newtransactionctrl.py:135
 msgid "Ends:"
-msgstr ""
+msgstr "Kết thúc:"
 
 #: wxbanker/newtransactionctrl.py:140
 msgid "Repeats:"
-msgstr ""
+msgstr "Lặp lại:"
 
 #: wxbanker/newtransactionctrl.py:169
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ngày"
 
 #: wxbanker/newtransactionctrl.py:171
 msgid "week"
 msgid_plural "weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "tuần"
 
 #: wxbanker/newtransactionctrl.py:174
 msgid "month"
 msgid_plural "months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "tháng"
 
 #: wxbanker/newtransactionctrl.py:176
 msgid "year"
 msgid_plural "years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "năm"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Mon"
-msgstr ""
+msgstr "Hai"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Tue"
-msgstr ""
+msgstr "Ba"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Wed"
-msgstr ""
+msgstr "Tư"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Thu"
-msgstr ""
+msgstr "Năm"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Fri"
-msgstr ""
+msgstr "Sáu"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Sat"
-msgstr ""
+msgstr "Bảy"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Sun"
-msgstr ""
+msgstr "CN"
 
 #: wxbanker/newtransactionctrl.py:221
 msgid "Repeats on days:"
-msgstr ""
+msgstr "Lặp lại vào những ngày:"
 
 #: wxbanker/newtransactionctrl.py:244
 msgid "Starts:"
-msgstr ""
+msgstr "Bắt đầu:"
 
 #: wxbanker/newtransactionctrl.py:253
 msgid "Enter this transaction"
-msgstr ""
+msgstr "Nhập giao dịch"
 
 #: wxbanker/newtransactionctrl.py:262
 msgid "Recurring"
-msgstr ""
+msgstr "Định kỳ"
 
 #: wxbanker/newtransactionctrl.py:344
 msgid "Initial balance"
-msgstr ""
+msgstr "Số dư ban đầu"
 
 #: wxbanker/newtransactionctrl.py:380
 msgid "No amount entered in the 'Amount' field."
-msgstr ""
+msgstr "Không có số lượng được nhập trong trường 'Tổng số'."
 
 #: wxbanker/newtransactionctrl.py:382
 #, python-format
 msgid "'%s' is not a valid amount."
-msgstr ""
+msgstr "'%s' không phải là một số lượng hợp lệ."
 
 #: wxbanker/newtransactionctrl.py:385
 msgid "Please enter a number such as 12.34 or -20."
-msgstr ""
+msgstr "Vui lòng nhập vào một số như 12,34 hay -20."
 
 #: wxbanker/newtransactionctrl.py:386
 msgid "Invalid Transaction Amount"
-msgstr ""
+msgstr "Số Lượng Giao Dịch Không Phù Hợp"
 
 #: wxbanker/newtransactionctrl.py:397
 msgid "Please select an account and then try again."
-msgstr ""
+msgstr "Vui lòng chọn một tài khoản và sau đó thử lại."
 
 #: wxbanker/newtransactionctrl.py:398 wxbanker/newtransactionctrl.py:426
 msgid "No account selected"
-msgstr ""
+msgstr "Không có tài khoản nào được chọn"
 
 #: wxbanker/newtransactionctrl.py:411
 msgid "A search is currently active."
-msgstr ""
+msgstr "Một tìm kiếm hiện tại hoạt động."
 
 #: wxbanker/newtransactionctrl.py:411
 #, python-format
@@ -302,21 +298,26 @@ msgid ""
 "Would you like to clear the current search and make this transaction in "
 "\"%s\"?"
 msgstr ""
+"Bạn có muốn xoá bỏ tìm kiếm hiện tại và thực hiện giao dịch này trong \"%s\"?"
 
 #: wxbanker/newtransactionctrl.py:412
 msgid "Clear search?"
-msgstr ""
+msgstr "Làm sạch tìm kiếm?"
 
 #: wxbanker/newtransactionctrl.py:425
 msgid ""
 "This transaction is marked as a transfer. Please select the transfer account."
 msgstr ""
+"Giao dịch này được đánh dấu như một chuyển khoản. Vui lòng chọn tài khoản "
+"chuyển."
 
 #: wxbanker/newtransactionctrl.py:458
 msgid ""
 "If this box is checked when adding a transaction, you will be prompted for "
 "the account to use as the source of the transfer."
 msgstr ""
+"Nếu ô này được kiểm khi thêm một giao dịch, bạn sẽ được nhắc về tài khoản "
+"dùng làm nguồn cho chuyển khoản."
 
 #: wxbanker/newtransactionctrl.py:459
 msgid ""
@@ -324,30 +325,32 @@ msgid ""
 "account will also subtract $50 from the account that you choose as the "
 "source."
 msgstr ""
+"Ví dụ, kiểm ô này và nhập một giao dịch 50$ vào tài khoản này cũng sẽ trừ "
+"50$ từ tài khoản mà bạn chọn làm nguồn."
 
 #: wxbanker/searchctrl.py:39
 msgid "Search transactions"
-msgstr ""
+msgstr "Tìm kiếm giao dịch"
 
 #: wxbanker/searchctrl.py:42
 msgid "More options"
-msgstr ""
+msgstr "Nhiều tuỳ chọn hơn"
 
 #: wxbanker/searchctrl.py:42
 msgid "Less options"
-msgstr ""
+msgstr "Ít tuỳ chọn hơn"
 
 #: wxbanker/searchctrl.py:54
 msgid "Match: "
-msgstr ""
+msgstr "Khớp: "
 
 #: wxbanker/searchctrl.py:124
 msgid "Show advanced search options"
-msgstr ""
+msgstr "Hiện những tuỳ chọn tìm kiếm nâng cao"
 
 #: wxbanker/searchctrl.py:126
 msgid "Hide advanced search options"
-msgstr ""
+msgstr "Ẩn những tuỳ chọn tìm kiếm nâng cao"
 
 #: wxbanker/main.py:85
 #, python-format
@@ -355,6 +358,8 @@ msgid ""
 "The recurring transaction \"%(description)s\" has %(num)i transactions ready "
 "for %(amount)s on %(datelist)s."
 msgstr ""
+"Giao dịch định kỳ \"%(description)s\" có %(num)i giao dịch sẵn sàng cho "
+"%(amount)s vào %(datelist)s."
 
 #: wxbanker/main.py:90
 #, python-format
@@ -362,114 +367,125 @@ msgid ""
 "%(num)i recurring transactions have a total of %(totalnum)i transactions "
 "ready."
 msgstr ""
+"%(num)i giao dịch định kỳ có tổng số %(totalnum)i giao dịch sẵn sàng."
 
 #: wxbanker/main.py:101
 msgid "Preview"
-msgstr ""
+msgstr "Xem trước"
 
 #: wxbanker/main.py:110
 msgid "Perform"
-msgstr ""
+msgstr "Thực hiện"
 
 #: wxbanker/main.py:126
 msgid "Recurring transaction successfully added."
-msgstr ""
+msgstr "Giao dịch định kỳ được thêm thành công."
 
 #: wxbanker/main.py:128
 #, python-format
 msgid "The first transaction will occur on %(date)s"
-msgstr ""
+msgstr "Giao dịch đầu tiên sẽ diễn ra vào %(date)s"
 
 #: wxbanker/main.py:191
 msgid "It looks like this is your first time using wxBanker!"
-msgstr ""
+msgstr "Đây có vẻ là lần đầu tiên bạn sử dụng wxBanker!"
 
 #: wxbanker/main.py:192
 msgid ""
 "To get started, add an account using the account control in the top left "
 "corner."
 msgstr ""
+"Để bắt đầu, thêm một tài khoản sử dụng điều khiển tài khoản ở góc trên bên "
+"trái."
 
 #: wxbanker/main.py:193
 msgid ""
 "The buttons in the account control allow you to add, rename, configure, and "
 "remove an account, respectively."
 msgstr ""
+"Các nút trong điều khiển tài khoản cho phép bạn thêm, đổi tên, cấu hình, và "
+"loại bỏ một tài khoản, theo thứ tự."
 
 #: wxbanker/main.py:194
 msgid ""
 "Once you have created an account you can add transactions to it (such as "
 "your initial balance) using the controls below the grid on the bottom right."
 msgstr ""
+"Một khi bạn tạo một tài khoản bạn có thể thêm các giao dịch vào nó (như số "
+"dư ban đầu của bạn) sử dụng các điều khiển bên dưới lưới ở góc dưới bên phải."
 
 #: wxbanker/main.py:195
 msgid "Have fun!"
-msgstr ""
+msgstr "Chúc vui!"
 
 #: wxbanker/main.py:197
 msgid "Welcome!"
-msgstr ""
+msgstr "Xin chào!"
 
 #: wxbanker/main.py:205
 msgid "Save changes?"
-msgstr ""
+msgstr "Lưu những thay đổi?"
 
 #: wxbanker/main.py:206
 msgid ""
 "You have made changes since the last save. Would you like to save before "
 "exiting?"
 msgstr ""
+"Bạn đã tạo những thay đổi kể từ lần lưu cuối. Bạn có muốn lưu trước khi "
+"thoát?"
 
 #: wxbanker/main.py:207
 msgid ""
 "Note that enabling auto-save from the File menu will eliminate the need for "
 "manual saving."
 msgstr ""
+"Lưu ý rằng cho phép tự động-lưu từ thực đơn Tệp sẽ loại bỏ việc cần thiết "
+"lưu thủ công."
 
 #: wxbanker/currconvert.py:59
 #, python-format
 msgid "No exchange rate for currency \"%s\""
-msgstr ""
+msgstr "Không có tỷ lệ quy đổi cho tiền tệ \"%s\""
 
 #: wxbanker/accountlistctrl.py:45
 msgid "Accounts"
-msgstr ""
+msgstr "Tài khoản"
 
 #: wxbanker/accountlistctrl.py:56
 msgid "Add a new account"
-msgstr ""
+msgstr "Thêm một tài khoản mới"
 
 #: wxbanker/accountlistctrl.py:60
 msgid "Remove the selected account"
-msgstr ""
+msgstr "Loại bỏ tài khoản đã chọn"
 
 #: wxbanker/accountlistctrl.py:65
 msgid "Rename the selected account"
-msgstr ""
+msgstr "Đổi tên tài khoản đã chọn"
 
 #: wxbanker/accountlistctrl.py:70
 msgid "Configure the selected account"
-msgstr ""
+msgstr "Cấu hình tài khoản đã chọn"
 
 #: wxbanker/accountlistctrl.py:87 wxbanker/menubar.py:68
 msgid "All accounts"
-msgstr ""
+msgstr "Tất cả tài khoản"
 
 #: wxbanker/accountlistctrl.py:158
 msgid "Not synchronized with Mint.com"
-msgstr ""
+msgstr "Không được đồng bộ với Mint.com"
 
 #: wxbanker/accountlistctrl.py:442 wxbanker/accountlistctrl.py:543
 msgid "Sorry, an account by that name already exists."
-msgstr ""
+msgstr "Xin lỗi, một tài khoản với tên đó đã tồn tại."
 
 #: wxbanker/accountlistctrl.py:444 wxbanker/accountlistctrl.py:545
 msgid "Account names cannot be blank."
-msgstr ""
+msgstr "Tên tài khoản không thể để trống."
 
 #: wxbanker/accountlistctrl.py:478
 msgid "Account name"
-msgstr ""
+msgstr "Tên tài khoản"
 
 #: wxbanker/accountlistctrl.py:517
 #, python-format
@@ -477,194 +493,197 @@ msgid ""
 "This will permanently remove the account '%s' and all its transactions. "
 "Continue?"
 msgstr ""
+"Việc này sẽ loại bỏ hẳn tài khoản '%s' và tất cả các giao dịch của nó. Tiếp "
+"tục?"
 
 #: wxbanker/accountlistctrl.py:518 wxbanker/accountconfigdialog.py:203
 msgid "Warning"
-msgstr ""
+msgstr "Cảnh báo"
 
 #: wxbanker/menubar.py:57
 msgid "Auto-save"
-msgstr ""
+msgstr "Tự động-lưu"
 
 #: wxbanker/menubar.py:57
 msgid "Automatically save changes"
-msgstr ""
+msgstr "Tự động lưu những thay đổi"
 
 #: wxbanker/menubar.py:59
 msgid "Import from CSV"
-msgstr ""
+msgstr "Nhập từ CSV"
 
 #: wxbanker/menubar.py:59
 msgid "Import transactions from a CSV file"
-msgstr ""
+msgstr "Nhập các giao dịch từ một tệp CSV"
 
 #: wxbanker/menubar.py:60
 msgid "Export to CSV"
-msgstr ""
+msgstr "Xuất ra CSV"
 
 #: wxbanker/menubar.py:60
 msgid "Export transactions to a CSV file"
-msgstr ""
+msgstr "Xuất các giao dịch ra một tếp CSV"
 
 #: wxbanker/menubar.py:66
 msgid "Previous account"
-msgstr ""
+msgstr "Tài khoản trước"
 
 #: wxbanker/menubar.py:67
 msgid "Next account"
-msgstr ""
+msgstr "Tài khoản kế tiếp"
 
 #: wxbanker/menubar.py:70
 msgid "Show zero-balance accounts"
-msgstr ""
+msgstr "Hiện những tài khoản không còn tiền"
 
 #: wxbanker/menubar.py:70
 msgid ""
 "When disabled, accounts with a balance of $0.00 will be hidden from the list"
 msgstr ""
+"Khi bị vô hiệu, những tài khoản với số dư là 0,00$ sẽ bị ẩn khỏi danh sách"
 
 #: wxbanker/menubar.py:79
 msgid "&Currency"
-msgstr ""
+msgstr "&Tiền tệ"
 
 #: wxbanker/menubar.py:79
 msgid "Select currency to display"
-msgstr ""
+msgstr "Chọn tiền tệ để hiển thị"
 
 #: wxbanker/menubar.py:92
 msgid "Request a Currency"
-msgstr ""
+msgstr "Yêu cầu một Tiền tệ"
 
 #: wxbanker/menubar.py:100
 msgid "Integrate with Mint.com"
-msgstr ""
+msgstr "Tích hợp với Mint.com"
 
 #: wxbanker/menubar.py:100
 msgid "Sync account balances with an existing Mint.com account"
-msgstr ""
+msgstr "Đồng bộ những số dư tài khoản với một tài khoản Mint.com đã có"
 
 #: wxbanker/menubar.py:106
 msgid "View &FAQs"
-msgstr ""
+msgstr "Xem &FAQ"
 
 #: wxbanker/menubar.py:106
 msgid "View Frequently Asked Questions online"
-msgstr ""
+msgstr "Xem Những Câu hỏi Thường gặp trực tuyến"
 
 #: wxbanker/menubar.py:111
 msgid "Ask a &Question"
-msgstr ""
+msgstr "Đặt một &Câu hỏi"
 
 #: wxbanker/menubar.py:111
 msgid "Ask a question online"
-msgstr ""
+msgstr "Đặt một câu hỏi trực tuyến"
 
 #: wxbanker/menubar.py:116
 msgid "&Report a Bug"
-msgstr ""
+msgstr "&Báo cáo một lỗi"
 
 #: wxbanker/menubar.py:116
 msgid "Report a bug to the developer online"
-msgstr ""
+msgstr "Báo cáo một lỗi cho người phát triển trực tuyến"
 
 #: wxbanker/menubar.py:121
 msgid "Request a Fea&ture"
-msgstr ""
+msgstr "Yêu cầu một Tính nă&ng"
 
 #: wxbanker/menubar.py:121
 msgid "Request a new feature to be implemented"
-msgstr ""
+msgstr "Yêu cầu một tính năng mới được hiện thức"
 
 #: wxbanker/menubar.py:126
 msgid "Tran&slate wxBanker"
-msgstr ""
+msgstr "Dị&ch wxBanker"
 
 #: wxbanker/menubar.py:126
 msgid "Translate wxBanker to another language"
-msgstr ""
+msgstr "Dịch wxBanker ra một ngôn ngữ khác"
 
 #: wxbanker/menubar.py:133
 msgid "&About"
-msgstr ""
+msgstr "&Về"
 
 #: wxbanker/menubar.py:133
 msgid "More information about wxBanker"
-msgstr ""
+msgstr "Thông tin thêm về wxBanker"
 
 #: wxbanker/menubar.py:136
 msgid "&File"
-msgstr ""
+msgstr "&Tệp"
 
 #: wxbanker/menubar.py:137
 msgid "&View"
-msgstr ""
+msgstr "&Xem"
 
 #: wxbanker/menubar.py:138
 msgid "&Settings"
-msgstr ""
+msgstr "&Thiệt đặt"
 
 #: wxbanker/menubar.py:139
 msgid "&Help"
-msgstr ""
+msgstr "&Trợ giúp"
 
 #: wxbanker/menubar.py:247
 msgid "Copyright"
-msgstr ""
+msgstr "Bản quyền"
 
 #: wxbanker/menubar.py:248
 msgid "Simple personal finance."
-msgstr ""
+msgstr "Tài chính cá nhân đơn giản."
 
 #: wxbanker/bankobjects/recurringtransaction.py:150
 msgid "Weekly on weekdays"
-msgstr ""
+msgstr "Hàng tuần vào ngày thường trong tuần"
 
 #: wxbanker/bankobjects/recurringtransaction.py:152
 msgid "Weekly on weekends"
-msgstr ""
+msgstr "Hàng tuần vào ngày cuối tuần"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Mondays"
-msgstr ""
+msgstr "Thứ Hai"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Tuesdays"
-msgstr ""
+msgstr "Thứ Ba"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Wednesdays"
-msgstr ""
+msgstr "Thứ Tư"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Thursdays"
-msgstr ""
+msgstr "Thứ Năm"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Fridays"
-msgstr ""
+msgstr "Thứ Sáu"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Saturdays"
-msgstr ""
+msgstr "Thứ Bảy"
 
 #: wxbanker/bankobjects/recurringtransaction.py:156
 msgid "Sundays"
-msgstr ""
+msgstr "Chủ Nhật"
 
 #: wxbanker/bankobjects/recurringtransaction.py:160
 #, python-format
 msgid "Weekly on %s"
-msgstr ""
+msgstr "Hàng tuần vào %s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:162
 #, python-format
 msgid "Every %(num)d weeks on %%s"
-msgstr ""
+msgstr "Mỗi %(num)d tuần vào %%s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:169
 #, python-format
 msgid " and %s"
-msgstr ""
+msgstr " and %s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:173
 #, python-format
@@ -676,223 +695,227 @@ msgstr[1] ""
 #: wxbanker/bankobjects/recurringtransaction.py:177
 #, python-format
 msgid "until %s"
-msgstr ""
+msgstr "cho đến %s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:194
 msgid "No description"
-msgstr ""
+msgstr "Không có mô tả"
 
 #: wxbanker/bankobjects/transaction.py:95
 #, python-format
 msgid "Transfer from %s"
-msgstr ""
+msgstr "Chuyển khoản từ %s"
 
 #: wxbanker/bankobjects/transaction.py:97
 #, python-format
 msgid "Transfer to %s"
-msgstr ""
+msgstr "Chuyển khoản tới %s"
 
 #: wxbanker/recurringsummaryrow.py:45
 msgid "Summary:"
-msgstr ""
+msgstr "Tóm tắt:"
 
 #: wxbanker/managetab.py:43
 msgid "Show Calculator"
-msgstr ""
+msgstr "Hiện Máy tính"
 
 #: wxbanker/managetab.py:43
 msgid "Hide Calculator"
-msgstr ""
+msgstr "Ẩn Máy tính"
 
 #: wxbanker/managetab.py:97
 msgid "Transactions"
-msgstr ""
+msgstr "Các giao dịch"
 
 #: wxbanker/managetab.py:110
 msgid "Summary"
-msgstr ""
+msgstr "Tóm tắt"
 
 #: wxbanker/transactionolv.py:38
 msgid "No transactions entered."
-msgstr ""
+msgstr "Không có giao dịch nào được nhập."
 
 #: wxbanker/transactionolv.py:39
 msgid "No matching transactions."
-msgstr ""
+msgstr "Không có giao dịch nào khớp."
 
 #: wxbanker/transactionolv.py:69 wxbanker/plots/wxplotpanel.py:37
 #: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:82
 #: wxbanker/plots/cairopanel.py:123
 msgid "Balance"
-msgstr ""
+msgstr "Số dư"
 
 #: wxbanker/transactionolv.py:172
 msgid "_Total"
-msgstr ""
+msgstr "_Tổng số"
 
 #: wxbanker/transactionolv.py:234
 #, python-format
 msgid "Send %s to calculator"
-msgstr ""
+msgstr "Gửi %s tới máy tính"
 
 #: wxbanker/transactionolv.py:235
 #, python-format
 msgid "Add %s to calculator"
-msgstr ""
+msgstr "Thêm %s vào máy tính"
 
 #: wxbanker/transactionolv.py:236
 #, python-format
 msgid "Subtract %s from calculator"
-msgstr ""
+msgstr "Trừ %s từ máy tính"
 
 #: wxbanker/transactionolv.py:248
 msgid "Remove this transaction"
-msgstr ""
+msgstr "Loại bỏ giao dịch này"
 
 #: wxbanker/transactionolv.py:249
 msgid "Move this transaction to account"
-msgstr ""
+msgstr "Chuyển giao dịch này vào tài khoản"
 
 #: wxbanker/transactionolv.py:250
 msgid "No tags yet"
-msgstr ""
+msgstr "Chưa gắn thẻ"
 
 #: wxbanker/transactionolv.py:252
 #, python-format
 msgid "Remove these %i transactions"
-msgstr ""
+msgstr "Loại bỏ %i giao dịch này"
 
 #: wxbanker/transactionolv.py:253
 #, python-format
 msgid "Move these %i transactions to account"
-msgstr ""
+msgstr "Chuyển %i giao dịch này vào tài khoản"
 
 #: wxbanker/transactionolv.py:254
 msgid "No common tags yet"
-msgstr ""
+msgstr "Chưa gắn thẻ thông thường"
 
 #: wxbanker/transactionolv.py:256 wxbanker/tagtransactiondialog.py:100
 msgid "Add a tag"
-msgstr ""
+msgstr "Thêm một thẻ"
 
 #: wxbanker/transactionolv.py:279
 msgid "Tags"
-msgstr ""
+msgstr "Thẻ"
 
 #: wxbanker/transactionolv.py:292
 msgid "Search for this tag"
-msgstr ""
+msgstr "Tìm kiếm thẻ này"
 
 #: wxbanker/transactionolv.py:293
 msgid "Remove this tag"
-msgstr ""
+msgstr "Loại bỏ thẻ này"
 
 #: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:76
 msgid "balance"
-msgstr ""
+msgstr "số dư"
 
 #: wxbanker/plots/wxplotpanel.py:42 wxbanker/plots/cairopanel.py:86
 msgid "Trend"
-msgstr ""
+msgstr "Xu hướng"
 
 #: wxbanker/plots/wxplotpanel.py:44
 msgid "Total Balance Over Time"
-msgstr ""
+msgstr "Tổng Số dư Theo Thời gian"
 
 #: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:122
 msgid "Time"
-msgstr ""
+msgstr "Thời gian"
 
 #: wxbanker/plots/cairopanel.py:33
 msgid "monthly"
-msgstr ""
+msgstr "hàng tháng"
 
 #: wxbanker/plots/plotfactory.py:51
 #, python-format
 msgid "To use '%s' plotting library, install following python modules: %s."
-msgstr ""
+msgstr "Để sử dụng thư viện vẽ '%s', cài đặt các mô-đun python sau: %s."
 
 #: wxbanker/messagepanel.py:47
 msgid "Dismiss"
-msgstr ""
+msgstr "Bỏ qua"
 
 #: wxbanker/currencies.py:334
 msgid "detected"
-msgstr ""
+msgstr "được phát hiện"
 
 #: wxbanker/accountconfigdialog.py:36
 msgid "None"
-msgstr ""
+msgstr "không có"
 
 #: wxbanker/accountconfigdialog.py:37
 msgid "Mint.com credentials:"
-msgstr ""
+msgstr "Chứng danh Mint.com:"
 
 #: wxbanker/accountconfigdialog.py:42
 msgid "Save credentials in keyring"
-msgstr ""
+msgstr "Lưu các chứng danh vào vòng khoá"
 
 #: wxbanker/accountconfigdialog.py:44
 #, python-format
 msgid "Corresponding Mint account for %(name)s:"
-msgstr ""
+msgstr "Tài khoản Mint tương ứng cho %(name)s:"
 
 #: wxbanker/accountconfigdialog.py:46
 msgid "Update"
-msgstr ""
+msgstr "Cập nhật"
 
 #: wxbanker/accountconfigdialog.py:49
 msgid "Username:"
-msgstr ""
+msgstr "Tên người dùng:"
 
 #: wxbanker/accountconfigdialog.py:51
 msgid "Password:"
-msgstr ""
+msgstr "Mật khẩu:"
 
 #: wxbanker/accountconfigdialog.py:160
 msgid "Transaction details"
-msgstr ""
+msgstr "Chi tiết giao dịch"
 
 #: wxbanker/accountconfigdialog.py:202
 msgid "This will permanently remove this recurring transaction. Continue?"
-msgstr ""
+msgstr "Việc này sẽ laoij bỏ hẳn giao dịch định kỳ này. Tiếp tục?"
 
 #: wxbanker/accountconfigdialog.py:213
 msgid "This account currently has no recurring transactions."
-msgstr ""
+msgstr "Tài khoản này hiện tại không có giao dịch định kỳ nào."
 
 #: wxbanker/accountconfigdialog.py:215
 msgid "Close"
-msgstr ""
+msgstr "Đóng"
 
 #: wxbanker/accountconfigdialog.py:226
 msgid "Delete"
-msgstr ""
+msgstr "Xoá"
 
 #: wxbanker/accountconfigdialog.py:251
 msgid "Recurring Transactions"
-msgstr ""
+msgstr "Giao dịch Định kỳ"
 
 #: wxbanker/accountconfigdialog.py:252
 msgid "Mint.com Integration"
-msgstr ""
+msgstr "Tích hợp Mint.com"
 
 #: wxbanker/tagtransactiondialog.py:29
 msgid ""
 "You can also tag a transaction by putting #tagname anywhere in the "
 "description."
 msgstr ""
+"Bạn cũng có thể gắn thẻ cho một giao dịch bằng cách đặt #tagname ở bất kỳ "
+"đâu trong phần mô tả."
 
 #: wxbanker/tagtransactiondialog.py:30
 msgid "Tag:"
-msgstr ""
+msgstr "Thẻ:"
 
 #: wxbanker/tagtransactiondialog.py:32
 msgid ""
 "To remove this tag later, simply remove it from the description or right-"
 "click on the transaction."
 msgstr ""
+"Để loại bỏ thẻ này sau, đơn giản loại bỏ nó khỏi mô tả hay nhấn-chuột phải "
+"vào giao dịch."
 
 #: wxbanker/tagtransactiondialog.py:42
 msgid "Add Tag"
-msgstr ""
+msgstr "Thêm thẻ"
