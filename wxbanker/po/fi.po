@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-04 03:01-0700\n"
-"PO-Revision-Date: 2011-09-09 06:29+0000\n"
+"PO-Revision-Date: 2011-10-28 12:48+0000\n"
 "Last-Translator: Jiri Grönroos <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-09-10 04:42+0000\n"
-"X-Generator: Launchpad (build 13900)\n"
+"X-Launchpad-Export-Date: 2011-10-29 05:13+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
 
 #: wxbanker/summarytab.py:30
 msgid "Trend Degree"
@@ -534,7 +534,7 @@ msgstr "Näytä nollasaldon tilit"
 #: wxbanker/menubar.py:70
 msgid ""
 "When disabled, accounts with a balance of $0.00 will be hidden from the list"
-msgstr ""
+msgstr "Jos pois käytöstä, piilotetaan tilit joiden saldo on nolla"
 
 #: wxbanker/menubar.py:79
 msgid "&Currency"
@@ -689,7 +689,7 @@ msgstr[1] "%(num)d vuoden välein"
 #: wxbanker/bankobjects/recurringtransaction.py:177
 #, python-format
 msgid "until %s"
-msgstr ""
+msgstr "päättyen %s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:194
 msgid "No description"
@@ -773,12 +773,12 @@ msgstr "Ei tunnisteita vielä"
 #: wxbanker/transactionolv.py:252
 #, python-format
 msgid "Remove these %i transactions"
-msgstr ""
+msgstr "Poista nämä %i tapahtumaa"
 
 #: wxbanker/transactionolv.py:253
 #, python-format
 msgid "Move these %i transactions to account"
-msgstr ""
+msgstr "Siirrä nämä %i tapahtumaa tilille"
 
 #: wxbanker/transactionolv.py:254
 msgid "No common tags yet"
@@ -802,7 +802,7 @@ msgstr "Poista tämä tunniste"
 
 #: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:76
 msgid "balance"
-msgstr ""
+msgstr "saldo"
 
 #: wxbanker/plots/wxplotpanel.py:42 wxbanker/plots/cairopanel.py:86
 msgid "Trend"
@@ -810,7 +810,7 @@ msgstr "Kehityssuunta"
 
 #: wxbanker/plots/wxplotpanel.py:44
 msgid "Total Balance Over Time"
-msgstr ""
+msgstr "Kokonaissaldo"
 
 #: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:122
 msgid "Time"
