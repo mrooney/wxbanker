@@ -8,19 +8,19 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-04 03:01-0700\n"
-"PO-Revision-Date: 2011-01-10 10:59+0000\n"
-"Last-Translator: Sérgio Marques <Unknown>\n"
+"PO-Revision-Date: 2012-02-09 16:11+0000\n"
+"Last-Translator: Fugiwara <Unknown>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2011-01-11 04:48+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2012-02-10 04:42+0000\n"
+"X-Generator: Launchpad (build 14771)\n"
 
 #: wxbanker/summarytab.py:30
 msgid "Trend Degree"
-msgstr ""
+msgstr "Grau de tendência"
 
 #: wxbanker/summarytab.py:30
 msgid "Months"
@@ -981,9 +981,6 @@ msgstr "Adicionar Etiqueta"
 #~ msgid "&Tools"
 #~ msgstr "&Ferramentas"
 
-#~ msgid "account:"
-#~ msgstr "conta:"
-
 #~ msgid "CSV Import"
 #~ msgstr "Importar CSV"
 
@@ -1001,9 +998,6 @@ msgstr "Adicionar Etiqueta"
 #~ msgstr ""
 #~ "Aviso: Incapaz de criar atalho para DateCtrl's ENTER. Actualize para "
 #~ "wxPython >= 2.8.8.1 para resolver o problema."
-
-#~ msgid "Password"
-#~ msgstr "Senha"
 
 #~ msgid "Skip first line"
 #~ msgstr "Saltar primeira linha"
