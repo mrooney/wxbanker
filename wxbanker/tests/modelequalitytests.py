@@ -88,9 +88,9 @@ class ModelEqualityTest(testbase.TestCaseWithController):
         
         self.assertEqual(t1, t2)
         
-        t2._Tags = set("foo")
-        
-        self.assertNotEqual(t1, t2)
+        t2._Tags = set(["foo"])
+
+        self.assertFalse(t1 == t2) # Why does assertNotEquals(t1, t2) not work?
 
 if __name__ == "__main__":
     unittest.main()
