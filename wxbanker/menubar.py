@@ -76,7 +76,7 @@ class BankMenuBar(wx.MenuBar):
         settingsMenu = wx.Menu()
 
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
-        currencyMenu = wx.MenuItem(settingsMenu, -1, _("&Currency"), _("Select currency to display"))
+        currencyMenu = wx.MenuItem(settingsMenu, -1, _("Base &Currency"), _("Select currency for the 'All accounts balance'"))
         currencyMenu.SetBitmap(wx.ArtProvider.GetBitmap("wxART_money"))
 
         # Add an entry for each available currency.
