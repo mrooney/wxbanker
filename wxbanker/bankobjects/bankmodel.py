@@ -42,7 +42,8 @@ class BankModel(ORMKeyValueObject):
         if self.MintEnabled:
             delayedresult.startWorker(lambda result: Publisher.sendMessage("mint.updated"), Mint.LoginFromKeyring, wkwargs={"notify": False})
 
-        Publisher.subscribe(self.onCurrencyChanged, "user.currency_changed")
+        Publisher.subscribe(self.onGlobalCurrencyChanged, "user.global_currency_changed")
+        Publisher.subscribe(self.onAccountCurrencyChanged, "user.account_currency_changed")
         Publisher.subscribe(self.onMintToggled, "user.mint.toggled")
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
         Publisher.subscribe(self.onTransactionTagged, "transaction.tagged")
@@ -172,13 +173,22 @@ class BankModel(ORMKeyValueObject):
         return currency.float2str(*args, **kwargs)
 
     def setGlobalCurrency(self, currencyIndex):
-        self.Store.setGlobalCurrency(currencyIndex)
+        self.Store.setCurrency(currencyIndex)
         Publisher.sendMessage("currency_changed", currencyIndex)
 
-    def onCurrencyChanged(self, message):
+    def setAccountCurrency(self, account, currencyIndex):
+        self.Store.setCurrency(currencyIndex, account)
+        account.SetCurrency(currencyIndex)
+        Publisher.sendMessage("currency_changed", currencyIndex)
+    
+    def onGlobalCurrencyChanged(self, message):
         currencyIndex = message.data
         self.setGlobalCurrency(currencyIndex)
-        
+    
+    def onAccountCurrencyChanged(self, message):
+        account, currency = message.data
+        self.setAccountCurrency(account, currency)
+    
     def onAccountChanged(self, message):
         account = message.data
         if account:

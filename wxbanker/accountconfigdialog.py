@@ -19,6 +19,7 @@
 import wx
 from wx.lib.pubsub import Publisher
 from wxbanker.transactionctrl import TransactionCtrl
+from wxbanker.currencies import CurrencyStrings, GetCurrencyInt
 
 from wxbanker.mint.api import Mint
 try:
@@ -238,7 +239,49 @@ class RecurringConfigPanel(wx.Panel):
     def onTransactionChoice(self, event):
         transaction = self.GetCurrentRecurringTransaction()
         self.transactionCtrl.FromRecurring(transaction)
+        
+class CurrencyConfigPanel(wx.Panel):
+    def __init__(self, parent, account):
+        self.Account = account
+        wx.Panel.__init__(self, parent)
+        self.headerText = wx.StaticText(self, -1, _("Account currency: "))
+        
+        saveButton = wx.Button(self, label=_("Save"), id=wx.ID_SAVE)
+        closeButton = wx.Button(self, label=_("Cancel"), id=wx.ID_CLOSE)
+        
+        buttonSizer = wx.BoxSizer()
+        buttonSizer.Add(saveButton)
+        buttonSizer.AddSpacer(12)
+        buttonSizer.Add(closeButton)
+        buttonSizer.AddSpacer(6)
+        
+        #base currency = global currency
+        currencies = ["Base currency"] + CurrencyStrings
+        self.currencyCombo = wx.Choice(self, choices=currencies)
+        # we have to add 1 to the current indext because we added the "base currency" entry
+        self.currencyCombo.SetSelection(GetCurrencyInt(self.Account.GetCurrency())+1)
 
+        self.Sizer = wx.BoxSizer(wx.VERTICAL)
+        self.Sizer.AddSpacer(6)
+        self.Sizer.Add(self.headerText, 0, wx.LEFT, 6)
+        self.Sizer.AddSpacer(6)
+        self.Sizer.Add(self.currencyCombo, 0, wx.LEFT, 6)
+        self.Sizer.AddStretchSpacer(1)
+        self.Sizer.Add(buttonSizer, flag=wx.ALIGN_RIGHT)
+        self.Sizer.AddSpacer(6)
+        self.Bind(wx.EVT_BUTTON, self.onButton)
+        
+    def onButton(self, event):
+        """If the save button was clicked save, and close the dialog in any case (Close/Cancel/Save)."""
+        assert event.Id in (wx.ID_CLOSE, wx.ID_SAVE)
+        
+        if event.Id == wx.ID_SAVE:
+            #we have to substract 1 from combo_box selection because we added the "base currency" entry
+            selectedCurrency = self.currencyCombo.GetSelection() - 1
+            Publisher.sendMessage("user.account_currency_changed", (self.Account, selectedCurrency))
+            
+        self.GrandParent.Destroy()
+        
 class AccountConfigDialog(wx.Dialog):
     def __init__(self, parent, account, tab="default"):
         wx.Dialog.__init__(self, parent, title=account.Name, size=(600, 400))
@@ -248,8 +291,10 @@ class AccountConfigDialog(wx.Dialog):
         
         self.recurringPanel = RecurringConfigPanel(self.notebook, account)
         self.mintPanel = MintConfigPanel(self.notebook, account)
+        self.currencyPanel = CurrencyConfigPanel(self.notebook, account)
         self.notebook.AddPage(self.recurringPanel, _("Recurring Transactions"))
         self.notebook.AddPage(self.mintPanel, _("Mint.com Integration"))
+        self.notebook.AddPage(self.currencyPanel, _("Currency Settings"))
         
         if tab == "mint":
             # Setting the selection synchronously gets changed back somewhere in the event queue.

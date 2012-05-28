@@ -216,7 +216,7 @@ class BankMenuBar(wx.MenuBar):
         Publisher.sendMessage("quit")
 
     def onSelectCurrency(self, currencyIndex):
-        Publisher.sendMessage("user.currency_changed", currencyIndex)
+        Publisher.sendMessage("user.global_currency_changed", currencyIndex)
 
     def onClickFAQs(self, event):
         webbrowser.open("https://answers.launchpad.net/wxbanker/+faqs")

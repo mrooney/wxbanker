@@ -450,15 +450,15 @@ class PersistentStore:
         self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (account.Name, oldName))
         self.commitIfAppropriate()
         
-    def setGlobalCurrency(self, currencyIndex):
-        self.dbconn.cursor().execute('UPDATE meta SET value=? WHERE name="GlobalCurrency"', (currencyIndex,))	
-        self.commitIfAppropriate()
-        
-    def setCurrency(self, currencyIndex):
-        self.setGlobalCurrency(currencyIndex)
-        self.dbconn.cursor().execute('UPDATE accounts SET currency=?', (currencyIndex,))
-        self.commitIfAppropriate()
+    def setCurrency(self, currencyIndex, account=None):
+		if account:
+			self.dbconn.cursor().execute('UPDATE accounts SET currency=? WHERE id=?', (currencyIndex, account.ID))
+		else:
+		    #Since no account received, we are updating the global currency
+		    self.dbconn.cursor().execute('UPDATE meta SET value=? WHERE name="GlobalCurrency"', (currencyIndex,))	
+		self.commitIfAppropriate()
 
+        
     def __print__(self):
         cursor = self.dbconn.cursor()
         for account in cursor.execute("SELECT * FROM accounts").fetchall():
