@@ -32,7 +32,8 @@ import wx, datetime
 from wx.lib.pubsub import Publisher
 from wxbanker.ObjectListView import GroupListView, ColumnDefn, CellEditorRegistry
 from wxbanker import bankcontrols, tagtransactiondialog
-
+from wxbanker.currconvert import *
+from wxbanker.currencies import CurrencyList
 
 class TransactionOLV(GroupListView):
     EMPTY_MSG_NORMAL = _("No transactions entered.")
@@ -43,6 +44,7 @@ class TransactionOLV(GroupListView):
         self.LastSearch = None
         self.CurrentAccount = None
         self.BankController = bankController
+        self.GlobalCurrency = self.BankController.Model.Store.getGlobalCurrency()
 
         self.showGroups = False
         #WXTODO: figure out these (and the text color, or is that already?) from theme (LP: ???)
@@ -140,12 +142,24 @@ class TransactionOLV(GroupListView):
         if first is None:
             return
         
-        first._Total = first.Amount
+        conv = CurrencyConverter()
+        if not self.CurrentAccount:
+            #This means we are in 'All accounts' so we need to convert each total
+            # to the global currency
+            balance_currency = CurrencyList[self.GlobalCurrency]().GetCurrencyNick()
+        else:
+            #we are just viewing a single account
+            # balance currency = accounts currency
+            balance_currency = self.CurrentAccount.GetCurrency().GetCurrencyNick()
+        
+        transaction_currency = first.Parent.GetCurrency().GetCurrencyNick()
+        first._Total = conv.Convert(first.Amount, transaction_currency, balance_currency)
         
         b = first
         for i in range(1, len(self.GetObjects())):
             a, b = b, self.GetObjectAt(i)
-            b._Total = a._Total + b.Amount
+            transaction_currency = first.Parent.GetCurrency().GetCurrencyNick()
+            b._Total = a._Total + conv.Convert(b.Amount, transaction_currency, balance_currency)
     
     def renderDateIDTuple(self, pair):
         return str(pair[0])
@@ -166,7 +180,6 @@ class TransactionOLV(GroupListView):
         else:
             #this is a trnasaction, so it belogns to the 'Amount' column, render
             # it with its appropieate currency
-            # TODO, convert this value to base's currency?
             return value.RenderAmount()
     
     def renderEditDate(self, transaction):
@@ -425,6 +438,7 @@ class TransactionOLV(GroupListView):
         self.Refresh()
 
     def onCurrencyChanged(self, message):
+        self.GlobalCurrency = message.data
         # Refresh all the transaction objects, re-rendering the amounts.
         self.RefreshObjects()
         # The current likely changed the widths of the amount/total column.
