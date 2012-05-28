@@ -1,6 +1,7 @@
 import wx
 import datetime
 from wxbanker.plots import plotfactory
+from wx.lib.pubsub import Publisher
 
 try:
     try:
@@ -17,7 +18,7 @@ class CairoPlotPanelFactory(baseplot.BaseFactory):
         self.Plots = [CairoPlotPanel, CairoPlotPanelMonthly]
     
 class BaseCairoPlotPanel(wx.Panel, baseplot.BasePlot):
-    def __init__(self, bankController, parent):
+    def __init__(self, bankController, parent, plotSettings=None):
         wx.Panel.__init__(self, parent)
         baseplot.BasePlot.__init__(self)
         self.bankController = bankController
@@ -25,6 +26,14 @@ class BaseCairoPlotPanel(wx.Panel, baseplot.BasePlot):
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.data = None
         self.x_labels = None
+        self.plotSettings = plotSettings
+        
+        # watch if there's any currency change to repaint the plot.
+        Publisher.subscribe(self.currencyChanged, "controller.show_currency_nick_toggled")
+        Publisher.subscribe(self.currencyChanged, "currency_changed")
+    
+    def currencyChanged(self, message):
+        self.Refresh()
         
     def OnSize(self, event):
         self.Refresh()
@@ -33,6 +42,7 @@ class CairoPlotPanelMonthly(BaseCairoPlotPanel):
     NAME = _("monthly")
     
     def plotBalance(self, totals, plotSettings):
+        self.plotSettings = plotSettings
         model = self.bankController.Model
         transactions = model.GetTransactions()
         earnings = baseplot.BasePlot.plotMonthly(self, transactions, plotSettings['Months'])
@@ -56,6 +66,13 @@ class CairoPlotPanelMonthly(BaseCairoPlotPanel):
         
         cr = wx.lib.wxcairo.ContextFromDC(dc)
         size = self.GetClientSize()
+        
+        # try to format Y axes labels according to the account's currency.
+        if self.plotSettings['Account']:
+            value_formatter = lambda s: self.plotSettings['Account'].float2str(s)
+        else:
+            value_formatter = lambda s: self.bankController.Model.float2str(s)
+            
         cairoplot.vertical_bar_plot(
             cr.get_target(),
             data = self.data,
@@ -65,7 +82,7 @@ class CairoPlotPanelMonthly(BaseCairoPlotPanel):
             colors = ["green"],
             #series_legend = True,
             display_values = True,
-            value_formatter = lambda s: self.bankController.Model.float2str(s),
+            value_formatter = value_formatter,
             #x_title=_("Earnings"),
             #y_title=_("Month"),
             rounded_corners = True,
@@ -76,6 +93,7 @@ class CairoPlotPanel(BaseCairoPlotPanel):
     NAME = _("balance")
     
     def plotBalance(self, totals, plotSettings, xunits="Days"):
+        self.plotSettings = plotSettings
         amounts, dates, strdates, trendable = baseplot.BasePlot.plotBalance(self, totals, plotSettings, xunits)
         data = [(i, total) for i, total in enumerate(amounts)]
         self.data = {
@@ -107,6 +125,13 @@ class CairoPlotPanel(BaseCairoPlotPanel):
         
         cr = wx.lib.wxcairo.ContextFromDC(dc)
         size = self.GetClientSize()
+        
+         # try to format Y axes labels according to the account's currency.
+        if self.plotSettings['Account']:
+            y_formatter = lambda s: self.plotSettings['Account'].float2str(s)
+        else:
+            y_formatter = lambda s: self.bankController.Model.float2str(s)
+        
         cairoplot.scatter_plot(
             cr.get_target(),
             data = self.data,
@@ -118,7 +143,7 @@ class CairoPlotPanel(BaseCairoPlotPanel):
             series_colors = ["green", "blue"],
             series_legend = True,
             x_labels=self.x_labels,
-            y_formatter=lambda s: self.bankController.Model.float2str(s),
+            y_formatter=y_formatter,
             x_title=_("Time"),
             y_title=_("Balance"),
         )
