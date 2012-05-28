@@ -53,7 +53,7 @@ class PersistentStore:
     """
     def __init__(self, path, autoSave=True):
         self.Subscriptions = []
-        self.Version = 11
+        self.Version = 12
         self.Path = path
         self.AutoSave = False
         self.Dirty = False
@@ -288,6 +288,9 @@ class PersistentStore:
             # This is tested by testOrphanedTransactionsAreDeleted (dbupgradetests.DBUpgradeTest)
             # Also takes care of LP #249954 without the explicit need to defensively remove on any account creation.
             self.cleanOrphanedTransactions()
+        elif fromVer == 11:
+            # globalCurrency entry
+            cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('GlobalCurrency', 0))
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
         
@@ -442,8 +445,13 @@ class PersistentStore:
     def renameAccount(self, oldName, account):
         self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (account.Name, oldName))
         self.commitIfAppropriate()
-
+        
+    def setGlobalCurrency(self, currencyIndex):
+        self.dbconn.cursor().execute('UPDATE meta SET value=? WHERE name="GlobalCurrency"', (currencyIndex,))	
+        self.commitIfAppropriate()
+        
     def setCurrency(self, currencyIndex):
+        self.setGlobalCurrency(currencyIndex)
         self.dbconn.cursor().execute('UPDATE accounts SET currency=?', (currencyIndex,))
         self.commitIfAppropriate()
 
