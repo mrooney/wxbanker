@@ -66,7 +66,7 @@ class TransactionOLV(GroupListView):
         self.SetColumns([
             ColumnDefn(_("Date"), valueGetter=self.getDateAndIDOf, valueSetter=self.setDateOf, stringConverter=self.renderDateIDTuple, editFormatter=self.renderEditDate, width=dateWidth),
             ColumnDefn(_("Description"), valueGetter="Description", isSpaceFilling=True, editFormatter=self.renderEditDescription),
-            ColumnDefn(_("Amount"), "right", valueGetter="Amount", stringConverter=self.renderFloat, editFormatter=self.renderEditFloat),
+            ColumnDefn(_("Amount"), "right", valueGetter=self.getAmount, stringConverter=self.renderFloat, editFormatter=self.renderEditFloat),
             ColumnDefn(_("Balance"), "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
         ])
         # Our custom hack in OLV.py:2017 will render amount floats appropriately as %.2f when editing.
@@ -91,7 +91,7 @@ class TransactionOLV(GroupListView):
 
         for callback, topic in self.Subscriptions:
             Publisher.subscribe(callback, topic)
-
+        
     def SetObjects(self, objs, *args, **kwargs):
         """
         Override the default SetObjects to properly refresh the auto-size,
@@ -149,14 +149,25 @@ class TransactionOLV(GroupListView):
     
     def renderDateIDTuple(self, pair):
         return str(pair[0])
-    
-    def renderFloat(self, floatVal):
-        if self.CurrentAccount:
-            return self.CurrentAccount.float2str(floatVal)
+  
+    def getAmount(self, obj):
+        #Return the whole transaction/float since we need to use its
+        #renderAmount method to support multiple currencies.
+        return obj  
+        
+    def renderFloat(self, value):
+        if isinstance(value, float):
+            #this is a 'balance' column, its ok to use the bank model's float2str
+            # as long as we'r not in an account.
+            if self.CurrentAccount:
+                return self.CurrentAccount.float2str(value)
+            else:
+                return self.BankController.Model.float2str(value)
         else:
-            #WXTODO: fix me, this function should be given the object which should have a float2str method
-            # so that for multiple currencies they can be displayed differently when viewing all.
-            return self.BankController.Model.float2str(floatVal)
+            #this is a trnasaction, so it belogns to the 'Amount' column, render
+            # it with its appropieate currency
+            # TODO, convert this value to base's currency?
+            return value.RenderAmount()
     
     def renderEditDate(self, transaction):
         return str(transaction.Date)
