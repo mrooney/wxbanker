@@ -167,22 +167,17 @@ class BankModel(ORMKeyValueObject):
         Handle representing floats as strings for non
         account-specific amounts, such as totals.
         """
-        if len(self.Accounts) == 0:
-            currency = currencies.CurrencyList[0]()
-        else:
-            currency = self.Accounts[0].Currency
-
+        currencyID = self.Store.getGlobalCurrency()
+        currency = currencies.CurrencyList[currencyID]()
         return currency.float2str(*args, **kwargs)
 
-    def setCurrency(self, currencyIndex):
-        self.Store.setCurrency(currencyIndex)
-        for account in self.Accounts:
-            account.Currency = currencyIndex
+    def setGlobalCurrency(self, currencyIndex):
+        self.Store.setGlobalCurrency(currencyIndex)
         Publisher.sendMessage("currency_changed", currencyIndex)
 
     def onCurrencyChanged(self, message):
         currencyIndex = message.data
-        self.setCurrency(currencyIndex)
+        self.setGlobalCurrency(currencyIndex)
         
     def onAccountChanged(self, message):
         account = message.data

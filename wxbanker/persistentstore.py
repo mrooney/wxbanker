@@ -209,6 +209,10 @@ class PersistentStore:
         cursor.execute('CREATE TABLE meta (id INTEGER PRIMARY KEY, name VARCHAR(255), value VARCHAR(255))')
         cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('VERSION', '2'))
 
+    def getGlobalCurrency(self):
+        results = self.dbconn.cursor().execute('SELECT value FROM meta WHERE name="GlobalCurrency"').fetchall()
+        return int(results[0][0])
+
     def getMeta(self):
         try:
             results = self.dbconn.cursor().execute('SELECT * FROM meta').fetchall()
