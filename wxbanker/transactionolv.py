@@ -84,6 +84,7 @@ class TransactionOLV(GroupListView):
             (self.onTransactionAdded, "transaction.created"),
             (self.onTransactionsRemoved, "transactions.removed"),
             (self.onCurrencyChanged, "currency_changed"),
+            (self.onShowCurrencyNickToggled, "controller.show_currency_nick_toggled"),
             (self.updateTotals, "ormobject.updated.Transaction.Amount"),
             (self.onTransactionDateUpdated, "ormobject.updated.Transaction.Date"),
         )
@@ -419,7 +420,15 @@ class TransactionOLV(GroupListView):
         self.sizeAmounts()
         # Now we need to adjust the description width so we don't have a horizontal scrollbar.
         self.AutoSizeColumns()
-
+        
+    def onShowCurrencyNickToggled(self, message):
+        # Refresh all the transaction objects, re-rendering the amounts.
+        self.RefreshObjects()
+        # The current likely changed the widths of the amount/total column.
+        self.sizeAmounts()
+        # Now we need to adjust the description width so we don't have a horizontal scrollbar.
+        self.AutoSizeColumns()
+        
     def __del__(self):
         for callback, topic in self.Subscriptions:
             Publisher.unsubscribe(callback)

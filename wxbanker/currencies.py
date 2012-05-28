@@ -69,7 +69,7 @@ class BaseCurrency(object):
     def GetCurrencyNick(self):
         return self.LOCALECONV["int_curr_symbol"].strip()
 
-    def float2str(self, val, just=0):
+    def float2str(self, val, just=0, withNick=True):
         """Formats float values as currency strings according to the currency settings in self.LOCALECONV"""
         # Don't show negative zeroes!
         if abs(val) < .001:
@@ -89,6 +89,9 @@ class BaseCurrency(object):
         if not isinstance(s, unicode):
             s = unicode(s, locale.getlocale()[1])
 
+        if withNick:
+            s = self.GetCurrencyNick() + " " + s
+            
         # Justify as appropriate.
         s = s.rjust(just)
 

@@ -32,7 +32,7 @@ class Account(ORMObject):
     ORM_TABLE = "accounts"
     ORM_ATTRIBUTES = ["Name", "Balance", "MintId"]
     
-    def __init__(self, store, aID, name, currency=0, balance=0.0, mintId=None):
+    def __init__(self, store, aID, name, currency=0, balance=0.0, mintId=None, currNick=False):
         ORMObject.__init__(self)
         self.IsFrozen = True
         self.Store = store
@@ -45,6 +45,7 @@ class Account(ORMObject):
         self.Currency = currency or 0
         self.Balance = balance or 0.0
         self.MintId = mintId
+        self.ShowCurrencyNick = currNick or False
         self.IsFrozen = False
 
         Publisher.subscribe(self.onTransactionAmountChanged, "ormobject.updated.Transaction.Amount")
@@ -329,7 +330,7 @@ class Account(ORMObject):
             debug.debug("Ignoring transaction because I am %s: %s" % (self.Name, transaction))
 
     def float2str(self, *args, **kwargs):
-        return self.Currency.float2str(*args, **kwargs)
+        return self.Currency.float2str(withNick=self.ShowCurrencyNick, *args, **kwargs)
 
     def __cmp__(self, other):
         return cmp(self.Name, other.Name)

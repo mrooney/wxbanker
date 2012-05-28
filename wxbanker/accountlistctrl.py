@@ -116,6 +116,7 @@ class AccountListCtrl(wx.Panel):
         Publisher.subscribe(self.onAccountAdded, "account.created")
         Publisher.subscribe(self.onCurrencyChanged, "currency_changed")
         Publisher.subscribe(self.onShowZeroToggled, "controller.showzero_toggled")
+        Publisher.subscribe(self.onShowCurrencyNickToggled, "controller.show_currency_nick_toggled")
         Publisher.subscribe(self.onAccountChanged, "user.account changed")
         Publisher.subscribe(self.onSelectNextAccount, "user.next account")
         Publisher.subscribe(self.onSelectPreviousAccount, "user.previous account")
@@ -165,13 +166,22 @@ class AccountListCtrl(wx.Panel):
             mintCtrl.SetBitmap(wx.ArtProvider.GetBitmap("wxART_%s" % bitmapName))
             mintCtrl.SetToolTipString(tooltip)
 
-    def onCurrencyChanged(self, message):
+    def refreshBalances(self):
         # Update all the accounts.
         for account, textCtrl in zip(self.accountObjects, self.totalTexts):
             textCtrl.Label = account.float2str(account.Balance)
         # Update the total text.
         self.updateGrandTotal()
         self.Parent.Layout()
+        
+    def onCurrencyChanged(self, message):
+        self.refreshBalances()
+        
+    def onShowCurrencyNickToggled(self, message):
+        val = message.data
+        for account in self.Model.Accounts:
+            account.ShowCurrencyNick = val
+        self.refreshBalances()
         
     def onToggleMintIntegration(self, message):
         enabled = message.data
@@ -326,6 +336,10 @@ class AccountListCtrl(wx.Panel):
                 break
             index += 1
 
+        # Check if we should set account to show currency NIcks,
+        # wouldn't it be better to have per-account show-currency-nick setting?
+        account.ShowCurrencyNick = self.bankController.ShowCurrencyNick
+        
         self._InsertItem(index, account)
 
         if select:
@@ -427,7 +441,8 @@ class AccountListCtrl(wx.Panel):
         self._UpdateMintStatuses()
 
     def updateGrandTotal(self):
-        self.totalText.Label = self.Model.float2str( self.Model.Balance )
+        shownick = self.bankController.ShowCurrencyNick
+        self.totalText.Label = self.Model.float2str( self.Model.Balance, withNick=shownick )
 
     def onAddButton(self, event):
         self.showEditCtrl()

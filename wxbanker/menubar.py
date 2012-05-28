@@ -39,6 +39,7 @@ class BankMenuBar(wx.MenuBar):
     ID_REQUESTFEATURE = wx.NewId()
     ID_TRANSLATE = wx.NewId()
     IDS_CURRENCIES = [wx.NewId() for i in range(len(CurrencyStrings))]
+    ID_SHOWCURRENCYNICK = wx.NewId()
     ID_MINTINTEGRATION = wx.NewId()
     ID_REQUESTCURRENCY = wx.NewId()
     ID_IMPORT_CSV = wx.NewId()
@@ -49,6 +50,7 @@ class BankMenuBar(wx.MenuBar):
         self.bankController = bankController
         autosave = bankController.AutoSave
         showZero = bankController.ShowZeroBalanceAccounts
+        showcurrnick = bankController.ShowCurrencyNick
         self.currencyStrings = CurrencyStrings[:]
 
         # File menu.
@@ -97,6 +99,8 @@ class BankMenuBar(wx.MenuBar):
 
         settingsMenu.AppendItem(currencyMenu)
         
+        self.showCurrencyNickItem = settingsMenu.AppendCheckItem(self.ID_SHOWCURRENCYNICK, _("Show currencies nick"), _("Show currencies nick before quantities"))
+
         self.mintEnabledItem = settingsMenu.AppendCheckItem(self.ID_MINTINTEGRATION, _("Integrate with Mint.com"), _("Sync account balances with an existing Mint.com account"))
 
         # Help menu.
@@ -142,8 +146,10 @@ class BankMenuBar(wx.MenuBar):
         helpMenu.Bind(wx.EVT_MENU, self.onClickAbout)
 
         self.toggleAutoSave(autosave)
+        self.toggleShowCurrencyNick(showcurrnick)
         Publisher.subscribe(self.onAutoSaveToggled, "controller.autosave_toggled")
         Publisher.subscribe(self.onShowZeroToggled, "controller.showzero_toggled")
+        Publisher.subscribe(self.onShowCurrencyNickToggled, "controller.show_currency_nick_toggled")
         # Subscribe to a Mint update event, which tells us the checkbox should be enabled after startup.
         Publisher.subscribe(self.onMintUpdate, "mint.updated")
 
@@ -170,6 +176,7 @@ class BankMenuBar(wx.MenuBar):
                 self.ID_EXPORT_CSV: self.onClickExportCsv,
                 wx.ID_ABOUT: self.onClickAbout,
                 self.ID_REQUESTCURRENCY: self.onClickRequestCurrency,
+                self.ID_SHOWCURRENCYNICK: self.onClickShowCurrencyNick,
                 self.ID_MINTINTEGRATION: self.onClickMintIntegration,
             }.get(ID, lambda e: e.Skip())
 
@@ -190,6 +197,12 @@ class BankMenuBar(wx.MenuBar):
         
     def toggleShowZero(self, showzero):
         self.showZeroMenuItem.Check(showzero)
+
+    def onShowCurrencyNickToggled(self, message):
+        self.toggleShowCurrencyNick(message.data)
+
+    def toggleShowCurrencyNick(self, showcurr):
+        self.showCurrencyNickItem.Check(showcurr)
         
     def toggleMintEnabled(self, enabled):
         self.mintEnabledItem.Check(enabled)
@@ -236,6 +249,9 @@ class BankMenuBar(wx.MenuBar):
     def onClickRequestCurrency(self, event):
         webbrowser.open("https://answers.launchpad.net/wxbanker/+faq/477")
         
+    def onClickShowCurrencyNick(self, event):
+        Publisher.sendMessage("user.show_currency_nick_toggled", event.Checked())
+
     def onClickMintIntegration(self, event):
         Publisher.sendMessage("user.mint.toggled", event.Checked())
 

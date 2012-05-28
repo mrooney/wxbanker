@@ -29,6 +29,7 @@ class Controller(object):
     def __init__(self, path=None):
         self._AutoSave = True
         self._ShowZeroBalanceAccounts = True
+        self._ShowCurrencyNick = True
         self.Models = []
         
         self.InitConfig()
@@ -36,6 +37,7 @@ class Controller(object):
 
         Publisher.subscribe(self.onAutoSaveToggled, "user.autosave_toggled")
         Publisher.subscribe(self.onShowZeroToggled, "user.showzero_toggled")
+        Publisher.subscribe(self.onShowCurrencyNickToggled, "user.show_currency_nick_toggled")
         Publisher.subscribe(self.onSaveRequest, "user.saved")
         
     def MigrateIfFound(self, fromPath, toPath):
@@ -82,10 +84,13 @@ class Controller(object):
             config.WriteBool("AUTO-SAVE", True)
         if not config.HasEntry("HIDE_ZERO_BALANCE_ACCOUNTS"):
             config.WriteBool("HIDE_ZERO_BALANCE_ACCOUNTS", False)
+        if not config.HasEntry("SHOW_CURRENCY_NICK"):
+            config.WriteBool("SHOW_CURRENCY_NICK", True)
 
         # Set the auto-save option as appropriate.
         self.AutoSave = config.ReadBool("AUTO-SAVE")
         self.ShowZeroBalanceAccounts = not config.ReadBool("HIDE_ZERO_BALANCE_ACCOUNTS")
+        self.ShowCurrencyNick = config.ReadBool("SHOW_CURRENCY_NICK")
 
     def onAutoSaveToggled(self, message):
         val = message.data
@@ -95,6 +100,10 @@ class Controller(object):
         val = message.data
         self.ShowZeroBalanceAccounts = val
 
+    def onShowCurrencyNickToggled(self, message):
+        val = message.data
+        self.ShowCurrencyNick = val
+        
     def onSaveRequest(self, message):
         self.Model.Save()
 
@@ -120,6 +129,14 @@ class Controller(object):
         self._ShowZeroBalanceAccounts = val
         wx.Config.Get().WriteBool("HIDE_ZERO_BALANCE_ACCOUNTS", not val)
         Publisher.sendMessage("controller.showzero_toggled", val)
+
+    def GetShowCurrencyNick(self):
+        return self._ShowCurrencyNick
+    
+    def SetShowCurrencyNick(self, val):
+        self._ShowCurrencyNick = val
+        wx.Config.Get().WriteBool("SHOW_CURRENCY_NICK", val)
+        Publisher.sendMessage("controller.show_currency_nick_toggled", val)
 
     def LoadPath(self, path, use=False):
         if path is None:
@@ -153,3 +170,4 @@ class Controller(object):
 
     AutoSave = property(GetAutoSave, SetAutoSave)
     ShowZeroBalanceAccounts = property(GetShowZero, SetShowZero)
+    ShowCurrencyNick = property(GetShowCurrencyNick, SetShowCurrencyNick)
