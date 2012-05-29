@@ -68,7 +68,7 @@ class TransactionOLV(GroupListView):
         self.SetColumns([
             ColumnDefn(_("Date"), valueGetter=self.getDateAndIDOf, valueSetter=self.setDateOf, stringConverter=self.renderDateIDTuple, editFormatter=self.renderEditDate, width=dateWidth),
             ColumnDefn(_("Description"), valueGetter="Description", isSpaceFilling=True, editFormatter=self.renderEditDescription),
-            ColumnDefn(_("Amount"), "right", valueGetter=self.getAmount, stringConverter=self.renderFloat, editFormatter=self.renderEditFloat),
+            ColumnDefn(_("Amount"), "right", valueGetter=self.getAmount, valueSetter=self.setAmount, stringConverter=self.renderFloat, editFormatter=self.renderEditFloat),
             ColumnDefn(_("Balance"), "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
         ])
         # Our custom hack in OLV.py:2017 will render amount floats appropriately as %.2f when editing.
@@ -127,6 +127,12 @@ class TransactionOLV(GroupListView):
 
     def setDateOf(self, transaction, date):
         transaction.Date = date
+        self.Freeze()
+        self.SortBy(self.SORT_COL)
+        self.Thaw()
+        
+    def setAmount(self, transaction, amount):
+        transaction.Amount = amount
         self.Freeze()
         self.SortBy(self.SORT_COL)
         self.Thaw()
