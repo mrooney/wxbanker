@@ -28,6 +28,9 @@ from wxbanker.bankobjects.ormobject import ORMKeyValueObject
 from wxbanker.bankobjects.accountlist import AccountList
 from wxbanker.mint.api import Mint
 
+from wxbanker.currconvert import *
+from wxbanker.currencies import CurrencyList
+
 class BankModel(ORMKeyValueObject):
     ORM_TABLE = "meta"
     ORM_ATTRIBUTES = ["LastAccountId", "MintEnabled"]
@@ -85,13 +88,16 @@ class BankModel(ORMKeyValueObject):
         """
         if account is None:
             transactions = self.GetTransactions()
+            currency = CurrencyList[self.GlobalCurrency]().GetCurrencyNick()
         else:
             transactions = account.Transactions[:]
+            currency = account.GetCurrency().GetCurrencyNick()
         transactions.sort()
         
         if transactions == []:
             return []
         
+        conv = CurrencyConverter()
         startingBalance = 0.0
         # Crop transactions around the date range, if supplied.
         if daterange:
@@ -105,7 +111,8 @@ class BankModel(ORMKeyValueObject):
                 if t.Date > endDate:
                     endi = i
                     break
-                total += t.Amount
+                t_currency = t.Parent.GetCurrency().GetCurrencyNick()
+                total += conv.Convert(t.Amount, t_currency, currency)
                 
             transactions = transactions[starti:endi]
         else:
@@ -127,7 +134,8 @@ class BankModel(ORMKeyValueObject):
         balance = startingBalance
         while currDate <= endDate:
             while tindex < len(transactions) and transactions[tindex].Date <= currDate:
-                balance += transactions[tindex].Amount
+                t_currency = transactions[tindex].Parent.GetCurrency().GetCurrencyNick()
+                balance += conv.Convert(transactions[tindex].Amount, t_currency, currency)
                 tindex += 1
             totals.append([currDate, balance])
             currDate += onedaydelta
