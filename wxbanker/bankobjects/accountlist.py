@@ -21,9 +21,6 @@
 from wx.lib.pubsub import Publisher
 from wxbanker import bankexceptions
 
-from wxbanker.currencies import CurrencyList
-from wxbanker.currconvert import *
-
 
 class AccountList(list):
     def __init__(self, store):
@@ -47,12 +44,10 @@ class AccountList(list):
         return allRecurrings
 
     def GetBalance(self):
-        conv = CurrencyConverter()
-        totalCurrency = CurrencyList[self.Store.getGlobalCurrency()]().GetCurrencyNick()
+        totalCurrency = self.Store.getGlobalCurrency()
         total = 0
         for account in self:
-            accountCurrency = account.GetCurrency().GetCurrencyNick()
-            total = total + conv.Convert(account.Balance, accountCurrency, totalCurrency)
+            total = total + account.GetCurrentBalance(totalCurrency)
         return total
     
     def GetById(self, theId):

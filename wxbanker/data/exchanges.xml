@@ -6,7 +6,7 @@
 	</gesmes:Sender>
 	<Cube>
 		<Cube time='2009-02-25'>
-			<Cube currency='USD' rate='1.2795'/>
+			<Cube currency='USD' rate='1.2489'/>
 			<Cube currency='JPY' rate='123.76'/>
 			<Cube currency='BGN' rate='1.9558'/>
 			<Cube currency='CZK' rate='28.350'/>
@@ -32,7 +32,7 @@
 			<Cube currency='IDR' rate='15385.99'/>
 			<Cube currency='INR' rate='63.7700'/>
 			<Cube currency='KRW' rate='1938.03'/>
-			<Cube currency='MXN' rate='18.9687'/>
+			<Cube currency='MXN' rate='17.3842235'/>
 			<Cube currency='MYR' rate='4.6951'/>
 			<Cube currency='NZD' rate='2.4847'/>
 			<Cube currency='PHP' rate='61.610'/>
