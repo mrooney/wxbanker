@@ -32,8 +32,8 @@ import wx, datetime
 from wx.lib.pubsub import Publisher
 from wxbanker.ObjectListView import GroupListView, ColumnDefn, CellEditorRegistry
 from wxbanker import bankcontrols, tagtransactiondialog
-from wxbanker.currconvert import *
-from wxbanker.currencies import CurrencyList
+
+from wxbanker.currencies import GetCurrencyInt
 
 class TransactionOLV(GroupListView):
     EMPTY_MSG_NORMAL = _("No transactions entered.")
@@ -148,24 +148,21 @@ class TransactionOLV(GroupListView):
         if first is None:
             return
         
-        conv = CurrencyConverter()
         if not self.CurrentAccount:
             #This means we are in 'All accounts' so we need to convert each total
             # to the global currency
-            balance_currency = CurrencyList[self.GlobalCurrency]().GetCurrencyNick()
+            balance_currency = self.GlobalCurrency
         else:
             #we are just viewing a single account
             # balance currency = accounts currency
-            balance_currency = self.CurrentAccount.GetCurrency().GetCurrencyNick()
+            balance_currency = GetCurrencyInt(self.CurrentAccount.GetCurrency())
         
-        transaction_currency = first.Parent.GetCurrency().GetCurrencyNick()
-        first._Total = conv.Convert(first.Amount, transaction_currency, balance_currency)
+        first._Total = first.GetAmount(balance_currency)
         
         b = first
         for i in range(1, len(self.GetObjects())):
             a, b = b, self.GetObjectAt(i)
-            transaction_currency = first.Parent.GetCurrency().GetCurrencyNick()
-            b._Total = a._Total + conv.Convert(b.Amount, transaction_currency, balance_currency)
+            b._Total = a._Total + b.GetAmount(balance_currency)
     
     def renderDateIDTuple(self, pair):
         return str(pair[0])
