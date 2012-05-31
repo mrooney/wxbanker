@@ -28,8 +28,7 @@ from wxbanker.bankobjects.ormobject import ORMKeyValueObject
 from wxbanker.bankobjects.accountlist import AccountList
 from wxbanker.mint.api import Mint
 
-from wxbanker.currconvert import *
-from wxbanker.currencies import CurrencyList
+from wxbanker.currencies import GetCurrencyInt
 
 class BankModel(ORMKeyValueObject):
     ORM_TABLE = "meta"
@@ -88,16 +87,15 @@ class BankModel(ORMKeyValueObject):
         """
         if account is None:
             transactions = self.GetTransactions()
-            currency = CurrencyList[self.GlobalCurrency]().GetCurrencyNick()
+            currency = self.GlobalCurrency
         else:
             transactions = account.Transactions[:]
-            currency = account.GetCurrency().GetCurrencyNick()
+            currency = GetCurrencyInt(account.GetCurrency())
         transactions.sort()
         
         if transactions == []:
             return []
         
-        conv = CurrencyConverter()
         startingBalance = 0.0
         # Crop transactions around the date range, if supplied.
         if daterange:
@@ -111,8 +109,7 @@ class BankModel(ORMKeyValueObject):
                 if t.Date > endDate:
                     endi = i
                     break
-                t_currency = t.Parent.GetCurrency().GetCurrencyNick()
-                total += conv.Convert(t.Amount, t_currency, currency)
+                total += t.GetAmount(currency)
                 
             transactions = transactions[starti:endi]
         else:
@@ -134,8 +131,7 @@ class BankModel(ORMKeyValueObject):
         balance = startingBalance
         while currDate <= endDate:
             while tindex < len(transactions) and transactions[tindex].Date <= currDate:
-                t_currency = transactions[tindex].Parent.GetCurrency().GetCurrencyNick()
-                balance += conv.Convert(transactions[tindex].Amount, t_currency, currency)
+                balance += transactions[tindex].GetAmount(currency)
                 tindex += 1
             totals.append([currDate, balance])
             currDate += onedaydelta
