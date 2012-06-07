@@ -27,7 +27,7 @@ from wxbanker.bankobjects.tag import Tag, EmptyTagException
 from wxbanker import debug
 
 from wxbanker.currencies import CurrencyList
-from wxbanker.currconvert import *
+from wxbanker.currconvert import CurrencyConverter
 
 class Transaction(ORMObject):
     """

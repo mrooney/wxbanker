@@ -27,7 +27,7 @@ from wxbanker import currencies, bankexceptions, debug
 from wxbanker.mint.api import Mint
 
 from wxbanker.currencies import CurrencyList
-from wxbanker.currconvert import *
+from wxbanker.currconvert import CurrencyConverter
 
 import datetime
 
