@@ -51,6 +51,7 @@ def createFromLocale(currencyName):
     marker = u"# " + u"__CURRENCY_CLASS_NAME__"
     currencies = currencies.replace(marker, currency_class_name+u",\n    "+marker)
     open(__file__, "w").write(currencies.encode("utf8"))
+    # TODO: open and write currency tests assertion
     #currencytests = open(
 
 class BaseCurrency(object):
