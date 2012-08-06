@@ -28,6 +28,7 @@ TODO (for feature parity):
 - handle batch events at UI level
 """
 
+import threading
 import wx, datetime
 from wx.lib.pubsub import Publisher
 from wxbanker.ObjectListView import GroupListView, ColumnDefn, CellEditorRegistry
@@ -166,7 +167,7 @@ class TransactionOLV(GroupListView):
     def renderEditDescription(self, modelObj):
         return modelObj._Description
 
-    def sizeAmounts(self):
+    def _sizeAmounts(self):
         """Set the width of the Amount and Total columns based on the approximated widest value."""
         transactions = self.GetObjects()
         # If there aren't any transactions, there's nothing to do.
@@ -181,7 +182,10 @@ class TransactionOLV(GroupListView):
             header = _({"_Total": "Balance"}.get(attr, attr))
             # Take the max of the two as well as the column header width, as we need to at least display that.
             widestWidth = max([self.GetTextExtent(header)[0]] + [self.GetTextExtent(self.renderFloat(getattr(t, attr)))[0] for t in (high, low)])
-            self.SetColumnFixedWidth(self.COL_AMOUNT+i, widestWidth + 10)
+            wx.CallAfter(self.SetColumnFixedWidth, *(self.COL_AMOUNT+i, widestWidth + 10))
+
+    def sizeAmounts(self):
+        threading.Thread(target=self._sizeAmounts).start()
 
     def setAccount(self, account, scrollToBottom=True):
         self.CurrentAccount = account
@@ -373,6 +377,7 @@ class TransactionOLV(GroupListView):
             self.updateTotals()
             #WXTODO: Perhaps get the actual position and scroll to that, it may not be last.
             self.ensureVisible(-1)
+            self.sizeAmounts()
 
     def onTagSearch(self, tag):
         Publisher.sendMessage("SEARCH.EXTERNAL", str(tag))
