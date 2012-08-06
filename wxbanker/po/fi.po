@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2010-08-10 00:01-0700\n"
-"PO-Revision-Date: 2010-08-14 14:54+0000\n"
+"POT-Creation-Date: 2010-10-04 03:01-0700\n"
+"PO-Revision-Date: 2011-10-28 12:48+0000\n"
 "Last-Translator: Jiri Grönroos <Unknown>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-08-15 06:13+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2011-10-29 05:13+0000\n"
+"X-Generator: Launchpad (build 14197)\n"
 
 #: wxbanker/summarytab.py:30
 msgid "Trend Degree"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: wxbanker/summarytab.py:30
 msgid "Months"
-msgstr ""
+msgstr "Kuukausia"
 
 #: wxbanker/summarytab.py:48
 msgid "From"
@@ -38,114 +38,112 @@ msgstr ""
 msgid "Graph"
 msgstr "Kuvaaja"
 
-#: wxbanker/csvimportframe.py:28
+#: wxbanker/csvimportframe.py:30
 msgid "CSV import"
 msgstr "CSV-tuonti"
 
-#: wxbanker/csvimportframe.py:62
+#: wxbanker/csvimportframe.py:65
 msgid "Target account"
 msgstr "Kohdetili"
 
-#: wxbanker/csvimportframe.py:77 wxbanker/csvimportframe.py:79
+#: wxbanker/csvimportframe.py:77 wxbanker/csvimportframe.py:78
+#: wxbanker/accountconfigdialog.py:59 wxbanker/accountconfigdialog.py:228
+#: wxbanker/tagtransactiondialog.py:43
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: wxbanker/csvimportframe.py:81 wxbanker/csvimportframe.py:82
 msgid "Import"
 msgstr "Tuo"
 
-#: wxbanker/csvimportframe.py:89
+#: wxbanker/csvimportframe.py:104
 msgid "CSV columns mapping"
 msgstr ""
 
-#: wxbanker/csvimportframe.py:98 wxbanker/bankcontrols.py:52
-#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:63
+#: wxbanker/csvimportframe.py:113 wxbanker/bankcontrols.py:52
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:66
 msgid "Date"
 msgstr "Päivämäärä"
 
-#: wxbanker/csvimportframe.py:101
+#: wxbanker/csvimportframe.py:116
 msgid "Date format"
 msgstr "Päivämäärän muoto"
 
-#: wxbanker/csvimportframe.py:106 wxbanker/newtransactionctrl.py:249
-#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:65
+#: wxbanker/csvimportframe.py:121 wxbanker/newtransactionctrl.py:249
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:68
 msgid "Amount"
 msgstr "Määrä"
 
-#: wxbanker/csvimportframe.py:108
+#: wxbanker/csvimportframe.py:123
 msgid "Decimal separator"
 msgstr "Desimaalierotin"
 
-#: wxbanker/csvimportframe.py:112 wxbanker/newtransactionctrl.py:248
-#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:64
+#: wxbanker/csvimportframe.py:127 wxbanker/newtransactionctrl.py:248
+#: wxbanker/searchctrl.py:44 wxbanker/transactionolv.py:67
 msgid "Description"
 msgstr "Kuvaus"
 
-#: wxbanker/csvimportframe.py:119
+#: wxbanker/csvimportframe.py:134
 msgid "CSV file settings"
 msgstr "CSV-tiedoston asetukset"
 
-#: wxbanker/csvimportframe.py:128
+#: wxbanker/csvimportframe.py:144
 msgid "Lines to skip"
 msgstr "Ohitettavat rivit"
 
-#: wxbanker/csvimportframe.py:131
+#: wxbanker/csvimportframe.py:147
 msgid "Encoding"
 msgstr "Merkistökoodaus"
 
-#: wxbanker/csvimportframe.py:135
+#: wxbanker/csvimportframe.py:151
 msgid "Column delimiter"
 msgstr "Sarakkeiden erotin"
 
-#: wxbanker/csvimportframe.py:146
+#: wxbanker/csvimportframe.py:162
 msgid "File to import"
 msgstr "Tuotava tiedosto"
 
-#: wxbanker/csvimportframe.py:151 wxbanker/csvimportframe.py:153
-#: wxbanker/main.py:100
-msgid "Preview"
-msgstr "Esikatsele"
-
-#: wxbanker/csvimportframe.py:166
+#: wxbanker/csvimportframe.py:176
 msgid "CSV profiles"
 msgstr "CSV-profiilit"
 
-#: wxbanker/csvimportframe.py:171
+#: wxbanker/csvimportframe.py:181
 msgid "Python simplejson library is needed for csv profile loading/saving."
 msgstr ""
+"CSV-profiilin lataus ja tallennus vaativat Python-kirjasto simplejsonin."
 
-#: wxbanker/csvimportframe.py:181
-msgid "Load"
-msgstr "Lataa"
-
-#: wxbanker/csvimportframe.py:186 wxbanker/accountconfigdialog.py:58
+#: wxbanker/csvimportframe.py:192 wxbanker/accountconfigdialog.py:58
 #: wxbanker/accountconfigdialog.py:227
 msgid "Save"
 msgstr "Tallenna"
 
-#: wxbanker/csvimportframe.py:191 wxbanker/accountconfigdialog.py:226
-msgid "Delete"
+#: wxbanker/csvimportframe.py:198
+msgid "Remove"
 msgstr "Poista"
 
-#: wxbanker/csvimportframe.py:245
+#: wxbanker/csvimportframe.py:252
 #, python-format
 msgid "The file encoding does not seem to be '%s'."
 msgstr "Tiedoston merkistökoodaus ei vaikuta olevan '%s'."
 
-#: wxbanker/csvimportframe.py:252
+#: wxbanker/csvimportframe.py:257
 msgid "An error ocurred during the csv file import."
 msgstr "CSV-tuonnin aikana tapahtui virhe."
 
-#: wxbanker/csvimportframe.py:253
+#: wxbanker/csvimportframe.py:258
 msgid "CSV import error"
 msgstr "CSV-tuontivirhe"
 
-#: wxbanker/csvimportframe.py:303
+#: wxbanker/csvimportframe.py:300
 #, python-format
 msgid "Profile with the name '%s' exists already. Overwrite it ?"
 msgstr "Profiili nimeltä '%s' on jo olemassa. Korvataanko se?"
 
-#: wxbanker/csvimportframe.py:304
+#: wxbanker/csvimportframe.py:301
 msgid "Overwrite profile ?"
 msgstr "Korvataanko profiili?"
 
-#: wxbanker/csvimportframe.py:318
+#: wxbanker/csvimportframe.py:315
 msgid "Select file and click \"Preview\""
 msgstr "Valitse tiedosto ja napsauta \"Esikatsele\""
 
@@ -163,8 +161,8 @@ msgstr "Siirto"
 #, python-format
 msgid "Daily"
 msgid_plural "Every %(num)d days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Päivittäin"
+msgstr[1] "%(num)d päivän välein"
 
 #: wxbanker/newtransactionctrl.py:100
 msgid "Weekly"
@@ -175,8 +173,8 @@ msgstr "Viikoittain"
 #, python-format
 msgid "Monthly"
 msgid_plural "Every %(num)d months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Kuukausittain"
+msgstr[1] "%(num)d kuukauden välein"
 
 #: wxbanker/newtransactionctrl.py:100
 msgid "Yearly"
@@ -188,7 +186,7 @@ msgstr "Ei koskaan"
 
 #: wxbanker/newtransactionctrl.py:130
 msgid "every"
-msgstr ""
+msgstr "joka"
 
 #: wxbanker/newtransactionctrl.py:135
 msgid "Ends:"
@@ -201,26 +199,26 @@ msgstr "Toistuu:"
 #: wxbanker/newtransactionctrl.py:169
 msgid "day"
 msgid_plural "days"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "päivä"
+msgstr[1] "päivää"
 
 #: wxbanker/newtransactionctrl.py:171
 msgid "week"
 msgid_plural "weeks"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "viikko"
+msgstr[1] "viikkoa"
 
 #: wxbanker/newtransactionctrl.py:174
 msgid "month"
 msgid_plural "months"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "kuukausi"
+msgstr[1] "kuukautta"
 
 #: wxbanker/newtransactionctrl.py:176
 msgid "year"
 msgid_plural "years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "vuosi"
+msgstr[1] "vuotta"
 
 #: wxbanker/newtransactionctrl.py:214
 msgid "Mon"
@@ -252,11 +250,11 @@ msgstr "Su"
 
 #: wxbanker/newtransactionctrl.py:221
 msgid "Repeats on days:"
-msgstr ""
+msgstr "Toista seuraavina päivinä:"
 
 #: wxbanker/newtransactionctrl.py:244
 msgid "Starts:"
-msgstr ""
+msgstr "Alkaa:"
 
 #: wxbanker/newtransactionctrl.py:253
 msgid "Enter this transaction"
@@ -266,56 +264,56 @@ msgstr "Syötä tämä tapahtuma"
 msgid "Recurring"
 msgstr "Toistuva"
 
-#: wxbanker/newtransactionctrl.py:341
+#: wxbanker/newtransactionctrl.py:344
 msgid "Initial balance"
 msgstr "Alkusaldo"
 
-#: wxbanker/newtransactionctrl.py:377
+#: wxbanker/newtransactionctrl.py:380
 msgid "No amount entered in the 'Amount' field."
 msgstr "Summaa ei ole kirjoitettu \"Määrä\"-kenttään."
 
-#: wxbanker/newtransactionctrl.py:379
+#: wxbanker/newtransactionctrl.py:382
 #, python-format
 msgid "'%s' is not a valid amount."
 msgstr "'%s' ei ole kelvollinen määrä."
 
-#: wxbanker/newtransactionctrl.py:382
+#: wxbanker/newtransactionctrl.py:385
 msgid "Please enter a number such as 12.34 or -20."
 msgstr "Anna kelvollinen lukuarvo, kuten 12,34 tai -20."
 
-#: wxbanker/newtransactionctrl.py:383
+#: wxbanker/newtransactionctrl.py:386
 msgid "Invalid Transaction Amount"
-msgstr ""
+msgstr "Tapahtuman summa on virheellinen"
 
-#: wxbanker/newtransactionctrl.py:394
+#: wxbanker/newtransactionctrl.py:397
 msgid "Please select an account and then try again."
 msgstr "Valitse tili ja yritä sitten uudelleen"
 
-#: wxbanker/newtransactionctrl.py:395 wxbanker/newtransactionctrl.py:423
+#: wxbanker/newtransactionctrl.py:398 wxbanker/newtransactionctrl.py:426
 msgid "No account selected"
 msgstr "Yhtään tiliä ei ole valittu"
 
-#: wxbanker/newtransactionctrl.py:408
+#: wxbanker/newtransactionctrl.py:411
 msgid "A search is currently active."
-msgstr ""
+msgstr "Haku on parhaillaan aktiivisena."
 
-#: wxbanker/newtransactionctrl.py:408
+#: wxbanker/newtransactionctrl.py:411
 #, python-format
 msgid ""
 "Would you like to clear the current search and make this transaction in "
 "\"%s\"?"
 msgstr ""
 
-#: wxbanker/newtransactionctrl.py:409
+#: wxbanker/newtransactionctrl.py:412
 msgid "Clear search?"
-msgstr ""
+msgstr "Tyhjennetäänkö haku?"
 
-#: wxbanker/newtransactionctrl.py:422
+#: wxbanker/newtransactionctrl.py:425
 msgid ""
 "This transaction is marked as a transfer. Please select the transfer account."
 msgstr ""
 
-#: wxbanker/newtransactionctrl.py:455
+#: wxbanker/newtransactionctrl.py:458
 msgid ""
 "If this box is checked when adding a transaction, you will be prompted for "
 "the account to use as the source of the transfer."
@@ -323,7 +321,7 @@ msgstr ""
 "Tämän ollessa valittuna, tilitapahtumaa lisättäessä kysytään miltä tililtä "
 "siirto tapahtui."
 
-#: wxbanker/newtransactionctrl.py:456
+#: wxbanker/newtransactionctrl.py:459
 msgid ""
 "For example, checking this box and entering a transaction of $50 into this "
 "account will also subtract $50 from the account that you choose as the "
@@ -352,31 +350,35 @@ msgstr "Näytä haun lisävalinnat"
 
 #: wxbanker/searchctrl.py:126
 msgid "Hide advanced search options"
-msgstr ""
+msgstr "Piilota laajennetut hakuominaisuudet"
 
-#: wxbanker/main.py:84
+#: wxbanker/main.py:85
 #, python-format
 msgid ""
 "The recurring transaction \"%(description)s\" has %(num)i transactions ready "
 "for %(amount)s on %(datelist)s."
 msgstr ""
 
-#: wxbanker/main.py:89
+#: wxbanker/main.py:90
 #, python-format
 msgid ""
 "%(num)i recurring transactions have a total of %(totalnum)i transactions "
 "ready."
 msgstr ""
 
-#: wxbanker/main.py:109
-msgid "Perform"
-msgstr ""
+#: wxbanker/main.py:101
+msgid "Preview"
+msgstr "Esikatsele"
 
-#: wxbanker/main.py:125
+#: wxbanker/main.py:110
+msgid "Perform"
+msgstr "Suorita"
+
+#: wxbanker/main.py:126
 msgid "Recurring transaction successfully added."
 msgstr "Toistuva tapahtuma lisätty onnistuneesti"
 
-#: wxbanker/main.py:127
+#: wxbanker/main.py:128
 #, python-format
 msgid "The first transaction will occur on %(date)s"
 msgstr "Ensimmäinen tapahtuma suoritetaan %(date)s"
@@ -393,11 +395,11 @@ msgstr "Lisää aluksi vasemmasta yläkulmasta itsellesi tili."
 
 #: wxbanker/main.py:193
 msgid ""
-"The buttons in the account control allow you to add, remove, and rename an "
-"account, respectively."
+"The buttons in the account control allow you to add, rename, configure, and "
+"remove an account, respectively."
 msgstr ""
-"Tilihallinnan painikkeet mahdollistavat tilien lisäyksen, poiston ja "
-"uudelleen nimeämisen."
+"Painikkeet tilihallinnassa mahdollistavat tilin lisäyksen, "
+"uudelleennimeämisen, muokkauksen ja poiston."
 
 #: wxbanker/main.py:194
 msgid ""
@@ -464,23 +466,23 @@ msgstr "Muokkaa valittua tiliä"
 msgid "All accounts"
 msgstr "Kaikki tilit"
 
-#: wxbanker/accountlistctrl.py:154
+#: wxbanker/accountlistctrl.py:158
 msgid "Not synchronized with Mint.com"
 msgstr "Ei synkronoitu Mint.com-palvelun kanssa"
 
-#: wxbanker/accountlistctrl.py:438 wxbanker/accountlistctrl.py:539
+#: wxbanker/accountlistctrl.py:442 wxbanker/accountlistctrl.py:543
 msgid "Sorry, an account by that name already exists."
 msgstr "Valittu nimi on jo käytössä toisella tilillä."
 
-#: wxbanker/accountlistctrl.py:440 wxbanker/accountlistctrl.py:541
+#: wxbanker/accountlistctrl.py:444 wxbanker/accountlistctrl.py:545
 msgid "Account names cannot be blank."
 msgstr "Tilin nimi ei voi olla tyhjä."
 
-#: wxbanker/accountlistctrl.py:474
+#: wxbanker/accountlistctrl.py:478
 msgid "Account name"
 msgstr "Tilin nimi"
 
-#: wxbanker/accountlistctrl.py:513
+#: wxbanker/accountlistctrl.py:517
 #, python-format
 msgid ""
 "This will permanently remove the account '%s' and all its transactions. "
@@ -489,7 +491,7 @@ msgstr ""
 "Tämä poistaa pysyvästi valitun tilin '%s' ja kaikki sen tapahtumat. "
 "Jatketaanko?"
 
-#: wxbanker/accountlistctrl.py:514 wxbanker/accountconfigdialog.py:203
+#: wxbanker/accountlistctrl.py:518 wxbanker/accountconfigdialog.py:203
 msgid "Warning"
 msgstr "Varoitus"
 
@@ -532,7 +534,7 @@ msgstr "Näytä nollasaldon tilit"
 #: wxbanker/menubar.py:70
 msgid ""
 "When disabled, accounts with a balance of $0.00 will be hidden from the list"
-msgstr ""
+msgstr "Jos pois käytöstä, piilotetaan tilit joiden saldo on nolla"
 
 #: wxbanker/menubar.py:79
 msgid "&Currency"
@@ -552,7 +554,7 @@ msgstr "Integroi Mint.com-palvelun kanssa"
 
 #: wxbanker/menubar.py:100
 msgid "Sync account balances with an existing Mint.com account"
-msgstr ""
+msgstr "Synkronoi tilitiedot käytössä olevan Mint.com-tilin kanssa"
 
 #: wxbanker/menubar.py:106
 msgid "View &FAQs"
@@ -580,7 +582,7 @@ msgstr "Ilmoita virheestä kehittäjälle"
 
 #: wxbanker/menubar.py:121
 msgid "Request a Fea&ture"
-msgstr "Pyydä %uutta ominaisuutta"
+msgstr "Pyydä &uutta ominaisuutta"
 
 #: wxbanker/menubar.py:121
 msgid "Request a new feature to be implemented"
@@ -618,11 +620,11 @@ msgstr "&Asetukset"
 msgid "&Help"
 msgstr "&Ohje"
 
-#: wxbanker/menubar.py:246
+#: wxbanker/menubar.py:247
 msgid "Copyright"
 msgstr "Tekijänoikeus"
 
-#: wxbanker/menubar.py:247
+#: wxbanker/menubar.py:248
 msgid "Simple personal finance."
 msgstr "Yksinkertaista henkilökohtaista varainhoitoa."
 
@@ -670,24 +672,24 @@ msgstr "Viikottain %s"
 #: wxbanker/bankobjects/recurringtransaction.py:162
 #, python-format
 msgid "Every %(num)d weeks on %%s"
-msgstr ""
+msgstr "%(num)d viikon välein %%s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:169
 #, python-format
 msgid " and %s"
-msgstr ""
+msgstr " ja %s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:173
 #, python-format
 msgid "Annually"
 msgid_plural "Every %(num)d years"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Vuosittain"
+msgstr[1] "%(num)d vuoden välein"
 
 #: wxbanker/bankobjects/recurringtransaction.py:177
 #, python-format
 msgid "until %s"
-msgstr ""
+msgstr "päättyen %s"
 
 #: wxbanker/bankobjects/recurringtransaction.py:194
 msgid "No description"
@@ -731,85 +733,86 @@ msgstr "Tapahtumia ei ole kirjattu."
 msgid "No matching transactions."
 msgstr "Ei vastaavia tapahtumia."
 
-#: wxbanker/transactionolv.py:66
-msgid "Total"
-msgstr "Yhteensä"
+#: wxbanker/transactionolv.py:69 wxbanker/plots/wxplotpanel.py:37
+#: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:82
+#: wxbanker/plots/cairopanel.py:123
+msgid "Balance"
+msgstr "Saldo"
 
-#: wxbanker/transactionolv.py:212
+#: wxbanker/transactionolv.py:172
+msgid "_Total"
+msgstr "_Yhteensä"
+
+#: wxbanker/transactionolv.py:234
 #, python-format
 msgid "Send %s to calculator"
 msgstr "Lähetä %s laskimeen"
 
-#: wxbanker/transactionolv.py:213
+#: wxbanker/transactionolv.py:235
 #, python-format
 msgid "Add %s to calculator"
 msgstr "Lisää %s laskimeen"
 
-#: wxbanker/transactionolv.py:214
+#: wxbanker/transactionolv.py:236
 #, python-format
 msgid "Subtract %s from calculator"
 msgstr "Vähennä %s laskimesta"
 
-#: wxbanker/transactionolv.py:226
+#: wxbanker/transactionolv.py:248
 msgid "Remove this transaction"
 msgstr "Poista tämä tapahtuma"
 
-#: wxbanker/transactionolv.py:227
+#: wxbanker/transactionolv.py:249
 msgid "Move this transaction to account"
 msgstr "Siirrä tämä tapahtuma tilille"
 
-#: wxbanker/transactionolv.py:228
+#: wxbanker/transactionolv.py:250
 msgid "No tags yet"
 msgstr "Ei tunnisteita vielä"
 
-#: wxbanker/transactionolv.py:230
+#: wxbanker/transactionolv.py:252
 #, python-format
 msgid "Remove these %i transactions"
-msgstr ""
+msgstr "Poista nämä %i tapahtumaa"
 
-#: wxbanker/transactionolv.py:231
+#: wxbanker/transactionolv.py:253
 #, python-format
 msgid "Move these %i transactions to account"
-msgstr ""
+msgstr "Siirrä nämä %i tapahtumaa tilille"
 
-#: wxbanker/transactionolv.py:232
+#: wxbanker/transactionolv.py:254
 msgid "No common tags yet"
 msgstr "Ei yleisiä tunnisteita vielä"
 
-#: wxbanker/transactionolv.py:234 wxbanker/tagtransactiondialog.py:100
+#: wxbanker/transactionolv.py:256 wxbanker/tagtransactiondialog.py:100
 msgid "Add a tag"
 msgstr "Lisää tunniste"
 
-#: wxbanker/transactionolv.py:257
+#: wxbanker/transactionolv.py:279
 msgid "Tags"
 msgstr "Tunnisteet"
 
-#: wxbanker/transactionolv.py:270
+#: wxbanker/transactionolv.py:292
 msgid "Search for this tag"
 msgstr "Etsi tunnistetta"
 
-#: wxbanker/transactionolv.py:271
+#: wxbanker/transactionolv.py:293
 msgid "Remove this tag"
 msgstr "Poista tämä tunniste"
 
-#: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:75
+#: wxbanker/plots/wxplotpanel.py:16 wxbanker/plots/cairopanel.py:76
 msgid "balance"
-msgstr ""
+msgstr "saldo"
 
-#: wxbanker/plots/wxplotpanel.py:37 wxbanker/plots/wxplotpanel.py:44
-#: wxbanker/plots/cairopanel.py:81 wxbanker/plots/cairopanel.py:122
-msgid "Balance"
-msgstr "Saldo"
-
-#: wxbanker/plots/wxplotpanel.py:42 wxbanker/plots/cairopanel.py:85
+#: wxbanker/plots/wxplotpanel.py:42 wxbanker/plots/cairopanel.py:86
 msgid "Trend"
 msgstr "Kehityssuunta"
 
 #: wxbanker/plots/wxplotpanel.py:44
 msgid "Total Balance Over Time"
-msgstr ""
+msgstr "Kokonaissaldo"
 
-#: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:121
+#: wxbanker/plots/wxplotpanel.py:44 wxbanker/plots/cairopanel.py:122
 msgid "Time"
 msgstr "Aika"
 
@@ -824,7 +827,7 @@ msgstr ""
 
 #: wxbanker/messagepanel.py:47
 msgid "Dismiss"
-msgstr ""
+msgstr "Hylkää"
 
 #: wxbanker/currencies.py:334
 msgid "detected"
@@ -832,7 +835,7 @@ msgstr "havaittu"
 
 #: wxbanker/accountconfigdialog.py:36
 msgid "None"
-msgstr ""
+msgstr "Ei määritelty"
 
 #: wxbanker/accountconfigdialog.py:37
 msgid "Mint.com credentials:"
@@ -845,7 +848,7 @@ msgstr "Tallenna tunnukset avainnippuun"
 #: wxbanker/accountconfigdialog.py:44
 #, python-format
 msgid "Corresponding Mint account for %(name)s:"
-msgstr ""
+msgstr "Tiliä %(name)s vastaava Mint-tunnus:"
 
 #: wxbanker/accountconfigdialog.py:46
 msgid "Update"
@@ -858,11 +861,6 @@ msgstr "Käyttäjätunnus:"
 #: wxbanker/accountconfigdialog.py:51
 msgid "Password:"
 msgstr "Salasana:"
-
-#: wxbanker/accountconfigdialog.py:59 wxbanker/accountconfigdialog.py:228
-#: wxbanker/tagtransactiondialog.py:43
-msgid "Cancel"
-msgstr "Peruuta"
 
 #: wxbanker/accountconfigdialog.py:160
 msgid "Transaction details"
@@ -879,6 +877,10 @@ msgstr "Tällä tilillä ei ole toistuvia tapahtumia."
 #: wxbanker/accountconfigdialog.py:215
 msgid "Close"
 msgstr "Sulje"
+
+#: wxbanker/accountconfigdialog.py:226
+msgid "Delete"
+msgstr "Poista"
 
 #: wxbanker/accountconfigdialog.py:251
 msgid "Recurring Transactions"
@@ -923,9 +925,34 @@ msgstr "Lisää tunniste"
 #~ msgid "Other accounts"
 #~ msgstr "Muut tilit"
 
+#~ msgid "Total"
+#~ msgstr "Yhteensä"
+
 #~ msgid ""
 #~ "When enabled, accounts with a balance of $0.00 will be hidden from the list"
 #~ msgstr "Tämä valinta poistaa näkyvistä ne tilit, joiden saldo on 0,00"
 
 #~ msgid "Hide zero-balance accounts"
 #~ msgstr "Piilota tyhjät tilit"
+
+#~ msgid ""
+#~ "The buttons in the account control allow you to add, remove, and rename an "
+#~ "account, respectively."
+#~ msgstr ""
+#~ "Tilihallinnan painikkeet mahdollistavat tilien lisäyksen, poiston ja "
+#~ "uudelleen nimeämisen."
+
+#~ msgid "Load"
+#~ msgstr "Lataa"
+
+#~ msgid "Skip first line"
+#~ msgstr "Ohita ensimmäinen rivi"
+
+#~ msgid "Which account will the money come from?"
+#~ msgstr "Miltä tililtä rahat tulevat?"
+
+#~ msgid "Case Sensitive"
+#~ msgstr "Huomioi kirjainkoko"
+
+#~ msgid "Account"
+#~ msgstr "Tili"
