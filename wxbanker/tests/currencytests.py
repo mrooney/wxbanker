@@ -80,6 +80,7 @@ class CurrencyTest(unittest.TestCase):
         self.assertEqual(currencies.LithuanianCurrency().float2str(testAmount), u'1.234,50 Lt')
         self.assertEqual(currencies.SerbianCurrency().float2str(testAmount), u'1.234,50 дин')
         self.assertEqual(currencies.HungarianCurrency().float2str(testAmount), u'1.234,50 Ft')
+        # __CURRENCY_ASSERTION__
 
 
 if __name__ == "__main__":

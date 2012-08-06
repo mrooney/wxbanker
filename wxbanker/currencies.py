@@ -28,7 +28,12 @@ def createFromLocale(currencyName):
     new = {}
     local = LocalizedCurrency()
     base = BaseCurrency()
-    print "class %sCurrency(BaseCurrency):\n    def __init__(self):\n        BaseCurrency.__init__(self)" % currencyName
+    current_class_name = "%sCurrency" % currencyName
+    currency_class = "class %s(BaseCurrency):\n    def __init__(self):\n        BaseCurrency.__init__(self)" % currency_class_name
+    testAmount = base.float2str(1234.5)
+    currency_assertion = "self.assertEqual(currencies.%sCurrency().float2str(testAmount), u'%s')" % (currencyName, testAmount)
+    print currency_class
+    print currency_assertion
     for key, val in local.LOCALECONV.items():
         if not base.LOCALECONV.has_key(key) or base.LOCALECONV[key] != val:
             new[key] = val
@@ -37,9 +42,13 @@ def createFromLocale(currencyName):
             print (" "*8) + "self.LOCALECONV['%s'] = %s" % (key, val)
 
     base.LOCALECONV = local.LOCALECONV
-    print "\nExamples: \"%s\" and \"%s\"" % (base.float2str(1234.56), base.float2str(-5))
-    testAmount = base.float2str(1234.5)
-    print "self.assertEqual(currencies.%sCurrency().float2str(testAmount), u'%s')" % (currencyName, testAmount)
+    print "\nThanks for the request, I've added this! How does it look? Examples: \"%s\" and \"%s\"" % (base.float2str(1234.56), base.float2str(-5))
+
+    currencies = open(__file__).read()
+    for marker, replacement in zip(("__CURRENCY_CLASS__", "__CURRENCY_CLASS_NAME__"), (currency_class, currency_class_name)):
+        currencies = currencies.replace(marker, replacement+"\n"+marker)
+    open(__file__, "w").write(currencies)
+    #currencytests = open(
 
 class BaseCurrency(object):
     """
@@ -313,6 +322,8 @@ class HungarianCurrency(BaseCurrency):
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
 
+# __CURRENCY_CLASS__
+
 class LocalizedCurrency(BaseCurrency):
     def __init__(self):
         BaseCurrency.__init__(self)
@@ -325,10 +336,27 @@ def GetCurrencyInt(currency):
     return -1
 
 CurrencyList = [
-    LocalizedCurrency, UnitedStatesCurrency, EuroCurrency, GreatBritainCurrency, JapaneseCurrency,
-    RussianCurrency, UkranianCurrency, MexicanCurrency, SwedishCurrency, SaudiCurrency,
-    NorwegianCurrency, ThaiCurrency, VietnameseCurrency, IndianCurrency, RomanianCurrency,
-    ArabEmiratesCurrency, LithuanianCurrency, SerbianCurrency, HungarianCurrency,
+    LocalizedCurrency,
+    UnitedStatesCurrency,
+    EuroCurrency,
+    GreatBritainCurrency,
+    JapaneseCurrency,
+    RussianCurrency,
+    UkranianCurrency,
+    MexicanCurrency,
+    SwedishCurrency,
+    SaudiCurrency,
+    NorwegianCurrency,
+    ThaiCurrency,
+    VietnameseCurrency,
+    IndianCurrency,
+    RomanianCurrency,
+    ArabEmiratesCurrency,
+    LithuanianCurrency,
+    SerbianCurrency,
+    HungarianCurrency,
+    IsraeliCurrency,
+    # __CURRENCY_CLASS_NAME__
 ]
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
 CurrencyStrings[0] += " (%s)" % _("detected")
