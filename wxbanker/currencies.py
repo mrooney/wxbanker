@@ -28,12 +28,9 @@ def createFromLocale(currencyName):
     new = {}
     local = LocalizedCurrency()
     base = BaseCurrency()
-    current_class_name = "%sCurrency" % currencyName
+    currency_class_name = "%sCurrency" % currencyName
     currency_class = "class %s(BaseCurrency):\n    def __init__(self):\n        BaseCurrency.__init__(self)" % currency_class_name
-    testAmount = base.float2str(1234.5)
-    currency_assertion = "self.assertEqual(currencies.%sCurrency().float2str(testAmount), u'%s')" % (currencyName, testAmount)
     print currency_class
-    print currency_assertion
     for key, val in local.LOCALECONV.items():
         if not base.LOCALECONV.has_key(key) or base.LOCALECONV[key] != val:
             new[key] = val
@@ -42,11 +39,14 @@ def createFromLocale(currencyName):
             print (" "*8) + "self.LOCALECONV['%s'] = %s" % (key, val)
 
     base.LOCALECONV = local.LOCALECONV
+    testAmount = base.float2str(1234.5)
+    currency_assertion = "self.assertEqual(currencies.%sCurrency().float2str(testAmount), u'%s')" % (currencyName, testAmount)
+    print currency_assertion
     print "\nThanks for the request, I've added this! How does it look? Examples: \"%s\" and \"%s\"" % (base.float2str(1234.56), base.float2str(-5))
 
     currencies = open(__file__).read()
-    for marker, replacement in zip(("__CURRENCY_CLASS__", "__CURRENCY_CLASS_NAME__"), (currency_class, currency_class_name)):
-        currencies = currencies.replace(marker, replacement+"\n"+marker)
+    currencies = currencies.replace("# " + "__CURRENCY_CLASS__", currency_class+"\n\n"+marker)
+    currencies = currencies.replace("# " + "__CURRENCY_CLASS_NAME__", currency_class_name+"\n    "+marker)
     open(__file__, "w").write(currencies)
     #currencytests = open(
 
@@ -355,7 +355,6 @@ CurrencyList = [
     LithuanianCurrency,
     SerbianCurrency,
     HungarianCurrency,
-    IsraeliCurrency,
     # __CURRENCY_CLASS_NAME__
 ]
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
