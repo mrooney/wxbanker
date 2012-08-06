@@ -18,7 +18,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 #
-# Usage: LC_ALL=vi_VN.utf8 python -c "from wxbanker.currencies import createFromLocale as c;c('Vietnamese')"
+# First: apt-cache search language-pack | grep -i Vietnam
+# Usage: LC_ALL=vi_VN.utf8 python -m wxbanker/currencies Vietnamese
 
 import locale
 from wxbanker import localization
@@ -49,7 +50,8 @@ def createFromLocale(currencyName):
     currencies = currencies.replace(marker, currency_class+u"\n\n"+marker)
     marker = u"# " + u"__CURRENCY_CLASS_NAME__"
     currencies = currencies.replace(marker, currency_class_name+u",\n    "+marker)
-    open(__file__, "w").write(currencies)
+    print currencies
+    #open(__file__, "w").write(currencies)
     #currencytests = open(
 
 class BaseCurrency(object):
