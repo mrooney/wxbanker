@@ -30,14 +30,14 @@ def createFromLocale(currencyName):
     base = BaseCurrency()
     currency_class_name = "%sCurrency" % currencyName
     currency_class = "class %s(BaseCurrency):\n    def __init__(self):\n        BaseCurrency.__init__(self)" % currency_class_name
-    print currency_class
     for key, val in local.LOCALECONV.items():
         if not base.LOCALECONV.has_key(key) or base.LOCALECONV[key] != val:
             new[key] = val
             if isinstance(val, basestring) and not isinstance(val, unicode):
                 val = "u'%s'" % val.decode("utf-8")
-            print (" "*8) + "self.LOCALECONV['%s'] = %s" % (key, val)
+            currency_class += "\n" + (" "*8) + "self.LOCALECONV['%s'] = %s" % (key, val)
 
+    print currency_class
     base.LOCALECONV = local.LOCALECONV
     testAmount = base.float2str(1234.5)
     currency_assertion = "self.assertEqual(currencies.%sCurrency().float2str(testAmount), u'%s')" % (currencyName, testAmount)
@@ -48,7 +48,7 @@ def createFromLocale(currencyName):
     marker = "# " + "__CURRENCY_CLASS__"
     currencies = currencies.replace(marker, currency_class+"\n\n"+marker)
     marker = "# " + "__CURRENCY_CLASS_NAME__"
-    currencies = currencies.replace(marker, currency_class_name+"\n    "+marker)
+    currencies = currencies.replace(marker, currency_class_name+",\n    "+marker)
     open(__file__, "w").write(currencies)
     #currencytests = open(
 
