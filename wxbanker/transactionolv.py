@@ -369,6 +369,7 @@ class TransactionOLV(GroupListView):
             # Remove the item from the list.
             self.RemoveObjects(transactions)
             self.updateTotals()
+            self.sizeAmounts()
             
     def onTransactionAdded(self, message):
         account, transaction = message.data
