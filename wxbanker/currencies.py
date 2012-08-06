@@ -45,8 +45,10 @@ def createFromLocale(currencyName):
     print "\nThanks for the request, I've added this! How does it look? Examples: \"%s\" and \"%s\"" % (base.float2str(1234.56), base.float2str(-5))
 
     currencies = open(__file__).read()
-    currencies = currencies.replace("# " + "__CURRENCY_CLASS__", currency_class+"\n\n"+marker)
-    currencies = currencies.replace("# " + "__CURRENCY_CLASS_NAME__", currency_class_name+"\n    "+marker)
+    marker = "# " + "__CURRENCY_CLASS__"
+    currencies = currencies.replace(marker, currency_class+"\n\n"+marker)
+    marker = "# " + "__CURRENCY_CLASS_NAME__"
+    currencies = currencies.replace(marker, currency_class_name+"\n    "+marker)
     open(__file__, "w").write(currencies)
     #currencytests = open(
 
