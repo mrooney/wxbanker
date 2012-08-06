@@ -46,9 +46,9 @@ def createFromLocale(currencyName):
 
     currencies = open(__file__).read()
     marker = "# " + "__CURRENCY_CLASS__"
-    currencies = currencies.replace(marker, currency_class+"\n\n"+marker)
+    currencies = currencies.replace(marker, currency_class+u"\n\n"+marker)
     marker = "# " + "__CURRENCY_CLASS_NAME__"
-    currencies = currencies.replace(marker, currency_class_name+",\n    "+marker)
+    currencies = currencies.replace(marker, currency_class_name+u",\n    "+marker)
     open(__file__, "w").write(currencies)
     #currencytests = open(
 
