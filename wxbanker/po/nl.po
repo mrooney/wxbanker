@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-08-06 04:57+0000\n"
+"X-Launchpad-Export-Date: 2012-08-07 04:45+0000\n"
 "X-Generator: Launchpad (build 15745)\n"
 
 #: wxbanker/summarytab.py:30
@@ -1032,22 +1032,3 @@ msgstr "Label toevoegen"
 #~ msgstr ""
 #~ "Waarschuwing: Numpy modules zijn niet beschikbaar, de samenvattingstab is "
 #~ "uitgeschakeld. Installeer numpy om het probleem op te lossen."
-
-#~ msgid "account:"
-#~ msgstr "rekening:"
-
-#~ msgid "Every"
-#~ msgstr "Elke"
-
-#~ msgid "Password"
-#~ msgstr "Wachtwoord"
-
-#~ msgid ""
-#~ "wxBanker can synchronize account balances online if you have an account with "
-#~ "mint.com"
-#~ msgstr ""
-#~ "wxBanker kan uw rekeningen online synchroniseren als u een account heeft op "
-#~ "mint.com"
-
-#~ msgid "Username"
-#~ msgstr "Gebruikersnaam"

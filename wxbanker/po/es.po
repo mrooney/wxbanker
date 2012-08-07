@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-08-06 04:57+0000\n"
+"X-Launchpad-Export-Date: 2012-08-07 04:45+0000\n"
 "X-Generator: Launchpad (build 15745)\n"
 
 #: wxbanker/summarytab.py:30
@@ -1026,22 +1026,3 @@ msgstr "Añadir etiqueta"
 
 #~ msgid "A lightweight personal finance management application."
 #~ msgstr "Una aplicación ligera para gestionar sus finanzas personales."
-
-#~ msgid "account:"
-#~ msgstr "cuenta:"
-
-#~ msgid "Every"
-#~ msgstr "Cada"
-
-#~ msgid ""
-#~ "wxBanker can synchronize account balances online if you have an account with "
-#~ "mint.com"
-#~ msgstr ""
-#~ "wxBanker puede sincronizar balances de cuentas en línea si tiene una cuenta "
-#~ "con mint.com"
-
-#~ msgid "Password"
-#~ msgstr "Contraseña"
-
-#~ msgid "Username"
-#~ msgstr "Nombre de usuario"

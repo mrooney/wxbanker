@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2012-08-06 04:57+0000\n"
+"X-Launchpad-Export-Date: 2012-08-07 04:45+0000\n"
 "X-Generator: Launchpad (build 15745)\n"
 
 #: wxbanker/summarytab.py:30
@@ -1000,21 +1000,3 @@ msgstr "הוספת תגית"
 
 #~ msgid "CSV Import"
 #~ msgstr "ייבוא CSV"
-
-#~ msgid "account:"
-#~ msgstr "חשבון:"
-
-#~ msgid "Every"
-#~ msgstr "כל"
-
-#~ msgid "Password"
-#~ msgstr "סיסמה"
-
-#~ msgid "Username"
-#~ msgstr "שם משתמש"
-
-#~ msgid ""
-#~ "wxBanker can synchronize account balances online if you have an account with "
-#~ "mint.com"
-#~ msgstr ""
-#~ "התכנית wxBanker יכולה לסנכרן את מאזני החשבונות שלך אם יש לך חשבון ב־mint.com"
