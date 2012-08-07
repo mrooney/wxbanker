@@ -385,6 +385,18 @@ class CzechCurrency(BaseCurrency):
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
 
+class ArgentineCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['mon_decimal_point'] = u','
+        self.LOCALECONV['p_sep_by_space'] = 1
+        self.LOCALECONV['thousands_sep'] = u'.'
+        self.LOCALECONV['decimal_point'] = u','
+        self.LOCALECONV['int_curr_symbol'] = u'ARS '
+        self.LOCALECONV['mon_thousands_sep'] = u'.'
+        self.LOCALECONV['currency_symbol'] = u'$'
+        self.LOCALECONV['n_sep_by_space'] = 1
+
 # __CURRENCY_CLASS__
 
 class LocalizedCurrency(BaseCurrency):
@@ -422,6 +434,7 @@ CurrencyList = [
     EgyptianCurrency,
     PolishCurrency,
     CzechCurrency,
+    ArgentineCurrency,
     # __CURRENCY_CLASS_NAME__
 ]
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
