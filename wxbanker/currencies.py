@@ -333,6 +333,16 @@ class HungarianCurrency(BaseCurrency):
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
 
+class IsraeliCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['p_sep_by_space'] = 1
+        self.LOCALECONV['n_sign_posn'] = 2
+        self.LOCALECONV['int_curr_symbol'] = u'ILS '
+        self.LOCALECONV['p_sign_posn'] = 2
+        self.LOCALECONV['currency_symbol'] = u'שח'
+        self.LOCALECONV['n_sep_by_space'] = 1
+
 # __CURRENCY_CLASS__
 
 class LocalizedCurrency(BaseCurrency):
@@ -366,6 +376,7 @@ CurrencyList = [
     LithuanianCurrency,
     SerbianCurrency,
     HungarianCurrency,
+    IsraeliCurrency,
     # __CURRENCY_CLASS_NAME__
 ]
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
