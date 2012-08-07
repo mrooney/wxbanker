@@ -26,6 +26,8 @@ from wxbanker import localization
 
 def createFromLocale(currencyName):
     """Create a currency class from the current locale."""
+    import os
+
     new = {}
     local = LocalizedCurrency()
     base = BaseCurrency()
@@ -46,13 +48,18 @@ def createFromLocale(currencyName):
     print "\nThanks for the request, I've added this! How does it look? Examples: \"%s\" and \"%s\"" % (base.float2str(1234.56), base.float2str(-5))
 
     currencies = open(__file__).read().decode("utf8")
+    currencytests_path = os.path.join(os.path.dirname(__file__), "tests", "currencytests.py")
+    currencytests = open(currencytests_path).read().decode("utf8")
+
     marker = u"# " + u"__CURRENCY_CLASS__"
     currencies = currencies.replace(marker, currency_class+u"\n\n"+marker)
     marker = u"# " + u"__CURRENCY_CLASS_NAME__"
     currencies = currencies.replace(marker, currency_class_name+u",\n    "+marker)
+    marker = u"# " + u"__CURRENCY_ASSERTION__"
+    currencytests = currencytests.replace(marker, currency_asertion+u"\n        "+marker)
+
     open(__file__, "w").write(currencies.encode("utf8"))
-    # TODO: open and write currency tests assertion
-    #currencytests = open(
+    open(currencytests_path, "w").write(currencytests.encode("utf8"))
 
 class BaseCurrency(object):
     """
