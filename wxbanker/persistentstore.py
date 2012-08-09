@@ -53,14 +53,14 @@ class PersistentStore:
     """
     def __init__(self, path, autoSave=True):
         self.Subscriptions = []
-        self.Version = 11
+        self.Version = 12
         self.Path = path
         self.AutoSave = False
         self.Dirty = False
         self.BatchDepth = 0
         self.cachedModel = None
         # Upgrades can't enable syncing if needed from older versions.
-        self.needsSync = True
+        self.needsSync = False
         existed = True
 
         # See if the path already exists to decide what to do.
@@ -288,6 +288,8 @@ class PersistentStore:
             # This is tested by testOrphanedTransactionsAreDeleted (dbupgradetests.DBUpgradeTest)
             # Also takes care of LP #249954 without the explicit need to defensively remove on any account creation.
             self.cleanOrphanedTransactions()
+        elif fromVer == 11:
+            self.needsSync = True
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
         
@@ -468,6 +470,7 @@ class PersistentStore:
         self.commitIfAppropriate()
 
     def onExit(self, message):
+        self.syncBalances()
         if self.Dirty:
             Publisher.sendMessage("warning.dirty exit", message.data)
             
