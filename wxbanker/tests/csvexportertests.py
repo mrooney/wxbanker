@@ -19,23 +19,36 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 from wxbanker.tests import testbase
-import unittest, datetime
+import unittest, datetime, os, tempfile
 from wxbanker.csvexporter import CsvExporter
 
+
 class CsvExporterTest(testbase.TestCaseWithController):
-    def testExpectedOutput(self):
+    def assertTransactionExports(self, description):
         model = self.Model
         a = model.CreateAccount("foo")
-        a.AddTransaction(1, "Baz", "2010-5-24")
+        a.AddTransaction(1, description, "2010-5-24")
         
-        result = CsvExporter.Generate(model)
+        handle, path = tempfile.mkstemp()
+        try:
+            CsvExporter.Export(model, path)
+            result = open(path).read().decode("utf8")
+        finally:
+            os.remove(path)
         
         expected = [
-            'Account,Description,Amount,Date',
-            'foo,Baz,1.0,2010-05-24'
+            u'Account,Description,Amount,Date',
+            u'foo,%s,1.0,2010-05-24' % (description),
         ]
-        
-        self.assertEquals('\r\n'.join(expected)+"\r\n", result)
+        expected = u'\r\n'.join(expected)+u"\r\n"
+        self.assertEquals(expected, result)
+
+    def testExpectedOutput(self):
+        self.assertTransactionExports("Bar")
+
+    def testExpectedOutputWithUnicode(self):
+        self.assertTransactionExports(u'\u0143')
+
 
 if __name__ == "__main__":
     unittest.main()
