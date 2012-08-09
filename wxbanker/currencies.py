@@ -503,6 +503,16 @@ class MalaysianCurrency(BaseCurrency):
         self.LOCALECONV['mon_grouping'] = [3, 0]
         self.LOCALECONV['grouping'] = [3, 0]
 
+class SouthAfricanCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['mon_decimal_point'] = u','
+        self.LOCALECONV['thousands_sep'] = u' '
+        self.LOCALECONV['decimal_point'] = u','
+        self.LOCALECONV['int_curr_symbol'] = u'ZAR '
+        self.LOCALECONV['mon_thousands_sep'] = u' '
+        self.LOCALECONV['currency_symbol'] = u'R'
+
 # __CURRENCY_CLASS__
 
 class LocalizedCurrency(BaseCurrency):
@@ -551,6 +561,7 @@ CurrencyList = [
     KazakhstanCurrency,
     TunisianCurrency,
     MalaysianCurrency,
+    SouthAfricanCurrency,
     # __CURRENCY_CLASS_NAME__
 ]
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
