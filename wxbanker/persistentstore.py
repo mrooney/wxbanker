@@ -60,7 +60,7 @@ class PersistentStore:
         self.BatchDepth = 0
         self.cachedModel = None
         # Upgrades can't enable syncing if needed from older versions.
-        self.needsSync = False
+        self.needsSync = True
         existed = True
 
         # See if the path already exists to decide what to do.
