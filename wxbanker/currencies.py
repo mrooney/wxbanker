@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 #
-# First: apt-cache search language-pack | grep -i Vietnam
+# First: apt-cache search language-pack | grep -v "(gnome|kde|base)" | grep -i LANGUAGE_SPOKEN_IN_COUNTRY
 # Usage: LC_ALL=vi_VN.utf8 python -m wxbanker/currencies Vietnamese
 
 import locale
@@ -45,7 +45,7 @@ def createFromLocale(currencyName):
     testAmount = base.float2str(1234.5)
     currency_assertion = "self.assertEqual(currencies.%sCurrency().float2str(testAmount), u'%s')" % (currencyName, testAmount)
     print currency_assertion
-    print "\nThanks for the request, I've added this! How does it look? Examples: \"%s\" and \"%s\"" % (base.float2str(1234.56), base.float2str(-5))
+    print "\nThanks for the request, I've added %s! How does it look? Examples: \"%s\" and \"%s\"" % (base.LOCALECONV['int_curr_symbol'].strip(), base.float2str(1234.56), base.float2str(-5))
 
     currencies = open(__file__).read().decode("utf8")
     currencytests_path = os.path.join(os.path.dirname(__file__), "tests", "currencytests.py")
@@ -481,6 +481,28 @@ class KazakhstanCurrency(BaseCurrency):
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
 
+class TunisianCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['int_frac_digits'] = 3
+        self.LOCALECONV['p_sep_by_space'] = 1
+        self.LOCALECONV['frac_digits'] = 3
+        self.LOCALECONV['n_sign_posn'] = 2
+        self.LOCALECONV['int_curr_symbol'] = u'TND '
+        self.LOCALECONV['currency_symbol'] = u'د.ت.'
+        self.LOCALECONV['n_sep_by_space'] = 1
+        self.LOCALECONV['mon_grouping'] = [3, 0]
+        self.LOCALECONV['grouping'] = [3, 0]
+
+class MalaysianCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['n_sign_posn'] = 0
+        self.LOCALECONV['int_curr_symbol'] = u'MYR '
+        self.LOCALECONV['currency_symbol'] = u'RM'
+        self.LOCALECONV['mon_grouping'] = [3, 0]
+        self.LOCALECONV['grouping'] = [3, 0]
+
 # __CURRENCY_CLASS__
 
 class LocalizedCurrency(BaseCurrency):
@@ -527,6 +549,8 @@ CurrencyList = [
     IndonesianCurrency,
     CanadianCurrency,
     KazakhstanCurrency,
+    TunisianCurrency,
+    MalaysianCurrency,
     # __CURRENCY_CLASS_NAME__
 ]
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]

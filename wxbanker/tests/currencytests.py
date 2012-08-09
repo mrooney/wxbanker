@@ -89,6 +89,8 @@ class CurrencyTest(unittest.TestCase):
         self.assertEqual(currencies.IndonesianCurrency().float2str(testAmount), u'Rp1.234,50')
         self.assertEqual(currencies.CanadianCurrency().float2str(testAmount), u'$1,234.50')
         self.assertEqual(currencies.KazakhstanCurrency().float2str(testAmount), u'1 234.50 тг')
+        self.assertEqual(currencies.TunisianCurrency().float2str(testAmount), u'د.ت. 1,234.500')
+        self.assertEqual(currencies.MalaysianCurrency().float2str(testAmount), u'RM1,234.50')
         # __CURRENCY_ASSERTION__
 
 
