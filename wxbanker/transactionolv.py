@@ -376,8 +376,7 @@ class TransactionOLV(GroupListView):
         if account is self.CurrentAccount:
             self.AddObject(transaction)
             self.updateTotals()
-            #WXTODO: Perhaps get the actual position and scroll to that, it may not be last.
-            self.ensureVisible(-1)
+            self.Reveal(transaction)
             self.sizeAmounts()
 
     def onTagSearch(self, tag):
