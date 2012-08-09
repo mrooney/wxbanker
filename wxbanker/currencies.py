@@ -452,6 +452,35 @@ class MacedonianCurrency(BaseCurrency):
         self.LOCALECONV['n_sep_by_space'] = 1
         self.LOCALECONV['p_cs_precedes'] = 0
 
+class IndonesianCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['mon_decimal_point'] = u','
+        self.LOCALECONV['thousands_sep'] = u'.'
+        self.LOCALECONV['decimal_point'] = u','
+        self.LOCALECONV['int_curr_symbol'] = u'IDR '
+        self.LOCALECONV['mon_thousands_sep'] = u'.'
+        self.LOCALECONV['currency_symbol'] = u'Rp'
+
+class CanadianCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['int_curr_symbol'] = u'CAD '
+        self.LOCALECONV['currency_symbol'] = u'$'
+
+class KazakhstanCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['p_sep_by_space'] = 1
+        self.LOCALECONV['thousands_sep'] = u'.'
+        self.LOCALECONV['decimal_point'] = u','
+        self.LOCALECONV['int_curr_symbol'] = u'KZT '
+        self.LOCALECONV['n_cs_precedes'] = 0
+        self.LOCALECONV['mon_thousands_sep'] = u' '
+        self.LOCALECONV['currency_symbol'] = u'тг'
+        self.LOCALECONV['n_sep_by_space'] = 1
+        self.LOCALECONV['p_cs_precedes'] = 0
+
 # __CURRENCY_CLASS__
 
 class LocalizedCurrency(BaseCurrency):
@@ -495,6 +524,9 @@ CurrencyList = [
     ChineseCurrency,
     MoroccanCurrency,
     MacedonianCurrency,
+    IndonesianCurrency,
+    CanadianCurrency,
+    KazakhstanCurrency,
     # __CURRENCY_CLASS_NAME__
 ]
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
