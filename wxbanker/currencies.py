@@ -405,6 +405,16 @@ class TaiwanCurrency(BaseCurrency):
         self.LOCALECONV['mon_grouping'] = [3, 0]
         self.LOCALECONV['grouping'] = [3, 0]
 
+class GuatemalaCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['p_sep_by_space'] = 1
+        self.LOCALECONV['thousands_sep'] = u'.'
+        self.LOCALECONV['decimal_point'] = u','
+        self.LOCALECONV['int_curr_symbol'] = u'GTQ '
+        self.LOCALECONV['currency_symbol'] = u'Q'
+        self.LOCALECONV['n_sep_by_space'] = 1
+
 # __CURRENCY_CLASS__
 
 class LocalizedCurrency(BaseCurrency):
@@ -444,6 +454,7 @@ CurrencyList = [
     CzechCurrency,
     ArgentineCurrency,
     TaiwanCurrency,
+    GuatemalaCurrency,
     # __CURRENCY_CLASS_NAME__
 ]
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
