@@ -397,6 +397,14 @@ class ArgentineCurrency(BaseCurrency):
         self.LOCALECONV['currency_symbol'] = u'$'
         self.LOCALECONV['n_sep_by_space'] = 1
 
+class TaiwanCurrency(BaseCurrency):
+    def __init__(self):
+        BaseCurrency.__init__(self)
+        self.LOCALECONV['int_curr_symbol'] = u'TWD '
+        self.LOCALECONV['currency_symbol'] = u'NT$'
+        self.LOCALECONV['mon_grouping'] = [3, 0]
+        self.LOCALECONV['grouping'] = [3, 0]
+
 # __CURRENCY_CLASS__
 
 class LocalizedCurrency(BaseCurrency):
@@ -435,6 +443,7 @@ CurrencyList = [
     PolishCurrency,
     CzechCurrency,
     ArgentineCurrency,
+    TaiwanCurrency,
     # __CURRENCY_CLASS_NAME__
 ]
 CurrencyStrings = ["%s: %s" % (c().LOCALECONV['int_curr_symbol'].strip(), c().float2str(1)) for c in CurrencyList]
