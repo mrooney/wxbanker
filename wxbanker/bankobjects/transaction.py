@@ -26,6 +26,9 @@ from wxbanker.bankobjects.ormobject import ORMObject
 from wxbanker.bankobjects.tag import Tag, EmptyTagException
 from wxbanker import debug
 
+from wxbanker.currencies import CurrencyList
+from wxbanker.currconvert import CurrencyConverter
+
 class Transaction(ORMObject):
     """
     An object which represents a transaction.
@@ -152,7 +155,12 @@ class Transaction(ORMObject):
     def SetTags(self, tagList):
         self._Tags = tagList
 
-    def GetAmount(self):
+    def GetAmount(self, currency=None):
+        if currency:
+            conv = CurrencyConverter()
+            destCurrency = CurrencyList[currency]().GetCurrencyNick() 
+            srcCurrency = self.Parent.GetCurrency().GetCurrencyNick()
+            return conv.Convert(self._Amount, srcCurrency, destCurrency)
         return self._Amount
 
     def SetAmount(self, amount, fromLink=False):

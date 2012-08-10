@@ -53,7 +53,7 @@ class PersistentStore:
     """
     def __init__(self, path, autoSave=True):
         self.Subscriptions = []
-        self.Version = 12
+        self.Version = 13
         self.Path = path
         self.AutoSave = False
         self.Dirty = False
@@ -209,6 +209,10 @@ class PersistentStore:
         cursor.execute('CREATE TABLE meta (id INTEGER PRIMARY KEY, name VARCHAR(255), value VARCHAR(255))')
         cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('VERSION', '2'))
 
+    def getGlobalCurrency(self):
+        results = self.dbconn.cursor().execute('SELECT value FROM meta WHERE name="GlobalCurrency"').fetchall()
+        return int(results[0][0])
+
     def getMeta(self):
         try:
             results = self.dbconn.cursor().execute('SELECT * FROM meta').fetchall()
@@ -290,6 +294,9 @@ class PersistentStore:
             self.cleanOrphanedTransactions()
         elif fromVer == 11:
             self.needsSync = True
+        elif fromVer == 12:
+            # globalCurrency entry
+            cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('GlobalCurrency', 0))
         else:
             raise Exception("Cannot upgrade database from version %i"%fromVer)
         
@@ -444,11 +451,16 @@ class PersistentStore:
     def renameAccount(self, oldName, account):
         self.dbconn.cursor().execute("UPDATE accounts SET name=? WHERE name=?", (account.Name, oldName))
         self.commitIfAppropriate()
+        
+    def setCurrency(self, currencyIndex, account=None):
+		if account:
+			self.dbconn.cursor().execute('UPDATE accounts SET currency=? WHERE id=?', (currencyIndex, account.ID))
+		else:
+		    #Since no account received, we are updating the global currency
+		    self.dbconn.cursor().execute('UPDATE meta SET value=? WHERE name="GlobalCurrency"', (currencyIndex,))	
+		self.commitIfAppropriate()
 
-    def setCurrency(self, currencyIndex):
-        self.dbconn.cursor().execute('UPDATE accounts SET currency=?', (currencyIndex,))
-        self.commitIfAppropriate()
-
+        
     def __print__(self):
         cursor = self.dbconn.cursor()
         for account in cursor.execute("SELECT * FROM accounts").fetchall():

@@ -34,6 +34,7 @@ from wx.lib.pubsub import Publisher
 from wxbanker.ObjectListView import GroupListView, ColumnDefn, CellEditorRegistry
 from wxbanker import bankcontrols, tagtransactiondialog
 
+from wxbanker.currencies import GetCurrencyInt
 
 class TransactionOLV(GroupListView):
     EMPTY_MSG_NORMAL = _("No transactions entered.")
@@ -44,6 +45,7 @@ class TransactionOLV(GroupListView):
         self.LastSearch = None
         self.CurrentAccount = None
         self.BankController = bankController
+        self.GlobalCurrency = self.BankController.Model.Store.getGlobalCurrency()
 
         self.showGroups = False
         #WXTODO: figure out these (and the text color, or is that already?) from theme (LP: ???)
@@ -67,7 +69,7 @@ class TransactionOLV(GroupListView):
         self.SetColumns([
             ColumnDefn(_("Date"), valueGetter=self.getDateAndIDOf, valueSetter=self.setDateOf, stringConverter=self.renderDateIDTuple, editFormatter=self.renderEditDate, width=dateWidth),
             ColumnDefn(_("Description"), valueGetter="Description", isSpaceFilling=True, editFormatter=self.renderEditDescription),
-            ColumnDefn(_("Amount"), "right", valueGetter="Amount", stringConverter=self.renderFloat, editFormatter=self.renderEditFloat),
+            ColumnDefn(_("Amount"), "right", valueGetter=self.getAmount, valueSetter=self.setAmount, stringConverter=self.renderFloat, editFormatter=self.renderEditFloat),
             ColumnDefn(_("Balance"), "right", valueGetter=self.getTotal, stringConverter=self.renderFloat, isEditable=False),
         ])
         # Our custom hack in OLV.py:2017 will render amount floats appropriately as %.2f when editing.
@@ -85,13 +87,14 @@ class TransactionOLV(GroupListView):
             (self.onTransactionAdded, "transaction.created"),
             (self.onTransactionsRemoved, "transactions.removed"),
             (self.onCurrencyChanged, "currency_changed"),
+            (self.onShowCurrencyNickToggled, "controller.show_currency_nick_toggled"),
             (self.updateTotals, "ormobject.updated.Transaction.Amount"),
             (self.onTransactionDateUpdated, "ormobject.updated.Transaction.Date"),
         )
 
         for callback, topic in self.Subscriptions:
             Publisher.subscribe(callback, topic)
-
+        
     def SetObjects(self, objs, *args, **kwargs):
         """
         Override the default SetObjects to properly refresh the auto-size,
@@ -128,6 +131,12 @@ class TransactionOLV(GroupListView):
         self.Freeze()
         self.SortBy(self.SORT_COL)
         self.Thaw()
+        
+    def setAmount(self, transaction, amount):
+        transaction.Amount = amount
+        self.Freeze()
+        self.SortBy(self.SORT_COL)
+        self.Thaw()
 
     def getTotal(self, transObj):
         if not hasattr(transObj, "_Total"):
@@ -140,23 +149,42 @@ class TransactionOLV(GroupListView):
         if first is None:
             return
         
-        first._Total = first.Amount
+        if not self.CurrentAccount:
+            #This means we are in 'All accounts' so we need to convert each total
+            # to the global currency
+            balance_currency = self.GlobalCurrency
+        else:
+            #we are just viewing a single account
+            # balance currency = accounts currency
+            balance_currency = GetCurrencyInt(self.CurrentAccount.GetCurrency())
+        
+        first._Total = first.GetAmount(balance_currency)
         
         b = first
         for i in range(1, len(self.GetObjects())):
             a, b = b, self.GetObjectAt(i)
-            b._Total = a._Total + b.Amount
+            b._Total = a._Total + b.GetAmount(balance_currency)
     
     def renderDateIDTuple(self, pair):
         return str(pair[0])
-    
-    def renderFloat(self, floatVal):
-        if self.CurrentAccount:
-            return self.CurrentAccount.float2str(floatVal)
+  
+    def getAmount(self, obj):
+        #Return the whole transaction/float since we need to use its
+        #renderAmount method to support multiple currencies.
+        return obj  
+        
+    def renderFloat(self, value):
+        if isinstance(value, float):
+            #this is a 'balance' column, its ok to use the bank model's float2str
+            # as long as we'r not in an account.
+            if self.CurrentAccount:
+                return self.CurrentAccount.float2str(value)
+            else:
+                return self.BankController.Model.float2str(value)
         else:
-            #WXTODO: fix me, this function should be given the object which should have a float2str method
-            # so that for multiple currencies they can be displayed differently when viewing all.
-            return self.BankController.Model.float2str(floatVal)
+            #this is a trnasaction, so it belogns to the 'Amount' column, render
+            # it with its appropieate currency
+            return value.RenderAmount()
     
     def renderEditDate(self, transaction):
         return str(transaction.Date)
@@ -418,13 +446,22 @@ class TransactionOLV(GroupListView):
         self.Refresh()
 
     def onCurrencyChanged(self, message):
+        self.GlobalCurrency = message.data
         # Refresh all the transaction objects, re-rendering the amounts.
         self.RefreshObjects()
         # The current likely changed the widths of the amount/total column.
         self.sizeAmounts()
         # Now we need to adjust the description width so we don't have a horizontal scrollbar.
         self.AutoSizeColumns()
-
+        
+    def onShowCurrencyNickToggled(self, message):
+        # Refresh all the transaction objects, re-rendering the amounts.
+        self.RefreshObjects()
+        # The current likely changed the widths of the amount/total column.
+        self.sizeAmounts()
+        # Now we need to adjust the description width so we don't have a horizontal scrollbar.
+        self.AutoSizeColumns()
+        
     def __del__(self):
         for callback, topic in self.Subscriptions:
             Publisher.unsubscribe(callback)

@@ -28,6 +28,8 @@ from wxbanker.bankobjects.ormobject import ORMKeyValueObject
 from wxbanker.bankobjects.accountlist import AccountList
 from wxbanker.mint.api import Mint
 
+from wxbanker.currencies import GetCurrencyInt
+
 class BankModel(ORMKeyValueObject):
     ORM_TABLE = "meta"
     ORM_ATTRIBUTES = ["LastAccountId", "MintEnabled"]
@@ -42,7 +44,8 @@ class BankModel(ORMKeyValueObject):
         if self.MintEnabled:
             delayedresult.startWorker(lambda result: Publisher.sendMessage("mint.updated"), Mint.LoginFromKeyring, wkwargs={"notify": False})
 
-        Publisher.subscribe(self.onCurrencyChanged, "user.currency_changed")
+        Publisher.subscribe(self.onGlobalCurrencyChanged, "user.global_currency_changed")
+        Publisher.subscribe(self.onAccountCurrencyChanged, "user.account_currency_changed")
         Publisher.subscribe(self.onMintToggled, "user.mint.toggled")
         Publisher.subscribe(self.onAccountChanged, "view.account changed")
         Publisher.subscribe(self.onTransactionTagged, "transaction.tagged")
@@ -84,8 +87,10 @@ class BankModel(ORMKeyValueObject):
         """
         if account is None:
             transactions = self.GetTransactions()
+            currency = self.GlobalCurrency
         else:
             transactions = account.Transactions[:]
+            currency = GetCurrencyInt(account.GetCurrency())
         transactions.sort()
         
         if transactions == []:
@@ -104,7 +109,7 @@ class BankModel(ORMKeyValueObject):
                 if t.Date > endDate:
                     endi = i
                     break
-                total += t.Amount
+                total += t.GetAmount(currency)
                 
             transactions = transactions[starti:endi]
         else:
@@ -126,7 +131,7 @@ class BankModel(ORMKeyValueObject):
         balance = startingBalance
         while currDate <= endDate:
             while tindex < len(transactions) and transactions[tindex].Date <= currDate:
-                balance += transactions[tindex].Amount
+                balance += transactions[tindex].GetAmount(currency)
                 tindex += 1
             totals.append([currDate, balance])
             currDate += onedaydelta
@@ -167,23 +172,27 @@ class BankModel(ORMKeyValueObject):
         Handle representing floats as strings for non
         account-specific amounts, such as totals.
         """
-        if len(self.Accounts) == 0:
-            currency = currencies.CurrencyList[0]()
-        else:
-            currency = self.Accounts[0].Currency
-
+        currencyID = self.Store.getGlobalCurrency()
+        currency = currencies.CurrencyList[currencyID]()
         return currency.float2str(*args, **kwargs)
 
-    def setCurrency(self, currencyIndex):
+    def setGlobalCurrency(self, currencyIndex):
         self.Store.setCurrency(currencyIndex)
-        for account in self.Accounts:
-            account.Currency = currencyIndex
         Publisher.sendMessage("currency_changed", currencyIndex)
 
-    def onCurrencyChanged(self, message):
+    def setAccountCurrency(self, account, currencyIndex):
+        self.Store.setCurrency(currencyIndex, account)
+        account.SetCurrency(currencyIndex)
+        Publisher.sendMessage("currency_changed", currencyIndex)
+    
+    def onGlobalCurrencyChanged(self, message):
         currencyIndex = message.data
-        self.setCurrency(currencyIndex)
-        
+        self.setGlobalCurrency(currencyIndex)
+    
+    def onAccountCurrencyChanged(self, message):
+        account, currency = message.data
+        self.setAccountCurrency(account, currency)
+    
     def onAccountChanged(self, message):
         account = message.data
         if account:
