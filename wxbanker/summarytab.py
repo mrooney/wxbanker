@@ -46,7 +46,7 @@ class SummaryPanel(wx.Panel):
 
         self.optionText = wx.StaticText(self, label=self.plotLabels[0])
         self.fromText = wx.StaticText(self, label=_("From"))
-        self.toText = wx.StaticText(self, label=_("to"))
+        self.toText = wx.StaticText(self, label=_("until"))
         controlSizer.Add(wx.StaticText(self, label=_("Graph")), 0, wx.ALIGN_CENTER_VERTICAL)
         controlSizer.AddSpacer(5)
         controlSizer.Add(self.graphChoice, 0, wx.ALIGN_CENTER_VERTICAL)
