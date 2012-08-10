@@ -85,7 +85,7 @@ class Controller(object):
         if not config.HasEntry("HIDE_ZERO_BALANCE_ACCOUNTS"):
             config.WriteBool("HIDE_ZERO_BALANCE_ACCOUNTS", False)
         if not config.HasEntry("SHOW_CURRENCY_NICK"):
-            config.WriteBool("SHOW_CURRENCY_NICK", True)
+            config.WriteBool("SHOW_CURRENCY_NICK", False)
 
         # Set the auto-save option as appropriate.
         self.AutoSave = config.ReadBool("AUTO-SAVE")

@@ -31,7 +31,12 @@ Table: transactions                                                             
 | 1                      | 1                 | 100.00       | "Initial Balance"        | "2007/01/06"   | null           |
 +-------------------------------------------------------------------------------------------------------+----------------+
 """
-import sys, os, datetime
+
+import ast
+import datetime
+import os
+import sys
+
 from sqlite3 import dbapi2 as sqlite
 import sqlite3
 from wx.lib.pubsub import Publisher
@@ -175,7 +180,7 @@ class PersistentStore:
         for result in self.dbconn.cursor().execute("SELECT * from %s" % table).fetchall():
             autoid, key, value = result
             # eval the value since we store it repr'd. However null comes out as None, so cast to a string.
-            value = eval(str(value))
+            value = ast.literal_eval(str(value))
             setattr(ormkvobj, key, value)
 
     def onBatchEvent(self, message):
@@ -208,10 +213,6 @@ class PersistentStore:
 
         cursor.execute('CREATE TABLE meta (id INTEGER PRIMARY KEY, name VARCHAR(255), value VARCHAR(255))')
         cursor.execute('INSERT INTO meta VALUES (null, ?, ?)', ('VERSION', '2'))
-
-    def getGlobalCurrency(self):
-        results = self.dbconn.cursor().execute('SELECT value FROM meta WHERE name="GlobalCurrency"').fetchall()
-        return int(results[0][0])
 
     def getMeta(self):
         try:
@@ -456,7 +457,7 @@ class PersistentStore:
 		if account:
 			self.dbconn.cursor().execute('UPDATE accounts SET currency=? WHERE id=?', (currencyIndex, account.ID))
 		else:
-		    #Since no account received, we are updating the global currency
+		    # Since no account received, we are updating the global currency
 		    self.dbconn.cursor().execute('UPDATE meta SET value=? WHERE name="GlobalCurrency"', (currencyIndex,))	
 		self.commitIfAppropriate()
 

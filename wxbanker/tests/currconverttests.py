@@ -31,7 +31,7 @@ class CurrConvertTest(unittest.TestCase):
         self.assertEqual(self.CC.Convert(amount, "EUR", "EUR"), amount)
 
     def testConversionWithStockValuesIsExpected(self):
-        rate = 1.2795
+        rate = self.CC.Exchanges['USD'] = 1.2345
         self.assertEqual(self.CC.Convert(1, "EUR", "USD"), rate)
         self.assertEqual(self.CC.Convert(1, "USD", "EUR"), 1/rate)
 

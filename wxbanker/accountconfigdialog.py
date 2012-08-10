@@ -292,9 +292,9 @@ class AccountConfigDialog(wx.Dialog):
         self.recurringPanel = RecurringConfigPanel(self.notebook, account)
         self.mintPanel = MintConfigPanel(self.notebook, account)
         self.currencyPanel = CurrencyConfigPanel(self.notebook, account)
+        self.notebook.AddPage(self.currencyPanel, _("Currency"))
         self.notebook.AddPage(self.recurringPanel, _("Recurring Transactions"))
         self.notebook.AddPage(self.mintPanel, _("Mint.com Integration"))
-        self.notebook.AddPage(self.currencyPanel, _("Currency Settings"))
         
         if tab == "mint":
             # Setting the selection synchronously gets changed back somewhere in the event queue.

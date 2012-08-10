@@ -32,12 +32,12 @@ from wxbanker.currencies import GetCurrencyInt
 
 class BankModel(ORMKeyValueObject):
     ORM_TABLE = "meta"
-    ORM_ATTRIBUTES = ["LastAccountId", "MintEnabled"]
+    ORM_ATTRIBUTES = ["LastAccountId", "MintEnabled", "GlobalCurrency"]
     
     def __init__(self, store):
         ORMKeyValueObject.__init__(self, store)
         self.Store = store
-        self.Accounts = AccountList(store)
+        self.Accounts = AccountList(self, store)
         self._Tags = {}
 
         # Handle Mint integration, but send the message in the main thread, otherwise, dead.
@@ -172,8 +172,7 @@ class BankModel(ORMKeyValueObject):
         Handle representing floats as strings for non
         account-specific amounts, such as totals.
         """
-        currencyID = self.Store.getGlobalCurrency()
-        currency = currencies.CurrencyList[currencyID]()
+        currency = currencies.CurrencyList[self.GlobalCurrency]()
         return currency.float2str(*args, **kwargs)
 
     def setGlobalCurrency(self, currencyIndex):

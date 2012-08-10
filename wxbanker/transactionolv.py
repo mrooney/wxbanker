@@ -45,7 +45,6 @@ class TransactionOLV(GroupListView):
         self.LastSearch = None
         self.CurrentAccount = None
         self.BankController = bankController
-        self.GlobalCurrency = self.BankController.Model.Store.getGlobalCurrency()
 
         self.showGroups = False
         #WXTODO: figure out these (and the text color, or is that already?) from theme (LP: ???)
@@ -152,7 +151,7 @@ class TransactionOLV(GroupListView):
         if not self.CurrentAccount:
             #This means we are in 'All accounts' so we need to convert each total
             # to the global currency
-            balance_currency = self.GlobalCurrency
+            balance_currency = self.BankController.Model.GlobalCurrency
         else:
             #we are just viewing a single account
             # balance currency = accounts currency
@@ -446,7 +445,6 @@ class TransactionOLV(GroupListView):
         self.Refresh()
 
     def onCurrencyChanged(self, message):
-        self.GlobalCurrency = message.data
         # Refresh all the transaction objects, re-rendering the amounts.
         self.RefreshObjects()
         # The current likely changed the widths of the amount/total column.

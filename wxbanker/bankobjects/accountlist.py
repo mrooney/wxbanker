@@ -23,12 +23,13 @@ from wxbanker import bankexceptions
 
 
 class AccountList(list):
-    def __init__(self, store):
+    def __init__(self, bankmodel, store):
         list.__init__(self, store.GetAccounts())
         # Make sure all the items know their parent list.
         for account in self:
             account.Parent = self
 
+        self.BankModel = bankmodel
         self.Store = store
         self.sort()
         
@@ -44,7 +45,7 @@ class AccountList(list):
         return allRecurrings
 
     def GetBalance(self):
-        totalCurrency = self.Store.getGlobalCurrency()
+        totalCurrency = self.BankModel.GlobalCurrency
         total = 0
         for account in self:
             total = total + account.GetCurrentBalance(totalCurrency)
