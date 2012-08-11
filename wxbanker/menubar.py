@@ -78,7 +78,7 @@ class BankMenuBar(wx.MenuBar):
         settingsMenu = wx.Menu()
 
         ## TRANSLATORS: Put the ampersand (&) before the letter to use as the Alt shortcut.
-        currencyMenu = wx.MenuItem(settingsMenu, -1, _("Base &Currency"), _("Select currency for the 'All accounts balance'"))
+        currencyMenu = wx.MenuItem(settingsMenu, -1, _("Base &currency"), _("Select currency for the 'All Accounts' balance"))
         currencyMenu.SetBitmap(wx.ArtProvider.GetBitmap("wxART_money"))
 
         # Add an entry for each available currency.
@@ -99,7 +99,7 @@ class BankMenuBar(wx.MenuBar):
 
         settingsMenu.AppendItem(currencyMenu)
         
-        self.showCurrencyNickItem = settingsMenu.AppendCheckItem(self.ID_SHOWCURRENCYNICK, _("Show currencies nick"), _("Show currencies nick before quantities"))
+        self.showCurrencyNickItem = settingsMenu.AppendCheckItem(self.ID_SHOWCURRENCYNICK, _("Show currency names"), _("Show currency names with amounts"))
 
         self.mintEnabledItem = settingsMenu.AppendCheckItem(self.ID_MINTINTEGRATION, _("Integrate with Mint.com"), _("Sync account balances with an existing Mint.com account"))
 
