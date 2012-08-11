@@ -89,7 +89,18 @@ class Account(ORMObject):
 
     def GetCurrency(self):
         return self._Currency
-    
+
+    def balanceAtCurrency(self, balance, currency):
+        if currency:
+            conv = CurrencyConverter()
+            destCurrency = CurrencyList[currency]().GetCurrencyNick()
+            srcCurrency = self.GetCurrency().GetCurrencyNick()
+            return conv.Convert(balance, srcCurrency, destCurrency)
+        return balance
+
+    def GetBalance(self, currency=None):
+        return self.balanceAtCurrency(self.Balance, currency)
+
     def GetCurrentBalance(self, currency=None):
         """Returns the balance up to and including today, but not transactions in the future."""
         currentBalance = self.Balance
@@ -101,12 +112,7 @@ class Account(ORMObject):
             currentBalance -= transactions[index].Amount
             index -= 1
 
-        if currency:
-            conv = CurrencyConverter()
-            destCurrency = CurrencyList[currency]().GetCurrencyNick()
-            srcCurrency = self.GetCurrency().GetCurrencyNick()
-            return conv.Convert(currentBalance, srcCurrency, destCurrency)
-        return currentBalance
+        return self.balanceAtCurrency(currentBalance, currency)
         
     def GetRecurringTransactions(self):
         return self._RecurringTransactions

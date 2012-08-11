@@ -56,6 +56,7 @@ class PersistentStore:
     Handles creating the Model (bankobjects) from the store and writing
     back the changes.
     """
+
     def __init__(self, path, autoSave=True):
         self.Subscriptions = []
         self.Version = 13
@@ -426,9 +427,11 @@ class PersistentStore:
         for recurring in account.Parent.GetRecurringTransactions():
             recurringCache[recurring.ID] = recurring
             
+        Publisher.sendMessage("batch.start")
         for result in self.dbconn.cursor().execute('SELECT * FROM transactions WHERE accountId=?', (account.ID,)).fetchall():
             t = self.result2transaction(result, account, recurringCache=recurringCache)
             transactions.append(t)
+        Publisher.sendMessage("batch.end")
         return transactions
 
     def getTransactionAndParentById(self, tId, parentObj, linked):

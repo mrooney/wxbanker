@@ -48,7 +48,7 @@ class AccountList(list):
         totalCurrency = self.BankModel.GlobalCurrency
         total = 0
         for account in self:
-            total = total + account.GetCurrentBalance(totalCurrency)
+            total = total + account.GetBalance(totalCurrency)
         return total
     
     def GetById(self, theId):
