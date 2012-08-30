@@ -298,4 +298,4 @@ class AccountConfigDialog(wx.Dialog):
         
         if tab == "mint":
             # Setting the selection synchronously gets changed back somewhere in the event queue.
-            wx.CallLater(50, self.notebook.SetSelection, 1)
+            wx.CallLater(50, self.notebook.SetSelection, 2)
