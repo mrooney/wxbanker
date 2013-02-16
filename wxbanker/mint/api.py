@@ -20,7 +20,7 @@
 
 from wx.lib.pubsub import Publisher
 
-from wxbanker.lib import mint
+from wxbanker.lib.mint import api as mintapi
 
 try:
     from wxbanker.mint.keyring import Keyring
@@ -43,7 +43,7 @@ class Mint:
             return
 
         accounts = {}
-        for account in mint.api.get_accounts(username, password):
+        for account in mintapi.get_accounts(username, password):
             account['balance'] = account['currentBalance'] # convert to wxBanker speak
             accounts[account['accountId']] = account
         cls._CachedAccounts = accounts
