@@ -19,10 +19,8 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 from wx.lib.pubsub import Publisher
-from wxbanker.mint import web
-web.enablecookies()
-from BeautifulSoup import BeautifulSoup
-import re
+
+from wxbanker.lib import mint
 
 try:
     from wxbanker.mint.keyring import Keyring
@@ -31,55 +29,30 @@ except ImportError:
     import traceback; traceback.print_exc()
     Keyring = None
 
-class MintLoginException(Exception):
-    """Thrown on invalid credentials or login error."""
-    pass
-
-class MintConnection:
-    """A MintConnection represents a static connection to Mint.com."""
-    _shared_state = {}
-    
-    def __init__(self):
-        self.__dict__ = self._shared_state
-        if not hasattr(self, "_CachedSummary"):
-            self._CachedSummary = None
-
-    def Login(self, username, password, notify=True):
-        # If we are already logged in, this is a no-op. Use Refresh if you want updated data.
-        if self._CachedSummary:
-            return
-        
-        postArgs = {"username": username, "password": password, "task": "L", "nextPage": ""}
-        result = web.post("https://wwws.mint.com/loginUserSubmit.xevent", postArgs)
-        if "your password?" in result.lower():
-            raise MintLoginException("Invalid credentials")
-        
-        self._CachedSummary = result
-        
-        if notify:
-            Publisher.sendMessage("mint.updated")
-        
-    def GetSummary(self):
-        if self._CachedSummary is None:
-            raise Exception("Please call Login(username, password) first.")
-        
-        return self._CachedSummary
-        
-
 class Mint:
     """A collection of methods for interfacing with a MintConnection."""
     _CachedAccounts = None
-    
-    @staticmethod
-    def IsLoggedIn():
-        return MintConnection()._CachedSummary is not None
-    
-    @staticmethod
-    def Login(username, password, notify=True):
-        return MintConnection().Login(username, password, notify)
 
-    @staticmethod
-    def LoginFromKeyring(notify=True):
+    @classmethod
+    def IsLoggedIn(cls):
+        return cls._CachedAccounts is not None
+    
+    @classmethod
+    def Login(cls, username, password, notify=True):
+        if cls.IsLoggedIn():
+            return
+
+        accounts = {}
+        for account in mint.api.get_accounts(username, password):
+            account['balance'] = account['currentBalance'] # convert to wxBanker speak
+            accounts[account['accountId']] = account
+        cls._CachedAccounts = accounts
+
+        if notify:
+            Publisher.sendMessage("mint.updated")
+
+    @classmethod
+    def LoginFromKeyring(cls, notify=True):
         if Keyring is None:
             raise Exception("Keyring was unable to be imported")
 
@@ -88,53 +61,27 @@ class Mint:
             raise Exception("Keyring does not have Mint.com credentials")
 
         user, passwd = keyring.get_credentials()
-        return Mint.Login(user, passwd, notify)
+        return cls.Login(user, passwd, notify)
         
-    @staticmethod
-    def GetAccounts():
+    @classmethod
+    def GetAccounts(cls):
         """Returns a dictionary like {account_id: {'name': name, 'balance': balance}}"""
-        if Mint._CachedAccounts is None:
-            summary = MintConnection().GetSummary()
-            soup = BeautifulSoup(summary)
-            mintAccounts = {}
-            
-            accountRe = re.compile("account( refreshing|)")
-            for li in soup.findAll("li", {"class": accountRe}):
-                h4 = li.find("h4")
-                h6 = li.find("h6")
-                balanceStr = h4.find("span").contents[0]
-                balanceStr = balanceStr.replace("–".decode("utf-8"), "-") # Mint uses a weird negative sign!
-                for char in ",$":
-                    balanceStr = balanceStr.replace(char, "")
-                    
-                aid = int(li.get("id").split("-")[1])
-                balance = float(balanceStr)
-                bankName = h4.find("a").contents[0]
-                accountName = h6.contents[1]
-                # Support BeautifulSoup 3(.2.0)
-                if hasattr(accountName, 'text'):
-                    accountName = accountName.text
-                name = bankName + ' ' + accountName
-                mintAccounts[aid] = {'name': name, 'balance': balance}
-                
-            Mint._CachedAccounts = mintAccounts
-             
-        return Mint._CachedAccounts
+        return cls._CachedAccounts
 
-    @staticmethod
-    def GetAccount(accountid):
-        accounts = Mint.GetAccounts()
-        account = accounts.get(accountid, None)
+    @classmethod
+    def GetAccount(cls, accountid):
+        account = cls.GetAccounts().get(accountid)
         if account is None:
             raise Exception("No such account with ID: %r. Valid accounts: %s" % (accountid, accounts))
         return account
         
-    @staticmethod
-    def GetAccountBalance(accountid):
-        return Mint.GetAccount(accountid)['balance']
+    @classmethod
+    def GetAccountBalance(cls, accountid):
+        return cls.GetAccount(accountid)['balance']
 
     @staticmethod
     def GetAccountTransactionsCSV(accountid):
+        #TODO: update for new Mint.
         return web.read("https://wwws.mint.com/transactionDownload.event?accountId=%s&comparableType=8&offset=0" % accountid)
 
 
@@ -146,10 +93,9 @@ def main():
     #Mint.LoginFromKeyring()
     Mint.Login(username, password)
     accounts = Mint.GetAccounts()
-    pprint.pprint(accounts)
 
     for account in accounts:
         print account, accounts[account]
-    
+
 if __name__ == "__main__":
     main()

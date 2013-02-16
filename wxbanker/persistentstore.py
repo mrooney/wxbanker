@@ -347,7 +347,11 @@ class PersistentStore:
             repeatOn = [int(x) for x in repeatOn.split(",")]
 
         if sourceId:
-            sourceAccount = [a for a in allAccounts if a.ID == sourceId][0]
+            try:
+                sourceAccount = [a for a in allAccounts if a.ID == sourceId][0]
+            except IndexError:
+                # The sourceAccount no longer exists; it was likely deleted.
+                sourceAccount = None
         else:
             sourceAccount = None
 

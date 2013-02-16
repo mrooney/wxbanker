@@ -56,7 +56,6 @@ def doImport():
     bankController = controller.Controller()
     username = raw_input("Mint email: ")
     password = getpass.getpass("Password: ")
-    Mint.Login(username, password)
     ImportAccounts(bankController.Model)
 
 if __name__ == "__main__":

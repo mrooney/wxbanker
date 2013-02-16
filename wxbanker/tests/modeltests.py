@@ -24,6 +24,8 @@ from wxbanker import controller, bankexceptions, currencies
 from wx.lib.pubsub import Publisher
 from wxbanker.bankobjects.account import Account
 
+from wxbanker.mint import api as mintapi
+
 from wxbanker.tests.testbase import today, yesterday, tomorrow
 
 class ModelTests(testbase.TestCaseWithController):
@@ -469,6 +471,7 @@ class ModelTests(testbase.TestCaseWithController):
         self.assertEqual(self.Model.MintEnabled, False)
         
     def testAccountMintSync(self):
+        mintapi.Mint._CachedAccounts = {1218040: {'name': 'PayPal PayPal', 'balance': -4277.24}}
         model = self.Model
         a = model.CreateAccount("Foo")
         
@@ -479,29 +482,20 @@ class ModelTests(testbase.TestCaseWithController):
         self.assertEquals(1218040, a.GetMintId())
         self.assertTrue(a.IsMintEnabled())
 
-        # Put the fixture cached summary in, so we can test.
-        from wxbanker.mint.api import MintConnection
-        MintConnection()._CachedSummary = open(testbase.fixturefile("mint_index.html")).read()
-        
         self.assertFalse(a.IsInSync())
 
         # Add the balance and we should be in sync.
         a.AddTransaction(-4277.24)
         self.assertTrue(a.IsInSync())
         
-        self.assertEqual(a.GetSyncString(), "PayPal PayPal Balance: -$4,277.24")
-
-        del MintConnection()._CachedSummary
+        self.assertEqual(a.GetSyncString(), "PayPal PayPal: -$4,277.24")
         
     def testAccountMintSyncWithFutureDates(self):
+        mintapi.Mint._CachedAccounts = {1218040: {'name': 'foo', 'balance': -4277.24}}
         model = self.Model
         a = model.CreateAccount("Foo")
         a.MintId = 1218040
 
-        # Put the fixture cached summary in, so we can test.
-        from wxbanker.mint.api import MintConnection
-        MintConnection()._CachedSummary = open(testbase.fixturefile("mint_index.html")).read()
-        
         # Add the balance and we should be in sync.
         a.AddTransaction(-4277.24)
         self.assertTrue(a.IsInSync())
