@@ -44,7 +44,7 @@ class Mint:
 
         accounts = {}
         for account in mintapi.get_accounts(username, password):
-            account['balance'] = account['currentBalance'] # convert to wxBanker speak
+            account['balance'] = account['value'] # convert to wxBanker speak
             accounts[account['accountId']] = account
         cls._CachedAccounts = accounts
 
