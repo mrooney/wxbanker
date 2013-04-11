@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: wxbanker\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2010-10-04 03:01-0700\n"
-"PO-Revision-Date: 2010-10-27 18:31+0000\n"
+"PO-Revision-Date: 2012-08-06 04:09+0000\n"
 "Last-Translator: DiegoJ <diegojromerolopez@gmail.com>\n"
 "Language-Team: Spanish <es@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Launchpad-Export-Date: 2010-10-28 05:00+0000\n"
-"X-Generator: Launchpad (build Unknown)\n"
+"X-Launchpad-Export-Date: 2012-08-07 04:45+0000\n"
+"X-Generator: Launchpad (build 15745)\n"
 
 #: wxbanker/summarytab.py:30
 msgid "Trend Degree"
@@ -1026,22 +1026,3 @@ msgstr "Añadir etiqueta"
 
 #~ msgid "A lightweight personal finance management application."
 #~ msgstr "Una aplicación ligera para gestionar sus finanzas personales."
-
-#~ msgid "account:"
-#~ msgstr "cuenta:"
-
-#~ msgid "Every"
-#~ msgstr "Cada"
-
-#~ msgid ""
-#~ "wxBanker can synchronize account balances online if you have an account with "
-#~ "mint.com"
-#~ msgstr ""
-#~ "wxBanker puede sincronizar balances de cuentas en línea si tiene una cuenta "
-#~ "con mint.com"
-
-#~ msgid "Password"
-#~ msgstr "Contraseña"
-
-#~ msgid "Username"
-#~ msgstr "Nombre de usuario"
