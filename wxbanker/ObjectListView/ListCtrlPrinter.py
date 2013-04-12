@@ -2514,7 +2514,7 @@ class WatermarkDecoration(Decoration):
         """
         """
         self.text = text
-        self.color = color or wx.Color(128, 128, 128, 128)
+        self.color = color or wx.Colour(128, 128, 128, 128)
         self.font = font or wx.FFont(128, wx.SWISS, 0)
         self.angle = angle
         self.over = over

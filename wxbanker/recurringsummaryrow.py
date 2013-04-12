@@ -25,7 +25,7 @@ class RecurringSummaryText(wx.Panel):
         self.SetBackgroundColour(wx.BLACK)
 
         self.contentPanel = wx.Panel(self)
-        self.contentPanel.SetBackgroundColour(wx.Color(224,238,238))
+        self.contentPanel.SetBackgroundColour(wx.Colour(224,238,238))
         self.Sizer = wx.BoxSizer()
         self.Sizer.Add(self.contentPanel, 1, wx.EXPAND|wx.ALL, 1)
 

@@ -3,3 +3,5 @@ simplejson
 BeautifulSoup
 pyxdg
 numpy
+pyquery
+pycairo

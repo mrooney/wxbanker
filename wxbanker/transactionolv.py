@@ -48,7 +48,7 @@ class TransactionOLV(GroupListView):
 
         self.showGroups = False
         #WXTODO: figure out these (and the text color, or is that already?) from theme (LP: ???)
-        self.evenRowsBackColor = wx.Color(224,238,238)
+        self.evenRowsBackColor = wx.Colour(224,238,238)
         self.oddRowsBackColor = wx.WHITE
 
         self.cellEditMode = GroupListView.CELLEDIT_DOUBLECLICK
