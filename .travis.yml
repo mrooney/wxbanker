@@ -4,4 +4,4 @@ python:
   - 2.7
 before_install: sudo apt-get update && sudo apt-get install python-wxgtk2.8 language-pack-ru-base language-pack-fr-base
 install: ls
-script: deactivate && pip install -r pip_requirements.txt && xvfb-run python -c "from wxbanker.tests import alltests; alltests.main()"
+script: deactivate && sudo pip install -r pip_requirements.txt && xvfb-run python -c "from wxbanker.tests import alltests; alltests.main()"
