@@ -1,7 +1,7 @@
-Hello, and thanks for using wxBanker! If you have any questions,
-comments, or suggestions, please don't hesitate to email me at
-mrooney@ubuntu.com. If you find a bug, please file it at
-https://bugs.launchpad.net/wxbanker.
+wxBanker is a simple personal finance application.
+
+For more information, see https://wiki.ubuntu.com/wxBanker and
+https://launchpad.net/wxbanker
 
 Requirements:
  * Ubuntu: sudo apt-get install python-wxgtk2.8
