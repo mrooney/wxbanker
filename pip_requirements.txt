@@ -4,4 +4,3 @@ BeautifulSoup
 pyxdg
 numpy
 pyquery
-pycairo
