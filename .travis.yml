@@ -1,0 +1,7 @@
+language: python
+python:
+  - 2.6
+  - 2.7
+before_install: sudo apt-get install wxbanker language-pack-ru-base language-pack-fr-base
+install: ls
+script: deactivate && xvfb-run python -c "from wxbanker.tests import alltests; alltests.main()"
