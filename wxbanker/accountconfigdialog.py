@@ -22,11 +22,7 @@ from wxbanker.transactionctrl import TransactionCtrl
 from wxbanker.currencies import CurrencyStrings, GetCurrencyInt
 
 from wxbanker.mint.api import Mint
-try:
-    from wxbanker.mint.keyring import Keyring
-except ImportError:
-    Keyring = None
-
+from wxbanker.mint.kring import Keyring
 
 class MintConfigPanel(wx.Panel):
     ID_UPDATE = wx.NewId()
@@ -83,7 +79,7 @@ class MintConfigPanel(wx.Panel):
         if Keyring:
             self.saveAuthCheck.Enable(True)
             keyring = Keyring()
-            if keyring.has_credentials():
+            if keyring.get_credentials() is not None:
                 self.saveAuthCheck.Value = True
                 user, passwd = keyring.get_credentials()
                 self.usernameBox.Value = user

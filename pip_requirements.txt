@@ -4,3 +4,4 @@ BeautifulSoup
 pyxdg
 numpy
 pyquery
+keyring

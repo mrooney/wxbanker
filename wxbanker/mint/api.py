@@ -21,13 +21,7 @@
 from wx.lib.pubsub import Publisher
 
 from wxbanker.lib.mint import api as mintapi
-
-try:
-    from wxbanker.mint.keyring import Keyring
-except ImportError:
-    print "[WARNING] Unable to import keyring module, Mint.com integration isn't possible."
-    import traceback; traceback.print_exc()
-    Keyring = None
+from wxbanker.mint.kring import Keyring
 
 class Mint:
     """A collection of methods for interfacing with a MintConnection."""
@@ -57,7 +51,7 @@ class Mint:
             raise Exception("Keyring was unable to be imported")
 
         keyring = Keyring()
-        if not keyring.has_credentials():
+        if keyring.get_credentials() is None:
             raise Exception("Keyring does not have Mint.com credentials")
 
         user, passwd = keyring.get_credentials()
