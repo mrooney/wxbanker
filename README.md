@@ -1,7 +1,7 @@
 wxBanker is a simple personal finance application.
 
-WARNING: This is an in-progress "port" from Ubuntu to OSX. Everything is
-not currently working optimally.
+[![Build
+Status](https://travis-ci.org/mrooney/wxbanker.png?branch=master)](https://travis-ci.org/mrooney/wxbanker)
 
 For more information, see https://wiki.ubuntu.com/wxBanker and
 https://launchpad.net/wxbanker
