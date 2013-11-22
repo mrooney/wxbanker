@@ -18,4 +18,4 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-NUMBER = "0.8.2"
+NUMBER = "0.9.1"
