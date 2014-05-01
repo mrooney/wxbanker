@@ -6,9 +6,9 @@ Status](https://travis-ci.org/mrooney/wxbanker.png?branch=master)](https://travi
 For more information, see https://wiki.ubuntu.com/wxBanker and
 https://launchpad.net/wxbanker
 
-Requirements:
+Pre-requirements:
  * Ubuntu: sudo apt-get install python-wxgtk2.8
- * OSX: brew install wxpython
+ * OSX: brew install wxpython py2cairo
 
 Installation:
  * pip install -r pip_requirements.txt
