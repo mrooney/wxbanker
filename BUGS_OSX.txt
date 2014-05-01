@@ -3,3 +3,4 @@
 * pending recurring transaction banner is all black
 * account action icons are cut off by a pixel on each side
 * up/down arrows only adjust the date if the date field is focused, not from desc/amount
+* changing a date of a transaction to an invalid date leaves the ctrl stuck there
