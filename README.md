@@ -7,7 +7,7 @@ For more information, see https://wiki.ubuntu.com/wxBanker and
 https://launchpad.net/wxbanker
 
 Pre-requirements:
- * Ubuntu: sudo apt-get install python-wxgtk2.8
+ * Ubuntu: sudo apt-get install python-wxgtk2.8 python-cairo
  * OSX: brew install wxpython py2cairo
 
 Installation:
