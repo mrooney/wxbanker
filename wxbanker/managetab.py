@@ -21,7 +21,7 @@ import datetime
 from wxbanker import searchctrl, accountlistctrl, transactionctrl
 from wxbanker.transactionolv import TransactionOLV as TransactionCtrl
 from wxbanker.calculator import CollapsableWidget, SimpleCalculator
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 from wxbanker import localization, summarytab
 from wxbanker.plots.plotfactory import PlotFactory
 

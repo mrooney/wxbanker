@@ -18,7 +18,7 @@
 
 from wxbanker import localization, bankcontrols, helpers
 import wx, datetime
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 
 class SummaryPanel(wx.Panel):
     def __init__(self, parent, plotFactory, bankController):

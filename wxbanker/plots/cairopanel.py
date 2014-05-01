@@ -1,7 +1,7 @@
 import wx
 import datetime
 from wxbanker.plots import plotfactory
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 
 try:
     try:

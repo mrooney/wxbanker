@@ -25,7 +25,7 @@ from wxbanker.bankobjects.tag import Tag
 from wxbanker.tests.testbase import today, tomorrow
 
 import os, unittest
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 
 class ModelDiskTests(testbase.TestCaseWithControllerOnDisk):
     """

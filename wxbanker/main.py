@@ -31,13 +31,7 @@ else:
     wxversion.ensureMinimal("2.8")
     import wx, wx.aui
 
-# Handle PubSub API change in 2.9.4.0
-try:
-    import wx.lib.pubsub.setupv1
-except ImportError:
-    pass
-
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 
 # wxBanker
 from wxbanker.menubar import BankMenuBar

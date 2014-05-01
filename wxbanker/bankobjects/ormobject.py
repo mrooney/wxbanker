@@ -18,7 +18,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 
 class ORMObject(object):
     ORM_TABLE = None

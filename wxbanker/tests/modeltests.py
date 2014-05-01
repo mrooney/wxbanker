@@ -21,7 +21,7 @@
 from wxbanker.tests import testbase
 import os, datetime, unittest
 from wxbanker import controller, bankexceptions, currencies
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 from wxbanker.bankobjects.account import Account
 
 from wxbanker.mint import api as mintapi

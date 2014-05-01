@@ -19,7 +19,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import wx
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 import wx.lib.delayedresult as delayedresult
 import re, datetime
 

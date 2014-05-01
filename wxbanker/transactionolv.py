@@ -30,7 +30,7 @@ TODO (for feature parity):
 
 import threading
 import wx, datetime
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 from wxbanker.ObjectListView import GroupListView, ColumnDefn, CellEditorRegistry
 from wxbanker import bankcontrols, tagtransactiondialog
 

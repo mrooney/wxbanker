@@ -39,7 +39,7 @@ import sys
 
 from sqlite3 import dbapi2 as sqlite
 import sqlite3
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 
 from wxbanker import currencies, debug
 from wxbanker.bankobjects.account import Account

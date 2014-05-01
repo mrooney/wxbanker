@@ -51,7 +51,7 @@ else:
 # Import wxbanker here so wx gets initialized first, so wxversion calls work properly.
 import wxbanker
 from wxbanker import controller, fileservice
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 
 def fixturefile(name):
     return fileservice.getSharedFilePath("fixtures", name)

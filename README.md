@@ -8,7 +8,7 @@ https://launchpad.net/wxbanker
 
 Requirements:
  * Ubuntu: sudo apt-get install python-wxgtk2.8
- * OSX: brew install wxmac
+ * OSX: brew install wxpython
 
 Installation:
  * pip install -r pip_requirements.txt

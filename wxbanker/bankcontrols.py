@@ -17,7 +17,7 @@
 #    along with wxBanker.  If not, see <http://www.gnu.org/licenses/>.
 
 import wx, datetime
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 from wxbanker.smoothsizer import SmoothStaticBoxSizer
 from wxbanker import localization
 

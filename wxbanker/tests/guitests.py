@@ -21,7 +21,7 @@
 from wxbanker.tests import testbase
 from wxbanker import main, controller
 import os, wx, unittest
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 
 class GUITests(testbase.TestCaseHandlingConfigBase):
     def setUp(self):

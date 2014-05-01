@@ -18,7 +18,7 @@
 
 import wx
 from wxbanker import bankcontrols, bankexceptions, accountconfigdialog, localization
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 
 
 class AccountListCtrl(wx.Panel):

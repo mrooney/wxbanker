@@ -20,7 +20,7 @@
 
 import wx, webbrowser, os
 from wx.lib.wordwrap import wordwrap
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 
 from wxbanker import version, localization, debug, fileservice, brandedframe
 from wxbanker.currencies import CurrencyStrings

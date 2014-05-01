@@ -38,7 +38,7 @@ setup(
     packages = ["wxbanker", "wxbanker.art", "wxbanker.bankobjects",
         "wxbanker.plots", "wxbanker.tests", "wxbanker.mint",
         "wxbanker.cairoplot", "wxbanker.ObjectListView", "wxbanker.lib",
-        "wxbanker.lib.mint"],
+        "wxbanker.lib.mint", "wxbanker.lib.pubsub"],
     license='GNU GPL',
     platforms='linux',
     scripts = ['bin/wxbanker'],

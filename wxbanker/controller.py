@@ -19,7 +19,7 @@
 
 from wxbanker.persistentstore import PersistentStore
 import wx, os
-from wx.lib.pubsub import Publisher
+from wxbanker.lib.pubsub import Publisher
 from wxbanker import debug, fileservice
 
 class Controller(object):
