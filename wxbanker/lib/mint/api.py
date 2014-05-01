@@ -1,42 +1,29 @@
-from cookielib import CookieJar, DefaultCookiePolicy
 import json
-import urllib2, urllib
-
-from pyquery import PyQuery as pq
-
-def enable_cookies():
-    cj = CookieJar(DefaultCookiePolicy(rfc2965=True))
-    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
-    urllib2.install_opener(opener)
-
-def url_get(url, postVars=None):
-    try:
-        con = urllib2.urlopen(url, postVars)
-    except Exception:
-        result = None
-    else:
-        result = con.read()
-
-    return result
-
-def url_post(url, varDict):
-    return url_get(url, urllib.urlencode(varDict))
+import requests
 
 def get_accounts(email, password):
-    enable_cookies()
-    # login
-    post_args = {"username": email, "password": password, "task": "L", "nextPage": ""}
-    response = url_post("https://wwws.mint.com/loginUserSubmit.xevent", post_args)
-    if "javascript-token" not in response.lower():
-        raise Exception("Mint.com login failed")
+    # 1: Login.
+    session = requests.Session()
 
-    # grab token
-    d = pq(response)
-    token = d("input#javascript-token")[0].value
+    if session.get("https://wwws.mint.com/login.event?task=L").status_code != requests.codes.ok:
+        raise Exception("Failed to load Mint main page '{}'".format(Mint.START_URL))
+    
+    data = {"username": email, "password": password, "task": "L", "browser": "firefox", "browserVersion": "27", "os": "linux"}
+    headers = {"accept": "application/json"}
+    response = session.post("https://wwws.mint.com/loginUserSubmit.xevent", data=data, headers=headers).text
+    if "token" not in response:
+        raise Exception("Mint.com login failed[1]")
 
-    # issue service request
-    request_id = "115485" # magic number? random number?
-    post_args = {"input": json.dumps([
+    response = json.loads(response)
+    if not response["sUser"]["token"]:
+        raise Exception("Mint.com login failed[2]")
+
+    # 2: Grab token.
+    token = response["sUser"]["token"]
+
+    # 3. Issue service request.
+    request_id = "42" # magic number? random number?
+    data = {"input": json.dumps([
         {"args": {
             "types": [
                 "BANK", 
@@ -52,24 +39,29 @@ def get_accounts(email, password):
         }, 
         "id": request_id, 
         "service": "MintAccountService", 
-        "task": "getAccountsSorted"}
+        #"task": "getAccountsSorted"
+        "task": "getAccountsSortedByBalanceDescending"
+        }
     ])}
-    json_response = url_post("https://wwws.mint.com/bundledServiceController.xevent?token="+token, post_args)
-    response = json.loads(json_response)["response"]
-
-    # turn into correct format
-    accounts = response[request_id]["response"]
+    response = session.post("https://wwws.mint.com/bundledServiceController.xevent?legacy=false&token="+token, data=data, headers=headers).text
+    if request_id not in response:
+        raise Exception("Could not parse account data: " + response)
+    response = json.loads(response)
+    accounts = response["response"][request_id]["response"]
     return accounts
 
 if __name__ == "__main__":
     import getpass, sys
 
+    # Handle Python 3's raw_input change.
+    try: input = raw_input
+    except NameError: pass
+
     if len(sys.argv) >= 3:
         email, password = sys.argv[1:]
     else:
-        email = raw_input("Mint email: ")
+        email = input("Mint email: ")
         password = getpass.getpass("Password: ")
 
     accounts = get_accounts(email, password)
-    print json.dumps(accounts, indent=2)
-
+    print(json.dumps(accounts, indent=2))

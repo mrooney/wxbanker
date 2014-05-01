@@ -1,7 +1,7 @@
-python-dateutil
-simplejson
 BeautifulSoup
-pyxdg
-numpy
-pyquery
 keyring
+numpy
+python-dateutil
+pyxdg
+requests
+simplejson
