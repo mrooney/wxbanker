@@ -94,6 +94,7 @@ class BankerPanel(wx.Panel):
             
         # Create the message panel.
         mpanel = messagepanel.MessagePanel(self, message)
+        print message, lines
         
         # If there are lines to display, add the button and callback
         if lines:

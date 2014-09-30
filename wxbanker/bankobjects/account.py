@@ -47,7 +47,7 @@ class Account(ORMObject):
         # Make sure that Currency and Balance are not None (bug #653716)
         self.Currency = currency or 0
         self.Balance = balance or 0.0
-        self.MintId = mintId
+        self.MintId = mintId or None
         self.ShowCurrencyNick = currNick or False
         self.IsFrozen = False
 
@@ -297,7 +297,7 @@ class Account(ORMObject):
         return self._MintId
     
     def SetMintId(self, mintId):
-        if mintId is not None:
+        if mintId:
             mintId = int(mintId)
         self._MintId = mintId
         
