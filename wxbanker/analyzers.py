@@ -29,10 +29,8 @@ class MonthlyAnalyzer:
     def GetDateRange(self):
         startMonth = self.Today - relativedelta(months=self.Months-1)
         start = datetime.date(startMonth.year, startMonth.month, 1)
-        #endMonth = self.Today - relativedelta(months=1)
-        #lastDay = calendar.monthrange(endMonth.year, endMonth.month)[1]
-        #end = datetime.date(endMonth.year, endMonth.month, lastDay)
-        end = datetime.date.today()
+        lastDay = calendar.monthrange(self.Today.year, self.Today.month)[1]
+        end = self.Today.replace(day=lastDay)
         return start, end
     
     def _DateToBucket(self, date):

@@ -5,3 +5,4 @@ python-dateutil
 pyxdg
 requests
 simplejson
+xmltodict
