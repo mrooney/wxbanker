@@ -21,18 +21,15 @@ from wxbanker.plots.plotfactory import BasePlotImportException
 from wxbanker.analyzers import MonthlyAnalyzer
 
 # Needs Numeric or numarray or NumPy
+polyfit = None
 try:
-    import numpy.oldnumeric as _Numeric
+    from numpy import polyfit
+    from numpy.oldnumeric import polyfit
+    from numarray import polyfit
+    from Numeric import polyfit
 except:
-    try:
-        import numarray as _Numeric  #if numarray is used it is renamed Numeric
-    except:
-        try:
-            import Numeric as _Numeric
-        except:
-            _Numeric = None
-if not hasattr(_Numeric, 'polyfit'):
-    raise BasePlotImportException()
+    if polyfit is None:
+        raise BasePlotImportException()
 
 
 class BaseFactory(object):
@@ -111,7 +108,7 @@ class BasePlot(object):
         xs = tuple((p[0] for p in points))
         ys = tuple((p[1] for p in points))
 
-        coefficients = _Numeric.polyfit(xs, ys, N)
+        coefficients = polyfit(xs, ys, N)
 
         bestFitPoints = []
         for x in xs:
