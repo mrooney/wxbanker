@@ -37,7 +37,6 @@ class TransactionCtrl(wx.Panel):
         
         self.Sizer = wx.GridBagSizer(0, 3)
         self.Sizer.SetEmptyCellSize((0,0))
-        self.Sizer.AddGrowableCol(1, 1)
         
         self.recurringRow = RecurringRow(self, self.RECURRING_ROW)
         self.recurringSummaryRow = RecurringSummaryRow(self, self.SUMMARY_ROW)
@@ -45,6 +44,9 @@ class TransactionCtrl(wx.Panel):
         self.transferRow = TransferRow(self, self.TRANSFER_ROW)
         self.transactionRow = NewTransactionRow(self, self.TRANSACTION_ROW, editing=editing)
         
+        # can not set 2nd column growable in wx3.0 if Sizer is empty
+        self.Sizer.AddGrowableCol(1, 1)
+
         # RecurringRow needs an update once both it and the other controls exist.
         self.recurringRow.Update()
         
