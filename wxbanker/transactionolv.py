@@ -338,7 +338,7 @@ class TransactionOLV(GroupListView):
                     tagItemMenu.Bind(wx.EVT_MENU, lambda e, tag=tag: self.onTagRemoval(tag, transactions), source=removeItem)
             else:
                 noTagsItem = tagsMenu.Append(-1, tagStr)
-                menu.Enable(noTagsItem.Id, False)
+                tagsMenu.Enable(noTagsItem.Id, False)
             tagsMenu.AppendSeparator()
             addItem = tagsMenu.Append(-1, addTagStr)
             tagsItem.SetSubMenu(tagsMenu)
