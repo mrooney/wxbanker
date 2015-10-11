@@ -142,9 +142,6 @@ class BankMenuBar(wx.MenuBar):
         self.Append(settingsMenu, _("&Settings"))
         self.Append(helpMenu, _("&Help"))
 
-        self.Bind(wx.EVT_MENU, self.onClickAbout)
-        helpMenu.Bind(wx.EVT_MENU, self.onClickAbout)
-
         self.toggleAutoSave(autosave)
         self.toggleShowCurrencyNick(showcurrnick)
         Publisher.subscribe(self.onAutoSaveToggled, "controller.autosave_toggled")
