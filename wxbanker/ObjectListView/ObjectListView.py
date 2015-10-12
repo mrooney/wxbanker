@@ -1654,7 +1654,7 @@ class ObjectListView(wx.ListCtrl):
 
         # Which item did the user click?
         (rowIndex, flags, subItemIndex) = self.HitTestSubItem(evt.GetPosition())
-        if (flags & wx.LIST_HITTEST_ONITEM) == 0 or subItemIndex == -1:
+        if (flags & wx.LIST_HITTEST_ONITEM) == 0 or rowIndex == -1 or subItemIndex == -1:
             return
 
         # A single click on column 0 doesn't start an edit
@@ -1939,10 +1939,10 @@ class ObjectListView(wx.ListCtrl):
         """
         Start an edit operation on the given cell after performing some sanity checks
         """
-        if 0 > rowIndex >= self.GetItemCount():
+        if 0 > rowIndex or rowIndex >= self.GetItemCount():
             return
 
-        if 0 > subItemIndex >= self.GetColumnCount():
+        if 0 > subItemIndex or subItemIndex >= self.GetColumnCount():
             return
 
         if self.cellEditMode == self.CELLEDIT_NONE:
