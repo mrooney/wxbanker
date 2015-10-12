@@ -59,6 +59,8 @@ class Transaction(ORMObject):
 
     def SetDate(self, date, fromLink=False):
         date = self._MassageDate(date)
+        if date is None:
+            return
         self._Date = date
         
         # Update the linked transaction if one exists.
@@ -67,7 +69,7 @@ class Transaction(ORMObject):
 
     def _MassageDate(self, date):
         """
-        Takes a date and returns a valid datetime.date object.
+        Takes a date and returns a valid datetime.date object or None if the date is invalid.
         `date` can be a datetime object, or a string. In the case of a string, valid separators are '-' and '/'.
         Abbreviated years will be converted into the "intended" year: 86 => 1986, 08 => 2008.
         """
@@ -79,7 +81,10 @@ class Transaction(ORMObject):
         MAX_FUTURE_ABBR = 10
         date = str(date) #if it is a datetime.date object, make it a Y-M-D string.
         date = date.replace('/', '-') # '-' is our standard assumed separator
-        year, m, d = [int(x) for x in date.split("-")]
+        try:
+            year, m, d = [int(x) for x in date.split("-")]
+        except ValueError:
+            return None
         if year < 100:
             currentYear = datetime.date.today().year
             currentAbr = currentYear % 100
@@ -88,7 +93,10 @@ class Transaction(ORMObject):
                 year += currentBase * 100
             else:
                 year += (currentBase-1) * 100
-        return datetime.date(year, m, d)
+        try:
+            return datetime.date(year, m, d)
+        except ValueError:
+            return None
 
     def GetDescription(self):
         description = self._Description
