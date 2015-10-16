@@ -31,7 +31,7 @@ class AnalyzerTests(testbase.TestCaseWithController):
             
     def createMonthly(self, *args, **kwargs):
         monthly = MonthlyAnalyzer(*args, **kwargs)
-        monthly.Today = datetime.date(2010, 1, 15)
+        monthly.Today = datetime.date(2009, 12, 15)
         return monthly
             
     def testMonthlyDateRangeDefault(self):
