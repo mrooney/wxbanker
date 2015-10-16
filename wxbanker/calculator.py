@@ -30,7 +30,7 @@ class SimpleCalculator(wx.Panel):
         self.display = wx.TextCtrl(self, -1, '0.00',  style=wx.TE_RIGHT)
         self.display.Bind(wx.EVT_CHAR, self.onChar)
         sizer.Add(self.display, 0, wx.EXPAND | wx.TOP | wx.BOTTOM, 4)
-        gs = wx.GridSizer(4, 4, 3, 3)
+        gs = wx.GridSizer(5, 4, 3, 3)
 
         for lbl in "C ()789/456*123-0.+=":
             if not lbl == ' ':

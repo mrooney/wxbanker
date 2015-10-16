@@ -1643,8 +1643,13 @@ class ObjectListView(wx.ListCtrl):
         #    we should edit on double click and this is a single click, OR
         #    we should edit on single click and this is a double click,
         # THEN we don't try to start a cell edit operation
-        if evt.m_altDown or evt.m_controlDown or evt.m_shiftDown:
-            return
+        try:
+            if evt.GetModifiers() != wx.MOD_NONE:
+                return
+        except AttributeError:
+            # deprecated properties in wx2.9+
+            if evt.m_altDown or evt.m_controlDown or evt.m_shiftDown or evt.m_metaDown:
+                return
         if self.cellEditMode == self.CELLEDIT_NONE:
             return
         if evt.LeftUp() and self.cellEditMode == self.CELLEDIT_DOUBLECLICK:
@@ -1654,7 +1659,7 @@ class ObjectListView(wx.ListCtrl):
 
         # Which item did the user click?
         (rowIndex, flags, subItemIndex) = self.HitTestSubItem(evt.GetPosition())
-        if (flags & wx.LIST_HITTEST_ONITEM) == 0 or subItemIndex == -1:
+        if (flags & wx.LIST_HITTEST_ONITEM) == 0 or rowIndex == -1 or subItemIndex == -1:
             return
 
         # A single click on column 0 doesn't start an edit
@@ -1939,10 +1944,10 @@ class ObjectListView(wx.ListCtrl):
         """
         Start an edit operation on the given cell after performing some sanity checks
         """
-        if 0 > rowIndex >= self.GetItemCount():
+        if 0 > rowIndex or rowIndex >= self.GetItemCount():
             return
 
-        if 0 > subItemIndex >= self.GetColumnCount():
+        if 0 > subItemIndex or subItemIndex >= self.GetColumnCount():
             return
 
         if self.cellEditMode == self.CELLEDIT_NONE:
