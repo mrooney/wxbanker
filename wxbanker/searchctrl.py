@@ -38,6 +38,7 @@ class SearchCtrl(wx.Panel):
         self.searchCtrl.ShowCancelButton(True)
         self.searchCtrl.ShowSearchButton(False)
         self.searchCtrl.DescriptiveText = _("Search transactions")
+        self.searchCtrl.SetForegroundColour('DARK GRAY')
 
         # The More/Less button.
         self.moreButton = bankcontrols.MultiStateButton(self, labelDict={True: _("More options"), False: _("Less options")}, state=True)
@@ -97,6 +98,7 @@ class SearchCtrl(wx.Panel):
             self.onCancel()
         else:
             Publisher.sendMessage("SEARCH.INITIATED", searchInfo)
+            self.searchCtrl.SetForegroundColour('BLACK')
             
     def onExternalSearch(self, message):
         # If something else performs a search (such as Tag context menu), update the Value and search.

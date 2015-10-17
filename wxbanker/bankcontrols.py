@@ -146,6 +146,7 @@ class UpdatableSearchCtrl(wx.SearchCtrl):
         self.SetFocus()
         self.SetValue(value)
         self.SetInsertionPoint(len(self.Value))
+        self.SetForegroundColour('BLACK')
             
         
 class HintedTextCtrl(UpdatableSearchCtrl):
@@ -166,6 +167,7 @@ class HintedTextCtrl(UpdatableSearchCtrl):
             self.ShowSearchButton(True)
 
         self.SetDescriptiveText(conf['hint'])
+        self.SetForegroundColour('DARK GRAY')
 
         try:
             self.Children[0].Bind(wx.EVT_CHAR, self.onChar)
@@ -176,6 +178,8 @@ class HintedTextCtrl(UpdatableSearchCtrl):
             pass
 
     def onChar(self, event):
+        self.SetForegroundColour('BLACK')
+
         if event.KeyCode == wx.WXK_TAB:
             if event.ShiftDown():
                 self.Navigate(wx.NavigationKeyEvent.IsBackward)
