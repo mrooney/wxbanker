@@ -19,11 +19,11 @@ class PlotFactory(object):
                 factory = cls.__createFactory(factory)
                 if factory is not None:
                     return factory
-    
+
     @classmethod
     def getAvailableFactories(cls):
         return cls.factories.keys()
-        
+
     @classmethod
     def __createFactory(cls, method):
         """Execute factory creation method. Handle thrown exception exception."""
@@ -31,12 +31,12 @@ class PlotFactory(object):
             return method()
         except PlotLibraryImportException, exc:
             print exc.getImportHint()
-    
+
     @staticmethod
     def __getCairoFactory():
         from wxbanker.plots import cairopanel
         return cairopanel.CairoPlotPanelFactory()
-        
+
     @staticmethod
     def __getWxFactory():
         from wxbanker.plots import wxplotpanel
@@ -46,9 +46,9 @@ class PlotLibraryImportException(Exception):
     def __init__(self, library, module):
         self.library = library
         self.module = module
-    
+
     def getImportHint(self):
         return _("To use '%s' plotting library, install following python modules: %s."%(self.library, self.module))
-    
+
 class BasePlotImportException(Exception): pass
-        
+
