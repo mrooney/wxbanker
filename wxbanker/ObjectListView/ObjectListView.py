@@ -2017,7 +2017,7 @@ class ObjectListView(wx.ListCtrl):
 
         # If the event handler hasn't already configured the editor, do it now.
         if evt.shouldConfigureEditor:
-            #self.cellEditor.SetFocus()
+            wx.FutureCall(100, self.cellEditor.SetFocus)
             colDef = self.columns[subItemIndex]
             if colDef.editFormatter:
                 evt.cellValue = colDef.editFormatter(modelObject)
