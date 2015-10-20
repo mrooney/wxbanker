@@ -1,5 +1,5 @@
+* new account / rename account doesn't work
 * enter in transaction fields doesn't enter transaction (works from date, not desc/amount)
-* description width does not fill the width
 * pending recurring transaction banner is all black
 * account action icons are cut off by a pixel on each side
 * up/down arrows only adjust the date if the date field is focused, not from desc/amount
