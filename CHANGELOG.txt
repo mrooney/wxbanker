@@ -1,5 +1,33 @@
-wxbanker 0.7 [pending]
-  *
+wxbanker 1.0
+ * compatibility with wxPython 3.0 and latest packages
+ * various bug fixes, particularly on OSX
+
+wxbanker 0.9
+ * per-account currencies
+ * various bug fixes and currencies added
+ * For full details see https://launchpad.net/wxbanker/trunk/0.9
+
+wxbanker 0.8.2
+ * undo the appmenu workaround now that it is fixed in Maverick
+ * other minor fixes
+ * For full details see https://launchpad.net/wxbanker/0.8/0.8.2
+
+wxbanker 0.8.1
+ * a bug-fix/streamlining release based on the feedback of 0.8.
+ * For full details see https://launchpad.net/wxbanker/0.8/0.8.1
+
+wxbanker 0.8
+ * online account synchronization via Mint.com
+ * transaction tagging
+ * new monthly earnings graph
+ * For full details see https://launchpad.net/wxbanker/0.8/0.8
+
+wxbanker 0.7
+  * UX/UI refresh
+  * shiny new summary graph
+  * shared attributes between transfer transactions.
+  * more keyboard shortcuts, currencies, and plenty of bug fixes
+  * For full details see https://launchpad.net/wxbanker/+milestone/0.7
 
 wxbanker 0.6.1
   * fix db upgrades from wxbanker 0.4 to 0.6 (LP: #496341)
