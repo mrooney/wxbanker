@@ -26,6 +26,8 @@ from wxbanker import version, localization, debug, fileservice, brandedframe
 from wxbanker.currencies import CurrencyStrings
 from wxbanker.csvimportframe import CsvImportFrame
 from wxbanker.csvexporter import CsvExporter
+from wxbanker.xmlexporter import XmlExporter
+from wxbanker.xmlimporter import XmlImporter
 
 class BankMenuBar(wx.MenuBar):
     ID_AUTOSAVE = wx.NewId()
@@ -44,6 +46,8 @@ class BankMenuBar(wx.MenuBar):
     ID_REQUESTCURRENCY = wx.NewId()
     ID_IMPORT_CSV = wx.NewId()
     ID_EXPORT_CSV = wx.NewId()
+    ID_IMPORT_XML = wx.NewId()
+    ID_EXPORT_XML = wx.NewId()
 
     def __init__(self, bankController, *args, **kwargs):
         wx.MenuBar.__init__(self, *args, **kwargs)
@@ -60,6 +64,8 @@ class BankMenuBar(wx.MenuBar):
         fileMenu.AppendSeparator()
         importCsvMenu = fileMenu.Append(self.ID_IMPORT_CSV, _("Import from CSV"), _("Import transactions from a CSV file"))
         exportCsvMenu = fileMenu.Append(self.ID_EXPORT_CSV, _("Export to CSV"), _("Export transactions to a CSV file"))
+        importXmlMenu = fileMenu.Append(self.ID_IMPORT_XML, _("Import from XML"), _("Import transactions from a XML file"))
+        exportXmlMenu = fileMenu.Append(self.ID_EXPORT_XML, _("Export to XML"), _("Export transactions to a XML file"))
         fileMenu.AppendSeparator()
         quitItem = fileMenu.Append(wx.ID_EXIT)
         
@@ -171,6 +177,8 @@ class BankMenuBar(wx.MenuBar):
                 self.ID_TRANSLATE: self.onClickTranslate,
                 self.ID_IMPORT_CSV: self.onClickImportCsv,
                 self.ID_EXPORT_CSV: self.onClickExportCsv,
+                self.ID_IMPORT_XML: self.onClickImportXml,
+                self.ID_EXPORT_XML: self.onClickExportXml,
                 wx.ID_ABOUT: self.onClickAbout,
                 self.ID_REQUESTCURRENCY: self.onClickRequestCurrency,
                 self.ID_SHOWCURRENCYNICK: self.onClickShowCurrencyNick,
@@ -264,6 +272,7 @@ class BankMenuBar(wx.MenuBar):
         info.Developers = [
             'Mike Rooney (mrooney@ubuntu.com)',
             'Karel Kolman (kolmis@gmail.com)',
+            'Evgenii Sopov (mrseakg@gmail.com)',
         ]
         info.Artists = [
             'Mark James (www.famfamfam.com/lab/icons/silk/)',
@@ -286,9 +295,32 @@ class BankMenuBar(wx.MenuBar):
         CsvImportFrame()
 
     def onClickExportCsv(self, event):
-        dlg = wx.FileDialog(None, style=wx.FD_SAVE)
+        dlg = wx.FileDialog(None, style=wx.FD_SAVE, wildcard=_("CSV Files (*.csv)|*.csv"))
         result = dlg.ShowModal()
         if result == wx.ID_OK:
             csvpath = dlg.GetPath()
-            CsvExporter.Export(self.bankController.Model, csvpath) 
-            
+            CsvExporter.Export(self.bankController.Model, csvpath)
+
+    def onClickImportXml(self, event):
+        dlg = wx.FileDialog(None, style=wx.FD_OPEN, message=_("Import from XML"), wildcard=_("XML Files (*.xml)|*.xml"))
+        result = dlg.ShowModal()
+        if result == wx.ID_OK:
+            xmlpath = dlg.GetPath()
+            dlgConfirm = wx.MessageDialog(None, style=wx.YES_NO, caption=_("Attention"), message=_("Will be removed all current transactions. Are you agree?"))
+            resultConfirm = dlgConfirm.ShowModal()
+            if resultConfirm == wx.ID_YES:
+                XmlImporter.Import(self.bankController.Model, xmlpath)
+
+    def onClickExportXml(self, event):
+        dlg = wx.FileDialog(None, style=wx.FD_SAVE, message=_("Export to XML"),wildcard=_("XML Files (*.xml)|*.xml"))
+        result = dlg.ShowModal()
+        if result == wx.ID_OK:
+            xmlpath = dlg.GetPath()
+            if not os.path.isfile(xmlpath):
+			    XmlExporter.Export(self.bankController.Model, xmlpath)
+            else:
+                msg = _("Are you sure that rewrite file?\n%(filename)s") % {'filename': xmlpath }
+                dlgConfirm = wx.MessageDialog(None, style=wx.YES_NO, caption=_("File already exists"), message=msg)
+                resultConfirm = dlgConfirm.ShowModal()
+                if resultConfirm == wx.ID_YES:
+                    XmlExporter.Export(self.bankController.Model, xmlpath)
