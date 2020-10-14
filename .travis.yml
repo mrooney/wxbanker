@@ -1,10 +1,30 @@
-sudo: required
-dist: trusty
 language: python
+
+branches:
+  only:
+    - master
+
+matrix:
+  include:
+    - dist: trusty
+
 python:
-  - 2.7
+  - "2.7"
+
 before_install:
   - sudo apt-get -qq update
   - sudo apt-get install -y python-wxgtk2.8 language-pack-ru-base language-pack-fr-base
-install: ls
-script: deactivate && sudo pip install -r pip_requirements.txt && xvfb-run python -c "from wxbanker.tests import alltests; alltests.main()"
+
+install:
+  - ls
+  - pip install beautifulsoup4
+  - pip install keyring
+  - pip install numpy
+  - pip install python-dateutil
+  - pip install pyxdg
+  - pip install requests
+  - pip install simplejson
+  - pip install xmltodict
+
+script:
+  - xvfb-run python -c "from wxbanker.tests import alltests; alltests.main()"
